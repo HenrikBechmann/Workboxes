@@ -1,0 +1,50 @@
+{
+  "hosting": {
+    "public": "/lib",
+    "ignore": [
+      "**/_archive/**",
+      "firebase.json",
+      "**/.*",
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/src/**",
+      "**/js/**",
+      "**/config/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/lib/index.html"
+      }
+    ],
+    "headers": [
+        {
+            "source":"dist/**",
+            "headers":[
+                {
+                    "key":"cache-control",
+                    "value":"public,max-age=0,must-revalidate"
+                }
+            ]
+        },
+        {
+            "source":"public/**",
+            "headers":[
+                {
+                    "key":"cache-control",
+                    "value":"public,max-age=0,must-revalidate"
+                }
+            ]
+        },
+        {
+            "source":"css/**",
+            "headers":[
+                {
+                    "key":"cache-control",
+                    "value":"public,max-age=0,must-revalidate"
+                }
+            ]
+        }
+    ]
+  }
+}
