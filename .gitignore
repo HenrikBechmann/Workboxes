@@ -7,8 +7,8 @@ node_modules/
 .env
 client-id.txt
 # Ignore build folder
-lib/
-.firebase/
+/lib
+/.firebase
 
 # Ignore logs
 *.log
