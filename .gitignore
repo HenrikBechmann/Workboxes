@@ -8,6 +8,7 @@ node_modules/
 client-id.txt
 # Ignore build folder
 lib/
+js/
 .firebase/
 
 # Ignore logs
