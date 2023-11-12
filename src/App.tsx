@@ -23,13 +23,13 @@ const App = () => {
 
     // TODO consider persitent database
     const { status:firestoreStatus, data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
-        const db = initializeFirestore(firebaseApp, {});
+        const db = initializeFirestore(firebaseApp, {})
         return db;
     })
 
     useEffect(()=>{
 
-        if (firestoreStatus === 'loading') { // TODO find names of all possible states
+        if (firestoreStatus !== 'success') { // 'success', 'loading', 'error'
             setAppState(firestoreStatus)
         } else {
             setAppState('ready')
@@ -45,7 +45,7 @@ const App = () => {
                     <ChakraProvider>
                         <div>Hello, world!</div>
                     </ChakraProvider>
-                </FirestoreProvider>
+                  </FirestoreProvider>
                 : <div>Waiting...</div>
             }
         </AuthProvider>
