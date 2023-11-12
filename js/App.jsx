@@ -1,35 +1,46 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // App.tsx
-import React from 'react';
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import React, { useState, useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
+import { initializeFirestore } from 'firebase/firestore';
+import { useFirebaseApp, AuthProvider, useInitFirestore, FirestoreProvider } from 'reactfire';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { ChakraProvider } from '@chakra-ui/react';
-import { FirebaseAppProvider } from 'reactfire';
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyAno9l7uKUR6SSI5M_cGqonZhw6JUQfrAk",
-    authDomain: "tribalopolis-dev.firebaseapp.com",
-    projectId: "tribalopolis-dev",
-    storageBucket: "tribalopolis-dev.appspot.com",
-    messagingSenderId: "79911740938",
-    appId: "1:79911740938:web:5821518cb4c8bb76caa1f3",
-    measurementId: "G-D58TT5J5J2"
-};
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
 const App = () => {
-    return (<ChakraProvider>
-        <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-          <div>Hello, world!</div>
-        </FirebaseAppProvider>
-      </ChakraProvider>);
+    const [appState, setAppState] = useState('setup');
+    const app = useFirebaseApp();
+    const auth = getAuth(app);
+    const { status: firestoreStatus, data: firestoreInstance } = useInitFirestore((firebaseApp) => __awaiter(void 0, void 0, void 0, function* () {
+        const db = initializeFirestore(firebaseApp, {});
+        return db;
+    }));
+    useEffect(() => {
+        if (firestoreStatus === 'loading') { // TODO find names of all possible states
+            setAppState(firestoreStatus);
+        }
+        else {
+            setAppState('ready');
+        }
+    }, [appState, firestoreStatus]);
+    return (<AuthProvider sdk={auth}>
+            {appState == 'ready'
+            ? <FirestoreProvider sdk={firestoreInstance}>
+                    <ChakraProvider>
+                        <div>Hello, world!</div>
+                    </ChakraProvider>
+                </FirestoreProvider>
+            : <div>Waiting...</div>}
+        </AuthProvider>);
 };
 export default App;
 //# sourceMappingURL=App.jsx.map
