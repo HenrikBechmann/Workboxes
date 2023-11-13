@@ -21,8 +21,6 @@ const root = createRoot(document.getElementById('root'))
 
 root.render(
     <BrowserRouter>
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <App /> 
-    </FirebaseAppProvider>
     </BrowserRouter>
 )

@@ -5,8 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 export const Tribalopolis = (props) => {
 
-
-    return <div>Hello, global world!</div>
+    return <div>Hello world!</div>
 
 }
 
