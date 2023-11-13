@@ -71,7 +71,7 @@ const App = () => {
                         <Tribalopolis />
                     </ChakraProvider>
                   </FirestoreProvider>
-                : <div>Waiting...</div>
+                : <div> Waiting... </div>
             }
         </AuthProvider>
         // </AppCheckProvider>

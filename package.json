@@ -27,7 +27,7 @@
     "react-grid-layout": "^1.4.3",
     "react-infinite-grid-scroller": "^2.2.1",
     "react-resizeable": "^0.2.6",
-    "react-router": "^6.18.0",
+    "react-router-dom": "^6.18.0",
     "reactfire": "^4.2.3"
   },
   "devDependencies": {
