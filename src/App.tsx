@@ -42,7 +42,7 @@ const App = () => {
 
     const { status:firestoreStatus, data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
         const db = initializeFirestore(firebaseApp, {})
-        // await enableIndexedDbPersistence(db) // TODO console message says to be deprecated 
+        await enableIndexedDbPersistence(db) // TODO console message says to be deprecated 
             // use `FirestoreSettings.cache` instead -- firebase-admin? source and specs not apparent
         // FirestoreSettings.firestore // failed attempt
         return db
