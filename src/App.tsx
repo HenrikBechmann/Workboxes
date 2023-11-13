@@ -1,30 +1,40 @@
+// App.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-// App.tsx
+// react
 import React, { useState, useEffect } from 'react'
 
+// firebase
 import { getAuth } from 'firebase/auth'
-
-import { initializeFirestore } from 'firebase/firestore'
-
-import { useFirebaseApp, AuthProvider, useInitFirestore, FirestoreProvider } from 'reactfire'
+import { initializeFirestore, enableIndexedDbPersistence } from 'firebase/firestore'
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-import { ChakraProvider, Button } from '@chakra-ui/react'
+// reactfire
+import { useFirebaseApp, AuthProvider, useInitFirestore, FirestoreProvider, AppCheckProvider } from 'reactfire'
+
+// chakra
+import { ChakraProvider } from '@chakra-ui/react'
 
 const App = () => {
 
-    const [appState, setAppState] = useState('setup')
-
+    const APP_CHECK_TOKEN = '6LdJ9gwpAAAAAAbTlVr_PRdMLcwhFSfbSO_AruxN' // for tribalopolis-dev.firebaseapp.com
     const app = useFirebaseApp()
     const auth = getAuth(app)
 
-    // TODO consider persitent database
+    const appCheck = initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider(APP_CHECK_TOKEN),
+        isTokenAutoRefreshEnabled: true,
+    });
+
+    const [appState, setAppState] = useState('setup')
+
     const { status:firestoreStatus, data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
         const db = initializeFirestore(firebaseApp, {})
-        return db;
+        await enableIndexedDbPersistence(db)
+        return db
     })
 
     useEffect(()=>{
@@ -35,11 +45,12 @@ const App = () => {
             setAppState('ready')
         }
 
-    },[appState, firestoreStatus])
+    },[firestoreStatus])
 
     return (
       
         <AuthProvider sdk = {auth}>
+        <AppCheckProvider sdk={appCheck}>
             {appState == 'ready'
                 ? <FirestoreProvider sdk={firestoreInstance}>
                     <ChakraProvider>
@@ -48,6 +59,7 @@ const App = () => {
                   </FirestoreProvider>
                 : <div>Waiting...</div>
             }
+        </AppCheckProvider>
         </AuthProvider>
 
     )
