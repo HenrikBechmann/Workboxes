@@ -1,12 +1,12 @@
 {
   "hosting": {
-    "public": "/lib",
+    "public": "lib",
     "ignore": [
-      "**/_archive/**",
       "firebase.json",
       "**/.*",
-      "**/.git/**",
       "**/node_modules/**",
+      "**/.*",
+      "**/.git/**",
       "**/src/**",
       "**/js/**",
       "**/config/**"
@@ -14,12 +14,12 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/lib/index.html"
+        "destination": "/index.html"
       }
     ],
     "headers": [
         {
-            "source":"dist/**",
+            "source":"lib/**",
             "headers":[
                 {
                     "key":"cache-control",
