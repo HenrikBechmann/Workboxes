@@ -16,7 +16,10 @@ module.exports = {
     libraryTarget:'umd',
     clean:true
   },
-  resolve: {
+  devServer: {
+    historyApiFallback: true,
+  },
+ resolve: {
     extensions: ['.tsx', '.js'],
     modules: ['src', 'node_modules']
   },
