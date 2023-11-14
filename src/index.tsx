@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { BrowserRouter } from 'react-router-dom'
-import { FirebaseAppProvider} from 'reactfire'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAno9l7uKUR6SSI5M_cGqonZhw6JUQfrAk",
@@ -19,8 +19,12 @@ import App from './App'
 
 const root = createRoot(document.getElementById('root'))
 
+const queryClient = new QueryClient()
+
 root.render(
+    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
         <App /> 
     </BrowserRouter>
+    </QueryClientProvider>
 )
