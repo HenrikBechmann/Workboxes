@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 export const Start = (props) => {
 
-    return <div>Hello world!</div>
+    return <div>Start Page</div>
 
 }
 
