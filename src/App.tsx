@@ -17,6 +17,7 @@ import { initializeFirestore, enableIndexedDbPersistence } from 'firebase/firest
 // local
 import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
+import ProtectedRoute from './components/ProtectedRoute'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -44,8 +45,14 @@ const App = () => {
     return (
       
         <Routes>
-            <Route path = '/' element = {<Tribalopolis />} />
-            <Route path = "/start" element = {<Start />} />
+            <Route path = '/' element = {
+                <ProtectedRoute 
+                    user = {null} 
+                    redirectPath = '/start'>
+                    <Tribalopolis/>
+                </ProtectedRoute>
+            } />
+            <Route path = '/start' element = {<Start />} />
 {
 //            <Route path = '/signup' element = {<Signup />} />
 //            <Route path = '/login' element = {<Login />} />
