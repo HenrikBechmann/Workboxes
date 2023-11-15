@@ -4,7 +4,7 @@
 
 import React from 'react'
 
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter as RouterProvider} from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // chakra
 import { ChakraProvider } from '@chakra-ui/react'
@@ -21,11 +21,11 @@ const queryClient = new QueryClient()
 root.render(
     <FirebaseProvider>
     <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
+    <RouterProvider>
     <ChakraProvider>
         <App /> 
     </ChakraProvider>
-    </BrowserRouter>
+    </RouterProvider>
     </QueryClientProvider>
     </FirebaseProvider>
 )

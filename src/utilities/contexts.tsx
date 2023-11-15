@@ -28,16 +28,16 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 const FirebaseAppContext = React.createContext(firebaseApp)
 
-export const useFirebaseApp = () => {
-    return useContext(FirebaseAppContext)
-}
-
 export const FirebaseProvider = ({children}) => {
     return (
         <FirebaseAppContext.Provider value = {firebaseApp}>
             {children}
         </FirebaseAppContext.Provider>
     )
+}
+
+export const useFirebaseApp = () => {
+    return useContext(FirebaseAppContext)
 }
 
 // UserProvider
@@ -47,3 +47,7 @@ export const FirebaseProvider = ({children}) => {
 
 
 // StorageProvider
+
+
+// CloudFunctionsProvider
+
