@@ -6,6 +6,7 @@ import React from 'react'
 
 // services
 import { Routes, Route } from 'react-router'
+import { useUser } from './utilities/contexts'
 
 // local
 import Tribalopolis from './Tribalopolis'
@@ -14,12 +15,14 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
 
+    const user = useUser()
+
     return (
       
         <Routes>
             <Route path = '/' element = {
                 <ProtectedRoute 
-                    user = {null} 
+                    user = { user } 
                     redirectPath = '/start'>
                     <Tribalopolis/>
                 </ProtectedRoute>
