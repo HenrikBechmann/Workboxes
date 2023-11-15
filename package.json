@@ -24,7 +24,7 @@
     "@tanstack/react-query": "^5.8.3",
     "firebase": "^10.5.2",
     "firebase-admin": "^11.11.0",
-    "firebase-tools": "^12.8.1",
+    "firebase-tools": "^12.9.1",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

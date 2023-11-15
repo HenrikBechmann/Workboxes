@@ -22,7 +22,7 @@ const App = () => {
         <Routes>
             <Route path = '/' element = {
                 <MemberRoute>
-                    <Tribalopolis/>
+                    <Route index element = {<Tribalopolis/>} />
                 </MemberRoute>
             } />
             <Route path = '/start' element = {<Start />} />
