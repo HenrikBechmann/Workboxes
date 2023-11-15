@@ -11,7 +11,7 @@ import { useUser } from './utilities/contexts'
 // local
 import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
-import ProtectedRoute from './components/ProtectedRoute'
+import MemberRoute from './components/MemberRoute'
 
 const App = () => {
 
@@ -21,11 +21,9 @@ const App = () => {
       
         <Routes>
             <Route path = '/' element = {
-                <ProtectedRoute 
-                    user = { user } 
-                    redirectPath = '/start'>
+                <MemberRoute>
                     <Tribalopolis/>
-                </ProtectedRoute>
+                </MemberRoute>
             } />
             <Route path = '/start' element = {<Start />} />
 {
