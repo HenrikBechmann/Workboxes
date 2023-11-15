@@ -47,7 +47,7 @@ const App = () => {
         <Routes>
             <Route path = '/' element = {
                 <ProtectedRoute 
-                    user = {null} 
+                    user = {10} 
                     redirectPath = '/start'>
                     <Tribalopolis/>
                 </ProtectedRoute>
