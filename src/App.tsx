@@ -14,6 +14,7 @@ import { Routes, Route } from 'react-router'
 
 // local
 import Tribalopolis from './Tribalopolis'
+import Start from './pages/Start'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -45,9 +46,10 @@ const App = () => {
       
         <ChakraProvider>
             <Routes>
-                <Route path = '/' element = {<div> home </div>} />
-                <Route path = "/start" element = {<Tribalopolis />} />
+                <Route path = '/' element = {<Tribalopolis />} />
+                <Route path = "/start" element = {<Start />} />
 {
+//                <Route path = "/start" element = {<Tribalopolis />} />
 //                <Route path = '/workspace' element = {<Workspace />} />
 //                <Route path = '/signup' element = {<Signup />} />
 //                <Route path = '/login' element = {<Login />} />
