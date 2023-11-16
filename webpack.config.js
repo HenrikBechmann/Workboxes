@@ -17,7 +17,10 @@ module.exports = {
     clean:true,
   },
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    devMiddleware:{
+      writeToDisk:true,
+    }
   },
  resolve: {
     extensions: ['.tsx', '.js'],

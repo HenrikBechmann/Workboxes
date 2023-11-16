@@ -1,17 +1,37 @@
 // Start.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { 
+    Card, CardHeader, CardBody, CardFooter,
+    Box, Stack, StackDivider,
+    Text, Heading, Image
+} from '@chakra-ui/react'
 
 export const Start = (props) => {
 
-    return <>
-        <img src = '/public/icons/fire.png' />
-        <p>Use Tribalopolis to Organize, Re-organize, Communicate, Collaborate</p>
-        <p>While we get established, we're accepting members by invitation only.</p>
-        <p>If you've received an invitation, please sign up or log in.</p>
-    </>
-
+    return ( 
+    <Card margin = {3}>
+    
+        <CardBody>
+            <Stack divider={<StackDivider />} spacing='4'>
+            <Box>
+                <Heading size = 'xl'>
+                    <Image src = '/public/fire.png'/> Use Tribalopolis to...
+                </Heading>
+            </Box>
+            <Box>
+                <Heading size = 'lg'> Organize, Re-organize, Communicate, Collaborate</Heading>
+            </Box>
+            <Box>
+                <Text>While we get established, we're accepting members by invitation only.</Text>
+                <Text>If you've received an invitation, please sign up or log in.</Text>
+            </Box>
+            </Stack>
+        </CardBody>
+    
+    </Card>
+    )
 }
 
 export default Start
