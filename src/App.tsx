@@ -11,7 +11,7 @@ import { useUser } from './utilities/contexts'
 // local
 import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
-import MemberRoute from './components/MemberRoutes'
+import MemberRoutes from './components/MemberRoutes'
 
 const App = () => {
 
@@ -21,9 +21,9 @@ const App = () => {
       
         <Routes>
             <Route path = '/' element = {
-                <MemberRoute>
+                <MemberRoutes>
                     <Route index element = {<Tribalopolis/>} />
-                </MemberRoute>
+                </MemberRoutes>
             } />
             <Route path = '/start' element = {<Start />} />
 {
