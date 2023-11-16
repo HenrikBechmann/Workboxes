@@ -18,11 +18,11 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    devMiddleware:{
-      writeToDisk:true,
-    }
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },  
   },
- resolve: {
+  resolve: {
     extensions: ['.tsx', '.js'],
     modules: ['./app/src', 'node_modules']
   },
