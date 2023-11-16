@@ -8,7 +8,7 @@ import {
     Text, Heading, Image
 } from '@chakra-ui/react'
 
-import image from '../../public/fire.png'
+import image from '../../assets/fire.png'
 
 export const Start = (props) => {
 
