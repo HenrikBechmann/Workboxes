@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 export const Start = (props) => {
 
-    return <div>Start Page</div>
+    return <div>Use Tribalopolis to Organize, Re-organize, Communicate, Collborate</div>
 
 }
 
