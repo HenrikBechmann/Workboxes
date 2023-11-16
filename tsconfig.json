@@ -8,8 +8,8 @@
         "sourceMap":true,
         "allowJs":false,
         "jsx":"react",
-        "rootDir":"src",
-        "baseUrl":"src",
+        "rootDir":"app/src",
+        "baseUrl":"app/src",
         "declaration":false,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
@@ -20,6 +20,6 @@
         "node_modules"
       ],
       "include": [
-        "src"
+        "app/src"
       ]
 }

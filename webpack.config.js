@@ -7,28 +7,26 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   // devtool: 'source-map',
   entry: {
-    main:'./src/index.tsx'
+    main:'./app/src/index.tsx'
   },
   output: {
     filename: 'build.js',
-    path: path.resolve('lib'),
+    path: path.resolve('dist'),
     library:'tribalopolis',
     libraryTarget:'umd',
     clean:true,
   },
   devServer: {
-    static: {
-        publicPath: path.join(__dirname, 'lib')
-    },
     historyApiFallback: true
   },
  resolve: {
     extensions: ['.tsx', '.js'],
-    modules: ['src', 'node_modules']
+    modules: ['./app/src', 'node_modules']
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './app/src/index.html',
+      filename: 'index.html',
     }),
   ],
     module: {
@@ -39,14 +37,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
+        type: "asset/resource",
       },
       {
           test: /\.css?$/,

@@ -1,15 +1,21 @@
 {
   "hosting": {
-    "public": "lib",
+    "public": "./",
     "ignore": [
       "firebase.json",
+      "babel.config.json",
+      "tsconfig.json",
+      "webpack.config.js",
+      "LICENCE",
+      "README.md",
+      "package.json",
+      "package-lock.json",
       "**/.*",
       "**/node_modules/**",
       "**/.*",
       "**/.git/**",
       "**/src/**",
-      "**/js/**",
-      "**/config/**"
+      "**/js/**"
     ],
     "rewrites": [
       {

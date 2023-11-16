@@ -2,7 +2,7 @@
   "name": "tribalopolis-dev",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.tsx",
+  "main": "./app/src/index.tsx",
   "author": "Henrik Bechmann <hbechmann@gmail.com> (https://twitter.com/HenrikBechmann)",
   "license": "GPL-3.0",
   "scripts": {
