@@ -8,6 +8,8 @@ import {
     Text, Heading, Image
 } from '@chakra-ui/react'
 
+import image from '../../public/fire.png'
+
 export const Start = (props) => {
 
     return ( 
@@ -17,7 +19,7 @@ export const Start = (props) => {
             <Stack divider={<StackDivider />} spacing='4'>
             <Box>
                 <Heading size = 'xl'>
-                    <Image src = '/public/fire.png'/> Use Tribalopolis to...
+                    <Image src = {image} /> Use Tribalopolis to...
                 </Heading>
             </Box>
             <Box>
