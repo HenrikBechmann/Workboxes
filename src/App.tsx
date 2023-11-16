@@ -11,7 +11,7 @@ import { useUser } from './utilities/contexts'
 // local
 import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
-import MemberRoute from './components/MemberRoute'
+import MemberRoute from './components/MemberRoutes'
 
 const App = () => {
 
