@@ -4,36 +4,50 @@
 import React from 'react'
 import { 
     Card, CardHeader, CardBody, CardFooter,
-    Box, Stack, StackDivider,
-    Text, Heading, Image
+    Box, VStack, HStack, StackDivider,
+    Text, Heading, Image, Center, Icon
 } from '@chakra-ui/react'
 
 import tribalopolisIcon from '../../assets/fire.png'
+import boxIcon from '../../assets/workbox.png'
 
 export const Start = (props) => {
 
-    return ( 
-    <Card margin = {3}>
+    return (
+    <Card ml = {20} mr = {20} mt = {10} >
     
         <CardBody>
-            <Stack divider={<StackDivider />} spacing='4'>
+            <Center>
+            <VStack divider={<StackDivider />} spacing='4'>
             <Box>
-                <Heading size = 'xl'>
-                    <Image src = {tribalopolisIcon} /> Use Tribalopolis to...
+                <Heading style = {{textAlign:'center'}} size = 'lg'>Welcome!</Heading>
+                <Heading style = {{textAlign:'center'}} size = 'xl'>
+                    <Text>Use <Image style = {{display:"inline-block", verticalAlign:'baseline'}} src = {tribalopolisIcon} />Tribalopolis to...</Text>
                 </Heading>
             </Box>
             <Box>
-                <Heading size = 'lg'> Organize, Re-organize, Communicate, Collaborate</Heading>
+                <Heading style = {{textAlign:'center'}} size = 'lg'> Organize, Re-organize, <br /> Communicate, Collaborate</Heading>
             </Box>
-            <Box>
+            <Box style = {{textAlign:'center'}} >
                 <Text>While we get established, we're accepting members by invitation only.</Text>
-                <Text>If you've received an invitation, please sign up or log in.</Text>
+                <Text mt = {3}><i>If you've received an invitation, <br />please sign up or log in.</i></Text>
             </Box>
-            </Stack>
+            <Box style = {{textAlign:'center'}} >
+                <Text>Organize your information into our <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Boxes.</Text>
+                <Text>Cluster the Work Boxes into Work Windows.</Text>
+                <Text>Drag and Drop things around to keep up to date.</Text>
+                <Text>Organize the Work Windows into Work Panels.</Text>
+                <Text>Organize the Work Panels into Work Spaces.</Text>
+                <Text>Have fun!</Text>
+            </Box>
+            </VStack>
+        </Center>
         </CardBody>
-    
+
     </Card>
     )
 }
+
+// <Box style = {{display:'flex',flexDirection:'column', justifyContent:'space-between'}}></Box>
 
 export default Start
