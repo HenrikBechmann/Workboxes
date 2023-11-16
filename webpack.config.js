@@ -14,10 +14,13 @@ module.exports = {
     path: path.resolve('lib'),
     library:'tribalopolis',
     libraryTarget:'umd',
-    clean:true
+    clean:true,
   },
   devServer: {
-    historyApiFallback: true,
+    static: {
+        publicPath: path.join(__dirname, 'lib')
+    },
+    historyApiFallback: true
   },
  resolve: {
     extensions: ['.tsx', '.js'],
