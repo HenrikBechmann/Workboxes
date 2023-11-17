@@ -5,7 +5,7 @@ import React from 'react'
 import { 
     Card, CardHeader, CardBody, CardFooter,
     Box, VStack, HStack, StackDivider,
-    Text, Heading, Image, Center, Icon
+    Text, Heading, Image, Center, Icon, Button
 } from '@chakra-ui/react'
 
 import tribalopolisIcon from '../../assets/fire.png'
@@ -32,6 +32,10 @@ export const Start = (props) => {
             <Box style = {{textAlign:'center'}} >
                 <Text>While we get established, we're accepting members by invitation only.</Text>
                 <Text mt = {3}><i>If you've received an invitation, <br />please sign up or log in.</i></Text>
+                <HStack justifyContent = 'center' spacing = {10} mt = {5}>
+                    <div><Button colorScheme = "blue" width = '180px'>Sign Up</Button><Text fontSize = 'sm' fontStyle = 'italic'>First time users</Text></div>
+                    <div><Button colorScheme = "blue" width = '180px'>Log In</Button><Text fontSize = 'sm' fontStyle = 'italic'>Returning users</Text></div>
+                </HStack>
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>Organize your information into our <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Boxes.</Text>
