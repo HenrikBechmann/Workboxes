@@ -15,7 +15,7 @@ import dragIcon from '../../assets/drag.png'
 export const Start = (props) => {
 
     return (
-    <Card ml = {20} mr = {20} mt = {10} >
+    <Card ml = {20} mr = {20} mt = {5} >
     
         <CardBody>
             <Center>
