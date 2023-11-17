@@ -26,7 +26,7 @@ export const Start = (props) => {
                 </Heading>
             </Box>
             <Box>
-                <Heading style = {{textAlign:'center'}} size = 'lg'> Organize, Re-organize, <br /> Communicate, Collaborate</Heading>
+                <Heading style = {{textAlign:'center'}} size = 'lg'> Organize, Re-organize, <br /> Communicate, and Collaborate</Heading>
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>While we get established, we're accepting members by invitation only.</Text>
