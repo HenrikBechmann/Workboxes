@@ -33,8 +33,8 @@ export const Start = (props) => {
                 <Text>While we get established, we're accepting members by invitation only.</Text>
                 <Text mt = {3}><i>If you've received an invitation, <br />please sign up or log in.</i></Text>
                 <HStack justifyContent = 'center' spacing = {10} mt = {5}>
-                    <div><Button colorScheme = "blue" width = '180px'>Sign Up</Button><Text fontSize = 'sm' fontStyle = 'italic'>First time users</Text></div>
-                    <div><Button colorScheme = "blue" width = '180px'>Log In</Button><Text fontSize = 'sm' fontStyle = 'italic'>Returning users</Text></div>
+                    <div><Button colorScheme = "blue" width = '150px'>Sign Up</Button><Text fontSize = 'xs' fontStyle = 'italic'>First time users</Text></div>
+                    <div><Button colorScheme = "blue" width = '150px'>Log In</Button><Text fontSize = 'xs' fontStyle = 'italic'>Returning users</Text></div>
                 </HStack>
             </Box>
             <Box style = {{textAlign:'center'}} >
