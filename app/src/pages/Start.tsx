@@ -10,6 +10,7 @@ import {
 
 import tribalopolisIcon from '../../assets/fire.png'
 import boxIcon from '../../assets/workbox.png'
+import dragIcon from '../../assets/drag.png'
 
 export const Start = (props) => {
 
@@ -35,7 +36,7 @@ export const Start = (props) => {
             <Box style = {{textAlign:'center'}} >
                 <Text>Organize your information into our <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Boxes.</Text>
                 <Text>Cluster the Work Boxes into Work Windows.</Text>
-                <Text>Drag and Drop things around to keep up to date.</Text>
+                <Text>Drag and Drop <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> things around to keep up to date.</Text>
                 <Text>Organize the Work Windows into Work Panels.</Text>
                 <Text>Organize the Work Panels into Work Spaces.</Text>
                 <Text>Have fun!</Text>
