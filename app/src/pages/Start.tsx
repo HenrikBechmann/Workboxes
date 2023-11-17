@@ -20,14 +20,14 @@ export const Start = (props) => {
         <CardBody>
             <Center>
             <VStack divider={<StackDivider />} spacing='4'>
-            <Box>
-                <Heading style = {{textAlign:'center'}} size = 'lg'>Welcome!</Heading>
-                <Heading style = {{textAlign:'center'}} size = 'xl'>
+            <Box style = {{textAlign:'center'}} >
+                <Heading size = 'lg'>Welcome!</Heading>
+                <Heading size = 'xl'>
                     <Text>Use <Image style = {{display:"inline-block", verticalAlign:'baseline'}} src = {tribalopolisIcon} />Tribalopolis to...</Text>
                 </Heading>
             </Box>
-            <Box>
-                <Heading style = {{textAlign:'center'}} size = 'lg'> Organize, Re-organize, <br /> Communicate, and Collaborate</Heading>
+            <Box style = {{textAlign:'center'}} >
+                <Heading size = 'lg'> Organize, Re-organize, <br /> Communicate, and Collaborate</Heading>
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>While we get established, we're accepting members by invitation only.</Text>
