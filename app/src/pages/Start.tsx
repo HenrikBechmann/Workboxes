@@ -33,8 +33,8 @@ export const Start = (props) => {
                 <Text mt = {3}><i>If you've received an invitation, <br />please sign up or log in.</i></Text>
             </Box>
             <Box style = {{textAlign:'center'}} >
-                <Text>Organize your information into our <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Bins.</Text>
-                <Text>Cluster the Work Bins into Work Windows.</Text>
+                <Text>Organize your information into our <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Boxes.</Text>
+                <Text>Cluster the Work Boxes into Work Windows.</Text>
                 <Text>Drag and Drop things around to keep up to date.</Text>
                 <Text>Organize the Work Windows into Work Panels.</Text>
                 <Text>Organize the Work Panels into Work Spaces.</Text>
