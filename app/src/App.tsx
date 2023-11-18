@@ -13,6 +13,7 @@ import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
+import Account from './pages/Account'
 import NotFound from './pages/NotFound'
 
 import MemberRoutes from './components/MemberRoutes'
@@ -27,11 +28,12 @@ const App = () => {
             <Route path = '/' element = {
                 <MemberRoutes>
                     <Route index element = { <Tribalopolis/> } />
+                    <Route path = '/account' element = { <Account /> } />
                 </MemberRoutes>
             } />
             <Route path = '/start' element = { <Start /> } />
-            <Route path = '/login' element = { <Login /> } />
             <Route path = '/signup' element = { <Signup /> } />
+            <Route path = '/login' element = { <Login /> } />
             <Route path = '*' element = {<NotFound />} />
 {//            <Route path = '/admin' element = {<Admin />} />
 }                
