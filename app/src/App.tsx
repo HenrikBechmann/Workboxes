@@ -11,6 +11,10 @@ import { useUser } from './utilities/contexts'
 // local
 import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
+import Signup from './pages/Signup'
+import Login from './pages/Login'
+import NotFound from './pages/NotFound'
+
 import MemberRoutes from './components/MemberRoutes'
 
 const App = () => {
@@ -22,15 +26,14 @@ const App = () => {
         <Routes>
             <Route path = '/' element = {
                 <MemberRoutes>
-                    <Route index element = {<Tribalopolis/>} />
+                    <Route index element = { <Tribalopolis/> } />
                 </MemberRoutes>
             } />
-            <Route path = '/start' element = {<Start />} />
-{
-//            <Route path = '/signup' element = {<Signup />} />
-//            <Route path = '/login' element = {<Login />} />
-//            <Route path = '/admin' element = {<Admin />} />
-//            <Route path = '*' element = {<NotFound />} />
+            <Route path = '/start' element = { <Start /> } />
+            <Route path = '/login' element = { <Login /> } />
+            <Route path = '/signup' element = { <Signup /> } />
+            <Route path = '*' element = {<NotFound />} />
+{//            <Route path = '/admin' element = {<Admin />} />
 }                
         </Routes>
 

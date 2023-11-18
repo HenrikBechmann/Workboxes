@@ -2,6 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { 
     Card, CardHeader, CardBody, CardFooter,
     Box, VStack, HStack, StackDivider,
@@ -12,7 +13,21 @@ import tribalopolisIcon from '../../assets/fire.png'
 import boxIcon from '../../assets/workbox.png'
 import dragIcon from '../../assets/drag.png'
 
-export const Start = (props) => {
+const Start = (props) => {
+
+    const navigate = useNavigate()
+
+    const gotoSignup = () => {
+
+        navigate('/signup')
+
+    }
+
+    const gotoLogin = () => {
+
+        navigate('/login')
+
+    }
 
     return (
     <Card ml = {20} mr = {20} mt = {5} >
@@ -33,8 +48,22 @@ export const Start = (props) => {
                 <Text>While we get established, we're accepting members by invitation only.</Text>
                 <Text mt = {3}><i>If you've received an invitation, <br />please sign up or log in.</i></Text>
                 <HStack justifyContent = 'center' spacing = {10} mt = {5}>
-                    <div><Button colorScheme = "blue" width = '150px'>Sign Up</Button><Text fontSize = 'xs' fontStyle = 'italic'>First time users</Text></div>
-                    <div><Button colorScheme = "blue" width = '150px'>Log In</Button><Text fontSize = 'xs' fontStyle = 'italic'>Returning users</Text></div>
+                    <div><Button 
+                        colorScheme = "blue" 
+                        width = '150px'
+                        onClick = {gotoSignup}
+                    >
+                        Sign Up
+                    </Button>
+                    <Text fontSize = 'xs' fontStyle = 'italic'>First time users</Text></div>
+                    <div><Button 
+                        colorScheme = "blue" 
+                        width = '150px'
+                        onClick = {gotoLogin}
+                    >
+                        Log In
+                    </Button>
+                    <Text fontSize = 'xs' fontStyle = 'italic'>Returning users</Text></div>
                 </HStack>
             </Box>
             <Box style = {{textAlign:'center'}} >
