@@ -13,6 +13,7 @@ import Tribalopolis from './Tribalopolis'
 import Start from './pages/Start'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
+import Declined from './pages/Declined'
 import Account from './pages/Account'
 import NotFound from './pages/NotFound'
 
@@ -34,6 +35,7 @@ const App = () => {
             <Route path = '/start' element = { <Start /> } />
             <Route path = '/signup' element = { <Signup /> } />
             <Route path = '/login' element = { <Login /> } />
+            <Route path = '/declined' element = { <Declined /> } />
             <Route path = '*' element = {<NotFound />} />
 {//            <Route path = '/admin' element = {<Admin />} />
 }                
