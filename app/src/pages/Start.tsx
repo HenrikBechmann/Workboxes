@@ -5,8 +5,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
     Card, CardHeader, CardBody, CardFooter,
-    Box, VStack, HStack, StackDivider,
-    Text, Heading, Image, Center, Icon, Button
+    Box, VStack, HStack, StackDivider, Center,
+    Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
 import tribalopolisIcon from '../../assets/fire.png'
@@ -81,7 +81,5 @@ const Start = (props) => {
     </Card>
     )
 }
-
-// <Box style = {{display:'flex',flexDirection:'column', justifyContent:'space-between'}}></Box>
 
 export default Start

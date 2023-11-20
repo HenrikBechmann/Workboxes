@@ -27,9 +27,23 @@ const App = () => {
       
         <Routes>
             <Route path = '/' element = {
-                <MemberRoutes>
-                    <Route index element = { <Tribalopolis/> } />
+                <MemberRoutes> 
+                    <Route index element = { <Tribalopolis /> } />
                     <Route path = '/account' element = { <Account /> } />
+                    {/* // allow sharing
+                        <Route path = '/workbox' element = { <Tribalopolis /> } >
+                            <Route path = ':id' element = { <Tribalopolis /> } />
+                        </Route>
+                        <Route path = '/window' element = { <Tribalopolis /> } >
+                            <Route path = ':id' element = { <Tribalopolis /> } />
+                        </Route>
+                        <Route path = '/panel' element = { <Tribalopolis /> } >
+                            <Route path = ':id' element = { <Tribalopolis /> } />
+                        </Route>
+                        <Route path = '/workspace' element = { <Tribalopolis /> } >
+                            <Route path = ':id' element = { <Tribalopolis /> } />
+                        </Route>
+                    */}
                 </MemberRoutes>
             } />
             <Route path = '/start' element = { <Start /> } />
