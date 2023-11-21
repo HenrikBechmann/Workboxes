@@ -26,43 +26,37 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-
 const FirebaseAppContext = React.createContext(firebaseApp)
 
-export const FirebaseAppProvider = ({children}) => {
-    return (
-        <FirebaseAppContext.Provider value = {firebaseApp}>
-            {children}
-        </FirebaseAppContext.Provider>
-    )
-}
-
-export const useFirebaseApp = () => {
-    return useContext(FirebaseAppContext)
-}
-
-// AuthProvider
-
 const auth = getAuth(firebaseApp)
-
 const AuthContext = React.createContext(auth)
-
-export const AuthProvider = ({children}) => {
-    return (
-        <AuthContext.Provider value = {auth} >
-            {children}
-        </AuthContext.Provider>
-    )
-}
-
-export const useAuth = () => {
-    return useContext(AuthContext)
-}
-
-// UserProvider
 
 const UserContext = React.createContext(null)
 
+const firestoreDb = getFirestore(firebaseApp)
+const FirestoreContext = React.createContext(firestoreDb)
+
+const storage = getStorage(firebaseApp)
+const StorageContext = React.createContext(storage)
+
+const FirebaseProviders = ({children}) => {
+
+    return <FirebaseAppContext.Provider value = {firebaseApp}>
+    <AuthContext.Provider value = {auth} >
+    <UserProvider>
+    <FirestoreContext.Provider value = {firestoreDb}>
+    <StorageContext.Provider value = {storage}>
+        {children}
+    </StorageContext.Provider>
+    </FirestoreContext.Provider>
+    </UserProvider>
+    </AuthContext.Provider>
+    </FirebaseAppContext.Provider>
+}
+
+export default FirebaseProviders
+
+// special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
     const [user, setUser] = useState(null)
@@ -101,45 +95,33 @@ export const UserProvider = ({children}) => {
 
 }
 
-export const useUser = () => {
+// context access
+
+const useFirebaseApp = () => {
+    return useContext(FirebaseAppContext)
+}
+
+const useAuth = () => {
+    return useContext(AuthContext)
+}
+
+const useUser = () => {
     return useContext(UserContext)
 }
 
-// FirestoreProvider
-
-const firestoreDb = getFirestore(firebaseApp)
-
-const FirestoreContext = React.createContext(firestoreDb)
-
-export const FirestoreProvider = ({children}) => {
-    return (
-        <FirestoreContext.Provider value = {firestoreDb}>
-            {children}
-        </FirestoreContext.Provider>
-    )
-}
-
-export const useFirestoreDb = () => {
+const useFirestoreDb = () => {
     return useContext(FirestoreContext)
 }
 
-// StorageProvider
-
-const storage = getStorage(firebaseApp)
-
-const StorageContext = React.createContext(storage)
-
-export const StorageProvider = ({children}) => {
-    return (
-        <StorageContext.Provider value = {storage}>
-            {children}
-        </StorageContext.Provider>
-    )
-}
-
-export const useStorage = () => {
+const useStorage = () => {
     return useContext(StorageContext)
 }
 
-// CloudFunctionsProvider ?
+export {
+    useFirebaseApp,
+    useAuth,
+    useUser,
+    useFirestoreDb,
+    useStorage,
+}
 

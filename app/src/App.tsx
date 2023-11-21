@@ -6,7 +6,7 @@ import React from 'react'
 
 // services
 import { Routes, Route } from 'react-router'
-import { useUser } from './utilities/contexts'
+import { useUser } from './utilities/FirebaseProviders'
 
 // local
 import Tribalopolis from './Tribalopolis'

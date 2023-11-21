@@ -2,7 +2,7 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import { useUser } from '../utilities/contexts'
+import { useUser } from '../utilities/FirebaseProviders'
 
 function MemberRoute({ children }) {
 

@@ -9,13 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // chakra
 import { ChakraProvider } from '@chakra-ui/react'
 
-import { 
-    FirebaseAppProvider, 
-    AuthProvider,
-    UserProvider, 
-    FirestoreProvider, 
-    StorageProvider, 
-} from './utilities/contexts'
+import FirebaseProviders from './utilities/FirebaseProviders'
 
 import { createRoot } from 'react-dom/client'
 import App from './App'
@@ -25,21 +19,13 @@ const root = createRoot(document.getElementById('root'))
 const queryClient = new QueryClient()
 
 root.render(
-    <FirebaseAppProvider>
-    <AuthProvider>
-    <UserProvider>
-    <FirestoreProvider>
-    <StorageProvider>
-    <QueryClientProvider client={queryClient}>
-    <RouterProvider>
-    <ChakraProvider>
-        <App /> 
-    </ChakraProvider>
-    </RouterProvider>
-    </QueryClientProvider>
-    </StorageProvider>
-    </FirestoreProvider>
-    </UserProvider>
-    </AuthProvider>
-    </FirebaseAppProvider>
+    <FirebaseProviders>
+        <QueryClientProvider client={queryClient}>
+        <RouterProvider>
+        <ChakraProvider>
+            <App /> 
+        </ChakraProvider>
+        </RouterProvider>
+        </QueryClientProvider>
+    </FirebaseProviders>
 )
