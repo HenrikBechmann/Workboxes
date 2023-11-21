@@ -5,13 +5,21 @@ import React, { useState, useEffect } from 'react'
 
 import { signOut } from "firebase/auth"
 
+import { useNavigate } from 'react-router-dom'
+
 import { Button } from '@chakra-ui/react'
 
 import { useAuth } from './utilities/FirebaseProviders'
 
 export const Tribalopolis = (props) => {
 
-    const auth = useAuth();
+    const auth = useAuth()
+
+    const navigate = useNavigate()
+
+    const gotoAccount = () => {
+        navigate('/account')
+    } 
     
     const logOut = () => {
 
@@ -26,6 +34,7 @@ export const Tribalopolis = (props) => {
         <>
             <div>Main page</div>
             <Button onClick = {logOut}> Sign out </Button>
+            <Button onClick = {gotoAccount}> Go to account </Button>
         </>
     )
 }

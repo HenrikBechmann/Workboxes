@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 
 import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from "firebase/auth"
 
-import { useAuth } from '../utilities/FirebaseProviders'
+import { useAuth, useUser } from '../utilities/FirebaseProviders'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -20,9 +20,18 @@ const Signup = (props) => {
 
     const auth = useAuth()
 
+    const user = useUser()
+
     const navigate = useNavigate()
 
     useEffect (()=>{
+
+    if (user) {
+
+        navigate('/')
+        return
+
+    }
 
     getRedirectResult(auth)
         .then((result) => {
@@ -49,7 +58,7 @@ const Signup = (props) => {
             const credential = GoogleAuthProvider.credentialFromError(error);
         });
 
-    },[])
+    },[user])
 
     const signInWithGoogle = () => {
         signInWithRedirect(auth, provider)

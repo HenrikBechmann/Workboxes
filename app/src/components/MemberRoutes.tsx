@@ -7,6 +7,9 @@ import { useUser } from '../utilities/FirebaseProviders'
 function MemberRoute() {
 
   const user = useUser()
+
+  console.log('user in MemberRoutes',user)
+
   if (!user) {
     return <Navigate to = {'/start'} replace />
   }
