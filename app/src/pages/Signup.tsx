@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@chakra-ui/react'
 
 const provider = new GoogleAuthProvider()
+provider.setCustomParameters({
+  prompt: 'select_account',
+})
 
 const Signup = (props) => {
 
