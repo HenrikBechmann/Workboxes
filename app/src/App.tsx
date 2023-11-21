@@ -19,6 +19,23 @@ import NotFound from './pages/NotFound'
 
 import MemberRoutes from './components/MemberRoutes'
 
+/* // allow sharing
+    <Route path = '/workbox' element = { <Tribalopolis /> } >
+        <Route path = ':id' element = { <Tribalopolis /> } />
+    </Route>
+    <Route path = '/window' element = { <Tribalopolis /> } >
+        <Route path = ':id' element = { <Tribalopolis /> } />
+    </Route>
+    <Route path = '/panel' element = { <Tribalopolis /> } >
+        <Route path = ':id' element = { <Tribalopolis /> } />
+    </Route>
+    <Route path = '/workspace' element = { <Tribalopolis /> } >
+        <Route path = ':id' element = { <Tribalopolis /> } />
+    </Route>
+{//            <Route path = '/admin' element = {<Admin />} />
+}                
+*/
+
 const App = () => {
 
     const user = useUser()
@@ -26,33 +43,15 @@ const App = () => {
     return (
       
         <Routes>
-            <Route path = '/' element = {
-                <MemberRoutes> 
-                    <Route index element = { <Tribalopolis /> } />
-                    <Route path = '/account' element = { <Account /> } />
-                    {/* // allow sharing
-                        <Route path = '/workbox' element = { <Tribalopolis /> } >
-                            <Route path = ':id' element = { <Tribalopolis /> } />
-                        </Route>
-                        <Route path = '/window' element = { <Tribalopolis /> } >
-                            <Route path = ':id' element = { <Tribalopolis /> } />
-                        </Route>
-                        <Route path = '/panel' element = { <Tribalopolis /> } >
-                            <Route path = ':id' element = { <Tribalopolis /> } />
-                        </Route>
-                        <Route path = '/workspace' element = { <Tribalopolis /> } >
-                            <Route path = ':id' element = { <Tribalopolis /> } />
-                        </Route>
-                    */}
-                </MemberRoutes>
-            } />
+            <Route path = '/' element = {<MemberRoutes />} > 
+                <Route index element = { <Tribalopolis /> } />
+                <Route path = '/account' element = { <Account /> } />
+            </Route>
             <Route path = '/start' element = { <Start /> } />
             <Route path = '/signup' element = { <Signup /> } />
             <Route path = '/login' element = { <Login /> } />
             <Route path = '/declined' element = { <Declined /> } />
             <Route path = '*' element = {<NotFound />} />
-{//            <Route path = '/admin' element = {<Admin />} />
-}                
         </Routes>
 
     )

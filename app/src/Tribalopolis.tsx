@@ -3,10 +3,31 @@
 
 import React, { useState, useEffect } from 'react'
 
+import { signOut } from "firebase/auth"
+
+import { Button } from '@chakra-ui/react'
+
+import { useAuth } from './utilities/FirebaseProviders'
+
 export const Tribalopolis = (props) => {
 
-    return <div>Main page</div>
+    const auth = useAuth();
+    
+    const logOut = () => {
 
+        signOut(auth).then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          // An error happened.
+        })
+    }
+
+    return (
+        <>
+            <div>Main page</div>
+            <Button onClick = {logOut}> Sign out </Button>
+        </>
+    )
 }
 
 export default Tribalopolis
