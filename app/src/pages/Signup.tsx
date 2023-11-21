@@ -26,37 +26,37 @@ const Signup = (props) => {
 
     useEffect (()=>{
 
-    if (user) {
-
-        navigate('/')
-        return
-
-    }
-
-    getRedirectResult(auth)
-        .then((result) => {
-
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-
-            const user = result.user;
-
-            console.log('user', user)
+        if (user) {
 
             navigate('/')
+            return
 
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
-        }).catch((error) => {
-            console.log('error',error)
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData?.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-        });
+        }
+
+        getRedirectResult(auth)
+            .then((result) => {
+
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+
+                const user = result.user;
+
+                console.log('user in Signup', user)
+
+                navigate('/')
+
+                // IdP data available using getAdditionalUserInfo(result)
+                // ...
+            }).catch((error) => {
+                console.log('error in Signup',error)
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData?.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+            });
 
     },[user])
 

@@ -66,7 +66,7 @@ export const UserProvider = ({children}) => {
 
         isMountedRef.current = true
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, (user) => {
-            console.log('user', user)
+            console.log('user in FirebaseProviders', user)
             // https://firebase.google.com/docs/reference/js/auth.user
             setUser(user)
         })

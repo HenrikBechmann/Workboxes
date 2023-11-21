@@ -40,6 +40,8 @@ const App = () => {
 
     const user = useUser()
 
+    console.log('user in App', user)
+
     return (
       
         <Routes>
