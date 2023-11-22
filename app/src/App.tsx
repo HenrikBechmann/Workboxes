@@ -42,6 +42,10 @@ const App = () => {
 
     console.log('user in App', user)
 
+    if (user === undefined) {
+        return <div> Connecting... </div>
+    }
+
     const startingLocationRef = useRef(useLocation())
 
     console.log('locationRef', startingLocationRef)
