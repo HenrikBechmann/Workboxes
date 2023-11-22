@@ -2,10 +2,10 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 // react
-import React from 'react'
+import React, { useRef } from 'react'
 
 // services
-import { Routes, Route } from 'react-router'
+import { Routes, Route, useLocation } from 'react-router'
 import { useUser } from './utilities/FirebaseProviders'
 
 // local
@@ -42,17 +42,21 @@ const App = () => {
 
     console.log('user in App', user)
 
+    const startingLocationRef = useRef(useLocation())
+
+    console.log('locationRef', startingLocationRef)
+
     return (
       
         <Routes>
-            <Route path = '/' element = {<MemberRoutes />} > 
+            <Route path = '/' element = {<MemberRoutes startingLocationRef = {startingLocationRef}/>} > 
                 <Route index element = { <Tribalopolis /> } />
-                <Route path = '/account' element = { <Account /> } />
+                <Route path = 'account' element = { <Account /> } />
             </Route>
+            <Route path = '/declined' element = { <Declined /> } />
             <Route path = '/start' element = { <Start /> } />
             <Route path = '/signup' element = { <Signup /> } />
             <Route path = '/login' element = { <Login /> } />
-            <Route path = '/declined' element = { <Declined /> } />
             <Route path = '*' element = {<NotFound />} />
         </Routes>
 

@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { useUser } from '../utilities/FirebaseProviders'
 
-function MemberRoute() {
+function MemberRoute({startingLocationRef}) {
 
   const user = useUser()
 
@@ -12,7 +12,12 @@ function MemberRoute() {
 
   if (!user) {
     return <Navigate to = {'/start'} replace />
+  } else if (startingLocationRef.current) {
+    const startingPath = startingLocationRef.current
+    startingLocationRef.current = null
+    return <Navigate to = {startingPath} replace />
+  } else {
+    return <Outlet />
   }
-  return <Outlet />
 }
 export default MemberRoute

@@ -3,23 +3,35 @@
 
 import React, { useState, useEffect } from 'react'
 
-import { signOut } from "firebase/auth"
+import { signOut, deleteUser } from "firebase/auth"
 
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@chakra-ui/react'
 
-import { useAuth } from './utilities/FirebaseProviders'
+import { useAuth, useUser } from './utilities/FirebaseProviders'
 
 export const Tribalopolis = (props) => {
 
     const auth = useAuth()
+
+    const user = useUser()
 
     const navigate = useNavigate()
 
     const gotoAccount = () => {
         navigate('/account')
     } 
+
+    const deleteAccount = () => {
+        
+        deleteUser(user).then(()=>{
+            console.log('deleted user', user.displayName, user.email)
+        }).catch((error) => {
+            console.log('failed delete user',error)
+        })
+
+    }
     
     const logOut = () => {
 
@@ -34,7 +46,12 @@ export const Tribalopolis = (props) => {
         <>
             <div>Main page</div>
             <Button onClick = {logOut}> Sign out </Button>
+            <Button onClick = {deleteAccount}> Delete account </Button>
             <Button onClick = {gotoAccount}> Go to account </Button>
+            <div><span>{user.displayName} {user.email}</span></div>
+            <pre><code>
+                {JSON.stringify(user,null,2)}
+            </code></pre>
         </>
     )
 }
