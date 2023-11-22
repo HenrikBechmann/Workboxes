@@ -50,7 +50,7 @@ export default FirebaseProviders
 // special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(undefined)
     const authStateUnsubscribeRef = useRef(null)
     const isMountedRef = useRef(true)
 
