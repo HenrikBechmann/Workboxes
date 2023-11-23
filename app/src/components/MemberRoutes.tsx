@@ -1,6 +1,6 @@
 // ProtectedRoute.tsx based on https://www.robinwieruch.de/react-router-private-routes/
 import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { useUser } from '../utilities/FirebaseProviders'
 
@@ -8,11 +8,15 @@ function MemberRoute() {
 
   const user = useUser()
 
-  console.log('user in MemberRoutes',user)
+  const location = useLocation()
+
+  console.log('location in MemberRoutes',location)
 
   if (!user) {
 
-    return <Navigate to = {'/signin'} />
+    const from = location.pathname || '/'
+
+    return <Navigate to = {`/signin/?from=${from}`} />
 
   } else {
 

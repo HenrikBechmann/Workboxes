@@ -11,7 +11,6 @@ import { useUser } from './utilities/FirebaseProviders'
 // local
 import Tribalopolis from './Tribalopolis'
 import Signin from './pages/Signin'
-import Signup from './pages/Signup'
 import Account from './pages/Account'
 import NotFound from './pages/NotFound'
 
@@ -38,7 +37,9 @@ const App = () => {
 
     const user = useUser()
 
-    console.log('user in App', user)
+    const location = useLocation()
+
+    console.log('location in App', location)
 
     if (user === undefined) {
         return <div> Connecting... </div>
@@ -51,8 +52,9 @@ const App = () => {
                 <Route index element = { <Tribalopolis /> } />
                 <Route path = 'account' element = { <Account /> } />
             </Route>
-            <Route path = '/signin' element = { <Signin /> } />
-            <Route path = '/signup' element = { <Signup /> } />
+            <Route path = '/signin/*' element = { <Signin /> } >
+                <Route path = ':id' element = { <Signin /> } />
+            </Route>
             <Route path = '*' element = {<NotFound />} />
         </Routes>
 
