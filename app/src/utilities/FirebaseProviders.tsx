@@ -101,7 +101,7 @@ const useUser = () => {
     return useContext(UserContext)
 }
 
-const useFirestoreDb = () => {
+const useFirestore = () => {
     return useContext(FirestoreContext)
 }
 
@@ -113,7 +113,7 @@ export {
     useFirebaseApp,
     useAuth,
     useUser,
-    useFirestoreDb,
+    useFirestore,
     useStorage,
 }
 

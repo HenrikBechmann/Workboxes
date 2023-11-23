@@ -10,10 +10,8 @@ import { useUser } from './utilities/FirebaseProviders'
 
 // local
 import Tribalopolis from './Tribalopolis'
-import Start from './pages/Start'
+import Signin from './pages/Signin'
 import Signup from './pages/Signup'
-import Login from './pages/Login'
-import Declined from './pages/Declined'
 import Account from './pages/Account'
 import NotFound from './pages/NotFound'
 
@@ -46,21 +44,15 @@ const App = () => {
         return <div> Connecting... </div>
     }
 
-    const startingLocationRef = useRef(useLocation())
-
-    console.log('locationRef', startingLocationRef)
-
     return (
       
         <Routes>
-            <Route path = '/' element = {<MemberRoutes startingLocationRef = {startingLocationRef}/>} > 
+            <Route path = '/' element = {<MemberRoutes/>} > 
                 <Route index element = { <Tribalopolis /> } />
                 <Route path = 'account' element = { <Account /> } />
             </Route>
-            <Route path = '/declined' element = { <Declined /> } />
-            <Route path = '/start' element = { <Start /> } />
+            <Route path = '/signin' element = { <Signin /> } />
             <Route path = '/signup' element = { <Signup /> } />
-            <Route path = '/login' element = { <Login /> } />
             <Route path = '*' element = {<NotFound />} />
         </Routes>
 

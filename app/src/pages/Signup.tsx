@@ -1,7 +1,7 @@
 // Signup.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from "firebase/auth"
 
@@ -20,35 +20,29 @@ const Signup = (props) => {
 
     const auth = useAuth()
 
-    const user = useUser()
+    const userRef = useRef()
+
+    userRef.current = useUser()
 
     const navigate = useNavigate()
 
     useEffect (()=>{
 
-        if (user) {
-
-            navigate('/')
-            return
-
-        }
-
         getRedirectResult(auth)
             .then((result) => {
 
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
+                console.log('result in getRedirectResult Signup', result)
 
-                const user = result.user;
+                if (result === null) return
 
-                console.log('user in Signup', user)
-
-                navigate('/')
+                const credential = GoogleAuthProvider.credentialFromResult(result)
+                const token = credential.accessToken
+                const user = result.user
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
             }).catch((error) => {
-                console.log('error in Signup',error)
+                console.log('error in Signup from redirectResult',error)
                 // Handle Errors here.
                 const errorCode = error.code;
                 const errorMessage = error.message;
@@ -58,7 +52,13 @@ const Signup = (props) => {
                 const credential = GoogleAuthProvider.credentialFromError(error);
             });
 
-    },[user])
+        if (userRef.current) {
+
+            navigate('/')
+
+        }
+
+    },[])
 
     const signInWithGoogle = () => {
         signInWithRedirect(auth, provider)
