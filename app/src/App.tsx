@@ -39,7 +39,7 @@ const App = () => {
 
     const location = useLocation()
 
-    console.log('location in App', location)
+    // console.log('location in App', location)
 
     if (user === undefined) {
         return <div> Connecting... </div>
@@ -51,11 +51,9 @@ const App = () => {
             <Route path = '/' element = {<MemberRoutes/>} > 
                 <Route index element = { <Tribalopolis /> } />
                 <Route path = 'account' element = { <Account /> } />
+                <Route path = '*' element = {<NotFound />} />
             </Route>
-            <Route path = '/signin/*' element = { <Signin /> } >
-                <Route path = ':id' element = { <Signin /> } />
-            </Route>
-            <Route path = '*' element = {<NotFound />} />
+            <Route path = '/signin' element = { <Signin /> } />
         </Routes>
 
     )

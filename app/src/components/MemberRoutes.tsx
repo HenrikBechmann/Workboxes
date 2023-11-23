@@ -10,13 +10,13 @@ function MemberRoute() {
 
   const location = useLocation()
 
-  console.log('location in MemberRoutes',location)
+  // console.log('location in MemberRoutes',location)
 
   if (!user) {
 
     const from = location.pathname || '/'
 
-    return <Navigate to = {`/signin/?from=${from}`} />
+    return <Navigate to = {`/signin?from=${location.pathname}`} />
 
   } else {
 
