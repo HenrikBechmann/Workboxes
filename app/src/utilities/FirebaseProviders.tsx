@@ -24,8 +24,8 @@ const AuthContext = React.createContext(auth)
 
 const UserContext = React.createContext(null)
 
-const firestoreDb = getFirestore(firebaseApp)
-const FirestoreContext = React.createContext(firestoreDb)
+const firestore = getFirestore(firebaseApp)
+const FirestoreContext = React.createContext(firestore)
 
 const storage = getStorage(firebaseApp)
 const StorageContext = React.createContext(storage)
@@ -35,7 +35,7 @@ const FirebaseProviders = ({children}) => {
     return <FirebaseAppContext.Provider value = {firebaseApp}>
     <AuthContext.Provider value = {auth} >
     <UserProvider>
-    <FirestoreContext.Provider value = {firestoreDb}>
+    <FirestoreContext.Provider value = {firestore}>
     <StorageContext.Provider value = {storage}>
         {children}
     </StorageContext.Provider>

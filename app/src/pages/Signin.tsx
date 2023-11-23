@@ -2,8 +2,8 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useRef, useEffect } from 'react'
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
-import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from "firebase/auth"
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth"
 import { 
     Card, CardHeader, CardBody, CardFooter,
     Box, VStack, HStack, StackDivider, Center,
@@ -31,13 +31,9 @@ const Start = (props) => {
 
     const navigate = useNavigate()
 
-    const location = useLocation()
-
     const [searchParams] = useSearchParams()
 
     const from = searchParams.get('from') || '/'
-
-    // console.log('search params', searchParams, searchParams.get('from'))
 
     useEffect (()=>{
 
@@ -65,8 +61,6 @@ const Start = (props) => {
             });
 
         if (userRef.current) {
-
-            // console.log('redirecting from signIn to home: location', location)
 
             navigate(from)
 

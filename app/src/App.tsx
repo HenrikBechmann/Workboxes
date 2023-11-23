@@ -5,7 +5,7 @@
 import React, { useRef } from 'react'
 
 // services
-import { Routes, Route, useLocation } from 'react-router'
+import { Routes, Route } from 'react-router'
 import { useUser } from './utilities/FirebaseProviders'
 
 // local
@@ -36,10 +36,6 @@ import MemberRoutes from './components/MemberRoutes'
 const App = () => {
 
     const user = useUser()
-
-    const location = useLocation()
-
-    // console.log('location in App', location)
 
     if (user === undefined) {
         return <div> Connecting... </div>

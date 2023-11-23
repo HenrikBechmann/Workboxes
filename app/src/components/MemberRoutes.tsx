@@ -10,8 +10,6 @@ function MemberRoute() {
 
   const location = useLocation()
 
-  // console.log('location in MemberRoutes',location)
-
   if (!user) {
 
     const from = location.pathname || '/'
