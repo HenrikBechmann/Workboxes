@@ -13,26 +13,17 @@ import { useAuth, useUser } from './utilities/FirebaseProviders'
 
 export const Tribalopolis = (props) => {
 
-    const auth = useAuth()
-
-    const user = useUser()
-
-    const navigate = useNavigate()
+    const 
+        auth = useAuth(),
+        user = useUser(),
+        navigate = useNavigate()
 
     const gotoAccount = () => {
+
         navigate('/account')
+        
     } 
 
-    const deleteAccount = () => {
-        
-        deleteUser(user).then(()=>{
-            console.log('deleted user', user.displayName, user.email)
-        }).catch((error) => {
-            console.log('failed delete user',error)
-        })
-
-    }
-    
     const logOut = () => {
 
         signOut(auth).then(() => {
@@ -45,13 +36,9 @@ export const Tribalopolis = (props) => {
     return (
         <>
             <div>Main page</div>
-            <Button onClick = {logOut}> Sign out </Button>
-            <Button onClick = {deleteAccount}> Delete account </Button>
-            <Button onClick = {gotoAccount}> Go to account </Button>
-            <div><span>{user.displayName} {user.email}</span></div>
-            <pre><code>
-                {JSON.stringify(user,null,2)}
-            </code></pre>
+            <Button m = {3} onClick = {logOut}> Sign out </Button>
+            <Button m = {3} onClick = {gotoAccount}> Go to account </Button>
+            <div>{user.displayName} {user.email}</div>
         </>
     )
 }
