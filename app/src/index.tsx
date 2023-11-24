@@ -5,7 +5,10 @@
 import React from 'react'
 
 import { BrowserRouter as RouterProvider} from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+// see instead the favoured createBrowserRouter https://reactrouter.com/en/main/routers/create-browser-router
+
+// import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 // chakra
 import { ChakraProvider } from '@chakra-ui/react'
 
@@ -16,16 +19,17 @@ import App from './App'
 
 const root = createRoot(document.getElementById('root'))
 
-const queryClient = new QueryClient()
+// const queryClient = new QueryClient()
+
+// <QueryClientProvider client={queryClient}>
+// </QueryClientProvider>
 
 root.render(
     <FirebaseProviders>
-        <QueryClientProvider client={queryClient}>
-        <RouterProvider>
-        <ChakraProvider>
-            <App /> 
-        </ChakraProvider>
-        </RouterProvider>
-        </QueryClientProvider>
+    <RouterProvider>
+    <ChakraProvider>
+        <App /> 
+    </ChakraProvider>
+    </RouterProvider>
     </FirebaseProviders>
 )
