@@ -21,7 +21,7 @@ provider.setCustomParameters({
   prompt: 'select_account',
 })
 
-const Start = (props) => {
+const Signin = (props) => {
 
     const auth = useAuth()
 
@@ -62,7 +62,7 @@ const Start = (props) => {
 
         if (userRef.current) {
 
-            navigate(from)
+            navigate(from, {replace:true})
 
         }
 
@@ -123,4 +123,4 @@ const Start = (props) => {
     )
 }
 
-export default Start
+export default Signin

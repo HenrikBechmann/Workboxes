@@ -14,7 +14,7 @@ function MemberRoute() {
 
     const from = location.pathname || '/'
 
-    return <Navigate to = {`/signin?from=${from}`} />
+    return <Navigate to = {`/signin?from=${from}`}/>
 
   } else {
 
