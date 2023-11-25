@@ -62,7 +62,7 @@ const Signin = (props) => {
 
         if (userRef.current) {
 
-            navigate(from, {replace:true})
+            navigate(from)
 
         }
 
