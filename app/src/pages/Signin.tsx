@@ -1,7 +1,7 @@
 // Start.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth"
 import { 
@@ -22,6 +22,8 @@ provider.setCustomParameters({
 })
 
 const Signin = (props) => {
+
+    const [errorState,setErrorState] = useState('')
 
     const auth = useAuth()
 
@@ -49,8 +51,15 @@ const Signin = (props) => {
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
+                if (userRef.current) {
+
+                    navigate(from)
+
+                }
+
             }).catch((error) => {
                 console.log('error in Signup from redirectResult',error)
+                setErrorState(error.message)
                 // Handle Errors here.
                 // const errorCode = error.code;
                 // const errorMessage = error.message;
@@ -59,12 +68,6 @@ const Signin = (props) => {
                 // // The AuthCredential type that was used.
                 // const credential = GoogleAuthProvider.credentialFromError(error);
             });
-
-        if (userRef.current) {
-
-            navigate(from)
-
-        }
 
     },[])
 
@@ -104,6 +107,7 @@ const Signin = (props) => {
                     >
                         Sign in using Google
                     </Button></div>
+                    {errorState && <Text> {errorState} </Text>}
                 </HStack>
             </Box>
             <Box style = {{textAlign:'center'}} >
