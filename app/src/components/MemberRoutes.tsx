@@ -10,6 +10,10 @@ function MemberRoute() {
 
   const location = useLocation()
 
+  if (user === undefined) {
+      return <div> Loading... </div>
+  }
+
   if (!user) {
 
     const from = location.pathname || '/'

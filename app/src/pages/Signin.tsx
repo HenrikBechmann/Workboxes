@@ -77,8 +77,12 @@ const Signin = (props) => {
 
     }
 
+    if (userRef.current === undefined) {
+        return <div> Connecting... </div>
+    }
+
     if (userRef.current) {
-        return <div> signed in... redirecting... </div>
+        return null
     }
 
     return (

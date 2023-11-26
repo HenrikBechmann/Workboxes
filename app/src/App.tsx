@@ -6,7 +6,6 @@ import React, { useRef } from 'react'
 
 // services
 import { Routes, Route } from 'react-router'
-import { useUser } from './system/FirebaseProviders'
 
 // local
 import Tribalopolis from './Tribalopolis'
@@ -34,12 +33,6 @@ import MemberRoutes from './components/MemberRoutes'
 */
 
 const App = () => {
-
-    const user = useUser()
-
-    if (user === undefined) {
-        return <div> Connecting... </div>
-    }
 
     return (
       
