@@ -108,9 +108,15 @@ const Signin = (props) => {
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>Self organize into Work Groups.</Text>
-                <Text>Organize information into <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> Work Boxes.</Text>
+                <Text>Organize information into 
+                    <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/> 
+                    Work Boxes.
+                </Text>
                 <Text>Cluster Work Boxes into Work Windows.</Text>
-                <Text>Drag and Drop <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> things around to keep up to date.</Text>
+                <Text>Drag and Drop 
+                    <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> 
+                    things around to keep up to date.
+                </Text>
                 <Text>Organize Work Windows into Work Panels.</Text>
                 <Text>Organize Work Panels into Work Spaces.</Text>
                 <Text>Have fun!</Text>
