@@ -12,7 +12,7 @@ import { BrowserRouter as RouterProvider} from 'react-router-dom'
 // chakra
 import { ChakraProvider } from '@chakra-ui/react'
 
-import FirebaseProviders from './utilities/FirebaseProviders'
+import FirebaseProviders from './system/FirebaseProviders'
 
 import { createRoot } from 'react-dom/client'
 import App from './App'

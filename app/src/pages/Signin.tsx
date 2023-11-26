@@ -10,7 +10,7 @@ import {
     Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
-import { useAuth, useUser } from '../utilities/FirebaseProviders'
+import { useAuth, useUser } from '../system/FirebaseProviders'
 
 import tribalopolisIcon from '../../assets/fire.png'
 import boxIcon from '../../assets/workbox.png'

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@chakra-ui/react'
 
-import { useAuth, useUser } from './utilities/FirebaseProviders'
+import { useAuth, useUser } from './system/FirebaseProviders'
 
 export const Tribalopolis = (props) => {
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
-import { useUser } from '../utilities/FirebaseProviders'
+import { useUser } from '../system/FirebaseProviders'
 
 function MemberRoute() {
 
