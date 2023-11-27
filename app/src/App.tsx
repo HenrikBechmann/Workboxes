@@ -1,5 +1,6 @@
 // App.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
+// **DEPRECATED**
 
 // react
 import React, { useRef } from 'react'

@@ -11,9 +11,9 @@ import FirebaseProviders from './system/FirebaseProviders'
 
 import { ChakraProvider } from '@chakra-ui/react'
 
-import routes from './system/Routes'
+import scaffold from './system/scaffold'
 
-const router = createBrowserRouter(routes)
+const router = createBrowserRouter(scaffold)
 
 const root = createRoot(document.getElementById('root'))
 
