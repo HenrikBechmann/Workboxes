@@ -37,7 +37,7 @@ const App = () => {
     return (
       
         <Routes>
-            <Route path = '/' element = {<MemberRoutes/>} > 
+            <Route path = '/' element = {<MemberRoutes />} > 
                 <Route index element = { <Tribalopolis /> } />
                 <Route path = 'account' element = { <Account /> } />
                 <Route path = '*' element = {<NotFound />} />
