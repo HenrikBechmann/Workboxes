@@ -58,7 +58,7 @@ const Signin = (props) => {
                 }
 
             }).catch((error) => {
-                console.log('error in Signup from redirectResult',error)
+                console.log('error in Signup from redirectResult', error)
                 setErrorState(error.message)
                 // Handle Errors here.
                 // const errorCode = error.code;
