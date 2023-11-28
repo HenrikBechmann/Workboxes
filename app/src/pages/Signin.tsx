@@ -23,7 +23,7 @@ provider.setCustomParameters({
 
 const Signin = (props) => {
 
-    const [errorState,setErrorState] = useState('')
+    const [errorState,setErrorState] = useState<any>(null)
 
     const auth = useAuth()
 
@@ -58,8 +58,13 @@ const Signin = (props) => {
                 }
 
             }).catch((error) => {
-                console.log('error in Signup from redirectResult', error)
-                setErrorState(error.message)
+
+                // console.log('error.message',error.message)
+                const jsonstring = error.message.match(/\{(.*)\}/)[0]
+                // console.log('error jsonstring', jsonstring)
+                const json = JSON.parse(jsonstring)
+                // console.log('json', json)
+                setErrorState(json)
                 // Handle Errors here.
                 // const errorCode = error.code;
                 // const errorMessage = error.message;
@@ -111,8 +116,12 @@ const Signin = (props) => {
                     >
                         Sign in using Google
                     </Button></div>
-                    {errorState && <Text> {errorState} </Text>}
                 </HStack>
+                {errorState && 
+                    <Text mt = {"20px"} style = {{backgroundColor:'lightpink', padding:'10px 3px 10px 3px'}}> 
+                    Sorry, permission is denied.<br />
+                    {errorState.error?.message}<br />
+                    {errorState.error?.details} </Text>}
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>Self organize into Work Groups.</Text>

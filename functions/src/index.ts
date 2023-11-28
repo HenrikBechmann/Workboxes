@@ -45,8 +45,8 @@ export const beforecreated = beforeUserCreated(async (event) => {
   console.log("query result", result?.docs[0]);
   if (!result?.docs[0]) {
     throw new HttpsError("permission-denied",
-      "An invitation is required to sign in to Tribalopolis",
-      email + " is not found in invitations");
+      "An invitation is required to sign in to Tribalopolis.",
+      email + " was not found in invitations.");
   }
 });
 
