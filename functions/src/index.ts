@@ -10,7 +10,7 @@
 // import {onRequest} from "firebase-functions/v2/https";
 // import * as logger from "firebase-functions/logger";
 
-import * as admin from "firebase-admin";
+import {getFirestore} from "firebase-admin/firestore";
 
 import {
   beforeUserCreated,
@@ -21,7 +21,7 @@ import {
 // https://firebase.google.com/docs/functions/typescript
 
 export const beforecreated = beforeUserCreated((event) => {
-  const db = admin.firestore();
+  const db = getFirestore();
   db.collection("invitations")
     .where("email", "==", "something".toLowerCase())
     .get()
