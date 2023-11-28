@@ -7,8 +7,10 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+// import {onRequest} from "firebase-functions/v2/https";
+// import * as logger from "firebase-functions/logger";
+
+import * as admin from "firebase-admin";
 
 import {
   beforeUserCreated,
@@ -18,13 +20,20 @@ import {
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+export const beforecreated = beforeUserCreated(async (event) => {
+  const db = admin.firestore();
+  db.collection("invitations")
+    .where("email", "==", "something".toLowerCase())
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        // fail!
+      }
+    })
+    .catch((error) => {
+      // fail with error
+    });
 
-export const beforecreated = beforeUserCreated((event) => {
-  // TODO
   return;
 });
 
