@@ -20,7 +20,7 @@ import {
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const beforecreated = beforeUserCreated(async (event) => {
+export const beforecreated = beforeUserCreated((event) => {
   const db = admin.firestore();
   db.collection("invitations")
     .where("email", "==", "something".toLowerCase())
