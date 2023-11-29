@@ -6,9 +6,9 @@ import { useUser } from '../system/FirebaseProviders'
 
 function MemberRoute() {
 
-  const user = useUser()
-
-  const location = useLocation()
+  const 
+    user = useUser(),
+    location = useLocation()
 
   if (user === undefined) {
       return <div> Loading... </div>
@@ -17,7 +17,6 @@ function MemberRoute() {
   if (!user) {
 
     const from = location.pathname || '/'
-
     return <Navigate to = {`/signin?from=${from}`}/>
 
   } else {

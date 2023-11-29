@@ -23,19 +23,15 @@ provider.setCustomParameters({
 
 const Signin = (props) => {
 
-    const [errorState,setErrorState] = useState<any>(null)
-
-    const auth = useAuth()
-
-    const userRef = useRef()
+    const 
+        [errorState,setErrorState] = useState<any>(null),
+        auth = useAuth(),
+        userRef = useRef(),
+        navigate = useNavigate(),
+        [searchParams] = useSearchParams(),
+        from = searchParams.get('from') || '/'
 
     userRef.current = useUser()
-
-    const navigate = useNavigate()
-
-    const [searchParams] = useSearchParams()
-
-    const from = searchParams.get('from') || '/'
 
     useEffect (()=>{
 

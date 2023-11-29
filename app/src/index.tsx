@@ -4,15 +4,11 @@
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
-import FirebaseProviders from './system/FirebaseProviders'
-
 import { ChakraProvider } from '@chakra-ui/react'
 
+import FirebaseProviders from './system/FirebaseProviders'
 import scaffold from './system/scaffold'
-
 const router = createBrowserRouter(scaffold)
 
 const root = createRoot(document.getElementById('root'))
