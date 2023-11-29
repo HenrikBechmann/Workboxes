@@ -24,10 +24,6 @@ const routes = [
                 path: 'account',
                 element: <Account />,
             },
-            {
-                path: '*',
-                element: <NotFound />,
-            },
         ],
     },
     {
@@ -37,6 +33,10 @@ const routes = [
     {
         path: 'about',
         element: <About />
+    },
+    {
+        path: '*',
+        element: <NotFound />,
     },
 ]
 

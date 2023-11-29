@@ -57,6 +57,10 @@ const Signin = (props) => {
 
                 const jsonstring = error.message.match(/\{(.*)\}/)[0]
                 const json = JSON.parse(jsonstring)
+                const errorStatus = json.error?.status
+                if (errorStatus == 'PERMISSION_DENIED') {
+                    json.error.status = 'Sorry, permission is denied.'
+                }
                 setErrorState(json)
                 // Handle Errors here.
                 // const errorCode = error.code;
@@ -112,7 +116,7 @@ const Signin = (props) => {
                 </HStack>
                 {errorState && 
                     <Text mt = {"20px"} style = {{backgroundColor:'lightpink', padding:'10px 3px 10px 3px'}}> 
-                    Sorry, permission is denied.<br />
+                    {errorState.error.status}<br />
                     {errorState.error?.message}<br />
                     {errorState.error?.details} </Text>}
             </Box>
