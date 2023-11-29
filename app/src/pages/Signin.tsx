@@ -55,11 +55,8 @@ const Signin = (props) => {
 
             }).catch((error) => {
 
-                // console.log('error.message',error.message)
                 const jsonstring = error.message.match(/\{(.*)\}/)[0]
-                // console.log('error jsonstring', jsonstring)
                 const json = JSON.parse(jsonstring)
-                // console.log('json', json)
                 setErrorState(json)
                 // Handle Errors here.
                 // const errorCode = error.code;

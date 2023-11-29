@@ -1,4 +1,5 @@
-// ProtectedRoute.tsx based on https://www.robinwieruch.de/react-router-private-routes/
+// MemberRoutes.tsx
+// copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 

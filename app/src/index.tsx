@@ -16,7 +16,7 @@ const root = createRoot(document.getElementById('root'))
 root.render(
     <FirebaseProviders>
     <ChakraProvider>
-    <RouterProvider router = {router} />
+        <RouterProvider router = {router} />
     </ChakraProvider>
     </FirebaseProviders>
 )

@@ -1,3 +1,5 @@
+// tribalopolis cloud functions
+// copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 /**
  * Import function triggers from their respective submodules:
  *
@@ -9,14 +11,13 @@
 
 import {HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-const app = admin.initializeApp();
 import {getFirestore} from "firebase-admin/firestore";
 import {
   beforeUserCreated,
   beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+
+const app = admin.initializeApp();
 
 export const beforecreated = beforeUserCreated(async (event) => {
   const user = event.data;
@@ -27,10 +28,10 @@ export const beforecreated = beforeUserCreated(async (event) => {
   try {
     result = await db.collection("invitations")
       .where("email", "==", email).get();
-  } catch (error) {
-    // throw new HttpsError("internal",
-    //   "Internal error: " + error.message,
-    //   email + " is not found in invitations");
+  } catch (e) {
+    const error:Error = e as Error;
+    throw new HttpsError("internal",
+      "Internal error: " + error?.message);
   }
   if (!result?.docs[0]) {
     throw new HttpsError("permission-denied",
