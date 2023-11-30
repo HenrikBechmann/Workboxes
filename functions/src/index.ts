@@ -22,6 +22,7 @@ export const isSuperUser = onCall(async (request) => {
   const isAdmin = {
     isSuperUser: false,
     errorCondition: false,
+    role: undefined,
   };
   const db = getFirestore(app);
   let result;
@@ -32,6 +33,7 @@ export const isSuperUser = onCall(async (request) => {
     isAdmin.errorCondition = true;
   }
   if (result?.docs[0]) {
+    isAdmin.role = result.docs[0].data().role;
     isAdmin.isSuperUser = true;
   }
   return isAdmin;
