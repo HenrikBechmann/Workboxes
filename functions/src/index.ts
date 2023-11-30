@@ -9,7 +9,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {HttpsError} from "firebase-functions/v2/https";
+import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import {getFirestore} from "firebase-admin/firestore";
 import {
@@ -18,6 +18,27 @@ import {
 } from "firebase-functions/v2/identity";
 
 const app = admin.initializeApp();
+
+export const isSuperUser = onCall(async (request) => {
+  let email = request.auth?.token.email || null;
+  if (email) email = email.toLowerCase();
+  const isAdmin = {
+    isSuperUser: false,
+    errorCondition: false,
+  };
+  const db = getFirestore(app);
+  let result;
+  try {
+    result = await db.collection("sysadmins")
+      .where("email", "==", email).get();
+  } catch (e) {
+    isAdmin.errorCondition = true;
+  }
+  if (result?.docs[0]) {
+    isAdmin.isSuperUser = true;
+  }
+  return isAdmin;
+});
 
 export const beforecreated = beforeUserCreated(async (event) => {
   const user = event.data;

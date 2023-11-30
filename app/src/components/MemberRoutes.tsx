@@ -22,6 +22,8 @@ function MemberRoute() {
 
   } else {
 
+    // console.log('user',user)
+
     return <Outlet />
 
   }

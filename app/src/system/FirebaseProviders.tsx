@@ -10,6 +10,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -65,9 +66,24 @@ export const UserProvider = ({children}) => {
     useEffect(()=>{
 
         isMountedRef.current = true
-        authStateUnsubscribeRef.current = onAuthStateChanged(auth, (user) => {
-            // console.log('user in FirebaseProviders', user)
-            // https://firebase.google.com/docs/reference/js/auth.user
+        authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
+
+            if (user) {
+                const superUser = {
+                    isSuperUser:false,
+                    errorCondition:false,
+                }
+                const functions = getFunctions();
+                const isSuperUser = httpsCallable(functions, 'isSuperUser');
+                try {
+                    const result:any = await isSuperUser()
+                    superUser.isSuperUser = result.data.isSuperUser
+                    // console.log('result, superUser',result, superUser)
+                } catch (error) {
+                    superUser.errorCondition = true
+                }
+            }
+
             setUser(user)
         })
 

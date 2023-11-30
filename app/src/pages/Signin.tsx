@@ -2,8 +2,8 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useRef, useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth"
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, getAdditionalUserInfo } from "firebase/auth"
 import { 
     Card, CardHeader, CardBody, CardFooter,
     Box, VStack, HStack, StackDivider, Center,
@@ -29,7 +29,10 @@ const Signin = (props) => {
         userRef = useRef(),
         navigate = useNavigate(),
         [searchParams] = useSearchParams(),
-        from = searchParams.get('from') || '/'
+        from = searchParams.get('from') || '/',
+        location = useLocation()
+
+    // console.log('location', location, from)
 
     userRef.current = useUser()
 
@@ -38,17 +41,20 @@ const Signin = (props) => {
         getRedirectResult(auth)
             .then((result) => {
 
+                // console.log('getRedirectResult',result)
+
                 if (result === null) return
 
                 // additional properties if needed
-                // const credential = GoogleAuthProvider.credentialFromResult(result)
                 // const token = credential.accessToken
                 // const user = result.user
-
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
-                if (userRef.current) {
+                if (result) { //(userRef.current) {
 
+                    // const credential = GoogleAuthProvider.credentialFromResult(result)
+                    // const additionalInfo = getAdditionalUserInfo(result)
+                    // console.log('credential, additionalInfo',credential, additionalInfo)
                     navigate(from)
 
                 }
