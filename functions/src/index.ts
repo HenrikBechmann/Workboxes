@@ -1,5 +1,6 @@
 // tribalopolis cloud functions
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
+
 /**
  * import {onDocumentWritten} from "firebase-functions/v2/firestore";
  *

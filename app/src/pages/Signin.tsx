@@ -90,7 +90,9 @@ const Signin = (props) => {
     }
 
     if (userDataRef.current) {
+
         return null
+
     }
 
     return (

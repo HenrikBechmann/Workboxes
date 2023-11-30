@@ -12,7 +12,9 @@ function SysadminRoutes() {
     location = useLocation()
 
   if (userdata === undefined) {
+
       return <div> Loading... </div>
+      
   }
 
   if (!userdata) {
@@ -22,12 +24,13 @@ function SysadminRoutes() {
 
   } else if (userdata.sysadminStatus.isSuperUser) {
 
-    // console.log('user',user)
-
     return <Outlet />
 
   } else {
+
     return <Navigate to = {`/unauthorized`} replace/>
+
   }
+
 }
 export default SysadminRoutes
