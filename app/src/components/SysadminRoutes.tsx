@@ -1,11 +1,11 @@
-// MemberRoutes.tsx
+// SysadminRoutes.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { useUserData } from '../system/FirebaseProviders'
 
-function MemberRoutes() {
+function SysadminRoutes() {
 
   const 
     userdata = useUserData(),
@@ -20,12 +20,14 @@ function MemberRoutes() {
     const from = location.pathname || '/'
     return <Navigate to = {`/signin?from=${from}`}/>
 
-  } else {
+  } else if (userdata.sysadminStatus.isSuperUser) {
 
     // console.log('user',user)
 
     return <Outlet />
 
+  } else {
+    return <Navigate to = {`/unauthorized`} replace/>
   }
 }
-export default MemberRoutes
+export default SysadminRoutes

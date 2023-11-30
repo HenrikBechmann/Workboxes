@@ -10,7 +10,7 @@ import {
     Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
-import { useAuth, useUser } from '../system/FirebaseProviders'
+import { useAuth, useUserData } from '../system/FirebaseProviders'
 
 import tribalopolisIcon from '../../assets/fire.png'
 import boxIcon from '../../assets/workbox.png'
@@ -26,7 +26,7 @@ const Signin = (props) => {
     const 
         [errorState,setErrorState] = useState<any>(null),
         auth = useAuth(),
-        userRef = useRef(),
+        userDataRef = useRef(),
         navigate = useNavigate(),
         [searchParams] = useSearchParams(),
         from = searchParams.get('from') || '/',
@@ -34,7 +34,7 @@ const Signin = (props) => {
 
     // console.log('location', location, from)
 
-    userRef.current = useUser()
+    userDataRef.current = useUserData()
 
     useEffect (()=>{
 
@@ -85,11 +85,11 @@ const Signin = (props) => {
 
     }
 
-    if (userRef.current === undefined) {
+    if (userDataRef.current === undefined) {
         return <div> Connecting... </div>
     }
 
-    if (userRef.current) {
+    if (userDataRef.current) {
         return null
     }
 

@@ -23,7 +23,7 @@ const FirebaseAppContext = React.createContext(firebaseApp)
 const auth = getAuth(firebaseApp)
 const AuthContext = React.createContext(auth)
 
-const UserContext = React.createContext(null)
+const UserDataContext = React.createContext(null)
 
 const firestore = getFirestore(firebaseApp)
 const FirestoreContext = React.createContext(firestore)
@@ -51,7 +51,7 @@ export default FirebaseProviders
 // special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
-    const [user, setUser] = useState(undefined)
+    const [userData, setUserData] = useState(undefined)
     const authStateUnsubscribeRef = useRef(null)
     const isMountedRef = useRef(true)
 
@@ -68,6 +68,8 @@ export const UserProvider = ({children}) => {
         isMountedRef.current = true
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
 
+            let userData = null
+
             if (user) {
                 const superUser = {
                     isSuperUser:false,
@@ -82,9 +84,14 @@ export const UserProvider = ({children}) => {
                 } catch (error) {
                     superUser.errorCondition = true
                 }
+
+                userData = {
+                    authUser:user,
+                    sysadminStatus:superUser
+                }
             }
 
-            setUser(user)
+            setUserData(userData)
         })
 
         return () => {
@@ -96,9 +103,9 @@ export const UserProvider = ({children}) => {
     },[])
 
     return (
-        <UserContext.Provider value = {user} >
+        <UserDataContext.Provider value = {userData} >
             {children}
-        </UserContext.Provider>
+        </UserDataContext.Provider>
     )
 
 }
@@ -113,8 +120,8 @@ const useAuth = () => {
     return useContext(AuthContext)
 }
 
-const useUser = () => {
-    return useContext(UserContext)
+const useUserData = () => {
+    return useContext(UserDataContext)
 }
 
 const useFirestore = () => {
@@ -128,7 +135,7 @@ const useStorage = () => {
 export {
     useFirebaseApp,
     useAuth,
-    useUser,
+    useUserData,
     useFirestore,
     useStorage,
 }

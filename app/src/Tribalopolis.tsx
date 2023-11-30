@@ -9,13 +9,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@chakra-ui/react'
 
-import { useAuth, useUser } from './system/FirebaseProviders'
+import { useAuth, useUserData } from './system/FirebaseProviders'
 
 export const Tribalopolis = (props) => {
 
     const 
         auth = useAuth(),
-        user = useUser(),
+        userdata = useUserData(),
         navigate = useNavigate()
 
     const gotoAccount = () => {
@@ -27,6 +27,12 @@ export const Tribalopolis = (props) => {
     const gotoAbout = () => {
 
         navigate('/about')
+        
+    } 
+
+    const gotoSysadmin = () => {
+
+        navigate('/sysadmin')
         
     } 
 
@@ -45,7 +51,8 @@ export const Tribalopolis = (props) => {
             <Button m = {3} onClick = {logOut}> Sign out </Button>
             <Button m = {3} onClick = {gotoAccount}> Go to account </Button>
             <Button m = {3} onClick = {gotoAbout}> Go to about </Button>
-            <div>{user.displayName} {user.email}</div>
+            <Button m = {3} onClick = {gotoSysadmin}> Go to system administration </Button>
+            <div>{userdata.authUser.displayName} {userdata.authUser.email}</div>
         </>
     )
 }
