@@ -1,9 +1,6 @@
 // tribalopolis cloud functions
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 /**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
  * import {onDocumentWritten} from "firebase-functions/v2/firestore";
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
