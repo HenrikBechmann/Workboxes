@@ -10,7 +10,7 @@ const SysadminLayout = (props) => {
 
     return <>
         <div data-type = 'sysadmin-layout' style = {{height:'40px'}}>Header</div>
-        <div style = {bodyStyle}>
+        <div data-type = 'sysadmin-outlet' style = {bodyStyle}>
             <Outlet />
         </div>
         <div style = {{height:'40px'}}>Footer</div>
