@@ -12,6 +12,7 @@ import NotFound from '../pages/NotFound'
 import Unauthorized from '../pages/Unauthorized'
 import About from '../pages/About'
 import Sysadmin from '../pages/Sysadmin'
+import SysadminLayout from '../pages/SysadminLayout'
 
 const routes = [
     
@@ -38,8 +39,13 @@ const routes = [
         element: <SysadminRoutes />,
         children: [
             {
-                index: true,
-                element: <Sysadmin />,
+                element: <SysadminLayout />,
+                children: [
+                    {
+                        index:true,
+                        element:<Sysadmin />
+                    }
+                ]
             },
         ],
     },
