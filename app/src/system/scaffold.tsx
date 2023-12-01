@@ -11,8 +11,9 @@ import Account from '../pages/Account'
 import NotFound from '../pages/NotFound'
 import Unauthorized from '../pages/Unauthorized'
 import About from '../pages/About'
-import Sysadmin from '../pages/Sysadmin'
 import SysadminLayout from '../pages/SysadminLayout'
+import Sysadmin from '../pages/Sysadmin'
+import SysSettings from '../pages/SysSettings'
 
 const routes = [
     
@@ -35,16 +36,20 @@ const routes = [
         ],
     },
     {
-        path: '/sysadmin',
+        path: '/sysadmin/',
         element: <SysadminRoutes />,
         children: [
             {
                 element: <SysadminLayout />,
-                children: [
+                children:[
                     {
                         index:true,
-                        element:<Sysadmin />
-                    }
+                        element:<Sysadmin />,
+                    },
+                    {
+                        path:'settings',
+                        element:<SysSettings />
+                    },
                 ]
             },
         ],
