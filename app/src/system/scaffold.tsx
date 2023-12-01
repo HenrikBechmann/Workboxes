@@ -36,7 +36,7 @@ const routes = [
         ],
     },
     {
-        path: '/sysadmin/',
+        path: 'sysadmin',
         element: <SysadminRoutes />,
         children: [
             {
