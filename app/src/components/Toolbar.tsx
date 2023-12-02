@@ -7,7 +7,7 @@ import navBeforeIcon from '../../assets/nav_before.png'
 
 const menubarStyles = {
     overflow:'auto',
-    height:'28px',
+    height:'30px',
     width:'100%',
     display:'relative',
 }
@@ -32,19 +32,19 @@ const navNextStyles = {
 
 const Toolbar = (props) => {
 
-    const { children } = props
 
     const 
+        { children } = props,
+        [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
+        measurementsRef = useRef(measurements),
         menubarRef = useRef(null),
         menubarScrollerRef = useRef(null),
         isMountedRef = useRef(true),
         overflow_leftRef = useRef(false),
         overflow_rightRef = useRef(false),
-        resizeObserverRef = useRef(null),
-        [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
-        measurementsRef = useRef(measurements)
+        resizeObserverRef = useRef(null)
 
-    useEffect(()=>{
+    useEffect(() => {
         return () => {
             isMountedRef.current = false
         }
@@ -76,6 +76,8 @@ const Toolbar = (props) => {
             measurements = measurementsRef.current,
             menubar = menubarRef.current,
             scrollbar = menubarScrollerRef.current
+
+        if (!menubar || !scrollbar) return
 
         measurements.scrollLeft = menubar.scrollLeft
         measurements.menubarWidth = menubar.offsetWidth

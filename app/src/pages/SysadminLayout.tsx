@@ -5,9 +5,10 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 import Toolbar from '../components/Toolbar'
+import StandardToolbar from '../components/StandardToolbar'
 
 const bodyStyle = {
-    height: 'calc(100vh - 28px)', 
+    height: 'calc(100vh - 30px)', 
     display:'relative', 
     backgroundColor:'gray'
 }
@@ -15,7 +16,9 @@ const bodyStyle = {
 const SysadminLayout = (props) => {
 
     return <>
-        <Toolbar />
+        <Toolbar>
+            <StandardToolbar />
+        </Toolbar>
         <div data-type = 'sysadmin-outlet' style = {bodyStyle}>
             <Outlet />
         </div>
