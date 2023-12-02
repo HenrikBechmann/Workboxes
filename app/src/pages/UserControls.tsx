@@ -6,7 +6,7 @@ const outerStyle = {height: '100%', display:'relative', backgroundColor:'gray'}
 
 const UserControls = (props) => {
 
-    return <div data-type = 'sysadmin' style = {outerStyle}>User Controls</div>
+    return <div data-type = 'sysadmin' style = {outerStyle}>User Controls ▼</div>
 
 }
 
