@@ -11,6 +11,7 @@ import notificationsIcon from '../../assets/notifications.png'
 import chatIcon from '../../assets/chat.png'
 import helpIcon from '../../assets/help.png'
 import homeIcon from '../../assets/home.png'
+import subscriptionsIcon from '../../assets/subscriptions.png'
 
 const standardToolbarStyles = {
     display:'flex',
@@ -50,6 +51,9 @@ const StandardToolbar = (props) => {
         </div> 
         <div style = {{marginLeft:'12px',opacity:0.7}} >
             <img src = {chatIcon} />
+        </div>
+        <div style = {{marginLeft:'12px',opacity:0.7}} >
+            <img src = {subscriptionsIcon} />
         </div>
         <div style = {{marginLeft:'12px',opacity:0.7}} >
             <img src = {helpIcon} />
