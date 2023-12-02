@@ -57,8 +57,8 @@ const Toolbar = (props) => {
         remeasure()
         return () => {
             if (!isMountedRef.current) {
-                menubarRef.current.removeEventListener('scroll',onScroll)
-                resizeObserverRef.current.disconnect()
+                menubarRef.current && menubarRef.current.removeEventListener('scroll',onScroll)
+                resizeObserverRef.current && resizeObserverRef.current.disconnect()
             }
         }
 
