@@ -42,6 +42,12 @@ const Toolbar = (props) => {
         measurementsRef = useRef(measurements)
 
     useEffect(()=>{
+        return () => {
+            isMountedRef.current = false
+        }
+    },[])
+
+    useEffect(()=>{
 
         isMountedRef.current = true
         menubarRef.current.addEventListener('scroll',onScroll)
