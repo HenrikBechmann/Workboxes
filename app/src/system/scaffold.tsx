@@ -14,6 +14,8 @@ import About from '../pages/About'
 import SysadminLayout from '../pages/SysadminLayout'
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
+import Metadata from '../pages/Metadata'
+import UserControls from '../pages/UserControls'
 
 const routes = [
     
@@ -49,6 +51,14 @@ const routes = [
                     {
                         path:'settings',
                         element:<SysSettings />
+                    },
+                    {
+                        path:'metadata',
+                        element:<Metadata />
+                    },
+                    {
+                        path:'usercontrols',
+                        element:<UserControls />
                     },
                 ]
             },

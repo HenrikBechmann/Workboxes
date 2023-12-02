@@ -16,10 +16,20 @@ const Sysadmin = (props) => {
         navigate('/sysadmin/settings')
     }
 
+    const gotoMetadata = () => {
+        navigate('/sysadmin/metadata')
+    }
+
+    const gotoUserControls = () => {
+        navigate('/sysadmin/usercontrols')
+    }
+
     return <div data-type = 'sysadmin' style = {outerStyle}>
 
         <Text>System administration</Text>
         <Button m = {3} onClick = {gotoSettings}> Settings </Button>
+        <Button m = {3} onClick = {gotoMetadata}> Metadata </Button>
+        <Button m = {3} onClick = {gotoUserControls}> User Controls </Button>
 
     </div>
 
