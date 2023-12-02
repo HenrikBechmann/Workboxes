@@ -32,6 +32,8 @@ const navNextStyles = {
 
 const Toolbar = (props) => {
 
+    const { children } = props
+
     const 
         menubarRef = useRef(null),
         menubarScrollerRef = useRef(null),
@@ -54,21 +56,26 @@ const Toolbar = (props) => {
         menubarRef.current.addEventListener('scroll',onScroll)
         const resizeObserver = new ResizeObserver(onResize)
         resizeObserverRef.current = resizeObserver.observe(menubarRef.current)
+
         remeasure()
+
         return () => {
+
             if (!isMountedRef.current) {
                 menubarRef.current && menubarRef.current.removeEventListener('scroll',onScroll)
                 resizeObserverRef.current && resizeObserverRef.current.disconnect()
             }
+
         }
 
     },[])
 
     const remeasure = () => {
 
-        const measurements = measurementsRef.current
-        const menubar = menubarRef.current
-        const scrollbar = menubarScrollerRef.current
+        const 
+            measurements = measurementsRef.current,
+            menubar = menubarRef.current,
+            scrollbar = menubarScrollerRef.current
 
         measurements.scrollLeft = menubar.scrollLeft
         measurements.menubarWidth = menubar.offsetWidth
@@ -93,18 +100,18 @@ const Toolbar = (props) => {
 
     },[])
 
-    useLayoutEffect(()=>{
-
-    },[measurements])
-
     return <div data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
+
         {overflow_leftRef.current && <img style = {navBeforeStyles} src = {navBeforeIcon} />}
+
         <div data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
     
-        Toolbar
+            {children}
 
         </div>
+
         {overflow_rightRef.current && <img style = {navNextStyles} src = {navNextIcon} />}
+        
     </div>
 
 }
