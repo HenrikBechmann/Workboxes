@@ -3,14 +3,19 @@
 
 import React from 'react'
 
-import MemberRoutes from '../components/MemberRoutes'
-import SysadminRoutes from '../components/SysadminRoutes'
-import Tribalopolis from '../Tribalopolis'
+// ananymous support
 import Signin from '../pages/Signin'
-import Account from '../pages/Account'
-import NotFound from '../pages/NotFound'
-import Unauthorized from '../pages/Unauthorized'
 import About from '../pages/About'
+import NotFound from '../pages/NotFound'
+
+// user support
+import MemberRoutes from '../components/MemberRoutes'
+import Tribalopolis from '../Tribalopolis'
+import Account from '../pages/Account'
+import Unauthorized from '../pages/Unauthorized'
+
+// system support
+import SysadminRoutes from '../components/SysadminRoutes'
 import SysadminLayout from '../pages/SysadminLayout'
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
