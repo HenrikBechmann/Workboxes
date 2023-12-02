@@ -38,6 +38,7 @@ const Toolbar = (props) => {
         isMountedRef = useRef(true),
         overflow_leftRef = useRef(false),
         overflow_rightRef = useRef(false),
+        resizeObserverRef = useRef(null),
         [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
         measurementsRef = useRef(measurements)
 
@@ -51,16 +52,19 @@ const Toolbar = (props) => {
 
         isMountedRef.current = true
         menubarRef.current.addEventListener('scroll',onScroll)
-        onScroll()
+        const resizeObserver = new ResizeObserver(onResize)
+        resizeObserverRef.current = resizeObserver.observe(menubarRef.current)
+        remeasure()
         return () => {
             if (!isMountedRef.current) {
                 menubarRef.current.removeEventListener('scroll',onScroll)
+                resizeObserverRef.current.disconnect()
             }
         }
 
     },[])
 
-    const onScroll = useCallback(() => {
+    const remeasure = () => {
 
         const measurements = measurementsRef.current
         const menubar = menubarRef.current
@@ -74,6 +78,18 @@ const Toolbar = (props) => {
         overflow_rightRef.current = (
             (measurements.scrollbarWidth - measurements.scrollLeft) > measurements.menubarWidth)
         setMeasurements({...measurements})
+
+    }
+
+    const onScroll = useCallback(() => {
+
+        remeasure()
+
+    },[])
+
+    const onResize = useCallback(() => {
+
+        remeasure()
 
     },[])
 
