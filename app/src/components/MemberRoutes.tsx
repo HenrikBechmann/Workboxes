@@ -12,7 +12,9 @@ function MemberRoutes() {
     location = useLocation()
 
   if (userdata === undefined) {
+
       return <div> Loading... </div>
+      
   }
 
   if (!userdata) {
@@ -21,8 +23,6 @@ function MemberRoutes() {
     return <Navigate to = {`/signin?from=${from}`}/>
 
   } else {
-
-    // console.log('user',user)
 
     return <Outlet />
 
