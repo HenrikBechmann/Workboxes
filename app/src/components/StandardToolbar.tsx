@@ -38,6 +38,10 @@ const StandardToolbar = (props) => {
         navigate('/')
     }
 
+    const gotoSysadmin = () => {
+        navigate('/sysadmin')
+    }
+
     return <div style = {standardToolbarStyles}>
         <div style = {
             {
@@ -81,7 +85,7 @@ const StandardToolbar = (props) => {
         </div>
         {isSuperUser && <>
             <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
-            <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
+            <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {gotoSysadmin}>
                 <img src = {appSettingsIcon} />
             </div>
         </>
