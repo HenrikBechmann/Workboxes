@@ -12,6 +12,7 @@ import chatIcon from '../../assets/chat.png'
 import helpIcon from '../../assets/help.png'
 import homeIcon from '../../assets/home.png'
 import subscriptionsIcon from '../../assets/subscriptions.png'
+import appSettingsIcon from '../../assets/app_settings.png'
 
 const standardToolbarStyles = {
     display:'flex',
@@ -30,7 +31,8 @@ const StandardToolbar = (props) => {
     const 
         navigate = useNavigate(),
         userData = useUserData(),
-        { displayName, photoURL } = userData.authUser
+        { displayName, photoURL } = userData.authUser,
+        isSuperUser = userData.sysadminStatus.isSuperUser
 
     const goHome = () => {
         navigate('/')
@@ -77,6 +79,13 @@ const StandardToolbar = (props) => {
             <div style = {{fontSize:'small', marginLeft:'4px',marginRight:'3px', whiteSpace:'nowrap'}} >{displayName}</div>
             <span style = {{opacity:0.5}} >▼</span>
         </div>
+        {isSuperUser && <>
+            <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+            <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
+                <img src = {appSettingsIcon} />
+            </div>
+        </>
+        }
     </div>
 
 }
