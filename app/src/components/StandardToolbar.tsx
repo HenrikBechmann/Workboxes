@@ -139,6 +139,7 @@ const StandardToolbar = (props) => {
         <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
             <img src = {homeIcon} />
         </div>
+        <VerticalToolbarDivider />
         <Menu>
             <MenuButton >
                 <UserControl />
