@@ -129,13 +129,12 @@ const Signin = (props) => {
                     {errorState.error?.details} </Text>}
             </Box>
             <Box style = {{textAlign:'center'}} >
-                <Text>Self organize into Work Groups (Domains).</Text>
-                <Text>Organize information into Work Boxes. &nbsp;
+                <Text>- Self organize into Work Groups (Domains).</Text>
+                <Text>- Organize information into Work Boxes. &nbsp;
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/>
                 </Text>
-                <Text>Organize Work Boxes into Work Windows,</Text>
-                <Text>Domain Panels, and Work Spaces.</Text>
-                <Text>Drag and Drop 
+                <Text>- Organize Work Boxes into Work Windows, Domain Panels, and Work Spaces.</Text>
+                <Text>- Drag and Drop 
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> 
                     things around to keep up to date.
                 </Text>
