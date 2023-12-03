@@ -1,4 +1,4 @@
-// SysadminLaout.tsx
+// MembersLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Outlet } from 'react-router-dom'
@@ -9,20 +9,20 @@ import StandardToolbar from '../components/StandardToolbar'
 const bodyStyle = {
     height: 'calc(100vh - 30px)', 
     display:'relative', 
-    backgroundColor:'aliceblue'
+    backgroundColor:'ghostwhite'
 }
 
-const SysadminLayout = (props) => {
+const MembersLayout = (props) => {
 
     return <>
         <Toolbar>
             <StandardToolbar />
         </Toolbar>
-        <div data-type = 'sysadmin-outlet' style = {bodyStyle}>
+        <div data-type = 'members-outlet' style = {bodyStyle}>
             <Outlet />
         </div>
     </>
 
 }
 
-export default SysadminLayout
+export default MembersLayout

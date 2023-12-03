@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button, Text } from '@chakra-ui/react'
 
-const outerStyle = {height: '100%', display:'relative', backgroundColor:'gray'}
+const outerStyle = {height: '100%', display:'relative'}
 
 const Sysadmin = (props) => {
 

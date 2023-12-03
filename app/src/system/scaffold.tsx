@@ -10,6 +10,7 @@ import NotFound from '../pages/NotFound'
 
 // user support
 import MemberRoutes from '../components/MemberRoutes'
+import MembersLayout from '../pages/MembersLayout'
 import Tribalopolis from '../Tribalopolis'
 import Account from '../pages/Account'
 import Unauthorized from '../pages/Unauthorized'
@@ -30,16 +31,21 @@ const routes = [
         element: <MemberRoutes />,
         children: [
             {
-                index: true,
-                element: <Tribalopolis />,
-            },
-            {
-                path: 'account',
-                element: <Account />,
-            },
-            {
-                path: 'unauthorized',
-                element: <Unauthorized />,
+                element: <MembersLayout />,
+                children:[
+                    {
+                        index: true,
+                        element: <Tribalopolis />,
+                    },
+                    {
+                        path: 'account',
+                        element: <Account />,
+                    },
+                    {
+                        path: 'unauthorized',
+                        element: <Unauthorized />,
+                    },
+                ]
             },
         ],
     },
@@ -74,18 +80,23 @@ const routes = [
             },
         ],
     },
-    {
-        path: 'signin',
-        element: <Signin />
-    },
-    {
-        path: 'about',
-        element: <About />
-    },
-    {
-        path: '*',
-        element: <NotFound />,
-    },
+    // {
+    //     element: <GeneralLayout />,
+    //     children:[
+            {
+                path: 'signin',
+                element: <Signin />
+            },
+            {
+                path: 'about',
+                element: <About />
+            },
+            {
+                path: '*',
+                element: <NotFound />,
+            },
+    //     ]
+    // },
 ]
 
 export default routes
