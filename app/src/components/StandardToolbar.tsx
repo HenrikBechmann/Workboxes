@@ -5,7 +5,7 @@ import React, {CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
-  Menu, MenuButton, MenuList, MenuItem,
+  Menu, MenuButton, MenuList, MenuItem, MenuDivider,
   Tooltip
 } from '@chakra-ui/react'
 
@@ -154,6 +154,7 @@ const StandardToolbar = (props) => {
                 <MenuItem onClick = {gotoAccount}>Account</MenuItem>
                 <MenuItem >Account domains</MenuItem>
                 <MenuItem >Domain memberships</MenuItem>
+                <MenuDivider />
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
         </Menu>
