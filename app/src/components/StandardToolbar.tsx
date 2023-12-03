@@ -2,9 +2,20 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {CSSProperties} from 'react'
+import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+} from '@chakra-ui/react'
 
-import { useUserData } from '../system/FirebaseProviders'
+import { useUserData, useAuth } from '../system/FirebaseProviders'
 
 import fireIcon from '../../assets/fire.png'
 import notificationsIcon from '../../assets/notifications.png'
@@ -25,6 +36,12 @@ const standardToolbarStyles = {
     backgroundColor:'#f2f2f2',
 
 } as CSSProperties
+
+const VerticalToolbarDivider = (props) => {
+
+    return <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+
+}
 
 const FireIconControl = (props) => {
     
@@ -68,6 +85,7 @@ const StandardToolbar = (props) => {
     const 
         navigate = useNavigate(),
         userData = useUserData(),
+        auth = useAuth(),
         { displayName, photoURL } = userData.authUser,
         isSuperUser = userData.sysadminStatus.isSuperUser
 
@@ -79,8 +97,32 @@ const StandardToolbar = (props) => {
         navigate('/sysadmin')
     }
 
+    const gotoAbout = () => {
+        navigate('/about')
+    }
+
+    const gotoAccount = () => {
+        navigate('/account')
+    }
+
+    const logOut = () => {
+
+        signOut(auth).then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          // An error happened.
+        })
+    }
+
     return <div style = {standardToolbarStyles}>
-        <FireIconControl />
+        <Menu>
+            <MenuButton >
+                <FireIconControl />
+            </MenuButton>
+            <MenuList>
+                <MenuItem onClick = {gotoAbout}>About</MenuItem>
+            </MenuList>
+        </Menu>
         <div style = {{marginLeft:'12px',opacity:0.7}} >
             <img src = {notificationsIcon} />
         </div> 
@@ -93,14 +135,21 @@ const StandardToolbar = (props) => {
         <div style = {{marginLeft:'12px',opacity:0.7}} >
             <img src = {helpIcon} />
         </div>
-        <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+        <VerticalToolbarDivider />
         <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
             <img src = {homeIcon} />
         </div>
-        <UserControl />
-        <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+        <Menu>
+            <MenuButton >
+                <UserControl />
+            </MenuButton>
+            <MenuList>
+                <MenuItem onClick = {gotoAccount}>My account</MenuItem>
+                <MenuItem onClick = {logOut}>Sign out</MenuItem>
+            </MenuList>
+        </Menu>
         {isSuperUser && <>
-            <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+            <VerticalToolbarDivider />
             <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {gotoSysadmin}>
                 <img src = {appSettingsIcon} />
             </div>
