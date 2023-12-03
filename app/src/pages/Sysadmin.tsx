@@ -14,7 +14,7 @@ import {
 
 
 const MenuTile = (props) => {
-    const {header, body, footer, buttonPrompt, nav} = props
+    const {header, body, buttonPrompt, nav} = props
 
     const navigate = useNavigate()
 
@@ -42,28 +42,24 @@ const menuTileData = [
             header:'Global settings',
             body:`One document holds global settings for clients; 
                 another holds internal global settings.`,
-            footer:null,
             buttonPrompt:'Go to global settings',
             nav:'/sysadmin/settings',
         },
         {
             header:'Document metadata',
             body:`A document for each data type, informing clients how to present fields.`,
-            footer:null,
             buttonPrompt:'Go to metadata',
             nav:'/sysadmin/metadata',
         },
         {
             header:'User controls',
             body:`Invitations and suspensions by email.`,
-            footer:null,
             buttonPrompt:'Go to User controls',
             nav:'/sysadmin/usercontrols',
         },
         {
             header:'Help panels',
             body:`Sets the text for each help icon. Help icons are found all over the place.`,
-            footer:null ,
             buttonPrompt:'Go to help panels',
             nav:'/sysadmin/helppanels',
         },
