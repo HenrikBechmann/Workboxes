@@ -9,10 +9,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
 } from '@chakra-ui/react'
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
@@ -121,6 +117,7 @@ const StandardToolbar = (props) => {
             </MenuButton>
             <MenuList>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
+                <MenuItem>Notices</MenuItem>
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
