@@ -153,6 +153,7 @@ const StandardToolbar = (props) => {
             <MenuList>
                 <MenuItem onClick = {gotoAccount}>Account</MenuItem>
                 <MenuItem >Account domains</MenuItem>
+                <MenuItem >Domain memberships</MenuItem>
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
         </Menu>
