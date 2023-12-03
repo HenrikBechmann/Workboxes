@@ -3,38 +3,96 @@
 import React from 'react'
 
 import { useNavigate } from 'react-router-dom'
+import Scroller from 'react-infinite-grid-scroller'
 
-import { Button, Text } from '@chakra-ui/react'
+import { 
+    Button, Text, Heading,
+    Card, CardHeader, CardBody, CardFooter,
+    Grid, GridItem,
+    Center
+} from '@chakra-ui/react'
 
-const outerStyle = {height: '100%', display:'relative'}
 
-const Sysadmin = (props) => {
+const MenuTile = (props) => {
+    const {header, body, footer, buttonPrompt, nav} = props
 
     const navigate = useNavigate()
 
-    const gotoSettings = () => {
-        navigate('/sysadmin/settings')
+    const gotoNav = () => {
+        navigate(nav)
     }
 
-    const gotoMetadata = () => {
-        navigate('/sysadmin/metadata')
-    }
+    return <Card>
+        <CardHeader>
+            {header}
+        </CardHeader>
+        <CardBody>
+            {body}
+        </CardBody>
+        <CardFooter>
+            {footer}
+            <Button onClick = {gotoNav}>
+                {buttonPrompt}
+            </Button>
+        </CardFooter>
+    </Card>
+}
 
-    const gotoUserControls = () => {
-        navigate('/sysadmin/usercontrols')
-    }
+const menuTileData = [
+        {
+            header:'Global settings',
+            body:'',
+            footer:null,
+            buttonPrompt:'Go to global settings',
+            nav:'/sysadmin/settings',
+        },
+        {
+            header:'Document metadata',
+            body:'',
+            footer:null,
+            buttonPrompt:'Go to metadata',
+            nav:'/sysadmin/metadata',
+        },
+        {
+            header:'User controls',
+            body:'',
+            footer:null,
+            buttonPrompt:'Go to User controls',
+            nav:'/sysadmin/usercontrols',
+        },
+        {
+            header:'Help panels',
+            body:'',
+            footer:null ,
+            buttonPrompt:'Go to help panels',
+            nav:'/sysadmin/helppanels',
+        },
+    ]
 
-    const gotoHelpPanels = () => {
-        navigate('/sysadmin/helppanels')
-    }
+const outerSysadminStyle = {
+    height: '100%', 
+    display:'relative'
+}
 
-    return <div data-type = 'sysadmin' style = {outerStyle}>
+const Sysadmin = (props) => {
 
-        <Text>System administration</Text>
-        <Button m = {3} onClick = {gotoSettings}> Settings </Button>
-        <Button m = {3} onClick = {gotoMetadata}> Metadata </Button>
-        <Button m = {3} onClick = {gotoUserControls}> User Controls </Button>
-        <Button m = {3} onClick = {gotoHelpPanels}> Help Panels </Button>
+    return <div data-type = 'sysadmin' style = {outerSysadminStyle}>
+
+    <Grid height = '100%'
+      templateAreas={`"header"
+                      "body"`}
+      gridTemplateRows={'50px 1fr'}
+      gridTemplateColumns={'1fr'}
+    >
+      <GridItem area={'header'}>
+          <Center>
+              <Heading mt = {3} fontSize = 'xl'>System Administration</Heading>
+          </Center>
+      </GridItem>
+      <GridItem area={'body'}>
+          
+      </GridItem>
+    </Grid>
 
     </div>
 
