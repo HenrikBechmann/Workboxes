@@ -53,7 +53,7 @@ const FireIconControl = (props) => {
             borderRadius:'6px',
             marginLeft:'6px',
         }
-    } ><img src = {fireIcon} /><span style = {{opacity:0.5}} >▼</span></div> 
+    } ><img src = {fireIcon} /><span style = {{opacity:0.5, fontSize:'small'}} >▼</span></div> 
 
 }
 
@@ -75,7 +75,7 @@ const UserControl = (props) => {
     }>
         <img style = {{width:'24px', height:'24px', borderRadius:'12px'}} src = {photoURL} />
         <div style = {{fontSize:'small', marginLeft:'4px',marginRight:'3px', whiteSpace:'nowrap'}} >{displayName}</div>
-        <span style = {{opacity:0.5}} >▼</span>
+        <span style = {{opacity:0.5, fontSize:'small'}} >▼</span>
     </div>
 
 }
@@ -123,6 +123,7 @@ const StandardToolbar = (props) => {
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
         </Menu>
+        <VerticalToolbarDivider />
         <div style = {{marginLeft:'12px',opacity:0.7}} >
             <img src = {notificationsIcon} />
         </div> 
@@ -145,7 +146,8 @@ const StandardToolbar = (props) => {
                 <UserControl />
             </MenuButton>
             <MenuList>
-                <MenuItem onClick = {gotoAccount}>My account</MenuItem>
+                <MenuItem onClick = {gotoAccount}>Account</MenuItem>
+                <MenuItem >Account domains</MenuItem>
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
         </Menu>
