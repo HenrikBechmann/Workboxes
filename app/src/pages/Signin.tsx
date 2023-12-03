@@ -138,7 +138,7 @@ const Signin = (props) => {
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> 
                     things around to keep up to date.
                 </Text>
-                <Text>Have fun!</Text>
+                <Text>- Have fun!</Text>
             </Box>
             </VStack>
         </Center>
