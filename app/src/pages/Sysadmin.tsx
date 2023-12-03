@@ -47,13 +47,13 @@ const menuTileData = [
         },
         {
             header:'Document metadata',
-            body:`A document for each data type, informing clients how to present fields.`,
+            body:`Technical parameters for each data type, informing clients how to present fields.`,
             buttonPrompt:'Go to metadata',
             nav:'/sysadmin/metadata',
         },
         {
             header:'User controls',
-            body:`Invitations and suspensions by email.`,
+            body:`Invitations and suspensions, by email.`,
             buttonPrompt:'Go to User controls',
             nav:'/sysadmin/usercontrols',
         },
