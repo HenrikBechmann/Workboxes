@@ -5,10 +5,8 @@ import React, {CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  Menu, MenuButton, MenuList, MenuItem,
+  Tooltip
 } from '@chakra-ui/react'
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
@@ -122,20 +120,30 @@ const StandardToolbar = (props) => {
         </Menu>
         <VerticalToolbarDivider />
         <div style = {{marginLeft:'12px',opacity:0.7}} >
-            <img src = {notificationsIcon} />
+            <Tooltip hasArrow label = 'Notifications to this account'>
+                <img src = {notificationsIcon} />
+            </Tooltip>
         </div> 
         <div style = {{marginLeft:'12px',opacity:0.7}} >
-            <img src = {chatIcon} />
+            <Tooltip hasArrow label = 'Chatrooms with this account'>
+                <img src = {chatIcon} />
+            </Tooltip>
         </div>
         <div style = {{marginLeft:'12px',opacity:0.7}} >
-            <img src = {subscriptionsIcon} />
-        </div>
+            <Tooltip hasArrow label = 'Subscribed news flows'>
+                <img src = {subscriptionsIcon} />
+            </Tooltip>
+    </div>
         <div style = {{marginLeft:'12px',opacity:0.7}} >
-            <img src = {helpIcon} />
+            <Tooltip hasArrow label = 'Explain this toolbar'>
+                <img style = {{height:'18px', width:'18px'}} src = {helpIcon} />
+            </Tooltip>
         </div>
         <VerticalToolbarDivider />
         <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
-            <img src = {homeIcon} />
+            <Tooltip hasArrow label = 'Go to the main work page'>
+                <img src = {homeIcon} />
+            </Tooltip>
         </div>
         <VerticalToolbarDivider />
         <Menu>
@@ -151,7 +159,9 @@ const StandardToolbar = (props) => {
         {isSuperUser && <>
             <VerticalToolbarDivider />
             <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {gotoSysadmin}>
-                <img src = {appSettingsIcon} />
+                <Tooltip hasArrow label = 'System settings'>
+                    <img src = {appSettingsIcon} />
+                </Tooltip>
             </div>
         </>
         }
