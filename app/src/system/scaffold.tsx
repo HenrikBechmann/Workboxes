@@ -44,6 +44,10 @@ const routes = [
                         element: <Tribalopolis />,
                     },
                     {
+                        path: ':focus',
+                        element:<Tribalopolis />,
+                    },
+                    {
                         path:'notices',
                         element:<Notices />
                     },

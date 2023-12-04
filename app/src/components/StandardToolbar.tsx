@@ -112,7 +112,10 @@ const StandardToolbar = (props) => {
         isSuperUser = userData.sysadminStatus.isSuperUser
 
     const 
-        goHome = () => { navigate('/') },
+        goHome = () => { navigate('/workspace') },
+        gotoNotifications = () => { navigate('/notifications') },
+        gotoChatrooms = () => { navigate('/chatrooms') },
+        gotoNewsflows = () => { navigate('/newsflows') },
         gotoSysadmin = () => { navigate('/sysadmin') },
         gotoAbout = () => { navigate('/about') },
         gotoNotices = () => { navigate('/notices') },
@@ -139,17 +142,17 @@ const StandardToolbar = (props) => {
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
-        <div style = {iconStyles} >
+        <div style = {iconStyles} onClick = {gotoNotifications} >
             <Tooltip hasArrow label = 'Notifications to this account'>
                 <img src = {notificationsIcon} />
             </Tooltip>
         </div> 
-        <div style = {iconStyles} >
+        <div style = {iconStyles} onClick = {gotoChatrooms} >
             <Tooltip hasArrow label = 'Chatrooms with this account'>
                 <img src = {chatIcon} />
             </Tooltip>
         </div>
-        <div style = {iconStyles} >
+        <div style = {iconStyles} onClick = {gotoNewsflows} >
             <Tooltip hasArrow label = 'Subscribed news flows'>
                 <img src = {subscriptionsIcon} />
             </Tooltip>
