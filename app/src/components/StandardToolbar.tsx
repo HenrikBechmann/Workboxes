@@ -21,10 +21,11 @@ import subscriptionsIcon from '../../assets/subscriptions.png'
 import appSettingsIcon from '../../assets/app_settings.png'
 
 const standardToolbarStyles = {
+    minHeight:0,
     display:'flex',
     flexDirection:'row',
     flexWrap:'nowrap',
-    justifyContent:'flex-start',
+    whitespace:'nowrap',
     alignItems:'center',
     height:'30px',
     boxSizing:'border-box',
@@ -37,9 +38,11 @@ const verticalDividerStyles = {
     borderLeft:'1px solid gray', 
     width:'0px', 
     marginLeft:'12px',
+    // display:'inline-block',
 }
 
 const iconStyles = {
+    display:'inline-block',
     marginLeft:'12px',
     opacity:0.7,
 }
@@ -47,26 +50,33 @@ const iconStyles = {
 const downArrowStyles = {
     opacity:0.5, 
     fontSize:'small',
+    // display:'inline-block',
 }
 
 const fireIconControlStyles = {
     display:'flex',
+    flexWrap:'nowrap',
+    alignItems:'center',
     padding:'2px',
     borderRadius:'6px',
     marginLeft:'6px',
-}
+} as CSSProperties
 
 const avatarStyles = {
     width:'24px', 
     height:'24px', 
-    borderRadius:'12px'
+    borderRadius:'12px',
+    // display:'inline-block',
 }
 
 const displayNameStyles = {
+    display:'flex',
+    flexWrap:'nowrap',
+    alignItems:'center',
+    whiteSpace:'nowrap',
     fontSize:'small', 
     marginLeft:'4px',
     marginRight:'3px', 
-    whiteSpace:'nowrap'
 } as CSSProperties
 
 const VerticalToolbarDivider = (props) => {
@@ -91,14 +101,14 @@ const UserControl = (props) => {
     return <div style = {
         {
             display:'flex',
-            alignItems:'center',
+            flexWrap:'nowrap',
             marginLeft:'12px',
             borderRadius:'6px',
         }
     }>
         <img style = {avatarStyles} src = {photoURL} />
         <div style = {displayNameStyles} >{displayName}</div>
-        <span style = {downArrowStyles} >▼</span>
+        <div style = {downArrowStyles} >▼</div>
     </div>
 
 }
@@ -164,7 +174,7 @@ const StandardToolbar = (props) => {
             <Tooltip hasArrow label = 'Subscribed news flows'>
                 <img src = {subscriptionsIcon} />
             </Tooltip>
-    </div>
+        </div>
         <div style = {iconStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {{height:'18px', width:'18px'}} src = {helpIcon} />
@@ -200,10 +210,10 @@ const StandardToolbar = (props) => {
                     <img src = {appSettingsIcon} />
                 </Tooltip>
             </div>
-        </>
+            &nbsp;&nbsp;
+            </>
         }
-    </div>
-
+        </div>
 }
 
 export default StandardToolbar

@@ -15,9 +15,11 @@ const bodyStyle = {
 const MembersLayout = (props) => {
 
     return <>
+        <div style = {{minHeight:0}}>
         <Toolbar>
             <StandardToolbar />
         </Toolbar>
+        </div>
         <div data-type = 'members-outlet' style = {bodyStyle}>
             <Outlet />
         </div>

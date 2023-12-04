@@ -6,15 +6,22 @@ import navNextIcon from '../../assets/nav_next.png'
 import navBeforeIcon from '../../assets/nav_before.png'
 
 const menubarStyles = {
-    overflow:'auto',
     height:'30px',
     width:'100%',
-    display:'relative',
-}
+    display:'flex',
+    overflowX:'auto',
+    minHeight:0,
+    MsOverflowStyle: 'none', /* for Internet Explorer, Edge */
+    scrollbarWidth: 'none' /* for Firefox */
+
+} as CSSProperties
 
 const scrollbarStyles = {
+    flexBasis:'auto', // these two flex settings allow scroll
+    flexShrink:0, // prevent shrink which prevents scroll
     height:'28px',
-}
+    minHeight:0,
+}  as CSSProperties
 
 const navBeforeStyles = {
     position:'absolute',
@@ -32,6 +39,7 @@ const navNextStyles = {
 
 const Toolbar = (props) => {
 
+    const [toolbarState, setToolbarState] = useState('setup')
 
     const 
         { children } = props,
@@ -70,6 +78,13 @@ const Toolbar = (props) => {
 
     },[])
 
+    useEffect(()=>{
+
+        setToolbarState('ready')
+        remeasure()
+
+    },[toolbarState])
+
     const remeasure = () => {
 
         const 
@@ -83,9 +98,8 @@ const Toolbar = (props) => {
         measurements.menubarWidth = menubar.offsetWidth
         measurements.scrollbarWidth = scrollbar.offsetWidth
 
-        overflow_leftRef.current = !!measurements.scrollLeft
-        overflow_rightRef.current = (
-            (measurements.scrollbarWidth - measurements.scrollLeft) > measurements.menubarWidth)
+        overflow_leftRef.current = !(measurements.scrollLeft == 0)
+        overflow_rightRef.current = ((measurements.scrollbarWidth - measurements.scrollLeft) > measurements.menubarWidth + 1)
         setMeasurements({...measurements})
 
     }
