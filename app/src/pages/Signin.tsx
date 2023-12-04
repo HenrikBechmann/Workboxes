@@ -2,7 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useRef, useEffect, useState } from 'react'
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
+import { useNavigate, useSearchParams, useLocation, NavLink } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, getAdditionalUserInfo } from "firebase/auth"
 import { 
     Card, CardHeader, CardBody, CardFooter,
@@ -20,6 +20,12 @@ const provider = new GoogleAuthProvider()
 provider.setCustomParameters({
   prompt: 'select_account',
 })
+
+const navlinkStyles = { 
+    textDecoration:'underline', 
+    fontStyle:'italic', 
+    color:'blue',
+}
 
 const Signin = (props) => {
 
@@ -109,6 +115,9 @@ const Signin = (props) => {
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Heading size = 'lg'> Organize, Re-organize, <br /> Communicate, and Collaborate</Heading>
+                <Text>
+                    <NavLink to = '/about' style={navlinkStyles} >Learn more</NavLink>
+                </Text>
             </Box>
             <Box style = {{textAlign:'center'}} >
                 <Text>While we get established, we're accepting members by invitation only.</Text>

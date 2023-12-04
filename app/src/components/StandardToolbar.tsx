@@ -29,7 +29,7 @@ const standardToolbarStyles = {
     alignItems:'center',
     height:'30px',
     boxSizing:'border-box',
-    backgroundColor:'#f2f2f2',
+    backgroundColor:'#dfecdf', //'#f2f2f2',
 
 } as CSSProperties
 
@@ -203,6 +203,7 @@ const StandardToolbar = (props) => {
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
         </Menu>
+        {!isSuperUser && <span>&nbsp;&nbsp;</span>}
         {isSuperUser && <>
             <VerticalToolbarDivider />
             <div style = {iconStyles} onClick = {gotoSysadmin}>
@@ -213,7 +214,7 @@ const StandardToolbar = (props) => {
             &nbsp;&nbsp;
             </>
         }
-        </div>
+    </div>
 }
 
 export default StandardToolbar

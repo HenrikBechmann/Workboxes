@@ -7,9 +7,10 @@ import Toolbar from '../components/Toolbar'
 import StandardToolbar from '../components/StandardToolbar'
 
 const bodyStyle = {
-    height: 'calc(100vh - 30px)', 
+    height: 'calc(100vh - 36px)', 
     display:'relative', 
-    backgroundColor:'aliceblue'
+    backgroundColor:'aliceblue',
+    borderTop:'1px solid lightgray',
 }
 
 const SysadminLayout = (props) => {

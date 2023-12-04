@@ -1,6 +1,6 @@
 // Sysadmin.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React from 'react'
+import React, {CSSProperties} from 'react'
 
 import { useNavigate } from 'react-router-dom'
 import Scroller from 'react-infinite-grid-scroller'
@@ -74,6 +74,11 @@ const outerSysadminStyle = {
     display:'relative'
 }
 
+const scrollerContainer = {
+    height:'100%', 
+    position:'relative',
+} as CSSProperties
+
 const Sysadmin = (props) => {
 
     const getMenuTile = (index) => {
@@ -88,24 +93,24 @@ const Sysadmin = (props) => {
         <Grid height = '100%'
           templateAreas={`"header"
                           "body"`}
-          gridTemplateRows={'56px 1fr'}
+          gridTemplateRows={'60px 1fr'}
           gridTemplateColumns={'1fr'}
         >
           <GridItem area={'header'}>
               <Center>
-                  <VStack>
+                  <VStack data-type = 'sysadmin-header'>
                   <Heading mt = {1} fontSize = 'xl'>System Administration Menu</Heading>
                   <Heading mt = {0} fontSize = 'md' color = 'gray'>Available only to system administrators</Heading>
                   </VStack>
               </Center>
           </GridItem>
           <GridItem area={'body'}>
-              <div style = {{height:'100%', position:'relative'}}>
+              <div data-type = 'tiles-body' style = {scrollerContainer}>
               <Scroller 
                   cellWidth = {200} 
                   cellHeight = {220} 
                   orientation = 'vertical'
-                  padding = {20}
+                  padding = {[10,20]}
                   gap = {20}
                   startingListRange = {[0,3]}
                   getItemPack = {getMenuTile}

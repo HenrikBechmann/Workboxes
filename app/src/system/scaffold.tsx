@@ -4,6 +4,7 @@
 import React from 'react'
 
 // general support
+import GeneralLayout from '../pages/GeneralLayout'
 import Signin from '../pages/Signin'
 import About from '../pages/About'
 import Notices from '../pages/Notices'
@@ -120,13 +121,10 @@ const routes = [
             },
         ],
     },
-    // {
-    //     element: <GeneralLayout />,
-    //     children:[
-            {
-                path: 'signin',
-                element: <Signin />
-            },
+    {
+        path:'/',
+        element: <GeneralLayout />,
+        children:[
             {
                 path: 'about',
                 element: <About />
@@ -135,8 +133,12 @@ const routes = [
                 path: '*',
                 element: <NotFound />,
             },
-    //     ]
-    // },
+        ],
+    },
+    {
+        path: 'signin',
+        element: <Signin />
+    },
 ]
 
 export default routes
