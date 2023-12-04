@@ -5,7 +5,7 @@ import React from 'react'
 
 export const Tribalopolis = (props) => {
 
-    return <div> Tirbalopolis main page </div>
+    return <div> Tribalopolis main page </div>
 }
 
 export default Tribalopolis

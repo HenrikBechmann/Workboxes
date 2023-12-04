@@ -10,6 +10,7 @@ import Signin from '../pages/Signin'
 import About from '../pages/About'
 import Notices from '../pages/Notices'
 import Classifieds from '../pages/Classifieds'
+import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
@@ -21,7 +22,6 @@ import Account from '../pages/Account'
 import Domains from '../pages/Domains'
 import Memberships from '../pages/Memberships'
 import Subscriptions from '../pages/Subscriptions'
-import Unauthorized from '../pages/Unauthorized'
 
 // system support
 import SysadminRoutes from '../components/SysadminRoutes'
