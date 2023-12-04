@@ -14,6 +14,7 @@ import { useUserData, useAuth } from '../system/FirebaseProviders'
 import fireIcon from '../../assets/fire.png'
 import notificationsIcon from '../../assets/notifications.png'
 import chatIcon from '../../assets/chat.png'
+import messageIcon from '../../assets/mail.png'
 import helpIcon from '../../assets/help.png'
 import homeIcon from '../../assets/home.png'
 import subscriptionsIcon from '../../assets/subscriptions.png'
@@ -114,6 +115,7 @@ const StandardToolbar = (props) => {
     const 
         goHome = () => { navigate('/workspace') },
         gotoNotifications = () => { navigate('/workspace/notifications') },
+        gotoMessages = () => { navigate('/workspace/messages') },
         gotoChatrooms = () => { navigate('/workspace/chatrooms') },
         gotoNewsflows = () => { navigate('/workspace/newsflows') },
         gotoSysadmin = () => { navigate('/sysadmin') },
@@ -137,6 +139,7 @@ const StandardToolbar = (props) => {
                 <FireIconControl />
             </MenuButton>
             <MenuList>
+                <MenuItem>Classifieds</MenuItem>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
                 <MenuItem onClick = {gotoNotices}>Notices</MenuItem>
             </MenuList>
@@ -147,6 +150,11 @@ const StandardToolbar = (props) => {
                 <img src = {notificationsIcon} />
             </Tooltip>
         </div> 
+        <div style = {iconStyles} onClick = {gotoMessages} >
+            <Tooltip hasArrow label = 'Direct messages'>
+                <img src = {messageIcon} />
+            </Tooltip>
+        </div>
         <div style = {iconStyles} onClick = {gotoChatrooms} >
             <Tooltip hasArrow label = 'Chatrooms with this account'>
                 <img src = {chatIcon} />
