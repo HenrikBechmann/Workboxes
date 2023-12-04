@@ -44,8 +44,17 @@ const routes = [
                         element: <Tribalopolis />,
                     },
                     {
-                        path: ':focus',
-                        element:<Tribalopolis />,
+                        path:'workspace',
+                        children:[
+                            {
+                                index: true,
+                                element: <Tribalopolis />,
+                            },
+                            {
+                                path: ':focus',
+                                element:<Tribalopolis />,
+                            },
+                        ]
                     },
                     {
                         path:'notices',

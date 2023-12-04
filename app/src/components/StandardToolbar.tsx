@@ -113,9 +113,9 @@ const StandardToolbar = (props) => {
 
     const 
         goHome = () => { navigate('/workspace') },
-        gotoNotifications = () => { navigate('/notifications') },
-        gotoChatrooms = () => { navigate('/chatrooms') },
-        gotoNewsflows = () => { navigate('/newsflows') },
+        gotoNotifications = () => { navigate('/workspace/notifications') },
+        gotoChatrooms = () => { navigate('/workspace/chatrooms') },
+        gotoNewsflows = () => { navigate('/workspace/newsflows') },
         gotoSysadmin = () => { navigate('/sysadmin') },
         gotoAbout = () => { navigate('/about') },
         gotoNotices = () => { navigate('/notices') },
