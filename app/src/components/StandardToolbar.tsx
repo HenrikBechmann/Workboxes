@@ -41,10 +41,20 @@ const verticalDividerStyles = {
     // display:'inline-block',
 }
 
-const iconStyles = {
+const iconWrapperStyles = {
     display:'inline-block',
     marginLeft:'12px',
     opacity:0.7,
+}
+
+const iconStyles = {
+    height:'20px',
+    width:'20px',
+}
+
+const smallerIconStyles = {
+    height:'18px', 
+    width:'18px'
 }
 
 const downArrowWrapperStyles = {
@@ -91,7 +101,7 @@ const VerticalToolbarDivider = (props) => {
 const FireIconControl = (props) => {
     
     return <div style = {fireIconControlStyles} >
-        <img src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
+        <img style = {iconStyles} src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
     </div> 
 }
 
@@ -158,35 +168,35 @@ const StandardToolbar = (props) => {
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
-        <div style = {iconStyles} onClick = {gotoNotifications} >
+        <div style = {iconWrapperStyles} onClick = {gotoNotifications} >
             <Tooltip hasArrow label = 'Notifications to this account'>
-                <img src = {notificationsIcon} />
+                <img style = {iconStyles} src = {notificationsIcon} />
             </Tooltip>
         </div> 
-        <div style = {iconStyles} onClick = {gotoMessages} >
+        <div style = {iconWrapperStyles} onClick = {gotoMessages} >
             <Tooltip hasArrow label = 'Direct messages'>
-                <img src = {messageIcon} />
+                <img style = {iconStyles} src = {messageIcon} />
             </Tooltip>
         </div>
-        <div style = {iconStyles} onClick = {gotoChatrooms} >
+        <div style = {iconWrapperStyles} onClick = {gotoChatrooms} >
             <Tooltip hasArrow label = 'Chatrooms with this account'>
-                <img src = {chatIcon} />
+                <img style = {iconStyles} src = {chatIcon} />
             </Tooltip>
         </div>
-        <div style = {iconStyles} onClick = {gotoNewsflows} >
+        <div style = {iconWrapperStyles} onClick = {gotoNewsflows} >
             <Tooltip hasArrow label = 'Subscribed news flows'>
-                <img src = {subscriptionsIcon} />
+                <img style = {iconStyles} src = {subscriptionsIcon} />
             </Tooltip>
         </div>
-        <div style = {iconStyles} >
+        <div style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
-                <img style = {{height:'18px', width:'18px'}} src = {helpIcon} />
+                <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
         </div>
         <VerticalToolbarDivider />
-        <div style = {iconStyles} onClick = {goHome}>
+        <div style = {iconWrapperStyles} onClick = {goHome}>
             <Tooltip hasArrow label = 'Go to the main work page'>
-                <img src = {homeIcon} />
+                <img style = {iconStyles} src = {homeIcon} />
             </Tooltip>
         </div>
         <VerticalToolbarDivider />
@@ -209,9 +219,9 @@ const StandardToolbar = (props) => {
         {!isSuperUser && <span>&nbsp;&nbsp;</span>}
         {isSuperUser && <>
             <VerticalToolbarDivider />
-            <div style = {iconStyles} onClick = {gotoSysadmin}>
+            <div style = {iconWrapperStyles} onClick = {gotoSysadmin}>
                 <Tooltip hasArrow label = 'System settings'>
-                    <img src = {appSettingsIcon} />
+                    <img style = {iconStyles} src = {appSettingsIcon} />
                 </Tooltip>
             </div>
             &nbsp;&nbsp;
