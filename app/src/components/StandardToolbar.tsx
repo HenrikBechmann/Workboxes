@@ -47,10 +47,13 @@ const iconStyles = {
     opacity:0.7,
 }
 
+const downArrowWrapperStyles = {
+    display:'inline-block',
+}
+
 const downArrowStyles = {
     opacity:0.5, 
     fontSize:'small',
-    // display:'inline-block',
 }
 
 const fireIconControlStyles = {
@@ -108,7 +111,7 @@ const UserControl = (props) => {
     }>
         <img style = {avatarStyles} src = {photoURL} />
         <div style = {displayNameStyles} >{displayName}</div>
-        <div style = {downArrowStyles} >▼</div>
+        <div style = {downArrowWrapperStyles} ><span style = {downArrowStyles}>▼</span></div>
     </div>
 
 }
