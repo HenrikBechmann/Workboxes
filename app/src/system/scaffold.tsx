@@ -4,7 +4,8 @@
 import React from 'react'
 
 // general support
-import GeneralLayout from '../pages/GeneralLayout'
+import GeneralLayout from '../components/GeneralLayout'
+
 import Signin from '../pages/Signin'
 import About from '../pages/About'
 import Notices from '../pages/Notices'
@@ -13,7 +14,7 @@ import NotFound from '../pages/NotFound'
 
 // user support
 import MemberRoutes from '../components/MemberRoutes'
-import MembersLayout from '../pages/MembersLayout'
+import MembersLayout from '../components/MembersLayout'
 
 import Tribalopolis from '../Tribalopolis'
 import Account from '../pages/Account'
@@ -24,7 +25,7 @@ import Unauthorized from '../pages/Unauthorized'
 
 // system support
 import SysadminRoutes from '../components/SysadminRoutes'
-import SysadminLayout from '../pages/SysadminLayout'
+import SysadminLayout from '../components/SysadminLayout'
 
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
