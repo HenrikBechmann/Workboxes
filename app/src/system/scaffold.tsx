@@ -3,21 +3,27 @@
 
 import React from 'react'
 
-// ananymous support
+// general support
 import Signin from '../pages/Signin'
 import About from '../pages/About'
+import Notices from '../pages/Notices'
 import NotFound from '../pages/NotFound'
 
 // user support
 import MemberRoutes from '../components/MemberRoutes'
 import MembersLayout from '../pages/MembersLayout'
+
 import Tribalopolis from '../Tribalopolis'
 import Account from '../pages/Account'
+import Domains from '../pages/Domains'
+import Memberships from '../pages/Memberships'
+import Subscriptions from '../pages/Subscriptions'
 import Unauthorized from '../pages/Unauthorized'
 
 // system support
 import SysadminRoutes from '../components/SysadminRoutes'
 import SysadminLayout from '../pages/SysadminLayout'
+
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
 import Metadata from '../pages/Metadata'
@@ -38,8 +44,29 @@ const routes = [
                         element: <Tribalopolis />,
                     },
                     {
+                        path:'notices',
+                        element:<Notices />
+                    },
+                    {
                         path: 'account',
-                        element: <Account />,
+                        children:[
+                            {
+                                index:true,
+                                element: <Account />,
+                            },
+                            {
+                                path:'domains',
+                                element:<Domains />
+                            },
+                            {
+                                path:'memberships',
+                                element:<Memberships />
+                            },
+                            {
+                                path:'subscriptions',
+                                element:<Subscriptions />
+                            },
+                        ]
                     },
                     {
                         path: 'unauthorized',

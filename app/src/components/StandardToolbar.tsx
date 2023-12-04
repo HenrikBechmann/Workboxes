@@ -5,7 +5,7 @@ import React, {CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
-  Menu, MenuButton, MenuList, MenuItem, MenuDivider,
+  Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
   Tooltip
 } from '@chakra-ui/react'
 
@@ -94,9 +94,21 @@ const StandardToolbar = (props) => {
     const gotoAbout = () => {
         navigate('/about')
     }
+    const gotoNotices = () => {
+        navigate('/notices')
+    }
 
     const gotoAccount = () => {
         navigate('/account')
+    }
+    const gotoDomains = () => {
+        navigate('/account/domains')
+    }
+    const gotoMemberships = () => {
+        navigate('/account/memberships')
+    }
+    const gotoSubscriptions = () => {
+        navigate('/account/subscriptions')
     }
 
     const logOut = () => {
@@ -115,7 +127,7 @@ const StandardToolbar = (props) => {
             </MenuButton>
             <MenuList>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
-                <MenuItem>Notices</MenuItem>
+                <MenuItem onClick = {gotoNotices}>Notices</MenuItem>
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
@@ -151,9 +163,13 @@ const StandardToolbar = (props) => {
                 <UserControl />
             </MenuButton>
             <MenuList>
-                <MenuItem onClick = {gotoAccount}>Account</MenuItem>
-                <MenuItem >Account domains</MenuItem>
-                <MenuItem >Domain memberships</MenuItem>
+                <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
+                <MenuDivider />
+                <MenuGroup title = 'MANAGE...'>
+                    <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
+                    <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
+                    <MenuItem onClick = {gotoDomains}>Account domains</MenuItem>
+                </MenuGroup>
                 <MenuDivider />
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
