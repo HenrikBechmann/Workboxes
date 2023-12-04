@@ -144,6 +144,7 @@ const StandardToolbar = (props) => {
         gotoSysadmin = () => { navigate('/sysadmin') },
         gotoAbout = () => { navigate('/about') },
         gotoNotices = () => { navigate('/notices') },
+        gotoClassifieds = () => { navigate('/classifieds') },
         gotoAccount = () => { navigate('/account') },
         gotoDomains = () => { navigate('/account/domains') },
         gotoMemberships = () => { navigate('/account/memberships') },
@@ -162,7 +163,8 @@ const StandardToolbar = (props) => {
                 <FireIconControl />
             </MenuButton>
             <MenuList>
-                <MenuItem>Classifieds</MenuItem>
+                <MenuItem onClick = {gotoClassifieds} >Classifieds</MenuItem>
+                <MenuDivider />
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
                 <MenuItem onClick = {gotoNotices}>Notices</MenuItem>
             </MenuList>

@@ -8,6 +8,7 @@ import GeneralLayout from '../pages/GeneralLayout'
 import Signin from '../pages/Signin'
 import About from '../pages/About'
 import Notices from '../pages/Notices'
+import Classifieds from '../pages/Classifieds'
 import NotFound from '../pages/NotFound'
 
 // user support
@@ -60,6 +61,10 @@ const routes = [
                     {
                         path:'notices',
                         element:<Notices />
+                    },
+                    {
+                        path:'classifieds',
+                        element:<Classifieds />
                     },
                     {
                         path: 'account',
