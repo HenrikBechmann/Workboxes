@@ -31,24 +31,54 @@ const standardToolbarStyles = {
 
 } as CSSProperties
 
+const verticalDividerStyles = {
+    height:'20px',
+    borderLeft:'1px solid gray', 
+    width:'0px', 
+    marginLeft:'12px',
+}
+
+const iconStyles = {
+    marginLeft:'12px',
+    opacity:0.7,
+}
+
+const downArrowStyles = {
+    opacity:0.5, 
+    fontSize:'small',
+}
+
+const fireIconControlStyles = {
+    display:'flex',
+    padding:'2px',
+    borderRadius:'6px',
+    marginLeft:'6px',
+}
+
+const avatarStyles = {
+    width:'24px', 
+    height:'24px', 
+    borderRadius:'12px'
+}
+
+const displayNameStyles = {
+    fontSize:'small', 
+    marginLeft:'4px',
+    marginRight:'3px', 
+    whiteSpace:'nowrap'
+} as CSSProperties
+
 const VerticalToolbarDivider = (props) => {
 
-    return <div style = {{height:'20px',borderLeft:'1px solid gray', width:'0px', marginLeft:'12px'}}></div>
+    return <div style = {verticalDividerStyles}></div>
 
 }
 
 const FireIconControl = (props) => {
     
-    return <div style = {
-        {
-            display:'flex',
-            // backgroundColor:'lightgray',
-            padding:'2px',
-            borderRadius:'6px',
-            marginLeft:'6px',
-        }
-    } ><img src = {fireIcon} /><span style = {{opacity:0.5, fontSize:'small'}} >▼</span></div> 
-
+    return <div style = {fireIconControlStyles} >
+        <img src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
+    </div> 
 }
 
 const UserControl = (props) => {
@@ -63,13 +93,11 @@ const UserControl = (props) => {
             alignItems:'center',
             marginLeft:'12px',
             borderRadius:'6px',
-            // opacity:0.7,
-            // border:'1px solid gray',
         }
     }>
-        <img style = {{width:'24px', height:'24px', borderRadius:'12px'}} src = {photoURL} />
-        <div style = {{fontSize:'small', marginLeft:'4px',marginRight:'3px', whiteSpace:'nowrap'}} >{displayName}</div>
-        <span style = {{opacity:0.5, fontSize:'small'}} >▼</span>
+        <img style = {avatarStyles} src = {photoURL} />
+        <div style = {displayNameStyles} >{displayName}</div>
+        <span style = {downArrowStyles} >▼</span>
     </div>
 
 }
@@ -83,42 +111,22 @@ const StandardToolbar = (props) => {
         { displayName, photoURL } = userData.authUser,
         isSuperUser = userData.sysadminStatus.isSuperUser
 
-    const goHome = () => {
-        navigate('/')
-    }
-
-    const gotoSysadmin = () => {
-        navigate('/sysadmin')
-    }
-
-    const gotoAbout = () => {
-        navigate('/about')
-    }
-    const gotoNotices = () => {
-        navigate('/notices')
-    }
-
-    const gotoAccount = () => {
-        navigate('/account')
-    }
-    const gotoDomains = () => {
-        navigate('/account/domains')
-    }
-    const gotoMemberships = () => {
-        navigate('/account/memberships')
-    }
-    const gotoSubscriptions = () => {
-        navigate('/account/subscriptions')
-    }
-
-    const logOut = () => {
-
-        signOut(auth).then(() => {
-          // Sign-out successful.
-        }).catch((error) => {
-          // An error happened.
-        })
-    }
+    const 
+        goHome = () => { navigate('/') },
+        gotoSysadmin = () => { navigate('/sysadmin') },
+        gotoAbout = () => { navigate('/about') },
+        gotoNotices = () => { navigate('/notices') },
+        gotoAccount = () => { navigate('/account') },
+        gotoDomains = () => { navigate('/account/domains') },
+        gotoMemberships = () => { navigate('/account/memberships') },
+        gotoSubscriptions = () => { navigate('/account/subscriptions') },
+        logOut = () => {
+            signOut(auth).then(() => {
+              // Sign-out successful.
+            }).catch((error) => {
+              // An error happened.
+            })
+        }
 
     return <div style = {standardToolbarStyles}>
         <Menu>
@@ -131,28 +139,28 @@ const StandardToolbar = (props) => {
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
-        <div style = {{marginLeft:'12px',opacity:0.7}} >
+        <div style = {iconStyles} >
             <Tooltip hasArrow label = 'Notifications to this account'>
                 <img src = {notificationsIcon} />
             </Tooltip>
         </div> 
-        <div style = {{marginLeft:'12px',opacity:0.7}} >
+        <div style = {iconStyles} >
             <Tooltip hasArrow label = 'Chatrooms with this account'>
                 <img src = {chatIcon} />
             </Tooltip>
         </div>
-        <div style = {{marginLeft:'12px',opacity:0.7}} >
+        <div style = {iconStyles} >
             <Tooltip hasArrow label = 'Subscribed news flows'>
                 <img src = {subscriptionsIcon} />
             </Tooltip>
     </div>
-        <div style = {{marginLeft:'12px',opacity:0.7}} >
+        <div style = {iconStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {{height:'18px', width:'18px'}} src = {helpIcon} />
             </Tooltip>
         </div>
         <VerticalToolbarDivider />
-        <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {goHome}>
+        <div style = {iconStyles} onClick = {goHome}>
             <Tooltip hasArrow label = 'Go to the main work page'>
                 <img src = {homeIcon} />
             </Tooltip>
@@ -176,7 +184,7 @@ const StandardToolbar = (props) => {
         </Menu>
         {isSuperUser && <>
             <VerticalToolbarDivider />
-            <div style = {{marginLeft:'12px',opacity:0.7}} onClick = {gotoSysadmin}>
+            <div style = {iconStyles} onClick = {gotoSysadmin}>
                 <Tooltip hasArrow label = 'System settings'>
                     <img src = {appSettingsIcon} />
                 </Tooltip>
