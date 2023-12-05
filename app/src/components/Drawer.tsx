@@ -11,7 +11,7 @@ export const Drawer = (props) => {
 
     const [openState, setOpenState] = useState(0) // truth - 0 or 1; boolean can't be used for useEffect index
 
-    const { placement, containerRef, isOpen, finalFocusRef, span, contents, onClose } = props
+    const { placement, containerRef, isOpen, finalFocusRef, span, component, onClose } = props
 
     const revisedLengthRef = useRef(null) // user drag
 
@@ -38,7 +38,7 @@ export const Drawer = (props) => {
             backgroundColor:'yellow', // -(lengthRef.current + 15) + 'px' // extra for resize tab
         }
         switch (placement) {
-            case 'right': {
+            case 'right': { // data entry
                 Object.assign(style,{
                     height: '100%',
                     width: lengthRef.current + 'px',
@@ -48,11 +48,12 @@ export const Drawer = (props) => {
                     left:'auto',
                     borderLeft:'1px solid gray',
                     boxShadow:'-5px 0px 5px 0px silver',
-                    borderRadius: '8px 0 0 8px'
+                    borderRadius: '8px 0 0 8px',
+                    zIndex:0
                 })
                 break
             }
-            case 'left': {
+            case 'left': { // help
                 Object.assign(style,{
                     height: '100%',
                     width: lengthRef.current + 'px',
@@ -62,11 +63,12 @@ export const Drawer = (props) => {
                     left:0,
                     borderRight:'1px solid gray',
                     boxShadow:'5px 0 5px 0px silver',
-                    borderRadius: '0 8px 8px 0'
+                    borderRadius: '0 8px 8px 0',
+                    zIndex:2
                 })
                 break
             }
-            case 'top': {
+            case 'top': { // lookup
                 Object.assign(style,{
                     height: lengthRef.current + 'px',
                     width: '100%',
@@ -76,11 +78,12 @@ export const Drawer = (props) => {
                     left:'auto',
                     borderBottom:'1px solid gray',
                     boxShadow:'0px 5px 5px 0px silver',
-                    borderRadius: '0 0 8px 8px'
+                    borderRadius: '0 0 8px 8px',
+                    zIndex:1
                 })
                 break
             }
-            case 'bottom': {
+            case 'bottom': { // message
                 Object.assign(style,{
                     height: lengthRef.current + 'px',
                     width: '100%',
@@ -90,7 +93,8 @@ export const Drawer = (props) => {
                     left:'auto',
                     borderTop:'1px solid gray',
                     boxShadow:'0px -5px 5px 0px silver',
-                    borderRadius: '8px 8px 0 0'
+                    borderRadius: '8px 8px 0 0',
+                    zIndex:3
                 })
                 break
             }
