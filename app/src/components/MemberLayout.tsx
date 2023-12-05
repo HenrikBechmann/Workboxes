@@ -13,7 +13,7 @@ const bodyStyle = {
     borderTop:'1px solid lightgray',
 }
 
-const MembersLayout = (props) => {
+const MemberLayout = (props) => {
 
     return <>
         <Toolbar>
@@ -26,4 +26,4 @@ const MembersLayout = (props) => {
 
 }
 
-export default MembersLayout
+export default MemberLayout

@@ -15,7 +15,7 @@ import NotFound from '../pages/NotFound'
 
 // user support
 import MemberRoutes from '../components/MemberRoutes'
-import MembersLayout from '../components/MembersLayout'
+import MemberLayout from '../components/MemberLayout'
 
 import Tribalopolis from '../Tribalopolis'
 import Account from '../pages/Account'
@@ -40,7 +40,7 @@ const routes = [
         element: <MemberRoutes />,
         children: [
             {
-                element: <MembersLayout />,
+                element: <MemberLayout />,
                 children:[
                     {
                         index: true,
