@@ -3,51 +3,78 @@
 // example
 // lookup is a namespace, parse with lowdash
 const Person = {
-  definitions: {
-    Person: {
-      properties: {
-        age: {
-          type: "number",
-          default:{
-              value:null,
-              lookup:null
-          }
-        },
-        firstName: {
-          type: "string",
-          default:{
-              value:null,
-              lookup:null
-          }
-        },
-        lastName: {
-          type: "string",
-          default:{
-              value:null,
-              lookup:null
-          }
-        },
-        socials: {
-          items: {
-            type: "string",
-              default:{
-                  value:null,
-                  lookup:null
-              }
-          },
-          type: "array",
-          default:{
-              value:null,
-              lookup:null
-          },
-        }
-      },
-      required: [ "firstName", "lastName", "age", "socials"],
-      type: "object",
+  properties: {
+    age: {
+      type: "number",
       default:{
           value:null,
           lookup:null
       },
+      alias:'Age',
+      order:1,
+      prompt:'',
+      description:'',
+      errormessage:'',
+      isValid:{},
+      onChange:{}
+    },
+    firstName: {
+      type: "string",
+      default:{
+          value:null,
+          lookup:null
+      },
+      alias:'Age',
+      order:1,
+      prompt:'',
+      description:'',
+      errormessage:'',
+      isValid:{},
+      onChange:{}
+    },
+    lastName: {
+      type: "string",
+      default:{
+          value:null,
+          lookup:null
+      },
+      alias:'Age',
+      order:1,
+      prompt:'',
+      description:'',
+      errormessage:'',
+      isValid:{},
+      onChange:{}
+    },
+    socials: {
+      items: {
+        type: "string",
+        default:{
+            value:null,
+            lookup:null
+        },
+        alias:'Age',
+        order:1,
+        prompt:'',
+        description:'',
+        errormessage:'',
+        isValid:{},
+        onChange:{}
+      },
+      type: "array",
+      default:{
+          value:null,
+          lookup:null
+      },
+      alias:'Age',
+      order:1,
+      prompt:'',
+      description:'',
+      errormessage:'',
+      isValid:{},
+      onChange:{}
     }
-  }
+  },
+  required: [ "firstName", "lastName", "age", "socials"],
+  type: 'object',
 }
