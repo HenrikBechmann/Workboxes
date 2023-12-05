@@ -11,7 +11,7 @@ export const Drawer = (props) => {
 
     const [openState, setOpenState] = useState(0) // truth - 0 or 1; boolean can't be used for useEffect index
 
-    const { placement, isOpen, finalFocusRef, span, containerRef, contents, onClose } = props
+    const { placement, containerRef, isOpen, finalFocusRef, span, contents, onClose } = props
 
     const revisedLengthRef = useRef(null) // user drag
 
@@ -46,6 +46,9 @@ export const Drawer = (props) => {
                     right:0,
                     bottom:'auto',
                     left:'auto',
+                    borderLeft:'1px solid gray',
+                    boxShadow:'-5px 0px 5px 0px silver',
+                    borderRadius: '8px 0 0 8px'
                 })
                 break
             }
@@ -57,6 +60,9 @@ export const Drawer = (props) => {
                     right:'auto',
                     bottom:'auto',
                     left:0,
+                    borderRight:'1px solid gray',
+                    boxShadow:'5px 0 5px 0px silver',
+                    borderRadius: '0 8px 8px 0'
                 })
                 break
             }
@@ -68,6 +74,9 @@ export const Drawer = (props) => {
                     right:'auto',
                     bottom:'auto',
                     left:'auto',
+                    borderBottom:'1px solid gray',
+                    boxShadow:'0px 5px 5px 0px silver',
+                    borderRadius: '0 0 8px 8px'
                 })
                 break
             }
@@ -79,6 +88,9 @@ export const Drawer = (props) => {
                     right:'auto',
                     bottom:0,
                     left:'auto',
+                    borderTop:'1px solid gray',
+                    boxShadow:'0px -5px 5px 0px silver',
+                    borderRadius: '8px 8px 0 0'
                 })
                 break
             }

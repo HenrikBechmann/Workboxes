@@ -12,7 +12,7 @@ const menubarStyles = {
     overflowX:'auto',
     minHeight:0,
     MsOverflowStyle: 'none', /* for Internet Explorer, Edge */
-    scrollbarWidth: 'none' /* for Firefox */
+    scrollbarWidth: 'none', /* for Firefox */
 
 } as CSSProperties
 
