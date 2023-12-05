@@ -5,6 +5,8 @@ import React, { useRef, useState, useEffect } from 'react'
 
 import { isMobile } from '../index'
 
+import handleIcon from '../../assets/handle.png'
+
 export const Drawer = (props) => {
 
     const [drawerState, setDrawerState] = useState('setup')
@@ -23,23 +25,34 @@ export const Drawer = (props) => {
             : containerRef.current.offsetHeight
     length = Math.max(Math.round(ratio * containerLength),length)
 
-    console.log('drawer span',length)
-
     const lengthRef = useRef(null)
     lengthRef.current = length
 
     const drawerStyleRef = useRef(null)
+    const handleStyleRef = useRef(null)
+    const handleIconStyleRef = useRef(null)
 
     const drawerElementRef = useRef(null)
+    const handleElementRef = useRef(null)
 
     if (!drawerStyleRef.current) {
-        const style = {
+        const drawerStyle = {
             position:'absolute',
             backgroundColor:'yellow', // -(lengthRef.current + 15) + 'px' // extra for resize tab
         }
+        const handleStyle = {
+            position:'absolute',
+            margin: 0,
+            backgroundColor:'yellow',
+            border:'1px solid gray',
+            display:'flex'
+        }
+        const handleIconStyle = {
+            opacity:.5
+        }
         switch (placement) {
             case 'right': { // data entry
-                Object.assign(style,{
+                Object.assign(drawerStyle,{
                     height: '100%',
                     width: lengthRef.current + 'px',
                     top:'auto',
@@ -49,12 +62,28 @@ export const Drawer = (props) => {
                     borderLeft:'1px solid gray',
                     boxShadow:'-5px 0px 5px 0px silver',
                     borderRadius: '8px 0 0 8px',
-                    zIndex:0
+                    zIndex:0,
+                })
+                Object.assign(handleStyle,{
+                    top:'50%',
+                    transform:'translateY(-50%)',
+                    left:'-24px',
+                    borderRight:'transparent',
+                    borderRadius: '8px 0 0 8px',
+                    height:'48px',
+                    width:'24px',
+                    alignItems:'center',
+                    boxShadow:'-5px 0px 5px 0px silver',
+                })
+                Object.assign(handleIconStyle,{
+                    height:'24px',
+                    width:'48px',
+                    transform:'rotate(90deg)'
                 })
                 break
             }
             case 'left': { // help
-                Object.assign(style,{
+                Object.assign(drawerStyle,{
                     height: '100%',
                     width: lengthRef.current + 'px',
                     top:'auto',
@@ -66,10 +95,26 @@ export const Drawer = (props) => {
                     borderRadius: '0 8px 8px 0',
                     zIndex:2
                 })
+                Object.assign(handleStyle,{
+                    top:'50%',
+                    transform:'translateY(-50%)',
+                    right:'-24px',
+                    borderLeft:'transparent',
+                    borderRadius: '0 8px 8px 0',
+                    height:'48px',
+                    width:'24px',
+                    alignItems:'center',
+                    boxShadow:'5px 0 5px 0px silver',
+                })
+                Object.assign(handleIconStyle,{
+                    height:'24px',
+                    width:'24px',
+                    transform:'rotate(90deg)'
+                })
                 break
             }
             case 'top': { // lookup
-                Object.assign(style,{
+                Object.assign(drawerStyle,{
                     height: lengthRef.current + 'px',
                     width: '100%',
                     top:0,
@@ -81,10 +126,25 @@ export const Drawer = (props) => {
                     borderRadius: '0 0 8px 8px',
                     zIndex:1
                 })
+                Object.assign(handleStyle,{
+                    left:'50%',
+                    transform:'translateX(-50%)',
+                    bottom:'-24px',
+                    borderTop:'transparent',
+                    borderRadius: '0 0 8px 8px',
+                    height:'24px',
+                    width:'48px',
+                    justifyContent:'center',
+                    boxShadow:'0px 5px 5px 0px silver',
+                })
+                Object.assign(handleIconStyle,{
+                    height:'24px',
+                    width:'24px',
+                })
                 break
             }
             case 'bottom': { // message
-                Object.assign(style,{
+                Object.assign(drawerStyle,{
                     height: lengthRef.current + 'px',
                     width: '100%',
                     top:'auto',
@@ -96,14 +156,35 @@ export const Drawer = (props) => {
                     borderRadius: '8px 8px 0 0',
                     zIndex:3
                 })
+                Object.assign(handleStyle,{
+                    left:'50%',
+                    transform:'translateX(-50%)',
+                    top:'-24px',
+                    borderBottom:'transparent',
+                    borderRadius: '8px 8px 0 0',
+                    height:'24px',
+                    width:'48px',
+                    justifyContent:'center',
+                    boxShadow:'0px -5px 5px 0px silver',
+                })
+                Object.assign(handleIconStyle,{
+                    height:'24px',
+                    width:'24px',
+                })
                 break
             }
         }
-        drawerStyleRef.current = style
+        handleIconStyleRef.current = handleIconStyle
+        handleStyleRef.current = handleStyle
+        drawerStyleRef.current = drawerStyle
     }
 
     useEffect(()=>{
-        drawerElementRef.current = <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current}>
+        handleElementRef.current = <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
+            <img style = {handleIconStyleRef.current} src = {handleIcon} />
+        </div>
+        drawerElementRef.current = <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
+            {handleElementRef.current}
             Drawer
         </div>
     },[])
@@ -118,7 +199,9 @@ export const Drawer = (props) => {
 
     }, [openState])
 
-    return (drawerState == 'ready')? drawerElementRef.current: null
+    return (drawerState == 'ready')
+        ? drawerElementRef.current
+        : null
 }
 
 export default Drawer
