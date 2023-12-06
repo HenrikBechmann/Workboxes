@@ -17,7 +17,7 @@ import NotFound from '../pages/NotFound'
 import MemberRoutes from '../components/MemberRoutes'
 import MemberLayout from '../components/MemberLayout'
 
-import Tribalopolis from '../Tribalopolis'
+import Main from '../pages/Main'
 import Account from '../pages/Account'
 import Domains from '../pages/Domains'
 import Memberships from '../pages/Memberships'
@@ -44,18 +44,18 @@ const routes = [
                 children:[
                     {
                         index: true,
-                        element: <Tribalopolis />,
+                        element: <Main />,
                     },
                     {
                         path:'workspace',
                         children:[
                             {
                                 index: true,
-                                element: <Tribalopolis />,
+                                element: <Main />,
                             },
                             {
                                 path: ':focus',
-                                element:<Tribalopolis />,
+                                element:<Main />,
                             },
                         ]
                     },
