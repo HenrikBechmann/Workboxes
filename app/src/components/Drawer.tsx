@@ -272,7 +272,7 @@ export const Drawer = (props) => {
                   <HStack alignItems = "center" >
                       <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
                       <Box mt = "3px" style = {iconWrapperStyles} >
-                          <Tooltip hasArrow label = {`Explain ${titleRef.current} drawer`}>
+                          <Tooltip hasArrow label = {`Explain the ${titleRef.current} drawer`}>
                               <img style = {smallerIconStyles} src = {helpIcon} />
                           </Tooltip>
                       </Box>

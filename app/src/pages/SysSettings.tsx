@@ -21,7 +21,9 @@ const SysSettings = (props) => {
             height:pageElementRef.current.offsetHeight
        })
 
-    },[])
+       if (pageState == 'setup') setPageState('ready')
+
+    },[pageState])
 
     useEffect(()=>{
 
@@ -35,13 +37,13 @@ const SysSettings = (props) => {
 
     },[])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if (pageState == 'setup') { // first cycle only
-            setPageState('ready')
-        }
+    //     if (pageState == 'setup') { // first cycle only
+    //         setPageState('ready')
+    //     }
 
-    },[pageState])
+    // },[pageState])
 
     return <div ref = {pageElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {(pageState == 'ready') && <Drawer placement = 'right' containerDimensions = {containerDimensions} />}
