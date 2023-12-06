@@ -11,15 +11,12 @@ export const Drawer = (props) => {
 
     const 
         { placement, containerRef, isOpen, finalFocusRef, span, component, onClose } = props,
-        [drawerState, setDrawerState] = useState('setup'),
         [openState, setOpenState] = useState(0), // truthy - 0 or 1; boolean can't be used for useEffect index
         lengthRef = useRef(null),
         revisedLengthRef = useRef(null), // user drag,
         drawerStyleRef = useRef(null),
         handleStyleRef = useRef(null),
-        handleIconStyleRef = useRef(null),
-        drawerElementRef = useRef(null),
-        handleElementRef = useRef(null)
+        handleIconStyleRef = useRef(null)
 
     let length = revisedLengthRef.current || span || 0
     const 
@@ -177,29 +174,16 @@ export const Drawer = (props) => {
         drawerStyleRef.current = drawerStyle
     }
 
-    useEffect(()=>{
-        handleElementRef.current = <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
-            <img style = {handleIconStyleRef.current} src = {handleIcon} />
-        </div>
-        drawerElementRef.current = <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
-            {handleElementRef.current}
-            Drawer
-        </div>
-    },[])
-
-    useEffect(()=>{
-        if (drawerState == 'setup') {
-            setDrawerState('ready')
-        }
-    },[drawerState])
-
     useEffect(()=> {
 
     }, [openState])
 
-    return (drawerState == 'ready')
-        ? drawerElementRef.current
-        : null
+    return <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
+        <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
+            <img style = {handleIconStyleRef.current} src = {handleIcon} />
+        </div>
+        Drawer
+    </div>
 }
 
 export default Drawer
