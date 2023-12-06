@@ -9,47 +9,45 @@ import handleIcon from '../../assets/handle.png'
 
 export const Drawer = (props) => {
 
-    const [drawerState, setDrawerState] = useState('setup')
-
-    const [openState, setOpenState] = useState(0) // truth - 0 or 1; boolean can't be used for useEffect index
-
-    const { placement, containerRef, isOpen, finalFocusRef, span, component, onClose } = props
-
-    const revisedLengthRef = useRef(null) // user drag
+    const 
+        { placement, containerRef, isOpen, finalFocusRef, span, component, onClose } = props,
+        [drawerState, setDrawerState] = useState('setup'),
+        [openState, setOpenState] = useState(0), // truthy - 0 or 1; boolean can't be used for useEffect index
+        lengthRef = useRef(null),
+        revisedLengthRef = useRef(null), // user drag,
+        drawerStyleRef = useRef(null),
+        handleStyleRef = useRef(null),
+        handleIconStyleRef = useRef(null),
+        drawerElementRef = useRef(null),
+        handleElementRef = useRef(null)
 
     let length = revisedLengthRef.current || span || 0
-    const ratio = isMobile?0.8:0.33
-    const containerLength = 
-        (['right','left'].includes(placement))
-            ? containerRef.current.offsetWidth
-            : containerRef.current.offsetHeight
+    const 
+        ratio = isMobile?0.8:0.33,
+        containerLength = 
+            (['right','left'].includes(placement))
+                ? containerRef.current.offsetWidth
+                : containerRef.current.offsetHeight
     length = Math.max(Math.round(ratio * containerLength),length)
-
-    const lengthRef = useRef(null)
     lengthRef.current = length
 
-    const drawerStyleRef = useRef(null)
-    const handleStyleRef = useRef(null)
-    const handleIconStyleRef = useRef(null)
-
-    const drawerElementRef = useRef(null)
-    const handleElementRef = useRef(null)
-
     if (!drawerStyleRef.current) {
-        const drawerStyle = {
-            position:'absolute',
-            backgroundColor:'yellow', // -(lengthRef.current + 15) + 'px' // extra for resize tab
-        }
-        const handleStyle = {
-            position:'absolute',
-            margin: 0,
-            backgroundColor:'yellow',
-            border:'1px solid gray',
-            display:'flex'
-        }
-        const handleIconStyle = {
-            opacity:.5
-        }
+        const 
+            drawerStyle = {
+                position:'absolute',
+                backgroundColor:'yellow', // -(lengthRef.current + 15) + 'px' // extra for resize tab
+            },
+            handleStyle = {
+                position:'absolute',
+                margin: 0,
+                backgroundColor:'yellow',
+                border:'1px solid gray',
+                display:'flex'
+            },
+                handleIconStyle = {
+                opacity:.5
+            }
+
         switch (placement) {
             case 'right': { // data entry
                 Object.assign(drawerStyle,{
