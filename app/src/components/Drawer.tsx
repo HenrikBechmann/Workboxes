@@ -4,13 +4,25 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { 
     Button, Text, Heading, Box,
-    Grid, GridItem, VStack,
-    Center
+    Grid, GridItem, VStack, HStack,
+    Center, Tooltip
 } from '@chakra-ui/react'
 
 import { isMobile } from '../index'
 
 import handleIcon from '../../assets/handle.png'
+import helpIcon from '../../assets/help.png'
+
+const iconWrapperStyles = {
+    // display:'inline-block',
+    // marginLeft:'12px',
+    opacity:0.7,
+}
+
+const smallerIconStyles = {
+    height:'18px', 
+    width:'18px'
+}
 
 export const Drawer = (props) => {
 
@@ -196,13 +208,22 @@ export const Drawer = (props) => {
           templateAreas={`"header"
                           "body"
                           "footer"`}
-          gridTemplateRows={'40px 1fr 40px'}
+          gridTemplateRows={'44px 1fr 34px'}
           gridTemplateColumns={'1fr'}
         >
             <GridItem area={'header'}>
+            <Box boxSizing = 'border-box' data-type = 'header-box' height = '100%'borderBottom = '1px solid silver'>
               <Center>
                   <VStack spacing = '0.1rem' data-type = 'sysadmin-header'>
-                  <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
+                  <HStack alignItems = "center" >
+                      <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
+                      <Box mt = {"3px"} style = {iconWrapperStyles} >
+                          <Tooltip hasArrow label = {`Explain ${titleRef.current}`}>
+                              <img style = {smallerIconStyles} src = {helpIcon} />
+                          </Tooltip>
+                      </Box>
+                  </HStack>
+                  
                   <Box color = 'gray' fontSize = 'sm' style = {
                       { 
                           whiteSpace: "nowrap",
@@ -213,15 +234,16 @@ export const Drawer = (props) => {
                    }>Internal system properties</Box>
                   </VStack>
               </Center>
+            </Box>
             </GridItem>
             <GridItem area={'body'}>
             Body
             </GridItem>
             <GridItem area={'footer'}>
-                <Box mt = '3px'>
-                    <Button size = 'sm' ml = '6px' colorScheme = "blue" >Apply</Button> 
-                    <Button size = 'sm' ml = '6px'>Cancel</Button> 
-                    <Button size = 'sm' ml = '6px' colorScheme = "blue" >Next</Button>
+                <Box p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
+                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Apply</Button> 
+                    <Button size = 'xs' ml = '6px'>Cancel</Button> 
+                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>
                 </Box>
             </GridItem>
         </Grid>
