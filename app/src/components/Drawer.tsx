@@ -2,6 +2,11 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useRef, useState, useEffect } from 'react'
+import { 
+    Button, Text, Heading, Box,
+    Grid, GridItem, VStack,
+    Center
+} from '@chakra-ui/react'
 
 import { isMobile } from '../index'
 
@@ -16,7 +21,8 @@ export const Drawer = (props) => {
         revisedLengthRef = useRef(null), // user drag,
         drawerStyleRef = useRef(null),
         handleStyleRef = useRef(null),
-        handleIconStyleRef = useRef(null)
+        handleIconStyleRef = useRef(null),
+        titleRef = useRef(null)
 
     let length = revisedLengthRef.current || span || 0
     const 
@@ -47,6 +53,7 @@ export const Drawer = (props) => {
 
         switch (placement) {
             case 'right': { // data entry
+                titleRef.current = 'Data updates'
                 Object.assign(drawerStyle,{
                     height: '100%',
                     width: lengthRef.current + 'px',
@@ -78,6 +85,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'left': { // help
+                titleRef.current = 'Information'
                 Object.assign(drawerStyle,{
                     height: '100%',
                     width: lengthRef.current + 'px',
@@ -109,6 +117,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'top': { // lookup
+                titleRef.current = 'Lookups'
                 Object.assign(drawerStyle,{
                     height: lengthRef.current + 'px',
                     width: '100%',
@@ -139,6 +148,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'bottom': { // message
+                titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
                     height: lengthRef.current + 'px',
                     width: '100%',
@@ -182,7 +192,39 @@ export const Drawer = (props) => {
         <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
             <img style = {handleIconStyleRef.current} src = {handleIcon} />
         </div>
-        Drawer
+        <Grid height = '100%'
+          templateAreas={`"header"
+                          "body"
+                          "footer"`}
+          gridTemplateRows={'40px 1fr 40px'}
+          gridTemplateColumns={'1fr'}
+        >
+            <GridItem area={'header'}>
+              <Center>
+                  <VStack spacing = '0.1rem' data-type = 'sysadmin-header'>
+                  <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
+                  <Box color = 'gray' fontSize = 'sm' style = {
+                      { 
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          fontStyle: "italic",
+                          textOverflow: "ellipsis",
+                       }
+                   }>Internal system properties</Box>
+                  </VStack>
+              </Center>
+            </GridItem>
+            <GridItem area={'body'}>
+            Body
+            </GridItem>
+            <GridItem area={'footer'}>
+                <Box mt = '3px'>
+                    <Button size = 'sm' ml = '6px' colorScheme = "blue" >Apply</Button> 
+                    <Button size = 'sm' ml = '6px'>Cancel</Button> 
+                    <Button size = 'sm' ml = '6px' colorScheme = "blue" >Next</Button>
+                </Box>
+            </GridItem>
+        </Grid>
     </div>
 }
 

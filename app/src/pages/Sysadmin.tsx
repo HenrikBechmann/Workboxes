@@ -9,7 +9,7 @@ import {
     Button, Text, Heading,
     Card, CardHeader, CardBody, CardFooter,
     Grid, GridItem, VStack,
-    Center, Flex
+    Center
 } from '@chakra-ui/react'
 
 const cardStyles = {
