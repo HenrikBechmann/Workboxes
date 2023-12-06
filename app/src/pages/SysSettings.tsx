@@ -8,25 +8,27 @@ import Drawer from '../components/Drawer'
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
-    const [pageState, setPageState] = useState('setup')
-    const [containerDimensions, setContainerDimensions] = useState(null)
+    const [pageState, setPageState] = useState('setup') // to collect pageElementRef
+    const [containerDimensions, setContainerDimensions] = useState(null) // to rerender for drawers on resize
 
-    const pageElementRef = useRef(null)
-    const resizeObserverRef = useRef(null)
+    const pageElementRef = useRef(null) // to pass to drawers
+    const resizeObserverRef = useRef(null) // to disconnect
 
-    const resizeCallback = useCallback(()=>{
+    const resizeCallback = useCallback(()=>{ // to trigger drawer resize
 
         setContainerDimensions({
             width:pageElementRef.current.offsetWidth,
             height:pageElementRef.current.offsetHeight
        })
+
     },[])
 
     useEffect(()=>{
 
         const resizeObserver = new ResizeObserver(resizeCallback)
-        resizeObserver.observe(pageElementRef.current)
+        resizeObserver.observe(pageElementRef.current) // triggers first drawer sizing
         resizeObserverRef.current = resizeObserver
+
         return () => {
             resizeObserverRef.current.disconnect()
         }
@@ -35,7 +37,7 @@ const SysSettings = (props) => {
 
     useEffect(()=>{
 
-        if (pageState == 'setup') {
+        if (pageState == 'setup') { // first cycle only
             setPageState('ready')
         }
 

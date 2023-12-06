@@ -1,7 +1,7 @@
 // Drawer.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, CSSProperties } from 'react'
 import { 
     Button, Text, Heading, Box,
     Grid, GridItem, VStack, HStack,
@@ -13,32 +13,59 @@ import { isMobile } from '../index'
 import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 
+const MIN_DRAWER_WIDTH = 250
+const MIN_DRAWER_HEIGHT = 100
+
 const iconWrapperStyles = {
     opacity:0.7,
 }
 
 const smallerIconStyles = {
     height:'18px', 
-    width:'18px'
+    width:'18px',
 }
+
+const headerBoxStyles = {
+    boxSizing: 'border-box',
+    display: 'relative',
+    height: '100%',
+    borderBottom: '1px solid silver'
+} as CSSProperties
+
+const subTitleStyles = { 
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    fontStyle: "italic",
+    textOverflow: "ellipsis",
+    maxWidth:'100%',
+    padding:'0 6px',
+    fontSize: 'small',
+    color:'gray',
+} as CSSProperties
 
 export const Drawer = (props) => {
 
-    const 
+    const
+        // props 
         { placement, containerDimensions, isOpen, finalFocusRef, span, component, onClose } = props,
-        [openState, setOpenState] = useState('open'), // truthy - 0 or 1; boolean can't be used for useEffect index
+        // states
+        [openState, setOpenState] = useState('open'), // or 'closed'
         [drawerLength, setDrawerLength] = useState(span),
+        // used for layouts
+        placementRef = useRef(placement),
+        // styles, set blow, first cycle
         drawerStyleRef = useRef(null),
         handleStyleRef = useRef(null),
         handleIconStyleRef = useRef(null),
+        // layout data
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
-        lengthRef = useRef(null),
+        lengthRef = useRef(null), // for drag operation
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
-        revisedLengthRef = useRef(null), // user drag
-        placementRef = useRef(placement)
+        revisedLengthRef = useRef(null) // user drag
 
+    // over-rides
     let length = revisedLengthRef.current || span || 0
     lengthRef.current = length
 
@@ -64,7 +91,6 @@ export const Drawer = (props) => {
                 titleRef.current = 'Data updates'
                 Object.assign(drawerStyle,{
                     height: '100%',
-                    width: lengthRef.current + 'px',
                     top:'auto',
                     right:0,
                     bottom:'auto',
@@ -96,7 +122,6 @@ export const Drawer = (props) => {
                 titleRef.current = 'Information'
                 Object.assign(drawerStyle,{
                     height: '100%',
-                    width: lengthRef.current + 'px',
                     top:'auto',
                     right:'auto',
                     bottom:'auto',
@@ -127,7 +152,6 @@ export const Drawer = (props) => {
             case 'top': { // lookup
                 titleRef.current = 'Lookups'
                 Object.assign(drawerStyle,{
-                    height: lengthRef.current + 'px',
                     width: '100%',
                     top:0,
                     right:'auto',
@@ -158,7 +182,6 @@ export const Drawer = (props) => {
             case 'bottom': { // message
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
-                    height: lengthRef.current + 'px',
                     width: '100%',
                     top:'auto',
                     right:'auto',
@@ -201,20 +224,28 @@ export const Drawer = (props) => {
                 (['right','left'].includes(placement))
                     ? containerDimensions.width
                     : containerDimensions.height,
-            defaultLength = Math.max(Math.round(defaultRatio * containerLength),lengthRef.current),
-            minLength = Math.max(Math.round(minRatio * containerLength)),
-            maxLength = Math.max(Math.round(maxRatio * containerLength))
+            minConst = 
+                (['right','left'].includes(placement))
+                    ? MIN_DRAWER_WIDTH
+                    : MIN_DRAWER_HEIGHT,
+            // calculate length and constraints from appropriate container measure
+            minLength = Math.max(Math.round(minRatio * containerLength),minConst),
+            maxLength = Math.round(maxRatio * containerLength),
+            defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength)
 
+        // save results
         lengthRef.current = defaultLength
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
+        // adjust CSS
         if (['left','right'].includes(placementRef.current)) {
-            drawerStyleRef.current = {...drawerStyleRef.current,width:defaultLength}
+            drawerStyleRef.current = {...drawerStyleRef.current,width:defaultLength + 'px'}
         } else {
-            drawerStyleRef.current = {...drawerStyleRef.current,height:defaultLength}
+            drawerStyleRef.current = {...drawerStyleRef.current,height:defaultLength + 'px'}
         }
 
+        // trigger re-render
         setDrawerLength(defaultLength)
 
     },[containerDimensions])
@@ -227,34 +258,28 @@ export const Drawer = (props) => {
         <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
             <img style = {handleIconStyleRef.current} src = {handleIcon} />
         </div>
-        <Grid height = '100%'
+        <Grid height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
                           "footer"`}
           gridTemplateRows={'44px 1fr 34px'}
-          gridTemplateColumns={'1fr'}
+          gridTemplateColumns={'100%'}
         >
             <GridItem area={'header'}>
-            <Box boxSizing = 'border-box' data-type = 'header-box' height = '100%'borderBottom = '1px solid silver'>
+            <Box data-type = 'header-box' style = {headerBoxStyles} >
               <Center>
-                  <VStack spacing = '0.1rem' data-type = 'sysadmin-header'>
+                  <VStack data-type = 'sysadmin-header' spacing = '0.1rem' maxWidth = '100%'>
                   <HStack alignItems = "center" >
                       <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
-                      <Box mt = {"3px"} style = {iconWrapperStyles} >
+                      <Box mt = "3px" style = {iconWrapperStyles} >
                           <Tooltip hasArrow label = {`Explain ${titleRef.current} drawer`}>
                               <img style = {smallerIconStyles} src = {helpIcon} />
                           </Tooltip>
                       </Box>
                   </HStack>
                   
-                  <Box color = 'gray' fontSize = 'sm' style = {
-                      { 
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          fontStyle: "italic",
-                          textOverflow: "ellipsis",
-                       }
-                   }>Internal system properties</Box>
+                  <Box style = {subTitleStyles}>
+                      Internal system properties Internal system properties Internal system properties Internal system properties</Box>
                   </VStack>
               </Center>
             </Box>
