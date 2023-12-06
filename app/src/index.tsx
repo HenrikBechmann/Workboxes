@@ -10,7 +10,7 @@ import ismobile from 'is-mobile'
 import FirebaseProviders from './system/FirebaseProviders'
 import scaffold from './system/scaffold'
 
-export const isMobile = ismobile({featureDetect: true, tablet: true})// /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+export const isMobile = ismobile({featureDetect: true, tablet: true})
 
 const router = createBrowserRouter(scaffold)
 

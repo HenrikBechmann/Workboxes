@@ -14,8 +14,6 @@ import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 
 const iconWrapperStyles = {
-    // display:'inline-block',
-    // marginLeft:'12px',
     opacity:0.7,
 }
 
@@ -27,30 +25,28 @@ const smallerIconStyles = {
 export const Drawer = (props) => {
 
     const 
-        { placement, containerRef, isOpen, finalFocusRef, span, component, onClose } = props,
-        [openState, setOpenState] = useState(0), // truthy - 0 or 1; boolean can't be used for useEffect index
-        lengthRef = useRef(null),
-        revisedLengthRef = useRef(null), // user drag,
+        { placement, containerDimensions, isOpen, finalFocusRef, span, component, onClose } = props,
+        [openState, setOpenState] = useState('open'), // truthy - 0 or 1; boolean can't be used for useEffect index
+        [drawerLength, setDrawerLength] = useState(span),
         drawerStyleRef = useRef(null),
         handleStyleRef = useRef(null),
         handleIconStyleRef = useRef(null),
-        titleRef = useRef(null)
+        titleRef = useRef(null),
+        containerDimensionsRef = useRef(containerDimensions),
+        lengthRef = useRef(null),
+        maxLengthRef = useRef(null),
+        minLengthRef = useRef(null),
+        revisedLengthRef = useRef(null), // user drag
+        placementRef = useRef(placement)
 
     let length = revisedLengthRef.current || span || 0
-    const 
-        ratio = isMobile?0.8:0.33,
-        containerLength = 
-            (['right','left'].includes(placement))
-                ? containerRef.current.offsetWidth
-                : containerRef.current.offsetHeight
-    length = Math.max(Math.round(ratio * containerLength),length)
     lengthRef.current = length
 
     if (!drawerStyleRef.current) {
         const 
             drawerStyle = {
                 position:'absolute',
-                backgroundColor:'yellow', // -(lengthRef.current + 15) + 'px' // extra for resize tab
+                backgroundColor:'yellow',
             },
             handleStyle = {
                 position:'absolute',
@@ -191,10 +187,37 @@ export const Drawer = (props) => {
                 break
             }
         }
-        handleIconStyleRef.current = handleIconStyle
-        handleStyleRef.current = handleStyle
         drawerStyleRef.current = drawerStyle
+        handleStyleRef.current = handleStyle
+        handleIconStyleRef.current = handleIconStyle
     }
+
+    useEffect(() => {
+        const 
+            defaultRatio = isMobile?0.8:0.33,
+            maxRatio = 0.9,
+            minRatio = isMobile?0.5:0.2,
+            containerLength = 
+                (['right','left'].includes(placement))
+                    ? containerDimensions.width
+                    : containerDimensions.height,
+            defaultLength = Math.max(Math.round(defaultRatio * containerLength),lengthRef.current),
+            minLength = Math.max(Math.round(minRatio * containerLength)),
+            maxLength = Math.max(Math.round(maxRatio * containerLength))
+
+        lengthRef.current = defaultLength
+        minLengthRef.current = minLength
+        maxLengthRef.current = maxLength
+
+        if (['left','right'].includes(placementRef.current)) {
+            drawerStyleRef.current = {...drawerStyleRef.current,width:defaultLength}
+        } else {
+            drawerStyleRef.current = {...drawerStyleRef.current,height:defaultLength}
+        }
+
+        setDrawerLength(defaultLength)
+
+    },[containerDimensions])
 
     useEffect(()=> {
 
@@ -237,7 +260,7 @@ export const Drawer = (props) => {
             </Box>
             </GridItem>
             <GridItem area={'body'}>
-            Body
+                Body
             </GridItem>
             <GridItem area={'footer'}>
                 <Box p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
