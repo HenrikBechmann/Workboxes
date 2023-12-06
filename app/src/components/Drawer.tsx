@@ -241,7 +241,7 @@ export const Drawer = (props) => {
             </GridItem>
             <GridItem area={'footer'}>
                 <Box p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
-                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Apply</Button> 
+                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
                     <Button size = 'xs' ml = '6px'>Cancel</Button> 
                     <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>
                 </Box>
