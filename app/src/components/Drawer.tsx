@@ -67,14 +67,14 @@ export const Drawer = (props) => {
         isDraggingRef = useRef(false),
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
-        lengthRef = useRef(null), // for drag operation
+        // lengthRef = useRef(null), // for drag operation
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
-        revisedLengthRef = useRef(null) // user drag
+        revisedLengthRef = useRef(0) // user drag
 
     // possible over-ride
-    let length = revisedLengthRef.current || span || 0
-    lengthRef.current = length
+    // let length = revisedLengthRef.current || span || 0
+    // lengthRef.current = length
 
     if (!drawerStyleRef.current) { // first time only
         const 
@@ -306,7 +306,8 @@ export const Drawer = (props) => {
 
     //-----------------------------[ end drag tab ]-----------------------------
 
-    useEffect(() => {
+    const recalculateLength = () => {
+
         const 
             defaultRatio = isMobile?0.8:0.33,
             maxRatio = 0.9,
@@ -322,22 +323,30 @@ export const Drawer = (props) => {
             // calculate length and constraints from appropriate container measure
             minLength = Math.max(Math.round(minRatio * containerLength),minConst),
             maxLength = Math.round(maxRatio * containerLength),
-            defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength)
+            defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
+            revisedLength = Math.min(Math.max(revisedLengthRef.current,minLength),maxLength),
+            updatedLength = Math.max(defaultLength, revisedLength)
 
         // save results
-        lengthRef.current = defaultLength
+        // lengthRef.current = updatedLength
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
         // adjust CSS
         if (['left','right'].includes(placementRef.current)) {
-            drawerStyleRef.current = {...drawerStyleRef.current,width:defaultLength + 'px'}
+            drawerStyleRef.current = {...drawerStyleRef.current,width:updatedLength + 'px'}
         } else {
-            drawerStyleRef.current = {...drawerStyleRef.current,height:defaultLength + 'px'}
+            drawerStyleRef.current = {...drawerStyleRef.current,height:updatedLength + 'px'}
         }
 
         // trigger re-render
         setDrawerLength(defaultLength)
+
+    }
+
+    useEffect(() => {
+
+        recalculateLength()
 
     },[containerDimensions])
 
