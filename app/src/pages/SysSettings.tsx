@@ -46,7 +46,7 @@ const SysSettings = (props) => {
     // },[pageState])
 
     return <div ref = {pageElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {(pageState == 'ready') && <Drawer placement = 'right' containerDimensions = {containerDimensions} />}
+        {(pageState == 'ready') && <Drawer placement = 'right' pageElementRef = {pageElementRef} containerDimensions = {containerDimensions} />}
         <Text>System settings</Text>
     </div>
 

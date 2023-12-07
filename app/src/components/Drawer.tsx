@@ -47,17 +47,24 @@ export const Drawer = (props) => {
 
     const
         // props 
-        { placement, containerDimensions, isOpen, finalFocusRef, span, component, onClose } = props,
+        { placement, containerDimensions, pageElementRef, isOpen, finalFocusRef, span, component, onClose } = props,
+        
         // states
         [openState, setOpenState] = useState('open'), // or 'closed'
         [drawerLength, setDrawerLength] = useState(span),
+        
         // used for layouts
         placementRef = useRef(placement),
-        // styles, set blow, first cycle
+
+        drawerTabRef = useRef(null),
+        
+        // styles, set below, first cycle
         drawerStyleRef = useRef(null),
         handleStyleRef = useRef(null),
         handleIconStyleRef = useRef(null),
-        // layout data
+        
+        // control data
+        isDraggingRef = useRef(false),
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
         lengthRef = useRef(null), // for drag operation
@@ -65,11 +72,11 @@ export const Drawer = (props) => {
         minLengthRef = useRef(null),
         revisedLengthRef = useRef(null) // user drag
 
-    // over-rides
+    // possible over-ride
     let length = revisedLengthRef.current || span || 0
     lengthRef.current = length
 
-    if (!drawerStyleRef.current) {
+    if (!drawerStyleRef.current) { // first time only
         const 
             drawerStyle = {
                 position:'absolute',
@@ -215,6 +222,90 @@ export const Drawer = (props) => {
         handleIconStyleRef.current = handleIconStyle
     }
 
+    //-----------------------------[ drag tab ]-----------------------------
+
+    const startDrag = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        isDraggingRef.current = true
+
+        console.log('starting drag')
+
+        return false
+    }
+
+    const dragMove = (event) => {
+
+        if (!isDraggingRef.current) return
+
+        event.preventDefault(); 
+        event.stopPropagation(); 
+
+        console.log('drag move')
+
+        return false;
+
+    }
+
+    const endDrag = (event) => {
+
+        if (!isDraggingRef.current) return
+
+        event.preventDefault(); 
+        event.stopPropagation(); 
+
+        isDraggingRef.current = false
+
+        console.log('drag end')
+
+        return false;
+    }
+
+    // initialize drag listeners
+    useEffect(()=>{
+
+        const tabElement = drawerTabRef.current
+        const pageElement = pageElementRef.current
+
+        if (isMobile) {
+
+            tabElement.addEventListener('touchstart', startDrag)
+            pageElement.addEventListener('touchmove', dragMove)
+            pageElement.addEventListener('touchend', endDrag)
+            pageElement.addEventListener('touchcancel', endDrag)
+
+        } else {
+
+            tabElement.addEventListener('mousedown', startDrag)
+            pageElement.addEventListener('mousemove', dragMove)
+            pageElement.addEventListener('mouseup', endDrag)
+
+        }
+
+        return () => {
+
+            if (isMobile) {
+
+                tabElement.removeEventListener('touchstart', startDrag)
+                pageElement.removeEventListener('touchmove', dragMove)
+                pageElement.removeEventListener('touchend', endDrag)
+                pageElement.removeEventListener('touchcancel', endDrag)
+
+            } else {
+
+                tabElement.removeEventListener('mousedown', startDrag)
+                pageElement.removeEventListener('mousemove', dragMove)
+                pageElement.removeEventListener('mouseup', endDrag)
+
+            }
+
+        }
+
+    },[])
+
+    //-----------------------------[ end drag tab ]-----------------------------
+
     useEffect(() => {
         const 
             defaultRatio = isMobile?0.8:0.33,
@@ -255,10 +346,10 @@ export const Drawer = (props) => {
     }, [openState])
 
     return <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
-        <div data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
+        <div ref = {drawerTabRef} data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
             <img style = {handleIconStyleRef.current} src = {handleIcon} />
         </div>
-        <Grid height = '100%' width = '100%'
+        <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
                           "footer"`}
@@ -272,7 +363,7 @@ export const Drawer = (props) => {
                   <HStack alignItems = "center" >
                       <Heading as = 'h4' mt = '3px' lineHeight = {1} fontSize = 'md'>{titleRef.current}</Heading>
                       <Box mt = "3px" style = {iconWrapperStyles} >
-                          <Tooltip hasArrow label = {`Explain the ${titleRef.current} drawer`}>
+                          <Tooltip hasArrow label = {`Explain the "${titleRef.current}" drawer`}>
                               <img style = {smallerIconStyles} src = {helpIcon} />
                           </Tooltip>
                       </Box>
@@ -284,11 +375,11 @@ export const Drawer = (props) => {
               </Center>
             </Box>
             </GridItem>
-            <GridItem area={'body'}>
+            <GridItem data-type = 'body-area' area={'body'}>
                 Body
             </GridItem>
             <GridItem area={'footer'}>
-                <Box p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
+                <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
                     <Button size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
                     <Button size = 'xs' ml = '6px'>Cancel</Button> 
                     <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>
