@@ -1,7 +1,7 @@
 // SysSettings.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
-import {Text} from '@chakra-ui/react'
+import {Text, Button} from '@chakra-ui/react'
 
 import Drawer from '../components/Drawer'
 
@@ -10,6 +10,9 @@ const SysSettings = (props) => {
 
     const [pageState, setPageState] = useState('setup') // to collect pageElementRef
     const [containerDimensions, setContainerDimensions] = useState(null) // to rerender for drawers on resize
+    const [drawerPlacement, setDrawerPlacement] = useState('right')
+
+    console.log('pageState, drawerPlacement', pageState, drawerPlacement)
 
     const pageElementRef = useRef(null) // to pass to drawers
     const resizeObserverRef = useRef(null) // to disconnect
@@ -37,17 +40,24 @@ const SysSettings = (props) => {
 
     },[])
 
-    // useEffect(()=>{
+    const openRight = () => {
+        setDrawerPlacement('right')        
+    }
+    const openTop = () => {
+        setDrawerPlacement('top')        
+    }
+    const openLeft = () => {
+        setDrawerPlacement('left')        
+    }
+    const openBottom = () => {
+        setDrawerPlacement('bottom')        
+    }
 
-    //     if (pageState == 'setup') { // first cycle only
-    //         setPageState('ready')
-    //     }
-
-    // },[pageState])
 
     return <div ref = {pageElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {(pageState == 'ready') && <Drawer placement = 'right' pageElementRef = {pageElementRef} containerDimensions = {containerDimensions} />}
+        {(pageState == 'ready') && <Drawer placement = {drawerPlacement} pageElementRef = {pageElementRef} containerDimensions = {containerDimensions} />}
         <Text>System settings</Text>
+        <Button onClick = {openRight} >Right</Button> <Button onClick = {openTop }>Top</Button> <Button onClick = {openLeft}>Left</Button> <Button onClick = {openBottom}>Bottom</Button>
     </div>
 
 }

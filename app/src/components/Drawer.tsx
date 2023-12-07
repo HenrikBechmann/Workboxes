@@ -1,7 +1,7 @@
 // Drawer.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useState, useEffect, useLayoutEffect, CSSProperties } from 'react'
+import React, { useRef, useState, useMemo, useEffect, useLayoutEffect, CSSProperties } from 'react'
 import { 
     Button, Text, Heading, Box,
     Grid, GridItem, VStack, HStack,
@@ -74,7 +74,10 @@ export const Drawer = (props) => {
 
     // lengthRef.current = revisedLengthRef.current || span || 0
 
-    if (!drawerStyleRef.current) { // first time only
+    console.log('drawer placement', placement)
+
+    useMemo(()=>{
+
         const 
             drawerStyle = {
                 position:'absolute',
@@ -84,7 +87,10 @@ export const Drawer = (props) => {
                 position:'absolute',
                 margin: 0,
                 backgroundColor:'yellow',
-                border:'1px solid gray',
+                borderTop:'1px solid gray',
+                borderRight:'1px solid gray',
+                borderBottom:'1px solid gray',
+                borderLef:'1px solid gray',
                 display:'flex'
             },
                 handleIconStyle = {
@@ -96,6 +102,7 @@ export const Drawer = (props) => {
                 titleRef.current = 'Data updates'
                 Object.assign(drawerStyle,{
                     height: '100%',
+                    width:'auto',
                     top:'auto',
                     right:0,
                     bottom:'auto',
@@ -127,6 +134,7 @@ export const Drawer = (props) => {
                 titleRef.current = 'Information'
                 Object.assign(drawerStyle,{
                     height: '100%',
+                    width:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:'auto',
@@ -158,6 +166,7 @@ export const Drawer = (props) => {
                 titleRef.current = 'Lookups'
                 Object.assign(drawerStyle,{
                     width: '100%',
+                    height:'auto',
                     top:0,
                     right:'auto',
                     bottom:'auto',
@@ -188,6 +197,7 @@ export const Drawer = (props) => {
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
                     width: '100%',
+                    height:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:0,
@@ -218,7 +228,9 @@ export const Drawer = (props) => {
         drawerStyleRef.current = drawerStyle
         handleStyleRef.current = handleStyle
         handleIconStyleRef.current = handleIconStyle
-    }
+        return null
+    },[placement])
+    
 
     //-----------------------------[ drag tab ]-----------------------------
 
