@@ -11,6 +11,7 @@ const SysSettings = (props) => {
     const [pageState, setPageState] = useState('setup') // to collect pageElementRef
     const [containerDimensions, setContainerDimensions] = useState(null) // to rerender for drawers on resize
     const [drawerPlacement, setDrawerPlacement] = useState('right')
+    const [openState,setOpenState] = useState(false)
 
     console.log('pageState, drawerPlacement', pageState, drawerPlacement)
 
@@ -52,7 +53,12 @@ const SysSettings = (props) => {
     const openBottom = () => {
         setDrawerPlacement('bottom')        
     }
-
+    const openDrawer = () => {
+        setOpenState(true)
+    }
+    const closeDrawer = () => {
+        setOpenState(false)
+    }
 
     return <div ref = {pageElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {(pageState == 'ready') && 
@@ -60,11 +66,16 @@ const SysSettings = (props) => {
             placement = {drawerPlacement} 
             pageElementRef = {pageElementRef} 
             containerDimensions = {containerDimensions} 
-            isOpen = 'open'
+            isOpen = {openState}
             />
         }
         <Text>System settings</Text>
-        <Button onClick = {openRight} >Right</Button> <Button onClick = {openTop }>Top</Button> <Button onClick = {openLeft}>Left</Button> <Button onClick = {openBottom}>Bottom</Button>
+        <Button onClick = {openRight} >Right</Button> 
+        <Button onClick = {openTop }>Top</Button> 
+        <Button onClick = {openLeft}>Left</Button> 
+        <Button onClick = {openBottom}>Bottom</Button>
+        <Button onClick = {openDrawer}>Open</Button>
+        <Button onClick = {closeDrawer}>Close</Button>
     </div>
 
 }

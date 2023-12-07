@@ -49,6 +49,8 @@ export const Drawer = (props) => {
         // props 
         { placement, pageElementRef, containerDimensions, isOpen } = props, //, finalFocusRef, span, component, onClose } = props,
         
+        openParm = isOpen?'open':'closed',
+
         // states
         [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerState, setDrawerState] = useState('setup'),
@@ -377,15 +379,15 @@ export const Drawer = (props) => {
     // update display
     useEffect(()=> {
 
-        if (isOpen == 'open') {
+        if (openParm == 'open') {
             Object.assign(drawerStyleRef.current, {display:'block'})
         } else {
             Object.assign(drawerStyleRef.current, {display:'none'})
         }
 
-        setOpenState(isOpen)
+        setOpenState(openParm)
 
-    }, [isOpen])
+    }, [openParm])
 
     // console.log('rendering drawer styles',{...drawerStyleRef.current})
 
