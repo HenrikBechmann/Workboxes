@@ -47,53 +47,50 @@ export const Drawer = (props) => {
 
     const
         // props 
-        { placement, containerDimensions, pageElementRef, isOpen, finalFocusRef, span, component, onClose } = props,
+        { placement, pageElementRef, containerDimensions } = props, //, isOpen, finalFocusRef, span, component, onClose } = props,
         
         // states
         [openState, setOpenState] = useState('open'), // or 'closed'
-        [drawerLength, setDrawerLength] = useState(span),
+        [drawerState, setDrawerState] = useState('setup'),
+        [drawerLength, setDrawerLength] = useState(0),
         
         // used for layouts
         placementRef = useRef(placement),
 
-        drawerTabRef = useRef(null),
+        tabRef = useRef(null),
         
         // styles, set below, first cycle
         drawerStyleRef = useRef(null),
-        handleStyleRef = useRef(null),
-        handleIconStyleRef = useRef(null),
         
         // control data
         isDraggingRef = useRef(false),
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
-        updatedLengthRef = useRef(null), // for drag operation
-        maxLengthRef = useRef(null),
-        minLengthRef = useRef(null),
-        revisedLengthRef = useRef(0) // user drag
 
-    // lengthRef.current = revisedLengthRef.current || span || 0
+        drawerLengthRef = useRef(null), // set and revised after first cycle (setup)
+        maxLengthRef = useRef(null),
+        minLengthRef = useRef(null)
 
     console.log('drawer placement', placement)
 
-    useMemo(()=>{
+    const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
         const 
             drawerStyle = {
                 position:'absolute',
                 backgroundColor:'yellow',
             },
-            handleStyle = {
+            tabStyle = {
                 position:'absolute',
                 margin: 0,
                 backgroundColor:'yellow',
                 borderTop:'1px solid gray',
                 borderRight:'1px solid gray',
                 borderBottom:'1px solid gray',
-                borderLef:'1px solid gray',
+                borderLeft:'1px solid gray',
                 display:'flex'
-            },
-                handleIconStyle = {
+            } as CSSProperties,
+            tabIconStyle = {
                 opacity:.5
             }
 
@@ -110,9 +107,9 @@ export const Drawer = (props) => {
                     borderLeft:'1px solid gray',
                     boxShadow:'-5px 0px 5px 0px silver',
                     borderRadius: '8px 0 0 8px',
-                    zIndex:0,
+                    zIndex:1,
                 })
-                Object.assign(handleStyle,{
+                Object.assign(tabStyle,{
                     top:'50%',
                     transform:'translateY(-50%)',
                     left:'-24px',
@@ -123,7 +120,7 @@ export const Drawer = (props) => {
                     alignItems:'center',
                     boxShadow:'-5px 0px 5px 0px silver',
                 })
-                Object.assign(handleIconStyle,{
+                Object.assign(tabIconStyle,{
                     height:'24px',
                     width:'48px',
                     transform:'rotate(90deg)'
@@ -144,7 +141,7 @@ export const Drawer = (props) => {
                     borderRadius: '0 8px 8px 0',
                     zIndex:2
                 })
-                Object.assign(handleStyle,{
+                Object.assign(tabStyle,{
                     top:'50%',
                     transform:'translateY(-50%)',
                     right:'-24px',
@@ -155,7 +152,7 @@ export const Drawer = (props) => {
                     alignItems:'center',
                     boxShadow:'5px 0 5px 0px silver',
                 })
-                Object.assign(handleIconStyle,{
+                Object.assign(tabIconStyle,{
                     height:'24px',
                     width:'24px',
                     transform:'rotate(90deg)'
@@ -174,9 +171,9 @@ export const Drawer = (props) => {
                     borderBottom:'1px solid gray',
                     boxShadow:'0px 5px 5px 0px silver',
                     borderRadius: '0 0 8px 8px',
-                    zIndex:1
+                    zIndex:3
                 })
-                Object.assign(handleStyle,{
+                Object.assign(tabStyle,{
                     left:'50%',
                     transform:'translateX(-50%)',
                     bottom:'-24px',
@@ -187,7 +184,7 @@ export const Drawer = (props) => {
                     justifyContent:'center',
                     boxShadow:'0px 5px 5px 0px silver',
                 })
-                Object.assign(handleIconStyle,{
+                Object.assign(tabIconStyle,{
                     height:'24px',
                     width:'24px',
                 })
@@ -205,9 +202,9 @@ export const Drawer = (props) => {
                     borderTop:'1px solid gray',
                     boxShadow:'0px -5px 5px 0px silver',
                     borderRadius: '8px 8px 0 0',
-                    zIndex:3
+                    zIndex:4
                 })
-                Object.assign(handleStyle,{
+                Object.assign(tabStyle,{
                     left:'50%',
                     transform:'translateX(-50%)',
                     top:'-24px',
@@ -218,19 +215,17 @@ export const Drawer = (props) => {
                     justifyContent:'center',
                     boxShadow:'0px -5px 5px 0px silver',
                 })
-                Object.assign(handleIconStyle,{
+                Object.assign(tabIconStyle,{
                     height:'24px',
                     width:'24px',
                 })
                 break
             }
         }
-        drawerStyleRef.current = drawerStyle
-        handleStyleRef.current = handleStyle
-        handleIconStyleRef.current = handleIconStyle
-        return null
+        return [drawerStyle, tabStyle, tabIconStyle]
     },[placement])
     
+    drawerStyleRef.current = drawerStyle
 
     //-----------------------------[ drag tab ]-----------------------------
 
@@ -254,7 +249,7 @@ export const Drawer = (props) => {
 
         console.log('drag move')
 
-        // recalculateLength() needs to be throttled here -- 100 ms?
+        // calculateDrawerLength() needs to be throttled here -- 100 ms?
 
         return false;
 
@@ -277,7 +272,7 @@ export const Drawer = (props) => {
     // initialize drag listeners
     useEffect(()=>{
 
-        const tabElement = drawerTabRef.current
+        const tabElement = tabRef.current
         const pageElement = pageElementRef.current
 
         if (isMobile) {
@@ -318,7 +313,7 @@ export const Drawer = (props) => {
 
     //-----------------------------[ end drag tab ]-----------------------------
 
-    const recalculateLength = () => {
+    const calculateDrawerLength = () => {
 
         const 
             defaultRatio = isMobile?0.8:0.33,
@@ -336,11 +331,11 @@ export const Drawer = (props) => {
             minLength = Math.max(Math.round(minRatio * containerLength),minConst),
             maxLength = Math.round(maxRatio * containerLength),
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
-            revisedLength = Math.min(Math.max(revisedLengthRef.current,minLength),maxLength),
+            revisedLength = Math.min(Math.max(drawerLengthRef.current,minLength),maxLength),
             updatedLength = Math.max(defaultLength, revisedLength)
 
         // save results
-        updatedLengthRef.current = updatedLength
+        drawerLengthRef.current = updatedLength
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
@@ -358,19 +353,21 @@ export const Drawer = (props) => {
 
     useLayoutEffect(() => {
 
-        recalculateLength()
+        calculateDrawerLength()
 
-    },[containerDimensions])
+        if (drawerState == 'setup') setDrawerState('ready')
+
+    },[containerDimensions, drawerState])
 
     useEffect(()=> {
 
     }, [openState])
 
     return <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
-        <div ref = {drawerTabRef} data-type = {'drawer-handle-' + placement} style = {handleStyleRef.current} >
-            <img style = {handleIconStyleRef.current} src = {handleIcon} />
+        <div ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
+            <img style = {tabIconStyle} src = {handleIcon} />
         </div>
-        <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
+        {drawerState == 'ready' && <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
                           "footer"`}
@@ -406,7 +403,7 @@ export const Drawer = (props) => {
                     {placement == 'right' && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
                 </Box>
             </GridItem>
-        </Grid>
+        </Grid>}
     </div>
 }
 
