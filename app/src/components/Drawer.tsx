@@ -1,7 +1,7 @@
 // Drawer.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useState, useEffect, CSSProperties } from 'react'
+import React, { useRef, useState, useEffect, useLayoutEffect, CSSProperties } from 'react'
 import { 
     Button, Text, Heading, Box,
     Grid, GridItem, VStack, HStack,
@@ -67,14 +67,12 @@ export const Drawer = (props) => {
         isDraggingRef = useRef(false),
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
-        // lengthRef = useRef(null), // for drag operation
+        updatedLengthRef = useRef(null), // for drag operation
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
         revisedLengthRef = useRef(0) // user drag
 
-    // possible over-ride
-    // let length = revisedLengthRef.current || span || 0
-    // lengthRef.current = length
+    // lengthRef.current = revisedLengthRef.current || span || 0
 
     if (!drawerStyleRef.current) { // first time only
         const 
@@ -244,6 +242,8 @@ export const Drawer = (props) => {
 
         console.log('drag move')
 
+        // recalculateLength() needs to be throttled here -- 100 ms?
+
         return false;
 
     }
@@ -328,7 +328,7 @@ export const Drawer = (props) => {
             updatedLength = Math.max(defaultLength, revisedLength)
 
         // save results
-        // lengthRef.current = updatedLength
+        updatedLengthRef.current = updatedLength
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
@@ -344,7 +344,7 @@ export const Drawer = (props) => {
 
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         recalculateLength()
 
