@@ -55,7 +55,14 @@ const SysSettings = (props) => {
 
 
     return <div ref = {pageElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {(pageState == 'ready') && <Drawer placement = {drawerPlacement} pageElementRef = {pageElementRef} containerDimensions = {containerDimensions} />}
+        {(pageState == 'ready') && 
+        <Drawer 
+            placement = {drawerPlacement} 
+            pageElementRef = {pageElementRef} 
+            containerDimensions = {containerDimensions} 
+            isOpen = 'open'
+            />
+        }
         <Text>System settings</Text>
         <Button onClick = {openRight} >Right</Button> <Button onClick = {openTop }>Top</Button> <Button onClick = {openLeft}>Left</Button> <Button onClick = {openBottom}>Bottom</Button>
     </div>

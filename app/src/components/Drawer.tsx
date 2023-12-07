@@ -47,20 +47,23 @@ export const Drawer = (props) => {
 
     const
         // props 
-        { placement, pageElementRef, containerDimensions } = props, //, isOpen, finalFocusRef, span, component, onClose } = props,
+        { placement, pageElementRef, containerDimensions, isOpen } = props, //, finalFocusRef, span, component, onClose } = props,
         
         // states
-        [openState, setOpenState] = useState('open'), // or 'closed'
+        [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerState, setDrawerState] = useState('setup'),
-        [drawerLength, setDrawerLength] = useState(0),
         
         // used for layouts
-        placementRef = useRef(placement),
+        placementRef = useRef(null),
 
         tabRef = useRef(null),
         
         // styles, set below, first cycle
-        drawerStyleRef = useRef(null),
+        drawerStyleRef = useRef<CSSProperties>({
+            position:'absolute',
+            backgroundColor:'yellow',
+            boxSizing:'border-box'
+        }),
         
         // control data
         isDraggingRef = useRef(false),
@@ -71,15 +74,14 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
-    console.log('drawer placement', placement)
+    placementRef.current = placement
+
+    // console.log('drawerState, placement', drawerState, placement, drawerStyleRef.current)
 
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
         const 
-            drawerStyle = {
-                position:'absolute',
-                backgroundColor:'yellow',
-            },
+            drawerStyle = drawerStyleRef.current,
             tabStyle = {
                 position:'absolute',
                 margin: 0,
@@ -98,8 +100,8 @@ export const Drawer = (props) => {
             case 'right': { // data entry
                 titleRef.current = 'Data updates'
                 Object.assign(drawerStyle,{
-                    height: '100%',
-                    width:'auto',
+                    // height: '100%',
+                    // width:'auto',
                     top:'auto',
                     right:0,
                     bottom:'auto',
@@ -130,8 +132,8 @@ export const Drawer = (props) => {
             case 'left': { // help
                 titleRef.current = 'Information'
                 Object.assign(drawerStyle,{
-                    height: '100%',
-                    width:'auto',
+                    // height: '100%',
+                    // width:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:'auto',
@@ -162,8 +164,8 @@ export const Drawer = (props) => {
             case 'top': { // lookup
                 titleRef.current = 'Lookups'
                 Object.assign(drawerStyle,{
-                    width: '100%',
-                    height:'auto',
+                    // width: '100%',
+                    // height:'auto',
                     top:0,
                     right:'auto',
                     bottom:'auto',
@@ -179,7 +181,7 @@ export const Drawer = (props) => {
                     bottom:'-24px',
                     borderTop:'transparent',
                     borderRadius: '0 0 8px 8px',
-                    height:'24px',
+                    height:'25px', // anomalous by 1px
                     width:'48px',
                     justifyContent:'center',
                     boxShadow:'0px 5px 5px 0px silver',
@@ -193,8 +195,8 @@ export const Drawer = (props) => {
             case 'bottom': { // message
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
-                    width: '100%',
-                    height:'auto',
+                    // width: '100%',
+                    // height:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:0,
@@ -222,10 +224,11 @@ export const Drawer = (props) => {
                 break
             }
         }
+        // console.log('useMemo: updating styles', {...drawerStyle})
         return [drawerStyle, tabStyle, tabIconStyle]
     },[placement])
     
-    drawerStyleRef.current = drawerStyle
+    // drawerStyleRef.current = Object.assign(drawerStyleRef.current, drawerStyle)
 
     //-----------------------------[ drag tab ]-----------------------------
 
@@ -313,6 +316,7 @@ export const Drawer = (props) => {
 
     //-----------------------------[ end drag tab ]-----------------------------
 
+    // update height and width
     const calculateDrawerLength = () => {
 
         const 
@@ -327,6 +331,7 @@ export const Drawer = (props) => {
                 (['right','left'].includes(placement))
                     ? MIN_DRAWER_WIDTH
                     : MIN_DRAWER_HEIGHT,
+
             // calculate length and constraints from appropriate container measure
             minLength = Math.max(Math.round(minRatio * containerLength),minConst),
             maxLength = Math.round(maxRatio * containerLength),
@@ -341,33 +346,56 @@ export const Drawer = (props) => {
 
         // adjust CSS
         if (['left','right'].includes(placementRef.current)) {
-            drawerStyleRef.current = {...drawerStyleRef.current,width:updatedLength + 'px'}
+            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{width:updatedLength + 'px', height:'100%'})
         } else {
-            drawerStyleRef.current = {...drawerStyleRef.current,height:updatedLength + 'px'}
+            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updatedLength + 'px', width:'100%'})
         }
 
-        // trigger re-render
-        setDrawerLength(defaultLength)
+        // console.log('calculateDrawerLength: updating height, width: drawerStyleRef.current',
+        //     placementRef.current,{...drawerStyleRef.current})
 
     }
 
     useLayoutEffect(() => {
 
         calculateDrawerLength()
+        setDrawerState('revisedlength')
 
-        if (drawerState == 'setup') setDrawerState('ready')
-
-    },[containerDimensions, drawerState])
+    },[containerDimensions, placement])
 
     useEffect(()=> {
 
-    }, [openState])
+        switch (drawerState) {
+        case 'setup':
+        case 'revisedvisibility':
+        case 'revisedlength':
+            setDrawerState('ready')
+        }
 
-    return <div data-type = {'drawer-' + placement} style = {drawerStyleRef.current} >
+    },[drawerState])
+
+    // update display
+    useEffect(()=> {
+
+        if (isOpen == 'open') {
+            Object.assign(drawerStyleRef.current, {display:'block'})
+        } else {
+            Object.assign(drawerStyleRef.current, {display:'none'})
+        }
+
+        setOpenState(isOpen)
+
+    }, [isOpen])
+
+    // console.log('rendering drawer styles',{...drawerStyleRef.current})
+
+    const renderDrawerStyle = {...drawerStyleRef.current}
+
+    return <div data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         <div ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
         </div>
-        {drawerState == 'ready' && <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
+        {drawerState != 'setup' && <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
                           "footer"`}
