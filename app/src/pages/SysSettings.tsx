@@ -13,7 +13,7 @@ const SysSettings = (props) => {
     const [drawerPlacement, setDrawerPlacement] = useState('right')
     const [openState,setOpenState] = useState(false)
 
-    console.log('pageState, drawerPlacement', pageState, drawerPlacement)
+    // console.log('pageState, drawerPlacement', pageState, drawerPlacement)
 
     const pageElementRef = useRef(null) // to pass to drawers
     const resizeObserverRef = useRef(null) // to disconnect
@@ -43,20 +43,21 @@ const SysSettings = (props) => {
 
     const openRight = () => {
         setDrawerPlacement('right')        
+        setOpenState(true)
     }
     const openTop = () => {
         setDrawerPlacement('top')        
+        setOpenState(true)
     }
     const openLeft = () => {
         setDrawerPlacement('left')        
+        setOpenState(true)
     }
     const openBottom = () => {
         setDrawerPlacement('bottom')        
-    }
-    const openDrawer = () => {
         setOpenState(true)
     }
-    const closeDrawer = () => {
+    const onClose = () => {
         setOpenState(false)
     }
 
@@ -67,6 +68,7 @@ const SysSettings = (props) => {
             pageElementRef = {pageElementRef} 
             containerDimensions = {containerDimensions} 
             isOpen = {openState}
+            onClose = {onClose}
             />
         }
         <Text>System settings</Text>
@@ -74,8 +76,6 @@ const SysSettings = (props) => {
         <Button onClick = {openTop }>Top</Button> 
         <Button onClick = {openLeft}>Left</Button> 
         <Button onClick = {openBottom}>Bottom</Button>
-        <Button onClick = {openDrawer}>Open</Button>
-        <Button onClick = {closeDrawer}>Close</Button>
     </div>
 
 }

@@ -12,12 +12,18 @@ import { isMobile } from '../index'
 
 import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
+import closeIcon from '../../assets/close.png'
 
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
 
 const iconWrapperStyles = {
     opacity:0.7,
+}
+
+const iconStyles = {
+    height:'20px',
+    width:'20px',
 }
 
 const smallerIconStyles = {
@@ -47,7 +53,7 @@ export const Drawer = (props) => {
 
     const
         // props 
-        { placement, pageElementRef, containerDimensions, isOpen } = props, //, finalFocusRef, span, component, onClose } = props,
+        { placement, pageElementRef, containerDimensions, isOpen, onClose } = props, //, finalFocusRef, span, component } = props,
         
         openParm = isOpen?'open':'closed',
 
@@ -63,7 +69,7 @@ export const Drawer = (props) => {
         // styles, set below, first cycle
         drawerStyleRef = useRef<CSSProperties>({
             position:'absolute',
-            backgroundColor:'yellow',
+            backgroundColor:'#ffffcc', // 'yellow',
             boxSizing:'border-box'
         }),
         
@@ -87,7 +93,7 @@ export const Drawer = (props) => {
             tabStyle = {
                 position:'absolute',
                 margin: 0,
-                backgroundColor:'yellow',
+                backgroundColor:'#ffffcc', //'yellow',
                 borderTop:'1px solid gray',
                 borderRight:'1px solid gray',
                 borderBottom:'1px solid gray',
@@ -405,6 +411,11 @@ export const Drawer = (props) => {
           gridTemplateColumns={'100%'}
         >
             <GridItem area={'header'}>
+            <Box onClick = {onClose} position = 'absolute' m = '3px' top = {0} right = {0} height = '24px' width = '24px'opacity = {0.7} >
+                <Tooltip hasArrow label = {`Explain the "${titleRef.current}" drawer`}>
+                  <img style = {iconStyles} src = {closeIcon} />
+                </Tooltip>                
+            </Box>
             <Box data-type = 'header-box' style = {headerBoxStyles} >
               <Center>
                   <VStack data-type = 'sysadmin-header' spacing = '0.1rem' maxWidth = '100%'>
@@ -428,8 +439,8 @@ export const Drawer = (props) => {
             </GridItem>
             <GridItem area={'footer'}>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
-                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
-                    {['right', 'top'].includes(placement) && <Button size = 'xs' ml = '6px'>Cancel</Button>}
+                    <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
+                    {['right', 'top'].includes(placement) && <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>}
                     {placement == 'right' && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
                 </Box>
             </GridItem>
