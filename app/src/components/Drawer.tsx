@@ -390,8 +390,8 @@ export const Drawer = (props) => {
             <GridItem area={'footer'}>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
                     <Button size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
-                    <Button size = 'xs' ml = '6px'>Cancel</Button> 
-                    <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>
+                    {['right', 'top'].includes(placement) && <Button size = 'xs' ml = '6px'>Cancel</Button>}
+                    {placement == 'right' && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
                 </Box>
             </GridItem>
         </Grid>
