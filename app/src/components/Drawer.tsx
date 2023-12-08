@@ -63,6 +63,7 @@ export const Drawer = (props) => {
         
         // used for layouts
         placementRef = useRef(null),
+        orientationRef = useRef(['right','left'].includes(placement)?'horizontal':'vertical'),
 
         tabRef = useRef(null),
         
@@ -84,8 +85,6 @@ export const Drawer = (props) => {
         minLengthRef = useRef(null)
 
     placementRef.current = placement
-
-    // console.log('drawerState, placement', drawerState, placement, drawerStyleRef.current)
 
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
@@ -237,8 +236,6 @@ export const Drawer = (props) => {
         return [drawerStyle, tabStyle, tabIconStyle]
     },[placement])
     
-    // drawerStyleRef.current = Object.assign(drawerStyleRef.current, drawerStyle)
-
     //-----------------------------[ drag tab ]-----------------------------
 
     const startDrag = (event) => {
@@ -252,6 +249,7 @@ export const Drawer = (props) => {
         return false
     }
 
+    // TODO add a timeout
     const dragMove = (event) => {
 
         if (!isDraggingRef.current) return
@@ -261,19 +259,18 @@ export const Drawer = (props) => {
 
         console.log('drag move')
 
-    // if (moving) {
-    //     if (event.clientX) {
-    //         // mousemove
-    //         moving.style.left = event.clientX - moving.clientWidth/2;
-    //         moving.style.top = event.clientY - moving.clientHeight/2;
-    //     } else {
-    //         // touchmove - assuming a single touchpoint
-    //         moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
-    //         moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
-    //     }
-    // }
+        let clientX, clientY
+        if (!isMobile) {
+            // mousemove
+            clientX = event.clientX
+            clientY = event.clientY
+        } else {
+            // touchmove - assuming a single touchpoint
+            clientX = event.changedTouches[0].clientX
+            clientY = event.changedTouches[0].clientY
+        }
 
-        // calculateDrawerLength() needs to be throttled here -- 100 ms?
+        console.log('clientX, clientY', clientX, clientY)
 
         return false;
 
