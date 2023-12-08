@@ -27,7 +27,7 @@ const standardToolbarStyles = {
     flexWrap:'nowrap',
     whitespace:'nowrap',
     alignItems:'center',
-    height:'50px',
+    height:'46px',
     boxSizing:'border-box',
     backgroundColor:'#dfecdf', //'#f2f2f2',
 
@@ -165,8 +165,8 @@ const StandardToolbar = (props) => {
             <MenuList>
                 <MenuItem onClick = {gotoClassifieds} >Classifieds</MenuItem>
                 <MenuDivider />
-                <MenuItem onClick = {gotoAbout}>About</MenuItem>
                 <MenuItem onClick = {gotoNotices}>Notices</MenuItem>
+                <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />

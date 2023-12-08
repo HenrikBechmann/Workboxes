@@ -6,7 +6,7 @@ import navNextIcon from '../../assets/nav_next.png'
 import navBeforeIcon from '../../assets/nav_before.png'
 
 const menubarStyles = {
-    height:'50px',
+    height:'46px',
     width:'100%',
     display:'flex',
     overflowX:'auto',

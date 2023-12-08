@@ -7,7 +7,7 @@ import Toolbar from '../components/Toolbar'
 import StandardToolbar from '../components/StandardToolbar'
 
 const bodyStyle = {
-    height: 'calc(100vh - 56px)', 
+    height: 'calc(100vh - 52px)', 
     display:'relative', 
     backgroundColor:'aliceblue',
     borderTop:'1px solid lightgray',
