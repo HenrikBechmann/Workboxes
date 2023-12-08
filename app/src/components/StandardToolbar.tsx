@@ -27,7 +27,7 @@ const standardToolbarStyles = {
     flexWrap:'nowrap',
     whitespace:'nowrap',
     alignItems:'center',
-    height:'30px',
+    height:'50px',
     boxSizing:'border-box',
     backgroundColor:'#dfecdf', //'#f2f2f2',
 
