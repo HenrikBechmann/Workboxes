@@ -79,6 +79,7 @@ export const Drawer = (props) => {
         containerDimensionsRef = useRef(containerDimensions),
 
         drawerLengthRef = useRef(null), // set and revised after first cycle (setup)
+        movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
@@ -260,6 +261,18 @@ export const Drawer = (props) => {
 
         console.log('drag move')
 
+    // if (moving) {
+    //     if (event.clientX) {
+    //         // mousemove
+    //         moving.style.left = event.clientX - moving.clientWidth/2;
+    //         moving.style.top = event.clientY - moving.clientHeight/2;
+    //     } else {
+    //         // touchmove - assuming a single touchpoint
+    //         moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
+    //         moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
+    //     }
+    // }
+
         // calculateDrawerLength() needs to be throttled here -- 100 ms?
 
         return false;
@@ -344,8 +357,16 @@ export const Drawer = (props) => {
             minLength = Math.max(Math.round(minRatio * containerLength),minConst),
             maxLength = Math.round(maxRatio * containerLength),
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
-            revisedLength = Math.min(Math.max(drawerLengthRef.current,minLength),maxLength),
-            updatedLength = Math.max(defaultLength, revisedLength)
+            movedLength = movedLengthRef.current
+            // movedLength = Math.min(Math.max(drawerLengthRef.current,minLength),maxLength),
+            // updatedLength = Math.max(defaultLength, movedLength)
+
+        let updatedLength
+        if (movedLength >= minLength && movedLength <= maxLength) {
+            updatedLength = movedLength
+        } else {
+            updatedLength = defaultLength
+        }
 
         // save results
         drawerLengthRef.current = updatedLength
