@@ -412,7 +412,7 @@ export const Drawer = (props) => {
         >
             <GridItem area={'header'}>
             <Box onClick = {onClose} position = 'absolute' m = '3px' top = {0} right = {0} height = '24px' width = '24px'opacity = {0.7} >
-                <Tooltip hasArrow label = {`Explain the "${titleRef.current}" drawer`}>
+                <Tooltip hasArrow label = "close the drawer">
                   <img style = {iconStyles} src = {closeIcon} />
                 </Tooltip>                
             </Box>
