@@ -11,6 +11,8 @@ import {
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
 
+import VerticalToolbarDivider from '../components/VerticalToolbarDivider'
+
 import fireIcon from '../../assets/fire.png'
 import notificationsIcon from '../../assets/notifications.png'
 import chatIcon from '../../assets/chat.png'
@@ -32,14 +34,6 @@ const standardToolbarStyles = {
     backgroundColor:'#dfecdf', //'#f2f2f2',
 
 } as CSSProperties
-
-const verticalDividerStyles = {
-    height:'20px',
-    borderLeft:'1px solid gray', 
-    width:'0px', 
-    marginLeft:'12px',
-    // display:'inline-block',
-}
 
 const iconWrapperStyles = {
     display:'inline-block',
@@ -91,12 +85,6 @@ const displayNameStyles = {
     marginLeft:'4px',
     marginRight:'3px', 
 } as CSSProperties
-
-const VerticalToolbarDivider = (props) => {
-
-    return <div style = {verticalDividerStyles}></div>
-
-}
 
 const FireIconControl = (props) => {
     

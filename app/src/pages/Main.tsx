@@ -1,11 +1,31 @@
 // Tribalopolis.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React from 'react'
+import React, { useRef } from 'react'
 
-export const Tribalopolis = (props) => {
+import Toolbar from '../components/Toolbar'
+import WorkspaceToolbar from '../components/WorkspaceToolbar'
 
-    return <div> Tribalopolis main page </div>
+export const Main = (props) => {
+
+    const workspaceStyleRef = useRef({
+        height: 'calc(100% - 47px)', 
+        display:'relative', 
+        backgroundColor:'ghostwhite',
+        borderTop:'1px solid silver',
+        borderBottom:'1px solid silver'
+    })
+
+    const workspaceStyle = workspaceStyleRef.current
+
+    return <>
+        <div data-type = 'members-outlet' style = {workspaceStyle}>
+            Main page
+        </div>
+        <Toolbar>
+            <WorkspaceToolbar />
+        </Toolbar>
+    </>
 }
 
-export default Tribalopolis
+export default Main
