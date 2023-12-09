@@ -219,7 +219,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'bottom': { // message
-                titleRef.current = 'Messages'
+                titleRef.current = 'Notices'
                 Object.assign(drawerStyle,{
                     // width: '100%',
                     // height:'auto',
