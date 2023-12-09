@@ -77,7 +77,7 @@ export const Drawer = (props) => {
         
         // control data
         isDraggingRef = useRef(false),
-        moveTimeoutID = useRef(null),
+        moveTimeoutIDRef = useRef(null),
         dragContainerRectRef = useRef(null), 
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
@@ -303,6 +303,15 @@ export const Drawer = (props) => {
 
         movedLengthRef.current = newLength
 
+        clearTimeout(moveTimeoutIDRef.current)
+
+        moveTimeoutIDRef.current = setTimeout(()=>{
+
+            isDraggingRef.current = false
+            dragContainerRectRef.current = null
+
+        },500)
+
         calculateDrawerLength()
 
         return false;
@@ -316,8 +325,9 @@ export const Drawer = (props) => {
         event.preventDefault(); 
         event.stopPropagation(); 
 
+        clearTimeout(moveTimeoutIDRef.current)
         isDraggingRef.current = false
-
+        dragContainerRectRef.current = null
         // console.log('drag end')
 
         return false;
@@ -325,8 +335,6 @@ export const Drawer = (props) => {
 
     // initialize drag listeners
     useEffect(()=>{
-
-        movedLengthRef.current = 0
 
         const tabElement = tabRef.current
         const pageElement = pageElementRef.current
