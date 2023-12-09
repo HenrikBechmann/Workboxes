@@ -82,7 +82,10 @@ export const Drawer = (props) => {
         drawerStyleRef = useRef<CSSProperties>({
             position:'absolute',
             backgroundColor:'#ffffcc', // 'yellow',
-            boxSizing:'border-box'
+            boxSizing:'border-box',
+            opacity:1,
+            visibility:'hidden',
+            transition:'visibility .4s, opacity .4s'
         }),
         
         // control data
@@ -458,9 +461,9 @@ export const Drawer = (props) => {
     useEffect(()=> {
 
         if (openParm == 'open') {
-            Object.assign(drawerStyleRef.current, {display:'block'})
+            Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
         } else {
-            Object.assign(drawerStyleRef.current, {display:'none'})
+            Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
         }
 
         setOpenState(openParm)
