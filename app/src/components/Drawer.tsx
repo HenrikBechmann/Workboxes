@@ -60,10 +60,11 @@ export const Drawer = (props) => {
         // states
         [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerState, setDrawerState] = useState('setup'),
+        [drawerLength, setDrawerLength] = useState(0),
         
         // used for layouts
         placementRef = useRef(null),
-        orientationRef = useRef(['right','left'].includes(placement)?'horizontal':'vertical'),
+        orientationRef = useRef(null),
 
         tabRef = useRef(null),
         
@@ -76,6 +77,8 @@ export const Drawer = (props) => {
         
         // control data
         isDraggingRef = useRef(false),
+        moveTimeoutID = useRef(null),
+        dragContainerRectRef = useRef(null), 
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
 
@@ -85,6 +88,8 @@ export const Drawer = (props) => {
         minLengthRef = useRef(null)
 
     placementRef.current = placement
+    orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
+    drawerLengthRef.current = drawerLength
 
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
@@ -243,8 +248,9 @@ export const Drawer = (props) => {
         event.stopPropagation()
 
         isDraggingRef.current = true
-
-        console.log('starting drag')
+        dragContainerRectRef.current = pageElementRef.current.getBoundingClientRect()
+        movedLengthRef.current = 0
+        // console.log('starting drag')
 
         return false
     }
@@ -257,7 +263,7 @@ export const Drawer = (props) => {
         event.preventDefault(); 
         event.stopPropagation(); 
 
-        console.log('drag move')
+        // console.log('drag move')
 
         let clientX, clientY
         if (!isMobile) {
@@ -270,7 +276,34 @@ export const Drawer = (props) => {
             clientY = event.changedTouches[0].clientY
         }
 
-        console.log('clientX, clientY', clientX, clientY)
+        const 
+            pageX = dragContainerRectRef.current.x,
+            pageY = dragContainerRectRef.current.y,
+            pageWidth = dragContainerRectRef.current.width,
+            pageHeight = dragContainerRectRef.current.height,
+            placement = placementRef.current,
+            orientation = orientationRef.current
+
+        let length
+        if (orientation == 'horizontal') {
+            if (placement == 'right') {
+                length = pageWidth - (clientX - pageX)
+            } else {
+                length = clientX - pageX
+            }
+        } else {
+            if (placement == 'top') {
+                length = clientY - pageY
+            } else {
+                length = pageHeight - (clientY - pageY)
+            }
+        }
+
+        const newLength = Math.min(Math.max(length, minLengthRef.current),maxLengthRef.current)
+
+        movedLengthRef.current = newLength
+
+        calculateDrawerLength()
 
         return false;
 
@@ -285,13 +318,15 @@ export const Drawer = (props) => {
 
         isDraggingRef.current = false
 
-        console.log('drag end')
+        // console.log('drag end')
 
         return false;
     }
 
     // initialize drag listeners
     useEffect(()=>{
+
+        movedLengthRef.current = 0
 
         const tabElement = tabRef.current
         const pageElement = pageElementRef.current
@@ -342,11 +377,11 @@ export const Drawer = (props) => {
             maxRatio = 0.9,
             minRatio = isMobile?0.5:0.2,
             containerLength = 
-                (['right','left'].includes(placement))
+                (['right','left'].includes(placementRef.current))
                     ? containerDimensions.width
                     : containerDimensions.height,
             minConst = 
-                (['right','left'].includes(placement))
+                (['right','left'].includes(placementRef.current))
                     ? MIN_DRAWER_WIDTH
                     : MIN_DRAWER_HEIGHT,
 
@@ -355,8 +390,6 @@ export const Drawer = (props) => {
             maxLength = Math.round(maxRatio * containerLength),
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
             movedLength = movedLengthRef.current
-            // movedLength = Math.min(Math.max(drawerLengthRef.current,minLength),maxLength),
-            // updatedLength = Math.max(defaultLength, movedLength)
 
         let updatedLength
         if (movedLength >= minLength && movedLength <= maxLength) {
@@ -366,7 +399,6 @@ export const Drawer = (props) => {
         }
 
         // save results
-        drawerLengthRef.current = updatedLength
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
@@ -377,24 +409,29 @@ export const Drawer = (props) => {
             drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updatedLength + 'px', width:'100%'})
         }
 
-        // console.log('calculateDrawerLength: updating height, width: drawerStyleRef.current',
-        //     placementRef.current,{...drawerStyleRef.current})
+        setDrawerLength(updatedLength)
 
     }
+
+    useEffect(()=>{
+
+        movedLengthRef.current = 0
+        calculateDrawerLength()
+
+    },[placement])
 
     useLayoutEffect(() => {
 
         calculateDrawerLength()
-        setDrawerState('revisedlength')
 
-    },[containerDimensions, placement])
+    },[containerDimensions])
 
     useEffect(()=> {
 
         switch (drawerState) {
         case 'setup':
         case 'revisedvisibility':
-        case 'revisedlength':
+        // case 'revisedlength':
             setDrawerState('ready')
         }
 
@@ -412,8 +449,6 @@ export const Drawer = (props) => {
         setOpenState(openParm)
 
     }, [openParm])
-
-    // console.log('rendering drawer styles',{...drawerStyleRef.current})
 
     const renderDrawerStyle = {...drawerStyleRef.current}
 
