@@ -26,6 +26,16 @@ const iconStyles = {
     width:'20px',
 }
 
+const closeIconStyle = {
+    position:'absolute',
+    margint:'3px',
+    top:0,
+    right:0,
+    height:'24px',
+    width:'24px',
+    opacity:0.7,
+} as CSSProperties
+
 const smallerIconStyles = {
     height:'18px', 
     width:'18px',
@@ -243,6 +253,48 @@ export const Drawer = (props) => {
     
     //-----------------------------[ drag tab ]-----------------------------
 
+    // initialize drag listeners
+    useEffect(()=>{
+
+        const tabElement = tabRef.current
+        const pageElement = pageElementRef.current
+
+        if (isMobile) {
+
+            tabElement.addEventListener('touchstart', startDrag)
+            pageElement.addEventListener('touchmove', dragMove)
+            pageElement.addEventListener('touchend', endDrag)
+            pageElement.addEventListener('touchcancel', endDrag)
+
+        } else {
+
+            tabElement.addEventListener('mousedown', startDrag)
+            pageElement.addEventListener('mousemove', dragMove)
+            pageElement.addEventListener('mouseup', endDrag)
+
+        }
+
+        return () => {
+
+            if (isMobile) {
+
+                tabElement.removeEventListener('touchstart', startDrag)
+                pageElement.removeEventListener('touchmove', dragMove)
+                pageElement.removeEventListener('touchend', endDrag)
+                pageElement.removeEventListener('touchcancel', endDrag)
+
+            } else {
+
+                tabElement.removeEventListener('mousedown', startDrag)
+                pageElement.removeEventListener('mousemove', dragMove)
+                pageElement.removeEventListener('mouseup', endDrag)
+
+            }
+
+        }
+
+    },[])
+
     const startDrag = (event) => {
         event.preventDefault()
         event.stopPropagation()
@@ -255,7 +307,6 @@ export const Drawer = (props) => {
         return false
     }
 
-    // TODO add a timeout
     const dragMove = (event) => {
 
         if (!isDraggingRef.current) return
@@ -305,7 +356,7 @@ export const Drawer = (props) => {
 
         clearTimeout(moveTimeoutIDRef.current)
 
-        moveTimeoutIDRef.current = setTimeout(()=>{
+        moveTimeoutIDRef.current = setTimeout(()=>{ // in case drag past page
 
             isDraggingRef.current = false
             dragContainerRectRef.current = null
@@ -333,49 +384,7 @@ export const Drawer = (props) => {
         return false;
     }
 
-    // initialize drag listeners
-    useEffect(()=>{
-
-        const tabElement = tabRef.current
-        const pageElement = pageElementRef.current
-
-        if (isMobile) {
-
-            tabElement.addEventListener('touchstart', startDrag)
-            pageElement.addEventListener('touchmove', dragMove)
-            pageElement.addEventListener('touchend', endDrag)
-            pageElement.addEventListener('touchcancel', endDrag)
-
-        } else {
-
-            tabElement.addEventListener('mousedown', startDrag)
-            pageElement.addEventListener('mousemove', dragMove)
-            pageElement.addEventListener('mouseup', endDrag)
-
-        }
-
-        return () => {
-
-            if (isMobile) {
-
-                tabElement.removeEventListener('touchstart', startDrag)
-                pageElement.removeEventListener('touchmove', dragMove)
-                pageElement.removeEventListener('touchend', endDrag)
-                pageElement.removeEventListener('touchcancel', endDrag)
-
-            } else {
-
-                tabElement.removeEventListener('mousedown', startDrag)
-                pageElement.removeEventListener('mousemove', dragMove)
-                pageElement.removeEventListener('mouseup', endDrag)
-
-            }
-
-        }
-
-    },[])
-
-    //-----------------------------[ end drag tab ]-----------------------------
+    //-----------------------------[ end of drag tab section ]-----------------------------
 
     // update height and width
     const calculateDrawerLength = () => {
@@ -471,8 +480,8 @@ export const Drawer = (props) => {
           gridTemplateRows={'44px 1fr 34px'}
           gridTemplateColumns={'100%'}
         >
-            <GridItem area={'header'}>
-            <Box onClick = {onClose} position = 'absolute' m = '3px' top = {0} right = {0} height = '24px' width = '24px'opacity = {0.7} >
+            <GridItem area = 'header'>
+            <Box onClick = {onClose} style = {closeIconStyle} >
                 <Tooltip hasArrow label = "close the drawer">
                   <img style = {iconStyles} src = {closeIcon} />
                 </Tooltip>                
@@ -495,14 +504,14 @@ export const Drawer = (props) => {
               </Center>
             </Box>
             </GridItem>
-            <GridItem data-type = 'body-area' area={'body'}>
+            <GridItem data-type = 'body-area' area = 'body'>
                 Body
             </GridItem>
-            <GridItem area={'footer'}>
+            <GridItem area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
                     <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
                     {['right', 'top'].includes(placement) && <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>}
-                    {placement == 'right' && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
+                    {(placement == 'right') && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
                 </Box>
             </GridItem>
         </Grid>}
