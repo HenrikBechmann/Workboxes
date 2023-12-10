@@ -222,7 +222,7 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
-    console.log('placement, openParm',placement, openParm, maxLengthRef.current)
+    // console.log('placement, openParm',placement, openParm, maxLengthRef.current)
     // for closures
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
@@ -538,7 +538,7 @@ export const Drawer = (props) => {
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
             movedLength = movedLengthRef.current
 
-        console.log('maxLength, maxRatio, containerLength',maxLength, maxRatio, containerLength)
+        // console.log('maxLength, maxRatio, containerLength',maxLength, maxRatio, containerLength)
 
         // console.log('placement, defaultLength, defaultRatio, containerLength\n',
         //     placement, defaultLength, defaultRatio, containerLength)
