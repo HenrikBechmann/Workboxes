@@ -178,26 +178,6 @@ const StandardToolbar = (props) => {
                 <img style = {iconStyles} src = {subscriptionsIcon} />
             </Tooltip>
         </div>
-        <div style = {iconWrapperStyles} onClick = {gotoNotifications} >
-            <Tooltip hasArrow label = 'Notifications to this account'>
-                <img style = {iconStyles} src = {notificationsIcon} />
-            </Tooltip>
-        </div> 
-        <div style = {iconWrapperStyles} onClick = {gotoMessages} >
-            <Tooltip hasArrow label = 'Direct messages'>
-                <img style = {iconStyles} src = {messageIcon} />
-            </Tooltip>
-        </div>
-        <div style = {iconWrapperStyles} onClick = {gotoChatrooms} >
-            <Tooltip hasArrow label = 'Chatrooms with this account'>
-                <img style = {iconStyles} src = {chatIcon} />
-            </Tooltip>
-        </div>
-        <div style = {iconWrapperStyles} onClick = {gotoNewsflows} >
-            <Tooltip hasArrow label = 'Subscribed news flows'>
-                <img style = {iconStyles} src = {subscriptionsIcon} />
-            </Tooltip>
-        </div>
         <div style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />
