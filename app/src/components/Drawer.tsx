@@ -441,6 +441,7 @@ export const Drawer = (props) => {
     useEffect(()=>{
 
         movedLengthRef.current = 0
+        drawerLengthRef.current = 0
         calculateDrawerLength()
 
     },[placement])
