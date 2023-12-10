@@ -66,14 +66,17 @@ const drawerTypes = {
     NOTICES:'notices',
 }
 
-export const useDrawers = (containerElementRef, containerDimensions, onCloses) => {
+export const useDrawers = (containerElementRef, onCloses) => {
 
     const initializedRef = useRef(false)
 
     const openDrawer = useCallback((drawerType, context)=>{
         const placement = placements[drawerType]
+        console.log('openDrawer: drawerType, placement', drawerType, placement)
         return React.cloneElement(componentsRef.current[placement],{isOpen:true, context})
     },[])
+
+    const containerDimensions = {}
 
     const closeDrawer = useCallback((drawerType) => {
         const placement = placements[drawerType]
@@ -93,24 +96,32 @@ export const useDrawers = (containerElementRef, containerDimensions, onCloses) =
         if (!initializedRef.current) {
             return {
                 top:<Drawer 
+                    key = 'top'
+                    isOpen = {false}
                     placement = 'top'
                     containerElementRef = {containerElementRef} 
                     containerDimensions = {containerDimensions}
                     onClose = {onCloses.lookups}
                 />,
                 right:<Drawer 
+                    key = 'right'
+                    isOpen = {false}
                     placement = 'right'
                     containerElementRef = {containerElementRef} 
                     containerDimensions = {containerDimensions}
                     onClose = {onCloses.data}
                 />,
-                bottom:<Drawer 
+                bottom:<Drawer
+                    key = 'bottom' 
                     placement = 'bottom'
+                    isOpen = {false}
                     containerElementRef = {containerElementRef} 
                     containerDimensions = {containerDimensions}
                     onClose = {onCloses.notices}
                 />,
                 left:<Drawer 
+                    key = 'left'
+                    isOpen = {false}
                     placement = 'left'
                     containerElementRef = {containerElementRef} 
                     containerDimensions = {containerDimensions}
@@ -197,6 +208,9 @@ export const Drawer = (props) => {
         movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
+
+    console.log('placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
+        placement, containerElementRef, containerDimensions, isOpen, onClose, context)
 
     // for closures
     placementRef.current = placement
