@@ -384,20 +384,14 @@ export const Drawer = (props) => {
     useEffect(()=>{
 
         const tabElement = tabRef.current
-        const pageElement = containerElementRef.current
 
         if (isMobile) {
 
             tabElement.addEventListener('touchstart', startDrag)
-            pageElement.addEventListener('touchmove', dragMove)
-            pageElement.addEventListener('touchend', endDrag)
-            pageElement.addEventListener('touchcancel', endDrag)
 
         } else {
 
             tabElement.addEventListener('mousedown', startDrag)
-            pageElement.addEventListener('mousemove', dragMove)
-            pageElement.addEventListener('mouseup', endDrag)
 
         }
 
@@ -408,15 +402,10 @@ export const Drawer = (props) => {
             if (isMobile) {
 
                 tabElement.removeEventListener('touchstart', startDrag)
-                pageElement.removeEventListener('touchmove', dragMove)
-                pageElement.removeEventListener('touchend', endDrag)
-                pageElement.removeEventListener('touchcancel', endDrag)
 
             } else {
 
                 tabElement.removeEventListener('mousedown', startDrag)
-                pageElement.removeEventListener('mousemove', dragMove)
-                pageElement.removeEventListener('mouseup', endDrag)
 
             }
 
@@ -432,6 +421,19 @@ export const Drawer = (props) => {
         dragContainerRectRef.current = containerElementRef.current.getBoundingClientRect()
         movedLengthRef.current = 0
         // console.log('starting drag')
+        const pageElement = containerElementRef.current
+        if (isMobile) {
+
+            pageElement.addEventListener('touchmove', dragMove)
+            pageElement.addEventListener('touchend', endDrag)
+            pageElement.addEventListener('touchcancel', endDrag)
+
+        } else {
+
+            pageElement.addEventListener('mousemove', dragMove)
+            pageElement.addEventListener('mouseup', endDrag)
+
+        }
 
         return false
     }
@@ -509,6 +511,19 @@ export const Drawer = (props) => {
         isDraggingRef.current = false
         dragContainerRectRef.current = null
         // console.log('drag end')
+        const pageElement = containerElementRef.current
+        if (isMobile) {
+
+            pageElement.removeEventListener('touchmove', dragMove)
+            pageElement.removeEventListener('touchend', endDrag)
+            pageElement.removeEventListener('touchcancel', endDrag)
+
+        } else {
+
+            pageElement.removeEventListener('mousemove', dragMove)
+            pageElement.removeEventListener('mouseup', endDrag)
+
+        }
 
         return false;
     }
@@ -551,6 +566,8 @@ export const Drawer = (props) => {
         } else {
             updatedLength = defaultLength
         }
+
+        // console.log('updatedLength', placement, updatedLength)
 
         // save results
         minLengthRef.current = minLength
