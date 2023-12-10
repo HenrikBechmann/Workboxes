@@ -71,6 +71,7 @@ export const Drawer = (props) => {
         [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerState, setDrawerState] = useState('setup'),
         [drawerLength, setDrawerLength] = useState(0),
+        drawerRatioRef = useRef(null),
         
         // used for layouts
         placementRef = useRef(null),
@@ -95,7 +96,7 @@ export const Drawer = (props) => {
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
 
-        drawerLengthRef = useRef(null), // set and revised after first cycle (setup)
+        drawerLengthRef = useRef(0), // set and revised after first cycle (setup)
         movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
@@ -393,6 +394,7 @@ export const Drawer = (props) => {
     const calculateDrawerLength = () => {
 
         const 
+            drawerLength = drawerLengthRef.current,
             defaultRatio = isMobile?0.8:0.33,
             maxRatio = 0.9,
             minRatio = isMobile?0.5:0.2,
@@ -414,6 +416,8 @@ export const Drawer = (props) => {
         let updatedLength
         if (movedLength >= minLength && movedLength <= maxLength) {
             updatedLength = movedLength
+        } else if (drawerLength >= minLength && drawerLength <= maxLength) {
+            updatedLength = drawerLength
         } else {
             updatedLength = defaultLength
         }
@@ -429,6 +433,7 @@ export const Drawer = (props) => {
             drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updatedLength + 'px', width:'100%'})
         }
 
+        drawerRatioRef.current = updatedLength/containerLength
         setDrawerLength(updatedLength)
 
     }
@@ -441,6 +446,16 @@ export const Drawer = (props) => {
     },[placement])
 
     useLayoutEffect(() => {
+
+        const
+            containerLength = 
+                (['right','left'].includes(placementRef.current))
+                    ? containerDimensions.width
+                    : containerDimensions.height,
+            ratio = drawerRatioRef.current
+
+        movedLengthRef.current = 0
+        drawerLengthRef.current = containerLength * ratio
 
         calculateDrawerLength()
 
