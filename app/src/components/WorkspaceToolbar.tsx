@@ -112,6 +112,7 @@ const WorkspaceToolbar = (props) => {
                 <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
         </Box>
+        <VerticalToolbarDivider />
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'toggle the item transfer cart'>
                 <img style = {iconStyles} src = {uploadIcon} />
