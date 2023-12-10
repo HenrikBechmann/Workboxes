@@ -9,28 +9,23 @@ import { useDrawers } from '../components/Drawer'
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
-    const [pageState, setPageState] = useState('setup') // to collect pageElementRef
-    const [containerDimensions, setContainerDimensions] = useState(null) // to rerender for drawers on resize
-    // const [drawerPlacement, setDrawerPlacement] = useState('right')
-    const [openState,setOpenState] = useState(false)
+    const 
+        [pageState, setPageState] = useState('setup'), // to collect pageElementRef
+        [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
+        [openState,setOpenState] = useState(false),
+        containerElementRef = useRef(null), // to pass to drawers
+        resizeObserverRef = useRef(null), // to disconnect
+        onCloses = {},
+        {
+            drawerTypes, 
+            drawers, 
+            openDrawer,
+            closeDrawer,
+            updateDimensions,
+        } = useDrawers(containerElementRef, onCloses),
+        drawersRef = useRef(drawers)
 
-    const containerElementRef = useRef(null) // to pass to drawers
-    const resizeObserverRef = useRef(null) // to disconnect
-
-    const onCloses = {}
-
-    const {
-        drawerTypes, 
-        drawers, 
-        openDrawer,
-        closeDrawer,
-        updateDimensions,
-    } = useDrawers(containerElementRef, onCloses)
-
-    const drawersRef = useRef(drawers)
-
-    const resizeCallback = useCallback(()=>{ // to trigger drawer resize
-
+    const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
         const containerDimensions = {
             width:containerElementRef.current.offsetWidth,
             height:containerElementRef.current.offsetHeight
@@ -40,7 +35,7 @@ const SysSettings = (props) => {
 
         setContainerDimensions(containerDimensions)
 
-       if (pageState == 'setup') setPageState('ready')
+        if (pageState == 'setup') setPageState('ready')
 
     },[pageState])
 

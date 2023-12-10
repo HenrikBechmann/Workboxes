@@ -76,8 +76,6 @@ export const useDrawers = (containerElementRef, onCloses) => {
         return React.cloneElement(componentsRef.current[placement],{isOpen:true, context})
     },[])
 
-    const containerDimensions = {}
-
     const closeDrawer = useCallback((drawerType) => {
         const placement = placements[drawerType]
         return React.cloneElement(componentsRef.current[placement],{isOpen:false})
@@ -91,6 +89,8 @@ export const useDrawers = (containerElementRef, onCloses) => {
             info:React.cloneElement(componentsRef.current.left,{containerDimensions}),
         }
     },[])
+
+    const containerDimensions = {}
 
     const initializeComponents = () => {
         if (!initializedRef.current) {
@@ -176,8 +176,8 @@ export const Drawer = (props) => {
         openParm = isOpen?'open':'closed',
 
         // states
-        [openState, setOpenState] = useState('closed'), // or 'open'
-        [drawerState, setDrawerState] = useState('setup'),
+        [drawerState, setDrawerState] = useState('ready'),
+        // [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerLength, setDrawerLength] = useState(0),
         drawerRatioRef = useRef(null),
         
@@ -209,8 +209,8 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
-    console.log('placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
-        placement, containerElementRef, containerDimensions, isOpen, onClose, context)
+    console.log('drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
+        drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context)
 
     // for closures
     placementRef.current = placement
@@ -551,13 +551,13 @@ export const Drawer = (props) => {
 
     }
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        movedLengthRef.current = 0
-        drawerLengthRef.current = 0
-        calculateDrawerLength()
+    //     movedLengthRef.current = 0
+    //     drawerLengthRef.current = 0
+    //     calculateDrawerLength()
 
-    },[placement])
+    // },[placement])
 
     useLayoutEffect(() => {
 
@@ -577,8 +577,10 @@ export const Drawer = (props) => {
 
     useEffect(()=> {
 
+        // if (drawerState)
+
         switch (drawerState) {
-        case 'setup':
+        // case 'setup':
         case 'revisedvisibility':
         // case 'revisedlength':
             setDrawerState('ready')
@@ -587,7 +589,7 @@ export const Drawer = (props) => {
     },[drawerState])
 
     // update display
-    useEffect(()=> {
+    drawerStyleRef.current = useMemo(()=> {
 
         if (openParm == 'open') {
             Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
@@ -595,7 +597,9 @@ export const Drawer = (props) => {
             Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
         }
 
-        setOpenState(openParm)
+        return drawerStyleRef.current
+
+        // setOpenState(openParm)
 
     }, [openParm])
 
