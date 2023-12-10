@@ -4,31 +4,31 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {Text, Button} from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
-import { useDrawers } from '../components/Drawer'
+import Drawer, { useDrawers } from '../components/Drawer'
 
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
-    const onCloseLookups = () => {
-        drawersRef.current[drawerTypes.LOOKUPS] = 
+    const onCloseLookups = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.LOOKUPS] = 
             closeDrawer(drawerTypes.LOOKUPS)
         setPageState('changedrawers')
-    }
-    const onCloseData = () => {
-        drawersRef.current[drawerTypes.DATA] = 
+    },[])
+    const onCloseData = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.DATA] = 
             closeDrawer(drawerTypes.DATA)
         setPageState('changedrawers')
-    }
-    const onCloseNotices = () => {
-        drawersRef.current[drawerTypes.NOTICES] = 
+    },[])
+    const onCloseNotices = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.NOTICES] = 
             closeDrawer(drawerTypes.NOTICES)
         setPageState('changedrawers')
-    }
-    const onCloseInfo = () => {
-        drawersRef.current[drawerTypes.INFO] = 
+    },[])
+    const onCloseInfo = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.INFO] = 
             closeDrawer(drawerTypes.INFO)
         setPageState('changedrawers')
-    }
+    },[])
 
     const onCloses = {
         lookups:onCloseLookups,
@@ -45,12 +45,12 @@ const SysSettings = (props) => {
         resizeObserverRef = useRef(null), // to disconnect
         {
             drawerTypes, 
-            drawers, 
+            drawerProps, 
             openDrawer,
             closeDrawer,
             updateDimensions,
         } = useDrawers(containerElementRef, onCloses),
-        drawersRef = useRef(drawers)
+        drawerPropsRef = useRef(drawerProps)
 
     const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
         const containerDimensions = {
@@ -58,7 +58,7 @@ const SysSettings = (props) => {
             height:containerElementRef.current.offsetHeight
         }
 
-        Object.assign(drawersRef.current, updateDimensions(containerDimensions))
+        Object.assign(drawerPropsRef.current, updateDimensions(containerDimensions))
 
         setContainerDimensions(containerDimensions)
 
@@ -90,34 +90,34 @@ const SysSettings = (props) => {
     },[pageState])
 
     const openRight = () => {
-        // setDrawerPlacement('right')
         const component = openDrawer(drawerTypes.DATA, null)
-        drawersRef.current[drawerTypes.DATA] = component
-        // console.log('drawerTypes.DATA, component',drawerTypes.DATA, component)
+        drawerPropsRef.current[drawerTypes.DATA] = component
         setPageState('changedrawers')
     }
     const openTop = () => {
-        // setDrawerPlacement('top')        
-        drawersRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
+        drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
         setPageState('changedrawers')
     }
     const openLeft = () => {
-        // setDrawerPlacement('left')        
-        drawersRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
+        drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
         setPageState('changedrawers')
     }
     const openBottom = () => {
-        // setDrawerPlacement('bottom')        
-        drawersRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
+        drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
         setPageState('changedrawers')
     }
 
-    const renderDrawers = drawersRef.current
+    const renderProps = drawerPropsRef.current
+
+    console.log('drawerProps.data', drawerProps.data)
 
     return <div ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {(pageState == 'ready') && 
-            [renderDrawers.lookups, renderDrawers.data, renderDrawers.notices, renderDrawers.info]
-        }
+        {pageState != 'setup' && <>
+            <Drawer {...renderProps.lookups} />
+            <Drawer {...renderProps.data} />
+            <Drawer {...renderProps.notices} />
+            <Drawer {...renderProps.info} />
+        </>}
         <Text>System settings</Text>
         <>
         <Button onClick = {openRight} >Right</Button> 

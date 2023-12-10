@@ -74,9 +74,9 @@ export const useDrawers = (containerElementRef, onCloses) => {
 
         const placement = placements[drawerType]
 
-        console.log('componentsRef.current', componentsRef.current)
+        Object.assign(componentPropsRef.current[placement], {isOpen:true, context})
 
-        return React.cloneElement(componentsRef.current[placement],{isOpen:true, context})
+        return componentPropsRef.current[placement]
 
     },[])
 
@@ -84,23 +84,29 @@ export const useDrawers = (containerElementRef, onCloses) => {
 
         const placement = placements[drawerType]
 
-        return React.cloneElement(componentsRef.current[placement],{isOpen:false})
+        componentPropsRef.current[placement].isOpen = false
+
+        return componentPropsRef.current[placement]
 
     },[])
 
     const updateDimensions = useCallback((containerDimensions) => {
-        Object.assign(componentsRef.current, {
-            top:React.cloneElement(componentsRef.current.top,{containerDimensions}),
-            right:React.cloneElement(componentsRef.current.right,{containerDimensions}),
-            bottom:React.cloneElement(componentsRef.current.bottom,{containerDimensions}),
-            left:React.cloneElement(componentsRef.current.left,{containerDimensions}),
-        })
-        const components = componentsRef.current
+
+        Object.assign(componentPropsRef.current.top, {
+            containerDimensions})
+        Object.assign(componentPropsRef.current.right, {
+            containerDimensions})
+        Object.assign(componentPropsRef.current.bottom, {
+            containerDimensions})
+        Object.assign(componentPropsRef.current.left, {
+            containerDimensions})
+
+        const componentProps = componentPropsRef.current
         return {
-            lookups:components.top,
-            data:components.right,
-            notices:components.bottom,
-            info:components.left,
+            lookups:componentProps.top,
+            data:componentProps.right,
+            notices:componentProps.bottom,
+            info:componentProps.left,
         }
 
     },[])
@@ -109,57 +115,50 @@ export const useDrawers = (containerElementRef, onCloses) => {
         if (!initializedRef.current) {
             const containerDimensions = {} // pre-initialization; updateDimensions is called before first render
             return {
-                top:<Drawer 
-                    key = 'top'
-                    isOpen = {false}
-                    placement = 'top'
-                    containerElementRef = {containerElementRef} 
-                    containerDimensions = {containerDimensions}
-                    onClose = {onCloses.lookups}
-                />,
-                right:<Drawer 
-                    key = 'right'
-                    isOpen = {false}
-                    placement = 'right'
-                    containerElementRef = {containerElementRef} 
-                    containerDimensions = {containerDimensions}
-                    onClose = {onCloses.data}
-                />,
-                bottom:<Drawer
-                    key = 'bottom' 
-                    placement = 'bottom'
-                    isOpen = {false}
-                    containerElementRef = {containerElementRef} 
-                    containerDimensions = {containerDimensions}
-                    onClose = {onCloses.notices}
-                />,
-                left:<Drawer 
-                    key = 'left'
-                    isOpen = {false}
-                    placement = 'left'
-                    containerElementRef = {containerElementRef} 
-                    containerDimensions = {containerDimensions}
-                    onClose = {onCloses.info}
-                />,
+                top:{
+                    isOpen:false,
+                    placement: 'top',
+                    containerElementRef,
+                    containerDimensions,
+                    onClose:onCloses.lookups
+                },
+                right:{
+                    isOpen:false,
+                    placement: 'right',
+                    containerElementRef,
+                    containerDimensions,
+                    onClose: onCloses.data,
+                },
+                bottom:{
+                    placement:'bottom',
+                    isOpen:false,
+                    containerElementRef,
+                    containerDimensions,
+                    onClose:onCloses.notices,
+                },
+                left:{
+                    key:'left',
+                    isOpen: false,
+                    placement:'left',
+                    containerElementRef,
+                    containerDimensions,
+                    onClose:onCloses.info,
+                },
             }
         }
     }
 
     const initializedComponents = initializeComponents()
 
-    const componentsRef = useRef(initializedComponents)
+    const componentPropsRef = useRef(initializedComponents)
 
-    if (!initializedRef.current) {
-        initializedRef.current = true
-    }
+    const componentProps = componentPropsRef.current
 
-    const components = componentsRef.current
-
-    const drawers = {
-        lookups:components.top,
-        data:components.right,
-        notices:components.bottom,
-        info:components.left,
+    const drawerProps = {
+        lookups:componentProps.top,
+        data:componentProps.right,
+        notices:componentProps.bottom,
+        info:componentProps.left,
     }
 
     const placements = {
@@ -173,12 +172,11 @@ export const useDrawers = (containerElementRef, onCloses) => {
 
     return {
         drawerTypes, 
-        drawers, 
+        drawerProps, 
         openDrawer,
         closeDrawer,
         updateDimensions,
     }
-
 }
 
 export const Drawer = (props) => {
@@ -189,9 +187,10 @@ export const Drawer = (props) => {
         
         openParm = isOpen?'open':'closed',
 
+        isInitializedRef = useRef(false),
+
         // states
         [drawerState, setDrawerState] = useState('ready'),
-        // [openState, setOpenState] = useState('closed'), // or 'open'
         [drawerLength, setDrawerLength] = useState(0),
         drawerRatioRef = useRef(null),
         
@@ -223,9 +222,7 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
-    // console.log('drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
-    //     drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context)
-
+    console.log('placement, openParm',placement, openParm, maxLengthRef.current)
     // for closures
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
@@ -378,7 +375,6 @@ export const Drawer = (props) => {
                 break
             }
         }
-        // console.log('useMemo: updating styles', {...drawerStyle})
         return [drawerStyle, tabStyle, tabIconStyle]
     },[placement])
     
@@ -404,6 +400,8 @@ export const Drawer = (props) => {
             pageElement.addEventListener('mouseup', endDrag)
 
         }
+
+        isInitializedRef.current = true
 
         return () => {
 
@@ -540,8 +538,10 @@ export const Drawer = (props) => {
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
             movedLength = movedLengthRef.current
 
-        console.log('placement, defaultLength, defaultRatio, containerLength\n',
-            placement, defaultLength, defaultRatio, containerLength)
+        console.log('maxLength, maxRatio, containerLength',maxLength, maxRatio, containerLength)
+
+        // console.log('placement, defaultLength, defaultRatio, containerLength\n',
+        //     placement, defaultLength, defaultRatio, containerLength)
 
         let updatedLength
         if (movedLength >= minLength && movedLength <= maxLength) {
@@ -599,6 +599,8 @@ export const Drawer = (props) => {
 
     // update display
     drawerStyleRef.current = useMemo(()=> {
+
+        // console.log('change opacity, placement: openParm',openParm, placement)
 
         if (openParm == 'open') {
             Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
