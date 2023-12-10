@@ -65,10 +65,11 @@ const SysSettings = (props) => {
         {(pageState == 'ready') && 
         <Drawer 
             placement = {drawerPlacement} 
-            pageElementRef = {pageElementRef} 
+            containerElementRef = {pageElementRef} 
             containerDimensions = {containerDimensions} 
             isOpen = {openState}
             onClose = {onClose}
+            context = {null}
             />
         }
         <Text>System settings</Text>

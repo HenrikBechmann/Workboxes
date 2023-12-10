@@ -1,7 +1,7 @@
 // Drawer.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useState, useMemo, useEffect, useLayoutEffect, CSSProperties } from 'react'
+import React, { useRef, useState, useMemo, useEffect, useLayoutEffect, useCallback, CSSProperties } from 'react'
 import { 
     Button, Text, Heading, Box,
     Grid, GridItem, VStack, HStack,
@@ -59,11 +59,108 @@ const subTitleStyles = {
     color:'gray',
 } as CSSProperties
 
+const drawerTypes = {
+    DATA:'data',
+    LOOKUPS:'lookups',
+    INFO:'info',
+    NOTICES:'notices',
+}
+
+export const useDrawers = (containerElementRef, containerDimensions, onCloses) => {
+
+    const initializedRef = useRef(false)
+
+    const openDrawer = useCallback((drawerType, context)=>{
+        const placement = placements[drawerType]
+        return React.cloneElement(componentsRef.current[placement],{isOpen:true, context})
+    },[])
+
+    const closeDrawer = useCallback((drawerType) => {
+        const placement = placements[drawerType]
+        return React.cloneElement(componentsRef.current[placement],{isOpen:false})
+    },[])
+
+    const updateDimensions = useCallback((containerDimensions) => {
+        return {
+            lookups:React.cloneElement(componentsRef.current.top,{containerDimensions}),
+            data:React.cloneElement(componentsRef.current.right,{containerDimensions}),
+            notices:React.cloneElement(componentsRef.current.bottom,{containerDimensions}),
+            info:React.cloneElement(componentsRef.current.left,{containerDimensions}),
+        }
+    },[])
+
+    const initializeComponents = () => {
+        if (!initializedRef.current) {
+            return {
+                top:<Drawer 
+                    placement = 'top'
+                    containerElementRef = {containerElementRef} 
+                    containerDimensions = {containerDimensions}
+                    onClose = {onCloses.lookups}
+                />,
+                right:<Drawer 
+                    placement = 'right'
+                    containerElementRef = {containerElementRef} 
+                    containerDimensions = {containerDimensions}
+                    onClose = {onCloses.data}
+                />,
+                bottom:<Drawer 
+                    placement = 'bottom'
+                    containerElementRef = {containerElementRef} 
+                    containerDimensions = {containerDimensions}
+                    onClose = {onCloses.notices}
+                />,
+                left:<Drawer 
+                    placement = 'left'
+                    containerElementRef = {containerElementRef} 
+                    containerDimensions = {containerDimensions}
+                    onClose = {onCloses.info}
+                />,
+            }
+        }
+    }
+
+    const initializedComponents = initializeComponents()
+
+    const componentsRef = useRef(initializedComponents)
+
+    if (!initializedRef.current) {
+        initializedRef.current = true
+    }
+
+    const components = componentsRef.current
+
+    const drawers = {
+        lookups:components.top,
+        data:components.right,
+        notices:components.bottom,
+        info:components.left,
+    }
+
+    const placements = {
+        data:'right',
+        lookups:'top',
+        info:'left',
+        notices:'bottom',
+    }
+
+    initializedRef.current = true
+
+    return {
+        drawerTypes, 
+        drawers, 
+        openDrawer,
+        closeDrawer,
+        updateDimensions,
+    }
+
+}
+
 export const Drawer = (props) => {
 
     const
         // props 
-        { placement, pageElementRef, containerDimensions, isOpen, onClose } = props, //, finalFocusRef, span, component } = props,
+        { placement, containerElementRef, containerDimensions, isOpen, onClose, context } = props,
         
         openParm = isOpen?'open':'closed',
 
@@ -101,10 +198,12 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
+    // for closures
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
     drawerLengthRef.current = drawerLength
 
+    // styles
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
         const 
@@ -261,7 +360,7 @@ export const Drawer = (props) => {
     useEffect(()=>{
 
         const tabElement = tabRef.current
-        const pageElement = pageElementRef.current
+        const pageElement = containerElementRef.current
 
         if (isMobile) {
 
@@ -304,7 +403,7 @@ export const Drawer = (props) => {
         event.stopPropagation()
 
         isDraggingRef.current = true
-        dragContainerRectRef.current = pageElementRef.current.getBoundingClientRect()
+        dragContainerRectRef.current = containerElementRef.current.getBoundingClientRect()
         movedLengthRef.current = 0
         // console.log('starting drag')
 
