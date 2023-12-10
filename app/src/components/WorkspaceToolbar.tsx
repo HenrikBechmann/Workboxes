@@ -14,6 +14,7 @@ import cartIcon from '../../assets/cart.png'
 import workspacesIcon from '../../assets/workspaces.png'
 import panelIcon from '../../assets/panel.png'
 import helpIcon from '../../assets/help.png'
+import uploadIcon from '../../assets/upload.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -111,6 +112,11 @@ const WorkspaceToolbar = (props) => {
                 <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
         </Box>
+        <Box style = {iconWrapperStyles} >
+            <Tooltip hasArrow label = 'toggle the item transfer cart'>
+                <img style = {iconStyles} src = {uploadIcon} />
+            </Tooltip>
+        </Box> 
         &nbsp; &nbsp;
     </Box>
 }
