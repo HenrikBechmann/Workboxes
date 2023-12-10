@@ -14,6 +14,8 @@ import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 import closeIcon from '../../assets/close.png'
 
+// ----------------------[ static values ]--------------------
+
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
 
@@ -65,6 +67,8 @@ const drawerTypes = {
     INFO:'info',
     NOTICES:'notices',
 }
+
+// ----------------------[ useDrawers ]------------------------
 
 export const useDrawers = (containerElementRef, onCloses) => {
 
@@ -178,6 +182,8 @@ export const useDrawers = (containerElementRef, onCloses) => {
         updateDimensions,
     }
 }
+
+// -------------------------------[ Drawer ]-----------------------------
 
 export const Drawer = (props) => {
 

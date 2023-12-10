@@ -105,8 +105,8 @@ const WorkspaceToolbar = (props) => {
             </Tooltip>
         </Box> 
         <VerticalToolbarDivider />
-        <SelectionControl icon = {panelIcon} iconStyles = {panelIconStyles} displayName = 'panel selection' tooltipLabel = 'select a panel'/>
-        <SelectionControl icon = {workspacesIcon} iconStyles = {iconStyles} displayName = 'workspace selection' tooltipLabel = 'select a workspace'/>
+        <SelectionControl icon = {panelIcon} iconStyles = {panelIconStyles} displayName = 'panel selection panel selection' tooltipLabel = 'select a panel'/>
+        <SelectionControl icon = {workspacesIcon} iconStyles = {iconStyles} displayName = 'workspace selection workspace selection' tooltipLabel = 'select a workspace'/>
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />

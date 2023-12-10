@@ -5,6 +5,12 @@ import React, {useRef, useEffect, useLayoutEffect, useCallback, useState, CSSPro
 import navNextIcon from '../../assets/nav_next.png'
 import navBeforeIcon from '../../assets/nav_before.png'
 
+const menuWrapperStyles = {
+    position:'relative',
+    height:'46px',
+    width:'100%',
+} as CSSProperties
+
 const menubarStyles = {
     height:'46px',
     width:'100%',
@@ -98,7 +104,7 @@ const Toolbar = (props) => {
         measurements.menubarWidth = menubar.offsetWidth
         measurements.scrollbarWidth = scrollbar.offsetWidth
 
-        overflow_leftRef.current = !(measurements.scrollLeft == 0)
+        overflow_leftRef.current = !(measurements.scrollLeft <= 1)
         overflow_rightRef.current = ((measurements.scrollbarWidth - measurements.scrollLeft) > measurements.menubarWidth + 1)
         setMeasurements({...measurements})
 
@@ -116,9 +122,13 @@ const Toolbar = (props) => {
 
     },[])
 
-    return <div data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
+    // console.log('overflow_leftRef.current, overflow_rightRef.current\n',
+    //     overflow_leftRef.current, overflow_rightRef.current)
 
-        {overflow_leftRef.current && <img style = {navBeforeStyles} src = {navBeforeIcon} />}
+    return <div style = {menuWrapperStyles}>
+        <div data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
+
+        {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
 
         <div data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
     
@@ -126,8 +136,9 @@ const Toolbar = (props) => {
 
         </div>
 
-        {overflow_rightRef.current && <img style = {navNextStyles} src = {navNextIcon} />}
+        {overflow_rightRef.current && <img data-type = 'right-chevron' style = {navNextStyles} src = {navNextIcon} />}
         
+    </div>
     </div>
 
 }
