@@ -9,13 +9,40 @@ import { useDrawers } from '../components/Drawer'
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
+    const onCloseLookups = () => {
+        drawersRef.current[drawerTypes.LOOKUPS] = 
+            closeDrawer(drawerTypes.LOOKUPS)
+        setPageState('changedrawers')
+    }
+    const onCloseData = () => {
+        drawersRef.current[drawerTypes.DATA] = 
+            closeDrawer(drawerTypes.DATA)
+        setPageState('changedrawers')
+    }
+    const onCloseNotices = () => {
+        drawersRef.current[drawerTypes.NOTICES] = 
+            closeDrawer(drawerTypes.NOTICES)
+        setPageState('changedrawers')
+    }
+    const onCloseInfo = () => {
+        drawersRef.current[drawerTypes.INFO] = 
+            closeDrawer(drawerTypes.INFO)
+        setPageState('changedrawers')
+    }
+
+    const onCloses = {
+        lookups:onCloseLookups,
+        data:onCloseData,
+        notices:onCloseNotices,
+        info:onCloseInfo,
+    }
+
     const 
         [pageState, setPageState] = useState('setup'), // to collect pageElementRef
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
         [openState,setOpenState] = useState(false),
         containerElementRef = useRef(null), // to pass to drawers
         resizeObserverRef = useRef(null), // to disconnect
-        onCloses = {},
         {
             drawerTypes, 
             drawers, 
@@ -66,7 +93,7 @@ const SysSettings = (props) => {
         // setDrawerPlacement('right')
         const component = openDrawer(drawerTypes.DATA, null)
         drawersRef.current[drawerTypes.DATA] = component
-        console.log('drawerTypes.DATA, component',drawerTypes.DATA, component)
+        // console.log('drawerTypes.DATA, component',drawerTypes.DATA, component)
         setPageState('changedrawers')
     }
     const openTop = () => {
@@ -83,9 +110,6 @@ const SysSettings = (props) => {
         // setDrawerPlacement('bottom')        
         drawersRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
         setPageState('changedrawers')
-    }
-    const onClose = () => {
-        openDrawer(drawerTypes.DATA, null)
     }
 
     const renderDrawers = drawersRef.current

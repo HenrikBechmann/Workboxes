@@ -71,29 +71,43 @@ export const useDrawers = (containerElementRef, onCloses) => {
     const initializedRef = useRef(false)
 
     const openDrawer = useCallback((drawerType, context)=>{
+
         const placement = placements[drawerType]
-        console.log('openDrawer: drawerType, placement', drawerType, placement)
+
+        console.log('componentsRef.current', componentsRef.current)
+
         return React.cloneElement(componentsRef.current[placement],{isOpen:true, context})
+
     },[])
 
     const closeDrawer = useCallback((drawerType) => {
+
         const placement = placements[drawerType]
+
         return React.cloneElement(componentsRef.current[placement],{isOpen:false})
+
     },[])
 
     const updateDimensions = useCallback((containerDimensions) => {
+        Object.assign(componentsRef.current, {
+            top:React.cloneElement(componentsRef.current.top,{containerDimensions}),
+            right:React.cloneElement(componentsRef.current.right,{containerDimensions}),
+            bottom:React.cloneElement(componentsRef.current.bottom,{containerDimensions}),
+            left:React.cloneElement(componentsRef.current.left,{containerDimensions}),
+        })
+        const components = componentsRef.current
         return {
-            lookups:React.cloneElement(componentsRef.current.top,{containerDimensions}),
-            data:React.cloneElement(componentsRef.current.right,{containerDimensions}),
-            notices:React.cloneElement(componentsRef.current.bottom,{containerDimensions}),
-            info:React.cloneElement(componentsRef.current.left,{containerDimensions}),
+            lookups:components.top,
+            data:components.right,
+            notices:components.bottom,
+            info:components.left,
         }
-    },[])
 
-    const containerDimensions = {}
+    },[])
 
     const initializeComponents = () => {
         if (!initializedRef.current) {
+            const containerDimensions = {} // pre-initialization; updateDimensions is called before first render
             return {
                 top:<Drawer 
                     key = 'top'
@@ -209,8 +223,8 @@ export const Drawer = (props) => {
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null)
 
-    console.log('drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
-        drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context)
+    // console.log('drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context\n',
+    //     drawerState, placement, containerElementRef, containerDimensions, isOpen, onClose, context)
 
     // for closures
     placementRef.current = placement
@@ -526,6 +540,9 @@ export const Drawer = (props) => {
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
             movedLength = movedLengthRef.current
 
+        console.log('placement, defaultLength, defaultRatio, containerLength\n',
+            placement, defaultLength, defaultRatio, containerLength)
+
         let updatedLength
         if (movedLength >= minLength && movedLength <= maxLength) {
             updatedLength = movedLength
@@ -550,14 +567,6 @@ export const Drawer = (props) => {
         setDrawerLength(updatedLength)
 
     }
-
-    // useEffect(()=>{
-
-    //     movedLengthRef.current = 0
-    //     drawerLengthRef.current = 0
-    //     calculateDrawerLength()
-
-    // },[placement])
 
     useLayoutEffect(() => {
 
