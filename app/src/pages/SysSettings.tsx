@@ -4,112 +4,119 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {Text, Button} from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
-import Drawer, { useDrawers } from '../components/Drawer'
+import Drawer, { useDrawerSupport } from '../components/Drawer'
 
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
-    //-------------------- drawer open functions ----------------
-    const openRight = () => {
-        const component = openDrawer(drawerTypes.DATA, null)
-        drawerPropsRef.current[drawerTypes.DATA] = component
-        setPageState('changedrawers')
-    }
-    const openTop = () => {
-        drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
-        setPageState('changedrawers')
-    }
-    const openLeft = () => {
-        drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
-        setPageState('changedrawers')
-    }
-    const openBottom = () => {
-        drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
-        setPageState('changedrawers')
-    }
+    // //-------------------- drawer open functions ----------------
+    // const openRight = () => {
+    //     const component = openDrawer(drawerTypes.DATA, null)
+    //     drawerPropsRef.current[drawerTypes.DATA] = component
+    //     setPageState('changedrawers')
+    // }
+    // const openTop = () => {
+    //     drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
+    //     setPageState('changedrawers')
+    // }
+    // const openLeft = () => {
+    //     drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
+    //     setPageState('changedrawers')
+    // }
+    // const openBottom = () => {
+    //     drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
+    //     setPageState('changedrawers')
+    // }
 
-    //-------------------- drawer close functions ----------------
-    const onCloseLookups = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.LOOKUPS] = 
-            closeDrawer(drawerTypes.LOOKUPS)
-        setPageState('changedrawers')
-    },[])
-    const onCloseData = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.DATA] = 
-            closeDrawer(drawerTypes.DATA)
-        setPageState('changedrawers')
-    },[])
-    const onCloseNotices = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.NOTICES] = 
-            closeDrawer(drawerTypes.NOTICES)
-        setPageState('changedrawers')
-    },[])
-    const onCloseInfo = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.INFO] = 
-            closeDrawer(drawerTypes.INFO)
-        setPageState('changedrawers')
-    },[])
+    // //-------------------- drawer close functions ----------------
+    // const onCloseLookups = useCallback(() => {
+    //     drawerPropsRef.current[drawerTypes.LOOKUPS] = 
+    //         closeDrawer(drawerTypes.LOOKUPS)
+    //     setPageState('changedrawers')
+    // },[])
+    // const onCloseData = useCallback(() => {
+    //     drawerPropsRef.current[drawerTypes.DATA] = 
+    //         closeDrawer(drawerTypes.DATA)
+    //     setPageState('changedrawers')
+    // },[])
+    // const onCloseNotices = useCallback(() => {
+    //     drawerPropsRef.current[drawerTypes.NOTICES] = 
+    //         closeDrawer(drawerTypes.NOTICES)
+    //     setPageState('changedrawers')
+    // },[])
+    // const onCloseInfo = useCallback(() => {
+    //     drawerPropsRef.current[drawerTypes.INFO] = 
+    //         closeDrawer(drawerTypes.INFO)
+    //     setPageState('changedrawers')
+    // },[])
 
-    const onCloses = {
-        lookups:onCloseLookups,
-        data:onCloseData,
-        notices:onCloseNotices,
-        info:onCloseInfo,
-    }
+    // const onCloses = {
+    //     lookups:onCloseLookups,
+    //     data:onCloseData,
+    //     notices:onCloseNotices,
+    //     info:onCloseInfo,
+    // }
 
-    // ---------------------------- state hooks ----------------------------
-    const 
-        [pageState, setPageState] = useState('setup'), // to collect pageElementRef
-        [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
-        containerElementRef = useRef(null), // to pass to drawers
-        resizeObserverRef = useRef(null), // to disconnect
-        {
-            drawerTypes, 
-            drawerProps, 
-            openDrawer,
-            closeDrawer,
-            updateDimensions,
-        } = useDrawers(containerElementRef, onCloses),
+    // // ---------------------------- state hooks ----------------------------
+    // const 
+    //     [pageState, setPageState] = useState('setup'), // to collect pageElementRef
+    //     [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
+    //     containerElementRef = useRef(null), // to pass to drawers
+    //     resizeObserverRef = useRef(null), // to disconnect
+    //     {
+    //         drawerTypes, 
+    //         drawerProps, 
+    //         openDrawer,
+    //         closeDrawer,
+    //         updateDimensions,
+    //     } = useDrawers(containerElementRef, onCloses),
 
-    drawerPropsRef = useRef(drawerProps)
+    // drawerPropsRef = useRef(drawerProps)
 
-    const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
-        const containerDimensions = {
-            width:containerElementRef.current.offsetWidth,
-            height:containerElementRef.current.offsetHeight
-        }
+    // const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
+    //     const containerDimensions = {
+    //         width:containerElementRef.current.offsetWidth,
+    //         height:containerElementRef.current.offsetHeight
+    //     }
 
-        Object.assign(drawerPropsRef.current, updateDimensions(containerDimensions))
+    //     Object.assign(drawerPropsRef.current, updateDimensions(containerDimensions))
 
-        setContainerDimensions(containerDimensions)
+    //     setContainerDimensions(containerDimensions)
 
-        if (pageState == 'setup') setPageState('ready')
+    //     if (pageState == 'setup') setPageState('ready')
 
-    },[pageState])
+    // },[pageState])
 
-    // ------------------------ effect hooks -----------------------
-    useEffect(()=>{
+    // // ------------------------ effect hooks -----------------------
+    // useEffect(()=>{
 
-        const resizeObserver = new ResizeObserver(resizeCallback)
-        resizeObserver.observe(containerElementRef.current) // triggers first drawer sizing
-        resizeObserverRef.current = resizeObserver
+    //     const resizeObserver = new ResizeObserver(resizeCallback)
+    //     resizeObserver.observe(containerElementRef.current) // triggers first drawer sizing
+    //     resizeObserverRef.current = resizeObserver
 
-        return () => {
-            resizeObserverRef.current.disconnect()
-        }
+    //     return () => {
+    //         resizeObserverRef.current.disconnect()
+    //     }
 
-    },[])
+    // },[])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        switch (pageState) {
-        case 'setup':
-        case 'changedrawers':
-            setPageState('ready')
+    //     switch (pageState) {
+    //     case 'setup':
+    //     case 'changedrawers':
+    //         setPageState('ready')
 
-        }
+    //     }
 
-    },[pageState])
+    // },[pageState])
+
+   const {
+        drawerPropsRef,
+        containerElementRef,
+        pageState,
+        onOpens,
+    } = useDrawerSupport()
 
     // --------------------------- render --------------------
     const renderProps = drawerPropsRef.current
@@ -123,10 +130,10 @@ const SysSettings = (props) => {
         </>}
         <Text>System settings</Text>
         <>
-        <Button onClick = {openRight} >Right</Button> 
-        <Button onClick = {openTop }>Top</Button> 
-        <Button onClick = {openLeft}>Left</Button> 
-        <Button onClick = {openBottom}>Bottom</Button>
+        <Button onClick = {onOpens.openRight} >Right</Button> 
+        <Button onClick = {onOpens.openTop }>Top</Button> 
+        <Button onClick = {onOpens.openLeft}>Left</Button> 
+        <Button onClick = {onOpens.openBottom}>Bottom</Button>
         </>
     </div>
 
