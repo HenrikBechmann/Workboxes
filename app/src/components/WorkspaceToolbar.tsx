@@ -26,7 +26,7 @@ const standardToolbarStyles = {
     height:'46px',
     boxSizing:'border-box',
     backgroundColor:'#dfecdf', //'#f2f2f2',
-
+    borderRadius:'8px',
 } as CSSProperties
 
 const iconWrapperStyles = {
