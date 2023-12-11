@@ -73,6 +73,7 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
+// ---------------------------- embedded component --------------------
 const SelectionControl = (props) => {
 
     const 
@@ -96,8 +97,10 @@ const SelectionControl = (props) => {
 
 }
 
+// --------------------------- component ----------------------------
 const WorkspaceToolbar = (props) => {
 
+    // render
     return <Box style = {standardToolbarStyles}>
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'toggle the item transfer cart'>

@@ -2,9 +2,11 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useRef, useEffect, useLayoutEffect, useCallback, useState, CSSProperties} from 'react'
+
 import navNextIcon from '../../assets/nav_next.png'
 import navBeforeIcon from '../../assets/nav_before.png'
 
+// --------------------------- static style values ---------
 const menuWrapperStyles = {
     position:'relative',
     height:'46px',
@@ -43,11 +45,12 @@ const navNextStyles = {
     opacity:0.75
 } as CSSProperties
 
+// ------------------------------- Toolbar component --------------------------------
 const Toolbar = (props) => {
 
-    const [toolbarState, setToolbarState] = useState('setup')
-
+    // ----------------------------- state hooks ------------------
     const 
+        [toolbarState, setToolbarState] = useState('setup'),
         { children } = props,
         [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
         measurementsRef = useRef(measurements),
@@ -58,6 +61,7 @@ const Toolbar = (props) => {
         overflow_rightRef = useRef(false),
         resizeObserverRef = useRef(null)
 
+    // -------------------------- effect hooks --------------
     useEffect(() => {
         return () => {
             isMountedRef.current = false
@@ -91,6 +95,20 @@ const Toolbar = (props) => {
 
     },[toolbarState])
 
+
+    const onScroll = useCallback(() => {
+
+        remeasure()
+
+    },[])
+
+    const onResize = useCallback(() => {
+
+        remeasure()
+
+    },[])
+
+    // ---------------------------- utility ----------------------------
     const remeasure = () => {
 
         const 
@@ -106,40 +124,28 @@ const Toolbar = (props) => {
 
         overflow_leftRef.current = !(measurements.scrollLeft <= 1)
         overflow_rightRef.current = ((measurements.scrollbarWidth - measurements.scrollLeft) > measurements.menubarWidth + 1)
-        setMeasurements({...measurements})
+        setMeasurements({...measurements}) // trigger render
 
     }
 
-    const onScroll = useCallback(() => {
-
-        remeasure()
-
-    },[])
-
-    const onResize = useCallback(() => {
-
-        remeasure()
-
-    },[])
-
-    // console.log('overflow_leftRef.current, overflow_rightRef.current\n',
-    //     overflow_leftRef.current, overflow_rightRef.current)
-
-    return <div style = {menuWrapperStyles}>
+    // ------------------------- render --------------------------
+    return (
+    <div style = {menuWrapperStyles}>
         <div data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
-        {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
+            {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
 
-        <div data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
-    
-            {children}
-
-        </div>
-
-        {overflow_rightRef.current && <img data-type = 'right-chevron' style = {navNextStyles} src = {navNextIcon} />}
+            <div data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
         
+                {children}
+
+            </div>
+
+            {overflow_rightRef.current && <img data-type = 'right-chevron' style = {navNextStyles} src = {navNextIcon} />}
+        
+        </div>
     </div>
-    </div>
+    )
 
 }
 

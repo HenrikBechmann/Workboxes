@@ -6,17 +6,17 @@ import React, { useRef } from 'react'
 import Toolbar from '../components/Toolbar'
 import WorkspaceToolbar from '../components/WorkspaceToolbar'
 
+// ------------------------- static values --------------------
+const workspaceStyle = {
+    height: 'calc(100% - 47px)', 
+    display:'relative', 
+    backgroundColor:'ghostwhite',
+    borderTop:'1px solid silver',
+    borderBottom:'1px solid silver'
+}
+
+// ------------------------ Main component -------------------
 export const Main = (props) => {
-
-    const workspaceStyleRef = useRef({
-        height: 'calc(100% - 47px)', 
-        display:'relative', 
-        backgroundColor:'ghostwhite',
-        borderTop:'1px solid silver',
-        borderBottom:'1px solid silver'
-    })
-
-    const workspaceStyle = workspaceStyleRef.current
 
     return <>
         <div data-type = 'members-outlet' style = {workspaceStyle}>

@@ -69,6 +69,7 @@ const drawerTypes = {
 }
 
 // ----------------------[ useDrawers ]------------------------
+// return key values to host
 
 export const useDrawers = (containerElementRef, onCloses) => {
 
@@ -174,6 +175,7 @@ export const useDrawers = (containerElementRef, onCloses) => {
 
     initializedRef.current = true
 
+    // used by the host
     return {
         drawerTypes, 
         drawerProps, 
@@ -193,6 +195,7 @@ export const Drawer = (props) => {
         
         openParm = isOpen?'open':'closed',
 
+        // ----------------------------- state hooks --------------------------
         isInitializedRef = useRef(false),
 
         // states
@@ -234,7 +237,7 @@ export const Drawer = (props) => {
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
     drawerLengthRef.current = drawerLength
 
-    // styles
+    // ------------------------- core styles -------------------------
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
         const 
@@ -536,7 +539,7 @@ export const Drawer = (props) => {
 
     //-----------------------------[ end of drag tab section ]-----------------------------
 
-    // update height and width
+    // -------------------- utility: caclulate drawer length -----------------------------
     const calculateDrawerLength = () => {
 
         const 
@@ -559,11 +562,6 @@ export const Drawer = (props) => {
             defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
             movedLength = movedLengthRef.current
 
-        // console.log('maxLength, maxRatio, containerLength',maxLength, maxRatio, containerLength)
-
-        // console.log('placement, defaultLength, defaultRatio, containerLength\n',
-        //     placement, defaultLength, defaultRatio, containerLength)
-
         let updatedLength
         if (movedLength >= minLength && movedLength <= maxLength) {
             updatedLength = movedLength
@@ -572,8 +570,6 @@ export const Drawer = (props) => {
         } else {
             updatedLength = defaultLength
         }
-
-        // console.log('updatedLength', placement, updatedLength)
 
         // save results
         minLengthRef.current = minLength
@@ -591,6 +587,7 @@ export const Drawer = (props) => {
 
     }
 
+    // ------------------------------ effect hooks ----------------------------
     useLayoutEffect(() => {
 
         const
@@ -637,6 +634,7 @@ export const Drawer = (props) => {
 
     }, [openParm])
 
+    // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
     return <div data-type = {'drawer-' + placement} style = {renderDrawerStyle} >

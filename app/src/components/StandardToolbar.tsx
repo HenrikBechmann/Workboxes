@@ -22,6 +22,7 @@ import homeIcon from '../../assets/home.png'
 import subscriptionsIcon from '../../assets/subscriptions.png'
 import appSettingsIcon from '../../assets/app_settings.png'
 
+// ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
     minHeight:0,
     display:'flex',
@@ -86,6 +87,7 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
+// ---------------------------- embedded components ----------------------------
 const FireIconControl = (props) => {
     
     return <div style = {fireIconControlStyles} >
@@ -114,8 +116,10 @@ const UserControl = (props) => {
 
 }
 
+// --------------------------- component ----------------------------
 const StandardToolbar = (props) => {
 
+    // ------------------------------ hooks ------------------------
     const 
         navigate = useNavigate(),
         userData = useUserData(),
@@ -123,6 +127,7 @@ const StandardToolbar = (props) => {
         { displayName, photoURL } = userData.authUser,
         isSuperUser = userData.sysadminStatus.isSuperUser
 
+    // --------------------- navigation functions ------------------
     const 
         goHome = () => { navigate('/workspace') },
         gotoNotifications = () => { navigate('/workspace/notifications') },
@@ -145,6 +150,7 @@ const StandardToolbar = (props) => {
             })
         }
 
+    // render
     return <div style = {standardToolbarStyles}>
         <Menu>
             <MenuButton >

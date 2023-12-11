@@ -9,6 +9,26 @@ import Drawer, { useDrawers } from '../components/Drawer'
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const SysSettings = (props) => {
 
+    //-------------------- drawer open functions ----------------
+    const openRight = () => {
+        const component = openDrawer(drawerTypes.DATA, null)
+        drawerPropsRef.current[drawerTypes.DATA] = component
+        setPageState('changedrawers')
+    }
+    const openTop = () => {
+        drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
+        setPageState('changedrawers')
+    }
+    const openLeft = () => {
+        drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
+        setPageState('changedrawers')
+    }
+    const openBottom = () => {
+        drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
+        setPageState('changedrawers')
+    }
+
+    //-------------------- drawer close functions ----------------
     const onCloseLookups = useCallback(() => {
         drawerPropsRef.current[drawerTypes.LOOKUPS] = 
             closeDrawer(drawerTypes.LOOKUPS)
@@ -37,10 +57,10 @@ const SysSettings = (props) => {
         info:onCloseInfo,
     }
 
+    // ---------------------------- state hooks ----------------------------
     const 
         [pageState, setPageState] = useState('setup'), // to collect pageElementRef
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
-        [openState,setOpenState] = useState(false),
         containerElementRef = useRef(null), // to pass to drawers
         resizeObserverRef = useRef(null), // to disconnect
         {
@@ -50,7 +70,8 @@ const SysSettings = (props) => {
             closeDrawer,
             updateDimensions,
         } = useDrawers(containerElementRef, onCloses),
-        drawerPropsRef = useRef(drawerProps)
+
+    drawerPropsRef = useRef(drawerProps)
 
     const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
         const containerDimensions = {
@@ -66,6 +87,7 @@ const SysSettings = (props) => {
 
     },[pageState])
 
+    // ------------------------ effect hooks -----------------------
     useEffect(()=>{
 
         const resizeObserver = new ResizeObserver(resizeCallback)
@@ -89,24 +111,7 @@ const SysSettings = (props) => {
 
     },[pageState])
 
-    const openRight = () => {
-        const component = openDrawer(drawerTypes.DATA, null)
-        drawerPropsRef.current[drawerTypes.DATA] = component
-        setPageState('changedrawers')
-    }
-    const openTop = () => {
-        drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
-        setPageState('changedrawers')
-    }
-    const openLeft = () => {
-        drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
-        setPageState('changedrawers')
-    }
-    const openBottom = () => {
-        drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
-        setPageState('changedrawers')
-    }
-
+    // --------------------------- render --------------------
     const renderProps = drawerPropsRef.current
 
     // console.log('drawerProps.data', drawerProps.data)
