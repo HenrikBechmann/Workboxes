@@ -6,7 +6,7 @@ import {Text, Button} from '@chakra-ui/react'
 // import Drawer from '../components/Drawer'
 import Drawer, { useDrawers } from '../components/Drawer'
 
-const outerStyle = {height: '100%', display:'relative'} as CSSProperties
+const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 
 const Metadata = (props) => {
 
@@ -35,7 +35,5 @@ const Metadata = (props) => {
         <Button onClick = {onOpens.openMessages}>Messages</Button>
         </>
     </div>
-
 }
-
 export default Metadata
