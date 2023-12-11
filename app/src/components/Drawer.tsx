@@ -68,7 +68,7 @@ const drawerTypes = {
     NOTICES:'notices',
 }
 
-export const useDrawerSupport = () => {
+export const useDrawers = () => {
 
     //-------------------- drawer open functions ----------------
     const openRight = () => {
@@ -137,7 +137,7 @@ export const useDrawerSupport = () => {
             openDrawer,
             closeDrawer,
             updateDimensions,
-        } = useDrawers(containerElementRef, onCloses),
+        } = useDrawerSupport(containerElementRef, onCloses),
 
     drawerPropsRef = useRef(drawerProps)
 
@@ -191,7 +191,7 @@ export const useDrawerSupport = () => {
 // ----------------------[ useDrawers ]------------------------
 // return key values to host
 
-export const useDrawers = (containerElementRef, onCloses) => {
+const useDrawerSupport = (containerElementRef, onCloses) => {
 
     const initializedRef = useRef(false)
 

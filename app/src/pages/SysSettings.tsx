@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {Text, Button} from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
-import Drawer, { useDrawerSupport } from '../components/Drawer'
+import Drawer, { useDrawers } from '../components/Drawer'
 
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 
@@ -15,7 +15,7 @@ const SysSettings = (props) => {
         containerElementRef,
         drawerState,
         onOpens,
-    } = useDrawerSupport()
+    } = useDrawers()
 
     // --------------------------- render --------------------
     const renderProps = drawerPropsRef.current
