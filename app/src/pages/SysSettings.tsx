@@ -114,8 +114,6 @@ const SysSettings = (props) => {
     // --------------------------- render --------------------
     const renderProps = drawerPropsRef.current
 
-    // console.log('drawerProps.data', drawerProps.data)
-
     return <div ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {pageState != 'setup' && <>
             <Drawer {...renderProps.lookups} />
