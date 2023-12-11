@@ -6,7 +6,7 @@ import {Text, Button} from '@chakra-ui/react'
 // import Drawer from '../components/Drawer'
 import Drawer, { useDrawers } from '../components/Drawer'
 
-const outerStyle = {height: '100%', display:'relative'}
+const outerStyle = {height: '100%', display:'relative'} as CSSProperties
 
 const Metadata = (props) => {
 
@@ -24,15 +24,15 @@ const Metadata = (props) => {
         {drawerState != 'setup' && <>
             <Drawer {...renderProps.lookups} />
             <Drawer {...renderProps.data} />
-            <Drawer {...renderProps.notices} />
+            <Drawer {...renderProps.messages} />
             <Drawer {...renderProps.info} />
         </>}
         <Text>Metadata</Text>
         <>
-        <Button onClick = {onOpens.openRight} >Right</Button> 
-        <Button onClick = {onOpens.openTop }>Top</Button> 
-        <Button onClick = {onOpens.openLeft}>Left</Button> 
-        <Button onClick = {onOpens.openBottom}>Bottom</Button>
+        <Button onClick = {onOpens.openData} >Data</Button> 
+        <Button onClick = {onOpens.openLookups }>Lookups</Button> 
+        <Button onClick = {onOpens.openInfo}>Info</Button> 
+        <Button onClick = {onOpens.openMessages}>Messages</Button>
         </>
     </div>
 

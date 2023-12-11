@@ -65,35 +65,35 @@ const drawerTypes = {
     DATA:'data',
     LOOKUPS:'lookups',
     INFO:'info',
-    NOTICES:'notices',
+    MESSAGES:'messages',
 }
 
 export const useDrawers = () => {
 
     //-------------------- drawer open functions ----------------
-    const openRight = () => {
+    const openData = () => {
         const component = openDrawer(drawerTypes.DATA, null)
         drawerPropsRef.current[drawerTypes.DATA] = component
         setDrawerState('changedrawers')
     }
-    const openTop = () => {
+    const openLookups = () => {
         drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
         setDrawerState('changedrawers')
     }
-    const openLeft = () => {
+    const openInfo = () => {
         drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
         setDrawerState('changedrawers')
     }
-    const openBottom = () => {
-        drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
+    const openMessages = () => {
+        drawerPropsRef.current[drawerTypes.MESSAGES] = openDrawer(drawerTypes.MESSAGES, null)
         setDrawerState('changedrawers')
     }
 
     const onOpens = {
-        openRight,
-        openTop,
-        openLeft,
-        openBottom,
+        openData,
+        openLookups,
+        openInfo,
+        openMessages,
     }
 
     //-------------------- drawer close functions ----------------
@@ -107,9 +107,9 @@ export const useDrawers = () => {
             closeDrawer(drawerTypes.DATA)
         setDrawerState('changedrawers')
     },[])
-    const onCloseNotices = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.NOTICES] = 
-            closeDrawer(drawerTypes.NOTICES)
+    const onCloseMessages = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.MESSAGES] = 
+            closeDrawer(drawerTypes.MESSAGES)
         setDrawerState('changedrawers')
     },[])
     const onCloseInfo = useCallback(() => {
@@ -121,7 +121,7 @@ export const useDrawers = () => {
     const onCloses = {
         lookups:onCloseLookups,
         data:onCloseData,
-        notices:onCloseNotices,
+        messages:onCloseMessages,
         info:onCloseInfo,
     }
 
@@ -230,7 +230,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
         return {
             lookups:componentProps.top,
             data:componentProps.right,
-            notices:componentProps.bottom,
+            messages:componentProps.bottom,
             info:componentProps.left,
         }
 
@@ -259,7 +259,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
                     isOpen:false,
                     containerElementRef,
                     containerDimensions,
-                    onClose:onCloses.notices,
+                    onClose:onCloses.messages,
                 },
                 left:{
                     key:'left',
@@ -282,7 +282,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
     const drawerProps = {
         lookups:componentProps.top,
         data:componentProps.right,
-        notices:componentProps.bottom,
+        messages:componentProps.bottom,
         info:componentProps.left,
     }
 
@@ -290,7 +290,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
         data:'right',
         lookups:'top',
         info:'left',
-        notices:'bottom',
+        messages:'bottom',
     }
 
     initializedRef.current = true
@@ -421,7 +421,7 @@ export const Drawer = (props) => {
                     borderRight:'1px solid gray',
                     boxShadow:'5px 0 5px 0px silver',
                     borderRadius: '0 8px 8px 0',
-                    zIndex:2
+                    zIndex:4
                 })
                 Object.assign(tabStyle,{
                     top:'50%',
@@ -453,7 +453,7 @@ export const Drawer = (props) => {
                     borderBottom:'1px solid gray',
                     boxShadow:'0px 5px 5px 0px silver',
                     borderRadius: '0 0 8px 8px',
-                    zIndex:3
+                    zIndex:2
                 })
                 Object.assign(tabStyle,{
                     left:'50%',
@@ -473,7 +473,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'bottom': { // message
-                titleRef.current = 'Notices'
+                titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
                     // width: '100%',
                     // height:'auto',
@@ -484,7 +484,7 @@ export const Drawer = (props) => {
                     borderTop:'1px solid gray',
                     boxShadow:'0px -5px 5px 0px silver',
                     borderRadius: '8px 8px 0 0',
-                    zIndex:4
+                    zIndex:3
                 })
                 Object.assign(tabStyle,{
                     left:'50%',
