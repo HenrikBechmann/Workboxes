@@ -15,6 +15,7 @@ import workspacesIcon from '../../assets/workspaces.png'
 import panelIcon from '../../assets/panel.png'
 import helpIcon from '../../assets/help.png'
 import uploadIcon from '../../assets/upload.png'
+import databaseIcon from '../../assets/database.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -117,7 +118,12 @@ const WorkspaceToolbar = (props) => {
         </Box>
         <VerticalToolbarDivider />
         <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'save workspace configuration'>
+            <Tooltip hasArrow label = 'save workspace config local'>
+                <img style = {iconStyles} src = {databaseIcon} />
+            </Tooltip>
+        </Box> 
+        <Box style = {iconWrapperStyles} >
+            <Tooltip hasArrow label = 'save workspace config to cloud'>
                 <img style = {iconStyles} src = {uploadIcon} />
             </Tooltip>
         </Box> 
