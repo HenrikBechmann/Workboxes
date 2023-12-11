@@ -11,21 +11,20 @@ const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 const Metadata = (props) => {
 
    const {
-        drawerPropsRef,
+        drawerProps,
         containerElementRef,
         drawerState,
         onOpens,
     } = useDrawers()
 
     // --------------------------- render --------------------
-    const renderProps = drawerPropsRef.current
 
     return <div ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {drawerState != 'setup' && <>
-            <Drawer {...renderProps.lookups} />
-            <Drawer {...renderProps.data} />
-            <Drawer {...renderProps.messages} />
-            <Drawer {...renderProps.info} />
+            <Drawer {...drawerProps.lookups} />
+            <Drawer {...drawerProps.data} />
+            <Drawer {...drawerProps.messages} />
+            <Drawer {...drawerProps.info} />
         </>}
         <Text>Metadata</Text>
         <>

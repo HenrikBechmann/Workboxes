@@ -180,7 +180,7 @@ export const useDrawers = () => {
     },[drawerState])
 
     return {
-        drawerPropsRef,
+        drawerProps:drawerPropsRef.current,
         containerElementRef,
         drawerState,
         onOpens,
