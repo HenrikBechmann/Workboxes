@@ -74,19 +74,19 @@ export const useDrawerSupport = () => {
     const openRight = () => {
         const component = openDrawer(drawerTypes.DATA, null)
         drawerPropsRef.current[drawerTypes.DATA] = component
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     }
     const openTop = () => {
         drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     }
     const openLeft = () => {
         drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     }
     const openBottom = () => {
         drawerPropsRef.current[drawerTypes.NOTICES] = openDrawer(drawerTypes.NOTICES, null)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     }
 
     const onOpens = {
@@ -100,22 +100,22 @@ export const useDrawerSupport = () => {
     const onCloseLookups = useCallback(() => {
         drawerPropsRef.current[drawerTypes.LOOKUPS] = 
             closeDrawer(drawerTypes.LOOKUPS)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
         drawerPropsRef.current[drawerTypes.DATA] = 
             closeDrawer(drawerTypes.DATA)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     },[])
     const onCloseNotices = useCallback(() => {
         drawerPropsRef.current[drawerTypes.NOTICES] = 
             closeDrawer(drawerTypes.NOTICES)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     },[])
     const onCloseInfo = useCallback(() => {
         drawerPropsRef.current[drawerTypes.INFO] = 
             closeDrawer(drawerTypes.INFO)
-        setPageState('changedrawers')
+        setDrawerState('changedrawers')
     },[])
 
     const onCloses = {
@@ -127,7 +127,7 @@ export const useDrawerSupport = () => {
 
     // ---------------------------- state hooks ----------------------------
     const 
-        [pageState, setPageState] = useState('setup'), // to collect pageElementRef
+        [drawerState, setDrawerState] = useState('setup'), // to collect pageElementRef
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
         containerElementRef = useRef(null), // to pass to drawers
         resizeObserverRef = useRef(null), // to disconnect
@@ -151,9 +151,9 @@ export const useDrawerSupport = () => {
 
         setContainerDimensions(containerDimensions)
 
-        if (pageState == 'setup') setPageState('ready')
+        if (drawerState == 'setup') setDrawerState('ready')
 
-    },[pageState])
+    },[drawerState])
 
     // ------------------------ effect hooks -----------------------
     useEffect(()=>{
@@ -170,19 +170,19 @@ export const useDrawerSupport = () => {
 
     useEffect(()=>{
 
-        switch (pageState) {
+        switch (drawerState) {
         case 'setup':
         case 'changedrawers':
-            setPageState('ready')
+            setDrawerState('ready')
 
         }
 
-    },[pageState])
+    },[drawerState])
 
     return {
         drawerPropsRef,
         containerElementRef,
-        pageState,
+        drawerState,
         onOpens,
     }
 

@@ -13,7 +13,7 @@ const Metadata = (props) => {
    const {
         drawerPropsRef,
         containerElementRef,
-        pageState,
+        drawerState,
         onOpens,
     } = useDrawerSupport()
 
@@ -21,7 +21,7 @@ const Metadata = (props) => {
     const renderProps = drawerPropsRef.current
 
     return <div ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {pageState != 'setup' && <>
+        {drawerState != 'setup' && <>
             <Drawer {...renderProps.lookups} />
             <Drawer {...renderProps.data} />
             <Drawer {...renderProps.notices} />
