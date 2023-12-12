@@ -24,13 +24,13 @@ const Metadata = (props) => {
             <Drawer {...drawerProps.lookups} />
             <Drawer {...drawerProps.data} />
             <Drawer {...drawerProps.messages} />
-            <Drawer {...drawerProps.info} />
+            <Drawer {...drawerProps.help} />
         </>}
         <Text>Metadata</Text>
         <>
         <Button onClick = {onOpens.openData} >Data</Button> 
         <Button onClick = {onOpens.openLookups }>Lookups</Button> 
-        <Button onClick = {onOpens.openInfo}>Info</Button> 
+        <Button onClick = {onOpens.openHelp}>Help</Button> 
         <Button onClick = {onOpens.openMessages}>Messages</Button>
         </>
     </Box>

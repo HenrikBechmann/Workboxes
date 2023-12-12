@@ -64,7 +64,7 @@ const subTitleStyles = {
 const drawerTypes = {
     DATA:'data',
     LOOKUPS:'lookups',
-    INFO:'info',
+    HELP:'help',
     MESSAGES:'messages',
 }
 
@@ -80,8 +80,8 @@ export const useDrawers = () => {
         drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
         setDrawerState('changedrawers')
     }
-    const openInfo = () => {
-        drawerPropsRef.current[drawerTypes.INFO] = openDrawer(drawerTypes.INFO, null)
+    const openHelp = () => {
+        drawerPropsRef.current[drawerTypes.HELP] = openDrawer(drawerTypes.HELP, null)
         setDrawerState('changedrawers')
     }
     const openMessages = () => {
@@ -92,7 +92,7 @@ export const useDrawers = () => {
     const onOpens = {
         openData,
         openLookups,
-        openInfo,
+        openHelp,
         openMessages,
     }
 
@@ -112,9 +112,9 @@ export const useDrawers = () => {
             closeDrawer(drawerTypes.MESSAGES)
         setDrawerState('changedrawers')
     },[])
-    const onCloseInfo = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.INFO] = 
-            closeDrawer(drawerTypes.INFO)
+    const onCloseHelp = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.HELP] = 
+            closeDrawer(drawerTypes.HELP)
         setDrawerState('changedrawers')
     },[])
 
@@ -122,7 +122,7 @@ export const useDrawers = () => {
         lookups:onCloseLookups,
         data:onCloseData,
         messages:onCloseMessages,
-        info:onCloseInfo,
+        help:onCloseHelp,
     }
 
     // ---------------------------- state hooks ----------------------------
@@ -231,7 +231,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
             lookups:componentProps.top,
             data:componentProps.right,
             messages:componentProps.bottom,
-            info:componentProps.left,
+            help:componentProps.left,
         }
 
     },[])
@@ -267,7 +267,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
                     placement:'left',
                     containerElementRef,
                     containerDimensions,
-                    onClose:onCloses.info,
+                    onClose:onCloses.help,
                 },
             }
         }
@@ -283,13 +283,13 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
         lookups:componentProps.top,
         data:componentProps.right,
         messages:componentProps.bottom,
-        info:componentProps.left,
+        help:componentProps.left,
     }
 
     const placements = {
         data:'right',
         lookups:'top',
-        info:'left',
+        help:'left',
         messages:'bottom',
     }
 
@@ -410,7 +410,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'left': { // help
-                titleRef.current = 'Information'
+                titleRef.current = 'Help'
                 Object.assign(drawerStyle,{
                     // height: '100%',
                     // width:'auto',
@@ -799,7 +799,8 @@ export const Drawer = (props) => {
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
                     <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
                     {['right', 'top'].includes(placement) && <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>}
-                    {(placement == 'right') && <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button>}
+                    {(placement == 'right') && <><Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button> 
+                        <Button size = 'xs' ml = '6px' colorScheme = "blue" >Previous</Button></>}
                 </Box>
             </GridItem>
         </Grid>}

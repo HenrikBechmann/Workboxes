@@ -8,7 +8,7 @@ const outerStyle = {height: '100%', display:'relative'}
 
 const UserControls = (props) => {
 
-    return <Box data-type = 'sysadmin' style = {outerStyle}>User Controls ▼</Box>
+    return <Box data-type = 'sysadmin' style = {outerStyle}>User Controls</Box>
 
 }
 
