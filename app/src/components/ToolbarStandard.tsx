@@ -11,7 +11,7 @@ import {
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
 
-import VerticalToolbarDivider from '../components/VerticalToolbarDivider'
+import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
 
 import fireIcon from '../../assets/fire.png'
 import notificationsIcon from '../../assets/notifications.png'
@@ -118,7 +118,7 @@ const UserControl = (props) => {
 }
 
 // --------------------------- component ----------------------------
-const StandardToolbar = (props) => {
+const ToolbarStandard = (props) => {
 
     // ------------------------------ hooks ------------------------
     const 
@@ -164,7 +164,7 @@ const StandardToolbar = (props) => {
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
         </Menu>
-        <VerticalToolbarDivider />
+        <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} onClick = {gotoNotifications} >
             <Tooltip hasArrow label = 'Notifications to this account'>
                 <img style = {iconStyles} src = {notificationsIcon} />
@@ -190,13 +190,13 @@ const StandardToolbar = (props) => {
                 <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
         </Box>
-        <VerticalToolbarDivider />
+        <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} onClick = {goHome}>
             <Tooltip hasArrow label = 'Go to the main work page'>
                 <img style = {iconStyles} src = {homeIcon} />
             </Tooltip>
         </Box>
-        <VerticalToolbarDivider />
+        <ToolbarVerticalDivider />
         <Menu>
             <MenuButton >
                 <UserControl />
@@ -215,7 +215,7 @@ const StandardToolbar = (props) => {
         </Menu>
         {!isSuperUser && <span>&nbsp;&nbsp;</span>}
         {isSuperUser && <>
-            <VerticalToolbarDivider />
+            <ToolbarVerticalDivider />
             <Box style = {iconWrapperStyles} onClick = {gotoSysadmin}>
                 <Tooltip hasArrow label = 'System settings'>
                     <img style = {iconStyles} src = {appSettingsIcon} />
@@ -227,4 +227,4 @@ const StandardToolbar = (props) => {
     </Box>
 }
 
-export default StandardToolbar
+export default ToolbarStandard

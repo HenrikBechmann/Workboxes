@@ -7,7 +7,7 @@ import { Text, Box } from '@chakra-ui/react'
 import { useUserData } from '../system/FirebaseProviders'
 
 import Toolbar from '../components/Toolbar'
-import StandardToolbar from '../components/StandardToolbar'
+import ToolbarStandard from '../components/ToolbarStandard'
 
 const bodyStyle = {
     height: 'calc(100vh - 52px)', 
@@ -22,7 +22,7 @@ const navlinkStyles = {
     color:'blue',
 }
 
-const GeneralLayout = (props) => {
+const LayoutGeneral = (props) => {
 
     const userData = useUserData()
 
@@ -33,7 +33,7 @@ const GeneralLayout = (props) => {
             {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
             style={navlinkStyles}
                 >Sign in</NavLink></Text>}
-            {userData && <StandardToolbar />}
+            {userData && <ToolbarStandard />}
         </Toolbar>
         <Box data-type = 'general-outlet' style = {bodyStyle}>
             <Outlet />
@@ -42,4 +42,4 @@ const GeneralLayout = (props) => {
 
 }
 
-export default GeneralLayout
+export default LayoutGeneral

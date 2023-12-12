@@ -4,7 +4,7 @@
 import React, { useRef } from 'react'
 
 import Toolbar from '../components/Toolbar'
-import WorkspaceToolbar from '../components/WorkspaceToolbar'
+import ToolbarWorkspace from '../components/ToolbarWorkspace'
 import { Box } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------
@@ -24,7 +24,7 @@ export const Main = (props) => {
             Main page
         </Box>
         <Toolbar>
-            <WorkspaceToolbar />
+            <ToolbarWorkspace />
         </Toolbar>
     </>
 }

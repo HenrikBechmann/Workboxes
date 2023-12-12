@@ -4,7 +4,7 @@
 import React from 'react'
 
 // general support
-import GeneralLayout from '../components/GeneralLayout'
+import LayoutGeneral from '../components/LayoutGeneral'
 
 import Signin from '../pages/Signin'
 import About from '../pages/About'
@@ -14,8 +14,8 @@ import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
-import MemberRoutes from '../components/MemberRoutes'
-import MemberLayout from '../components/MemberLayout'
+import RoutesMember from '../components/RoutesMember'
+import LayoutMember from '../components/LayoutMember'
 
 import Main from '../pages/Main'
 import Account from '../pages/Account'
@@ -24,8 +24,8 @@ import Memberships from '../pages/Memberships'
 import Subscriptions from '../pages/Subscriptions'
 
 // system support
-import SysadminRoutes from '../components/SysadminRoutes'
-import SysadminLayout from '../components/SysadminLayout'
+import RoutesSysadmin from '../components/RoutesSysadmin'
+import LayoutSysadmin from '../components/LayoutSysadmin'
 
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
@@ -37,10 +37,10 @@ const routes = [
     
     {
         path: '/',
-        element: <MemberRoutes />,
+        element: <RoutesMember />,
         children: [
             {
-                element: <MemberLayout />,
+                element: <LayoutMember />,
                 children:[
                     {
                         index: true,
@@ -98,10 +98,10 @@ const routes = [
     },
     {
         path: 'sysadmin',
-        element: <SysadminRoutes />,
+        element: <RoutesSysadmin />,
         children: [
             {
-                element: <SysadminLayout />,
+                element: <LayoutSysadmin />,
                 children:[
                     {
                         index:true,
@@ -129,7 +129,7 @@ const routes = [
     },
     {
         path:'/',
-        element: <GeneralLayout />,
+        element: <LayoutGeneral />,
         children:[
             {
                 path: 'about',

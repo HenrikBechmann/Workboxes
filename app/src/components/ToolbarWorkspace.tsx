@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 
-import VerticalToolbarDivider from '../components/VerticalToolbarDivider'
+import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
 
 import cartIcon from '../../assets/cart.png'
 import workspacesIcon from '../../assets/workspaces.png'
@@ -99,7 +99,7 @@ const SelectionControl = (props) => {
 }
 
 // --------------------------- component ----------------------------
-const WorkspaceToolbar = (props) => {
+const ToolbarWorkspace = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -108,7 +108,7 @@ const WorkspaceToolbar = (props) => {
                 <img style = {iconStyles} src = {cartIcon} />
             </Tooltip>
         </Box> 
-        <VerticalToolbarDivider />
+        <ToolbarVerticalDivider />
         <SelectionControl icon = {panelIcon} iconStyles = {panelIconStyles} displayName = 'panel selection' tooltipLabel = 'select a panel'/>
         <SelectionControl icon = {workspacesIcon} iconStyles = {iconStyles} displayName = 'workspace selection' tooltipLabel = 'select a workspace'/>
         <Box style = {iconWrapperStyles} >
@@ -116,7 +116,7 @@ const WorkspaceToolbar = (props) => {
                 <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
         </Box>
-        <VerticalToolbarDivider />
+        <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'save workspace config local'>
                 <img style = {iconStyles} src = {databaseIcon} />
@@ -131,5 +131,5 @@ const WorkspaceToolbar = (props) => {
     </Box>
 }
 
-export default WorkspaceToolbar
+export default ToolbarWorkspace
 
