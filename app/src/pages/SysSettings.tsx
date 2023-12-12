@@ -1,7 +1,7 @@
 // SysSettings.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
-import {Text, Button} from '@chakra-ui/react'
+import {Text, Button, Box} from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
 import Drawer, { useDrawers } from '../components/Drawer'
@@ -19,7 +19,7 @@ const SysSettings = (props) => {
 
     // --------------------------- render --------------------
 
-    return <div ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
+    return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {drawerState != 'setup' && <>
             <Drawer {...drawerProps.lookups} />
             <Drawer {...drawerProps.data} />
@@ -33,7 +33,7 @@ const SysSettings = (props) => {
         <Button onClick = {onOpens.openInfo}>Info</Button> 
         <Button onClick = {onOpens.openMessages}>Messages</Button>
         </>
-    </div>
+    </Box>
 
 }
 

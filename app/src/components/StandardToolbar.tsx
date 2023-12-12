@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
-  Tooltip
+  Tooltip, Box
 } from '@chakra-ui/react'
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
@@ -91,9 +91,9 @@ const displayNameStyles = {
 // ---------------------------- embedded components ----------------------------
 const FireIconControl = (props) => {
     
-    return <div style = {fireIconControlStyles} >
+    return <Box style = {fireIconControlStyles} >
         <img style = {iconStyles} src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
-    </div> 
+    </Box> 
 }
 
 const UserControl = (props) => {
@@ -102,7 +102,7 @@ const UserControl = (props) => {
         userData = useUserData(),
         { displayName, photoURL } = userData.authUser
 
-    return <div style = {
+    return <Box style = {
         {
             display:'flex',
             flexWrap:'nowrap',
@@ -111,9 +111,9 @@ const UserControl = (props) => {
         }
     }>
         <img style = {avatarStyles} src = {photoURL} />
-        <div style = {displayNameStyles} >{displayName}</div>
-        <div style = {downArrowWrapperStyles} ><span style = {downArrowStyles}>▼</span></div>
-    </div>
+        <Box style = {displayNameStyles} >{displayName}</Box>
+        <Box style = {downArrowWrapperStyles} ><span style = {downArrowStyles}>▼</span></Box>
+    </Box>
 
 }
 
@@ -152,7 +152,7 @@ const StandardToolbar = (props) => {
         }
 
     // render
-    return <div style = {standardToolbarStyles}>
+    return <Box style = {standardToolbarStyles}>
         <Menu>
             <MenuButton >
                 <FireIconControl />
@@ -165,37 +165,37 @@ const StandardToolbar = (props) => {
             </MenuList>
         </Menu>
         <VerticalToolbarDivider />
-        <div style = {iconWrapperStyles} onClick = {gotoNotifications} >
+        <Box style = {iconWrapperStyles} onClick = {gotoNotifications} >
             <Tooltip hasArrow label = 'Notifications to this account'>
                 <img style = {iconStyles} src = {notificationsIcon} />
             </Tooltip>
-        </div> 
-        <div style = {iconWrapperStyles} onClick = {gotoMessages} >
+        </Box> 
+        <Box style = {iconWrapperStyles} onClick = {gotoMessages} >
             <Tooltip hasArrow label = 'Direct messages'>
                 <img style = {iconStyles} src = {messageIcon} />
             </Tooltip>
-        </div>
-        <div style = {iconWrapperStyles} onClick = {gotoChatrooms} >
+        </Box>
+        <Box style = {iconWrapperStyles} onClick = {gotoChatrooms} >
             <Tooltip hasArrow label = 'Chatrooms with this account'>
                 <img style = {iconStyles} src = {chatIcon} />
             </Tooltip>
-        </div>
-        <div style = {iconWrapperStyles} onClick = {gotoNewsflows} >
+        </Box>
+        <Box style = {iconWrapperStyles} onClick = {gotoNewsflows} >
             <Tooltip hasArrow label = 'Subscribed news flows'>
                 <img style = {iconStyles} src = {subscriptionsIcon} />
             </Tooltip>
-        </div>
-        <div style = {iconWrapperStyles} >
+        </Box>
+        <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />
             </Tooltip>
-        </div>
+        </Box>
         <VerticalToolbarDivider />
-        <div style = {iconWrapperStyles} onClick = {goHome}>
+        <Box style = {iconWrapperStyles} onClick = {goHome}>
             <Tooltip hasArrow label = 'Go to the main work page'>
                 <img style = {iconStyles} src = {homeIcon} />
             </Tooltip>
-        </div>
+        </Box>
         <VerticalToolbarDivider />
         <Menu>
             <MenuButton >
@@ -216,15 +216,15 @@ const StandardToolbar = (props) => {
         {!isSuperUser && <span>&nbsp;&nbsp;</span>}
         {isSuperUser && <>
             <VerticalToolbarDivider />
-            <div style = {iconWrapperStyles} onClick = {gotoSysadmin}>
+            <Box style = {iconWrapperStyles} onClick = {gotoSysadmin}>
                 <Tooltip hasArrow label = 'System settings'>
                     <img style = {iconStyles} src = {appSettingsIcon} />
                 </Tooltip>
-            </div>
+            </Box>
             &nbsp;&nbsp;
             </>
         }
-    </div>
+    </Box>
 }
 
 export default StandardToolbar

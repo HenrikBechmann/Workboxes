@@ -2,6 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {CSSProperties} from 'react'
+import { Box } from '@chakra-ui/react'
 
 const verticalDividerStyles = {
     height:'20px',
@@ -13,7 +14,7 @@ const verticalDividerStyles = {
 
 const VerticalToolbarDivider = (props) => {
 
-    return <div style = {verticalDividerStyles}></div>
+    return <Box style = {verticalDividerStyles}></Box>
 
 }
 

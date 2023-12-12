@@ -92,7 +92,7 @@ const Signin = (props) => {
     }
 
     if (userDataRef.current === undefined) {
-        return <div> Connecting... </div>
+        return <Box> Connecting... </Box>
     }
 
     if (userDataRef.current) {
@@ -123,13 +123,13 @@ const Signin = (props) => {
                 <Text>While we get established, we're accepting members by invitation only.</Text>
                 <Text mt = {3}><i>If you've received an invitation, please sign in.</i></Text>
                 <HStack justifyContent = 'center' spacing = {10} mt = {5}>
-                    <div><Button 
+                    <Box><Button 
                         colorScheme = "blue" 
                         width = '300px'
                         onClick = {signInWithGoogle}
                     >
                         Sign in using Google
-                    </Button></div>
+                    </Button></Box>
                 </HStack>
                 {errorState && 
                     <Text mt = {"20px"} style = {{backgroundColor:'lightpink', padding:'10px 3px 10px 3px'}}> 

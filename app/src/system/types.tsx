@@ -1,80 +1,46 @@
 // types.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-// example
-// lookup is a namespace, parse with lowdash
-const Person = {
-  properties: {
-    age: {
+
+/* example
+lookup is a namespace, parse with lowdash
+
+Data types:
+number
+integer
+string
+boolean
+null
+timestamp
+map
+array
+geopoint
+
+document:{
+  collection
+  class
+  variant
+  type (class + variant)
+  fields: array
+}
+
+const field = 
+  {
+    <field>: {
       type: "number",
-      default:{
-          value:null,
-          lookup:null
-      },
       alias:'Age',
       order:1,
       prompt:'',
       description:'',
-      errormessage:'',
-      isValid:{},
-      onChange:{}
-    },
-    firstName: {
-      type: "string",
-      default:{
-          value:null,
-          lookup:null
-      },
-      alias:'Age',
-      order:1,
-      prompt:'',
-      description:'',
-      errormessage:'',
-      isValid:{},
-      onChange:{}
-    },
-    lastName: {
-      type: "string",
-      default:{
-          value:null,
-          lookup:null
-      },
-      alias:'Age',
-      order:1,
-      prompt:'',
-      description:'',
-      errormessage:'',
-      isValid:{},
-      onChange:{}
-    },
-    socials: {
-      items: {
-        type: "string",
+      edit: {
         default:{
             value:null,
             lookup:null
         },
-        alias:'Age',
-        order:1,
-        prompt:'',
-        description:'',
         errormessage:'',
-        isValid:{},
-        onChange:{}
-      },
-      type: "array",
-      default:{
-          value:null,
-          lookup:null
-      },
-      alias:'Age',
-      order:1,
-      prompt:'',
-      description:'',
-      errormessage:'',
-      isValid:{},
-      onChange:{}
+        verifyfunc:<index>,
+        changefunc:<index>,
+        required:true,
+      }
     }
-  },
-  required: [ "firstName", "lastName", "age", "socials"],
-  type: 'object',
-}
+  }
+*/

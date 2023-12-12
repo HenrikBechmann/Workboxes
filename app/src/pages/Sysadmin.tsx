@@ -2,6 +2,8 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {CSSProperties} from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 import { useNavigate } from 'react-router-dom'
 import Scroller from 'react-infinite-grid-scroller'
 
@@ -88,7 +90,7 @@ const Sysadmin = (props) => {
         }
     }
 
-    return <div data-type = 'sysadmin' style = {outerSysadminStyle}>
+    return <Box data-type = 'sysadmin' style = {outerSysadminStyle}>
 
         <Grid height = '100%'
           templateAreas={`"header"
@@ -105,7 +107,7 @@ const Sysadmin = (props) => {
               </Center>
           </GridItem>
           <GridItem area={'body'}>
-              <div data-type = 'tiles-body' style = {scrollerContainer}>
+              <Box data-type = 'tiles-body' style = {scrollerContainer}>
               <Scroller 
                   cellWidth = {200} 
                   cellHeight = {220} 
@@ -116,11 +118,11 @@ const Sysadmin = (props) => {
                   getItemPack = {getMenuTile}
                   usePlaceholder = {false}
               />
-              </div>
+              </Box>
           </GridItem>
         </Grid>
 
-    </div>
+    </Box>
 
 }
 

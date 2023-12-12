@@ -3,9 +3,11 @@
 
 import React from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 const NotFound = (props) => {
 
-    return <div>NotFound</div>
+    return <Box>NotFound</Box>
 
 }
 

@@ -2,7 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { Text } from '@chakra-ui/react'
+import { Text, Box } from '@chakra-ui/react'
 
 import { useUserData } from '../system/FirebaseProviders'
 
@@ -35,9 +35,9 @@ const GeneralLayout = (props) => {
                 >Sign in</NavLink></Text>}
             {userData && <StandardToolbar />}
         </Toolbar>
-        <div data-type = 'general-outlet' style = {bodyStyle}>
+        <Box data-type = 'general-outlet' style = {bodyStyle}>
             <Outlet />
-        </div>
+        </Box>
     </>
 
 }

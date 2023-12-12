@@ -3,9 +3,11 @@
 
 import React from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 const Subscriptions = (props) => {
 
-    return <div>Subscriptions</div>
+    return <Box>Subscriptions</Box>
 
 }
 

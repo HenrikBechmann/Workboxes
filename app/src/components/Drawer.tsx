@@ -757,10 +757,10 @@ export const Drawer = (props) => {
     // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
-    return <div data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
-        <div ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
+    return <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
+        <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
-        </div>
+        </Box>
         {drawerState != 'setup' && <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
@@ -803,7 +803,7 @@ export const Drawer = (props) => {
                 </Box>
             </GridItem>
         </Grid>}
-    </div>
+    </Box>
 }
 
 export default Drawer

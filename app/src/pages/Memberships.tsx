@@ -2,10 +2,11 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React from 'react'
+import { Box } from '@chakra-ui/react'
 
 const Memberships = (props) => {
 
-    return <div>Memberships</div>
+    return <Box>Memberships</Box>
 
 }
 

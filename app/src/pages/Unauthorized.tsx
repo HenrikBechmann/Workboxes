@@ -3,9 +3,11 @@
 
 import React from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 const Unauthorized = (props) => {
 
-    return <div>Unauthorized</div>
+    return <Box>Unauthorized</Box>
 
 }
 

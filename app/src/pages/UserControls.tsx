@@ -2,11 +2,13 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 const outerStyle = {height: '100%', display:'relative'}
 
 const UserControls = (props) => {
 
-    return <div data-type = 'sysadmin' style = {outerStyle}>User Controls ▼</div>
+    return <Box data-type = 'sysadmin' style = {outerStyle}>User Controls ▼</Box>
 
 }
 

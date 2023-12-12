@@ -2,6 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useRef, useEffect, useLayoutEffect, useCallback, useState, CSSProperties} from 'react'
+import { Box } from '@chakra-ui/react'
 
 import navNextIcon from '../../assets/nav_next.png'
 import navBeforeIcon from '../../assets/nav_before.png'
@@ -130,21 +131,21 @@ const Toolbar = (props) => {
 
     // ------------------------- render --------------------------
     return (
-    <div style = {menuWrapperStyles}>
-        <div data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
+    <Box style = {menuWrapperStyles}>
+        <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
             {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
 
-            <div data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
+            <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
         
                 {children}
 
-            </div>
+            </Box>
 
             {overflow_rightRef.current && <img data-type = 'right-chevron' style = {navNextStyles} src = {navNextIcon} />}
         
-        </div>
-    </div>
+        </Box>
+    </Box>
     )
 
 }

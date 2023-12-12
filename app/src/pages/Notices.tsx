@@ -3,9 +3,11 @@
 
 import React from 'react'
 
+import { Box } from '@chakra-ui/react'
+
 const Notices = (props) => {
 
-    return <div>Notices</div>
+    return <Box>Notices</Box>
 
 }
 

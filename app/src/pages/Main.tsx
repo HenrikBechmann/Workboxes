@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 
 import Toolbar from '../components/Toolbar'
 import WorkspaceToolbar from '../components/WorkspaceToolbar'
+import { Box } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------
 const workspaceStyle = {
@@ -19,9 +20,9 @@ const workspaceStyle = {
 export const Main = (props) => {
 
     return <>
-        <div data-type = 'members-outlet' style = {workspaceStyle}>
+        <Box data-type = 'members-outlet' style = {workspaceStyle}>
             Main page
-        </div>
+        </Box>
         <Toolbar>
             <WorkspaceToolbar />
         </Toolbar>
