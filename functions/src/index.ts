@@ -29,7 +29,7 @@ export const isSuperUser = onCall(async (request) => {
   let result;
   try {
     result = await db.collection("sysadmins")
-      .where("email", "==", email).get();
+      .where("properties.email", "==", email).get();
   } catch (e) {
     isAdmin.errorCondition = true;
   }
@@ -48,7 +48,7 @@ export const beforecreated = beforeUserCreated(async (event) => {
   let result;
   try {
     result = await db.collection("invitations")
-      .where("email", "==", email).get();
+      .where("properties.email", "==", email).get();
   } catch (e) {
     const error:Error = e as Error;
     throw new HttpsError("internal",
@@ -69,7 +69,7 @@ export const beforesignedin = beforeUserSignedIn(async (event) => {
   let result;
   try {
     result = await db.collection("suspensions")
-      .where("email", "==", email).get();
+      .where("properties.email", "==", email).get();
   } catch (e) {
     const error:Error = e as Error;
     throw new HttpsError("internal",

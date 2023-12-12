@@ -7,6 +7,24 @@ see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input for input at
 
 lookup is a namespace, parse with lowdash
 
+standard document structure:
+{
+  class,
+  variant,
+  type,
+  list_permission_group,
+  commits:{
+    created_by,
+    created_time,
+    updated_by,
+    updated_time,
+  },
+  permissions,
+  properties,
+  relations,
+  counts,
+}
+
 Data types:
 float
 integer
@@ -32,6 +50,7 @@ const field =
       type: "number",
       label:'Age',
       value:'',
+      format:'',
       order:1,
       description:'',
       edit: {
