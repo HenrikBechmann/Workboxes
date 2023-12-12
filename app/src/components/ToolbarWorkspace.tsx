@@ -16,6 +16,7 @@ import panelIcon from '../../assets/panel.png'
 import helpIcon from '../../assets/help.png'
 import uploadIcon from '../../assets/upload.png'
 import databaseIcon from '../../assets/database.png'
+import moreVertIcon from '../../assets/more_vert.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -118,7 +119,7 @@ const ToolbarWorkspace = (props) => {
         </Box>
         <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'save workspace config local'>
+            <Tooltip hasArrow label = 'save workspace config to local'>
                 <img style = {iconStyles} src = {databaseIcon} />
             </Tooltip>
         </Box> 
@@ -126,6 +127,9 @@ const ToolbarWorkspace = (props) => {
             <Tooltip hasArrow label = 'save workspace config to cloud'>
                 <img style = {iconStyles} src = {uploadIcon} />
             </Tooltip>
+        </Box> 
+        <Box style = {iconWrapperStyles} >
+            <img style = {iconStyles} src = {moreVertIcon} />
         </Box> 
         &nbsp; &nbsp;
     </Box>
