@@ -378,7 +378,7 @@ export const Drawer = (props) => {
 
         switch (placement) {
             case 'right': { // data entry
-                titleRef.current = 'Data edit'
+                titleRef.current = 'Edit'
                 Object.assign(drawerStyle,{
                     // height: '100%',
                     // width:'auto',
@@ -442,7 +442,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'top': { // lookup
-                titleRef.current = 'Lookups'
+                titleRef.current = 'Lookup'
                 Object.assign(drawerStyle,{
                     // width: '100%',
                     // height:'auto',
