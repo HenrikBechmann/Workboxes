@@ -28,7 +28,7 @@ standard document structure:
 Data types:
 float
 integer
-string
+string (text, textarea)
 boolean
 null
 timestamp
@@ -48,6 +48,7 @@ const field =
   {
     <fieldname>: {
       type: "number",
+      filter, (for markdown)
       label:'Age',
       value:'',
       format:'',
