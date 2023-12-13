@@ -797,10 +797,29 @@ export const Drawer = (props) => {
             </GridItem>
             <GridItem area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
-                    <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
-                    {['right', 'top'].includes(placement) && <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>}
-                    {(placement == 'right') && <><Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button> 
-                        <Button size = 'xs' ml = '6px' colorScheme = "blue" >Previous</Button></>}
+                    {(placement == 'top') && 
+                        <>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
+                            <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>
+                        </>
+                    }
+                    {(placement == 'right') && 
+                        <>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>
+                            <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button> 
+                            <Button size = 'xs' ml = '6px' colorScheme = "blue" >Previous</Button>
+                        </>
+                    }
+                    {(placement == 'bottom') && 
+                        <>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >OK</Button>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px' >Later</Button>
+                        </>
+                    }
+                    {(placement == 'left') && 
+                        <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >OK</Button>
+                    }
                 </Box>
             </GridItem>
         </Grid>}
