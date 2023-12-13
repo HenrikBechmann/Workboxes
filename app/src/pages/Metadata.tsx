@@ -21,7 +21,7 @@ const Metadata = (props) => {
 
     return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {drawerState != 'setup' && <>
-            <Drawer {...drawerProps.lookups} />
+            <Drawer {...drawerProps.lookup} />
             <Drawer {...drawerProps.data} />
             <Drawer {...drawerProps.messages} />
             <Drawer {...drawerProps.help} />
@@ -29,7 +29,7 @@ const Metadata = (props) => {
         <Text>Metadata</Text>
         <>
         <Button onClick = {onOpens.openData} >Data</Button> 
-        <Button onClick = {onOpens.openLookups }>Lookups</Button> 
+        <Button onClick = {onOpens.openLookup }>Lookup</Button> 
         <Button onClick = {onOpens.openHelp}>Help</Button> 
         <Button onClick = {onOpens.openMessages}>Messages</Button>
         </>

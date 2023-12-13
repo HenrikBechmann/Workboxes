@@ -63,7 +63,7 @@ const subTitleStyles = {
 
 const drawerTypes = {
     DATA:'data',
-    LOOKUPS:'lookups',
+    LOOKUP:'lookup',
     HELP:'help',
     MESSAGES:'messages',
 }
@@ -76,8 +76,8 @@ export const useDrawers = () => {
         drawerPropsRef.current[drawerTypes.DATA] = component
         setDrawerState('changedrawers')
     }
-    const openLookups = () => {
-        drawerPropsRef.current[drawerTypes.LOOKUPS] = openDrawer(drawerTypes.LOOKUPS, null)
+    const openLookup = () => {
+        drawerPropsRef.current[drawerTypes.LOOKUP] = openDrawer(drawerTypes.LOOKUP, null)
         setDrawerState('changedrawers')
     }
     const openHelp = () => {
@@ -91,15 +91,15 @@ export const useDrawers = () => {
 
     const onOpens = {
         openData,
-        openLookups,
+        openLookup,
         openHelp,
         openMessages,
     }
 
     //-------------------- drawer close functions ----------------
-    const onCloseLookups = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.LOOKUPS] = 
-            closeDrawer(drawerTypes.LOOKUPS)
+    const onCloseLookup = useCallback(() => {
+        drawerPropsRef.current[drawerTypes.LOOKUP] = 
+            closeDrawer(drawerTypes.LOOKUP)
         setDrawerState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
@@ -119,7 +119,7 @@ export const useDrawers = () => {
     },[])
 
     const onCloses = {
-        lookups:onCloseLookups,
+        lookup:onCloseLookup,
         data:onCloseData,
         messages:onCloseMessages,
         help:onCloseHelp,
@@ -228,7 +228,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
 
         const componentProps = componentPropsRef.current
         return {
-            lookups:componentProps.top,
+            lookup:componentProps.top,
             data:componentProps.right,
             messages:componentProps.bottom,
             help:componentProps.left,
@@ -245,7 +245,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
                     placement: 'top',
                     containerElementRef,
                     containerDimensions,
-                    onClose:onCloses.lookups
+                    onClose:onCloses.lookup
                 },
                 right:{
                     isOpen:false,
@@ -280,7 +280,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
     const componentProps = componentPropsRef.current
 
     const drawerProps = {
-        lookups:componentProps.top,
+        lookup:componentProps.top,
         data:componentProps.right,
         messages:componentProps.bottom,
         help:componentProps.left,
@@ -288,7 +288,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
 
     const placements = {
         data:'right',
-        lookups:'top',
+        lookup:'top',
         help:'left',
         messages:'bottom',
     }
