@@ -17,6 +17,95 @@ import {
 
 const app = admin.initializeApp();
 
+export const setAdminClaim = onCall( async (request) =>{
+  // validate the caller
+  let email = request.auth?.token.email || null;
+  if (email) email = email.toLowerCase();
+  const db = getFirestore(app);
+  let result;
+  try {
+    result = await db.collection("sysadmins")
+      .where("properties.email", "==", email).get();
+  } catch (e) {
+    const error:Error = e as Error;
+    return error.message;
+  }
+  if (!result?.docs[0]) {
+    return false;
+  }
+
+  // make sure candidate email is provided
+  let candidateemail = request.data.email;
+  if (!candidateemail) return false;
+
+  // validate the candidate email
+  if (candidateemail) candidateemail = candidateemail.toLowerCase();
+  try {
+    result = await db.collection("sysadmins")
+      .where("properties.email", "==", candidateemail).get();
+  } catch (e) {
+    const error:Error = e as Error;
+    return error.message;
+  }
+
+  if (!result?.docs[0]) {
+    return false;
+  }
+  let user;
+  try {
+    user = await admin.auth().getUserByEmail(candidateemail);
+    if (user.customClaims && user.customClaims.admin === true) {
+      return true;
+    }
+    admin.auth().setCustomUserClaims(user.uid, {admin: true});
+  } catch (e) {
+    const error:Error = e as Error;
+    return error.message;
+  }
+  return true;
+});
+
+export const revokeAdminClaim = onCall( async (request) =>{
+  // validate the caller
+  let email = request.auth?.token.email || null;
+  if (email) email = email.toLowerCase();
+  const db = getFirestore(app);
+  let result;
+  try {
+    result = await db.collection("sysadmins")
+      .where("properties.email", "==", email).get();
+  } catch (e) {
+    const error:Error = e as Error;
+    return error.message;
+  }
+  if (!result?.docs[0]) {
+    return false;
+  }
+
+  // make sure candidate email is provided
+  const candidateemail = request.data.email;
+  if (!candidateemail) return false;
+  candidateemail.toLowerCase();
+
+  let user;
+  try {
+    user = await admin.auth().getUserByEmail(candidateemail);
+    if (user.customClaims && !user.customClaims.admin) {
+      return true;
+    }
+    admin.auth().setCustomUserClaims(user.uid, {admin: null});
+  } catch (e) {
+    const error:Error = e as Error;
+    return error.message;
+  }
+  return true;
+});
+
+export const isAdminUser = onCall(async (request) => {
+  const isAdmin = !!request.auth?.token.admin === true;
+  return isAdmin;
+});
+
 export const isSuperUser = onCall(async (request) => {
   let email = request.auth?.token.email || null;
   if (email) email = email.toLowerCase();

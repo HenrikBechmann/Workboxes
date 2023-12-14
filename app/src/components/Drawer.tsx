@@ -389,7 +389,7 @@ export const Drawer = (props) => {
                     borderLeft:'1px solid gray',
                     boxShadow:'-5px 0px 5px 0px silver',
                     borderRadius: '8px 0 0 8px',
-                    zIndex:1,
+                    zIndex:101,
                 })
                 Object.assign(tabStyle,{
                     top:'50%',
@@ -421,7 +421,7 @@ export const Drawer = (props) => {
                     borderRight:'1px solid gray',
                     boxShadow:'5px 0 5px 0px silver',
                     borderRadius: '0 8px 8px 0',
-                    zIndex:4
+                    zIndex:104
                 })
                 Object.assign(tabStyle,{
                     top:'50%',
@@ -453,7 +453,7 @@ export const Drawer = (props) => {
                     borderBottom:'1px solid gray',
                     boxShadow:'0px 5px 5px 0px silver',
                     borderRadius: '0 0 8px 8px',
-                    zIndex:2
+                    zIndex:102
                 })
                 Object.assign(tabStyle,{
                     left:'50%',
@@ -484,7 +484,7 @@ export const Drawer = (props) => {
                     borderTop:'1px solid gray',
                     boxShadow:'0px -5px 5px 0px silver',
                     borderRadius: '8px 8px 0 0',
-                    zIndex:3
+                    zIndex:103
                 })
                 Object.assign(tabStyle,{
                     left:'50%',
