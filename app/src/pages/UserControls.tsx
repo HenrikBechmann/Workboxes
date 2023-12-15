@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {
     Text, 
     Button, 
-    Input, FormControl, FormLabel, FormErrorMessage,
+    Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
     Box, VStack, Center
 } from '@chakra-ui/react'
 
@@ -18,7 +18,7 @@ const contentBoxStyle = {
     flexShrink: 0, 
     margin: '5px', 
     backgroundColor:'white', 
-    height:'250px', 
+    height:'300px', 
     width: '300px', 
     border: '5px outset silver',
     paddingTop: '6px',
@@ -79,6 +79,7 @@ const UserControls = (props) => {
                 <FormControl isInvalid = {isInvalid}>
                     <FormLabel>Admin user email:</FormLabel>
                     <Input ref = {claimEmailInputRef} type = 'email'/>
+                    <FormHelperText fontSize = 'xs'>For granting the claim, email must be registered in the sysadmins collection</FormHelperText>
                 </FormControl>
                 <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
                 <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
