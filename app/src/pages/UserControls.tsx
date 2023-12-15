@@ -4,19 +4,31 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {
     Text, 
     Button, 
-    Box, VStack,
+    Input, FormControl, FormLabel, FormErrorMessage,
+    Box, VStack, Center
 } from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
 import Drawer, { useDrawers } from '../components/Drawer'
 
-const outerStyle = {display: 'flex', flexWrap: 'wrap', height: '100%', position:'relative'} as CSSProperties
+const outerStyle = {height: '100%', position:'relative'} as CSSProperties
+
+const contentBoxStyle = {
+    flexBasis:'auto', 
+    flexShrink: 0, 
+    margin: '5px', 
+    backgroundColor:'white', 
+    height:'250px', 
+    width: '300px', 
+    border: '5px outset silver',
+    paddingTop: '6px',
+}
 
 const ContentBox = (props) => {
 
     const {children} = props
 
-    return <Box style = {{flexBasis:'auto', flexShrink: 0, margin: '5px', backgroundColor:'white', height:'250px', width: '300px', border: '5px outset silver'}}>
+    return <Box style = {contentBoxStyle}>
             <VStack>
                 {children}
             </VStack>
@@ -34,6 +46,17 @@ const UserControls = (props) => {
 
     // --------------------------- render --------------------
 
+    const claimEmailInputRef = useRef(null)
+
+    const [isInvalid, setIsInvalid] = useState(false)
+
+    const  claimAction = (e) => {
+        const actionName = e.target.name
+        const value = claimEmailInputRef.current.value
+        const isValid = claimEmailInputRef.current.reportValidity()
+        setIsInvalid(!isValid)
+    }
+
     return <Box ref = {containerElementRef} data-type = 'usercontrols' style = {outerStyle}>
         {drawerState != 'setup' && <>
             <Drawer {...drawerProps.lookup} />
@@ -41,24 +64,32 @@ const UserControls = (props) => {
             <Drawer {...drawerProps.messages} />
             <Drawer {...drawerProps.help} />
         </>}
+        <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
-        <VStack>
-        <Text>User Controls</Text>
-        <Button onClick = {onOpens.openData} >Data</Button> 
-        <Button onClick = {onOpens.openLookup }>Lookup</Button> 
-        <Button onClick = {onOpens.openHelp}>Help</Button> 
-        <Button onClick = {onOpens.openMessages}>Messages</Button>
-        </VStack>
+            <VStack>
+                <Text>User Controls</Text>
+                <Button onClick = {onOpens.openData} >Data</Button> 
+                <Button onClick = {onOpens.openLookup }>Lookup</Button> 
+                <Button onClick = {onOpens.openHelp}>Help</Button> 
+                <Button onClick = {onOpens.openMessages}>Messages</Button>
+            </VStack>
         </ContentBox>
         <ContentBox>
-            
+            <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+                <FormControl isInvalid = {isInvalid}>
+                    <FormLabel>Admin user email:</FormLabel>
+                    <Input ref = {claimEmailInputRef} type = 'email'/>
+                </FormControl>
+                <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
+                <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
+            </VStack>
         </ContentBox>
         <ContentBox>
-            
+            <Button colorScheme = 'blue'>View signin admin claim</Button>
         </ContentBox>
         <ContentBox>
-            
         </ContentBox>
+        </Box>
     </Box>
 
 }
