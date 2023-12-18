@@ -28,15 +28,26 @@ export const setAdminClaim = onCall( async (request) =>{
       .where("properties.email", "==", email).get();
   } catch (e) {
     const error:Error = e as Error;
-    return error.message;
+    return {
+      status: false,
+      message: error.message,
+    };
   }
   if (!result?.docs[0]) {
-    return false;
+    return {
+      status: false,
+      message: "sender email not found",
+    };
   }
 
   // make sure candidate email is provided
   let candidateemail = request.data.email;
-  if (!candidateemail) return false;
+  if (!candidateemail) {
+    return {
+      status: false,
+      message: "candidate email required",
+    };
+  }
 
   // validate the candidate email
   if (candidateemail) candidateemail = candidateemail.toLowerCase();
@@ -45,24 +56,39 @@ export const setAdminClaim = onCall( async (request) =>{
       .where("properties.email", "==", candidateemail).get();
   } catch (e) {
     const error:Error = e as Error;
-    return error.message;
+    return {
+      status: false,
+      message: error.message,
+    };
   }
 
   if (!result?.docs[0]) {
-    return false;
+    return {
+      status: false,
+      message: "candidate email not found",
+    };
   }
   let user;
   try {
     user = await admin.auth().getUserByEmail(candidateemail);
     if (user.customClaims && user.customClaims.admin === true) {
-      return true;
+      return {
+        status: true,
+        message: "candidate already has admin claim",
+      };
     }
     admin.auth().setCustomUserClaims(user.uid, {admin: true});
   } catch (e) {
     const error:Error = e as Error;
-    return error.message;
+    return {
+      status: false,
+      message: error.message,
+    };
   }
-  return true;
+  return {
+    status: true,
+    message: "candidate admin claim is set",
+  };
 });
 
 export const revokeAdminClaim = onCall( async (request) =>{
@@ -76,29 +102,49 @@ export const revokeAdminClaim = onCall( async (request) =>{
       .where("properties.email", "==", email).get();
   } catch (e) {
     const error:Error = e as Error;
-    return error.message;
+    return {
+      status: false,
+      message: error.message,
+    };
   }
   if (!result?.docs[0]) {
-    return false;
+    return {
+      status: false,
+      message: "caller email not found",
+    };
   }
 
   // make sure candidate email is provided
   const candidateemail = request.data.email;
-  if (!candidateemail) return false;
+  if (!candidateemail) {
+    return {
+      status: false,
+      message: "candidate email required",
+    };
+  }
   candidateemail.toLowerCase();
 
   let user;
   try {
     user = await admin.auth().getUserByEmail(candidateemail);
     if (user.customClaims && !user.customClaims.admin) {
-      return true;
+      return {
+        status: true,
+        message: "candidate did not have admin claim",
+      };
     }
     admin.auth().setCustomUserClaims(user.uid, {admin: null});
   } catch (e) {
     const error:Error = e as Error;
-    return error.message;
+    return {
+      status: false,
+      message: error.message,
+    };
   }
-  return true;
+  return {
+    status: true,
+    message: "candidate admin claim revoked",
+  };
 });
 
 export const isAdminUser = onCall(async (request) => {
