@@ -86,7 +86,7 @@ const UserControls = (props) => {
             </VStack>
         </ContentBox>
         <ContentBox>
-            <Button colorScheme = 'blue'>View signin admin claim</Button>
+            <Button colorScheme = 'blue'>View signin's admin claim</Button>
         </ContentBox>
         <ContentBox>
         </ContentBox>

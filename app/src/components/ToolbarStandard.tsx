@@ -213,7 +213,6 @@ const ToolbarStandard = (props) => {
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
             </MenuList>
         </Menu>
-        {!isSuperUser && <span>&nbsp;&nbsp;</span>}
         {isSuperUser && <>
             <ToolbarVerticalDivider />
             <Box style = {iconWrapperStyles} onClick = {gotoSysadmin}>
@@ -221,9 +220,9 @@ const ToolbarStandard = (props) => {
                     <img style = {iconStyles} src = {appSettingsIcon} />
                 </Tooltip>
             </Box>
-            &nbsp;&nbsp;
             </>
         }
+        <span>&nbsp;&nbsp;</span>
     </Box>
 }
 

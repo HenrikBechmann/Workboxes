@@ -17,6 +17,7 @@ import helpIcon from '../../assets/help.png'
 import uploadIcon from '../../assets/upload.png'
 import databaseIcon from '../../assets/database.png'
 import moreVertIcon from '../../assets/more_vert.png'
+import expandMoreIcon from '../../assets/expand_more.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -130,6 +131,12 @@ const ToolbarWorkspace = (props) => {
         </Box> 
         <Box style = {iconWrapperStyles} >
             <img style = {iconStyles} src = {moreVertIcon} />
+        </Box> 
+        <ToolbarVerticalDivider />
+        <Box style = {iconWrapperStyles} >
+            <Tooltip hasArrow label = 'hide workspace toolbars'>
+                <img style = {iconStyles} src = {expandMoreIcon} />
+            </Tooltip>
         </Box> 
         &nbsp; &nbsp;
     </Box>
