@@ -10,26 +10,27 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
-import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // FirebaseProvider
 
-const firebaseApp = initializeApp(firebaseConfig);
-const FirebaseAppContext = React.createContext(firebaseApp)
+const 
+    firebaseApp = initializeApp(firebaseConfig),
+    FirebaseAppContext = React.createContext(firebaseApp),
 
-const auth = getAuth(firebaseApp)
-const AuthContext = React.createContext(auth)
+    auth = getAuth(firebaseApp),
+    AuthContext = React.createContext(auth),
 
-const UserDataContext = React.createContext(null)
+    UserDataContext = React.createContext(null),
 
-const firestore = getFirestore(firebaseApp)
-const FirestoreContext = React.createContext(firestore)
+    firestore = getFirestore(firebaseApp),
+    FirestoreContext = React.createContext(firestore),
 
-const storage = getStorage(firebaseApp)
-const StorageContext = React.createContext(storage)
+    storage = getStorage(firebaseApp),
+    StorageContext = React.createContext(storage)
 
 const FirebaseProviders = ({children}) => {
 
@@ -51,9 +52,10 @@ export default FirebaseProviders
 // special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
-    const [userData, setUserData] = useState(undefined)
-    const authStateUnsubscribeRef = useRef(null)
-    const isMountedRef = useRef(true)
+    const 
+        [userData, setUserData] = useState(undefined),
+        authStateUnsubscribeRef = useRef(null),
+        isMountedRef = useRef(true)
 
     useEffect(()=>{
 
@@ -71,12 +73,14 @@ export const UserProvider = ({children}) => {
             let userData = null
 
             if (user) {
-                const superUser = {
-                    isSuperUser:false,
-                    errorCondition:false,
-                }
-                const functions = getFunctions();
-                const isSuperUser = httpsCallable(functions, 'isSuperUser');
+                const 
+                    superUser = {
+                        isSuperUser:false,
+                        errorCondition:false,
+                    },
+                    functions = getFunctions(),
+                    isSuperUser = httpsCallable(functions, 'isSuperUser')
+
                 try {
                     const result:any = await isSuperUser()
                     superUser.isSuperUser = result.data.isSuperUser

@@ -1,6 +1,7 @@
 // UserControls.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import { getFunctions, httpsCallable } from "firebase/functions"
 import {
     Text, 
     Button, 
@@ -50,11 +51,39 @@ const UserControls = (props) => {
 
     const [isInvalid, setIsInvalid] = useState(false)
 
-    const  claimAction = (e) => {
-        const actionName = e.target.name
-        const value = claimEmailInputRef.current.value
-        const isValid = claimEmailInputRef.current.reportValidity()
+    async function claimAction(e) {
+        const 
+            actionName = e.target.name,
+            value = claimEmailInputRef.current.value,
+            isValid = claimEmailInputRef.current.reportValidity()
+
+        console.log('actionName, value, isValid',actionName, value, isValid)
+
+        // functions = getFunctions(),
+        // isSuperUser = httpsCallable(functions, 'isSuperUser')
+
         setIsInvalid(!isValid)
+
+        if (isValid) {
+            const 
+                functions = getFunctions(),
+                setAdminClaim = httpsCallable(functions, 'setAdminClaim')
+
+            const adminPack = await setAdminClaim({email:value})
+            console.log('adminPack.data', adminPack.data)
+
+        }
+    }
+
+    async function getAdminStatus(e) {
+
+        const 
+            functions = getFunctions(),
+            isAdminUser = httpsCallable(functions, 'isAdminUser')
+
+        const isAdmin = await isAdminUser()
+        console.log('isAdmin',isAdmin)
+
     }
 
     return <Box ref = {containerElementRef} data-type = 'usercontrols' style = {outerStyle}>
@@ -86,7 +115,7 @@ const UserControls = (props) => {
             </VStack>
         </ContentBox>
         <ContentBox>
-            <Button colorScheme = 'blue'>View signin's admin claim</Button>
+            <Button onClick = {getAdminStatus} colorScheme = 'blue'>View signin's admin claim</Button>
         </ContentBox>
         <ContentBox>
         </ContentBox>
