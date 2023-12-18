@@ -151,7 +151,6 @@ export const isAdminUser = onCall(async (request) => {
   const isAdmin = !!request.auth?.token.admin === true;
   return {
     status: isAdmin,
-    message: "current user admin status",
   };
 });
 
