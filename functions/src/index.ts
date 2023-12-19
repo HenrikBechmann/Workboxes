@@ -30,6 +30,7 @@ export const setAdminClaim = onCall( async (request) =>{
     const error:Error = e as Error;
     return {
       status: false,
+      error: true,
       message: error.message,
     };
   }
@@ -58,6 +59,7 @@ export const setAdminClaim = onCall( async (request) =>{
     const error:Error = e as Error;
     return {
       status: false,
+      error: true,
       message: error.message,
     };
   }
@@ -82,6 +84,7 @@ export const setAdminClaim = onCall( async (request) =>{
     const error:Error = e as Error;
     return {
       status: false,
+      error: true,
       message: error.message,
     };
   }
@@ -104,6 +107,7 @@ export const revokeAdminClaim = onCall( async (request) =>{
     const error:Error = e as Error;
     return {
       status: false,
+      error: true,
       message: error.message,
     };
   }
@@ -138,6 +142,7 @@ export const revokeAdminClaim = onCall( async (request) =>{
     const error:Error = e as Error;
     return {
       status: false,
+      error: true,
       message: error.message,
     };
   }
