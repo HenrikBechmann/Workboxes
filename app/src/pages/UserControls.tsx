@@ -49,30 +49,37 @@ const UserControls = (props) => {
 
     const claimEmailInputRef = useRef(null)
 
-    const [isInvalid, setIsInvalid] = useState(false)
+    const [isInputValid, setIsInputValid] = useState(true)
+    const [isProcessing, setIsProcessing] = useState(false)
 
     async function claimAction(e) {
         const 
             actionName = e.target.name,
-            value = claimEmailInputRef.current.value,
-            isValid = claimEmailInputRef.current.reportValidity()
+            email = claimEmailInputRef.current.value,
+            isInputValid = claimEmailInputRef.current.reportValidity()
 
-        console.log('actionName, value, isValid',actionName, value, isValid)
+        console.log('actionName, value, isInputValid',actionName, email, isInputValid)
 
-        // functions = getFunctions(),
-        // isSuperUser = httpsCallable(functions, 'isSuperUser')
+        if (isInputValid) {
+            setIsProcessing(true)
+            let adminPack
+            const functions = getFunctions()
 
-        setIsInvalid(!isValid)
+            if (actionName == 'grantadmin') {
+                const setAdminClaim = httpsCallable(functions, 'setAdminClaim')
+                adminPack = await setAdminClaim({email})
+            } else { // actionName = 'revokeadmin'
+                const revokeAdminClaim = httpsCallable(functions, 'revokeAdminClaim')
+                adminPack = await revokeAdminClaim({email})
+            }
 
-        if (isValid) {
-            const 
-                functions = getFunctions(),
-                setAdminClaim = httpsCallable(functions, 'setAdminClaim')
-
-            const adminPack = await setAdminClaim({email:value})
             console.log('adminPack.data', adminPack.data)
 
         }
+
+        setIsInputValid(isInputValid)
+        setIsProcessing(false)
+
     }
 
     async function getAdminStatus(e) {
@@ -81,7 +88,14 @@ const UserControls = (props) => {
             functions = getFunctions(),
             isAdminUser = httpsCallable(functions, 'isAdminUser')
 
-        const isAdmin = await isAdminUser()
+        let isAdmin
+        try {
+            isAdmin = await isAdminUser()
+        } catch (e) {
+            console.log('failure to get isAdmin status')
+            return
+        }
+
         console.log('isAdmin',isAdmin)
 
     }
@@ -105,13 +119,14 @@ const UserControls = (props) => {
         </ContentBox>
         <ContentBox>
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <FormControl isInvalid = {isInvalid}>
+                <FormControl isInvalid = {!isInputValid}>
                     <FormLabel>Admin user email:</FormLabel>
                     <Input ref = {claimEmailInputRef} type = 'email'/>
                     <FormHelperText fontSize = 'xs'>For granting the claim, email must be registered in the sysadmins collection</FormHelperText>
                 </FormControl>
                 <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
                 <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
+                {(isProcessing) && <Text>Processing...</Text>}
             </VStack>
         </ContentBox>
         <ContentBox>

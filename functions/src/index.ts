@@ -50,7 +50,7 @@ export const setAdminClaim = onCall( async (request) =>{
   }
 
   // validate the candidate email
-  if (candidateemail) candidateemail = candidateemail.toLowerCase();
+  candidateemail = candidateemail.toLowerCase();
   try {
     result = await db.collection("sysadmins")
       .where("properties.email", "==", candidateemail).get();
@@ -110,19 +110,19 @@ export const revokeAdminClaim = onCall( async (request) =>{
   if (!result?.docs[0]) {
     return {
       status: false,
-      message: "caller email not found",
+      message: "sender email not found",
     };
   }
 
   // make sure candidate email is provided
-  const candidateemail = request.data.email;
+  let candidateemail = request.data.email;
   if (!candidateemail) {
     return {
       status: false,
       message: "candidate email required",
     };
   }
-  candidateemail.toLowerCase();
+  candidateemail = candidateemail.toLowerCase();
 
   let user;
   try {
@@ -133,7 +133,7 @@ export const revokeAdminClaim = onCall( async (request) =>{
         message: "candidate did not have admin claim",
       };
     }
-    admin.auth().setCustomUserClaims(user.uid, {admin: null});
+    admin.auth().setCustomUserClaims(user.uid, null);
   } catch (e) {
     const error:Error = e as Error;
     return {
