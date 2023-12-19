@@ -49,8 +49,9 @@ const UserControls = (props) => {
 
     const claimEmailInputRef = useRef(null)
 
-    const [isInputValid, setIsInputValid] = useState(true)
-    const [isProcessing, setIsProcessing] = useState(false)
+    const [isAdminInputValid, setIsAdminInputValid] = useState(true)
+    const [isAdminProcessing, setIsAdminProcessing] = useState(false)
+    const [returnAdminPack, setReturnAdminPack] = useState(null)
 
     async function claimAction(e) {
         const 
@@ -58,10 +59,9 @@ const UserControls = (props) => {
             email = claimEmailInputRef.current.value,
             isInputValid = claimEmailInputRef.current.reportValidity()
 
-        console.log('actionName, value, isInputValid',actionName, email, isInputValid)
-
         if (isInputValid) {
-            setIsProcessing(true)
+            setIsAdminProcessing(true)
+            setReturnAdminPack(null)
             let adminPack
             const functions = getFunctions()
 
@@ -73,12 +73,12 @@ const UserControls = (props) => {
                 adminPack = await revokeAdminClaim({email})
             }
 
-            console.log('adminPack.data', adminPack.data)
+            setReturnAdminPack(adminPack.data)
 
         }
 
-        setIsInputValid(isInputValid)
-        setIsProcessing(false)
+        setIsAdminInputValid(isInputValid)
+        setIsAdminProcessing(false)
 
     }
 
@@ -119,14 +119,17 @@ const UserControls = (props) => {
         </ContentBox>
         <ContentBox>
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <FormControl isInvalid = {!isInputValid}>
+                <FormControl isInvalid = {!isAdminInputValid}>
                     <FormLabel>Admin user email:</FormLabel>
-                    <Input ref = {claimEmailInputRef} type = 'email'/>
+                    <Input ref = {claimEmailInputRef} type = 'email' autoComplete = 'on'/>
                     <FormHelperText fontSize = 'xs'>For granting the claim, email must be registered in the sysadmins collection</FormHelperText>
                 </FormControl>
                 <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
                 <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
-                {(isProcessing) && <Text>Processing...</Text>}
+                {isAdminProcessing && <Text>Processing...</Text>}
+                {returnAdminPack && <Text>
+                    {`status: ${returnAdminPack.status}; error: ${returnAdminPack.error}; message: ${returnAdminPack.message}`}
+                    </Text>}
             </VStack>
         </ContentBox>
         <ContentBox>
