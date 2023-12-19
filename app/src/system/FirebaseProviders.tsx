@@ -79,12 +79,11 @@ export const UserProvider = ({children}) => {
                         errorCondition:false,
                     },
                     functions = getFunctions(),
-                    isSuperUser = httpsCallable(functions, 'isSuperUser')
+                    isAdminUser = httpsCallable(functions, 'isAdminUser')
 
                 try {
-                    const result:any = await isSuperUser()
-                    superUser.isSuperUser = result.data.isSuperUser
-                    // console.log('result, superUser',result, superUser)
+                    const result:any = await isAdminUser()
+                    superUser.isSuperUser = result.data.status
                 } catch (error) {
                     superUser.errorCondition = true
                 }
