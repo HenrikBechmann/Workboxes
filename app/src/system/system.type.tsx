@@ -1,6 +1,5 @@
 
 const doc = {
-
     class: "system",
     variant: "type",
     type: "system.type",
@@ -48,7 +47,9 @@ const doc = {
                         size: "number",
                     },
                     display_attributes:{
+                        views:{
 
+                        },
                     }
                 },
             },
@@ -114,6 +115,10 @@ const doc = {
                         size: "number",
                     },
                     display_attributes: {
+                        views:{
+                            base:{}
+
+                        }
                     },
                 },
             },
@@ -121,6 +126,12 @@ const doc = {
                 fields:[],
             }
         },
+        views:{
+            // extra-small, small, medium, large, extra-large
+        },
+        settings:{
+
+        }
     },
     commits: {
         created_by: "henrik",
@@ -134,5 +145,4 @@ const doc = {
             seconds: 1702416615,
         },
     },
-
 }
