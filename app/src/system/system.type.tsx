@@ -131,7 +131,8 @@ const doc = {
         },
         settings:{
 
-        }
+        },
+        transitions:[]
     },
     commits: {
         created_by: "henrik",
