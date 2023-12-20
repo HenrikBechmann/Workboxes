@@ -2,12 +2,16 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
+import { doc, getDoc } from "firebase/firestore"
+
 import {
     Text, 
     Button, 
     Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
     Box, VStack, Center
 } from '@chakra-ui/react'
+
+import { useFirestore } from '../system/FirebaseProviders'
 
 import Drawer, { useDrawers } from '../components/Drawer'
 
@@ -42,6 +46,8 @@ const Metadata = (props) => {
    const transferCollectionRef = useRef(null)
    const transferDocumentRef = useRef(null)
 
+   const db = useFirestore()
+
    const {
         drawerProps,
         containerElementRef,
@@ -50,7 +56,17 @@ const Metadata = (props) => {
     } = useDrawers()
 
     async function transferDocument() {
-        
+
+        const docRef = doc(db, "types", "system.type");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
+
     }
 
     // --------------------------- render --------------------
