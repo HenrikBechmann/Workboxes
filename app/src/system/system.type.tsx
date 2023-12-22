@@ -1,4 +1,3 @@
-
 const doc = {
     class: "system",
     variant: "type",
@@ -7,53 +6,24 @@ const doc = {
     version: 0,
     generation: 1,
     relations: {},
-    list_permission_group: "",
-    permissions: [],
+    read_permission: "",
+    mutate_permissions: [],
     counts: [],
-    fields: {
-        root:{
-            metadata: {
-                type: "array",
-                array_type: "map",
-                map_type: {
-                    field_attributes:{
-                        order:"number",
-                        type: "string",
-                        value: "string",
-                        label: "string",
-                    },
-                    input_attributes: {
-                        error_message: "string",
-                        help_message:"string",
-                        min: "number",
-                        max: "number",
-                        minlength: "number",
-                        maxlength: "number",
-                        readonly: "boolean",
-                        required: "boolean",
-                        spellcheck: "",
-                        type: "string",
-                        default:{
-                            lookup: "namespace",
-                            value: "string",
-                        },
-                        change: "namespace",
-                        verify: "namespace",
-                        filter: "string",
-                        format: "string",
-                        placeholder: "",
-                        name: "string",
-                        order: "number",
-                        size: "number",
-                    },
-                    display_attributes:{
-                        views:{
-
-                        },
-                    }
-                },
-            },
-            data:{
+    commits: {
+        created_by: "henrik",
+        created_time: {
+            nanoseconds: 630000000,
+            seconds: 1702416553,
+        },
+        updated_by: "henrik",
+        updated_time: {
+            nanoseconds: 859000000,
+            seconds: 1702416615,
+        },
+    },
+    properties: {
+        defaults:{
+            system:{
                 class: "system",
                 variant: "type",
                 type: "system.type",
@@ -76,21 +46,117 @@ const doc = {
                         seconds: 1702416615,
                     },
                 },
+            },
+            properties:{
+                fields:[],
+                views:{},
+                settings:{},
             }
         },
-        fields:{
-            metadata: {
+        metadata: {
+            views:{
+                xs:{
+                    component:"string",
+                    props:{},
+                    children:{},
+                    filter: "string",
+                },
+                sm:{},
+                md:{},
+                lg:{},
+                xl:{},
+                edit:{},
+            },
+            settings:{
+
+            },
+            transitions:[],
+            structure:{
+                component:"string",
+                props:{},
+                children:{},
+            },
+            system:{
                 type: "array",
                 array_type: "map",
                 map_type: {
-                    field_attributes:{
+                    database:{
+                        type: "string",
+                        value: "string",
+                        name:"string",
+                        ingress:"namespace"
+                    },
+                    model:{
+                        order:"number",
+                        type: "string",
+                        value: "string",
+                        name:"string",
+                        ingress:"namespace"
+                    },
+                    display:{
+                        ingress:"namespace",
+                        views:{
+                            xs:{
+                                component:"string",
+                                props:{},
+                                children:{},
+                                filter: "string",
+                            },
+                            sm:{},
+                            md:{},
+                            lg:{},
+                            xl:{},
+                        },
+                    },
+                    mutate: {
+                        component:"RC",
+                        ingress:"namespace",
+                        props:{},
+                        children:{},
+                        error_message: "string",
+                        help_message:"string",
+                        min: "number",
+                        max: "number",
+                        minlength: "number",
+                        maxlength: "number",
+                        readonly: "boolean",
+                        required: "boolean",
+                        spellcheck: "",
+                        type: "string",
+                        default:{
+                            lookup: "namespace",
+                            value: "string",
+                        },
+                        change: "namespace",
+                        verify: "namespace",
+                        report: "namespace",
+                        filter: "string",
+                        placeholder: "",
+                        name: "string",
+                        order: "number",
+                        size: "number",
+                    },
+                },
+            },
+            properties:{
+                type: "array",
+                array_type: "map",
+                map_type: {
+                    database: {
+                        name: "string",
+                        type: "string",
+                        value: "string | object",
+                        ingress:"namespace",
+                    },
+                    model:{
                         order:"number",
                         required:"boolean",
+                        property:"string",
                         type: "string",
                         value: "string",
                         label: "string",
                     },
-                    input_attributes: {
+                    mutate: {
                         error_message: "string",
                         help_message:"string",
                         min: "number",
@@ -114,36 +180,17 @@ const doc = {
                         order: "number",
                         size: "number",
                     },
-                    display_attributes: {
+                    display: {
                         views:{
-                            base:{}
-
-                        }
+                            xs:{},
+                            sm:{},
+                            md:{},
+                            lg:{},
+                            xl:{},
+                        },
                     },
                 },
             },
-            data:{
-                fields:[],
-            }
-        },
-        views:{
-            // extra-small, small, medium, large, extra-large
-        },
-        settings:{
-
-        },
-        transitions:[]
-    },
-    commits: {
-        created_by: "henrik",
-        created_time: {
-            nanoseconds: 630000000,
-            seconds: 1702416553,
-        },
-        updated_by: "henrik",
-        updated_time: {
-            nanoseconds: 859000000,
-            seconds: 1702416615,
         },
     },
 }
