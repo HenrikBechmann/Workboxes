@@ -1,4 +1,4 @@
-export const systemtype = {
+export const metatype = {
     class: "system",
     variant: "type",
     type: "system.type",
