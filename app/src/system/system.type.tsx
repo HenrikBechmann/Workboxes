@@ -1,4 +1,4 @@
-const doc = {
+export const systemtype = {
     class: "system",
     variant: "type",
     type: "system.type",
