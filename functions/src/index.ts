@@ -9,7 +9,7 @@
 
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import {getFirestore} from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
 import {
   beforeUserCreated,
   beforeUserSignedIn,
@@ -29,7 +29,7 @@ export const updateDatabase = onCall( async (request) => {
   };
 
   const
-    response = {status:false, message:""}, 
+    response = {status:false, id: null, message:""}, 
     isAuthorized = getAuthorization();
 
   if (!isAuthorized) {
@@ -42,6 +42,25 @@ export const updateDatabase = onCall( async (request) => {
     { document, context } = data,
     { operation, collection, documentID } = context,
     db = getFirestore(app);
+
+  switch (operation) {
+    case "set":{ // set
+      db.doc("").set(document)
+      break;
+    }
+    case "update":{ // update
+      db.doc("").update(document)      
+      break;
+    }
+    case "delete":{ // delete
+      db.doc("").delete(document)
+      break
+    }
+    default:{
+      response.message = "unrecognized opeartion requested"
+      return 
+    }
+  }
 
   return response;
 
