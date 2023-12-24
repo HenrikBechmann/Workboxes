@@ -1,7 +1,7 @@
 // Metadata.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
-
+import { getFunctions, httpsCallable } from "firebase/functions"
 import { doc, getDoc } from "firebase/firestore"
 
 import {
@@ -14,6 +14,9 @@ import {
 import { useFirestore } from '../system/FirebaseProviders'
 
 import Drawer, { useDrawers } from '../components/Drawer'
+
+import { metatype } from '../system/system.type'
+
 
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 
@@ -41,10 +44,13 @@ const ContentBox = (props) => {
 
 const Metadata = (props) => {
 
-   const [isTransferProcessing, setIsTransferProcessing] = useState(false)
-   const [returnData, setReturnData] = useState(null)
+   const [isOutTransferProcessing, setIsOutTransferProcessing] = useState(false)
+   const [returnOutData, setReturnOutData] = useState(null)
    const transferCollectionRef = useRef(null)
    const transferDocumentRef = useRef(null)
+
+   const [isInTransferProcessing, setIsInTransferProcessing] = useState(false)
+   const [returnInData, setReturnInData] = useState(null)
 
    const db = useFirestore()
 
@@ -55,7 +61,7 @@ const Metadata = (props) => {
         onOpens,
     } = useDrawers()
 
-    async function transferDocument() {
+    async function transferOutDocument() { // out from database
 
         const docRef = doc(db, "types", "system.type");
         const docSnap = await getDoc(docRef);
@@ -66,6 +72,31 @@ const Metadata = (props) => {
           // docSnap.data() will be undefined in this case
           console.log("No such document!");
         }
+
+    }
+
+    async function transferInDocument() { // in to database
+
+        setIsInTransferProcessing(true)
+        setReturnInData(null)
+        let returnData
+        const functions = getFunctions()
+
+        try {
+            const updateDatabase = httpsCallable(functions, 'updateDatabase')
+            returnData = await updateDatabase({
+                document:metatype, 
+                context:{
+                    operation:'set', 
+                    path:'', collection:'system', documentID:'metatype'}})
+            console.log('returnData', returnData)
+        } catch (e) {
+            console.log('error',e)
+        }
+
+        setReturnInData(returnData.data)
+
+        setIsInTransferProcessing(false)
 
     }
 
@@ -98,9 +129,16 @@ const Metadata = (props) => {
                     <FormLabel>Document:</FormLabel>
                     <Input ref = {transferDocumentRef}/>
                 </FormControl>
-                <Button onClick = {transferDocument} colorScheme = 'blue'>Transfer document to console</Button>
-                {isTransferProcessing && <Text>Processing...</Text>}
-                {returnData && <Text>see the console</Text>}
+                <Button onClick = {transferOutDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
+                {isOutTransferProcessing && <Text>Processing...</Text>}
+                {returnOutData && <Text>see the console</Text>}
+            </VStack>
+        </ContentBox>
+        <ContentBox>
+            <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+                <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer document to console</Button>
+                {isInTransferProcessing && <Text>Processing...</Text>}
+                {returnInData && <Text>Status: {returnInData.status.toString()}, error: {returnInData.error.toString()}, message: {returnInData.message} </Text>}
             </VStack>
         </ContentBox>
         </Box>        

@@ -4,8 +4,12 @@ export const metatype = {
     type: "system.type",
     label: "System root type",
     version: 0,
-    generation: 1,
-    relations: {},
+    generation: 0,
+    relations: {
+        lists:[],
+        supers:[],
+        controllers:[],
+    },
     read_group: "",
     permissions: [],
     counts: [],
@@ -21,6 +25,8 @@ export const metatype = {
             seconds: 1702416615,
         },
     },
+    views:{},
+    settings:{},
     fields: {
         transitions:[],
         defaults:{
@@ -49,7 +55,7 @@ export const metatype = {
                 },
             },
             fields:{
-                fields:[],
+                fields:{},
                 views:{},
                 settings:{},
             }
@@ -69,10 +75,10 @@ export const metatype = {
             },
             settings:{
             },
-            properties:{
-                type: "array",
-                array_type: "map",
+            system:{
+                type: "map",
                 map_type: {
+                    name:"",
                     database:{
                         type: "string",
                         value: "string",
@@ -132,8 +138,8 @@ export const metatype = {
                 },
             },
             fields:{
-                type: "array",
-                array_type: "map",
+                name:"",
+                type: "map",
                 map_type: {
                     database: {
                         name: "string",
@@ -189,6 +195,4 @@ export const metatype = {
             },
         },
     },
-    views:{},
-    settings:{},
 }

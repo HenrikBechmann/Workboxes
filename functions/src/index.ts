@@ -9,7 +9,7 @@
 
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import { getFirestore } from "firebase-admin/firestore";
+import {getFirestore} from "firebase-admin/firestore";
 import {
   beforeUserCreated,
   beforeUserSignedIn,
@@ -17,55 +17,85 @@ import {
 
 const app = admin.initializeApp();
 
+// --
 export const updateDatabase = onCall( async (request) => {
-
   const getAuthorization = () => {
-
     const isAdmin = !!request.auth?.token.admin === true;
     const isAuthorized = isAdmin;
-
     return isAuthorized;
-
   };
 
-  const
-    response = {status:false, id: null, message:""}, 
-    isAuthorized = getAuthorization();
+  const response = {status: false, error: false, message: "", docpath:""};
+  const isAuthorized = getAuthorization();
 
   if (!isAuthorized) {
-    response.message = "database operation is not authorized";
-    return response
-  };
-
-  const  
-    { data } = request,
-    { document, context } = data,
-    { operation, collection, documentID } = context,
-    db = getFirestore(app);
-
-  switch (operation) {
-    case "set":{ // set
-      db.doc("").set(document)
-      break;
-    }
-    case "update":{ // update
-      db.doc("").update(document)      
-      break;
-    }
-    case "delete":{ // delete
-      db.doc("").delete(document)
-      break
-    }
-    default:{
-      response.message = "unrecognized opeartion requested"
-      return 
-    }
+    response.message = "requested database operation is not authorized";
+    return response;
   }
 
-  return response;
+  const {data} = request;
+  const {document, context} = data;
+  const {operation, path, collection, documentID} = context;
+  const db = getFirestore(app);
 
+  const docpath = path + "/" + collection + "/" + documentID;
+  response.docpath = docpath;
+  switch (operation) {
+  // case "add": {
+  //   const id = documentID || db.doc(docpath).id
+  //   docpath += id
+  //   try {
+  //     await db.doc(docpath).set(document)
+  //   } catch(error:any) {
+  //     response.error = true
+  //     response.message = error.message
+  //     return response
+  //   }
+  //   break;
+  // }
+  case "set": {
+    try {
+      await db.doc(docpath).set(document);
+    } catch (e) {
+      const error:Error = e as Error;
+      response.error = true;
+      response.message = error.message;
+      return response;
+    }
+    break;
+  }
+  // case "update":{
+  //   try {
+  //     await db.doc(docpath).update(document)
+  //   } catch(error:any) {
+  //     response.error = true
+  //     response.message = error.message
+  //     return response
+  //   }
+  //   break;
+  // }
+  // case "delete":{
+  //   try {
+  //     await db.doc(docpath).delete(document)
+  //   } catch(error:any) {
+  //     response.error = true
+  //     response.message = error.message
+  //     return response
+  //   }
+  //   break
+  // }
+  default: {
+    response.message = "unrecognized operation requested";
+    return response;
+  }
+  }
+
+  response.message = "database update operation was completed";
+  response.status = true;
+  return response;
 });
 
+// --
 export const setAdminClaim = onCall( async (request) =>{
   // validate the caller
   let email = request.auth?.token.email || null;
@@ -143,6 +173,7 @@ export const setAdminClaim = onCall( async (request) =>{
   };
 });
 
+// --
 export const revokeAdminClaim = onCall( async (request) =>{
   // validate the caller
   let email = request.auth?.token.email || null;
@@ -201,6 +232,7 @@ export const revokeAdminClaim = onCall( async (request) =>{
   };
 });
 
+// --
 export const isAdminUser = onCall(async (request) => {
   const isAdmin = !!request.auth?.token.admin === true;
   return {
@@ -208,6 +240,7 @@ export const isAdminUser = onCall(async (request) => {
   };
 });
 
+// --
 export const isSuperUser = onCall(async (request) => {
   let email = request.auth?.token.email || null;
   if (email) email = email.toLowerCase();
@@ -231,6 +264,7 @@ export const isSuperUser = onCall(async (request) => {
   return isAdmin;
 });
 
+// --
 export const beforecreated = beforeUserCreated(async (event) => {
   const user = event.data;
   let email = user?.email;
@@ -252,6 +286,7 @@ export const beforecreated = beforeUserCreated(async (event) => {
   }
 });
 
+// --
 export const beforesignedin = beforeUserSignedIn(async (event) => {
   const user = event.data;
   let email = user?.email;
