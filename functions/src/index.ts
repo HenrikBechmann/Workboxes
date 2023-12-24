@@ -17,6 +17,36 @@ import {
 
 const app = admin.initializeApp();
 
+export const updateDatabase = onCall( async (request) => {
+
+  const getAuthorization = () => {
+
+    const isAdmin = !!request.auth?.token.admin === true;
+    const isAuthorized = isAdmin;
+
+    return isAuthorized;
+
+  };
+
+  const
+    response = {status:false, message:""}, 
+    isAuthorized = getAuthorization();
+
+  if (!isAuthorized) {
+    response.message = "database operation is not authorized";
+    return response
+  };
+
+  const  
+    { data } = request,
+    { document, context } = data,
+    { operation, collection, documentID } = context,
+    db = getFirestore(app);
+
+  return response;
+
+});
+
 export const setAdminClaim = onCall( async (request) =>{
   // validate the caller
   let email = request.auth?.token.email || null;
