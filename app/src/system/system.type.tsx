@@ -6,22 +6,23 @@ export const metatype = {
     version: 0,
     generation: 1,
     relations: {},
-    read_permission: "",
-    mutate_permissions: [],
+    read_group: "",
+    permissions: [],
     counts: [],
     commits: {
-        created_by: "henrik",
-        created_time: {
+        creator: "henrik",
+        created: {
             nanoseconds: 630000000,
             seconds: 1702416553,
         },
-        updated_by: "henrik",
-        updated_time: {
+        updater: "henrik",
+        updated: {
             nanoseconds: 859000000,
             seconds: 1702416615,
         },
     },
-    properties: {
+    fields: {
+        transitions:[],
         defaults:{
             system:{
                 class: "system",
@@ -31,23 +32,23 @@ export const metatype = {
                 version: 0,
                 generation: 1,
                 relations: {},
-                list_permission_group: "",
+                read_group: "",
                 permissions: [],
                 counts: [],
                 commits: {
-                    created_by: "henrik",
-                    created_time: {
+                    creator: "henrik",
+                    created: {
                         nanoseconds: 630000000,
                         seconds: 1702416553,
                     },
-                    updated_by: "henrik",
-                    updated_time: {
+                    updater: "henrik",
+                    updated: {
                         nanoseconds: 859000000,
                         seconds: 1702416615,
                     },
                 },
             },
-            properties:{
+            fields:{
                 fields:[],
                 views:{},
                 settings:{},
@@ -59,7 +60,6 @@ export const metatype = {
                     component:"string",
                     props:{},
                     children:{},
-                    filter: "string",
                 },
                 sm:{},
                 md:{},
@@ -68,15 +68,8 @@ export const metatype = {
                 edit:{},
             },
             settings:{
-
             },
-            transitions:[],
-            structure:{
-                component:"string",
-                props:{},
-                children:{},
-            },
-            system:{
+            properties:{
                 type: "array",
                 array_type: "map",
                 map_type: {
@@ -87,7 +80,6 @@ export const metatype = {
                         ingress:"namespace"
                     },
                     model:{
-                        order:"number",
                         type: "string",
                         value: "string",
                         name:"string",
@@ -97,6 +89,7 @@ export const metatype = {
                         ingress:"namespace",
                         views:{
                             xs:{
+                                order:"number",
                                 component:"string",
                                 props:{},
                                 children:{},
@@ -108,11 +101,11 @@ export const metatype = {
                             xl:{},
                         },
                     },
-                    mutate: {
+                    edit: {
                         component:"RC",
-                        ingress:"namespace",
                         props:{},
                         children:{},
+                        ingress:"namespace",
                         error_message: "string",
                         help_message:"string",
                         min: "number",
@@ -138,7 +131,7 @@ export const metatype = {
                     },
                 },
             },
-            properties:{
+            fields:{
                 type: "array",
                 array_type: "map",
                 map_type: {
@@ -155,8 +148,9 @@ export const metatype = {
                         type: "string",
                         value: "string",
                         label: "string",
+                        ingress: "namespace"
                     },
-                    mutate: {
+                    edit: {
                         error_message: "string",
                         help_message:"string",
                         min: "number",
@@ -171,6 +165,8 @@ export const metatype = {
                             lookup: "namespace",
                             value: "string",
                         },
+                        ingress: "namespace",
+                        egress:"namespace",
                         change: "namespace",
                         verify: "namespace",
                         filter: "string",
@@ -193,4 +189,6 @@ export const metatype = {
             },
         },
     },
+    views:{},
+    settings:{},
 }
