@@ -138,7 +138,10 @@ const Metadata = (props) => {
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
                 <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer document to console</Button>
                 {isInTransferProcessing && <Text>Processing...</Text>}
-                {returnInData && <Text>Status: {returnInData.status.toString()}, error: {returnInData.error.toString()}, message: {returnInData.message} </Text>}
+                {returnInData && <Text>Status: {returnInData.status.toString()}, 
+                    error: {returnInData.error.toString()}, 
+                    message: {returnInData.message}, 
+                    docpath: {returnInData.docpath} </Text>}
             </VStack>
         </ContentBox>
         </Box>        

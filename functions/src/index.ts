@@ -25,7 +25,7 @@ export const updateDatabase = onCall( async (request) => {
     return isAuthorized;
   };
 
-  const response = {status: false, error: false, message: "", docpath:""};
+  const response = {status: false, error: false, message: "", docpath: ""};
   const isAuthorized = getAuthorization();
 
   if (!isAuthorized) {
@@ -38,7 +38,7 @@ export const updateDatabase = onCall( async (request) => {
   const {operation, path, collection, documentID} = context;
   const db = getFirestore(app);
 
-  const docpath = path + "/" + collection + "/" + documentID;
+  const docpath = path + collection + "/" + documentID;
   response.docpath = docpath;
   switch (operation) {
   // case "add": {
