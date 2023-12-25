@@ -129,14 +129,14 @@ const Metadata = (props) => {
                     <FormLabel>Document:</FormLabel>
                     <Input ref = {transferDocumentRef}/>
                 </FormControl>
-                <Button onClick = {transferOutDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
+                <Button onClick = {transferOutDocument} colorScheme = 'blue'>Transfer document to console</Button>
                 {isOutTransferProcessing && <Text>Processing...</Text>}
                 {returnOutData && <Text>see the console</Text>}
             </VStack>
         </ContentBox>
         <ContentBox>
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer document to console</Button>
+                <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
                 {isInTransferProcessing && <Text>Processing...</Text>}
                 {returnInData && <Text>Status: {returnInData.status.toString()}, 
                     error: {returnInData.error.toString()}, 
