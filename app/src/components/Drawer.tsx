@@ -380,8 +380,6 @@ export const Drawer = (props) => {
             case 'right': { // data entry
                 titleRef.current = 'Edit'
                 Object.assign(drawerStyle,{
-                    // height: '100%',
-                    // width:'auto',
                     top:'auto',
                     right:0,
                     bottom:'auto',
@@ -412,8 +410,6 @@ export const Drawer = (props) => {
             case 'left': { // help
                 titleRef.current = 'Help'
                 Object.assign(drawerStyle,{
-                    // height: '100%',
-                    // width:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:'auto',
@@ -444,8 +440,6 @@ export const Drawer = (props) => {
             case 'top': { // lookup
                 titleRef.current = 'Lookup'
                 Object.assign(drawerStyle,{
-                    // width: '100%',
-                    // height:'auto',
                     top:0,
                     right:'auto',
                     bottom:'auto',
@@ -475,8 +469,6 @@ export const Drawer = (props) => {
             case 'bottom': { // message
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
-                    // width: '100%',
-                    // height:'auto',
                     top:'auto',
                     right:'auto',
                     bottom:0,
@@ -761,14 +753,15 @@ export const Drawer = (props) => {
         <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
         </Box>
-        {drawerState != 'setup' && <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
+        {drawerState != 'setup' && <Box data-type = 'drawer-box' height = '100%' width = '100%'>
+        <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
                           "footer"`}
           gridTemplateRows={'44px 1fr 34px'}
           gridTemplateColumns={'100%'}
         >
-            <GridItem area = 'header'>
+            <GridItem data-type = 'header-area' area = 'header'>
             <Box onClick = {onClose} style = {closeIconStyle} >
                 <Tooltip hasArrow label = "close the drawer">
                   <img style = {iconStyles} src = {closeIcon} />
@@ -795,7 +788,7 @@ export const Drawer = (props) => {
             <GridItem data-type = 'body-area' area = 'body'>
                 Body
             </GridItem>
-            <GridItem area = 'footer'>
+            <GridItem data-type = 'footer-area' area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
                     {(placement == 'top') && 
                         <>
@@ -822,7 +815,8 @@ export const Drawer = (props) => {
                     }
                 </Box>
             </GridItem>
-        </Grid>}
+        </Grid>
+        </Box>}
     </Box>
 }
 
