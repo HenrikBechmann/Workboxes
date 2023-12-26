@@ -18,6 +18,7 @@ import closeIcon from '../../assets/close.png'
 
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
+// for restore after drag-resize and container-resize
 const TRANSITION_CSS = 'visibility .4s, opacity .4s, width .4s, height .4s'
 
 const iconWrapperStyles = {
