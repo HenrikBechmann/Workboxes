@@ -18,6 +18,7 @@ import closeIcon from '../../assets/close.png'
 
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
+const TRANSITION_CSS = 'visibility .4s, opacity .4s, width .4s, height .4s'
 
 const iconWrapperStyles = {
     opacity:0.7,
@@ -142,6 +143,7 @@ export const useDrawers = () => {
     drawerPropsRef = useRef(drawerProps)
 
     const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
+
         const containerDimensions = {
             width:containerElementRef.current.offsetWidth,
             height:containerElementRef.current.offsetHeight
@@ -320,6 +322,7 @@ export const Drawer = (props) => {
 
         // states
         [drawerState, setDrawerState] = useState('ready'),
+        drawerStateRef = useRef(drawerState),
         [drawerLength, setDrawerLength] = useState(0),
         drawerRatioRef = useRef(null),
         
@@ -334,9 +337,15 @@ export const Drawer = (props) => {
             position:'absolute',
             backgroundColor:'#ffffcc', // 'yellow',
             boxSizing:'border-box',
-            opacity:1,
+            // opacity:0,
             visibility:'hidden',
-            transition:'visibility .4s, opacity .4s'
+            // width:0,
+            transition:TRANSITION_CSS
+        }),
+
+        slideStyleRef = useRef<CSSProperties>({
+            width:'100%',
+            height:'100%',
         }),
         
         // control data
@@ -349,13 +358,18 @@ export const Drawer = (props) => {
         drawerLengthRef = useRef(0), // set and revised after first cycle (setup)
         movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
-        minLengthRef = useRef(null)
+        minLengthRef = useRef(null),
+        openParmRef = useRef(openParm)
+
+    // console.log('openParm', openParm, placement)
 
     // console.log('placement, openParm',placement, openParm, maxLengthRef.current)
     // for closures
+    drawerStateRef.current = drawerState
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
     drawerLengthRef.current = drawerLength
+    openParmRef.current = openParm
 
     // ------------------------- core styles -------------------------
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
@@ -556,6 +570,8 @@ export const Drawer = (props) => {
 
         }
 
+        drawerStyleRef.current.transition = 'unset'
+
         return false
     }
 
@@ -646,6 +662,8 @@ export const Drawer = (props) => {
 
         }
 
+        drawerStyleRef.current = {...drawerStyleRef.current,transition:TRANSITION_CSS}
+
         return false;
     }
 
@@ -687,20 +705,53 @@ export const Drawer = (props) => {
         minLengthRef.current = minLength
         maxLengthRef.current = maxLength
 
-        // adjust CSS
-        if (['left','right'].includes(placementRef.current)) {
-            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{width:updatedLength + 'px', height:'100%'})
+        let updateLength
+        if (openParmRef.current == 'closed') {
+            updateLength = 0 // hide
         } else {
-            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updatedLength + 'px', width:'100%'})
+            updateLength = updatedLength
         }
 
-        drawerRatioRef.current = updatedLength/containerLength
+        // console.log('openParmRef.current, placement, updateLength, updatedLength', 
+        //     openParmRef.current, placement, updateLength, updatedLength)
+
+        // adjust CSS
+        if (['left','right'].includes(placementRef.current)) {
+            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{width:updateLength + 'px', height:'100%'})
+        } else {
+            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updateLength + 'px', width:'100%'})
+        }
+
+        drawerRatioRef.current = updateLength === 0? 0:updatedLength/containerLength
         setDrawerLength(updatedLength)
 
     }
 
+    const [isResizing, setIsResizing] = useState(false)
+    const isResizingRef = useRef(false)
+    // const transitionRef = useRef('')
+    const resizingTimeoutIDRef = useRef(null)
+
     // ------------------------------ effect hooks ----------------------------
     useLayoutEffect(() => {
+
+        if (drawerStateRef.current == 'setup') return
+
+        if (!isResizingRef.current) {
+            setIsResizing(true)
+            isResizingRef.current = true
+            // transitionRef.current = drawerStyleRef.current.transition
+            drawerStyleRef.current.transition = 'unset'
+        }
+
+        clearTimeout(resizingTimeoutIDRef.current)
+
+        resizingTimeoutIDRef.current = setTimeout(()=>{
+            isResizingRef.current = false
+            // console.log('resetting transition',transitionRef.current)
+            drawerStyleRef.current.transition = TRANSITION_CSS
+            setIsResizing(false)
+        },1000)
 
         const
             containerLength = 
@@ -718,8 +769,6 @@ export const Drawer = (props) => {
 
     useEffect(()=> {
 
-        // if (drawerState)
-
         switch (drawerState) {
         // case 'setup':
         case 'revisedvisibility':
@@ -732,12 +781,22 @@ export const Drawer = (props) => {
     // update display
     drawerStyleRef.current = useMemo(()=> {
 
-        // console.log('change opacity, placement: openParm',openParm, placement)
+        if (['right','left'].includes(placementRef.current)) {
 
-        if (openParm == 'open') {
-            Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
+            if (openParm == 'open') {
+                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, width:drawerLengthRef.current, height:'100%'})
+            } else {
+                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, width:0, height:'100%'})
+            }
+
         } else {
-            Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
+
+            if (openParm == 'open') {
+                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, height:drawerLengthRef.current, width:'100%'})
+            } else {
+                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, height:0, width:'100%'})
+            }
+
         }
 
         return drawerStyleRef.current
@@ -753,7 +812,7 @@ export const Drawer = (props) => {
         <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
         </Box>
-        {drawerState != 'setup' && <Box data-type = 'drawer-box' height = '100%' width = '100%'>
+        {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
@@ -816,7 +875,7 @@ export const Drawer = (props) => {
                 </Box>
             </GridItem>
         </Grid>
-        </Box>}
+        </Box></Box>}
     </Box>
 }
 
