@@ -13,6 +13,8 @@ import {
 
 import { useFirestore } from '../system/FirebaseProviders'
 
+import { useTypes } from '../system/TribalopolisProvider'
+
 import Drawer, { useDrawers } from '../components/Drawer'
 import Workbox from '../components/Workbox'
 
@@ -54,6 +56,7 @@ const Metadata = (props) => {
    const [returnInData, setReturnInData] = useState(null)
 
    const db = useFirestore()
+   const getType = useTypes()
 
    const {
         drawerProps,

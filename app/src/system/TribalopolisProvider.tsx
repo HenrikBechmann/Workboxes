@@ -1,4 +1,4 @@
-// TibalopolisProvider.tsx
+// TribalopolisProvider.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 // react
@@ -69,3 +69,16 @@ const types = new class {
     }
 }
 
+const TypesContext = React.createContext(null)
+
+export const useTypes = () => {
+    return useContext(TypesContext)
+}
+
+const TribalopolisProvider = ({children}) => {
+    return <TypesContext.Provider value = {types.getType}>
+        {children}
+    </TypesContext.Provider>
+}
+
+export default TribalopolisProvider

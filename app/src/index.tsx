@@ -8,6 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import ismobile from 'is-mobile'
 
 import FirebaseProviders from './system/FirebaseProviders'
+import TribalopolisProvider from './system/TribalopolisProvider'
 import scaffold from './system/scaffold'
 
 export const isMobile = ismobile({featureDetect: true, tablet: true})
@@ -19,7 +20,9 @@ const root = createRoot(document.getElementById('root'))
 root.render(
     <FirebaseProviders>
         <ChakraProvider>
-            <RouterProvider router = {router} />
+            <TribalopolisProvider>
+                <RouterProvider router = {router} />
+            </TribalopolisProvider>
         </ChakraProvider>
     </FirebaseProviders>
 )
