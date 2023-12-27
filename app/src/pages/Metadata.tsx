@@ -104,10 +104,10 @@ const Metadata = (props) => {
 
     return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {drawersState != 'setup' && <>
-            <Drawer {...drawerProps.lookup} />
-            <Drawer {...drawerProps.data} />
-            <Drawer {...drawerProps.messages} />
-            <Drawer {...drawerProps.help} />
+            <Drawer {...drawerProps.lookup} >Lookup Drawer</Drawer>
+            <Drawer {...drawerProps.data} >Data Drawer</Drawer>
+            <Drawer {...drawerProps.messages} >Message Drawer</Drawer>
+            <Drawer {...drawerProps.help} >Help Drawer</Drawer>
         </>}
         <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>

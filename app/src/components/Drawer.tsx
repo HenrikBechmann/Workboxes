@@ -848,7 +848,7 @@ export const Drawer = (props) => {
             </Box>
             </GridItem>
             <GridItem data-type = 'body-area' area = 'body'>
-                Body
+                {props.children}
             </GridItem>
             <GridItem data-type = 'footer-area' area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
