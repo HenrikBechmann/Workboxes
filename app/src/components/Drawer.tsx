@@ -71,25 +71,27 @@ const drawerTypes = {
     MESSAGES:'messages',
 }
 
+
+// ----------------------[ useDrawers ]----------------------
 export const useDrawers = () => {
 
     //-------------------- drawer open functions ----------------
     const openData = () => {
         const component = openDrawer(drawerTypes.DATA, null)
         drawerPropsRef.current[drawerTypes.DATA] = component
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     }
     const openLookup = () => {
         drawerPropsRef.current[drawerTypes.LOOKUP] = openDrawer(drawerTypes.LOOKUP, null)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     }
     const openHelp = () => {
         drawerPropsRef.current[drawerTypes.HELP] = openDrawer(drawerTypes.HELP, null)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     }
     const openMessages = () => {
         drawerPropsRef.current[drawerTypes.MESSAGES] = openDrawer(drawerTypes.MESSAGES, null)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     }
 
     const onOpens = {
@@ -103,22 +105,22 @@ export const useDrawers = () => {
     const onCloseLookup = useCallback(() => {
         drawerPropsRef.current[drawerTypes.LOOKUP] = 
             closeDrawer(drawerTypes.LOOKUP)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
         drawerPropsRef.current[drawerTypes.DATA] = 
             closeDrawer(drawerTypes.DATA)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     },[])
     const onCloseMessages = useCallback(() => {
         drawerPropsRef.current[drawerTypes.MESSAGES] = 
             closeDrawer(drawerTypes.MESSAGES)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     },[])
     const onCloseHelp = useCallback(() => {
         drawerPropsRef.current[drawerTypes.HELP] = 
             closeDrawer(drawerTypes.HELP)
-        setDrawerState('changedrawers')
+        setDrawersState('changedrawers')
     },[])
 
     const onCloses = {
@@ -130,7 +132,7 @@ export const useDrawers = () => {
 
     // ---------------------------- state hooks ----------------------------
     const 
-        [drawerState, setDrawerState] = useState('setup'), // to collect pageElementRef
+        [drawersState, setDrawersState] = useState('setup'), // to collect pageElementRef
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
         containerElementRef = useRef(null), // to pass to drawers
         resizeObserverRef = useRef(null), // to disconnect
@@ -155,9 +157,9 @@ export const useDrawers = () => {
 
         setContainerDimensions(containerDimensions)
 
-        if (drawerState == 'setup') setDrawerState('ready')
+        if (drawersState == 'setup') setDrawersState('ready')
 
-    },[drawerState])
+    },[drawersState])
 
     // ------------------------ effect hooks -----------------------
     useEffect(()=>{
@@ -174,26 +176,26 @@ export const useDrawers = () => {
 
     useEffect(()=>{
 
-        switch (drawerState) {
+        switch (drawersState) {
         case 'setup':
         case 'changedrawers':
-            setDrawerState('ready')
+            setDrawersState('ready')
 
         }
 
-    },[drawerState])
+    },[drawersState])
 
     return {
         drawerProps:drawerPropsRef.current,
         containerElementRef,
-        drawerState,
+        drawersState,
         onOpens,
     }
 
 }
 
-// ----------------------[ useDrawers ]------------------------
-// return key values to host
+// ----------------------[ useDrawerSupport ]------------------------
+// return key values to useDrawers
 
 const useDrawerSupport = (containerElementRef, onCloses) => {
 
@@ -731,10 +733,11 @@ export const Drawer = (props) => {
 
     const [isResizing, setIsResizing] = useState(false)
     const isResizingRef = useRef(false)
-    // const transitionRef = useRef('')
     const resizingTimeoutIDRef = useRef(null)
 
     // ------------------------------ effect hooks ----------------------------
+    
+    // resizing
     useLayoutEffect(() => {
 
         if (drawerStateRef.current == 'setup') return
@@ -742,7 +745,6 @@ export const Drawer = (props) => {
         if (!isResizingRef.current) {
             setIsResizing(true)
             isResizingRef.current = true
-            // transitionRef.current = drawerStyleRef.current.transition
             drawerStyleRef.current.transition = 'unset'
         }
 
@@ -750,7 +752,6 @@ export const Drawer = (props) => {
 
         resizingTimeoutIDRef.current = setTimeout(()=>{
             isResizingRef.current = false
-            // console.log('resetting transition',transitionRef.current)
             drawerStyleRef.current.transition = TRANSITION_CSS
             setIsResizing(false)
         },1000)

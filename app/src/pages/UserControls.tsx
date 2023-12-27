@@ -41,7 +41,7 @@ const UserControls = (props) => {
    const {
         drawerProps,
         containerElementRef,
-        drawerState,
+        drawersState,
         onOpens,
     } = useDrawers()
 
@@ -101,7 +101,7 @@ const UserControls = (props) => {
     }
 
     return <Box ref = {containerElementRef} data-type = 'usercontrols' style = {outerStyle}>
-        {drawerState != 'setup' && <>
+        {drawersState != 'setup' && <>
             <Drawer {...drawerProps.lookup} />
             <Drawer {...drawerProps.data} />
             <Drawer {...drawerProps.messages} />
