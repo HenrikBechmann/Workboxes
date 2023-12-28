@@ -866,7 +866,7 @@ export const Drawer = (props) => {
                     }
                     {(placement == 'right') && 
                         <>
-                            <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button>
+                            <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Apply</Button>
                             <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>
                             <Button size = 'xs' ml = '6px' colorScheme = "blue" >Next</Button> 
                             <Button size = 'xs' ml = '6px' colorScheme = "blue" >Previous</Button>
