@@ -23,7 +23,7 @@ const SysSettings = (props) => {
        
    }
 
-   const onCompletes = {
+   const onCompleteFunctions = {
        data:onCompleteData,
        lookup:onCompleteLookup,
        help:onCompleteHelp,
@@ -34,8 +34,8 @@ const SysSettings = (props) => {
         drawerProps,
         containerElementRef,
         drawersState,
-        onOpens,
-    } = useDrawers(onCompletes)
+        onOpenFunctions,
+    } = useDrawers(onCompleteFunctions)
 
     // --------------------------- render --------------------
 
@@ -48,10 +48,10 @@ const SysSettings = (props) => {
         </>}
         <Text>System settings</Text>
         <>
-        <Button onClick = {onOpens.openDataDrawer} >Data</Button> 
-        <Button onClick = {onOpens.openLookupDrawer }>Lookup</Button> 
-        <Button onClick = {onOpens.openHelpDrawer}>Help</Button> 
-        <Button onClick = {onOpens.openMessagesDrawer}>Messages</Button>
+        <Button onClick = {onOpenFunctions.openDataDrawer} >Data</Button> 
+        <Button onClick = {onOpenFunctions.openLookupDrawer }>Lookup</Button> 
+        <Button onClick = {onOpenFunctions.openHelpDrawer}>Help</Button> 
+        <Button onClick = {onOpenFunctions.openMessagesDrawer}>Messages</Button>
         </>
     </Box>
 

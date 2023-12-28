@@ -14,7 +14,7 @@ import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 import closeIcon from '../../assets/close.png'
 
-// ----------------------[ static CSS values ]--------------------
+// ==========================[ static CSS values ]===============================
 
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
@@ -71,11 +71,59 @@ const drawerTypes = {
     MESSAGES:'messages',
 }
 
+// =============================[ useDrawers ]===========================
+// establish drawers for any context
 
-// ----------------------[ useDrawers ]----------------------
-export const useDrawers = (onCompletes) => {
+export const useDrawers = (onCompleteFunctions) => {
 
-    //-------------------- drawer open functions ----------------
+    //---------------------- container resize support ----------------
+
+    const
+        [drawersState, setDrawersState] = useState('setup'), // to collect pageElementRef
+        [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
+        containerElementRef = useRef(null), // to pass to drawers
+        resizeObserverRef = useRef(null) // to disconnect
+
+    useEffect(()=>{
+
+        const resizeObserver = new ResizeObserver(resizeCallback)
+        resizeObserver.observe(containerElementRef.current) // triggers first drawer sizing
+        resizeObserverRef.current = resizeObserver
+
+        return () => {
+            resizeObserverRef.current.disconnect()
+        }
+
+    },[])
+
+    const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
+
+        const containerDimensions = {
+            width:containerElementRef.current.offsetWidth,
+            height:containerElementRef.current.offsetHeight
+        }
+
+        Object.assign(drawerPropsRef.current, updateDimensions(containerDimensions))
+
+        setContainerDimensions(containerDimensions)
+
+        if (drawersState == 'setup') setDrawersState('ready')
+
+    },[drawersState])
+
+    const updateDimensions = useCallback((containerDimensions) => {
+
+        const drawerProps = drawerPropsRef.current
+        Object.assign(drawerProps.data, { containerDimensions })
+        Object.assign(drawerProps.lookup, { containerDimensions })
+        Object.assign(drawerProps.help, { containerDimensions })
+        Object.assign(drawerProps.messages, { containerDimensions })
+
+    },[])
+
+    //-------------------- drawer open and close functions ----------------
+
+    // open (called by host component)
     const openDataDrawer = (context) => {
         openDrawer(drawerTypes.DATA, context)
         setDrawersState('changedrawers')
@@ -93,43 +141,44 @@ export const useDrawers = (onCompletes) => {
         setDrawersState('changedrawers')
     }
 
-    const onOpens = {
+    // bundle
+    const onOpenFunctions = {
         openDataDrawer,
         openLookupDrawer,
         openHelpDrawer,
         openMessagesDrawer,
     }
 
-    //-------------------- drawer close functions ----------------
+    // close (called by drawer, in response to user action)
     const onCloseLookup = useCallback(() => {
         setDrawerCloseState(drawerTypes.LOOKUP)
-        onCompletes.lookup(null)
+        onCompleteFunctions.lookup(null) // add context
         setDrawersState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
         setDrawerCloseState(drawerTypes.DATA)
-        onCompletes.data(null)
+        onCompleteFunctions.data(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseMessages = useCallback(() => {
         setDrawerCloseState(drawerTypes.MESSAGES)
-        onCompletes.messages(null)
+        onCompleteFunctions.messages(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseHelp = useCallback(() => {
         setDrawerCloseState(drawerTypes.HELP)
-        onCompletes.help(null)
+        onCompleteFunctions.help(null)
         setDrawersState('changedrawers')
     },[])
 
-    const onCloses = {
+    const onCloseFunctions = {
         lookup:onCloseLookup,
         data:onCloseData,
         messages:onCloseMessages,
         help:onCloseHelp,
     }
 
-
+    // utilities
     const openDrawer = useCallback((drawerType, context)=>{
 
         Object.assign(drawerPropsRef.current[drawerType], {isOpen:true, context})
@@ -142,36 +191,16 @@ export const useDrawers = (onCompletes) => {
 
     },[])
 
-    const updateDimensions = useCallback((containerDimensions) => {
-
-        const drawerProps = drawerPropsRef.current
-        Object.assign(drawerProps.data, {
-            containerDimensions})
-        Object.assign(drawerProps.lookup, {
-            containerDimensions})
-        Object.assign(drawerProps.help, {
-            containerDimensions})
-        Object.assign(drawerProps.messages, {
-            containerDimensions})
-
-    },[])
-
-
-    // ---------------------------- state hooks ----------------------------
-    const 
-        [drawersState, setDrawersState] = useState('setup'), // to collect pageElementRef
-        [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
-        containerElementRef = useRef(null), // to pass to drawers
-        resizeObserverRef = useRef(null), // to disconnect
+    // ---------------------------- initialize drawer props ----------------------------
 
     // initialize drawerProps
-    drawerPropsRef = useRef({
+    const drawerPropsRef = useRef({
         lookup:{
             isOpen:false,
             placement: 'top',
             containerElementRef,
             containerDimensions,
-            onClose:onCloses.lookup,
+            onClose:onCloseFunctions.lookup,
             context:null,
         },
         data:{
@@ -179,7 +208,7 @@ export const useDrawers = (onCompletes) => {
             placement: 'right',
             containerElementRef,
             containerDimensions,
-            onClose: onCloses.data,
+            onClose: onCloseFunctions.data,
             context:null,
         },
         messages:{
@@ -187,7 +216,7 @@ export const useDrawers = (onCompletes) => {
             isOpen:false,
             containerElementRef,
             containerDimensions,
-            onClose:onCloses.messages,
+            onClose:onCloseFunctions.messages,
             context:null,
         },
         help:{
@@ -195,38 +224,12 @@ export const useDrawers = (onCompletes) => {
             placement:'left',
             containerElementRef,
             containerDimensions,
-            onClose:onCloses.help,
+            onClose:onCloseFunctions.help,
             context:null,
         },
     })
 
-    const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
-
-        const containerDimensions = {
-            width:containerElementRef.current.offsetWidth,
-            height:containerElementRef.current.offsetHeight
-        }
-
-        Object.assign(drawerPropsRef.current, updateDimensions(containerDimensions))
-
-        setContainerDimensions(containerDimensions)
-
-        if (drawersState == 'setup') setDrawersState('ready')
-
-    },[drawersState])
-
-    // ------------------------ effect hooks -----------------------
-    useEffect(()=>{
-
-        const resizeObserver = new ResizeObserver(resizeCallback)
-        resizeObserver.observe(containerElementRef.current) // triggers first drawer sizing
-        resizeObserverRef.current = resizeObserver
-
-        return () => {
-            resizeObserverRef.current.disconnect()
-        }
-
-    },[])
+    // ------------------------ state change -----------------------
 
     useEffect(()=>{
 
@@ -243,12 +246,12 @@ export const useDrawers = (onCompletes) => {
         drawerProps:drawerPropsRef.current,
         containerElementRef,
         drawersState,
-        onOpens,
+        onOpenFunctions,
     }
 
 }
 
-// -------------------------------[ Drawer ]-----------------------------
+// ================================= [ Drawer ] ======================================
 
 export const Drawer = (props) => {
 
@@ -610,7 +613,7 @@ export const Drawer = (props) => {
 
     //-----------------------------[ end of drag tab section ]-----------------------------
 
-    // -------------------- utility: caclulate drawer length -----------------------------
+    // -------------------- utility: calculate drawer length -----------------------------
     const calculateDrawerLength = () => {
 
         const 

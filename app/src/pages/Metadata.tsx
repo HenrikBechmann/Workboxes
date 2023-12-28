@@ -71,7 +71,7 @@ const Metadata = (props) => {
        
    }
 
-   const onCompletes = {
+   const onCompleteFunctions = {
        data:onCompleteData,
        lookup:onCompleteLookup,
        help:onCompleteHelp,
@@ -82,8 +82,8 @@ const Metadata = (props) => {
         drawerProps,
         containerElementRef,
         drawersState,
-        onOpens,
-    } = useDrawers(onCompletes)
+        onOpenFunctions,
+    } = useDrawers(onCompleteFunctions)
 
     async function transferOutDocument() { // out from database
 
@@ -125,19 +125,19 @@ const Metadata = (props) => {
     }
 
     const openDataDrawer = () => {
-        onOpens.openDataDrawer(null)
+        onOpenFunctions.openDataDrawer(null) // add context
     }
 
     const openLookupDrawer = () => {
-        onOpens.openLookupDrawer(null)
+        onOpenFunctions.openLookupDrawer(null)
     }
 
     const openHelpDrawer = () => {
-        onOpens.openHelpDrawer(null)
+        onOpenFunctions.openHelpDrawer(null)
     }
 
     const openMessageDrawer = () => {
-        onOpens.openMessagesDrawer(null)
+        onOpenFunctions.openMessagesDrawer(null)
     }
 
     // --------------------------- render --------------------
