@@ -38,12 +38,32 @@ const ContentBox = (props) => {
 
 const UserControls = (props) => {
 
+   const onCompleteData = (context) => {
+
+   }
+   const onCompleteLookup = (context) => {
+       
+   }
+   const onCompleteHelp = (context) => {
+       
+   }
+   const onCompleteMessages = (context) => {
+       
+   }
+
+   const onCompletes = {
+       data:onCompleteData,
+       lookup:onCompleteLookup,
+       help:onCompleteHelp,
+       messages:onCompleteMessages,
+   }
+
    const {
         drawerProps,
         containerElementRef,
         drawersState,
         onOpens,
-    } = useDrawers()
+    } = useDrawers(onCompletes)
 
     // --------------------------- render --------------------
 

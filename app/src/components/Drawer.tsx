@@ -73,7 +73,7 @@ const drawerTypes = {
 
 
 // ----------------------[ useDrawers ]----------------------
-export const useDrawers = () => {
+export const useDrawers = (onCompletes) => {
 
     //-------------------- drawer open functions ----------------
     const openData = (context) => {
@@ -105,21 +105,25 @@ export const useDrawers = () => {
     const onCloseLookup = useCallback(() => {
         drawerPropsRef.current[drawerTypes.LOOKUP] = 
             setDrawerCloseState(drawerTypes.LOOKUP)
+        onCompletes.lookup(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
         drawerPropsRef.current[drawerTypes.DATA] = 
             setDrawerCloseState(drawerTypes.DATA)
+        onCompletes.data(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseMessages = useCallback(() => {
         drawerPropsRef.current[drawerTypes.MESSAGES] = 
             setDrawerCloseState(drawerTypes.MESSAGES)
+        onCompletes.messages(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseHelp = useCallback(() => {
         drawerPropsRef.current[drawerTypes.HELP] = 
             setDrawerCloseState(drawerTypes.HELP)
+        onCompletes.help(null)
         setDrawersState('changedrawers')
     },[])
 
@@ -129,6 +133,8 @@ export const useDrawers = () => {
         messages:onCloseMessages,
         help:onCloseHelp,
     }
+
+
 
     // ---------------------------- state hooks ----------------------------
     const 
