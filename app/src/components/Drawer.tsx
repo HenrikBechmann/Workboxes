@@ -76,21 +76,21 @@ const drawerTypes = {
 export const useDrawers = () => {
 
     //-------------------- drawer open functions ----------------
-    const openData = () => {
-        const component = openDrawer(drawerTypes.DATA, null)
+    const openData = (context) => {
+        const component = openDrawer(drawerTypes.DATA, context)
         drawerPropsRef.current[drawerTypes.DATA] = component
         setDrawersState('changedrawers')
     }
-    const openLookup = () => {
-        drawerPropsRef.current[drawerTypes.LOOKUP] = openDrawer(drawerTypes.LOOKUP, null)
+    const openLookup = (context) => {
+        drawerPropsRef.current[drawerTypes.LOOKUP] = openDrawer(drawerTypes.LOOKUP, context)
         setDrawersState('changedrawers')
     }
-    const openHelp = () => {
-        drawerPropsRef.current[drawerTypes.HELP] = openDrawer(drawerTypes.HELP, null)
+    const openHelp = (context) => {
+        drawerPropsRef.current[drawerTypes.HELP] = openDrawer(drawerTypes.HELP, context)
         setDrawersState('changedrawers')
     }
-    const openMessages = () => {
-        drawerPropsRef.current[drawerTypes.MESSAGES] = openDrawer(drawerTypes.MESSAGES, null)
+    const openMessages = (context) => {
+        drawerPropsRef.current[drawerTypes.MESSAGES] = openDrawer(drawerTypes.MESSAGES, context)
         setDrawersState('changedrawers')
     }
 
@@ -104,22 +104,22 @@ export const useDrawers = () => {
     //-------------------- drawer close functions ----------------
     const onCloseLookup = useCallback(() => {
         drawerPropsRef.current[drawerTypes.LOOKUP] = 
-            closeDrawer(drawerTypes.LOOKUP)
+            setDrawerCloseState(drawerTypes.LOOKUP)
         setDrawersState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
         drawerPropsRef.current[drawerTypes.DATA] = 
-            closeDrawer(drawerTypes.DATA)
+            setDrawerCloseState(drawerTypes.DATA)
         setDrawersState('changedrawers')
     },[])
     const onCloseMessages = useCallback(() => {
         drawerPropsRef.current[drawerTypes.MESSAGES] = 
-            closeDrawer(drawerTypes.MESSAGES)
+            setDrawerCloseState(drawerTypes.MESSAGES)
         setDrawersState('changedrawers')
     },[])
     const onCloseHelp = useCallback(() => {
         drawerPropsRef.current[drawerTypes.HELP] = 
-            closeDrawer(drawerTypes.HELP)
+            setDrawerCloseState(drawerTypes.HELP)
         setDrawersState('changedrawers')
     },[])
 
@@ -140,7 +140,7 @@ export const useDrawers = () => {
             drawerTypes, 
             drawerProps, 
             openDrawer,
-            closeDrawer,
+            setDrawerCloseState,
             updateDimensions,
         } = useDrawerSupport(containerElementRef, onCloses),
 
@@ -211,7 +211,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
 
     },[])
 
-    const closeDrawer = useCallback((drawerType) => {
+    const setDrawerCloseState = useCallback((drawerType) => {
 
         const placement = placements[drawerType]
 
@@ -306,7 +306,7 @@ const useDrawerSupport = (containerElementRef, onCloses) => {
         drawerTypes, 
         drawerProps, 
         openDrawer,
-        closeDrawer,
+        setDrawerCloseState,
         updateDimensions,
     }
 }

@@ -104,6 +104,22 @@ const Metadata = (props) => {
 
     }
 
+    const openDataDrawer = () => {
+        onOpens.openData(null)
+    }
+
+    const openLookupDrawer = () => {
+        onOpens.openLookup(null)
+    }
+
+    const openHelpDrawer = () => {
+        onOpens.openHelp(null)
+    }
+
+    const openMessageDrawer = () => {
+        onOpens.openMessages(null)
+    }
+
     // --------------------------- render --------------------
 
     return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
@@ -117,10 +133,10 @@ const Metadata = (props) => {
         <ContentBox>
             <VStack>
                 <Text>User Controls</Text>
-                <Button onClick = {onOpens.openData} >Data</Button> 
-                <Button onClick = {onOpens.openLookup }>Lookup</Button> 
-                <Button onClick = {onOpens.openHelp}>Help</Button> 
-                <Button onClick = {onOpens.openMessages}>Messages</Button>
+                <Button onClick = {openDataDrawer} >Data</Button> 
+                <Button onClick = {openLookupDrawer }>Lookup</Button> 
+                <Button onClick = {openHelpDrawer}>Help</Button> 
+                <Button onClick = {openMessageDrawer}>Messages</Button>
             </VStack>
         </ContentBox>
         <ContentBox>
