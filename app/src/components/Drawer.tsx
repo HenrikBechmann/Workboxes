@@ -14,7 +14,7 @@ import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 import closeIcon from '../../assets/close.png'
 
-// ----------------------[ static values ]--------------------
+// ----------------------[ static CSS values ]--------------------
 
 const MIN_DRAWER_WIDTH = 250
 const MIN_DRAWER_HEIGHT = 100
@@ -76,53 +76,48 @@ const drawerTypes = {
 export const useDrawers = (onCompletes) => {
 
     //-------------------- drawer open functions ----------------
-    const openData = (context) => {
-        const component = openDrawer(drawerTypes.DATA, context)
-        drawerPropsRef.current[drawerTypes.DATA] = component
+    const openDataDrawer = (context) => {
+        openDrawer(drawerTypes.DATA, context)
         setDrawersState('changedrawers')
     }
-    const openLookup = (context) => {
-        drawerPropsRef.current[drawerTypes.LOOKUP] = openDrawer(drawerTypes.LOOKUP, context)
+    const openLookupDrawer = (context) => {
+        openDrawer(drawerTypes.LOOKUP, context)
         setDrawersState('changedrawers')
     }
-    const openHelp = (context) => {
-        drawerPropsRef.current[drawerTypes.HELP] = openDrawer(drawerTypes.HELP, context)
+    const openHelpDrawer = (context) => {
+        openDrawer(drawerTypes.HELP, context)
         setDrawersState('changedrawers')
     }
-    const openMessages = (context) => {
-        drawerPropsRef.current[drawerTypes.MESSAGES] = openDrawer(drawerTypes.MESSAGES, context)
+    const openMessagesDrawer = (context) => {
+        openDrawer(drawerTypes.MESSAGES, context)
         setDrawersState('changedrawers')
     }
 
     const onOpens = {
-        openData,
-        openLookup,
-        openHelp,
-        openMessages,
+        openDataDrawer,
+        openLookupDrawer,
+        openHelpDrawer,
+        openMessagesDrawer,
     }
 
     //-------------------- drawer close functions ----------------
     const onCloseLookup = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.LOOKUP] = 
-            setDrawerCloseState(drawerTypes.LOOKUP)
+        setDrawerCloseState(drawerTypes.LOOKUP)
         onCompletes.lookup(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseData = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.DATA] = 
-            setDrawerCloseState(drawerTypes.DATA)
+        setDrawerCloseState(drawerTypes.DATA)
         onCompletes.data(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseMessages = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.MESSAGES] = 
-            setDrawerCloseState(drawerTypes.MESSAGES)
+        setDrawerCloseState(drawerTypes.MESSAGES)
         onCompletes.messages(null)
         setDrawersState('changedrawers')
     },[])
     const onCloseHelp = useCallback(() => {
-        drawerPropsRef.current[drawerTypes.HELP] = 
-            setDrawerCloseState(drawerTypes.HELP)
+        setDrawerCloseState(drawerTypes.HELP)
         onCompletes.help(null)
         setDrawersState('changedrawers')
     },[])
@@ -135,6 +130,32 @@ export const useDrawers = (onCompletes) => {
     }
 
 
+    const openDrawer = useCallback((drawerType, context)=>{
+
+        Object.assign(drawerPropsRef.current[drawerType], {isOpen:true, context})
+
+    },[])
+
+    const setDrawerCloseState = useCallback((drawerType) => {
+
+        drawerPropsRef.current[drawerType].isOpen = false
+
+    },[])
+
+    const updateDimensions = useCallback((containerDimensions) => {
+
+        const drawerProps = drawerPropsRef.current
+        Object.assign(drawerProps.data, {
+            containerDimensions})
+        Object.assign(drawerProps.lookup, {
+            containerDimensions})
+        Object.assign(drawerProps.help, {
+            containerDimensions})
+        Object.assign(drawerProps.messages, {
+            containerDimensions})
+
+    },[])
+
 
     // ---------------------------- state hooks ----------------------------
     const 
@@ -142,15 +163,42 @@ export const useDrawers = (onCompletes) => {
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
         containerElementRef = useRef(null), // to pass to drawers
         resizeObserverRef = useRef(null), // to disconnect
-        {
-            drawerTypes, 
-            drawerProps, 
-            openDrawer,
-            setDrawerCloseState,
-            updateDimensions,
-        } = useDrawerSupport(containerElementRef, onCloses),
 
-    drawerPropsRef = useRef(drawerProps)
+    // initialize drawerProps
+    drawerPropsRef = useRef({
+        lookup:{
+            isOpen:false,
+            placement: 'top',
+            containerElementRef,
+            containerDimensions,
+            onClose:onCloses.lookup,
+            context:null,
+        },
+        data:{
+            isOpen:false,
+            placement: 'right',
+            containerElementRef,
+            containerDimensions,
+            onClose: onCloses.data,
+            context:null,
+        },
+        messages:{
+            placement:'bottom',
+            isOpen:false,
+            containerElementRef,
+            containerDimensions,
+            onClose:onCloses.messages,
+            context:null,
+        },
+        help:{
+            isOpen: false,
+            placement:'left',
+            containerElementRef,
+            containerDimensions,
+            onClose:onCloses.help,
+            context:null,
+        },
+    })
 
     const resizeCallback = useCallback(()=>{ // to trigger drawer resize,
 
@@ -198,123 +246,6 @@ export const useDrawers = (onCompletes) => {
         onOpens,
     }
 
-}
-
-// ----------------------[ useDrawerSupport ]------------------------
-// return key values to useDrawers
-
-const useDrawerSupport = (containerElementRef, onCloses) => {
-
-    const initializedRef = useRef(false)
-
-    const openDrawer = useCallback((drawerType, context)=>{
-
-        const placement = placements[drawerType]
-
-        Object.assign(componentPropsRef.current[placement], {isOpen:true, context})
-
-        return componentPropsRef.current[placement]
-
-    },[])
-
-    const setDrawerCloseState = useCallback((drawerType) => {
-
-        const placement = placements[drawerType]
-
-        componentPropsRef.current[placement].isOpen = false
-
-        return componentPropsRef.current[placement]
-
-    },[])
-
-    const updateDimensions = useCallback((containerDimensions) => {
-
-        Object.assign(componentPropsRef.current.top, {
-            containerDimensions})
-        Object.assign(componentPropsRef.current.right, {
-            containerDimensions})
-        Object.assign(componentPropsRef.current.bottom, {
-            containerDimensions})
-        Object.assign(componentPropsRef.current.left, {
-            containerDimensions})
-
-        const componentProps = componentPropsRef.current
-        return {
-            lookup:componentProps.top,
-            data:componentProps.right,
-            messages:componentProps.bottom,
-            help:componentProps.left,
-        }
-
-    },[])
-
-    const initializeComponents = () => {
-        if (!initializedRef.current) {
-            const containerDimensions = {} // pre-initialization; updateDimensions is called before first render
-            return {
-                top:{
-                    isOpen:false,
-                    placement: 'top',
-                    containerElementRef,
-                    containerDimensions,
-                    onClose:onCloses.lookup
-                },
-                right:{
-                    isOpen:false,
-                    placement: 'right',
-                    containerElementRef,
-                    containerDimensions,
-                    onClose: onCloses.data,
-                },
-                bottom:{
-                    placement:'bottom',
-                    isOpen:false,
-                    containerElementRef,
-                    containerDimensions,
-                    onClose:onCloses.messages,
-                },
-                left:{
-                    key:'left',
-                    isOpen: false,
-                    placement:'left',
-                    containerElementRef,
-                    containerDimensions,
-                    onClose:onCloses.help,
-                },
-            }
-        }
-    }
-
-    const initializedComponents = initializeComponents()
-
-    const componentPropsRef = useRef(initializedComponents)
-
-    const componentProps = componentPropsRef.current
-
-    const drawerProps = {
-        lookup:componentProps.top,
-        data:componentProps.right,
-        messages:componentProps.bottom,
-        help:componentProps.left,
-    }
-
-    const placements = {
-        data:'right',
-        lookup:'top',
-        help:'left',
-        messages:'bottom',
-    }
-
-    initializedRef.current = true
-
-    // used by the host
-    return {
-        drawerTypes, 
-        drawerProps, 
-        openDrawer,
-        setDrawerCloseState,
-        updateDimensions,
-    }
 }
 
 // -------------------------------[ Drawer ]-----------------------------
@@ -721,9 +652,6 @@ export const Drawer = (props) => {
         } else {
             updateLength = updatedLength
         }
-
-        // console.log('openParmRef.current, placement, updateLength, updatedLength', 
-        //     openParmRef.current, placement, updateLength, updatedLength)
 
         // adjust CSS
         if (['left','right'].includes(placementRef.current)) {

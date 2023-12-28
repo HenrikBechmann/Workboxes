@@ -48,10 +48,10 @@ const SysSettings = (props) => {
         </>}
         <Text>System settings</Text>
         <>
-        <Button onClick = {onOpens.openData} >Data</Button> 
-        <Button onClick = {onOpens.openLookup }>Lookup</Button> 
-        <Button onClick = {onOpens.openHelp}>Help</Button> 
-        <Button onClick = {onOpens.openMessages}>Messages</Button>
+        <Button onClick = {onOpens.openDataDrawer} >Data</Button> 
+        <Button onClick = {onOpens.openLookupDrawer }>Lookup</Button> 
+        <Button onClick = {onOpens.openHelpDrawer}>Help</Button> 
+        <Button onClick = {onOpens.openMessagesDrawer}>Messages</Button>
         </>
     </Box>
 

@@ -125,19 +125,19 @@ const Metadata = (props) => {
     }
 
     const openDataDrawer = () => {
-        onOpens.openData(null)
+        onOpens.openDataDrawer(null)
     }
 
     const openLookupDrawer = () => {
-        onOpens.openLookup(null)
+        onOpens.openLookupDrawer(null)
     }
 
     const openHelpDrawer = () => {
-        onOpens.openHelp(null)
+        onOpens.openHelpDrawer(null)
     }
 
     const openMessageDrawer = () => {
-        onOpens.openMessages(null)
+        onOpens.openMessagesDrawer(null)
     }
 
     // --------------------------- render --------------------
