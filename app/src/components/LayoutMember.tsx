@@ -12,6 +12,7 @@ const bodyStyle = {
     display:'relative', 
     backgroundColor:'ghostwhite',
     borderTop:'1px solid lightgray',
+    overflow:'hidden', // hide drawers
 }
 
 const LayoutMember = (props) => {

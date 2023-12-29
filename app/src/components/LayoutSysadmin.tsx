@@ -12,7 +12,7 @@ const bodyStyle = {
     display:'relative', 
     backgroundColor:'aliceblue',
     borderTop:'1px solid lightgray',
-    overflow:'auto',
+    overflow:'hidden', // hide drawers
 }
 
 const LayoutSysadmin = (props) => {
