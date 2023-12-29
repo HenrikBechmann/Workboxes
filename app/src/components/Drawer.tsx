@@ -791,13 +791,13 @@ export const Drawer = (props) => {
             </GridItem>
             <GridItem data-type = 'footer-area' area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>
-                    {(placement == 'top') && 
+                    {(placement == 'top') && // lookup
                         <>
                             <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Done</Button> 
                             <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>
                         </>
                     }
-                    {(placement == 'right') && 
+                    {(placement == 'right') && // data
                         <>
                             <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >Apply</Button>
                             <Button onClick = {onClose} size = 'xs' ml = '6px'>Cancel</Button>
@@ -805,13 +805,13 @@ export const Drawer = (props) => {
                             <Button size = 'xs' ml = '6px' colorScheme = "blue" >Previous</Button>
                         </>
                     }
-                    {(placement == 'bottom') && 
+                    {(placement == 'bottom') && // messages
                         <>
                             <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >OK</Button>
                             <Button onClick = {onClose} size = 'xs' ml = '6px' >Later</Button>
                         </>
                     }
-                    {(placement == 'left') && 
+                    {(placement == 'left') && // help
                         <Button onClick = {onClose} size = 'xs' ml = '6px' colorScheme = "blue" >OK</Button>
                     }
                 </Box>
