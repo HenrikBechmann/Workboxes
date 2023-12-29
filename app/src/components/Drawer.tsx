@@ -76,10 +76,13 @@ const drawerTypes = {
 
 export const useDrawers = (completeFunctions) => { // callbacks
 
+     //-------------------- bootstrap and changedrawer cycles --------------
+
+     const [drawersState, setDrawersState] = useState('setup') // ''setup to collect pageElementRef; 'changedrawers', 'ready'
+
     //---------------------- container resize support ----------------
 
     const
-        [drawersState, setDrawersState] = useState('setup'), // ''setup to collect pageElementRef; 'changedrawers', 'ready'
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender drawers on resize
         containerElementRef = useRef(null), // container element, to pass to drawers, instantiated by host
         resizeObserverRef = useRef(null) // observe container, ref to disconnect
@@ -243,7 +246,7 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
     },[drawersState])
 
-    return {
+    return { // data for host
         drawerProps:drawerPropsRef.current,
         containerElementRef,
         drawersState,
@@ -263,7 +266,6 @@ export const Drawer = (props) => {
         openParm = isOpen?'open':'closed',
 
         // ----------------------------- state hooks --------------------------
-        isInitializedRef = useRef(false),
 
         // states
         [drawerState, setDrawerState] = useState('ready'),
@@ -288,7 +290,7 @@ export const Drawer = (props) => {
             transition:TRANSITION_CSS
         }),
 
-        slideStyleRef = useRef<CSSProperties>({
+        slideBoxStyleRef = useRef<CSSProperties>({
             width:'100%',
             height:'100%',
         }),
@@ -306,9 +308,6 @@ export const Drawer = (props) => {
         minLengthRef = useRef(null),
         openParmRef = useRef(openParm)
 
-    // console.log('openParm', openParm, placement)
-
-    // console.log('placement, openParm',placement, openParm, maxLengthRef.current)
     // for closures
     drawerStateRef.current = drawerState
     placementRef.current = placement
@@ -316,11 +315,14 @@ export const Drawer = (props) => {
     drawerLengthRef.current = drawerLength
     openParmRef.current = openParm
 
-    // ------------------------- core styles -------------------------
+    // ------------------------- drawer styles -------------------------
+
     const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
 
+        // core styles
         const 
             drawerStyle = drawerStyleRef.current,
+
             tabStyle = {
                 position:'absolute',
                 margin: 0,
@@ -331,10 +333,12 @@ export const Drawer = (props) => {
                 borderLeft:'1px solid gray',
                 display:'flex'
             } as CSSProperties,
+
             tabIconStyle = {
                 opacity:.5
             }
 
+        // enhanced styles
         switch (placement) {
             case 'right': { // data entry
                 titleRef.current = 'Edit'
@@ -425,7 +429,7 @@ export const Drawer = (props) => {
                 })
                 break
             }
-            case 'bottom': { // message
+            case 'bottom': { // messages
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
                     top:'auto',
@@ -475,8 +479,6 @@ export const Drawer = (props) => {
 
         }
 
-        isInitializedRef.current = true
-
         return () => {
 
             if (isMobile) {
@@ -500,7 +502,7 @@ export const Drawer = (props) => {
         isDraggingRef.current = true
         dragContainerRectRef.current = containerElementRef.current.getBoundingClientRect()
         movedLengthRef.current = 0
-        // console.log('starting drag')
+
         const pageElement = containerElementRef.current
         if (isMobile) {
 
@@ -612,9 +614,8 @@ export const Drawer = (props) => {
         return false;
     }
 
-    //-----------------------------[ end of drag tab section ]-----------------------------
-
     // -------------------- utility: calculate drawer length -----------------------------
+
     const calculateDrawerLength = () => {
 
         const 
@@ -753,7 +754,7 @@ export const Drawer = (props) => {
         <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
         </Box>
-        {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
+        {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           templateAreas={`"header"
                           "body"
