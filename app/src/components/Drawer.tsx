@@ -72,17 +72,17 @@ const drawerTypes = {
 }
 
 // =============================[ useDrawers ]===========================
-// establish drawers for any context
+// establish drawers for any container
 
-export const useDrawers = (onCompleteFunctions) => {
+export const useDrawers = (completeFunctions) => { // callbacks
 
     //---------------------- container resize support ----------------
 
     const
-        [drawersState, setDrawersState] = useState('setup'), // to collect pageElementRef
-        [containerDimensions, setContainerDimensions] = useState(null), // to rerender for drawers on resize
-        containerElementRef = useRef(null), // to pass to drawers
-        resizeObserverRef = useRef(null) // to disconnect
+        [drawersState, setDrawersState] = useState('setup'), // ''setup to collect pageElementRef; 'changedrawers', 'ready'
+        [containerDimensions, setContainerDimensions] = useState(null), // to rerender drawers on resize
+        containerElementRef = useRef(null), // container element, to pass to drawers, instantiated by host
+        resizeObserverRef = useRef(null) // observe container, ref to disconnect
 
     useEffect(()=>{
 
@@ -107,9 +107,10 @@ export const useDrawers = (onCompleteFunctions) => {
 
         setContainerDimensions(containerDimensions)
 
-        if (drawersState == 'setup') setDrawersState('ready')
+        // if (drawersState == 'setup') setDrawersState('ready')
 
-    },[drawersState])
+    // },[drawersState])
+    },[])
 
     const updateDimensions = useCallback((containerDimensions) => {
 
@@ -142,7 +143,7 @@ export const useDrawers = (onCompleteFunctions) => {
     }
 
     // bundle
-    const onOpenFunctions = {
+    const openFunctions = {
         openDataDrawer,
         openLookupDrawer,
         openHelpDrawer,
@@ -150,32 +151,32 @@ export const useDrawers = (onCompleteFunctions) => {
     }
 
     // close (called by drawer, in response to user action)
-    const onCloseLookup = useCallback(() => {
+    const closeLookup = useCallback(() => {
         setDrawerCloseState(drawerTypes.LOOKUP)
-        onCompleteFunctions.lookup(null) // add context
+        completeFunctions.lookup(null) // add context
         setDrawersState('changedrawers')
     },[])
-    const onCloseData = useCallback(() => {
+    const closeData = useCallback(() => {
         setDrawerCloseState(drawerTypes.DATA)
-        onCompleteFunctions.data(null)
+        completeFunctions.data(null)
         setDrawersState('changedrawers')
     },[])
-    const onCloseMessages = useCallback(() => {
+    const closeMessages = useCallback(() => {
         setDrawerCloseState(drawerTypes.MESSAGES)
-        onCompleteFunctions.messages(null)
+        completeFunctions.messages(null)
         setDrawersState('changedrawers')
     },[])
-    const onCloseHelp = useCallback(() => {
+    const closeHelp = useCallback(() => {
         setDrawerCloseState(drawerTypes.HELP)
-        onCompleteFunctions.help(null)
+        completeFunctions.help(null)
         setDrawersState('changedrawers')
     },[])
 
-    const onCloseFunctions = {
-        lookup:onCloseLookup,
-        data:onCloseData,
-        messages:onCloseMessages,
-        help:onCloseHelp,
+    const closeFunctions = {
+        lookup:closeLookup,
+        data:closeData,
+        messages:closeMessages,
+        help:closeHelp,
     }
 
     // utilities
@@ -200,7 +201,7 @@ export const useDrawers = (onCompleteFunctions) => {
             placement: 'top',
             containerElementRef,
             containerDimensions,
-            onClose:onCloseFunctions.lookup,
+            onClose:closeFunctions.lookup,
             context:null,
         },
         data:{
@@ -208,7 +209,7 @@ export const useDrawers = (onCompleteFunctions) => {
             placement: 'right',
             containerElementRef,
             containerDimensions,
-            onClose: onCloseFunctions.data,
+            onClose: closeFunctions.data,
             context:null,
         },
         messages:{
@@ -216,7 +217,7 @@ export const useDrawers = (onCompleteFunctions) => {
             isOpen:false,
             containerElementRef,
             containerDimensions,
-            onClose:onCloseFunctions.messages,
+            onClose:closeFunctions.messages,
             context:null,
         },
         help:{
@@ -224,7 +225,7 @@ export const useDrawers = (onCompleteFunctions) => {
             placement:'left',
             containerElementRef,
             containerDimensions,
-            onClose:onCloseFunctions.help,
+            onClose:closeFunctions.help,
             context:null,
         },
     })
@@ -246,7 +247,7 @@ export const useDrawers = (onCompleteFunctions) => {
         drawerProps:drawerPropsRef.current,
         containerElementRef,
         drawersState,
-        onOpenFunctions,
+        openFunctions,
     }
 
 }

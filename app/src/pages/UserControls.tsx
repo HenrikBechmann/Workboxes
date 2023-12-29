@@ -38,32 +38,32 @@ const ContentBox = (props) => {
 
 const UserControls = (props) => {
 
-   const onCompleteData = (context) => {
+   const completeData = (context) => {
 
    }
-   const onCompleteLookup = (context) => {
+   const completeLookup = (context) => {
        
    }
-   const onCompleteHelp = (context) => {
+   const completeHelp = (context) => {
        
    }
-   const onCompleteMessages = (context) => {
+   const completeMessages = (context) => {
        
    }
 
-   const onCompleteFunctions = {
-       data:onCompleteData,
-       lookup:onCompleteLookup,
-       help:onCompleteHelp,
-       messages:onCompleteMessages,
+   const completeFunctions = {
+       data:completeData,
+       lookup:completeLookup,
+       help:completeHelp,
+       messages:completeMessages,
    }
 
    const {
         drawerProps,
         containerElementRef,
         drawersState,
-        onOpenFunctions,
-    } = useDrawers(onCompleteFunctions)
+        openFunctions,
+    } = useDrawers(completeFunctions)
 
     // --------------------------- render --------------------
 
@@ -131,10 +131,10 @@ const UserControls = (props) => {
         <ContentBox>
             <VStack>
                 <Text>User Controls</Text>
-                <Button onClick = {onOpenFunctions.openDataDrawer} >Data</Button> 
-                <Button onClick = {onOpenFunctions.openLookupDrawer }>Lookup</Button> 
-                <Button onClick = {onOpenFunctions.openHelpDrawer}>Help</Button> 
-                <Button onClick = {onOpenFunctions.openMessagesDrawer}>Messages</Button>
+                <Button onClick = {openFunctions.openDataDrawer} >Data</Button> 
+                <Button onClick = {openFunctions.openLookupDrawer }>Lookup</Button> 
+                <Button onClick = {openFunctions.openHelpDrawer}>Help</Button> 
+                <Button onClick = {openFunctions.openMessagesDrawer}>Messages</Button>
             </VStack>
         </ContentBox>
         <ContentBox>

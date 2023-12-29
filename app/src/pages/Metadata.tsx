@@ -58,32 +58,32 @@ const Metadata = (props) => {
    const db = useFirestore()
    const getType = useTypes()
 
-   const onCompleteData = (context) => {
+   const completeData = (context) => {
 
    }
-   const onCompleteLookup = (context) => {
+   const completeLookup = (context) => {
        
    }
-   const onCompleteHelp = (context) => {
+   const completeHelp = (context) => {
        
    }
-   const onCompleteMessages = (context) => {
+   const completeMessages = (context) => {
        
    }
 
-   const onCompleteFunctions = {
-       data:onCompleteData,
-       lookup:onCompleteLookup,
-       help:onCompleteHelp,
-       messages:onCompleteMessages,
+   const completeFunctions = {
+       data:completeData,
+       lookup:completeLookup,
+       help:completeHelp,
+       messages:completeMessages,
    }
 
    const {
         drawerProps,
         containerElementRef,
         drawersState,
-        onOpenFunctions,
-    } = useDrawers(onCompleteFunctions)
+        openFunctions,
+    } = useDrawers(completeFunctions)
 
     async function transferOutDocument() { // out from database
 
@@ -125,19 +125,19 @@ const Metadata = (props) => {
     }
 
     const openDataDrawer = () => {
-        onOpenFunctions.openDataDrawer(null) // add context
+        openFunctions.openDataDrawer(null) // add context
     }
 
     const openLookupDrawer = () => {
-        onOpenFunctions.openLookupDrawer(null)
+        openFunctions.openLookupDrawer(null)
     }
 
     const openHelpDrawer = () => {
-        onOpenFunctions.openHelpDrawer(null)
+        openFunctions.openHelpDrawer(null)
     }
 
     const openMessageDrawer = () => {
-        onOpenFunctions.openMessagesDrawer(null)
+        openFunctions.openMessagesDrawer(null)
     }
 
     // --------------------------- render --------------------
