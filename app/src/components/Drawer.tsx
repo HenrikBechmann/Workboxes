@@ -10,6 +10,8 @@ import {
 
 import { isMobile } from '../index'
 
+import Workbox from './Workbox'
+
 import handleIcon from '../../assets/handle.png'
 import helpIcon from '../../assets/help.png'
 import closeIcon from '../../assets/close.png'
@@ -787,7 +789,9 @@ export const Drawer = (props) => {
             </Box>
             </GridItem>
             <GridItem data-type = 'body-area' area = 'body' position = 'relative'>
+                <Workbox>
                 {props.children}
+                </Workbox>
             </GridItem>
             <GridItem data-type = 'footer-area' area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>

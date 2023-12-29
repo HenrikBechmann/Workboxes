@@ -16,7 +16,7 @@ import { useFirestore } from '../system/FirebaseProviders'
 import { useTypes } from '../system/TribalopolisProvider'
 
 import Drawer, { useDrawers } from '../components/Drawer'
-import Workbox from '../components/Workbox'
+// import Workbox from '../components/Workbox'
 
 import { metatype } from '../system/system.type'
 
@@ -144,10 +144,10 @@ const Metadata = (props) => {
 
     return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
         {drawersState != 'setup' && <>
-            <Drawer {...drawerProps.lookup} >Lookup Drawer</Drawer>
-            <Drawer {...drawerProps.data} ><Workbox>Data Drawer</Workbox></Drawer>
-            <Drawer {...drawerProps.messages} >Message Drawer</Drawer>
-            <Drawer {...drawerProps.help} >Help Drawer</Drawer>
+            <Drawer {...drawerProps.lookup} />
+            <Drawer {...drawerProps.data} />
+            <Drawer {...drawerProps.messages} />
+            <Drawer {...drawerProps.help} />
         </>}
         <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
