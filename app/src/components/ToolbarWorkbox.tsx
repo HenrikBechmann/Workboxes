@@ -14,13 +14,10 @@ import { useUserData, useAuth } from '../system/FirebaseProviders'
 import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
 
 import workboxIcon from '../../assets/workbox.png'
-import notificationsIcon from '../../assets/notifications.png'
-import chatIcon from '../../assets/chat.png'
-import messageIcon from '../../assets/mail.png'
 import helpIcon from '../../assets/help.png'
-import homeIcon from '../../assets/home.png'
-import subscriptionsIcon from '../../assets/subscriptions.png'
-import appSettingsIcon from '../../assets/app_settings.png'
+import listIcon from '../../assets/list.png'
+import profileIcon from '../../assets/profile.png'
+import settingsIcon from '../../assets/settings.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -43,11 +40,27 @@ const iconWrapperStyles = {
     opacity:0.7,
 }
 
+const iconToggleStyles = {
+    width:'24px',
+    height:'24px',
+    display:'inline-block',
+    marginLeft:'12px',
+    opacity:0.7,
+    border: '1px solid black',
+    borderRadius: '12px',
+    padding:'3px',
+}
+
 const iconStyles = {
     height:'20px',
     width:'20px',
 }
 
+const toggleIconStyles = {
+    height:'16px',
+    width:'16px',
+
+}
 const smallerIconStyles = {
     height:'18px', 
     width:'18px'
@@ -108,27 +121,6 @@ const ToolbarWorkbox = (props) => {
         isSuperUser = userData.sysadminStatus.isSuperUser
 
     // --------------------- navigation functions ------------------
-    const 
-        goHome = () => { navigate('/workspace') },
-        gotoNotifications = () => { navigate('/workspace/notifications') },
-        gotoMessages = () => { navigate('/workspace/messages') },
-        gotoChatrooms = () => { navigate('/workspace/chatrooms') },
-        gotoNewsflows = () => { navigate('/workspace/newsflows') },
-        gotoSysadmin = () => { navigate('/sysadmin') },
-        gotoAbout = () => { navigate('/about') },
-        gotoNotices = () => { navigate('/notices') },
-        gotoClassifieds = () => { navigate('/classifieds') },
-        gotoAccount = () => { navigate('/account') },
-        gotoDomains = () => { navigate('/account/domains') },
-        gotoMemberships = () => { navigate('/account/memberships') },
-        gotoSubscriptions = () => { navigate('/account/subscriptions') },
-        logOut = () => {
-            signOut(auth).then(() => {
-              // Sign-out successful.
-            }).catch((error) => {
-              // An error happened.
-            })
-        }
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -137,42 +129,30 @@ const ToolbarWorkbox = (props) => {
                 <WorkboxControl />
             </MenuButton>
             <MenuList>
-                <MenuItem onClick = {gotoClassifieds} >Classifieds</MenuItem>
+                <MenuItem >Classifieds</MenuItem>
                 <MenuDivider />
-                <MenuItem onClick = {gotoNotices}>Notices</MenuItem>
-                <MenuItem onClick = {gotoAbout}>About</MenuItem>
+                <MenuItem >Notices</MenuItem>
             </MenuList>
         </Menu>
         <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} onClick = {gotoNotifications} >
-            <Tooltip hasArrow label = 'Notifications to this account'>
-                <img style = {iconStyles} src = {notificationsIcon} />
+        <Box style = {iconToggleStyles} >
+            <Tooltip hasArrow label = 'Toggle settings pane'>
+                <img style = {toggleIconStyles} src = {settingsIcon} />
             </Tooltip>
         </Box> 
-        <Box style = {iconWrapperStyles} onClick = {gotoMessages} >
-            <Tooltip hasArrow label = 'Direct messages'>
-                <img style = {iconStyles} src = {messageIcon} />
+        <Box style = {iconToggleStyles} >
+            <Tooltip hasArrow label = 'Toggle profile pane'>
+                <img style = {toggleIconStyles} src = {profileIcon} />
             </Tooltip>
         </Box>
-        <Box style = {iconWrapperStyles} onClick = {gotoChatrooms} >
-            <Tooltip hasArrow label = 'Chatrooms with this account'>
-                <img style = {iconStyles} src = {chatIcon} />
+        <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
+            <Tooltip hasArrow label = 'Toggle lists pane'>
+                <img style = {toggleIconStyles} src = {listIcon} />
             </Tooltip>
-        </Box>
-        <Box style = {iconWrapperStyles} onClick = {gotoNewsflows} >
-            <Tooltip hasArrow label = 'Subscribed news flows'>
-                <img style = {iconStyles} src = {subscriptionsIcon} />
-            </Tooltip>
-        </Box>
+        </Box> 
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />
-            </Tooltip>
-        </Box>
-        <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} onClick = {goHome}>
-            <Tooltip hasArrow label = 'Go to the main work page'>
-                <img style = {iconStyles} src = {homeIcon} />
             </Tooltip>
         </Box>
         <span>&nbsp;&nbsp;</span>
