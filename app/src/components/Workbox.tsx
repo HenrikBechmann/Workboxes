@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
 import Toolbar from '../components/Toolbar'
+import ToolbarWorkbox from '../components/ToolbarWorkbox'
 
 const workboxStyle = {
     position:'absolute',
@@ -20,7 +21,7 @@ import {
 const Workbox = (props) => {
     return <Box data-type = 'workbox' style = {workboxStyle} >
         <Toolbar>
-            toolbar
+            <ToolbarWorkbox />
         </Toolbar>
     </Box>
 }
