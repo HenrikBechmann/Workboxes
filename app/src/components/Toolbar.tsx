@@ -131,7 +131,7 @@ const Toolbar = (props) => {
 
     // ------------------------- render --------------------------
     return (
-    <Box style = {menuWrapperStyles}>
+    <Box data-type = 'toolbar-wrapper' style = {menuWrapperStyles}>
         <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
             {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}

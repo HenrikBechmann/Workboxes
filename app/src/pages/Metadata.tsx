@@ -16,7 +16,7 @@ import { useFirestore } from '../system/FirebaseProviders'
 import { useTypes } from '../system/TribalopolisProvider'
 
 import Drawer, { useDrawers } from '../components/Drawer'
-// import Workbox from '../components/Workbox'
+import Workbox from '../components/Workbox'
 
 import { metatype } from '../system/system.type'
 
@@ -24,6 +24,7 @@ import { metatype } from '../system/system.type'
 const outerStyle = {height: '100%', position:'relative'} as CSSProperties
 
 const contentBoxStyle = {
+    position:'relative',
     flexBasis:'auto', 
     flexShrink: 0, 
     margin: '5px',
@@ -32,14 +33,16 @@ const contentBoxStyle = {
     width: '300px', 
     border: '5px outset silver',
     paddingTop: '6px',
-}
+} as CSSProperties
 
 const ContentBox = (props) => {
 
-    const {children} = props
+    const {children, styles} = props
+    const boxStyle = {...contentBoxStyle}
+    Object.assign(boxStyle, styles)
 
-    return <Box style = {contentBoxStyle}>
-            <VStack>
+    return <Box data-type = 'content-box' style = {boxStyle}>
+            <VStack data-type = 'vstack'>
                 {children}
             </VStack>
         </Box>
@@ -134,25 +137,28 @@ const Metadata = (props) => {
             <Drawer {...drawerProps.help} />
         </>}
         <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
-        <ContentBox>
-            <VStack>
-                <Text>User Controls</Text>
-                <Button onClick = {openDataDrawer} >Data</Button> 
-                <Button onClick = {openLookupDrawer }>Lookup</Button> 
-                <Button onClick = {openHelpDrawer}>Help</Button> 
-                <Button onClick = {openMessageDrawer}>Messages</Button>
-            </VStack>
-        </ContentBox>
-        <ContentBox>
-            <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
-                {isInTransferProcessing && <Text>Processing...</Text>}
-                {returnInData && <Text>Status: {returnInData.status.toString()}, 
-                    error: {returnInData.error.toString()}, 
-                    message: {returnInData.message}, 
-                    docpath: {returnInData.docpath} </Text>}
-            </VStack>
-        </ContentBox>
+            <ContentBox styles = {{height:'500px',width:'500px'}}>
+                <Workbox />
+            </ContentBox>
+            <ContentBox>
+                <VStack>
+                    <Text>User Controls</Text>
+                    <Button onClick = {openDataDrawer} >Data</Button> 
+                    <Button onClick = {openLookupDrawer }>Lookup</Button> 
+                    <Button onClick = {openHelpDrawer}>Help</Button> 
+                    <Button onClick = {openMessageDrawer}>Messages</Button>
+                </VStack>
+            </ContentBox>
+            <ContentBox>
+                <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+                    <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
+                    {isInTransferProcessing && <Text>Processing...</Text>}
+                    {returnInData && <Text>Status: {returnInData.status.toString()}, 
+                        error: {returnInData.error.toString()}, 
+                        message: {returnInData.message}, 
+                        docpath: {returnInData.docpath} </Text>}
+                </VStack>
+            </ContentBox>
         </Box>        
     </Box>
 }

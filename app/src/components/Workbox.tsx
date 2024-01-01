@@ -3,6 +3,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
+import Toolbar from '../components/Toolbar'
+
 const workboxStyle = {
     position:'absolute',
     inset:0,
@@ -16,7 +18,11 @@ import {
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
-    return <Box data-type = 'workbox' style = {workboxStyle} >{props.children}</Box>
+    return <Box data-type = 'workbox' style = {workboxStyle} >
+        <Toolbar>
+            toolbar
+        </Toolbar>
+    </Box>
 }
 
 export default Workbox
