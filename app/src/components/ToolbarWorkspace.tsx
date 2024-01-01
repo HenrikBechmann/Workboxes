@@ -125,7 +125,7 @@ const ToolbarWorkspace = (props) => {
             </Tooltip>
         </Box> 
         <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'save workspace config to cloud'>
+            <Tooltip hasArrow label = 'save workspace config to the cloud'>
                 <img style = {iconStyles} src = {uploadIcon} />
             </Tooltip>
         </Box> 

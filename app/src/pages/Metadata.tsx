@@ -47,8 +47,6 @@ const ContentBox = (props) => {
 
 const Metadata = (props) => {
 
-   const [isOutTransferProcessing, setIsOutTransferProcessing] = useState(false)
-   const [returnOutData, setReturnOutData] = useState(null)
    const transferCollectionRef = useRef(null)
    const transferDocumentRef = useRef(null)
 
@@ -84,20 +82,6 @@ const Metadata = (props) => {
         drawersState,
         openFunctions,
     } = useDrawers(completeFunctions)
-
-    async function transferOutDocument() { // out from database
-
-        const docRef = doc(db, "types", "system.type");
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
-        } else {
-          // docSnap.data() will be undefined in this case
-          console.log("No such document!");
-        }
-
-    }
 
     async function transferInDocument() { // in to database
 
@@ -157,21 +141,6 @@ const Metadata = (props) => {
                 <Button onClick = {openLookupDrawer }>Lookup</Button> 
                 <Button onClick = {openHelpDrawer}>Help</Button> 
                 <Button onClick = {openMessageDrawer}>Messages</Button>
-            </VStack>
-        </ContentBox>
-        <ContentBox>
-            <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <FormControl>
-                    <FormLabel>Collection:</FormLabel>
-                    <Input ref = {transferCollectionRef}/>
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Document:</FormLabel>
-                    <Input ref = {transferDocumentRef}/>
-                </FormControl>
-                <Button onClick = {transferOutDocument} colorScheme = 'blue'>Transfer document to console</Button>
-                {isOutTransferProcessing && <Text>Processing...</Text>}
-                {returnOutData && <Text>see the console</Text>}
             </VStack>
         </ContentBox>
         <ContentBox>
