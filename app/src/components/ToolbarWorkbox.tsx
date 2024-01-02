@@ -1,7 +1,7 @@
 // ToolbarWorkbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {CSSProperties} from 'react'
+import React, {useState, useRef, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
@@ -49,6 +49,8 @@ const iconToggleStyles = {
     border: '1px solid black',
     borderRadius: '12px',
     padding:'3px',
+    boxShadow:'none',
+    transition: 'box-shadow 0.4s, backgroundColor 0.4s',
 }
 
 const iconStyles = {
@@ -122,6 +124,55 @@ const ToolbarWorkbox = (props) => {
 
     // --------------------- navigation functions ------------------
 
+    const [toggleValues, setToggleValues] = useState({profile:false, list:false, swap:false})
+    const 
+        profileIconRef = useRef(null),
+        listIconRef = useRef(null),
+        swapIconRef = useRef(null)
+
+
+    const toggleIcon = (event) => {
+        event.preventDefault()
+        const target = event.target
+        const id = target.id
+        switch (id) {
+            case 'profileicon':{
+                if (toggleValues.profile) {
+                    profileIconRef.current.style.backgroundColor = 'transparent'
+                    profileIconRef.current.style.boxShadow = 'none'
+                } else {
+                    profileIconRef.current.style.backgroundColor = 'cyan'
+                    profileIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+                }
+                toggleValues.profile = !toggleValues.profile
+                break
+            }
+            case 'listicon': {
+                if (toggleValues.list) {
+                    listIconRef.current.style.backgroundColor = 'transparent'
+                    listIconRef.current.style.boxShadow = 'none'
+                } else {
+                    listIconRef.current.style.backgroundColor = 'cyan'
+                    listIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+                }
+                toggleValues.list = !toggleValues.list
+                break
+            }
+            case 'swapicon': {
+                if (toggleValues.swap) {
+                    swapIconRef.current.style.backgroundColor = 'transparent'
+                    swapIconRef.current.style.boxShadow = 'none'
+                } else {
+                    swapIconRef.current.style.backgroundColor = 'cyan'
+                    swapIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+                }
+                toggleValues.swap = !toggleValues.swap
+                break
+            }
+        }
+        setToggleValues({...toggleValues})
+    }
+
     // render
     return <Box style = {workboxToolbarStyles}>
         <Menu>
@@ -133,14 +184,14 @@ const ToolbarWorkbox = (props) => {
             </MenuList>
         </Menu>
         <ToolbarVerticalDivider />
-        <Box style = {iconToggleStyles} >
+        <Box onClick = {toggleIcon} ref = {profileIconRef} style = {iconToggleStyles} >
             <Tooltip hasArrow label = 'Toggle profile pane'>
-                <img style = {toggleIconStyles} src = {profileIcon} />
+                <img id = 'profileicon' style = {toggleIconStyles} src = {profileIcon} />
             </Tooltip>
         </Box>
-        <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
+        <Box onClick = {toggleIcon} ref = {listIconRef} style = {iconToggleStyles}>
             <Tooltip hasArrow label = 'Toggle lists pane'>
-                <img style = {toggleIconStyles} src = {listIcon} />
+                <img id = 'listicon' style = {toggleIconStyles} src = {listIcon} />
             </Tooltip>
         </Box> 
         <ToolbarVerticalDivider />
@@ -149,9 +200,9 @@ const ToolbarWorkbox = (props) => {
         <span>&nbsp;&nbsp;</span>
         <Text fontSize = 'sm'>Henrik Bechmann</Text>
         <ToolbarVerticalDivider />
-        <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
+        <Box onClick = {toggleIcon} ref = {swapIconRef} style = {iconToggleStyles} >
             <Tooltip hasArrow label = 'Toggle swap box'>
-                <img style = {toggleIconStyles} src = {swapIcon} />
+                <img id = 'swapicon' style = {toggleIconStyles} src = {swapIcon} />
             </Tooltip>
         </Box>
         <Box style = {iconWrapperStyles} >

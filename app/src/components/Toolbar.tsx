@@ -52,7 +52,7 @@ const Toolbar = (props) => {
     // ----------------------------- state hooks ------------------
     const 
         [toolbarState, setToolbarState] = useState('setup'),
-        { children } = props,
+        { children, scrollerStyles } = props,
         [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
         measurementsRef = useRef(measurements),
         menubarRef = useRef(null),
@@ -61,6 +61,8 @@ const Toolbar = (props) => {
         overflow_leftRef = useRef(false),
         overflow_rightRef = useRef(false),
         resizeObserverRef = useRef(null)
+
+    const scrollbarStylesRef = useRef({...scrollbarStyles, ...scrollerStyles})
 
     // -------------------------- effect hooks --------------
     useEffect(() => {
@@ -136,7 +138,7 @@ const Toolbar = (props) => {
 
             {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
 
-            <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStyles}>
+            <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStylesRef.current}>
         
                 {children}
 

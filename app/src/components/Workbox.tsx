@@ -20,7 +20,7 @@ import {
 
 const Workbox = (props) => {
     return <Box data-type = 'workbox' style = {workboxStyle} >
-        <Toolbar styles = {{justifyContent:'center'}}>
+        <Toolbar scrollerStyles = {{margin:'auto'}}>
             <ToolbarWorkbox />
         </Toolbar>
     </Box>
