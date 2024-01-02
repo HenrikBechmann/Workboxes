@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
-  Tooltip, Box
+  Tooltip, Box, Text
 } from '@chakra-ui/react'
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
@@ -17,7 +17,6 @@ import workboxIcon from '../../assets/workbox.png'
 import helpIcon from '../../assets/help.png'
 import listIcon from '../../assets/list.png'
 import profileIcon from '../../assets/profile.png'
-import settingsIcon from '../../assets/settings.png'
 import swapIcon from '../../assets/swap.png'
 
 // ----------------------------- static values -----------------------------
@@ -28,7 +27,7 @@ const workboxToolbarStyles = {
     flexWrap:'nowrap',
     whitespace:'nowrap',
     alignItems:'center',
-    height:'46px',
+    height:'40px',
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
     borderRadius:'8px',
@@ -76,7 +75,7 @@ const downArrowStyles = {
     fontSize:'small',
 }
 
-const fireIconControlStyles = {
+const workboxIconControlStyles = {
     display:'flex',
     flexWrap:'nowrap',
     alignItems:'center',
@@ -105,7 +104,7 @@ const displayNameStyles = {
 // ---------------------------- embedded components ----------------------------
 const WorkboxControl = (props) => {
     
-    return <Box style = {fireIconControlStyles} >
+    return <Box style = {workboxIconControlStyles} >
         <img style = {iconStyles} src = {workboxIcon} /><span style = {downArrowStyles} >▼</span>
     </Box> 
 }
@@ -144,11 +143,17 @@ const ToolbarWorkbox = (props) => {
                 <img style = {toggleIconStyles} src = {listIcon} />
             </Tooltip>
         </Box> 
+        <ToolbarVerticalDivider />
+        <span>&nbsp;&nbsp;</span>
+        <img style = {avatarStyles} src = {photoURL} />
+        <span>&nbsp;&nbsp;</span>
+        <Text fontSize = 'sm'>Henrik Bechmann</Text>
+        <ToolbarVerticalDivider />
         <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
             <Tooltip hasArrow label = 'Toggle swap box'>
                 <img style = {toggleIconStyles} src = {swapIcon} />
             </Tooltip>
-        </Box> 
+        </Box>
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />

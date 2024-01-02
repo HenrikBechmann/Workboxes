@@ -9,7 +9,7 @@ import { Box } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------
 const workspaceStyle = {
-    height: 'calc(100% - 47px)', 
+    height: 'calc(100% - 40px)', 
     display:'relative', 
     backgroundColor:'ghostwhite',
     borderTop:'1px solid silver',

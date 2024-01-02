@@ -10,12 +10,12 @@ import navBeforeIcon from '../../assets/nav_before.png'
 // --------------------------- static style values ---------
 const menuWrapperStyles = {
     position:'relative',
-    height:'46px',
+    height:'40px',
     width:'100%',
 } as CSSProperties
 
 const menubarStyles = {
-    height:'46px',
+    height:'40px',
     width:'100%',
     display:'flex',
     overflowX:'auto',
@@ -28,7 +28,7 @@ const menubarStyles = {
 const scrollbarStyles = {
     flexBasis:'auto', // these two flex settings allow scroll
     flexShrink:0, // prevent shrink which prevents scroll
-    height:'28px',
+    height:'40px',
     minHeight:0,
 }  as CSSProperties
 
