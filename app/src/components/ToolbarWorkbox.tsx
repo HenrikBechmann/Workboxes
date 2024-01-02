@@ -18,9 +18,10 @@ import helpIcon from '../../assets/help.png'
 import listIcon from '../../assets/list.png'
 import profileIcon from '../../assets/profile.png'
 import settingsIcon from '../../assets/settings.png'
+import swapIcon from '../../assets/swap.png'
 
 // ----------------------------- static values -----------------------------
-const standardToolbarStyles = {
+const workboxToolbarStyles = {
     minHeight:0,
     display:'flex',
     flexDirection:'row',
@@ -29,7 +30,7 @@ const standardToolbarStyles = {
     alignItems:'center',
     height:'46px',
     boxSizing:'border-box',
-    backgroundColor:'#dfecdf', //'#f2f2f2',
+    backgroundColor:'#f2f2f2',
     borderRadius:'8px',
 
 } as CSSProperties
@@ -123,23 +124,16 @@ const ToolbarWorkbox = (props) => {
     // --------------------- navigation functions ------------------
 
     // render
-    return <Box style = {standardToolbarStyles}>
+    return <Box style = {workboxToolbarStyles}>
         <Menu>
             <MenuButton >
                 <WorkboxControl />
             </MenuButton>
             <MenuList>
-                <MenuItem >Classifieds</MenuItem>
-                <MenuDivider />
-                <MenuItem >Notices</MenuItem>
+                <MenuItem >Workbox settings</MenuItem>
             </MenuList>
         </Menu>
         <ToolbarVerticalDivider />
-        <Box style = {iconToggleStyles} >
-            <Tooltip hasArrow label = 'Toggle settings pane'>
-                <img style = {toggleIconStyles} src = {settingsIcon} />
-            </Tooltip>
-        </Box> 
         <Box style = {iconToggleStyles} >
             <Tooltip hasArrow label = 'Toggle profile pane'>
                 <img style = {toggleIconStyles} src = {profileIcon} />
@@ -148,6 +142,11 @@ const ToolbarWorkbox = (props) => {
         <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
             <Tooltip hasArrow label = 'Toggle lists pane'>
                 <img style = {toggleIconStyles} src = {listIcon} />
+            </Tooltip>
+        </Box> 
+        <Box style = {iconToggleStyles} backgroundColor = 'cyan!'>
+            <Tooltip hasArrow label = 'Toggle swap box'>
+                <img style = {toggleIconStyles} src = {swapIcon} />
             </Tooltip>
         </Box> 
         <Box style = {iconWrapperStyles} >
