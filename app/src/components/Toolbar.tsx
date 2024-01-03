@@ -35,15 +35,47 @@ const scrollbarStyles = {
 const navBeforeStyles = {
     position:'absolute',
     left:'0px',
-    top:'2px',
-    opacity:0.75
+    top:'6px',
+    width:'20px',
+    height:'24px',
+    opacity:0.75,
+    overflow:'clip',
+    backgroundColor:'white',
+    border:'1px solid gray',
+    borderLeft:'transparent',
+    boxSizing:'border-box',
+    borderRadius:'0 12px 12px 0',
+} as CSSProperties
+
+const navBeforeIconStyles = {
+    position:'absolute',
+    left:'0',
+    top:'0px',
+    height:'24px',
+    width:'24px',
+} as CSSProperties
+
+const navAfterIconStyles = {
+    position:'absolute',
+    right:'0px',
+    top:'0px',
+    height:'24px',
+    width:'24px',
 } as CSSProperties
 
 const navNextStyles = {
     position:'absolute',
     right:'0px',
-    top:'2px',
-    opacity:0.75
+    top:'6px',
+    width:'20px',
+    height:'24px',
+    opacity:0.75,
+    overflow:'clip',
+    backgroundColor:'white',
+    border:'1px solid gray',
+    borderRight:'transparent',
+    boxSizing:'border-box',
+    borderRadius:'12px 0 0 12px',
 } as CSSProperties
 
 // ------------------------------- Toolbar component --------------------------------
@@ -136,7 +168,11 @@ const Toolbar = (props) => {
     <Box data-type = 'toolbar-wrapper' style = {menuWrapperStyles}>
         <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
-            {overflow_leftRef.current && <img data-type = 'left-chevron' style = {navBeforeStyles} src = {navBeforeIcon} />}
+            {overflow_leftRef.current && 
+                <Box style = {navBeforeStyles} ><Box width = '24px' height = '24px' position = 'absolute' right = '0px'>
+                    <img data-type = 'left-chevron' style = {navBeforeIconStyles} src = {navBeforeIcon} />
+                </Box></Box>
+            }
 
             <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStylesRef.current}>
         
@@ -144,7 +180,11 @@ const Toolbar = (props) => {
 
             </Box>
 
-            {overflow_rightRef.current && <img data-type = 'right-chevron' style = {navNextStyles} src = {navNextIcon} />}
+            {overflow_rightRef.current && 
+                <Box style = {navNextStyles} ><Box width = '24px' height = '24px' position = 'absolute' left = '0px'>
+                    <img data-type = 'right-chevron' style = {navAfterIconStyles} src = {navNextIcon} />
+                </Box></Box>
+            }
         
         </Box>
     </Box>
