@@ -19,6 +19,58 @@ import listIcon from '../../assets/list.png'
 import profileIcon from '../../assets/profile.png'
 import swapIcon from '../../assets/swap.png'
 
+const ToggleIcon = (props) => {
+
+    const { icon } = props
+
+    const toggleIconRef = useRef(null)
+
+    const [toggleValue, setToggleValue] = useState(false)
+
+    const iconBoxToggleStyles = {
+        width:'24px',
+        height:'24px',
+        display:'inline-block',
+        marginLeft:'12px',
+        opacity:0.7,
+        border: '1px solid black',
+        borderRadius: '12px',
+        padding:'3px',
+        boxShadow:'none',
+        transition: 'box-shadow 0.2s, backgroundColor 0.2s',
+    }
+
+    const iconToggleStyles = {
+        height:'16px',
+        width:'16px',
+
+    }
+
+    const toggleIcon = (event) => {
+        event.preventDefault()
+        if (toggleValue) {
+            toggleIconRef.current.style.backgroundColor = 'transparent'
+            toggleIconRef.current.style.boxShadow = 'none'
+        } else {
+            toggleIconRef.current.style.backgroundColor = 'chartreuse'
+            toggleIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+        }
+        setToggleValue(!toggleValue)
+    }
+
+    return <Box onClick = {toggleIcon} ref = {toggleIconRef} style = {iconBoxToggleStyles} >
+        <Tooltip hasArrow label = 'Toggle profile pane'>
+            <img id = 'profileicon' style = {iconToggleStyles} src = {icon} />
+        </Tooltip>
+    </Box>
+
+}
+
+const useToggleIcon = (icon) => {
+    const toggleStatus = false
+    return [toggleStatus, ToggleIcon]
+}
+
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
     minHeight:0,
@@ -30,7 +82,7 @@ const workboxToolbarStyles = {
     height:'40px',
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
-    borderRadius:'8px',
+    borderRadius:'8px 8px 0 0',
 
 } as CSSProperties
 
@@ -50,7 +102,7 @@ const iconToggleStyles = {
     borderRadius: '12px',
     padding:'3px',
     boxShadow:'none',
-    transition: 'box-shadow 0.4s, backgroundColor 0.4s',
+    transition: 'box-shadow 0.2s, backgroundColor 0.2s',
 }
 
 const iconStyles = {
@@ -86,11 +138,10 @@ const workboxIconControlStyles = {
     marginLeft:'6px',
 } as CSSProperties
 
-const avatarStyles = {
+const itemIconStyles = {
     width:'24px', 
     height:'24px', 
     borderRadius:'12px',
-    // display:'inline-block',
 }
 
 const displayNameStyles = {
@@ -141,7 +192,7 @@ const ToolbarWorkbox = (props) => {
                     profileIconRef.current.style.backgroundColor = 'transparent'
                     profileIconRef.current.style.boxShadow = 'none'
                 } else {
-                    profileIconRef.current.style.backgroundColor = 'cyan'
+                    profileIconRef.current.style.backgroundColor = 'chartreuse'
                     profileIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
                 }
                 toggleValues.profile = !toggleValues.profile
@@ -152,7 +203,7 @@ const ToolbarWorkbox = (props) => {
                     listIconRef.current.style.backgroundColor = 'transparent'
                     listIconRef.current.style.boxShadow = 'none'
                 } else {
-                    listIconRef.current.style.backgroundColor = 'cyan'
+                    listIconRef.current.style.backgroundColor = 'chartreuse'
                     listIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
                 }
                 toggleValues.list = !toggleValues.list
@@ -163,7 +214,7 @@ const ToolbarWorkbox = (props) => {
                     swapIconRef.current.style.backgroundColor = 'transparent'
                     swapIconRef.current.style.boxShadow = 'none'
                 } else {
-                    swapIconRef.current.style.backgroundColor = 'cyan'
+                    swapIconRef.current.style.backgroundColor = 'chartreuse'
                     swapIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
                 }
                 toggleValues.swap = !toggleValues.swap
@@ -196,7 +247,7 @@ const ToolbarWorkbox = (props) => {
         </Box> 
         <ToolbarVerticalDivider />
         <span>&nbsp;&nbsp;</span>
-        <img style = {avatarStyles} src = {photoURL} />
+        <img style = {itemIconStyles} src = {photoURL} />
         <span>&nbsp;&nbsp;</span>
         <Text fontSize = 'sm'>Henrik Bechmann</Text>
         <ToolbarVerticalDivider />
