@@ -19,58 +19,6 @@ import listIcon from '../../assets/list.png'
 import profileIcon from '../../assets/profile.png'
 import swapIcon from '../../assets/swap.png'
 
-const ToggleIcon = (props) => {
-
-    const { icon } = props
-
-    const toggleIconRef = useRef(null)
-
-    const [toggleValue, setToggleValue] = useState(false)
-
-    const iconBoxToggleStyles = {
-        width:'24px',
-        height:'24px',
-        display:'inline-block',
-        marginLeft:'12px',
-        opacity:0.7,
-        border: '1px solid black',
-        borderRadius: '12px',
-        padding:'3px',
-        boxShadow:'none',
-        transition: 'box-shadow 0.2s, backgroundColor 0.2s',
-    }
-
-    const iconToggleStyles = {
-        height:'16px',
-        width:'16px',
-
-    }
-
-    const toggleIcon = (event) => {
-        event.preventDefault()
-        if (toggleValue) {
-            toggleIconRef.current.style.backgroundColor = 'transparent'
-            toggleIconRef.current.style.boxShadow = 'none'
-        } else {
-            toggleIconRef.current.style.backgroundColor = 'chartreuse'
-            toggleIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
-        }
-        setToggleValue(!toggleValue)
-    }
-
-    return <Box onClick = {toggleIcon} ref = {toggleIconRef} style = {iconBoxToggleStyles} >
-        <Tooltip hasArrow label = 'Toggle profile pane'>
-            <img id = 'profileicon' style = {iconToggleStyles} src = {icon} />
-        </Tooltip>
-    </Box>
-
-}
-
-const useToggleIcon = (icon) => {
-    const toggleStatus = false
-    return [toggleStatus, ToggleIcon]
-}
-
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
     minHeight:0,
