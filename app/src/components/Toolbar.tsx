@@ -36,16 +36,16 @@ const navBeforeStyles = {
     zIndex:1,
     position:'absolute',
     left:'0px',
-    top:'6px',
+    top:'3px',
     width:'20px',
-    height:'24px',
+    height:'32px',
     opacity:0.75,
     overflow:'clip',
     backgroundColor:'white',
     border:'2px solid gray',
     borderLeft:'transparent',
     boxSizing:'border-box',
-    borderRadius:'0 12px 12px 0',
+    borderRadius:'0 16px 16px 0',
 } as CSSProperties
 
 const navBeforeIconStyles = {
@@ -68,16 +68,16 @@ const navNextStyles = {
     zIndex:1,
     position:'absolute',
     right:'0px',
-    top:'6px',
+    top:'3px',
     width:'20px',
-    height:'24px',
+    height:'32px',
     opacity:0.75,
     overflow:'clip',
     backgroundColor:'white',
     border:'2px solid gray',
     borderRight:'transparent',
     boxSizing:'border-box',
-    borderRadius:'12px 0 0 12px',
+    borderRadius:'16px 0 0 16px',
 } as CSSProperties
 
 // ------------------------------- Toolbar component --------------------------------
@@ -171,7 +171,7 @@ const Toolbar = (props) => {
         <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
             {overflow_leftRef.current && 
-                <Box style = {navBeforeStyles} ><Box width = '24px' height = '24px' position = 'absolute' right = '0px'>
+                <Box style = {navBeforeStyles} ><Box width = '24px' height = '24px' top = '2px' position = 'absolute' right = '0px'>
                     <img data-type = 'left-chevron' style = {navBeforeIconStyles} src = {navBeforeIcon} />
                 </Box></Box>
             }
@@ -183,7 +183,7 @@ const Toolbar = (props) => {
             </Box>
 
             {overflow_rightRef.current && 
-                <Box style = {navNextStyles} ><Box width = '24px' height = '24px' position = 'absolute' left = '0px'>
+                <Box style = {navNextStyles} ><Box width = '24px' height = '24px' top = '2px' position = 'absolute' left = '0px'>
                     <img data-type = 'right-chevron' style = {navAfterIconStyles} src = {navNextIcon} />
                 </Box></Box>
             }
