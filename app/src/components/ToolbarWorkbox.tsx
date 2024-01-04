@@ -12,6 +12,7 @@ import {
 import { useUserData, useAuth } from '../system/FirebaseProviders'
 
 import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
+import { useToggleIcon } from './ToggleIcon'
 
 import workboxIcon from '../../assets/workbox.png'
 import helpIcon from '../../assets/help.png'
@@ -113,6 +114,7 @@ const WorkboxControl = (props) => {
 // --------------------------- component ----------------------------
 const ToolbarWorkbox = (props) => {
 
+    console.log('running ToolbarWorkbox')
     // ------------------------------ hooks ------------------------
     const 
         navigate = useNavigate(),
@@ -172,6 +174,9 @@ const ToolbarWorkbox = (props) => {
         setToggleValues({...toggleValues})
     }
 
+    const toggleOnRef = useRef(false)
+    const listToggle = useToggleIcon({icon:listIcon, tooltip:'Toggle lists pane',toggleOnRef, disabled:false })
+
     // render
     return <Box style = {workboxToolbarStyles}>
         <Menu>
@@ -193,6 +198,7 @@ const ToolbarWorkbox = (props) => {
                 <img id = 'listicon' style = {toggleIconStyles} src = {listIcon} />
             </Tooltip>
         </Box> 
+        {listToggle}
         <ToolbarVerticalDivider />
         <span>&nbsp;&nbsp;</span>
         <img style = {itemIconStyles} src = {photoURL} />

@@ -1,7 +1,7 @@
 // ToggleIcon.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useEffect, useRef, CSSProperties} from 'react'
+import React, {useState, useEffect, useRef, useCallback, CSSProperties} from 'react'
 import {
   Tooltip, Box
 } from '@chakra-ui/react'
@@ -23,11 +23,11 @@ const ToggleIcon = (props) => {
 
     const { icon, toggleOn, tooltip, disabled, callback } = props
 
-    const toggleIconImgRef = useRef(null)
+    console.log('running ToggleIcon: toggleOn',toggleOn)
 
-    const [toggleValue, setToggleValue] = useState(false)
-    const toggleValueRef = useRef(null)
-    toggleValueRef.current = toggleValue
+    const toggleIconElementRef = useRef(null)
+
+    const toggleValueRef = useRef(false)
 
     const iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles)
 
@@ -36,14 +36,6 @@ const ToggleIcon = (props) => {
         width:'16px',
 
     })
-
-    useEffect(()=>{
-
-        if (toggleValueRef.current !== toggleOn) {
-            setToggleValue(toggleOn)
-        }
-
-    },[toggleOn])
 
     useEffect(()=>{
 
@@ -56,21 +48,35 @@ const ToggleIcon = (props) => {
 
     },[disabled])
 
+    const setVisible = (toggleOn) => {
+        if (!toggleIconElementRef.current) return
+        if (!toggleOn) {
+            toggleIconElementRef.current.style.backgroundColor = 'transparent'
+            toggleIconElementRef.current.style.boxShadow = 'none'
+        } else {
+            toggleIconElementRef.current.style.backgroundColor = 'chartreuse'
+            toggleIconElementRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+        }
+    }
+
+    if (toggleOn !== toggleValueRef.current) {
+        setVisible(toggleOn)
+        toggleValueRef.current = toggleOn
+    }
+
+    useEffect(()=>{
+        setVisible(toggleOn)
+    },[])
+
     const toggleIcon = (event) => {
         if (disabled) return
         event.preventDefault()
-        if (toggleValue) {
-            toggleIconImgRef.current.style.backgroundColor = 'transparent'
-            toggleIconImgRef.current.style.boxShadow = 'none'
-        } else {
-            toggleIconImgRef.current.style.backgroundColor = 'chartreuse'
-            toggleIconImgRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
-        }
-        setToggleValue(!toggleValue)
-        callback && callback(toggleValue)
+        setVisible(!toggleOn)
+
+        callback && callback(!toggleOn)
     }
 
-    return <Box onClick = {toggleIcon} ref = {toggleIconImgRef} style = {iconBoxToggleStylesRef.current} >
+    return <Box onClick = {toggleIcon} ref = {toggleIconElementRef} style = {iconBoxToggleStylesRef.current} >
         <Tooltip hasArrow label = {tooltip}>
             <img style = {iconToggleStylesRef.current} src = {icon} />
         </Tooltip>
@@ -78,9 +84,30 @@ const ToggleIcon = (props) => {
 
 }
 
-export const useToggleIcon = ({icon, tooltip, toggleOn, disabled, callback}) => {
-    const toggleComponentRef = useRef(<ToggleIcon />)
-    const toggleState = true
-    return [toggleState, toggleComponentRef.current]
-}
+// toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
+export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabled}) => {
+    const [useToggleState, setUseToggleState] = useState(toggleOnRef.current)
+    console.log('running useToggleIcon: toggleOnRef.current, useToggleState',toggleOnRef.current, useToggleState)
+    // const toggleStateSettingRef = useRef(null)
+    // toggleStateSettingRef.current = toggleOnRef.current
+    // const toggleStateUserRef = useRef(toggleOnRef.current)
+    // if (toggleStateUserRef.current !== toggleStateSettingRef.current) {
+    //     toggleStateUserRef.current = toggleStateSettingRef.current
+    // }
 
+    const userChangeCallback = useCallback((toggleOn) =>{
+
+        console.log('running callback: toggleOn',toggleOn)
+        toggleOnRef.current = toggleOn
+        // if (toggleOn !== toggleStateSettingRef.current) {
+        //     console.log('setting useToggleState',toggleOn)
+        //     toggleStateSettingRef.current = toggleStateUserRef.current = toggleOn
+            setUseToggleState(toggleOn) // creates host cycle
+        // }
+
+    },[])
+
+    return <ToggleIcon 
+        icon = {icon} tooltop = {tooltip} toggleOn = {toggleOnRef.current} disabled = {disabled} callback = {userChangeCallback} />
+ 
+}
