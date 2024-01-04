@@ -33,6 +33,7 @@ const scrollbarStyles = {
 }  as CSSProperties
 
 const navBeforeStyles = {
+    zIndex:1,
     position:'absolute',
     left:'0px',
     top:'6px',
@@ -41,7 +42,7 @@ const navBeforeStyles = {
     opacity:0.75,
     overflow:'clip',
     backgroundColor:'white',
-    border:'1px solid gray',
+    border:'2px solid gray',
     borderLeft:'transparent',
     boxSizing:'border-box',
     borderRadius:'0 12px 12px 0',
@@ -64,6 +65,7 @@ const navAfterIconStyles = {
 } as CSSProperties
 
 const navNextStyles = {
+    zIndex:1,
     position:'absolute',
     right:'0px',
     top:'6px',
@@ -72,7 +74,7 @@ const navNextStyles = {
     opacity:0.75,
     overflow:'clip',
     backgroundColor:'white',
-    border:'1px solid gray',
+    border:'2px solid gray',
     borderRight:'transparent',
     boxSizing:'border-box',
     borderRadius:'12px 0 0 12px',
