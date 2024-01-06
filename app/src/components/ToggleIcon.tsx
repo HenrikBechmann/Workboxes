@@ -51,7 +51,7 @@ const ToggleIcon = (props) => {
         iconBoxToggleStylesRef.current = styles
     }
 
-    if (toggleOn !== toggleValueRef.current || disabled !== disabledValueRef.current) {
+    if (toggleOn !== toggleValueRef.current || disabled !== disabledValueRef.current) { // change
         setDisplay(toggleOn)
         toggleValueRef.current = toggleOn
         disabledValueRef.current = disabled
@@ -61,10 +61,9 @@ const ToggleIcon = (props) => {
         setDisplay(toggleOn)
     },[])
 
-    const toggleIcon = (event) => {
+    const toggleIcon = (event) => { // user input
         if (disabled) return
         event.preventDefault()
-        setDisplay(!toggleOn)
 
         callback && callback(!toggleOn)
     }

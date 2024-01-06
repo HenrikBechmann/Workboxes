@@ -35,13 +35,7 @@ const workboxToolbarStyles = {
 
 } as CSSProperties
 
-const iconWrapperStyles = {
-    display:'inline-block',
-    marginLeft:'12px',
-    opacity:0.7,
-}
-
-const iconStyles = {
+const workboxIconStyles = {
     height:'20px',
     width:'20px',
 }
@@ -51,11 +45,13 @@ const smallerIconStyles = {
     width:'18px'
 }
 
-const downArrowWrapperStyles = {
+const iconWrapperStyles = {
     display:'inline-block',
+    marginLeft:'12px',
+    opacity:0.7,
 }
 
-const downArrowStyles = {
+const downArrowSpanStyles = {
     opacity:0.5, 
     fontSize:'small',
 }
@@ -69,7 +65,7 @@ const workboxIconControlStyles = {
     marginLeft:'6px',
 } as CSSProperties
 
-const itemIconStyles = {
+const workboxItemIconStyles = {
     width:'24px', 
     height:'24px', 
     borderRadius:'12px',
@@ -89,7 +85,7 @@ const displayNameStyles = {
 const WorkboxControl = (props) => {
     
     return <Box style = {workboxIconControlStyles} >
-        <img style = {iconStyles} src = {workboxIcon} /><span style = {downArrowStyles} >▼</span>
+        <img style = {workboxIconStyles} src = {workboxIcon} /><span style = {downArrowSpanStyles} >▼</span>
     </Box> 
 }
 
@@ -97,7 +93,7 @@ const WorkboxControl = (props) => {
 const ToolbarWorkbox = (props) => {
 
     const 
-        { itemIcon } = props,
+        { workboxItemIcon, workboxTitle } = props,
         [toggleValues, setToggleValues] = useState({profile:false, list:false, swap:false}),
 
         toggleOnProfileRef = useRef(false),
@@ -142,9 +138,9 @@ const ToolbarWorkbox = (props) => {
         {listToggle}
         <ToolbarVerticalDivider />
         <span>&nbsp;&nbsp;</span>
-        <img style = {itemIconStyles} src = {itemIcon} />
+        <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
         <span>&nbsp;&nbsp;</span>
-        <Text fontSize = 'sm'>Henrik Bechmann</Text>
+        <Text fontSize = 'sm'>{workboxTitle}</Text>
         <ToolbarVerticalDivider />
         {swapToggle}
         <Box style = {iconWrapperStyles} >

@@ -19,9 +19,10 @@ import {
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
+    const {workboxItemIcon, workboxTitle} = props
     return <Box data-type = 'workbox' style = {workboxStyle} >
         <Toolbar scrollerStyles = {{margin:'auto'}}>
-            <ToolbarWorkbox />
+            <ToolbarWorkbox workboxItemIcon = {workboxItemIcon} workboxTitle = {workboxTitle}/>
         </Toolbar>
     </Box>
 }

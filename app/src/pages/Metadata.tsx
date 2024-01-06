@@ -11,7 +11,7 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { useFirestore } from '../system/FirebaseProviders'
+import { useFirestore, useUserData } from '../system/FirebaseProviders'
 
 import { useTypes } from '../system/TribalopolisProvider'
 
@@ -49,6 +49,10 @@ const ContentBox = (props) => {
 }
 
 const Metadata = (props) => {
+
+    const 
+        userData = useUserData(),
+        { displayName, photoURL } = userData.authUser
 
    const transferCollectionRef = useRef(null)
    const transferDocumentRef = useRef(null)
@@ -138,7 +142,7 @@ const Metadata = (props) => {
         </>}
         <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
             <ContentBox styles = {{height:'500px',width:'500px'}}>
-                <Workbox />
+                <Workbox workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
             </ContentBox>
             <ContentBox>
                 <VStack>
