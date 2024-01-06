@@ -17,61 +17,54 @@ const baseIconBoxToggleStyles = {
     padding:'3px',
     boxShadow:'none',
     transition: 'box-shadow 0.2s, backgroundColor 0.2s',
-}
+    backgroundColor: 'transparent',
+} as CSSProperties
 
 const ToggleIcon = (props) => {
 
-    const { icon, toggleOn, tooltip, disabled, callback } = props
+    const 
+        { icon, toggleOn, tooltip, disabled, callback } = props,
+        toggleIconElementRef = useRef(null),
+        toggleValueRef = useRef(toggleOn),
+        disabledValueRef = useRef(disabled),
+        iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles),
+        iconToggleStylesRef = useRef({
+            height:'16px',
+            width:'16px',
+        })
 
-    console.log('running ToggleIcon: toggleOn',toggleOn)
-
-    const toggleIconElementRef = useRef(null)
-
-    const toggleValueRef = useRef(false)
-
-    const iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles)
-
-    const iconToggleStylesRef = useRef({
-        height:'16px',
-        width:'16px',
-
-    })
-
-    useEffect(()=>{
+    const setDisplay = (toggleOn) => {
 
         let styles
         if (!disabled) {
-            styles = baseIconBoxToggleStyles
+            styles = {...baseIconBoxToggleStyles}
         } else {
             styles = {...baseIconBoxToggleStyles, opacity:0.3}
         }
-
-    },[disabled])
-
-    const setVisible = (toggleOn) => {
-        if (!toggleIconElementRef.current) return
-        if (!toggleOn) {
-            toggleIconElementRef.current.style.backgroundColor = 'transparent'
-            toggleIconElementRef.current.style.boxShadow = 'none'
+        if (!toggleOn || disabled) {
+            styles.backgroundColor = 'transparent'
+            styles.boxShadow = 'none'
         } else {
-            toggleIconElementRef.current.style.backgroundColor = 'chartreuse'
-            toggleIconElementRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
+            styles.backgroundColor = 'chartreuse'
+            styles.boxShadow = 'inset 3px 3px 3px gray'
         }
+        iconBoxToggleStylesRef.current = styles
     }
 
-    if (toggleOn !== toggleValueRef.current) {
-        setVisible(toggleOn)
+    if (toggleOn !== toggleValueRef.current || disabled !== disabledValueRef.current) {
+        setDisplay(toggleOn)
         toggleValueRef.current = toggleOn
+        disabledValueRef.current = disabled
     }
 
     useEffect(()=>{
-        setVisible(toggleOn)
+        setDisplay(toggleOn)
     },[])
 
     const toggleIcon = (event) => {
         if (disabled) return
         event.preventDefault()
-        setVisible(!toggleOn)
+        setDisplay(!toggleOn)
 
         callback && callback(!toggleOn)
     }
@@ -86,28 +79,22 @@ const ToggleIcon = (props) => {
 
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
 export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabled}) => {
+
     const [useToggleState, setUseToggleState] = useState(toggleOnRef.current)
-    console.log('running useToggleIcon: toggleOnRef.current, useToggleState',toggleOnRef.current, useToggleState)
-    // const toggleStateSettingRef = useRef(null)
-    // toggleStateSettingRef.current = toggleOnRef.current
-    // const toggleStateUserRef = useRef(toggleOnRef.current)
-    // if (toggleStateUserRef.current !== toggleStateSettingRef.current) {
-    //     toggleStateUserRef.current = toggleStateSettingRef.current
-    // }
 
     const userChangeCallback = useCallback((toggleOn) =>{
 
-        console.log('running callback: toggleOn',toggleOn)
         toggleOnRef.current = toggleOn
-        // if (toggleOn !== toggleStateSettingRef.current) {
-        //     console.log('setting useToggleState',toggleOn)
-        //     toggleStateSettingRef.current = toggleStateUserRef.current = toggleOn
-            setUseToggleState(toggleOn) // creates host cycle
-        // }
+        setUseToggleState(toggleOn) // creates host cycle
 
     },[])
 
     return <ToggleIcon 
-        icon = {icon} tooltop = {tooltip} toggleOn = {toggleOnRef.current} disabled = {disabled} callback = {userChangeCallback} />
+        icon = {icon} 
+        tooltop = {tooltip} 
+        toggleOn = {toggleOnRef.current} 
+        disabled = {disabled} 
+        callback = {userChangeCallback} 
+    />
  
 }

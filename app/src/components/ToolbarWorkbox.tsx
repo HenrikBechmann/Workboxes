@@ -41,29 +41,11 @@ const iconWrapperStyles = {
     opacity:0.7,
 }
 
-const iconToggleStyles = {
-    width:'24px',
-    height:'24px',
-    display:'inline-block',
-    marginLeft:'12px',
-    opacity:0.7,
-    border: '1px solid black',
-    borderRadius: '12px',
-    padding:'3px',
-    boxShadow:'none',
-    transition: 'box-shadow 0.2s, backgroundColor 0.2s',
-}
-
 const iconStyles = {
     height:'20px',
     width:'20px',
 }
 
-const toggleIconStyles = {
-    height:'16px',
-    width:'16px',
-
-}
 const smallerIconStyles = {
     height:'18px', 
     width:'18px'
@@ -114,68 +96,36 @@ const WorkboxControl = (props) => {
 // --------------------------- component ----------------------------
 const ToolbarWorkbox = (props) => {
 
-    console.log('running ToolbarWorkbox')
-    // ------------------------------ hooks ------------------------
     const 
-        navigate = useNavigate(),
-        userData = useUserData(),
-        auth = useAuth(),
-        { displayName, photoURL } = userData.authUser,
-        isSuperUser = userData.sysadminStatus.isSuperUser
+        { itemIcon } = props,
+        [toggleValues, setToggleValues] = useState({profile:false, list:false, swap:false}),
 
-    // --------------------- navigation functions ------------------
+        toggleOnProfileRef = useRef(false),
+        disabledProfileRef = useRef(false),
+        profileToggle = useToggleIcon({
+            icon:profileIcon, 
+            tooltip:'Toggle lists pane',
+            toggleOnRef:toggleOnProfileRef, 
+            disabled:disabledProfileRef.current 
+        }),
 
-    const [toggleValues, setToggleValues] = useState({profile:false, list:false, swap:false})
-    const 
-        profileIconRef = useRef(null),
-        listIconRef = useRef(null),
-        swapIconRef = useRef(null)
+        toggleOnListRef = useRef(false),
+        disabledListRef = useRef(false),
+        listToggle = useToggleIcon({
+            icon:listIcon, 
+            tooltip:'Toggle lists pane',
+            toggleOnRef:toggleOnListRef, 
+            disabled:disabledListRef.current 
+        }),
 
-
-    const toggleIcon = (event) => {
-        event.preventDefault()
-        const target = event.target
-        const id = target.id
-        switch (id) {
-            case 'profileicon':{
-                if (toggleValues.profile) {
-                    profileIconRef.current.style.backgroundColor = 'transparent'
-                    profileIconRef.current.style.boxShadow = 'none'
-                } else {
-                    profileIconRef.current.style.backgroundColor = 'chartreuse'
-                    profileIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
-                }
-                toggleValues.profile = !toggleValues.profile
-                break
-            }
-            case 'listicon': {
-                if (toggleValues.list) {
-                    listIconRef.current.style.backgroundColor = 'transparent'
-                    listIconRef.current.style.boxShadow = 'none'
-                } else {
-                    listIconRef.current.style.backgroundColor = 'chartreuse'
-                    listIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
-                }
-                toggleValues.list = !toggleValues.list
-                break
-            }
-            case 'swapicon': {
-                if (toggleValues.swap) {
-                    swapIconRef.current.style.backgroundColor = 'transparent'
-                    swapIconRef.current.style.boxShadow = 'none'
-                } else {
-                    swapIconRef.current.style.backgroundColor = 'chartreuse'
-                    swapIconRef.current.style.boxShadow = 'inset 3px 3px 3px gray'
-                }
-                toggleValues.swap = !toggleValues.swap
-                break
-            }
-        }
-        setToggleValues({...toggleValues})
-    }
-
-    const toggleOnRef = useRef(false)
-    const listToggle = useToggleIcon({icon:listIcon, tooltip:'Toggle lists pane',toggleOnRef, disabled:false })
+        toggleOnSwapRef = useRef(false),
+        disabledSwapRef = useRef(false),
+        swapToggle = useToggleIcon({
+            icon:swapIcon, 
+            tooltip:'Toggle lists pane',
+            toggleOnRef:toggleOnSwapRef, 
+            disabled:disabledSwapRef.current 
+        })
 
     // render
     return <Box style = {workboxToolbarStyles}>
@@ -188,28 +138,15 @@ const ToolbarWorkbox = (props) => {
             </MenuList>
         </Menu>
         <ToolbarVerticalDivider />
-        <Box onClick = {toggleIcon} ref = {profileIconRef} style = {iconToggleStyles} >
-            <Tooltip hasArrow label = 'Toggle profile pane'>
-                <img id = 'profileicon' style = {toggleIconStyles} src = {profileIcon} />
-            </Tooltip>
-        </Box>
-        <Box onClick = {toggleIcon} ref = {listIconRef} style = {iconToggleStyles}>
-            <Tooltip hasArrow label = 'Toggle lists pane'>
-                <img id = 'listicon' style = {toggleIconStyles} src = {listIcon} />
-            </Tooltip>
-        </Box> 
+        {profileToggle}
         {listToggle}
         <ToolbarVerticalDivider />
         <span>&nbsp;&nbsp;</span>
-        <img style = {itemIconStyles} src = {photoURL} />
+        <img style = {itemIconStyles} src = {itemIcon} />
         <span>&nbsp;&nbsp;</span>
         <Text fontSize = 'sm'>Henrik Bechmann</Text>
         <ToolbarVerticalDivider />
-        <Box onClick = {toggleIcon} ref = {swapIconRef} style = {iconToggleStyles} >
-            <Tooltip hasArrow label = 'Toggle swap box'>
-                <img id = 'swapicon' style = {toggleIconStyles} src = {swapIcon} />
-            </Tooltip>
-        </Box>
+        {swapToggle}
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'Explain this toolbar'>
                 <img style = {smallerIconStyles} src = {helpIcon} />

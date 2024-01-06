@@ -206,8 +206,8 @@ const ToolbarStandard = (props) => {
                 <MenuDivider />
                 <MenuGroup title = 'MANAGE...'>
                     <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
-                    <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
-                    <MenuItem onClick = {gotoDomains}>Account domains</MenuItem>
+                    <MenuItem onClick = {gotoMemberships}>Workgroup memberships</MenuItem>
+                    <MenuItem onClick = {gotoDomains}>Account workgroups</MenuItem>
                 </MenuGroup>
                 <MenuDivider />
                 <MenuItem onClick = {logOut}>Sign out</MenuItem>
