@@ -752,6 +752,10 @@ export const Drawer = (props) => {
     // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
+                // <Workbox>
+                // {props.children}
+                // </Workbox>
+
     return <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
@@ -789,9 +793,6 @@ export const Drawer = (props) => {
             </Box>
             </GridItem>
             <GridItem data-type = 'body-area' area = 'body' position = 'relative'>
-                <Workbox>
-                {props.children}
-                </Workbox>
             </GridItem>
             <GridItem data-type = 'footer-area' area = 'footer'>
                 <Box data-type = 'footer-box' p = '3px' borderTop = '1px solid silver' borderBottom = '1px solid silver'>

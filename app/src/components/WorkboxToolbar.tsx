@@ -19,6 +19,7 @@ import helpIcon from '../../assets/help.png'
 import listIcon from '../../assets/list.png'
 import profileIcon from '../../assets/profile.png'
 import swapIcon from '../../assets/swap.png'
+import linkIcon from '../../assets/link.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -90,17 +91,17 @@ const WorkboxControl = (props) => {
 }
 
 // --------------------------- component ----------------------------
-const ToolbarWorkbox = (props) => {
+const WorkboxToolbar = (props) => {
 
     const 
-        { workboxItemIcon, workboxTitle } = props,
+        { workboxControls, setWorkboxControls, workboxItemIcon, workboxTitle } = props,
 
-        toggleOnProfileRef = useRef(false),
-        disabledProfileRef = useRef(false),
-        toggleOnListRef = useRef(false),
-        disabledListRef = useRef(false),
-        toggleOnSwapRef = useRef(false),
-        disabledSwapRef = useRef(true),
+        toggleOnProfileRef = useRef(workboxControls.profile),
+        disabledProfileRef = useRef(workboxControls.profileDisabled),
+        toggleOnLinksRef = useRef(workboxControls.links),
+        disabledLinksRef = useRef(workboxControls.linksDisabled),
+        toggleOnSwapRef = useRef(workboxControls.swap),
+        disabledSwapRef = useRef(workboxControls.swapDisabled),
 
         toggleHistoryRef = useRef({
             profile:toggleOnProfileRef.current,
@@ -109,12 +110,12 @@ const ToolbarWorkbox = (props) => {
     const 
         currentProfile = toggleOnProfileRef.current,
         previousProfile = toggleHistoryRef.current.profile,
-        currentList = toggleOnListRef.current
+        currentList = toggleOnLinksRef.current
 
     if (!currentProfile && !currentList) {
         if (previousProfile) {
 
-            toggleOnListRef.current = true
+            toggleOnLinksRef.current = true
 
         } else {
 
@@ -136,10 +137,10 @@ const ToolbarWorkbox = (props) => {
         }),
 
         listToggle = useToggleIcon({
-            icon:listIcon, 
-            tooltip:'Toggle lists pane',
-            toggleOnRef:toggleOnListRef,
-            disabledRef:disabledListRef, 
+            icon:linkIcon, 
+            tooltip:'Toggle links pane',
+            toggleOnRef:toggleOnLinksRef,
+            disabledRef:disabledLinksRef, 
         }),
 
         swapToggle = useToggleIcon({
@@ -178,4 +179,4 @@ const ToolbarWorkbox = (props) => {
     </Box>
 }
 
-export default ToolbarWorkbox
+export default WorkboxToolbar

@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
 import Toolbar from './Toolbar'
-import ToolbarWorkbox from './ToolbarWorkbox'
+import WorkboxToolbar from './WorkboxToolbar'
 import WorkboxContent from './WorkboxContent'
 
 const workboxStyle = {
@@ -20,13 +20,19 @@ import {
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
-    const {workboxItemIcon, workboxTitle} = props
+    const {workboxDefaults, workboxItemIcon, workboxTitle} = props
+    const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
     return <Box data-type = 'workbox' style = {workboxStyle} >
         <Toolbar scrollerStyles = {{margin:'auto'}}>
-            <ToolbarWorkbox workboxItemIcon = {workboxItemIcon} workboxTitle = {workboxTitle}/>
+            <WorkboxToolbar 
+                workboxControls = {workboxControls} 
+                setWorkboxControls = {setWorkboxControls} 
+                workboxItemIcon = {workboxItemIcon} 
+                workboxTitle = {workboxTitle}
+            />
         </Toolbar>
         <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = 'calc(100% - 40px)' width = '100%'>
-            <WorkboxContent />
+            <WorkboxContent workboxControls = {workboxControls} />
         </Box>
     </Box>
 }

@@ -42,7 +42,7 @@ const ContentBox = (props) => {
     Object.assign(boxStyle, styles)
 
     return <Box data-type = 'content-box' style = {boxStyle}>
-            <VStack data-type = 'vstack'>
+            <VStack height = '100%' data-type = 'contentbox-vstack'>
                 {children}
             </VStack>
         </Box>
@@ -53,6 +53,16 @@ const Metadata = (props) => {
     const 
         userData = useUserData(),
         { displayName, photoURL } = userData.authUser
+
+    const workboxDefaults = {
+        settings:false,
+        profile:true,
+        profileDisabled:false,
+        links:true,
+        linksDisabled:false,
+        swap:false,
+        swapDisabled:false,
+    }
 
    const transferCollectionRef = useRef(null)
    const transferDocumentRef = useRef(null)
@@ -142,10 +152,10 @@ const Metadata = (props) => {
         </>}
         <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
             <ContentBox styles = {{height:'500px',width:'500px'}}>
-                <Workbox workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
+                <Workbox workboxDefaults = {workboxDefaults} workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
             </ContentBox>
             <ContentBox>
-                <VStack>
+                <VStack height = '100%'>
                     <Text>User Controls</Text>
                     <Button onClick = {openDataDrawer} >Data</Button> 
                     <Button onClick = {openLookupDrawer }>Lookup</Button> 
