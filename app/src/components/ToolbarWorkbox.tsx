@@ -100,7 +100,7 @@ const ToolbarWorkbox = (props) => {
         toggleOnListRef = useRef(false),
         disabledListRef = useRef(false),
         toggleOnSwapRef = useRef(false),
-        disabledSwapRef = useRef(false),
+        disabledSwapRef = useRef(true),
 
         toggleHistoryRef = useRef({
             profile:toggleOnProfileRef.current,
@@ -150,7 +150,7 @@ const ToolbarWorkbox = (props) => {
         })
 
     // render
-    return <Box style = {workboxToolbarStyles}>
+    return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <Menu>
             <MenuButton >
                 <WorkboxControl />

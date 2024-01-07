@@ -3,8 +3,9 @@
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
-import Toolbar from '../components/Toolbar'
-import ToolbarWorkbox from '../components/ToolbarWorkbox'
+import Toolbar from './Toolbar'
+import ToolbarWorkbox from './ToolbarWorkbox'
+import WorkboxContent from './WorkboxContent'
 
 const workboxStyle = {
     position:'absolute',
@@ -24,6 +25,9 @@ const Workbox = (props) => {
         <Toolbar scrollerStyles = {{margin:'auto'}}>
             <ToolbarWorkbox workboxItemIcon = {workboxItemIcon} workboxTitle = {workboxTitle}/>
         </Toolbar>
+        <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = 'calc(100% - 40px)' width = '100%'>
+            <WorkboxContent />
+        </Box>
     </Box>
 }
 
