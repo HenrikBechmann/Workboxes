@@ -1,7 +1,7 @@
 // ToggleIcon.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useEffect, useRef, useCallback, CSSProperties} from 'react'
+import React, {useState, useEffect, useRef, useCallback, CSSProperties, forwardRef} from 'react'
 import {
   Tooltip, Box
 } from '@chakra-ui/react'
@@ -20,6 +20,7 @@ const baseIconBoxToggleStyles = {
     backgroundColor: 'transparent',
 } as CSSProperties
 
+// export const ToggleIcon = forwardRef((props:any,ref:React.LegacyRef<HTMLImageElement>) => {
 const ToggleIcon = (props) => {
 
     const 
@@ -94,10 +95,9 @@ export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabledRef}) => {
 
     return <ToggleIcon 
         icon = {icon} 
-        tooltop = {tooltip} 
+        tooltip = {tooltip} 
         toggleOn = {toggleOnRef.current} 
         disabled = {disabledRef.current} 
         callback = {userChangeCallback} 
     />
- 
 }

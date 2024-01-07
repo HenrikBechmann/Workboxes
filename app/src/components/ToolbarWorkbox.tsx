@@ -11,8 +11,8 @@ import {
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
 
-import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
 import { useToggleIcon } from './ToggleIcon'
+import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
 
 import workboxIcon from '../../assets/workbox.png'
 import helpIcon from '../../assets/help.png'
@@ -112,7 +112,7 @@ const ToolbarWorkbox = (props) => {
         currentList = toggleOnListRef.current
 
     if (!currentProfile && !currentList) {
-        if (currentProfile !== previousProfile) {
+        if (previousProfile) {
 
             toggleOnListRef.current = true
 
