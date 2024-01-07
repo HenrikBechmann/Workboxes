@@ -1,7 +1,7 @@
 // ToolbarWorkbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, CSSProperties} from 'react'
+import React, {useState, useRef, useEffect, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
@@ -94,33 +94,59 @@ const ToolbarWorkbox = (props) => {
 
     const 
         { workboxItemIcon, workboxTitle } = props,
-        [toggleValues, setToggleValues] = useState({profile:false, list:false, swap:false}),
 
         toggleOnProfileRef = useRef(false),
         disabledProfileRef = useRef(false),
-        profileToggle = useToggleIcon({
-            icon:profileIcon, 
-            tooltip:'Toggle lists pane',
-            toggleOnRef:toggleOnProfileRef, 
-            disabled:disabledProfileRef.current 
-        }),
-
         toggleOnListRef = useRef(false),
         disabledListRef = useRef(false),
+        toggleOnSwapRef = useRef(false),
+        disabledSwapRef = useRef(false),
+
+        toggleHistoryRef = useRef({
+            profile:toggleOnProfileRef.current,
+        })
+
+    const 
+        currentProfile = toggleOnProfileRef.current,
+        previousProfile = toggleHistoryRef.current.profile,
+        currentList = toggleOnListRef.current
+
+    if (!currentProfile && !currentList) {
+        if (currentProfile !== previousProfile) {
+
+            toggleOnListRef.current = true
+
+        } else {
+
+            toggleOnProfileRef.current = true
+
+        }
+    }
+
+    toggleHistoryRef.current = {
+        profile:toggleOnProfileRef.current,
+    }
+
+    const
+        profileToggle = useToggleIcon({
+            icon:profileIcon, 
+            tooltip:'Toggle profile pane',
+            toggleOnRef:toggleOnProfileRef,
+            disabledRef:disabledProfileRef, 
+        }),
+
         listToggle = useToggleIcon({
             icon:listIcon, 
             tooltip:'Toggle lists pane',
-            toggleOnRef:toggleOnListRef, 
-            disabled:disabledListRef.current 
+            toggleOnRef:toggleOnListRef,
+            disabledRef:disabledListRef, 
         }),
 
-        toggleOnSwapRef = useRef(false),
-        disabledSwapRef = useRef(false),
         swapToggle = useToggleIcon({
             icon:swapIcon, 
-            tooltip:'Toggle lists pane',
+            tooltip:'Toggle swap pane',
             toggleOnRef:toggleOnSwapRef, 
-            disabled:disabledSwapRef.current 
+            disabledRef:disabledSwapRef, 
         })
 
     // render
