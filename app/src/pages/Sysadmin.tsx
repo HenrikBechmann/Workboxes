@@ -35,12 +35,7 @@ const MenuTile = (props) => {
         <CardBody p = '3px 12px'>
             <Text>{body}</Text>
         </CardBody>
-{/*        <CardFooter justifyContent = 'center'>
-            <Button onClick = {gotoNav}>
-                {buttonPrompt}
-            </Button>
-        </CardFooter>
-*/}    </Card>
+    </Card>
 }
 
 const menuTileData = [
@@ -86,35 +81,35 @@ const Sysadmin = (props) => {
     }
 
     return <Grid 
-          height = '100%'
-          templateAreas={`"header"
-                          "body"`}
-          gridTemplateRows={'auto 1fr'}
-          gridTemplateColumns={'1fr'}
-        >
-          <GridItem area={'header'}>
-              <Center borderBottom = '1px solid gray'>
-                  <VStack data-type = 'sysadmin-header'>
-                  <Heading mt = {1} fontSize = 'xl'>System Administration Menu</Heading>
-                  <Heading mt = {0} fontSize = 'md' color = 'gray'>Available only to system administrators</Heading>
-                  </VStack>
-              </Center>
-          </GridItem>
-          <GridItem area={'body'}>
-              <Box data-type = 'tiles-body' style = {scrollerContainer}>
-              <Scroller 
-                  cellWidth = {200} 
-                  cellHeight = {220} 
-                  orientation = 'vertical'
-                  padding = {[10,20]}
-                  gap = {20}
-                  startingListRange = {[0,3]}
-                  getItemPack = {getMenuTile}
-                  usePlaceholder = {false}
-              />
-              </Box>
-          </GridItem>
-        </Grid>
+        height = '100%'
+        templateAreas={`"header"
+                      "body"`}
+        gridTemplateRows={'auto 1fr'}
+        gridTemplateColumns={'1fr'}
+    >
+        <GridItem area={'header'}>
+            <Center borderBottom = '1px solid gray'>
+                <VStack data-type = 'sysadmin-header'>
+                <Heading mt = {1} fontSize = 'xl'>System Administration Menu</Heading>
+                <Heading mt = {0} fontSize = 'md' color = 'gray'>Available only to system administrators</Heading>
+                </VStack>
+            </Center>
+        </GridItem>
+        <GridItem area={'body'}>
+            <Box data-type = 'tiles-body' style = {scrollerContainer}>
+                <Scroller 
+                    cellWidth = {200} 
+                    cellHeight = {220} 
+                    orientation = 'vertical'
+                    padding = {[10,20]}
+                    gap = {20}
+                    startingListRange = {[0,3]}
+                    getItemPack = {getMenuTile}
+                    usePlaceholder = {false}
+                />
+            </Box>
+        </GridItem>
+    </Grid>
 
 }
 

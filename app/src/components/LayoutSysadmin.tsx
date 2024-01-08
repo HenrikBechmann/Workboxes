@@ -17,21 +17,24 @@ const bodyStyle = {
 
 const LayoutSysadmin = (props) => {
 
-    return <Grid height = '100vh' gridTemplateColumns = '1fr' gridTemplateRows = 'auto 1fr'
+    return <Grid 
+        height = '100vh' 
+        gridTemplateColumns = '1fr' 
+        gridTemplateRows = 'auto 1fr'
         gridTemplateAreas = {`"header"
                               "body"`}
-        >
-            <GridItem data-type = 'grid-header' gridArea = 'header'>
-                <Toolbar>
-                    <ToolbarStandard />
-                </Toolbar>
-            </GridItem>
-            <GridItem data-type = 'grid-body' gridArea = 'body'>        
-                <Box data-type = 'sysadmin-outlet' style = {bodyStyle}>
-                    <Outlet />
-                </Box>
-            </GridItem>
-        </Grid>
+    >
+        <GridItem data-type = 'grid-header' gridArea = 'header'>
+            <Toolbar>
+                <ToolbarStandard />
+            </Toolbar>
+        </GridItem>
+        <GridItem data-type = 'grid-body' gridArea = 'body'>        
+            <Box data-type = 'sysadmin-outlet' style = {bodyStyle}>
+                <Outlet />
+            </Box>
+        </GridItem>
+    </Grid>
 }
 
 export default LayoutSysadmin
