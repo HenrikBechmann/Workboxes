@@ -10,7 +10,7 @@ const baseIconBoxToggleStyles = {
     width:'24px',
     height:'24px',
     display:'inline-block',
-    marginLeft:'12px',
+    // marginLeft:'12px',
     opacity:0.7,
     border: '1px solid black',
     borderRadius: '12px',
@@ -24,7 +24,7 @@ const baseIconBoxToggleStyles = {
 const ToggleIcon = (props) => {
 
     const 
-        { icon, toggleOn, tooltip, disabled, callback } = props,
+        { icon, toggleOn, tooltip, disabled, callback, caption } = props,
         toggleIconElementRef = useRef(null),
         toggleValueRef = useRef(toggleOn),
         disabledValueRef = useRef(disabled),
@@ -69,16 +69,19 @@ const ToggleIcon = (props) => {
         callback && callback(!toggleOn)
     }
 
-    return <Box onClick = {toggleIcon} ref = {toggleIconElementRef} style = {iconBoxToggleStylesRef.current} >
-        <Tooltip hasArrow label = {tooltip}>
-            <img style = {iconToggleStylesRef.current} src = {icon} />
-        </Tooltip>
+    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignItems = 'center' marginLeft = '12px'>
+        <Box onClick = {toggleIcon} ref = {toggleIconElementRef} style = {iconBoxToggleStylesRef.current} >
+            <Tooltip hasArrow label = {tooltip}>
+                <img style = {iconToggleStylesRef.current} src = {icon} />
+            </Tooltip>
+        </Box>
+        <Box fontSize = 'xs' fontStyle = 'italic'>{caption}</Box>
     </Box>
 
 }
 
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
-export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabledRef}) => {
+export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabledRef, caption}) => {
 
     const [useToggleState, setUseToggleState] = useState(toggleOnRef.current)
 
@@ -96,6 +99,7 @@ export const useToggleIcon = ({icon, tooltip, toggleOnRef, disabledRef}) => {
     return <ToggleIcon 
         icon = {icon} 
         tooltip = {tooltip} 
+        caption = {caption}
         toggleOn = {toggleOnRef.current} 
         disabled = {disabledRef.current} 
         callback = {userChangeCallback} 

@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
-  Tooltip, Box, Text
+  Tooltip, Box, Text, VStack,
 } from '@chakra-ui/react'
 
 import { useUserData, useAuth } from '../system/FirebaseProviders'
@@ -59,6 +59,7 @@ const downArrowSpanStyles = {
 
 const workboxIconControlStyles = {
     display:'flex',
+    flexDirection:'column',
     flexWrap:'nowrap',
     alignItems:'center',
     padding:'2px',
@@ -86,7 +87,8 @@ const displayNameStyles = {
 const WorkboxControl = (props) => {
     
     return <Box style = {workboxIconControlStyles} >
-        <img style = {workboxIconStyles} src = {workboxIcon} /><span style = {downArrowSpanStyles} >▼</span>
+        <Box display = 'flex' flexWrap = 'nowrap'><img style = {workboxIconStyles} src = {workboxIcon} /><span style = {downArrowSpanStyles} >▼</span></Box>
+        <Box fontSize = 'xs'><span>workbox</span></Box>
     </Box> 
 }
 
@@ -98,8 +100,8 @@ const WorkboxToolbar = (props) => {
 
         toggleOnProfileRef = useRef(workboxControls.profile),
         disabledProfileRef = useRef(workboxControls.profileDisabled),
-        toggleOnLinksRef = useRef(workboxControls.links),
-        disabledLinksRef = useRef(workboxControls.linksDisabled),
+        toggleOnLinksRef = useRef(workboxControls.lists),
+        disabledLinksRef = useRef(workboxControls.listsDisabled),
         toggleOnSwapRef = useRef(workboxControls.swap),
         disabledSwapRef = useRef(workboxControls.swapDisabled),
 
@@ -132,13 +134,15 @@ const WorkboxToolbar = (props) => {
         profileToggle = useToggleIcon({
             icon:profileIcon, 
             tooltip:'Toggle profile pane',
+            caption:'profile',
             toggleOnRef:toggleOnProfileRef,
             disabledRef:disabledProfileRef, 
         }),
 
         listToggle = useToggleIcon({
-            icon:linkIcon, 
-            tooltip:'Toggle links pane',
+            icon:listIcon, 
+            tooltip:'Toggle lists pane',
+            caption:'lists',
             toggleOnRef:toggleOnLinksRef,
             disabledRef:disabledLinksRef, 
         }),
@@ -146,6 +150,7 @@ const WorkboxToolbar = (props) => {
         swapToggle = useToggleIcon({
             icon:swapIcon, 
             tooltip:'Toggle swap pane',
+            caption:'mirror',
             toggleOnRef:toggleOnSwapRef, 
             disabledRef:disabledSwapRef, 
         })

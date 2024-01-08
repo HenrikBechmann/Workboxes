@@ -56,10 +56,11 @@ const Metadata = (props) => {
 
     const workboxDefaults = {
         settings:false,
+        setingsDisabled:false,
         profile:true,
         profileDisabled:false,
-        links:true,
-        linksDisabled:false,
+        lists:true,
+        listsDisabled:false,
         swap:false,
         swapDisabled:false,
     }
