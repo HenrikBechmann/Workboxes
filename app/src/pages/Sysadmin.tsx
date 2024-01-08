@@ -71,11 +71,6 @@ const menuTileData = [
         },
     ]
 
-const outerSysadminStyle = {
-    height: '100%', 
-    display:'relative'
-}
-
 const scrollerContainer = {
     height:'100%', 
     position:'relative',
@@ -90,16 +85,15 @@ const Sysadmin = (props) => {
         }
     }
 
-    return <Box data-type = 'sysadmin' style = {outerSysadminStyle}>
-
-        <Grid height = '100%'
+    return <Grid 
+          height = '100%'
           templateAreas={`"header"
                           "body"`}
-          gridTemplateRows={'60px 1fr'}
+          gridTemplateRows={'auto 1fr'}
           gridTemplateColumns={'1fr'}
         >
           <GridItem area={'header'}>
-              <Center>
+              <Center borderBottom = '1px solid gray'>
                   <VStack data-type = 'sysadmin-header'>
                   <Heading mt = {1} fontSize = 'xl'>System Administration Menu</Heading>
                   <Heading mt = {0} fontSize = 'md' color = 'gray'>Available only to system administrators</Heading>
@@ -121,8 +115,6 @@ const Sysadmin = (props) => {
               </Box>
           </GridItem>
         </Grid>
-
-    </Box>
 
 }
 
