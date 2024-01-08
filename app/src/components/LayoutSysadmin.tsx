@@ -18,6 +18,7 @@ const bodyStyle = {
 const LayoutSysadmin = (props) => {
 
     return <Grid 
+        data-type = 'layout-sysadmin'
         height = '100vh' 
         gridTemplateColumns = '1fr' 
         gridTemplateRows = 'auto 1fr'

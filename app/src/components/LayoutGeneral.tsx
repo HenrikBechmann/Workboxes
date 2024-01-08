@@ -10,7 +10,7 @@ import Toolbar from '../components/Toolbar'
 import ToolbarStandard from '../components/ToolbarStandard'
 
 const bodyStyle = {
-    // height: 'calc(100vh - 52px)', 
+    height: '100%', 
     display:'relative', 
     backgroundColor:'aliceblue',
     borderTop:'1px solid lightgray',
@@ -29,24 +29,28 @@ const LayoutGeneral = (props) => {
 
     if (userData === undefined) return null
 
-    return <Grid  height = '100vh' alignItems = 'stretch' gridTemplateColumns = '1fr' gridTemplateRows = 'auto 1fr'
+    return <Grid
+        data-type = 'layout-general'
+        height = '100vh' 
+        gridTemplateColumns = '1fr' 
+        gridTemplateRows = 'auto 1fr'
         gridTemplateAreas = {`"header"
                               "body"`}
-        >
-            <GridItem data-type = 'grid-header' gridArea = 'header'>
-                <Toolbar>
-                    {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
-                    style={navlinkStyles}
-                        >Sign in</NavLink></Text>}
-                    {userData && <ToolbarStandard />}
-                </Toolbar>
-            </GridItem>
-            <GridItem data-type = 'grid-body' gridArea = 'body'>        
-                <Box data-type = 'general-outlet' style = {bodyStyle}>
-                    <Outlet />
-                </Box>
-            </GridItem>
-        </Grid>
+    >
+        <GridItem data-type = 'grid-header' gridArea = 'header'>
+            <Toolbar>
+                {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
+                style={navlinkStyles}
+                    >Sign in</NavLink></Text>}
+                {userData && <ToolbarStandard />}
+            </Toolbar>
+        </GridItem>
+        <GridItem data-type = 'grid-body' gridArea = 'body'>        
+            <Box data-type = 'general-outlet' style = {bodyStyle}>
+                <Outlet />
+            </Box>
+        </GridItem>
+    </Grid>
 }
 
 export default LayoutGeneral

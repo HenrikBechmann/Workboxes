@@ -18,6 +18,7 @@ const bodyStyle = {
 const LayoutMember = (props) => {
 
     return <Grid 
+        data-type = 'layout-member'
         height = '100vh' 
         gridTemplateColumns = '1fr' 
         gridTemplateRows = 'auto 1fr'
