@@ -171,7 +171,11 @@ const Metadata = (props) => {
             <Box data-type = 'metadata-panel' overflow = 'auto' height = '100%' position = 'relative'>
                 <Box data-type = 'inner-box' width = '100%' display = 'flex' flexWrap = 'wrap'>
                     <ContentBox styles = {{height:'500px',width:'500px'}}>
-                        <Workbox workboxDefaults = {workboxDefaults} workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
+                        <Workbox 
+                            workboxDefaults = {workboxDefaults} 
+                            workboxItemIcon = {photoURL} 
+                            workboxTitle = {displayName}
+                        />
                     </ContentBox>
                     <ContentBox>
                         <VStack height = '100%'>
