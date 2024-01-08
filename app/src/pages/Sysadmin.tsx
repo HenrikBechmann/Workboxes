@@ -81,13 +81,14 @@ const Sysadmin = (props) => {
     }
 
     return <Grid 
+        data-type = 'sysadmin'
         height = '100%'
         templateAreas={`"header"
                       "body"`}
         gridTemplateRows={'auto 1fr'}
         gridTemplateColumns={'1fr'}
     >
-        <GridItem area={'header'}>
+        <GridItem data-type = 'sysadmin-header' area={'header'}>
             <Center borderBottom = '1px solid gray'>
                 <VStack data-type = 'sysadmin-header'>
                 <Heading mt = {1} fontSize = 'xl'>System Administration Menu</Heading>
@@ -95,7 +96,7 @@ const Sysadmin = (props) => {
                 </VStack>
             </Center>
         </GridItem>
-        <GridItem area={'body'}>
+        <GridItem data-type = 'sysadmin-body' area = 'body'>
             <Box data-type = 'tiles-body' style = {scrollerContainer}>
                 <Scroller 
                     cellWidth = {200} 

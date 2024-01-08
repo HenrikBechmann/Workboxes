@@ -8,7 +8,8 @@ import {
     Text, 
     Button, 
     Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center
+    Box, VStack, Center,
+    Grid, GridItem,
 } from '@chakra-ui/react'
 
 import { useFirestore, useUserData } from '../system/FirebaseProviders'
@@ -144,37 +145,58 @@ const Metadata = (props) => {
 
     // --------------------------- render --------------------
 
-    return <Box ref = {containerElementRef} data-type = 'sysadmin-panel' style = {outerStyle}>
-        {drawersState != 'setup' && <>
-            <Drawer {...drawerProps.lookup} />
-            <Drawer {...drawerProps.data} />
-            <Drawer {...drawerProps.messages} />
-            <Drawer {...drawerProps.help} />
-        </>}
-        <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
-            <ContentBox styles = {{height:'500px',width:'500px'}}>
-                <Workbox workboxDefaults = {workboxDefaults} workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
-            </ContentBox>
-            <ContentBox>
-                <VStack height = '100%'>
-                    <Text>User Controls</Text>
-                    <Button onClick = {openDataDrawer} >Data</Button> 
-                    <Button onClick = {openLookupDrawer }>Lookup</Button> 
-                    <Button onClick = {openHelpDrawer}>Help</Button> 
-                    <Button onClick = {openMessageDrawer}>Messages</Button>
-                </VStack>
-            </ContentBox>
-            <ContentBox>
-                <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                    <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
-                    {isInTransferProcessing && <Text>Processing...</Text>}
-                    {returnInData && <Text>Status: {returnInData.status.toString()}, 
-                        error: {returnInData.error.toString()}, 
-                        message: {returnInData.message}, 
-                        docpath: {returnInData.docpath} </Text>}
-                </VStack>
-            </ContentBox>
-        </Box>        
+    return <Grid
+        data-type = 'metadata'
+        height = '100%'
+        templateAreas={`"body"`}
+        gridTemplateRows={'1fr'}
+        gridTemplateColumns={'1fr'}
+    >
+    <GridItem data-type = 'metadata-body' area = 'body'>
+    <Box data-type = 'metadata-frame' height = '100%' position = 'relative'>
+        <Box 
+            data-type = 'metadata-container' 
+            ref = {containerElementRef} 
+            height = '100%' 
+            position = 'absolute' 
+            inset = '0' 
+            overflow = 'hidden'
+        >
+            {drawersState != 'setup' && <>
+                <Drawer {...drawerProps.lookup} />
+                <Drawer {...drawerProps.data} />
+                <Drawer {...drawerProps.messages} />
+                <Drawer {...drawerProps.help} />
+            </>}
+            <Box data-type = 'metadata-panel' overflow = 'auto' height = '100%' position = 'relative'>
+                <Box data-type = 'inner-box' width = '100%' display = 'flex' flexWrap = 'wrap'>
+                    <ContentBox styles = {{height:'500px',width:'500px'}}>
+                        <Workbox workboxDefaults = {workboxDefaults} workboxItemIcon = {photoURL} workboxTitle = {displayName}/>
+                    </ContentBox>
+                    <ContentBox>
+                        <VStack height = '100%'>
+                            <Text>User Controls</Text>
+                            <Button onClick = {openDataDrawer} >Data</Button> 
+                            <Button onClick = {openLookupDrawer }>Lookup</Button> 
+                            <Button onClick = {openHelpDrawer}>Help</Button> 
+                            <Button onClick = {openMessageDrawer}>Messages</Button>
+                        </VStack>
+                    </ContentBox>
+                    <ContentBox>
+                        <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+                            <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
+                            {isInTransferProcessing && <Text>Processing...</Text>}
+                            {returnInData && <Text>Status: {returnInData.status.toString()}, 
+                                error: {returnInData.error.toString()}, 
+                                message: {returnInData.message}, 
+                                docpath: {returnInData.docpath} </Text>}
+                        </VStack>
+                    </ContentBox>
+                </Box>        
+            </Box>
+        </Box>
     </Box>
+    </GridItem>
+    </Grid>
 }
 export default Metadata
