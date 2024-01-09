@@ -29,7 +29,6 @@ const workboxToolbarStyles = {
     flexWrap:'nowrap',
     whitespace:'nowrap',
     alignItems:'center',
-    // height:'40px',
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
     borderRadius:'8px 8px 0 0',

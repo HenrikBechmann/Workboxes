@@ -45,9 +45,11 @@ export const Main = (props) => {
             </Box>
         </GridItem>
         <GridItem area = 'footer'>
-            <Toolbar>
-                <ToolbarWorkspace />
-            </Toolbar>
+            <Box borderTop = '1px solid lightgray' width = '100%'>
+                <Toolbar>
+                    <ToolbarWorkspace />
+                </Toolbar>
+            </Box>
         </GridItem>
     </Grid>
 }
