@@ -35,11 +35,6 @@ const workboxToolbarStyles = {
 
 } as CSSProperties
 
-const workboxIconStyles = {
-    height:'20px',
-    width:'20px',
-}
-
 const smallerIconStyles = {
     height:'18px', 
     width:'18px'
@@ -49,27 +44,6 @@ const iconWrapperStyles = {
     display:'inline-block',
     marginLeft:'12px',
     opacity:0.7,
-}
-
-const downArrowSpanStyles = {
-    opacity:0.5, 
-    fontSize:'small',
-}
-
-const workboxIconControlStyles = {
-    display:'flex',
-    flexDirection:'column',
-    flexWrap:'nowrap',
-    alignItems:'center',
-    padding:'2px',
-    borderRadius:'6px',
-    marginLeft:'6px',
-} as CSSProperties
-
-const workboxItemIconStyles = {
-    width:'24px', 
-    height:'24px', 
-    borderRadius:'12px',
 }
 
 const displayNameStyles = {
@@ -84,6 +58,26 @@ const displayNameStyles = {
 
 // ---------------------------- embedded components ----------------------------
 const WorkboxControl = (props) => {
+
+    const workboxIconControlStyles = {
+        display:'flex',
+        flexDirection:'column',
+        flexWrap:'nowrap',
+        alignItems:'center',
+        padding:'2px',
+        borderRadius:'6px',
+        marginLeft:'6px',
+    } as CSSProperties
+
+    const workboxIconStyles = {
+        height:'20px',
+        width:'20px',
+    }
+
+    const downArrowSpanStyles = {
+        opacity:0.5, 
+        fontSize:'small',
+    }
     
     return <Box style = {workboxIconControlStyles} >
         <Box display = 'flex' flexWrap = 'nowrap' height = '24px' width = '24px' alignItems = 'center'>
@@ -96,11 +90,29 @@ const WorkboxControl = (props) => {
     </Box> 
 }
 
+const WorkboxItemControl = (props) => {
+
+    const { workboxItemIcon, workboxItemTitle } = props
+
+    const workboxItemIconStyles = {
+        width:'24px', 
+        height:'24px', 
+        borderRadius:'12px',
+    }
+
+   return <>
+        <span>&nbsp;&nbsp;</span>
+        <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
+        <span>&nbsp;&nbsp;</span>
+        <Text fontSize = 'sm'>{workboxItemTitle}</Text>
+    </>
+}
+
 // --------------------------- component ----------------------------
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControls, setWorkboxControls, workboxItemIcon, workboxTitle } = props,
+        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle } = props,
 
         toggleOnProfileRef = useRef(workboxControls.profile),
         disabledProfileRef = useRef(workboxControls.profileDisabled),
@@ -173,10 +185,7 @@ const WorkboxToolbar = (props) => {
         {profileToggle}
         {listToggle}
         <ToolbarVerticalDivider />
-        <span>&nbsp;&nbsp;</span>
-        <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
-        <span>&nbsp;&nbsp;</span>
-        <Text fontSize = 'sm'>{workboxTitle}</Text>
+        <WorkboxItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <ToolbarVerticalDivider />
         {swapToggle}
         <Box style = {iconWrapperStyles} >

@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
-    const {workboxDefaults, workboxItemIcon, workboxTitle} = props
+    const {workboxDefaults, workboxItemIcon, workboxItemTitle} = props
     const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
     return <Box data-type = 'workbox' style = {workboxStyle} >
         <Toolbar scrollerStyles = {{margin:'auto'}}>
@@ -28,7 +28,7 @@ const Workbox = (props) => {
                 workboxControls = {workboxControls} 
                 setWorkboxControls = {setWorkboxControls} 
                 workboxItemIcon = {workboxItemIcon} 
-                workboxTitle = {workboxTitle}
+                workboxItemTitle = {workboxItemTitle}
             />
         </Toolbar>
         <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = 'calc(100% - 40px)' width = '100%'>

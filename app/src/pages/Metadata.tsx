@@ -172,7 +172,7 @@ const Metadata = (props) => {
                                 <Workbox 
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 
-                                    workboxTitle = {displayName}
+                                    workboxItemTitle = {displayName}
                                 />
                             </ContentBox>
                             <ContentBox>
