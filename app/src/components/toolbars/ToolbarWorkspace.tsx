@@ -10,14 +10,14 @@ import {
 
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
-import cartIcon from '../../assets/cart.png'
-import workspacesIcon from '../../assets/workspaces.png'
-import panelIcon from '../../assets/panel.png'
-import helpIcon from '../../assets/help.png'
-import uploadIcon from '../../assets/upload.png'
-import databaseIcon from '../../assets/database.png'
-import moreVertIcon from '../../assets/more_vert.png'
-import expandMoreIcon from '../../assets/expand_more.png'
+import cartIcon from '../../../assets/cart.png'
+import workspacesIcon from '../../../assets/workspaces.png'
+import panelIcon from '../../../assets/panel.png'
+import helpIcon from '../../../assets/help.png'
+import uploadIcon from '../../../assets/upload.png'
+import databaseIcon from '../../../assets/database.png'
+import moreVertIcon from '../../../assets/more_vert.png'
+import expandMoreIcon from '../../../assets/expand_more.png'
 
 const standardToolbarStyles = {
     minHeight:0,

@@ -4,8 +4,8 @@
 import React, {useRef, useEffect, useLayoutEffect, useCallback, useState, CSSProperties} from 'react'
 import { Box } from '@chakra-ui/react'
 
-import navNextIcon from '../../assets/nav_next.png'
-import navBeforeIcon from '../../assets/nav_before.png'
+import navNextIcon from '../../../assets/nav_next.png'
+import navBeforeIcon from '../../../assets/nav_before.png'
 
 // --------------------------- static style values ---------
 const menuWrapperStyles = {

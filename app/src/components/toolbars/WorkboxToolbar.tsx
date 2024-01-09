@@ -14,12 +14,12 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
-import workboxIcon from '../../assets/workbox.png'
-import helpIcon from '../../assets/help.png'
-import listIcon from '../../assets/list.png'
-import profileIcon from '../../assets/profile.png'
-import swapIcon from '../../assets/swap.png'
-import linkIcon from '../../assets/link.png'
+import workboxIcon from '../../../assets/workbox.png'
+import helpIcon from '../../../assets/help.png'
+import listIcon from '../../../assets/list.png'
+import profileIcon from '../../../assets/profile.png'
+import swapIcon from '../../../assets/swap.png'
+import linkIcon from '../../../assets/link.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -86,8 +86,13 @@ const displayNameStyles = {
 const WorkboxControl = (props) => {
     
     return <Box style = {workboxIconControlStyles} >
-        <Box display = 'flex' flexWrap = 'nowrap'><img style = {workboxIconStyles} src = {workboxIcon} /><span style = {downArrowSpanStyles} >▼</span></Box>
-        <Box fontSize = 'xs'><span>workbox</span></Box>
+        <Box display = 'flex' flexWrap = 'nowrap' height = '24px' width = '24px' alignItems = 'center'>
+            <img style = {workboxIconStyles} src = {workboxIcon} />
+            <span style = {downArrowSpanStyles} >▼</span>
+        </Box>
+        <Box fontSize = 'xs' fontStyle = 'italic'>
+            <span>workbox</span>
+        </Box>
     </Box> 
 }
 

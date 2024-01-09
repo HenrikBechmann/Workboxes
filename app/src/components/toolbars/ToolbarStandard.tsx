@@ -13,14 +13,14 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
-import fireIcon from '../../assets/fire.png'
-import notificationsIcon from '../../assets/notifications.png'
-import chatIcon from '../../assets/chat.png'
-import messageIcon from '../../assets/mail.png'
-import helpIcon from '../../assets/help.png'
-import homeIcon from '../../assets/home.png'
-import subscriptionsIcon from '../../assets/subscriptions.png'
-import appSettingsIcon from '../../assets/app_settings.png'
+import fireIcon from '../../../assets/fire.png'
+import notificationsIcon from '../../../assets/notifications.png'
+import chatIcon from '../../../assets/chat.png'
+import messageIcon from '../../../assets/mail.png'
+import helpIcon from '../../../assets/help.png'
+import homeIcon from '../../../assets/home.png'
+import subscriptionsIcon from '../../../assets/subscriptions.png'
+import appSettingsIcon from '../../../assets/app_settings.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
