@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 
-import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
 import cartIcon from '../../assets/cart.png'
 import workspacesIcon from '../../assets/workspaces.png'

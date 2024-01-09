@@ -1,4 +1,4 @@
-// SysadminRoutes.tsx
+// RoutesSysadmin.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react'
 
 import { useUserData } from '../system/FirebaseProviders'
 
-function SysadminRoutes() {
+function RoutesSysadmin() {
 
   const 
     userdata = useUserData(),
@@ -34,4 +34,4 @@ function SysadminRoutes() {
   }
 
 }
-export default SysadminRoutes
+export default RoutesSysadmin

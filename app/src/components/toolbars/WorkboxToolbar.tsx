@@ -9,10 +9,10 @@ import {
   Tooltip, Box, Text, VStack,
 } from '@chakra-ui/react'
 
-import { useUserData, useAuth } from '../system/FirebaseProviders'
+import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
-import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
 import workboxIcon from '../../assets/workbox.png'
 import helpIcon from '../../assets/help.png'

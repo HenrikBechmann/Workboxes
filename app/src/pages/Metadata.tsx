@@ -17,7 +17,7 @@ import { useFirestore, useUserData } from '../system/FirebaseProviders'
 import { useTypes } from '../system/TribalopolisProvider'
 
 import Drawer, { useDrawers } from '../components/Drawer'
-import Workbox from '../components/Workbox'
+import Workbox from '../components/workbox/Workbox'
 
 import { metatype } from '../system/system.type'
 

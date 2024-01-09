@@ -62,8 +62,8 @@ const ToggleIcon = (props) => {
     },[])
 
     const toggleIcon = (event) => { // user input
-        if (disabled) return
         event.preventDefault()
+        if (disabled) return
 
         callback && callback(!toggleOn)
     }

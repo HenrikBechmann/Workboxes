@@ -9,9 +9,9 @@ import {
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserData, useAuth } from '../system/FirebaseProviders'
+import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
-import ToolbarVerticalDivider from '../components/ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
 import fireIcon from '../../assets/fire.png'
 import notificationsIcon from '../../assets/notifications.png'
