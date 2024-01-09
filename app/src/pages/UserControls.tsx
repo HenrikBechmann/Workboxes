@@ -12,8 +12,6 @@ import {
 // import Drawer from '../components/Drawer'
 import Drawer, { useDrawers } from '../components/Drawer'
 
-const outerStyle = {height: '100%', position:'relative'} as CSSProperties
-
 const contentBoxStyle = {
     flexBasis:'auto', 
     flexShrink: 0, 
@@ -121,64 +119,64 @@ const UserControls = (props) => {
     }
 
     return <Grid
-        data-type = 'metadata'
+        data-type = 'page'
         height = '100%'
         templateAreas={`"body"`}
         gridTemplateRows={'1fr'}
         gridTemplateColumns={'1fr'}
     >
-    <GridItem data-type = 'metadata-body' area = 'body'>
-    <Box data-type = 'metadata-frame' height = '100%' position = 'relative'>
-        <Box 
-            data-type = 'usercontrols'
-            ref = {containerElementRef} 
-            height = '100%' 
-            position = 'absolute' 
-            inset = '0' 
-            overflow = 'hidden'
-        >
-        {drawersState != 'setup' && <>
-            <Drawer {...drawerProps.lookup} />
-            <Drawer {...drawerProps.data} />
-            <Drawer {...drawerProps.messages} />
-            <Drawer {...drawerProps.help} />
-        </>}
-        <Box data-type = 'metadata-panel' overflow = 'auto' height = '100%' position = 'relative'>
-        <Box data-type = 'inner-box' overflow = 'auto' width = '100%' display = 'flex' flexWrap = 'wrap'>
-        <ContentBox>
-            <VStack>
-                <Text>User Controls</Text>
-                <Button onClick = {openFunctions.openDataDrawer} >Data</Button> 
-                <Button onClick = {openFunctions.openLookupDrawer }>Lookup</Button> 
-                <Button onClick = {openFunctions.openHelpDrawer}>Help</Button> 
-                <Button onClick = {openFunctions.openMessagesDrawer}>Messages</Button>
-            </VStack>
-        </ContentBox>
-        <ContentBox>
-            <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                <FormControl isInvalid = {!isAdminInputValid}>
-                    <FormLabel>Admin user email:</FormLabel>
-                    <Input ref = {claimEmailInputRef} type = 'email' autoComplete = 'on'/>
-                    <FormHelperText fontSize = 'xs'>For granting the claim, email must be registered in the sysadmins collection</FormHelperText>
-                </FormControl>
-                <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
-                <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
-                {isAdminProcessing && <Text>Processing...</Text>}
-                {returnAdminPack && <Text>
-                    {`status: ${returnAdminPack.status}; error: ${returnAdminPack.error}; message: ${returnAdminPack.message}`}
-                    </Text>}
-            </VStack>
-        </ContentBox>
-        <ContentBox>
-            <Button onClick = {getAdminStatus} colorScheme = 'blue'>View signin's admin claim</Button>
-        </ContentBox>
-        <ContentBox>
-        </ContentBox>
-        </Box>
-        </Box>
-    </Box>
-    </Box>
-    </GridItem>
+        <GridItem data-type = 'page-body' area = 'body'>
+            <Box data-type = 'page-frame' height = '100%' position = 'relative'>
+                <Box 
+                    data-type = 'page-liner'
+                    ref = {containerElementRef} 
+                    height = '100%' 
+                    position = 'absolute' 
+                    inset = '0' 
+                    overflow = 'hidden'
+                >
+                    {drawersState != 'setup' && <>
+                        <Drawer {...drawerProps.lookup} />
+                        <Drawer {...drawerProps.data} />
+                        <Drawer {...drawerProps.messages} />
+                        <Drawer {...drawerProps.help} />
+                    </>}
+                    <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
+                        <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
+                            <ContentBox>
+                                <VStack>
+                                    <Text>User Controls</Text>
+                                    <Button onClick = {openFunctions.openDataDrawer} >Data</Button> 
+                                    <Button onClick = {openFunctions.openLookupDrawer }>Lookup</Button> 
+                                    <Button onClick = {openFunctions.openHelpDrawer}>Help</Button> 
+                                    <Button onClick = {openFunctions.openMessagesDrawer}>Messages</Button>
+                                </VStack>
+                            </ContentBox>
+                            <ContentBox>
+                                <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+                                    <FormControl isInvalid = {!isAdminInputValid}>
+                                        <FormLabel>Admin user email:</FormLabel>
+                                        <Input ref = {claimEmailInputRef} type = 'email' autoComplete = 'on'/>
+                                        <FormHelperText fontSize = 'xs'>For granting the claim, email must be registered in the sysadmins collection</FormHelperText>
+                                    </FormControl>
+                                    <Button name = 'grantadmin' onClick = {claimAction} colorScheme = 'blue'>Grant admin claim</Button>
+                                    <Button name = 'revokeadmin' onClick = {claimAction} colorScheme = 'blue'>Revoke admin claim</Button>
+                                    {isAdminProcessing && <Text>Processing...</Text>}
+                                    {returnAdminPack && <Text>
+                                        {`status: ${returnAdminPack.status}; error: ${returnAdminPack.error}; message: ${returnAdminPack.message}`}
+                                        </Text>}
+                                </VStack>
+                            </ContentBox>
+                            <ContentBox>
+                                <Button onClick = {getAdminStatus} colorScheme = 'blue'>View signin's admin claim</Button>
+                            </ContentBox>
+                            <ContentBox>
+                            </ContentBox>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+        </GridItem>
     </Grid>
 }
 
