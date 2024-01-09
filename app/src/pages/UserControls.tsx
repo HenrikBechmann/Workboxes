@@ -6,7 +6,7 @@ import {
     Text, 
     Button, 
     Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center
+    Box, VStack, Center, Grid, GridItem
 } from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
@@ -120,14 +120,31 @@ const UserControls = (props) => {
 
     }
 
-    return <Box ref = {containerElementRef} data-type = 'usercontrols' style = {outerStyle}>
+    return <Grid
+        data-type = 'metadata'
+        height = '100%'
+        templateAreas={`"body"`}
+        gridTemplateRows={'1fr'}
+        gridTemplateColumns={'1fr'}
+    >
+    <GridItem data-type = 'metadata-body' area = 'body'>
+    <Box data-type = 'metadata-frame' height = '100%' position = 'relative'>
+        <Box 
+            data-type = 'usercontrols'
+            ref = {containerElementRef} 
+            height = '100%' 
+            position = 'absolute' 
+            inset = '0' 
+            overflow = 'hidden'
+        >
         {drawersState != 'setup' && <>
             <Drawer {...drawerProps.lookup} />
             <Drawer {...drawerProps.data} />
             <Drawer {...drawerProps.messages} />
             <Drawer {...drawerProps.help} />
         </>}
-        <Box data-type = 'inner-box' overflow = 'auto' width = '100%' height = '100%' display = 'flex' flexWrap = 'wrap'>
+        <Box data-type = 'metadata-panel' overflow = 'auto' height = '100%' position = 'relative'>
+        <Box data-type = 'inner-box' overflow = 'auto' width = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
             <VStack>
                 <Text>User Controls</Text>
@@ -158,8 +175,11 @@ const UserControls = (props) => {
         <ContentBox>
         </ContentBox>
         </Box>
+        </Box>
     </Box>
-
+    </Box>
+    </GridItem>
+    </Grid>
 }
 
 export default UserControls

@@ -545,10 +545,10 @@ export const Drawer = (props) => {
         }
 
         const 
-            pageX = dragContainerRectRef.current.x,
-            pageY = dragContainerRectRef.current.y,
-            pageWidth = dragContainerRectRef.current.width,
-            pageHeight = dragContainerRectRef.current.height,
+            pageX = dragContainerRectRef.current?.x,
+            pageY = dragContainerRectRef.current?.y,
+            pageWidth = dragContainerRectRef.current?.width,
+            pageHeight = dragContainerRectRef.current?.height,
             placement = placementRef.current,
             orientation = orientationRef.current
 
@@ -627,8 +627,8 @@ export const Drawer = (props) => {
             minRatio = isMobile?0.5:0.2,
             containerLength = 
                 (['right','left'].includes(placementRef.current))
-                    ? containerDimensions.width
-                    : containerDimensions.height,
+                    ? containerDimensions?.width
+                    : containerDimensions?.height,
             minConst = 
                 (['right','left'].includes(placementRef.current))
                     ? MIN_DRAWER_WIDTH
