@@ -61,14 +61,14 @@ const SysSettings = (props) => {
                         <Drawer {...drawerProps.help} />
                     </>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
-                        <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
+                        <Box data-type = 'page-content' width = '100%'>
                             <Text>System settings</Text>
-                            <>
+                            <Box>
                             <Button onClick = {openFunctions.openDataDrawer} >Data</Button> 
                             <Button onClick = {openFunctions.openLookupDrawer }>Lookup</Button> 
                             <Button onClick = {openFunctions.openHelpDrawer}>Help</Button> 
                             <Button onClick = {openFunctions.openMessagesDrawer}>Messages</Button>
-                            </>
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
