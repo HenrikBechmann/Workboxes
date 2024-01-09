@@ -700,8 +700,8 @@ export const Drawer = (props) => {
         const
             containerLength = 
                 (['right','left'].includes(placementRef.current))
-                    ? containerDimensions.width
-                    : containerDimensions.height,
+                    ? containerDimensions?.width
+                    : containerDimensions?.height,
             ratio = drawerRatioRef.current
 
         movedLengthRef.current = 0
