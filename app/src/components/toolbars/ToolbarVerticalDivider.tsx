@@ -5,11 +5,11 @@ import React, {CSSProperties} from 'react'
 import { Box } from '@chakra-ui/react'
 
 const verticalDividerStyles = {
-    height:'20px',
+    height:'24px',
     borderLeft:'1px solid gray', 
     width:'0px', 
     marginLeft:'12px',
-    // display:'inline-block',
+    marginRight:'6px',
 }
 
 const VerticalToolbarDivider = (props) => {

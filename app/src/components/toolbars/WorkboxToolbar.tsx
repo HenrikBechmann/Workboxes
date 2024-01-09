@@ -13,6 +13,7 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
+import LearnIcon from './LearnIcon'
 
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
@@ -41,20 +42,21 @@ const smallerIconStyles = {
 }
 
 const iconWrapperStyles = {
-    display:'inline-block',
-    marginLeft:'12px',
+    height: '24px',
+    // display:'inline-block',
     opacity:0.7,
+    padding:'4px',
 }
 
-const displayNameStyles = {
-    display:'flex',
-    flexWrap:'nowrap',
-    alignItems:'center',
-    whiteSpace:'nowrap',
-    fontSize:'small', 
-    marginLeft:'4px',
-    marginRight:'3px', 
-} as CSSProperties
+// const displayNameStyles = {
+//     display:'flex',
+//     flexWrap:'nowrap',
+//     alignItems:'center',
+//     whiteSpace:'nowrap',
+//     fontSize:'small', 
+//     marginLeft:'4px',
+//     marginRight:'3px', 
+// } as CSSProperties
 
 // ---------------------------- embedded components ----------------------------
 const WorkboxControl = (props) => {
@@ -100,12 +102,15 @@ const WorkboxItemControl = (props) => {
         borderRadius:'12px',
     }
 
-   return <>
-        <span>&nbsp;&nbsp;</span>
-        <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
-        <span>&nbsp;&nbsp;</span>
-        <Text fontSize = 'sm'>{workboxItemTitle}</Text>
-    </>
+   return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
+        <Box display = 'flex' flexWrap = 'nowrap'>
+            <span>&nbsp;&nbsp;</span>
+            <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
+            <span>&nbsp;&nbsp;</span>
+            <Text fontSize = 'sm'>{workboxItemTitle}</Text>
+        </Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' fontStyle = 'italic'><span>workbox item</span></Box>
+    </Box>
 }
 
 // --------------------------- component ----------------------------
@@ -188,11 +193,8 @@ const WorkboxToolbar = (props) => {
         <WorkboxItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <ToolbarVerticalDivider />
         {swapToggle}
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'Explain this toolbar'>
-                <img style = {smallerIconStyles} src = {helpIcon} />
-            </Tooltip>
-        </Box>
+        <span>&nbsp;&nbsp;</span>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
