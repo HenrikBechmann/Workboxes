@@ -192,7 +192,7 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         <WorkboxItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <ToolbarVerticalDivider />
-        {swapToggle}
+        {/*swapToggle*/}
         <span>&nbsp;&nbsp;</span>
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
