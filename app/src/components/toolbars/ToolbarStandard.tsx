@@ -158,7 +158,7 @@ const ToolbarStandard = (props) => {
                 <FireIconControl />
             </MenuButton>
             <MenuList>
-                <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds <span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
+                <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
                 <MenuDivider />
                 <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
