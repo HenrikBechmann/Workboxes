@@ -11,6 +11,7 @@ import {
 
 import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
+import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
 import fireIcon from '../../../assets/fire.png'
@@ -185,11 +186,7 @@ const ToolbarStandard = (props) => {
                 <img style = {iconStyles} src = {subscriptionsIcon} />
             </Tooltip>
         </Box>
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'Explain this toolbar'>
-                <img style = {smallerIconStyles} src = {helpIcon} />
-            </Tooltip>
-        </Box>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} onClick = {goHome}>
             <Tooltip hasArrow label = 'Go to the main work page'>

@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 
+import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './ToolbarVerticalDivider'
 
 import cartIcon from '../../../assets/cart.png'
@@ -113,11 +114,7 @@ const ToolbarWorkspace = (props) => {
         <ToolbarVerticalDivider />
         <SelectionControl icon = {panelIcon} iconStyles = {panelIconStyles} displayName = 'panel selection' tooltipLabel = 'select a panel'/>
         <SelectionControl icon = {workspacesIcon} iconStyles = {iconStyles} displayName = 'workspace selection' tooltipLabel = 'select a workspace'/>
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'Explain this toolbar'>
-                <img style = {smallerIconStyles} src = {helpIcon} />
-            </Tooltip>
-        </Box>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} >
             <Tooltip hasArrow label = 'save workspace config to local'>
