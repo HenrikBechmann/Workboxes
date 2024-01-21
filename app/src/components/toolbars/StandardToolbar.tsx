@@ -120,7 +120,7 @@ const UserControl = (props) => {
 }
 
 // --------------------------- component ----------------------------
-const ToolbarStandard = (props) => {
+const StandardToolbar = (props) => {
 
     // ------------------------------ hooks ------------------------
     const 
@@ -223,4 +223,4 @@ const ToolbarStandard = (props) => {
     </Box>
 }
 
-export default ToolbarStandard
+export default StandardToolbar
