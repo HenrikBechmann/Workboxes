@@ -81,7 +81,7 @@ const displayNameStyles = {
 
 // ---------------------------- embedded component --------------------
 // --------------------------- component ----------------------------
-const ToolbarWorkspace = (props) => {
+const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -89,14 +89,13 @@ const ToolbarWorkspace = (props) => {
         <ToolbarVerticalDivider />
         <SelectionControl 
             icon = {panelIcon} 
-            iconStyles = {panelIconStyles} 
+            moreStyles = {{transform:'rotate(-90deg)'}}
             displayName = 'panel selection' 
             tooltip = 'select a panel'
             caption = 'panel selection'
         />
         <SelectionControl 
             icon = {workspacesIcon} 
-            iconStyles = {iconStyles} 
             displayName = 'workspace selection' 
             tooltip = 'select a workspace'
             caption = 'workspace selection'
@@ -105,12 +104,12 @@ const ToolbarWorkspace = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {databaseIcon} caption = 'local' tootip = 'save workspace config to local'/>
         <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
-        <StandardIcon icon = {moreVertIcon} caption = 'more'/>
+        <StandardIcon icon = {moreVertIcon} caption = 'more' tooltip = 'more options' />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workspace toolbars'/>
         &nbsp; &nbsp;
     </Box>
 }
 
-export default ToolbarWorkspace
+export default WorkspaceToolbar
 

@@ -13,6 +13,7 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
+import MenuIcon from './MenuIcon'
 import LearnIcon from './LearnIcon'
 
 import workboxIcon from '../../../assets/workbox.png'
@@ -59,39 +60,6 @@ const iconWrapperStyles = {
 // } as CSSProperties
 
 // ---------------------------- embedded components ----------------------------
-const WorkboxControl = (props) => {
-
-    const workboxIconControlStyles = {
-        display:'flex',
-        flexDirection:'column',
-        flexWrap:'nowrap',
-        alignItems:'center',
-        padding:'2px',
-        borderRadius:'6px',
-        marginLeft:'6px',
-    } as CSSProperties
-
-    const workboxIconStyles = {
-        height:'20px',
-        width:'20px',
-    }
-
-    const downArrowSpanStyles = {
-        opacity:0.5, 
-        fontSize:'small',
-    }
-    
-    return <Box style = {workboxIconControlStyles} >
-        <Box display = 'flex' flexWrap = 'nowrap' height = '24px' width = '24px' alignItems = 'center'>
-            <img style = {workboxIconStyles} src = {workboxIcon} />
-            <span style = {downArrowSpanStyles} >▼</span>
-        </Box>
-        <Box fontSize = 'xs' fontStyle = 'italic'>
-            <span>workbox</span>
-        </Box>
-    </Box> 
-}
-
 const WorkboxItemControl = (props) => {
 
     const { workboxItemIcon, workboxItemTitle } = props
@@ -180,7 +148,7 @@ const WorkboxToolbar = (props) => {
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <Menu>
             <MenuButton >
-                <WorkboxControl />
+                <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox'/>
             </MenuButton>
             <MenuList>
                 <MenuItem >Workbox settings</MenuItem>

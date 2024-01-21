@@ -23,6 +23,11 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
+const iconStyles = {
+    height:'20px',
+    width:'20px',
+}
+
 const upArrowWrapperStyles = {
     display:'flex',
     transform:'rotate(180deg)'
@@ -38,7 +43,9 @@ const arrowStyles = {
 const SelectionControl = (props) => {
 
     const 
-        { displayName, icon, iconStyles, tooltip, caption } = props
+        { displayName, icon, moreStyles, tooltip, caption } = props
+
+    const iconStylesLocal = {...iconStyles, ...moreStyles}
 
     return <Box style = {{
         display:'flex',
@@ -50,14 +57,13 @@ const SelectionControl = (props) => {
         justifyContent: 'center',
         }}
     >
-        
-        <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
-            <Tooltip hasArrow label = {tooltip} >
-                <Box style = {iconWrapperStyles}> <img style = {iconStyles} src = {icon} /></Box>
-            </Tooltip>
-            <Box style = {displayNameStyles} >{displayName}</Box>
-            <Box style = {upArrowWrapperStyles} ><span style = {arrowStyles}>▼</span></Box>
-        </Box>
+        <Tooltip hasArrow label = {tooltip} >
+            <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
+                <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>
+                <Box style = {displayNameStyles} >{displayName}</Box>
+                <Box style = {upArrowWrapperStyles} ><span style = {arrowStyles}>▼</span></Box>
+            </Box>
+        </Tooltip>
         <Box fontSize = 'xs' fontStyle = 'italic'><span>{caption}</span></Box>
     </Box>
 

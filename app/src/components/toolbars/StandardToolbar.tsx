@@ -1,7 +1,7 @@
 // StandardToolbar.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {CSSProperties} from 'react'
+import React, {useMemo, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import {
@@ -12,6 +12,7 @@ import {
 import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import LearnIcon from './LearnIcon'
+import MenuIcon from './MenuIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
 import fireIcon from '../../../assets/fire.png'
@@ -90,12 +91,12 @@ const displayNameStyles = {
 } as CSSProperties
 
 // ---------------------------- embedded components ----------------------------
-const FireIconControl = (props) => {
+// const FireIconControl = (props) => {
     
-    return <Box style = {fireIconControlStyles} >
-        <img style = {iconStyles} src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
-    </Box> 
-}
+//     return <Box style = {fireIconControlStyles} >
+//         <img style = {iconStyles} src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
+//     </Box> 
+// }
 
 const UserControl = (props) => {
 
@@ -152,19 +153,18 @@ const ToolbarStandard = (props) => {
             })
         }
 
-    // render
-    return <Box style = {standardToolbarStyles}>
-        <Menu>
-            <MenuButton >
-                <FireIconControl />
-            </MenuButton>
-            <MenuList>
+    const menulist = useMemo(() => {
+       return <MenuList>
                 <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
                 <MenuDivider />
                 <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
-        </Menu>
+    },[])
+
+    // render
+    return <Box style = {standardToolbarStyles}>
+        <MenuIcon icon = {fireIcon} caption = 'Tribalopolis' tooltip = 'Tribalopolis menu' menulist = {menulist} />
         <ToolbarVerticalDivider />
         <Box style = {iconWrapperStyles} onClick = {gotoNotifications} >
             <Tooltip hasArrow label = 'Notifications to this account'>

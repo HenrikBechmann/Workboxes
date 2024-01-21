@@ -4,7 +4,7 @@
 import React, { useRef } from 'react'
 
 import Toolbar from '../components/toolbars/Toolbar'
-import ToolbarWorkspace from '../components/toolbars/WorkspaceToolbar'
+import WorkspaceToolbar from '../components/toolbars/WorkspaceToolbar'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------
@@ -47,7 +47,7 @@ export const Main = (props) => {
         <GridItem area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%'>
                 <Toolbar>
-                    <ToolbarWorkspace />
+                    <WorkspaceToolbar />
                 </Toolbar>
             </Box>
         </GridItem>
