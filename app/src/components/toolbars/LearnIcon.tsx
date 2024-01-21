@@ -1,11 +1,10 @@
 // LearnIcon.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, useEffect, CSSProperties} from 'react'
+import React from 'react'
 
 import {
-  Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
-  Tooltip, Box, Text, VStack,
+  Tooltip, Box,
 } from '@chakra-ui/react'
 
 import helpIcon from '../../../assets/help.png'
@@ -24,12 +23,12 @@ const iconWrapperStyles = {
 
 const LearnIcon = (props) => {
 
-    const {tooltip} = props
+    const { tooltip } = props
 
-    return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center'>
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = {tooltip} >
-                <img style = {smallerIconStyles} src = {helpIcon} />
+    return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px'>
+        <Box style = { iconWrapperStyles } >
+            <Tooltip hasArrow label = { tooltip } >
+                <img style = { smallerIconStyles } src = { helpIcon } />
             </Tooltip>
         </Box>
         <Box fontSize = 'xs' fontStyle = 'italic'><span>learn</span></Box>

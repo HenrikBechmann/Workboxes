@@ -8,6 +8,8 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 
+import StandardIcon from './StandardIcon'
+import SelectionControl from './SelectionControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
@@ -35,7 +37,7 @@ const standardToolbarStyles = {
 
 const iconWrapperStyles = {
     display:'inline-block',
-    marginLeft:'12px',
+    // marginLeft:'12px',
     opacity:0.7,
 }
 
@@ -73,68 +75,39 @@ const displayNameStyles = {
     alignItems:'center',
     whiteSpace:'nowrap',
     fontSize:'small', 
-    marginLeft:'4px',
+    marginLeft:'6px',
     marginRight:'3px', 
 } as CSSProperties
 
 // ---------------------------- embedded component --------------------
-const SelectionControl = (props) => {
-
-    const 
-        { displayName, icon, iconStyles, tooltipLabel } = props
-
-    return <Box style = {{
-        display:'flex',
-        flexWrap:'nowrap',
-        marginLeft:'4px',
-        borderRadius:'6px',
-        alignItems: 'center',
-        }}
-    >
-        
-        <Tooltip hasArrow label = {tooltipLabel} >
-        <Box style = {iconWrapperStyles}> <img style = {iconStyles} src = {icon} /></Box>
-        </Tooltip>
-        <Box style = {displayNameStyles} >{displayName}</Box>
-        <Box style = {upArrowWrapperStyles} ><span style = {arrowStyles}>▼</span></Box>
-    </Box>
-
-}
-
 // --------------------------- component ----------------------------
 const ToolbarWorkspace = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'toggle the item transfer cart'>
-                <img style = {iconStyles} src = {cartIcon} />
-            </Tooltip>
-        </Box> 
+        <StandardIcon icon = {cartIcon} caption = 'transfer' tooltip = 'toggle the item transfer cart'/>
         <ToolbarVerticalDivider />
-        <SelectionControl icon = {panelIcon} iconStyles = {panelIconStyles} displayName = 'panel selection' tooltipLabel = 'select a panel'/>
-        <SelectionControl icon = {workspacesIcon} iconStyles = {iconStyles} displayName = 'workspace selection' tooltipLabel = 'select a workspace'/>
+        <SelectionControl 
+            icon = {panelIcon} 
+            iconStyles = {panelIconStyles} 
+            displayName = 'panel selection' 
+            tooltip = 'select a panel'
+            caption = 'panel selection'
+        />
+        <SelectionControl 
+            icon = {workspacesIcon} 
+            iconStyles = {iconStyles} 
+            displayName = 'workspace selection' 
+            tooltip = 'select a workspace'
+            caption = 'workspace selection'
+        />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'save workspace config to local'>
-                <img style = {iconStyles} src = {databaseIcon} />
-            </Tooltip>
-        </Box> 
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'save workspace config to the cloud'>
-                <img style = {iconStyles} src = {uploadIcon} />
-            </Tooltip>
-        </Box> 
-        <Box style = {iconWrapperStyles} >
-            <img style = {iconStyles} src = {moreVertIcon} />
-        </Box> 
+        <StandardIcon icon = {databaseIcon} caption = 'local' tootip = 'save workspace config to local'/>
+        <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
+        <StandardIcon icon = {moreVertIcon} caption = 'more'/>
         <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} >
-            <Tooltip hasArrow label = 'hide workspace toolbars'>
-                <img style = {iconStyles} src = {expandMoreIcon} />
-            </Tooltip>
-        </Box> 
+        <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workspace toolbars'/>
         &nbsp; &nbsp;
     </Box>
 }
