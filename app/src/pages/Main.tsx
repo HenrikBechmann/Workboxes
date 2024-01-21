@@ -4,7 +4,7 @@
 import React, { useRef } from 'react'
 
 import Toolbar from '../components/toolbars/Toolbar'
-import ToolbarWorkspace from '../components/toolbars/ToolbarWorkspace'
+import ToolbarWorkspace from '../components/toolbars/WorkspaceToolbar'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------

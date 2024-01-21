@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 
 import LearnIcon from './LearnIcon'
-import ToolbarVerticalDivider from './ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './VerticalDivider'
 
 import cartIcon from '../../../assets/cart.png'
 import workspacesIcon from '../../../assets/workspaces.png'

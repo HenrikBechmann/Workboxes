@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
 import Toolbar from '../components/toolbars/Toolbar'
-import ToolbarStandard from '../components/toolbars/ToolbarStandard'
+import ToolbarStandard from '../components/toolbars/StandardToolbar'
 
 const bodyStyle = {
     height:'100%',

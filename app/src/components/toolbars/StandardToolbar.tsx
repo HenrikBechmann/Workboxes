@@ -12,7 +12,7 @@ import {
 import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import LearnIcon from './LearnIcon'
-import ToolbarVerticalDivider from './ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './VerticalDivider'
 
 import fireIcon from '../../../assets/fire.png'
 import notificationsIcon from '../../../assets/notifications.png'

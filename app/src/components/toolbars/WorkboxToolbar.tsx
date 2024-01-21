@@ -12,7 +12,7 @@ import {
 import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
-import ToolbarVerticalDivider from './ToolbarVerticalDivider'
+import ToolbarVerticalDivider from './VerticalDivider'
 import LearnIcon from './LearnIcon'
 
 import workboxIcon from '../../../assets/workbox.png'
