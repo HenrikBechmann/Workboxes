@@ -36,20 +36,18 @@ const MenuIcon = (props) => {
     return <Box style = {workboxIconControlStyles}>
         <Menu>
             <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center'>
-            <Tooltip hasArrow label = {tooltip} >
-                <Box >
-                <MenuButton >
-                    <Box display = 'flex' flexDirection = 'row' flexWrap = 'nowrap' alignItems = 'center'>
-                        <img style = {workboxIconStyles} src = {icon} />
-                        <span style = {downArrowSpanStyles} >▼</span>
-                    </Box>
-                </MenuButton>
+                <Tooltip hasArrow label = {tooltip} >
+                    <MenuButton >
+                        <Box display = 'flex' flexDirection = 'row' flexWrap = 'nowrap' alignItems = 'center'>
+                            <img style = {workboxIconStyles} src = {icon} />
+                            <span style = {downArrowSpanStyles} >▼</span>
+                        </Box>
+                    </MenuButton>
+                </Tooltip>
                 {menulist}
+                <Box fontSize = 'xs' fontStyle = 'italic'>
+                    <span>{caption}</span>
                 </Box>
-            </Tooltip>
-            <Box fontSize = 'xs' fontStyle = 'italic'>
-                <span>{caption}</span>
-            </Box>
             </Box>
         </Menu>
     </Box> 
