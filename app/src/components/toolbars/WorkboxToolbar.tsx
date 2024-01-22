@@ -14,6 +14,7 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 import MenuIcon from './MenuIcon'
+import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 
 import workboxIcon from '../../../assets/workbox.png'
@@ -49,16 +50,6 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-// const displayNameStyles = {
-//     display:'flex',
-//     flexWrap:'nowrap',
-//     alignItems:'center',
-//     whiteSpace:'nowrap',
-//     fontSize:'small', 
-//     marginLeft:'4px',
-//     marginRight:'3px', 
-// } as CSSProperties
-
 // ---------------------------- embedded components ----------------------------
 const WorkboxItemControl = (props) => {
 
@@ -77,7 +68,7 @@ const WorkboxItemControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'sm'>{workboxItemTitle}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' fontStyle = 'italic'><span>workbox item</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox item</span></Box>
     </Box>
 }
 
@@ -157,6 +148,8 @@ const WorkboxToolbar = (props) => {
         {listToggle}
         <ToolbarVerticalDivider />
         <WorkboxItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
+        <ToolbarVerticalDivider />
+        {swapToggle}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>

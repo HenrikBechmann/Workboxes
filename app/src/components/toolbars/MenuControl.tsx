@@ -10,7 +10,6 @@ import {
 
 const iconWrapperStyles = {
     display:'inline-block',
-    // marginLeft:'12px',
     opacity:0.7,
 }
 
@@ -42,7 +41,7 @@ const arrowStyles = {
 const MenuControl = (props) => {
 
     const 
-        { displayName, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props
+        { displayName, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props
 
     const iconStylesLocal = {...iconStyles, ...moreStyles}
 
