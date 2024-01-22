@@ -3,7 +3,7 @@
 
 import React, { useRef } from 'react'
 
-import Toolbar from '../components/toolbars/Toolbar'
+import ToolbarFrame from '../components/toolbars/ToolbarFrame'
 import WorkspaceToolbar from '../components/toolbars/WorkspaceToolbar'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
@@ -46,9 +46,9 @@ export const Main = (props) => {
         </GridItem>
         <GridItem area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%'>
-                <Toolbar>
+                <ToolbarFrame>
                     <WorkspaceToolbar />
-                </Toolbar>
+                </ToolbarFrame>
             </Box>
         </GridItem>
     </Grid>

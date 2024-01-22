@@ -6,7 +6,7 @@ import { Text, Box, Grid, GridItem } from '@chakra-ui/react'
 
 import { useUserData } from '../system/FirebaseProviders'
 
-import Toolbar from '../components/toolbars/Toolbar'
+import ToolbarFrame from '../components/toolbars/ToolbarFrame'
 import ToolbarStandard from '../components/toolbars/StandardToolbar'
 
 const bodyStyle = {
@@ -38,12 +38,12 @@ const LayoutGeneral = (props) => {
                               "body"`}
     >
         <GridItem data-type = 'grid-header' gridArea = 'header'>
-            <Toolbar>
+            <ToolbarFrame>
                 {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
                 style={navlinkStyles}
                     >Sign in</NavLink></Text>}
                 {userData && <ToolbarStandard />}
-            </Toolbar>
+            </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body'>        
             <Box data-type = 'general-outlet' style = {bodyStyle}>

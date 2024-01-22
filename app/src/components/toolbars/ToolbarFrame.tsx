@@ -1,4 +1,4 @@
-// Toolbar.tsx
+// ToolbarFrame.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useRef, useEffect, useLayoutEffect, useCallback, useState, CSSProperties} from 'react'
@@ -79,8 +79,8 @@ const navNextStyles = {
     borderRadius:'16px 0 0 16px',
 } as CSSProperties
 
-// ------------------------------- Toolbar component --------------------------------
-const Toolbar = (props) => {
+// ------------------------------- ToolbarFrame component --------------------------------
+const ToolbarFrame = (props) => {
 
     // ----------------------------- state hooks ------------------
     const 
@@ -193,4 +193,4 @@ const Toolbar = (props) => {
 
 }
 
-export default Toolbar
+export default ToolbarFrame

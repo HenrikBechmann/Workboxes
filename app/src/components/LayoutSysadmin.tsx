@@ -4,7 +4,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
-import Toolbar from '../components/toolbars/Toolbar'
+import ToolbarFrame from '../components/toolbars/ToolbarFrame'
 import ToolbarStandard from '../components/toolbars/StandardToolbar'
 
 const bodyStyle = {
@@ -26,9 +26,9 @@ const LayoutSysadmin = (props) => {
                               "body"`}
     >
         <GridItem data-type = 'grid-header' gridArea = 'header'>
-            <Toolbar>
+            <ToolbarFrame>
                 <ToolbarStandard />
-            </Toolbar>
+            </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body'>        
             <Box data-type = 'sysadmin-outlet' style = {bodyStyle}>
