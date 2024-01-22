@@ -31,7 +31,7 @@ const LearnIcon = (props) => {
                 <img style = { smallerIconStyles } src = { helpIcon } />
             </Tooltip>
         </Box>
-        <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>learn</span></Box>
+        <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>info</span></Box>
     </Box>
 
 }
