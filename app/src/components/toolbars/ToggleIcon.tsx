@@ -74,7 +74,7 @@ const ToggleIcon = (props) => {
                 <img style = {iconToggleStylesRef.current} src = {icon} />
             </Tooltip>
         </Box>
-        <Box fontSize = 'xs' fontStyle = 'italic'>{caption}</Box>
+        <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'>{caption}</Box>
     </Box>
 
 }

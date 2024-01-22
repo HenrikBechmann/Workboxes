@@ -32,7 +32,7 @@ const StandardIcon = (props) => {
                 <img style = { iconStyles } src = { icon } />
             </Tooltip>
         </Box>
-        <Box fontSize = 'xs' fontStyle = 'italic'><span>{caption}</span></Box>
+        <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{caption}</span></Box>
     </Box>
 
 }

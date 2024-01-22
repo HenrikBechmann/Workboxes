@@ -144,16 +144,14 @@ const WorkboxToolbar = (props) => {
             disabledRef:disabledSwapRef, 
         })
 
+    const workboxmenulist = <MenuList>
+        <MenuItem >Workbox settings</MenuItem>
+    </MenuList>
+
+
     // render
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
-        <Menu>
-            <MenuButton >
-                <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox'/>
-            </MenuButton>
-            <MenuList>
-                <MenuItem >Workbox settings</MenuItem>
-            </MenuList>
-        </Menu>
+        <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
         {profileToggle}
         {listToggle}
