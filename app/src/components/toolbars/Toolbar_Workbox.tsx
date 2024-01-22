@@ -23,7 +23,8 @@ import helpIcon from '../../../assets/help.png'
 import listIcon from '../../../assets/list.png'
 import profileIcon from '../../../assets/profile.png'
 import swapIcon from '../../../assets/swap.png'
-import linkIcon from '../../../assets/link.png'
+// import linkIcon from '../../../assets/link.png'
+import settingsIcon from '../../../assets/settings.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -63,6 +64,8 @@ const WorkboxToolbar = (props) => {
         disabledLinksRef = useRef(workboxControls.listsDisabled),
         toggleOnSwapRef = useRef(workboxControls.swap),
         disabledSwapRef = useRef(workboxControls.swapDisabled),
+        toggleOnSettingsRef = useRef(workboxControls.settings),
+        disabledSettingsRef = useRef(workboxControls.settingsDisabled),
 
         toggleHistoryRef = useRef({
             profile:toggleOnProfileRef.current,
@@ -92,16 +95,16 @@ const WorkboxToolbar = (props) => {
     const
         profileToggle = useToggleIcon({
             icon:profileIcon, 
-            tooltip:'Toggle profile pane',
-            caption:'profile',
+            tooltip:'Toggle document pane',
+            caption:'document',
             toggleOnRef:toggleOnProfileRef,
             disabledRef:disabledProfileRef, 
         }),
 
         listToggle = useToggleIcon({
             icon:listIcon, 
-            tooltip:'Toggle lists pane',
-            caption:'lists',
+            tooltip:'Toggle links pane',
+            caption:'links',
             toggleOnRef:toggleOnLinksRef,
             disabledRef:disabledLinksRef, 
         }),
@@ -112,6 +115,14 @@ const WorkboxToolbar = (props) => {
             caption:'mirror',
             toggleOnRef:toggleOnSwapRef, 
             disabledRef:disabledSwapRef, 
+        }),
+
+        settingsToggle = useToggleIcon({
+            icon:settingsIcon, 
+            tooltip:'Toggle settings pane',
+            caption:'settings',
+            toggleOnRef:toggleOnSettingsRef, 
+            disabledRef:disabledSettingsRef, 
         })
 
     const workboxmenulist = <MenuList>
@@ -123,8 +134,9 @@ const WorkboxToolbar = (props) => {
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
-        {profileToggle}
-        {listToggle}
+        { settingsToggle }
+        { profileToggle }
+        { listToggle }
         <ToolbarVerticalDivider />
         <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <ToolbarVerticalDivider />

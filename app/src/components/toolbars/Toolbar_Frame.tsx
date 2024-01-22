@@ -32,7 +32,7 @@ const scrollbarStyles = {
 }  as CSSProperties
 
 const navBeforeStyles = {
-    zIndex:1,
+    // zIndex:1,
     position:'absolute',
     left:'0px',
     top:'3px',
@@ -64,7 +64,7 @@ const navAfterIconStyles = {
 } as CSSProperties
 
 const navNextStyles = {
-    zIndex:1,
+    // zIndex:1,
     position:'absolute',
     right:'0px',
     top:'3px',
