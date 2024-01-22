@@ -13,6 +13,7 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'
+import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
 import fireIcon from '../../../assets/fire.png'
@@ -166,33 +167,13 @@ const StandardToolbar = (props) => {
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Tribalopolis' tooltip = 'Tribalopolis menu' menulist = {menulist} />
         <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} onClick = {gotoNotifications} >
-            <Tooltip hasArrow label = 'Notifications to this account'>
-                <img style = {iconStyles} src = {notificationsIcon} />
-            </Tooltip>
-        </Box> 
-        <Box style = {iconWrapperStyles} onClick = {gotoMessages} >
-            <Tooltip hasArrow label = 'Direct messages'>
-                <img style = {iconStyles} src = {messageIcon} />
-            </Tooltip>
-        </Box>
-        <Box style = {iconWrapperStyles} onClick = {gotoChatrooms} >
-            <Tooltip hasArrow label = 'Chatrooms with this account'>
-                <img style = {iconStyles} src = {chatIcon} />
-            </Tooltip>
-        </Box>
-        <Box style = {iconWrapperStyles} onClick = {gotoNewsflows} >
-            <Tooltip hasArrow label = 'Subscribed news flows'>
-                <img style = {iconStyles} src = {subscriptionsIcon} />
-            </Tooltip>
-        </Box>
+        <StandardIcon icon = {notificationsIcon} caption = 'notices' tooltip = 'Notifications to this account' response = {gotoNotifications} />
+        <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
+        <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
+        <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <Box style = {iconWrapperStyles} onClick = {goHome}>
-            <Tooltip hasArrow label = 'Go to the main work page'>
-                <img style = {iconStyles} src = {homeIcon} />
-            </Tooltip>
-        </Box>
+        <StandardIcon icon = {homeIcon} caption = 'workspace' tooltip = 'Go to the main work page' response = {goHome} />
         <ToolbarVerticalDivider />
         <Menu>
             <MenuButton >
@@ -212,11 +193,7 @@ const StandardToolbar = (props) => {
         </Menu>
         {isSuperUser && <>
             <ToolbarVerticalDivider />
-            <Box style = {iconWrapperStyles} onClick = {gotoSysadmin}>
-                <Tooltip hasArrow label = 'System settings'>
-                    <img style = {iconStyles} src = {appSettingsIcon} />
-                </Tooltip>
-            </Box>
+            <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
             </>
         }
         <span>&nbsp;&nbsp;</span>

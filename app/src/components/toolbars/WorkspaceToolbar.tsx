@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 
 import StandardIcon from './StandardIcon'
-import SelectionControl from './SelectionControl'
+import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
@@ -87,22 +87,22 @@ const WorkspaceToolbar = (props) => {
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {cartIcon} caption = 'transfer' tooltip = 'toggle the item transfer cart'/>
         <ToolbarVerticalDivider />
-        <SelectionControl 
+        <MenuControl 
             icon = {panelIcon} 
             moreStyles = {{transform:'rotate(-90deg)'}}
-            displayName = 'panel selection' 
+            displayName = 'main panel' 
             tooltip = 'select a panel'
             caption = 'panel selection'
         />
-        <SelectionControl 
+        <MenuControl 
             icon = {workspacesIcon} 
-            displayName = 'workspace selection' 
+            displayName = 'main workspace' 
             tooltip = 'select a workspace'
             caption = 'workspace selection'
         />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {databaseIcon} caption = 'local' tootip = 'save workspace config to local'/>
+        <StandardIcon icon = {databaseIcon} caption = 'local' tooltip = 'save workspace config to local'/>
         <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
         <StandardIcon icon = {moreVertIcon} caption = 'more' tooltip = 'more options' />
         <ToolbarVerticalDivider />

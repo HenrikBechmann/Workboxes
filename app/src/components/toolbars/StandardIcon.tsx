@@ -19,15 +19,15 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-const LearnIcon = (props) => {
+const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, isDisabled } = props
+    const { icon, caption, tooltip, response, isDisabled = false } = props
 
-    let isDisabledLocal = isDisabled ?? false
+    let isDisabledLocal = isDisabled
     if (!isDisabled) isDisabledLocal = !tooltip
 
     return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px'>
-        <Box style = { iconWrapperStyles } >
+        <Box style = { iconWrapperStyles } onClick = {response} >
             <Tooltip isDisabled = {isDisabledLocal} hasArrow label = { tooltip } >
                 <img style = { iconStyles } src = { icon } />
             </Tooltip>
@@ -37,4 +37,4 @@ const LearnIcon = (props) => {
 
 }
 
-export default LearnIcon
+export default StandardIcon

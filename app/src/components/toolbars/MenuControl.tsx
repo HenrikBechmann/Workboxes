@@ -40,7 +40,7 @@ const arrowStyles = {
     alignItems:'center',
 }
 
-const SelectionControl = (props) => {
+const MenuControl = (props) => {
 
     const 
         { displayName, icon, moreStyles, tooltip, caption } = props
@@ -69,4 +69,4 @@ const SelectionControl = (props) => {
 
 }
 
-export default SelectionControl
+export default MenuControl
