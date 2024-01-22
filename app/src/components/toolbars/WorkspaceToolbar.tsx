@@ -93,12 +93,14 @@ const WorkspaceToolbar = (props) => {
             displayName = 'main panel' 
             tooltip = 'select a panel'
             caption = 'panel selection'
+            arrowdirection = 'up'
         />
         <MenuControl 
             icon = {workspacesIcon} 
             displayName = 'main workspace' 
             tooltip = 'select a workspace'
             caption = 'workspace selection'
+            arrowdirection = 'up'
         />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />

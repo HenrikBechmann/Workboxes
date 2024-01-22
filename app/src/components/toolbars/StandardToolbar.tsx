@@ -13,6 +13,7 @@ import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'
+import MenuControl from './MenuControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
@@ -91,35 +92,6 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
-// ---------------------------- embedded components ----------------------------
-// const FireIconControl = (props) => {
-    
-//     return <Box style = {fireIconControlStyles} >
-//         <img style = {iconStyles} src = {fireIcon} /><span style = {downArrowStyles} >▼</span>
-//     </Box> 
-// }
-
-const UserControl = (props) => {
-
-    const 
-        userData = useUserData(),
-        { displayName, photoURL } = userData.authUser
-
-    return <Box style = {
-        {
-            display:'flex',
-            flexWrap:'nowrap',
-            marginLeft:'12px',
-            borderRadius:'6px',
-        }
-    }>
-        <img style = {avatarStyles} src = {photoURL} />
-        <Box style = {displayNameStyles} >{displayName}</Box>
-        <Box style = {downArrowWrapperStyles} ><span style = {downArrowStyles}>▼</span></Box>
-    </Box>
-
-}
-
 // --------------------------- component ----------------------------
 const StandardToolbar = (props) => {
 
@@ -154,7 +126,7 @@ const StandardToolbar = (props) => {
             })
         }
 
-    const menulist = useMemo(() => {
+    const tribalopolismenulist = useMemo(() => {
        return <MenuList>
                 <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
                 <MenuDivider />
@@ -163,9 +135,25 @@ const StandardToolbar = (props) => {
             </MenuList>
     },[])
 
+    const currentusermenulist = useMemo(() => {
+
+        return <MenuList>
+            <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
+            <MenuDivider />
+            <MenuGroup title = 'MANAGE...'>
+                <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
+                <MenuItem onClick = {gotoMemberships}>Workgroup memberships</MenuItem>
+                <MenuItem onClick = {gotoDomains}>Account workgroups</MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuItem onClick = {logOut}>Sign out</MenuItem>
+        </MenuList>
+
+    },[])
+
     // render
     return <Box style = {standardToolbarStyles}>
-        <MenuIcon icon = {fireIcon} caption = 'Tribalopolis' tooltip = 'Tribalopolis menu' menulist = {menulist} />
+        <MenuIcon icon = {fireIcon} caption = 'Tribalopolis' tooltip = 'Tribalopolis menu' menulist = {tribalopolismenulist} />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {notificationsIcon} caption = 'notices' tooltip = 'Notifications to this account' response = {gotoNotifications} />
         <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
@@ -175,22 +163,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {homeIcon} caption = 'workspace' tooltip = 'Go to the main work page' response = {goHome} />
         <ToolbarVerticalDivider />
-        <Menu>
-            <MenuButton >
-                <UserControl />
-            </MenuButton>
-            <MenuList>
-                <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
-                <MenuDivider />
-                <MenuGroup title = 'MANAGE...'>
-                    <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
-                    <MenuItem onClick = {gotoMemberships}>Workgroup memberships</MenuItem>
-                    <MenuItem onClick = {gotoDomains}>Account workgroups</MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuItem onClick = {logOut}>Sign out</MenuItem>
-            </MenuList>
-        </Menu>
+        <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         {isSuperUser && <>
             <ToolbarVerticalDivider />
             <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />

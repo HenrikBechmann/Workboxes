@@ -4,7 +4,8 @@
 import React, {CSSProperties} from 'react'
 
 import {
-  Tooltip, Box,
+    Tooltip, Box,
+    Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
 const iconWrapperStyles = {
@@ -28,10 +29,8 @@ const iconStyles = {
     width:'20px',
 }
 
-const upArrowWrapperStyles = {
+const arrowWrapperStyles = {
     display:'flex',
-    transform:'rotate(180deg)'
-
 }
 
 const arrowStyles = {
@@ -43,9 +42,16 @@ const arrowStyles = {
 const MenuControl = (props) => {
 
     const 
-        { displayName, icon, moreStyles, tooltip, caption } = props
+        { displayName, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props
 
     const iconStylesLocal = {...iconStyles, ...moreStyles}
+
+    const moreArrowWrapperStyles = 
+        arrowdirection == 'down'
+        ? null
+        : {transform:'rotate(180deg)'}
+
+    const arrowWrapperStylesLocal = {...arrowWrapperStyles, ...moreArrowWrapperStyles}
 
     return <Box style = {{
         display:'flex',
@@ -57,14 +63,21 @@ const MenuControl = (props) => {
         justifyContent: 'center',
         }}
     >
-        <Tooltip hasArrow label = {tooltip} >
-            <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
-                <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>
-                <Box style = {displayNameStyles} >{displayName}</Box>
-                <Box style = {upArrowWrapperStyles} ><span style = {arrowStyles}>▼</span></Box>
-            </Box>
-        </Tooltip>
-        <Box fontSize = 'xs' fontStyle = 'italic'><span>{caption}</span></Box>
+        <Menu>
+            <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center'>
+                <Tooltip hasArrow label = {tooltip} >
+                    <MenuButton >
+                        <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
+                            <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>
+                            <Box style = {displayNameStyles} >{displayName}</Box>
+                            <Box style = {arrowWrapperStylesLocal} ><span style = {arrowStyles}>▼</span></Box>
+                        </Box>
+                    </MenuButton >
+                </Tooltip>
+                {menulist}
+            <Box fontSize = 'xs' fontStyle = 'italic'><span>{caption}</span></Box>
+        </Box>
+        </Menu>
     </Box>
 
 }
