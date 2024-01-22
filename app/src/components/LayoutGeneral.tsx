@@ -6,8 +6,8 @@ import { Text, Box, Grid, GridItem } from '@chakra-ui/react'
 
 import { useUserData } from '../system/FirebaseProviders'
 
-import ToolbarFrame from '../components/toolbars/ToolbarFrame'
-import ToolbarStandard from '../components/toolbars/StandardToolbar'
+import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
+import ToolbarStandard from '../components/toolbars/Toolbar_Standard'
 
 const bodyStyle = {
     height: '100%', 

@@ -79,8 +79,8 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
-// ---------------------------- embedded component --------------------
 // --------------------------- component ----------------------------
+// bottom toolbar
 const WorkspaceToolbar = (props) => {
 
     // render

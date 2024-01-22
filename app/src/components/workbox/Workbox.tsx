@@ -3,8 +3,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
-import ToolbarFrame from '../toolbars/ToolbarFrame'
-import WorkboxToolbar from '../toolbars/WorkboxToolbar'
+import ToolbarFrame from '../toolbars/Toolbar_Frame'
+import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
 const workboxStyle = {

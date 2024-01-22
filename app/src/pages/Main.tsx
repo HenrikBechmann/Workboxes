@@ -3,8 +3,8 @@
 
 import React, { useRef } from 'react'
 
-import ToolbarFrame from '../components/toolbars/ToolbarFrame'
-import WorkspaceToolbar from '../components/toolbars/WorkspaceToolbar'
+import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
+import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
 // ------------------------- static values --------------------

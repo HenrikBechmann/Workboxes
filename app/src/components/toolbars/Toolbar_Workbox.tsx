@@ -16,6 +16,7 @@ import ToolbarVerticalDivider from './VerticalDivider'
 import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
+import ItemControl from './ItemControl'
 
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
@@ -48,28 +49,6 @@ const iconWrapperStyles = {
     // display:'inline-block',
     opacity:0.7,
     padding:'4px',
-}
-
-// ---------------------------- embedded components ----------------------------
-const WorkboxItemControl = (props) => {
-
-    const { workboxItemIcon, workboxItemTitle } = props
-
-    const workboxItemIconStyles = {
-        width:'24px', 
-        height:'24px', 
-        borderRadius:'12px',
-    }
-
-   return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
-        <Box display = 'flex' flexWrap = 'nowrap'>
-            <span>&nbsp;&nbsp;</span>
-            <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
-            <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'sm'>{workboxItemTitle}</Text>
-        </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox item</span></Box>
-    </Box>
 }
 
 // --------------------------- component ----------------------------
@@ -147,7 +126,7 @@ const WorkboxToolbar = (props) => {
         {profileToggle}
         {listToggle}
         <ToolbarVerticalDivider />
-        <WorkboxItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
+        <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <ToolbarVerticalDivider />
         {swapToggle}
         <ToolbarVerticalDivider />
