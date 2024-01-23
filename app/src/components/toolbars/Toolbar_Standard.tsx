@@ -1,4 +1,4 @@
-// StandardToolbar.tsx
+// Toolbar_Standard.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useMemo, CSSProperties} from 'react'

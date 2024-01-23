@@ -1,4 +1,4 @@
-// ToolbarWorkbox.tsx
+// Toolbar_Workbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
@@ -119,8 +119,8 @@ const WorkboxToolbar = (props) => {
 
         settingsToggle = useToggleIcon({
             icon:settingsIcon, 
-            tooltip:'Toggle settings pane',
-            caption:'settings',
+            tooltip:'Toggle properties pane',
+            caption:'properties',
             toggleOnRef:toggleOnSettingsRef, 
             disabledRef:disabledSettingsRef, 
         })
