@@ -20,17 +20,18 @@ const LayoutSysadmin = (props) => {
     return <Grid 
         data-type = 'layout-sysadmin'
         height = '100vh' 
+        width = '100vw'
         gridTemplateColumns = '1fr' 
         gridTemplateRows = 'auto 1fr'
         gridTemplateAreas = {`"header"
                               "body"`}
     >
-        <GridItem data-type = 'grid-header' gridArea = 'header'>
+        <GridItem data-type = 'grid-header' gridArea = 'header'  width = '100vw'>
             <ToolbarFrame>
                 <ToolbarStandard />
             </ToolbarFrame>
         </GridItem>
-        <GridItem data-type = 'grid-body' gridArea = 'body'>        
+        <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>        
             <Box data-type = 'sysadmin-outlet' style = {bodyStyle}>
                 <Outlet />
             </Box>

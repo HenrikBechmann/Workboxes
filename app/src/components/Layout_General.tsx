@@ -32,12 +32,13 @@ const LayoutGeneral = (props) => {
     return <Grid
         data-type = 'layout-general'
         height = '100vh' 
+        width = '100vw'
         gridTemplateColumns = '1fr' 
         gridTemplateRows = 'auto 1fr'
         gridTemplateAreas = {`"header"
                               "body"`}
     >
-        <GridItem data-type = 'grid-header' gridArea = 'header'>
+        <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw'>
             <ToolbarFrame>
                 {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
                 style={navlinkStyles}
@@ -45,7 +46,7 @@ const LayoutGeneral = (props) => {
                 {userData && <ToolbarStandard />}
             </ToolbarFrame>
         </GridItem>
-        <GridItem data-type = 'grid-body' gridArea = 'body'>        
+        <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>
             <Box data-type = 'general-outlet' style = {bodyStyle}>
                 <Outlet />
             </Box>

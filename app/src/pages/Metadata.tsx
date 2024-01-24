@@ -167,8 +167,8 @@ const Metadata = (props) => {
                         <Drawer {...drawerProps.help} />
                     </>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
-                        <Box data-type = 'paeg-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-                            <ContentBox styles = {{height:'500px',width:'500px'}}>
+                        <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
+                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'600px'}}>
                                 <Workbox 
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 
