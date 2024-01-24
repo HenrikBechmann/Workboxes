@@ -3,7 +3,7 @@
 
 import React, {useMemo, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
   Tooltip, Box
@@ -23,6 +23,7 @@ import chatIcon from '../../../assets/chat.png'
 import messageIcon from '../../../assets/mail.png'
 import helpIcon from '../../../assets/help.png'
 import homeIcon from '../../../assets/home.png'
+import homeFillIcon from '../../../assets/home_fill.png'
 import subscriptionsIcon from '../../../assets/subscriptions.png'
 import appSettingsIcon from '../../../assets/app_settings.png'
 
@@ -98,10 +99,18 @@ const StandardToolbar = (props) => {
     // ------------------------------ hooks ------------------------
     const 
         navigate = useNavigate(),
+        location = useLocation(),
+        { pathname } = location,
         userData = useUserData(),
         auth = useAuth(),
         { displayName, photoURL } = userData.authUser,
-        isSuperUser = userData.sysadminStatus.isSuperUser
+        isSuperUser = userData.sysadminStatus.isSuperUser,
+        homepath = '/workspace'
+
+    const currentHomeIcon = 
+        (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
+        ? homeFillIcon
+        : homeIcon
 
     // --------------------- navigation functions ------------------
     const 
@@ -161,7 +170,7 @@ const StandardToolbar = (props) => {
         <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {homeIcon} caption = 'workspace' tooltip = 'Go to the main work page' response = {goHome} />
+        <StandardIcon icon = {currentHomeIcon} caption = 'workspace' tooltip = 'Go to the main work page' response = {goHome} />
         <ToolbarVerticalDivider />
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         {isSuperUser && <>
