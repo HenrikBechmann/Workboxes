@@ -169,17 +169,17 @@ const ToolbarFrame = (props) => {
     <Box data-type = 'toolbar-wrapper' style = {menuWrapperStyles}>
         <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
-            {overflow_leftRef.current && 
-                <Box style = {navBeforeStyles} ><Box width = '24px' height = '24px' top = '2px' position = 'absolute' right = '0px'>
-                    <img data-type = 'left-chevron' style = {navBeforeIconStyles} src = {navBeforeIcon} />
-                </Box></Box>
-            }
-
             <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStylesRef.current}>
         
                 {children}
 
             </Box>
+
+            {overflow_leftRef.current && 
+                <Box style = {navBeforeStyles} ><Box width = '24px' height = '24px' top = '2px' position = 'absolute' right = '0px'>
+                    <img data-type = 'left-chevron' style = {navBeforeIconStyles} src = {navBeforeIcon} />
+                </Box></Box>
+            }
 
             {overflow_rightRef.current && 
                 <Box style = {navNextStyles} ><Box width = '24px' height = '24px' top = '2px' position = 'absolute' left = '0px'>

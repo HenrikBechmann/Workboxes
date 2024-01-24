@@ -30,7 +30,7 @@ const contentBoxStyle = {
     backgroundColor:'white', 
     height:'300px', 
     width: '300px', 
-    border: '5px outset silver',
+    border: '2px solid silver',
 } as CSSProperties
 
 const ContentBox = (props) => {

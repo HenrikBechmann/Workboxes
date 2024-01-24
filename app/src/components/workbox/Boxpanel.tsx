@@ -10,8 +10,18 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
+const panelStyles = {
+    height:'100%',
+    width: '250px',
+    border: '5px ridge gray',
+    backgroundColor:'ghostwhite',
+    borderRadius:'8px',
+}
+
 const Boxpanel = (props) => {
-    return <Box>Box panel</Box>
+    const { moreStyles, children, type } = props
+    const localStyles = {...panelStyles, ...moreStyles}
+    return <Box data-type = {type} style = {localStyles}>{children}</Box>
 } 
 
 export default Boxpanel

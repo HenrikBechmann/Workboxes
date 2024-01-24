@@ -28,6 +28,7 @@ import settingsIcon from '../../../assets/settings.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
+    padding:'2px',
     minHeight:0,
     display:'flex',
     flexDirection:'row',
@@ -37,6 +38,7 @@ const workboxToolbarStyles = {
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
     borderRadius:'8px 8px 0 0',
+    border:'3px solid gray',
 
 } as CSSProperties
 
