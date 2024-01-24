@@ -4,7 +4,7 @@
 import React from 'react'
 
 // general support
-import LayoutGeneral from '../components/LayoutGeneral'
+import LayoutGeneral from '../components/Layout_General'
 
 import Signin from '../pages/Signin'
 import About from '../pages/About'
@@ -14,8 +14,8 @@ import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
-import RoutesMember from '../components/RoutesMember'
-import LayoutMember from '../components/LayoutMember'
+import RoutesMember from '../components/Routes_Member'
+import LayoutMember from '../components/Layout_Member'
 
 import Main from '../pages/Main'
 import Account from '../pages/Account'
@@ -24,8 +24,8 @@ import Memberships from '../pages/Memberships'
 import Subscriptions from '../pages/Subscriptions'
 
 // system support
-import RoutesSysadmin from '../components/RoutesSysadmin'
-import LayoutSysadmin from '../components/LayoutSysadmin'
+import RoutesSysadmin from '../components/Routes_Sysadmin'
+import LayoutSysadmin from '../components/Layout_Sysadmin'
 
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
@@ -34,6 +34,7 @@ import UserControls from '../pages/UserControls'
 import HelpPanels from '../pages/HelpPanels'
 
 const routes = [
+    
     
     {
         path: '/',
