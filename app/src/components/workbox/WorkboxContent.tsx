@@ -11,7 +11,6 @@ const workboxContentStyles = {
     display:'block',
     height:'100%',
     backgroundColor:'brown',
-    width:'200px',
     margin:'auto',
 }
 
