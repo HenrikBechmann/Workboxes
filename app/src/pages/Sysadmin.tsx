@@ -83,7 +83,7 @@ const Sysadmin = (props) => {
     return <Grid 
         data-type = 'sysadmin'
         height = '100%'
-        templateAreas={`"header"
+        gridTemplateAreas={`"header"
                       "body"`}
         gridTemplateRows={'auto 1fr'}
         gridTemplateColumns={'1fr'}

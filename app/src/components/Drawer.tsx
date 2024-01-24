@@ -762,7 +762,7 @@ export const Drawer = (props) => {
         </Box>
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
-          templateAreas={`"header"
+          gridTemplateAreas={`"header"
                           "body"
                           "footer"`}
           gridTemplateRows={'44px 1fr 34px'}

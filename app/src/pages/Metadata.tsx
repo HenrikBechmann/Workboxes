@@ -31,7 +31,6 @@ const contentBoxStyle = {
     height:'300px', 
     width: '300px', 
     border: '5px outset silver',
-    paddingTop: '6px',
 } as CSSProperties
 
 const ContentBox = (props) => {
@@ -146,7 +145,7 @@ const Metadata = (props) => {
     return <Grid
         data-type = 'page'
         height = '100%'
-        templateAreas={`"body"`}
+        gridTemplateAreas={`"body"`}
         gridTemplateRows={'1fr'}
         gridTemplateColumns={'1fr'}
     >
@@ -168,7 +167,7 @@ const Metadata = (props) => {
                     </>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
                         <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'600px'}}>
+                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'450px'}}>
                                 <Workbox 
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 

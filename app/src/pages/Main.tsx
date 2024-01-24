@@ -22,7 +22,7 @@ export const Main = (props) => {
     return <Grid 
           date-type = 'page'
           height = '100%'
-          templateAreas={`"body"
+          gridTemplateAreas={`"body"
                           "footer"`}
           gridTemplateRows={'1fr auto'}
           gridTemplateColumns={'1fr'}

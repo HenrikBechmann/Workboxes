@@ -16,13 +16,24 @@ import {
     Text, 
     Button, 
     Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center
+    Box, VStack, Center,
+    Grid, GridItem
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
     const {workboxDefaults, workboxItemIcon, workboxItemTitle} = props
     const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
-    return <Box data-type = 'workbox' style = {workboxStyle} >
+    return <Grid
+        data-type = 'workbox-grid'
+        height = '100%'
+        width = '100%'
+        gridTemplateAreas = {`"header"
+                              "body"`}
+        gridTemplateColumns = '1fr' 
+        gridTemplateRows = 'auto 1fr'
+    >
+        <GridItem data-type = 'workbox-header' area = 'header' overflow = 'hidden'>
+        <Box position = 'relative' width = '100%'>
         <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
             <WorkboxToolbar 
                 workboxControls = {workboxControls} 
@@ -31,10 +42,16 @@ const Workbox = (props) => {
                 workboxItemTitle = {workboxItemTitle}
             />
         </ToolbarFrame>
-        <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = 'calc(100% - 40px)' width = '100%'>
-            <WorkboxContent workboxControls = {workboxControls} />
         </Box>
-    </Box>
+        </GridItem>
+        <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden'>
+            <Box data-type = 'workbox' style = {workboxStyle} >
+                <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = '100%' width = '100%'>
+                    <WorkboxContent workboxControls = {workboxControls} />
+                </Box>
+            </Box>
+        </GridItem>
+    </Grid>
 }
 
 export default Workbox

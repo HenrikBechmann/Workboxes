@@ -40,7 +40,7 @@ const SysSettings = (props) => {
     return <Grid
         data-type = 'page'
         height = '100%'
-        templateAreas={`"body"`}
+        gridTemplateAreas={`"body"`}
         gridTemplateRows={'1fr'}
         gridTemplateColumns={'1fr'}
     >
