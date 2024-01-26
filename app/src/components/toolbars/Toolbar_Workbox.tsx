@@ -16,6 +16,7 @@ import ToolbarVerticalDivider from './VerticalDivider'
 import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
+import StandardIcon from './StandardIcon'
 import ItemControl from './ItemControl'
 
 import workboxIcon from '../../../assets/workbox.png'
@@ -25,6 +26,7 @@ import profileIcon from '../../../assets/profile.png'
 import swapIcon from '../../../assets/swap.png'
 // import linkIcon from '../../../assets/link.png'
 import settingsIcon from '../../../assets/settings.png'
+import expandMoreIcon from '../../../assets/expand_more.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -38,7 +40,7 @@ const workboxToolbarStyles = {
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
     borderRadius:'8px 8px 0 0',
-    border:'3px solid gray',
+    border:'3px solid silver',
 
 } as CSSProperties
 
@@ -105,8 +107,8 @@ const WorkboxToolbar = (props) => {
 
         listToggle = useToggleIcon({
             icon:listIcon, 
-            tooltip:'Toggle links pane',
-            caption:'links',
+            tooltip:'Toggle folders pane',
+            caption:'folders',
             toggleOnRef:toggleOnLinksRef,
             disabledRef:disabledLinksRef, 
         }),
@@ -145,6 +147,8 @@ const WorkboxToolbar = (props) => {
         {swapToggle}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workbox toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }

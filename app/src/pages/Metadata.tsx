@@ -31,6 +31,7 @@ const contentBoxStyle = {
     height:'300px', 
     width: '300px', 
     border: '2px solid silver',
+    borderRadius:'12px',
 } as CSSProperties
 
 const ContentBox = (props) => {
@@ -167,7 +168,7 @@ const Metadata = (props) => {
                     </>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
                         <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'450px'}}>
+                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'400px'}}>
                                 <Workbox 
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 
