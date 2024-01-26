@@ -55,7 +55,7 @@ const Metadata = (props) => {
 
     const workboxDefaults = {
         settings:false,
-        setingsDisabled:false,
+        settingsDisabled:false,
         profile:true,
         profileDisabled:false,
         lists:false,

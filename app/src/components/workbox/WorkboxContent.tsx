@@ -19,6 +19,8 @@ const workboxContentStyles = {
 }
 
 const WorkboxContent = (props) => {
+    const { workboxControls } = props
+    console.log('workboxControls',workboxControls)
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <TogglePanel type = 'toggle-panel' 
             moreStyles = {
@@ -30,8 +32,12 @@ const WorkboxContent = (props) => {
                     position:'relative',
                 }
             } >
-            <DocumentPanel type = 'document-panel' moreStyles = {{position:'absolute', top:0,left:0}} />
-            <LinkPanel type = 'link-panel' moreStyles = {{position:'absolute',top:0,right:0}} />
+            <DocumentPanel type = 'document-panel' moreStyles = {{position:'absolute', top:0,left:0}} >
+            Document
+            </DocumentPanel>
+            <LinkPanel type = 'link-panel' moreStyles = {{position:'absolute',top:0,right:0}} >
+            Folders
+            </LinkPanel>
         </TogglePanel>
     </Box>
 } 

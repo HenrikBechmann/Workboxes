@@ -23,6 +23,7 @@ import {
 const Workbox = (props) => {
     const {workboxDefaults, workboxItemIcon, workboxItemTitle} = props
     const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
+    
     return <Grid
         data-type = 'workbox-grid'
         height = '100%'

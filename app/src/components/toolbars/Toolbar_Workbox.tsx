@@ -76,12 +76,12 @@ const WorkboxToolbar = (props) => {
         })
 
     const 
-        currentProfile = toggleOnProfileRef.current,
-        previousProfile = toggleHistoryRef.current.profile,
-        currentList = toggleOnLinksRef.current
+        currentIsProfile = toggleOnProfileRef.current,
+        previousIsProfile = toggleHistoryRef.current.profile,
+        currentIsList = toggleOnLinksRef.current
 
-    if (!currentProfile && !currentList) {
-        if (previousProfile) {
+    if (!currentIsProfile && !currentIsList) {
+        if (previousIsProfile) {
 
             toggleOnLinksRef.current = true
 
@@ -91,6 +91,31 @@ const WorkboxToolbar = (props) => {
 
         }
     }
+
+    // any change of configuration triggers message to workboxcontent
+    useEffect(()=> {
+
+        workboxControls.profile = toggleOnProfileRef.current
+        workboxControls.profileDisabled = disabledProfileRef.current
+        workboxControls.lists = toggleOnLinksRef.current
+        workboxControls.listsDisabled = disabledLinksRef.current
+        workboxControls.swap = toggleOnSwapRef.current
+        workboxControls.swapDisabled = disabledSwapRef.current
+        workboxControls.settings = toggleOnSettingsRef.current
+        workboxControls.settingsDisabled = disabledSettingsRef.current
+
+        setWorkboxControls({...workboxControls})
+
+    },[
+        toggleOnProfileRef.current,
+        disabledProfileRef.current,
+        toggleOnLinksRef.current,
+        disabledLinksRef.current,
+        toggleOnSwapRef.current,
+        disabledSwapRef.current,
+        toggleOnSettingsRef.current,
+        disabledSettingsRef.current,
+    ])
 
     toggleHistoryRef.current = {
         profile:toggleOnProfileRef.current,
