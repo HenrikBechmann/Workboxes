@@ -7,37 +7,44 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import TogglePanel from './Boxpanel'
-import DocumentPanel from './Boxpanel'
-import LinkPanel from './Boxpanel'
+import { TogglePanel, DocumentPanel, FoldersPanel } from './Boxpanel'
 
 const workboxContentStyles = {
     display:'block',
     height:'100%',
-    backgroundColor:'brown',
+    // backgroundColor:'brown',
     margin:'auto',
 }
 
 const WorkboxContent = (props) => {
-    const { workboxControls } = props
-    console.log('workboxControls',workboxControls)
+
+    const 
+        { workboxControls } = props,
+        {lists, profile} = workboxControls
+
+    let toggleTargetDisplay, documentTargetDisplay, foldersTargetDisplay
+    if (lists && profile) {
+        toggleTargetDisplay = 'both'
+        documentTargetDisplay = 'out'
+        foldersTargetDisplay = 'out'
+    } else if (lists) {
+        toggleTargetDisplay = 'folders'
+        documentTargetDisplay = 'under'
+        foldersTargetDisplay = 'over'
+    } else { // profile
+        toggleTargetDisplay = 'document'
+        documentTargetDisplay = 'over'
+        foldersTargetDisplay = 'under'
+    }
+
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <TogglePanel type = 'toggle-panel' 
-            moreStyles = {
-                {
-                    margin:'auto', 
-                    border:'initial', 
-                    backgroundColor:'transparent', 
-                    width:'250px',
-                    position:'relative',
-                }
-            } >
-            <DocumentPanel type = 'document-panel' moreStyles = {{position:'absolute', top:0,left:0}} >
+        <TogglePanel targetDisplay = {toggleTargetDisplay} >
+            <DocumentPanel targetDisplay = {documentTargetDisplay} >
             Document
             </DocumentPanel>
-            <LinkPanel type = 'link-panel' moreStyles = {{position:'absolute',top:0,right:0}} >
+            <FoldersPanel targetDisplay = {foldersTargetDisplay} >
             Folders
-            </LinkPanel>
+            </FoldersPanel>
         </TogglePanel>
     </Box>
 } 

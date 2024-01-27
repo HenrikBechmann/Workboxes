@@ -18,10 +18,32 @@ const panelStyles = {
     borderRadius:'8px',
 }
 
-const Boxpanel = (props) => {
-    const { moreStyles, children, type } = props
+export const TogglePanel = (props) => {
+
+    const moreStyles = 
+        {
+            margin:'auto', 
+            border:'initial', 
+            backgroundColor:'transparent', 
+            width:'250px',
+            position:'relative',
+        } as CSSProperties
+
+    const { children, targetDisplay } = props
     const localStyles = {...panelStyles, ...moreStyles}
-    return <Box data-type = {type} style = {localStyles}>{children}</Box>
+    return <Box data-type = 'toggle-panel' style = {localStyles}>{children}</Box>
 } 
 
-export default Boxpanel
+export const DocumentPanel = (props) => {
+    const { children, targetDisplay } = props
+    const moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties
+    const localStyles = {...panelStyles, ...moreStyles}
+    return <Box data-type = 'document-panel' style = {localStyles}>{children}</Box>
+} 
+
+export const FoldersPanel = (props) => {
+    const { children, targetDisplay } = props
+    const moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties
+    const localStyles = {...panelStyles, ...moreStyles}
+    return <Box data-type = 'folders-panel' style = {localStyles}>{children}</Box>
+} 
