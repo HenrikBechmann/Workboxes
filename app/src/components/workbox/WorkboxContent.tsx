@@ -20,7 +20,9 @@ const WorkboxContent = (props) => {
 
     const 
         { workboxControls } = props,
-        {lists, profile} = workboxControls
+        {lists, profile} = workboxControls,
+        documentElementRef = useRef(null),
+        foldersElementRef = useRef(null)
 
     let toggleTargetDisplay, documentTargetDisplay, foldersTargetDisplay
     if (lists && profile) {
@@ -38,11 +40,11 @@ const WorkboxContent = (props) => {
     }
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <TogglePanel targetDisplay = {toggleTargetDisplay} >
-            <DocumentPanel targetDisplay = {documentTargetDisplay} >
+        <TogglePanel targetDisplay = {toggleTargetDisplay} documentElementRef = {documentElementRef} foldersElementRef = {foldersElementRef} >
+            <DocumentPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
             Document
             </DocumentPanel>
-            <FoldersPanel targetDisplay = {foldersTargetDisplay} >
+            <FoldersPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
             Folders
             </FoldersPanel>
         </TogglePanel>
