@@ -23,7 +23,7 @@ const toggleStyles = {
     border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
-    transition: 'width 1s'
+    transition: 'width .5s',
 } as CSSProperties
 
 export const TogglePanel = (props) => {
@@ -38,20 +38,18 @@ export const TogglePanel = (props) => {
 
     panelStateRef.current = panelState
 
+    useEffect(()=>{
 
-    useEffect(() => {
+        setPanelState('ready')
 
-        if (panelState !== 'ready') {
-            setPanelState('ready')
-        }
+    },[])
 
-    },[panelState])
 
     useEffect(()=>{
 
         if (panelStateRef.current != 'ready') return
 
-        let timeout = 1100
+        let timeout = 600
 
         if (targetDisplay == 'both') {
 
@@ -72,12 +70,11 @@ export const TogglePanel = (props) => {
             }
 
             setTimeout(()=>{
-                console.log('setting document width')
                 panelElementRef.current.style.width = 
                     documentElementRef.current.offsetWidth + 'px'
             },timeout)
 
-        } else {
+        } else { // 'folders'
 
             if (displayStateRef.current == 'document') {
 
@@ -91,7 +88,6 @@ export const TogglePanel = (props) => {
             }
 
             setTimeout(()=>{
-                console.log('setting folders width')
                 panelElementRef.current.style.width = 
                     foldersElementRef.current.offsetWidth + 'px'
             },timeout)
@@ -109,8 +105,38 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
-        localStyles = {...panelStyles, ...moreStyles},
-        [displayState, setDisplayState ] = useState('over')
+        displayStateRef = useRef('document'),
+        localStyles = {...panelStyles, ...moreStyles}
+
+    useEffect(()=>{
+
+        let timeout = 500
+
+        if (targetDisplay == 'out') {
+
+            setTimeout(()=>{
+                ref.current.style.zIndex = 0
+            },timeout)
+
+        } else if (targetDisplay == 'over') {
+            if (displayStateRef.current == 'out') {
+                timeout = 0
+            }
+            setTimeout(()=>{
+                ref.current.style.zIndex = 1
+            },timeout)
+        } else { // 'under'
+            if (displayStateRef.current == 'out') {
+                timeout = 0
+            }
+            setTimeout(()=>{
+                ref.current.style.zIndex = 0
+            },timeout)
+        }
+
+        displayStateRef.current = targetDisplay
+
+    },[targetDisplay])
 
     return <div ref = {ref} data-type = 'document-panel' style = {localStyles}>{children}</div>
 })
@@ -119,8 +145,39 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
-        localStyles = {...panelStyles, ...moreStyles},
-        [displayState, setDisplayState ] = useState('under')
+        displayStateRef = useRef('folders'),
+        localStyles = {...panelStyles, ...moreStyles}
 
-    return <div ref = {ref} data-type = 'folders-panel' style = {localStyles}>{children}</div>
+    useEffect(()=>{
+
+        let timeout = 500
+
+        if (targetDisplay == 'out') {
+
+            setTimeout(()=>{
+                ref.current.style.zIndex = 0
+            },timeout)
+
+        } else if (targetDisplay == 'over') {
+            if (displayStateRef.current == 'out') {
+                timeout = 0
+            }
+            setTimeout(()=>{
+                ref.current.style.zIndex = 1
+            },timeout)
+        } else { // 'under'
+            if (displayStateRef.current == 'out') {
+                timeout = 0
+            }
+            setTimeout(()=>{
+                ref.current.style.zIndex = 0
+            },timeout)
+        }
+
+        displayStateRef.current = targetDisplay
+
+    },[targetDisplay])
+
+    return <div ref = {ref} data-type = 'folders-panel' style = {localStyles}> {children}</div>
+
 })
