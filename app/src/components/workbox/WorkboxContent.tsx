@@ -13,6 +13,7 @@ const workboxContentStyles = {
     display:'block',
     height:'100%',
     margin:'auto',
+    padding:'5px'
 }
 
 const WorkboxContent = (props) => {

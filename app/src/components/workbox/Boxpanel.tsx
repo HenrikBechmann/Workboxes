@@ -16,6 +16,7 @@ const panelStyles = {
     border: '5px ridge gray',
     backgroundColor:'ghostwhite',
     borderRadius:'8px',
+    transition:'box-shadow .5s'
 }
 
 const toggleStyles = {
@@ -36,7 +37,7 @@ export const TogglePanel = (props) => {
 
     useEffect(()=>{
 
-        let timeout = 600
+        let timeout = 700
 
         if (targetDisplay == 'both') {
 
@@ -113,6 +114,10 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
+                // ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                // setTimeout(()=>{
+                    ref.current.style.boxShadow = 'none'
+                // },500)
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -123,6 +128,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 1
+                ref.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
@@ -133,6 +139,10 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
+                ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                // setTimeout(()=>{
+                //     ref.current.style.boxShadow = 'none'
+                // },500)
             },timeout)
 
         }
@@ -169,6 +179,10 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
+                // ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                // setTimeout(()=>{
+                    ref.current.style.boxShadow = 'none'
+                // },500)
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -179,6 +193,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 1
+                ref.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
@@ -189,6 +204,10 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
+                ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                // setTimeout(()=>{
+                //     ref.current.style.boxShadow = 'none'
+                // },500)
             },timeout)
 
         }
