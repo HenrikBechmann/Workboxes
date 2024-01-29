@@ -31,30 +31,17 @@ export const TogglePanel = (props) => {
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
         displayStateRef = useRef(targetDisplay),
-        localStyles = {...panelStyles, ...toggleStyles},
-        panelElementRef = useRef(null),
-        [panelState, setPanelState] = useState('setup'),
-        panelStateRef = useRef(null)
-
-    panelStateRef.current = panelState
+        localStyles = {...panelStyles, ...toggleStyles} as CSSProperties,
+        panelElementRef = useRef(null)
 
     useEffect(()=>{
-
-        setPanelState('ready')
-
-    },[])
-
-
-    useEffect(()=>{
-
-        if (panelStateRef.current != 'ready') return
 
         let timeout = 600
 
         if (targetDisplay == 'both') {
 
-            panelElementRef.current.style.width = 
-                (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+            const width = (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+            panelElementRef.current.style.width = width    
 
         } else if (targetDisplay == 'document') {
 
@@ -105,12 +92,22 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
-        displayStateRef = useRef('document'),
-        localStyles = {...panelStyles, ...moreStyles}
+        displayStateRef = useRef(targetDisplay),
+        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties)
 
     useEffect(()=>{
 
         let timeout = 500
+
+        if (localStylesRef.current.visibility == 'hidden') {
+
+            const localTimeout = targetDisplay == 'under'?timeout:0
+
+            setTimeout(()=>{
+                localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
+            },localTimeout)
+
+        }
 
         if (targetDisplay == 'out') {
 
@@ -119,38 +116,54 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
             },timeout)
 
         } else if (targetDisplay == 'over') {
+
             if (displayStateRef.current == 'out') {
                 timeout = 0
             }
+
             setTimeout(()=>{
                 ref.current.style.zIndex = 1
             },timeout)
+
         } else { // 'under'
+
             if (displayStateRef.current == 'out') {
                 timeout = 0
             }
+
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
             },timeout)
+
         }
 
         displayStateRef.current = targetDisplay
 
     },[targetDisplay])
 
-    return <div ref = {ref} data-type = 'document-panel' style = {localStyles}>{children}</div>
+    return <div ref = {ref} data-type = 'document-panel' style = {localStylesRef.current}>{children}</div>
 })
 
 export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
-        displayStateRef = useRef('folders'),
-        localStyles = {...panelStyles, ...moreStyles}
+        displayStateRef = useRef(targetDisplay),
+        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties)
 
     useEffect(()=>{
 
         let timeout = 500
+
+        if (localStylesRef.current.visibility == 'hidden') {
+
+            const localTimeout = targetDisplay == 'under'?timeout:0
+
+            setTimeout(()=>{
+                localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
+            },localTimeout)
+
+        }
 
         if (targetDisplay == 'out') {
 
@@ -159,25 +172,31 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
             },timeout)
 
         } else if (targetDisplay == 'over') {
+
             if (displayStateRef.current == 'out') {
                 timeout = 0
             }
+
             setTimeout(()=>{
                 ref.current.style.zIndex = 1
             },timeout)
+
         } else { // 'under'
+
             if (displayStateRef.current == 'out') {
                 timeout = 0
             }
+
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
             },timeout)
+
         }
 
         displayStateRef.current = targetDisplay
 
     },[targetDisplay])
 
-    return <div ref = {ref} data-type = 'folders-panel' style = {localStyles}> {children}</div>
+    return <div ref = {ref} data-type = 'folders-panel' style = {localStylesRef.current}> {children}</div>
 
 })
