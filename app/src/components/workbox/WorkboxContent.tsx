@@ -12,7 +12,6 @@ import { TogglePanel, DocumentPanel, FoldersPanel } from './Boxpanel'
 const workboxContentStyles = {
     display:'block',
     height:'100%',
-    // backgroundColor:'brown',
     margin:'auto',
 }
 

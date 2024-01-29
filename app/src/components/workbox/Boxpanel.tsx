@@ -22,7 +22,6 @@ const toggleStyles = {
     margin:'auto', 
     border:'initial', 
     backgroundColor:'transparent', 
-    // width:'250px',
     position:'relative',
     transition: 'width 1s'
 } as CSSProperties
