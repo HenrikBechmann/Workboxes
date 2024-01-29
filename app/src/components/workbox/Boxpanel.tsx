@@ -34,7 +34,10 @@ export const TogglePanel = (props) => {
         displayStateRef = useRef(targetDisplay),
         localStyles = {...panelStyles, ...toggleStyles},
         panelElementRef = useRef(null),
-        [panelState, setPanelState] = useState('setup')
+        [panelState, setPanelState] = useState('setup'),
+        panelStateRef = useRef(null)
+
+    panelStateRef.current = panelState
 
 
     useEffect(() => {
@@ -47,9 +50,7 @@ export const TogglePanel = (props) => {
 
     useEffect(()=>{
 
-        if (panelState != 'ready') return
-
-        console.log('displayState, targetDisplay',displayStateRef.current, targetDisplay)
+        if (panelStateRef.current != 'ready') return
 
         let timeout = 1100
 
@@ -99,8 +100,6 @@ export const TogglePanel = (props) => {
         }
 
         displayStateRef.current = targetDisplay
-
-        setPanelState('updating')
 
     },[targetDisplay])
 
