@@ -18,29 +18,93 @@ const panelStyles = {
     borderRadius:'8px',
 }
 
+const toggleStyles = {
+    margin:'auto', 
+    border:'initial', 
+    backgroundColor:'transparent', 
+    // width:'250px',
+    position:'relative',
+    transition: 'width 1s'
+} as CSSProperties
+
 export const TogglePanel = (props) => {
 
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
-        [displayState, setDisplayState ] = useState('document'),
+        displayStateRef = useRef(targetDisplay),
+        localStyles = {...panelStyles, ...toggleStyles},
+        panelElementRef = useRef(null),
+        [panelState, setPanelState] = useState('setup')
 
-    // console.log('documentElementRef, foldersElementRef', documentElementRef, foldersElementRef)
 
-        documentElement = documentElementRef.current,
-        foldersElement = foldersElementRef.current,
+    useEffect(() => {
 
-        moreStyles = 
-            {
-                margin:'auto', 
-                border:'initial', 
-                backgroundColor:'transparent', 
-                width:'250px',
-                position:'relative',
-            } as CSSProperties,
+        if (panelState !== 'ready') {
+            setPanelState('ready')
+        }
 
-        localStyles = {...panelStyles, ...moreStyles}
+    },[panelState])
 
-    return <Box data-type = 'toggle-panel' style = {localStyles}>{children}</Box>
+    useEffect(()=>{
+
+        if (panelState != 'ready') return
+
+        console.log('displayState, targetDisplay',displayStateRef.current, targetDisplay)
+
+        let timeout = 1100
+
+        if (targetDisplay == 'both') {
+
+            panelElementRef.current.style.width = 
+                (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+
+        } else if (targetDisplay == 'document') {
+
+            if (displayStateRef.current == 'folders') {
+
+                panelElementRef.current.style.width = 
+                    (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+
+            } else {
+
+                timeout = 0
+
+            }
+
+            setTimeout(()=>{
+                console.log('setting document width')
+                panelElementRef.current.style.width = 
+                    documentElementRef.current.offsetWidth + 'px'
+            },timeout)
+
+        } else {
+
+            if (displayStateRef.current == 'document') {
+
+                panelElementRef.current.style.width = 
+                    (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+
+            } else {
+
+                timeout = 0
+
+            }
+
+            setTimeout(()=>{
+                console.log('setting folders width')
+                panelElementRef.current.style.width = 
+                    foldersElementRef.current.offsetWidth + 'px'
+            },timeout)
+
+        }
+
+        displayStateRef.current = targetDisplay
+
+        setPanelState('updating')
+
+    },[targetDisplay])
+
+    return <Box data-type = 'toggle-panel' ref = {panelElementRef} style = {localStyles}>{children}</Box>
 } 
 
 export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
