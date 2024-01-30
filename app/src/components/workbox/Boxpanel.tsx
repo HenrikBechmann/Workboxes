@@ -19,19 +19,37 @@ const panelStyles = {
     transition:'box-shadow .5s'
 }
 
-const toggleStyles = {
-    // margin:'auto', 
+const centralPanelStyles = {
     border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
     transition: 'width .5s ease-in-out',
 } as CSSProperties
 
+const propertiesPanelStyles = {
+    height: '100%',
+    width:'auto',
+} as CSSProperties
+
+const propertiesContentStyles = {
+    display:'block', 
+    border:'4px solid silver',
+    borderRadius:'8px',
+    padding:'3px',
+    boxSizing:'border-box',
+    height: '100%',
+    width:'250px',
+} as CSSProperties
+
 export const PropertiesPanel = (props) => {
     const
-        {centralPanelElementRef, children} = props
+        {showPanel, children} = props
 
-    return <Box data-type = 'properties-panel' display = 'block'>{children}</Box>
+    return <Box data-type = 'properties-panel' style = {propertiesPanelStyles} >
+        <Box data-type = 'properties-content' style = {propertiesContentStyles}>
+            {children}
+        </Box>
+    </Box>
 }
 
 export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
@@ -39,7 +57,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
         displayStateRef = useRef(targetDisplay),
-        localStyles = {...panelStyles, ...toggleStyles} as CSSProperties
+        localStyles = {...panelStyles, ...centralPanelStyles} as CSSProperties
 
     useEffect(()=>{
 
@@ -212,7 +230,11 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
 export const MirrorPanel = (props) => {
     const
-        {centralPanelElementRef, children} = props
+        {showPanel, children} = props
 
-    return <Box data-type = 'mirror-panel' display = 'none'>{children}</Box>
+    return <Box data-type = 'properties-panel' style = {propertiesPanelStyles} >
+        <Box data-type = 'properties-content' style = {propertiesContentStyles}>
+            {children}
+        </Box>
+    </Box>
 }

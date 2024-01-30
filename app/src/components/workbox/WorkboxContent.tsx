@@ -15,7 +15,6 @@ const workboxContentStyles = {
     flexBasis: 'auto',
     flexShrink: 0,
     height:'100%',
-    // margin:'auto',
     padding:'5px',
     position:'relative',
 } as CSSProperties
@@ -54,7 +53,7 @@ const WorkboxContent = (props) => {
     },[])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <PropertiesPanel centralPanelElementRef = {centralPanelElementRef}>
+        <PropertiesPanel showPanel = {workboxControls.settings}>
             Properties
         </PropertiesPanel>
         <CentralPanel 
@@ -70,7 +69,7 @@ const WorkboxContent = (props) => {
             Folders
             </FoldersPanel>
         </CentralPanel>
-        <MirrorPanel centralPanelElementRef = {centralPanelElementRef} >
+        <MirrorPanel showPanel = {workboxControls.swap} >
             Mirror
         </MirrorPanel>
     </Box>
