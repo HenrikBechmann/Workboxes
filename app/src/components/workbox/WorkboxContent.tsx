@@ -7,7 +7,7 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { TogglePanel, DocumentPanel, FoldersPanel } from './Boxpanel'
+import { CentralPanel, DocumentPanel, FoldersPanel } from './Boxpanel'
 
 const workboxContentStyles = {
     display:'block',
@@ -23,6 +23,7 @@ const WorkboxContent = (props) => {
         {lists, profile} = workboxControls,
         documentElementRef = useRef(null),
         foldersElementRef = useRef(null),
+        centralPanelElementRef = useRef(null),
         [contentState,setContentState] = useState('setup')
 
     let toggleTargetDisplay, documentTargetDisplay, foldersTargetDisplay
@@ -42,21 +43,21 @@ const WorkboxContent = (props) => {
 
     useEffect(()=>{
 
-        setTimeout(() => {
+        setTimeout(() => { // yield for forward reference updates
             setContentState('ready')
-        },100)
+        },1)
 
     },[])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <TogglePanel targetDisplay = {toggleTargetDisplay} documentElementRef = {documentElementRef} foldersElementRef = {foldersElementRef} >
+        <CentralPanel ref = {centralPanelElementRef} targetDisplay = {toggleTargetDisplay} documentElementRef = {documentElementRef} foldersElementRef = {foldersElementRef} >
             <DocumentPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
             Document
             </DocumentPanel>
             <FoldersPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
             Folders
             </FoldersPanel>
-        </TogglePanel>
+        </CentralPanel>
     </Box>
 } 
 

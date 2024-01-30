@@ -27,13 +27,12 @@ const toggleStyles = {
     transition: 'width .5s ease-in-out',
 } as CSSProperties
 
-export const TogglePanel = (props) => {
+export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
 
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
         displayStateRef = useRef(targetDisplay),
-        localStyles = {...panelStyles, ...toggleStyles} as CSSProperties,
-        panelElementRef = useRef(null)
+        localStyles = {...panelStyles, ...toggleStyles} as CSSProperties
 
     useEffect(()=>{
 
@@ -42,7 +41,7 @@ export const TogglePanel = (props) => {
         if (targetDisplay == 'both') {
 
             const width = (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
-            panelElementRef.current.style.width = width    
+            ref.current.style.width = width    
 
         } else if (targetDisplay == 'document') {
 
@@ -50,13 +49,13 @@ export const TogglePanel = (props) => {
 
                 timeout = 800
 
-                panelElementRef.current.style.width = 
+                ref.current.style.width = 
                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
 
             }
 
             setTimeout(()=>{
-                panelElementRef.current.style.width = 
+                ref.current.style.width = 
                     documentElementRef.current.offsetWidth + 'px'
             },timeout)
 
@@ -66,13 +65,13 @@ export const TogglePanel = (props) => {
 
                 timeout = 800
 
-                panelElementRef.current.style.width = 
+                ref.current.style.width = 
                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
 
             }
 
             setTimeout(()=>{
-                panelElementRef.current.style.width = 
+                ref.current.style.width = 
                     foldersElementRef.current.offsetWidth + 'px'
             },timeout)
 
@@ -82,8 +81,8 @@ export const TogglePanel = (props) => {
 
     },[targetDisplay])
 
-    return <Box data-type = 'toggle-panel' ref = {panelElementRef} style = {localStyles}>{children}</Box>
-} 
+    return <Box data-type = 'toggle-panel' ref = {ref} style = {localStyles}>{children}</Box>
+})
 
 export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
     const 
@@ -141,7 +140,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
     },[targetDisplay])
 
-    return <div ref = {ref} data-type = 'document-panel' style = {localStylesRef.current}>{children}</div>
+    return <Box ref = {ref} data-type = 'document-panel' style = {localStylesRef.current}>{children}</Box>
 })
 
 export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
@@ -200,6 +199,6 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
     },[targetDisplay])
 
-    return <div ref = {ref} data-type = 'folders-panel' style = {localStylesRef.current}> {children}</div>
+    return <Box ref = {ref} data-type = 'folders-panel' style = {localStylesRef.current}> {children}</Box>
 
 })
