@@ -20,12 +20,19 @@ const panelStyles = {
 }
 
 const toggleStyles = {
-    margin:'auto', 
+    // margin:'auto', 
     border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
     transition: 'width .5s ease-in-out',
 } as CSSProperties
+
+export const PropertiesPanel = (props) => {
+    const
+        {centralPanelElementRef, children} = props
+
+    return <Box data-type = 'properties-panel' display = 'block'>{children}</Box>
+}
 
 export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
 
@@ -81,7 +88,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
 
     },[targetDisplay])
 
-    return <Box data-type = 'toggle-panel' ref = {ref} style = {localStyles}>{children}</Box>
+    return <Box data-type = 'central-panel' ref = {ref} style = {localStyles}>{children}</Box>
 })
 
 export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
@@ -202,3 +209,10 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
     return <Box ref = {ref} data-type = 'folders-panel' style = {localStylesRef.current}> {children}</Box>
 
 })
+
+export const MirrorPanel = (props) => {
+    const
+        {centralPanelElementRef, children} = props
+
+    return <Box data-type = 'mirror-panel' display = 'none'>{children}</Box>
+}

@@ -10,6 +10,8 @@ import WorkboxContent from './WorkboxContent'
 const workboxStyle = {
     position:'absolute',
     inset:0,
+    display:'flex',
+    overflow:'auto',
 } as CSSProperties
 
 import {
@@ -47,12 +49,15 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden'>
             <Box data-type = 'workbox' style = {workboxStyle} >
-                <Box data-type = 'content-holder' overflowX = 'auto' position = 'relative' height = '100%' width = '100%'>
-                    <WorkboxContent workboxControls = {workboxControls} />
-                </Box>
+                <WorkboxContent workboxControls = {workboxControls} />
             </Box>
         </GridItem>
     </Grid>
 }
+
+                // <Box data-type = 'content-holder' display = 'flex' overflowX = 'auto' position = 'relative' height = '100%' width = '100%'>
+                //     <WorkboxContent workboxControls = {workboxControls} />
+                // </Box>
+
 
 export default Workbox

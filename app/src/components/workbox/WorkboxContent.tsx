@@ -7,14 +7,18 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { CentralPanel, DocumentPanel, FoldersPanel } from './Boxpanel'
+import { CentralPanel, DocumentPanel, FoldersPanel, PropertiesPanel, MirrorPanel } from './Boxpanel'
 
 const workboxContentStyles = {
-    display:'block',
+    display:'flex',
+    flexWrap: 'nowrap',
+    flexBasis: 'auto',
+    flexShrink: 0,
     height:'100%',
-    margin:'auto',
-    padding:'5px'
-}
+    // margin:'auto',
+    padding:'5px',
+    position:'relative',
+} as CSSProperties
 
 const WorkboxContent = (props) => {
 
@@ -50,7 +54,15 @@ const WorkboxContent = (props) => {
     },[])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <CentralPanel ref = {centralPanelElementRef} targetDisplay = {toggleTargetDisplay} documentElementRef = {documentElementRef} foldersElementRef = {foldersElementRef} >
+        <PropertiesPanel centralPanelElementRef = {centralPanelElementRef}>
+            Properties
+        </PropertiesPanel>
+        <CentralPanel 
+            ref = {centralPanelElementRef} 
+            targetDisplay = {toggleTargetDisplay} 
+            documentElementRef = {documentElementRef} 
+            foldersElementRef = {foldersElementRef} 
+        >
             <DocumentPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
             Document
             </DocumentPanel>
@@ -58,6 +70,9 @@ const WorkboxContent = (props) => {
             Folders
             </FoldersPanel>
         </CentralPanel>
+        <MirrorPanel centralPanelElementRef = {centralPanelElementRef} >
+            Mirror
+        </MirrorPanel>
     </Box>
 } 
 
