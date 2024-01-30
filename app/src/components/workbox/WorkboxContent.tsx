@@ -22,7 +22,8 @@ const WorkboxContent = (props) => {
         { workboxControls } = props,
         {lists, profile} = workboxControls,
         documentElementRef = useRef(null),
-        foldersElementRef = useRef(null)
+        foldersElementRef = useRef(null),
+        [contentState,setContentState] = useState('setup')
 
     let toggleTargetDisplay, documentTargetDisplay, foldersTargetDisplay
     if (lists && profile) {
@@ -38,6 +39,14 @@ const WorkboxContent = (props) => {
         documentTargetDisplay = 'over'
         foldersTargetDisplay = 'under'
     }
+
+    useEffect(()=>{
+
+        setTimeout(() => {
+            setContentState('ready')
+        },100)
+
+    },[])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <TogglePanel targetDisplay = {toggleTargetDisplay} documentElementRef = {documentElementRef} foldersElementRef = {foldersElementRef} >
