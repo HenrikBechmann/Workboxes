@@ -24,7 +24,7 @@ const toggleStyles = {
     border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
-    transition: 'width .5s',
+    transition: 'width .5s ease-in-out',
 } as CSSProperties
 
 export const TogglePanel = (props) => {
@@ -37,7 +37,7 @@ export const TogglePanel = (props) => {
 
     useEffect(()=>{
 
-        let timeout = 700
+        let timeout = 500
 
         if (targetDisplay == 'both') {
 
@@ -48,12 +48,10 @@ export const TogglePanel = (props) => {
 
             if (displayStateRef.current == 'folders') {
 
+                timeout = 800
+
                 panelElementRef.current.style.width = 
                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
-
-            } else {
-
-                timeout = 0
 
             }
 
@@ -66,12 +64,10 @@ export const TogglePanel = (props) => {
 
             if (displayStateRef.current == 'document') {
 
+                timeout = 800
+
                 panelElementRef.current.style.width = 
                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
-
-            } else {
-
-                timeout = 0
 
             }
 
@@ -114,10 +110,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
-                // ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-                // setTimeout(()=>{
-                    ref.current.style.boxShadow = 'none'
-                // },500)
+                ref.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -140,9 +133,6 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-                // setTimeout(()=>{
-                //     ref.current.style.boxShadow = 'none'
-                // },500)
             },timeout)
 
         }
@@ -179,10 +169,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
-                // ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-                // setTimeout(()=>{
-                    ref.current.style.boxShadow = 'none'
-                // },500)
+                ref.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -205,9 +192,6 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
             setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-                // setTimeout(()=>{
-                //     ref.current.style.boxShadow = 'none'
-                // },500)
             },timeout)
 
         }
