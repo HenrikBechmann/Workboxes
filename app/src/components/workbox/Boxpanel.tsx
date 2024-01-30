@@ -29,16 +29,37 @@ const centralPanelStyles = {
 const propertiesPanelStyles = {
     height: '100%',
     width:'auto',
+    overflow:'hidden',
+    position:'relative',
 } as CSSProperties
 
 const propertiesContentStyles = {
     display:'block', 
-    border:'4px solid silver',
+    border:'5px solid silver',
     borderRadius:'8px',
     padding:'3px',
     boxSizing:'border-box',
     height: '100%',
     width:'250px',
+    position:'relative',
+} as CSSProperties
+
+const mirrorPanelStyles = {
+    height: '100%',
+    width:'auto',
+    overflow:'hidden',
+    position:'relative',
+} as CSSProperties
+
+const mirrorContentStyles = {
+    display:'block', 
+    border:'5px solid silver',
+    borderRadius:'8px',
+    padding:'3px',
+    boxSizing:'border-box',
+    height: '100%',
+    width:'250px',
+    position:'relative',
 } as CSSProperties
 
 export const PropertiesPanel = (props) => {
@@ -232,8 +253,8 @@ export const MirrorPanel = (props) => {
     const
         {showPanel, children} = props
 
-    return <Box data-type = 'properties-panel' style = {propertiesPanelStyles} >
-        <Box data-type = 'properties-content' style = {propertiesContentStyles}>
+    return <Box data-type = 'mirror-panel' style = {mirrorPanelStyles} >
+        <Box data-type = 'mirror-content' style = {mirrorContentStyles}>
             {children}
         </Box>
     </Box>
