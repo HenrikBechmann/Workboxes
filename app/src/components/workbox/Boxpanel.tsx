@@ -28,9 +28,10 @@ const centralPanelStyles = {
 
 const propertiesPanelStyles = {
     height: '100%',
-    width:'auto',
+    width:'0px',
     overflow:'hidden',
     position:'relative',
+    transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out'
 } as CSSProperties
 
 const propertiesContentStyles = {
@@ -46,9 +47,10 @@ const propertiesContentStyles = {
 
 const mirrorPanelStyles = {
     height: '100%',
-    width:'auto',
+    width:'0px',
     overflow:'hidden',
     position:'relative',
+    transition: 'width .5s ease-in-out, opacity .5s ease-in-out'
 } as CSSProperties
 
 const mirrorContentStyles = {
@@ -64,10 +66,99 @@ const mirrorContentStyles = {
 
 export const PropertiesPanel = (props) => {
     const
-        {showPanel, children} = props
+        {showPanel, children} = props,
+        localPropertiesPanelStylesRef = useRef(propertiesPanelStyles),
+        contentRef = useRef(null),
+        panelRef = useRef(null),
+        previousTransitioningValueRef = useRef(showPanel),
+        transitioningCountRef = useRef(0),
+        firstTimeoutRef = useRef(null),
+        secondTimeoutRef = useRef(null),
+        thirdTimeoutRef = useRef(null)
 
-    return <Box data-type = 'properties-panel' style = {propertiesPanelStyles} >
-        <Box data-type = 'properties-content' style = {propertiesContentStyles}>
+    if (showPanel !== previousTransitioningValueRef.current) {
+        transitioningCountRef.current++
+        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(secondTimeoutRef.current)
+        clearTimeout(thirdTimeoutRef.current)
+    }
+    previousTransitioningValueRef.current = showPanel
+
+    useEffect(()=>{
+
+        const contentWidth = contentRef.current.offsetWidth
+        panelRef.current.style.width = contentWidth + 'px'
+        if (!showPanel) {
+            firstTimeoutRef.current = setTimeout(()=>{
+                panelRef.current.style.width = '0px'
+                panelRef.current.style.opacity = 0
+                secondTimeoutRef.current = setTimeout(()=>{
+                    localPropertiesPanelStylesRef.current = {...localPropertiesPanelStylesRef.current,width:'0px',opacity:0}
+                },500)
+            },50) // time for base to set
+        } else {
+            panelRef.current.style.opacity = 1
+            thirdTimeoutRef.current = setTimeout(()=>{
+                panelRef.current.style.width = 'auto'
+                panelRef.current.style.opacity = 1
+                localPropertiesPanelStylesRef.current = {...localPropertiesPanelStylesRef.current,width:'auto',opacity:1}
+            },500)
+        }
+
+    },[showPanel, transitioningCountRef.current])
+
+    return <Box data-type = 'properties-panel' ref = {panelRef} style = {localPropertiesPanelStylesRef.current} >
+        <Box data-type = 'properties-content' ref = {contentRef} style = {propertiesContentStyles}>
+            {children}
+        </Box>
+    </Box>
+}
+
+export const MirrorPanel = (props) => {
+    const
+        {showPanel, children} = props,
+        localMirrorPanelStylesRef = useRef(mirrorPanelStyles),
+        contentRef = useRef(null),
+        panelRef = useRef(null),
+        previousTransitioningValueRef = useRef(showPanel),
+        transitioningCountRef = useRef(0),
+        firstTimeoutRef = useRef(null),
+        secondTimeoutRef = useRef(null),
+        thirdTimeoutRef = useRef(null)
+
+    if (showPanel !== previousTransitioningValueRef.current) {
+        transitioningCountRef.current++
+        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(secondTimeoutRef.current)
+        clearTimeout(thirdTimeoutRef.current)
+    }
+    previousTransitioningValueRef.current = showPanel
+
+    useEffect(()=>{
+
+        const contentWidth = contentRef.current.offsetWidth
+        panelRef.current.style.width = contentWidth + 'px'
+        if (!showPanel) {
+            firstTimeoutRef.current = setTimeout(()=>{
+                panelRef.current.style.width = '0px'
+                panelRef.current.style.opacity = 0
+                secondTimeoutRef.current = setTimeout(()=>{
+                    localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'0px',opacity:0}
+                },500)
+            },50) // time for base to set
+        } else {
+            panelRef.current.style.opacity = 1
+            thirdTimeoutRef.current = setTimeout(()=>{
+                panelRef.current.style.width = 'auto'
+                panelRef.current.style.opacity = 1
+                localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'auto',opacity:1}
+            },500)
+        }
+
+    },[showPanel, transitioningCountRef.current])
+
+    return <Box data-type = 'mirror-panel' ref = {panelRef} style = {localMirrorPanelStylesRef.current} >
+        <Box data-type = 'mirror-content' ref = {contentRef} style = {mirrorContentStyles}>
             {children}
         </Box>
     </Box>
@@ -248,14 +339,3 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
     return <Box ref = {ref} data-type = 'folders-panel' style = {localStylesRef.current}> {children}</Box>
 
 })
-
-export const MirrorPanel = (props) => {
-    const
-        {showPanel, children} = props
-
-    return <Box data-type = 'mirror-panel' style = {mirrorPanelStyles} >
-        <Box data-type = 'mirror-content' style = {mirrorContentStyles}>
-            {children}
-        </Box>
-    </Box>
-}
