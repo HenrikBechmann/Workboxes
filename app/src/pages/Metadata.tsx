@@ -1,6 +1,6 @@
 // Metadata.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
 import { getFunctions, httpsCallable } from "firebase/functions"
 import { doc, getDoc } from "firebase/firestore"
 
@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react'
 
 import { useFirestore, useUserData } from '../system/FirebaseProviders'
+
+import Draggable from 'react-draggable'
 
 import { useTypes } from '../system/TribalopolisProvider'
 
@@ -49,9 +51,30 @@ const ContentBox = (props) => {
 
 const Metadata = (props) => {
 
+    const onStart = () => {
+        dragState.activeDrags = ++dragState.activeDrags
+        setDragState(dragState)
+    }
+
+    const onStop = () => {
+        dragState.activeDrags = --dragState.activeDrags
+        setDragState(dragState)
+    }
+
     const 
         userData = useUserData(),
-        { displayName, photoURL } = userData.authUser
+        { displayName, photoURL } = userData.authUser,
+        dragHandlers = {onStart, onStop},
+        [dragState, setDragState] = useState(
+        {
+            activeDrags: 0,
+            // deltaPosition: {
+            //   x: 0, y: 0
+            // },
+            // controlledPosition: {
+            //   x: -400, y: 200
+            // }
+        })
 
     const workboxDefaults = {
         settings:false,
@@ -175,7 +198,7 @@ const Metadata = (props) => {
                                     workboxItemTitle = {displayName}
                                 />
                             </ContentBox>
-                            <ContentBox>
+                            <Draggable ><Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
                                 <VStack height = '100%'>
                                     <Text>User Controls</Text>
                                     <Button onClick = {openDataDrawer} >Data</Button> 
@@ -183,7 +206,7 @@ const Metadata = (props) => {
                                     <Button onClick = {openHelpDrawer}>Help</Button> 
                                     <Button onClick = {openMessageDrawer}>Messages</Button>
                                 </VStack>
-                            </ContentBox>
+                            </ContentBox></Box></Draggable>
                             <ContentBox>
                                 <VStack data-type = 'vstack' padding = '3px' width = '100%'>
                                     <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
