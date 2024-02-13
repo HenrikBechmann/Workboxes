@@ -17,7 +17,7 @@ import MenuControl from './MenuControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
-import fireIcon from '../../../assets/fire.png'
+import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'
 import chatIcon from '../../../assets/chat.png'
 import messageIcon from '../../../assets/mail.png'

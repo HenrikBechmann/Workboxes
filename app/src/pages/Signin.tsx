@@ -12,7 +12,7 @@ import {
 
 import { useAuth, useUserData } from '../system/FirebaseProviders'
 
-import tribalopolisIcon from '../../assets/fire.png'
+import tribalopolisIcon from '../../assets/workbox-logo.png'
 import boxIcon from '../../assets/workbox.png'
 import dragIcon from '../../assets/drag.png'
 
