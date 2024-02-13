@@ -63,10 +63,10 @@ const WorkboxContent = (props) => {
             foldersElementRef = {foldersElementRef} 
         >
             <DocumentPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
-            Document
+            Cover
             </DocumentPanel>
             <FoldersPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
-            Folders
+            Contents
             </FoldersPanel>
         </CentralPanel>
         <MirrorPanel showPanel = {workboxControls.swap} >

@@ -47,7 +47,7 @@ const menuTileData = [
             nav:'/sysadmin/settings',
         },
         {
-            header:'Document metadata',
+            header:'Cover metadata',
             body:`Technical parameters for each data type, informing clients how to present fields.`,
             buttonPrompt:'Administer',
             nav:'/sysadmin/metadata',

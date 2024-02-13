@@ -124,16 +124,16 @@ const WorkboxToolbar = (props) => {
     const
         profileToggle = useToggleIcon({
             icon:profileIcon, 
-            tooltip:'Toggle document pane',
-            caption:'document',
+            tooltip:'Toggle workbox cover pane',
+            caption:'cover',
             toggleOnRef:toggleOnProfileRef,
             disabledRef:disabledProfileRef, 
         }),
 
         listToggle = useToggleIcon({
             icon:listIcon, 
-            tooltip:'Toggle folders pane',
-            caption:'folders',
+            tooltip:'Toggle workbox contents pane',
+            caption:'contents',
             toggleOnRef:toggleOnLinksRef,
             disabledRef:disabledLinksRef, 
         }),
@@ -148,8 +148,8 @@ const WorkboxToolbar = (props) => {
 
         settingsToggle = useToggleIcon({
             icon:settingsIcon, 
-            tooltip:'Toggle properties pane',
-            caption:'properties',
+            tooltip:'Toggle settings pane',
+            caption:'settings',
             toggleOnRef:toggleOnSettingsRef, 
             disabledRef:disabledSettingsRef, 
         })
