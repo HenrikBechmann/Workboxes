@@ -1,4 +1,4 @@
-// Tribalopolis.tsx
+// Main.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useRef } from 'react'

@@ -162,7 +162,7 @@ const StandardToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <MenuIcon icon = {fireIcon} caption = 'Tribalopolis' tooltip = 'Tribalopolis menu' menulist = {tribalopolismenulist} />
+        <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {tribalopolismenulist} />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {notificationsIcon} caption = 'notices' tooltip = 'Notifications to this account' response = {gotoNotifications} />
         <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />

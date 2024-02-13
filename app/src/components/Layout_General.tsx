@@ -40,7 +40,7 @@ const LayoutGeneral = (props) => {
     >
         <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw'>
             <ToolbarFrame>
-                {!userData && <Text ml = '6px'>Welcome to Tribalopolis! <NavLink to = '/signin'
+                {!userData && <Text ml = '6px'>Welcome to Workboxes! <NavLink to = '/signin'
                 style={navlinkStyles}
                     >Sign in</NavLink></Text>}
                 {userData && <ToolbarStandard />}

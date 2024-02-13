@@ -110,7 +110,7 @@ const Signin = (props) => {
             <Box style = {{textAlign:'center'}} >
                 <Heading size = 'lg'>Welcome!</Heading>
                 <Heading size = 'xl'>
-                    <Text>Use <Image style = {{display:"inline-block", verticalAlign:'baseline'}} src = {tribalopolisIcon} />Tribalopolis to...</Text>
+                    <Text>Use <Image style = {{display:"inline-block", verticalAlign:'baseline'}} src = {tribalopolisIcon} />Workboxes to...</Text>
                 </Heading>
             </Box>
             <Box style = {{textAlign:'center'}} >
@@ -138,11 +138,11 @@ const Signin = (props) => {
                     {errorState.error?.details} </Text>}
             </Box>
             <Box style = {{textAlign:'center'}} >
-                <Text>- Self organize into Work Groups (Domains).</Text>
                 <Text>- Organize information into Work Boxes. &nbsp;
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/>
                 </Text>
-                <Text>- Organize Work Boxes into Work Windows, Domain Panels, and Work Spaces.</Text>
+                <Text>- Organize Work Boxes into Work Windows, Work Panels, and Work Spaces.</Text>
+                <Text>- Even organize into Work Groups (Domains).</Text>
                 <Text>- Drag and Drop 
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> 
                     things around to keep up to date.
