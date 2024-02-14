@@ -373,7 +373,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'left': { // help
-                titleRef.current = 'Info'
+                titleRef.current = 'Learn'
                 Object.assign(drawerStyle,{
                     top:'auto',
                     right:'auto',

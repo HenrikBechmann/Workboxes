@@ -114,6 +114,7 @@ const Signin = (props) => {
                 </Heading>
             </Box>
             <Box style = {{textAlign:'center'}} >
+                <Heading size = 'lg'> Get things done:</Heading>
                 <Heading size = 'lg'> Organize, Re-organize, <br /> Communicate, and Collaborate</Heading>
                 <Text>
                     <NavLink to = '/about' style={navlinkStyles} >Learn more</NavLink>
@@ -138,16 +139,15 @@ const Signin = (props) => {
                     {errorState.error?.details} </Text>}
             </Box>
             <Box style = {{textAlign:'center'}} >
-                <Text>- Organize information into Work Boxes. &nbsp;
+                <Text>- Organize information into Work Boxes, and do your work there. &nbsp;
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/>
                 </Text>
                 <Text>- Organize Work Boxes into Work Windows, Work Panels, and Work Spaces.</Text>
-                <Text>- Even organize into Work Groups (Domains).</Text>
+                <Text>- Even organize into Work Groups (Work Domains).</Text>
                 <Text>- Drag and Drop 
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {dragIcon}/> 
                     things around to keep up to date.
                 </Text>
-                <Text>- Have fun!</Text>
             </Box>
             </VStack>
         </Center>
