@@ -54,7 +54,7 @@ const WorkboxContent = (props) => {
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <PropertiesPanel showPanel = {workboxControls.settings}>
-            Properties
+            Seettings
         </PropertiesPanel>
         <CentralPanel 
             ref = {centralPanelElementRef} 
