@@ -1,7 +1,7 @@
 // Toolbar_Standard.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties} from 'react'
+import React, {useMemo, CSSProperties, useRef} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -16,6 +16,7 @@ import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
+import { useToggleIcon } from './ToggleIcon'
 
 import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'
@@ -110,10 +111,20 @@ const StandardToolbar = (props) => {
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
 
-    const currentHomeIcon = 
-        isHome
-        ? homeFillIcon
-        : homeIcon
+    const 
+        currentHomeIcon = 
+            isHome
+            ? homeFillIcon
+            : homeIcon,
+        toggleOnCartRef = useRef(false),
+        disabledCartRef = useRef(false),
+        cartToggle = useToggleIcon({
+            icon:cartIcon, 
+            tooltip:'hold workboxes for transfer',
+            caption:'transfer',
+            toggleOnRef:toggleOnCartRef, 
+            disabledRef:disabledCartRef, 
+        })
 
     // --------------------- navigation functions ------------------
     const 
@@ -181,7 +192,7 @@ const StandardToolbar = (props) => {
         <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
         { isHome && <>
             <ToolbarVerticalDivider />
-            <StandardIcon icon = {cartIcon} caption = 'transfer' tooltip = 'toggle the item transfer cart'/>
+            {cartToggle}
             <ToolbarVerticalDivider />
             <MenuControl 
                 icon = {workspacesIcon} 
