@@ -196,6 +196,7 @@ const Metadata = (props) => {
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 
                                     workboxItemTitle = {displayName}
+                                    workboxDomainTitle = 'Your User Domain'
                                 />
                             </ContentBox>
                             <Draggable ><Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>

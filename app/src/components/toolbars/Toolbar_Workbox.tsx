@@ -18,6 +18,7 @@ import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import StandardIcon from './StandardIcon'
 import ItemControl from './ItemControl'
+import DomainControl from './DomainControl'
 
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
@@ -28,7 +29,6 @@ import swapIcon from '../../../assets/swap.png'
 import settingsIcon from '../../../assets/settings.png'
 import expandMoreIcon from '../../../assets/expand_more.png'
 import shareIcon from '../../../assets/share.png'
-
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
     padding:'2px',
@@ -61,7 +61,7 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle } = props,
+        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle, workboxDomainTitle } = props,
 
         toggleOnProfileRef = useRef(workboxControls.profile),
         disabledProfileRef = useRef(workboxControls.profileDisabled),
@@ -169,6 +169,7 @@ const WorkboxToolbar = (props) => {
         { listToggle }
         <ToolbarVerticalDivider />
         <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
+        <DomainControl workboxDomainTitle = {workboxDomainTitle} />
         <ToolbarVerticalDivider />
         {swapToggle}
         <ToolbarVerticalDivider />

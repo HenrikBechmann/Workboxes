@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react'
 
 const Workbox = (props) => {
-    const {workboxDefaults, workboxItemIcon, workboxItemTitle} = props
+    const {workboxDefaults, workboxItemIcon, workboxItemTitle, workboxDomainTitle} = props
     const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
     
     return <Grid
@@ -43,6 +43,7 @@ const Workbox = (props) => {
                 setWorkboxControls = {setWorkboxControls} 
                 workboxItemIcon = {workboxItemIcon} 
                 workboxItemTitle = {workboxItemTitle}
+                workboxDomainTitle = {workboxDomainTitle}
             />
         </ToolbarFrame>
         </Box>
