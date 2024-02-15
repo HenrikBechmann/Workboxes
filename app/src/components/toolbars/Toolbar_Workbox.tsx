@@ -174,7 +174,7 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share workbox'/>
+        <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workbox toolbar'/>
         <span>&nbsp;&nbsp;</span>

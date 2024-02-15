@@ -26,6 +26,8 @@ import homeIcon from '../../../assets/home.png'
 import homeFillIcon from '../../../assets/home_fill.png'
 import subscriptionsIcon from '../../../assets/subscriptions.png'
 import appSettingsIcon from '../../../assets/app_settings.png'
+import workspacesIcon from '../../../assets/workspaces.png'
+import cartIcon from '../../../assets/cart.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -105,10 +107,11 @@ const StandardToolbar = (props) => {
         auth = useAuth(),
         { displayName, photoURL } = userData.authUser,
         isSuperUser = userData.sysadminStatus.isSuperUser,
-        homepath = '/workspace'
+        homepath = '/workspace',
+        isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
 
     const currentHomeIcon = 
-        (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
+        isHome
         ? homeFillIcon
         : homeIcon
 
@@ -170,7 +173,19 @@ const StandardToolbar = (props) => {
         <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {currentHomeIcon} caption = 'workspace' tooltip = 'Go to the main work page' response = {goHome} />
+        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
+        { isHome && <>
+            <ToolbarVerticalDivider />
+            <StandardIcon icon = {cartIcon} caption = 'transfer' tooltip = 'toggle the item transfer cart'/>
+            <ToolbarVerticalDivider />
+            <MenuControl 
+                icon = {workspacesIcon} 
+                displayName = 'main workspace' 
+                tooltip = 'select a workspace'
+                caption = 'workspace'
+            />
+            </>
+        }
         <ToolbarVerticalDivider />
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         {isSuperUser && <>

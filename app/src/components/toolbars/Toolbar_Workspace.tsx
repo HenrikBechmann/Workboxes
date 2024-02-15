@@ -13,14 +13,14 @@ import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
-import cartIcon from '../../../assets/cart.png'
-import workspacesIcon from '../../../assets/workspaces.png'
 import panelIcon from '../../../assets/panel.png'
 import helpIcon from '../../../assets/help.png'
 import uploadIcon from '../../../assets/upload.png'
 import databaseIcon from '../../../assets/database.png'
 import moreVertIcon from '../../../assets/more_vert.png'
 import expandMoreIcon from '../../../assets/expand_more.png'
+import menuIcon from '../../../assets/menu.png'
+import addIcon from '../../../assets/add.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -85,33 +85,25 @@ const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <StandardIcon icon = {cartIcon} caption = 'transfer' tooltip = 'toggle the item transfer cart'/>
+        <StandardIcon icon = {menuIcon} tooltip = 'select panel'/>
+        <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             icon = {panelIcon} 
             moreStyles = {{transform:'rotate(-90deg)'}}
             displayName = 'main panel' 
             tooltip = 'select a panel'
-            caption = 'panel selection'
             arrowdirection = 'up'
         />
-        <MenuControl 
-            icon = {workspacesIcon} 
-            displayName = 'main workspace' 
-            tooltip = 'select a workspace'
-            caption = 'workspace selection'
-            arrowdirection = 'up'
-        />
-        <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {databaseIcon} caption = 'local' tooltip = 'save workspace config to local'/>
-        <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
-        <StandardIcon icon = {moreVertIcon} caption = 'more' tooltip = 'more options' />
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workspace toolbars'/>
         &nbsp; &nbsp;
     </Box>
 }
+
+// <LearnIcon tooltip = 'Explain this toolbar'/>
+// <ToolbarVerticalDivider />
+// <StandardIcon icon = {databaseIcon} caption = 'local' tooltip = 'save workspace config to local'/>
+// <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
+// <StandardIcon icon = {moreVertIcon} caption = 'more' tooltip = 'more options' />
 
 export default WorkspaceToolbar
 
