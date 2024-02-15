@@ -27,6 +27,7 @@ import swapIcon from '../../../assets/swap.png'
 // import linkIcon from '../../../assets/link.png'
 import settingsIcon from '../../../assets/settings.png'
 import expandMoreIcon from '../../../assets/expand_more.png'
+import shareIcon from '../../../assets/share.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -172,6 +173,8 @@ const WorkboxToolbar = (props) => {
         {swapToggle}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share workbox'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workbox toolbar'/>
         <span>&nbsp;&nbsp;</span>
