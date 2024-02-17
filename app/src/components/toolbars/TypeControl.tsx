@@ -8,9 +8,11 @@ import {
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
-const ItemControl = (props) => {
+import typeIcon from '../../../assets/label.png'
 
-    const { workboxItemIcon, workboxItemTitle } = props
+const DomainControl = (props) => {
+
+    const { workboxTypeName } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -21,12 +23,12 @@ const ItemControl = (props) => {
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
         <Box display = 'flex' flexWrap = 'nowrap'>
             <span>&nbsp;&nbsp;</span>
-            <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
+            <img style = {workboxItemIconStyles} src = {typeIcon} />
             <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'sm'>{workboxItemTitle}</Text>
+            <Text fontSize = 'sm'>{workboxTypeName}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox name</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox type</span></Box>
     </Box>
 }
 
-export default ItemControl
+export default DomainControl
