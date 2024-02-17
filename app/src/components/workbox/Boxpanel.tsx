@@ -169,11 +169,16 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
         displayStateRef = useRef(targetDisplay),
-        localStyles = {...panelStyles, ...centralPanelStyles} as CSSProperties
+        localStyles = {...panelStyles, ...centralPanelStyles} as CSSProperties,
+        firstTimeoutRef = useRef(null),
+        secondTimeoutRef = useRef(null),
+        thirdTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
         let timeout = 500
+        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(secondTimeoutRef.current)
 
         if (targetDisplay == 'both') {
 
@@ -191,12 +196,12 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
 
             }
 
-            setTimeout(()=>{
+            firstTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.width = 
                     documentElementRef.current.offsetWidth + 'px'
             },timeout)
 
-        } else { // 'folders'
+        } else { // targetDisplay == 'folders'
 
             if (displayStateRef.current == 'document') {
 
@@ -207,7 +212,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
 
             }
 
-            setTimeout(()=>{
+            secondTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.width = 
                     foldersElementRef.current.offsetWidth + 'px'
             },timeout)
