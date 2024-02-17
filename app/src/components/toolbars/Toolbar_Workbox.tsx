@@ -19,6 +19,7 @@ import LearnIcon from './LearnIcon'
 import StandardIcon from './StandardIcon'
 import ItemControl from './ItemControl'
 import DomainControl from './DomainControl'
+import TypeControl from './TypeControl'
 
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
@@ -61,7 +62,7 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle, workboxDomainTitle } = props,
+        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle, workboxDomainTitle, workboxTypeName } = props,
 
         toggleOnProfileRef = useRef(workboxControls.profile),
         disabledProfileRef = useRef(workboxControls.profileDisabled),
@@ -169,6 +170,7 @@ const WorkboxToolbar = (props) => {
         { listToggle }
         <ToolbarVerticalDivider />
         <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
+        <TypeControl workboxTypeName = {workboxTypeName} />
         <DomainControl workboxDomainTitle = {workboxDomainTitle} />
         <ToolbarVerticalDivider />
         {swapToggle}
