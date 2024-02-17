@@ -196,7 +196,7 @@ const Metadata = (props) => {
                                     workboxDefaults = {workboxDefaults} 
                                     workboxItemIcon = {photoURL} 
                                     workboxItemTitle = {displayName}
-                                    workboxDomainTitle = 'Your Personal Domain'
+                                    workboxDomainTitle = 'Henrik Bechmann'
                                     workboxTypeName = 'Domain Member'
                                 />
                             </ContentBox>

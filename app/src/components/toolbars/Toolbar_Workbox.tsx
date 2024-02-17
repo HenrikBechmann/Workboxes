@@ -169,17 +169,15 @@ const WorkboxToolbar = (props) => {
         { profileToggle }
         { listToggle }
         <ToolbarVerticalDivider />
+        {swapToggle}
+        <ToolbarVerticalDivider />
         <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
         <TypeControl workboxTypeName = {workboxTypeName} />
         <DomainControl workboxDomainTitle = {workboxDomainTitle} />
         <ToolbarVerticalDivider />
-        {swapToggle}
-        <ToolbarVerticalDivider />
-        <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
         <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {expandMoreIcon} caption = 'hide' tooltip = 'hide workbox toolbar'/>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
