@@ -171,8 +171,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
         displayStateRef = useRef(targetDisplay),
         localStyles = {...panelStyles, ...centralPanelStyles} as CSSProperties,
         firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null),
-        thirdTimeoutRef = useRef(null)
+        secondTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
@@ -231,9 +230,18 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
-        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties)
+        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
+        firstTimeoutRef = useRef(null),
+        secondTimeoutRef = useRef(null),
+        thirdTimeoutRef = useRef(null),
+        fourthTimeoutRef = useRef(null)
 
     useEffect(()=>{
+
+        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(secondTimeoutRef.current)
+        clearTimeout(thirdTimeoutRef.current)
+        clearTimeout(fourthTimeoutRef.current)
 
         let timeout = 500
 
@@ -241,7 +249,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             const localTimeout = targetDisplay == 'under'?timeout:0
 
-            setTimeout(()=>{
+            firstTimeoutRef.current = setTimeout(()=>{
                 localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
             },localTimeout)
 
@@ -249,7 +257,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
         if (targetDisplay == 'out') {
 
-            setTimeout(()=>{
+            secondTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -260,7 +268,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
                 timeout = 0
             }
 
-            setTimeout(()=>{
+            thirdTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 1
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -271,7 +279,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
                 timeout = 0
             }
 
-            setTimeout(()=>{
+            fourthTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
@@ -290,9 +298,18 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
-        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties)
+        localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
+        firstTimeoutRef = useRef(null),
+        secondTimeoutRef = useRef(null),
+        thirdTimeoutRef = useRef(null),
+        fourthTimeoutRef = useRef(null)
 
     useEffect(()=>{
+
+        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(secondTimeoutRef.current)
+        clearTimeout(thirdTimeoutRef.current)
+        clearTimeout(fourthTimeoutRef.current)
 
         let timeout = 500
 
@@ -300,7 +317,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             const localTimeout = targetDisplay == 'under'?timeout:0
 
-            setTimeout(()=>{
+            secondTimeoutRef.current = setTimeout(()=>{
                 localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
             },localTimeout)
 
@@ -308,7 +325,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
         if (targetDisplay == 'out') {
 
-            setTimeout(()=>{
+            secondTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -319,7 +336,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
                 timeout = 0
             }
 
-            setTimeout(()=>{
+            thirdTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 1
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -330,7 +347,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
                 timeout = 0
             }
 
-            setTimeout(()=>{
+            fourthTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
