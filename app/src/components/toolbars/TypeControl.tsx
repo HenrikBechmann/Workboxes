@@ -27,7 +27,7 @@ const DomainControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'sm'>{workboxTypeName}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox type</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox type...</span></Box>
     </Box>
 }
 
