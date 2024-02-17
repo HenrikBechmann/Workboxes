@@ -170,14 +170,12 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
         displayStateRef = useRef(targetDisplay),
         localStyles = {...panelStyles, ...centralPanelStyles} as CSSProperties,
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null)
+        timeoutRef = useRef(null)
 
     useEffect(()=>{
 
         let timeout = 500
-        clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
+        clearTimeout(timeoutRef.current)
 
         if (targetDisplay == 'both') {
 
@@ -195,7 +193,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
 
             }
 
-            firstTimeoutRef.current = setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
                 ref.current.style.width = 
                     documentElementRef.current.offsetWidth + 'px'
             },timeout)
@@ -211,7 +209,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
 
             }
 
-            secondTimeoutRef.current = setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
                 ref.current.style.width = 
                     foldersElementRef.current.offsetWidth + 'px'
             },timeout)
@@ -231,17 +229,13 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
         moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null),
-        thirdTimeoutRef = useRef(null),
-        fourthTimeoutRef = useRef(null)
+        visibilityTimeoutRef = useRef(null),
+        targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
-        clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
-        clearTimeout(thirdTimeoutRef.current)
-        clearTimeout(fourthTimeoutRef.current)
+        clearTimeout(visibilityTimeoutRef.current)
+        clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
 
@@ -249,7 +243,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
             const localTimeout = targetDisplay == 'under'?timeout:0
 
-            firstTimeoutRef.current = setTimeout(()=>{
+            visibilityTimeoutRef.current = setTimeout(()=>{
                 localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
             },localTimeout)
 
@@ -257,7 +251,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
 
         if (targetDisplay == 'out') {
 
-            secondTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -268,7 +262,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
                 timeout = 0
             }
 
-            thirdTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 1
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -279,7 +273,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
                 timeout = 0
             }
 
-            fourthTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
@@ -299,17 +293,13 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
         moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null),
-        thirdTimeoutRef = useRef(null),
-        fourthTimeoutRef = useRef(null)
+        visibilityTimeoutRef = useRef(null),
+        targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
-        clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
-        clearTimeout(thirdTimeoutRef.current)
-        clearTimeout(fourthTimeoutRef.current)
+        clearTimeout(visibilityTimeoutRef.current)
+        clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
 
@@ -317,7 +307,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
             const localTimeout = targetDisplay == 'under'?timeout:0
 
-            secondTimeoutRef.current = setTimeout(()=>{
+            visibilityTimeoutRef.current = setTimeout(()=>{
                 localStylesRef.current = {...localStylesRef.current, visibility:'visible'}
             },localTimeout)
 
@@ -325,7 +315,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
 
         if (targetDisplay == 'out') {
 
-            secondTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -336,7 +326,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
                 timeout = 0
             }
 
-            thirdTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 1
                 ref.current.style.boxShadow = 'none'
             },timeout)
@@ -347,7 +337,7 @@ export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any)
                 timeout = 0
             }
 
-            fourthTimeoutRef.current = setTimeout(()=>{
+            targetTimeoutRef.current = setTimeout(()=>{
                 ref.current.style.zIndex = 0
                 ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
