@@ -8,6 +8,9 @@ import {
     Center, Tooltip
 } from '@chakra-ui/react'
 
+import { Resizable } from 'react-resizable'
+import "react-resizable/css/styles.css"
+
 import { isMobile } from '../index'
 
 import Workbox from './workbox/Workbox'
@@ -467,35 +470,35 @@ export const Drawer = (props) => {
     //-----------------------------[ drag tab ]-----------------------------
 
     // initialize drag listeners
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        const tabElement = tabRef.current
+    //     const tabElement = tabRef.current
 
-        if (isMobile) {
+    //     if (isMobile) {
 
-            tabElement.addEventListener('touchstart', startDrag)
+    //         tabElement.addEventListener('touchstart', startDrag)
 
-        } else {
+    //     } else {
 
-            tabElement.addEventListener('mousedown', startDrag)
+    //         tabElement.addEventListener('mousedown', startDrag)
 
-        }
+    //     }
 
-        return () => {
+    //     return () => {
 
-            if (isMobile) {
+    //         if (isMobile) {
 
-                tabElement.removeEventListener('touchstart', startDrag)
+    //             tabElement.removeEventListener('touchstart', startDrag)
 
-            } else {
+    //         } else {
 
-                tabElement.removeEventListener('mousedown', startDrag)
+    //             tabElement.removeEventListener('mousedown', startDrag)
 
-            }
+    //         }
 
-        }
+    //     }
 
-    },[])
+    // },[])
 
     const startDrag = (event) => {
         event.preventDefault()
@@ -756,10 +759,20 @@ export const Drawer = (props) => {
                 // {props.children}
                 // </Workbox>
 
-    return <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
-        <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
+    console.log('tabRef.current',tabRef.current)
+
+    const resizeHandleAxis = 'w'
+
+        // <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
+        //     <img style = {tabIconStyle} src = {handleIcon} />
+        // </Box>
+
+    return <Resizable data-inheritedtype = 'resizable' handle = {
+        <Box ref = {tabRef} data-type = {'resizable-handle-' + placement} style = {tabStyle} >
             <img style = {tabIconStyle} src = {handleIcon} />
         </Box>
+    } height = {50} width = {50}>
+    <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           gridTemplateAreas={`"header"
@@ -824,6 +837,7 @@ export const Drawer = (props) => {
         </Grid>
         </Box></Box>}
     </Box>
+    </Resizable>
 }
 
 export default Drawer
