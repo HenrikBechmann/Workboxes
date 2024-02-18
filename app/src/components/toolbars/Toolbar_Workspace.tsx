@@ -85,14 +85,14 @@ const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <StandardIcon icon = {menuIcon} tooltip = 'select panel'/>
+        <StandardIcon icon = {menuIcon} tooltip = 'select a panel'/>
         <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             icon = {panelIcon} 
             moreStyles = {{transform:'rotate(-90deg)'}}
             displayName = 'main panel' 
-            tooltip = 'select a panel'
+            tooltip = 'panel options'
             arrowdirection = 'up'
         />
         &nbsp; &nbsp;
