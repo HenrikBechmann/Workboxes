@@ -166,6 +166,7 @@ const WorkboxToolbar = (props) => {
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
         { settingsToggle }
+        <ToolbarVerticalDivider />
         { profileToggle }
         { listToggle }
         <ToolbarVerticalDivider />
