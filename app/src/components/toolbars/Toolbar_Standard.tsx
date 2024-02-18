@@ -177,20 +177,12 @@ const StandardToolbar = (props) => {
     // render
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {tribalopolismenulist} />
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {notificationsIcon} caption = 'notices' tooltip = 'Notifications to this account' response = {gotoNotifications} />
         { isHome && <>
             <ToolbarVerticalDivider />
+            <StandardIcon icon = {notificationsIcon} caption = 'notifications' tooltip = 'Notifications to this account' response = {gotoNotifications} />
             <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
             <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
             <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
-            </>
-        }
-        <ToolbarVerticalDivider />
-        <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
-        { isHome && <>
             <ToolbarVerticalDivider />
             {cartToggle}
             <ToolbarVerticalDivider />
@@ -203,12 +195,16 @@ const StandardToolbar = (props) => {
             </>
         }
         <ToolbarVerticalDivider />
+        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
+        <ToolbarVerticalDivider />
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         {isSuperUser && <>
             <ToolbarVerticalDivider />
             <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
             </>
         }
+        <ToolbarVerticalDivider />
+        <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
