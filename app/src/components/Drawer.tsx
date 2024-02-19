@@ -83,7 +83,9 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
      //-------------------- bootstrap and changedrawer cycles --------------
 
-     const [drawersState, setDrawersState] = useState('setup') // ''setup to collect pageElementRef; 'changedrawers', 'ready'
+     const [drawersState, setDrawersState] = useState('setup') // 'setup' to collect pageElementRef; 'changedrawers', 'ready'
+     const drawersStateRef = useRef(null)
+     drawersStateRef.current = drawersState
 
     //---------------------- container resize support ----------------
 
@@ -262,6 +264,24 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
 // ================================= [ Drawer ] ======================================
 
+// const DrawerHandle = forwardRef(function DrawerHandle(props:any, ref:any) {
+
+//     const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
+
+//     return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
+//             <img style = {tabIconStyle} src = {handleIcon} />
+//         </Box>
+// })
+
+const DrawerHandle = (props) => {
+
+    const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
+
+    return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
+            <img style = {tabIconStyle} src = {handleIcon} />
+        </Box>
+}
+
 export const Drawer = (props) => {
 
     const
@@ -273,16 +293,16 @@ export const Drawer = (props) => {
         // ----------------------------- state hooks --------------------------
 
         // states
-        [drawerState, setDrawerState] = useState('ready'),
+        [drawerState, setDrawerState] = useState('setup'),
         drawerStateRef = useRef(drawerState),
-        [drawerLength, setDrawerLength] = useState(0),
+        [drawerSpecs, setDrawerSpecs] = useState({length:0,height:0,width:0}),
         drawerRatioRef = useRef(null),
         
         // used for layouts
         placementRef = useRef(null),
         orientationRef = useRef(null),
 
-        tabRef = useRef(null),
+        // tabRef = useRef(null),
         
         // styles, set below, first cycle
         drawerStyleRef = useRef<CSSProperties>({
@@ -301,8 +321,8 @@ export const Drawer = (props) => {
         }),
         
         // control data
-        isDraggingRef = useRef(false),
-        moveTimeoutIDRef = useRef(null),
+        // isDraggingRef = useRef(false),
+        // moveTimeoutIDRef = useRef(null),
         dragContainerRectRef = useRef(null), 
         titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
@@ -317,7 +337,7 @@ export const Drawer = (props) => {
     drawerStateRef.current = drawerState
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
-    drawerLengthRef.current = drawerLength
+    drawerLengthRef.current = drawerSpecs.length
     openParmRef.current = openParm
 
     // ------------------------- drawer styles -------------------------
@@ -469,59 +489,15 @@ export const Drawer = (props) => {
     
     //-----------------------------[ drag tab ]-----------------------------
 
-    // initialize drag listeners
-    // useEffect(()=>{
-
-    //     const tabElement = tabRef.current
-
-    //     if (isMobile) {
-
-    //         tabElement.addEventListener('touchstart', startDrag)
-
-    //     } else {
-
-    //         tabElement.addEventListener('mousedown', startDrag)
-
-    //     }
-
-    //     return () => {
-
-    //         if (isMobile) {
-
-    //             tabElement.removeEventListener('touchstart', startDrag)
-
-    //         } else {
-
-    //             tabElement.removeEventListener('mousedown', startDrag)
-
-    //         }
-
-    //     }
-
-    // },[])
-
     const startDrag = (event) => {
         event.preventDefault()
         event.stopPropagation()
 
-        isDraggingRef.current = true
+        // isDraggingRef.current = true
         dragContainerRectRef.current = containerElementRef.current.getBoundingClientRect()
         movedLengthRef.current = 0
 
         const pageElement = containerElementRef.current
-        if (isMobile) {
-
-            pageElement.addEventListener('touchmove', dragMove)
-            pageElement.addEventListener('touchend', endDrag)
-            pageElement.addEventListener('touchcancel', endDrag)
-
-        } else {
-
-            pageElement.addEventListener('mousemove', dragMove)
-            pageElement.addEventListener('mouseup', endDrag)
-
-        }
-
         drawerStyleRef.current.transition = 'unset'
 
         return false
@@ -529,7 +505,7 @@ export const Drawer = (props) => {
 
     const dragMove = (event) => {
 
-        if (!isDraggingRef.current) return
+        // if (!isDraggingRef.current) return
 
         event.preventDefault(); 
         event.stopPropagation(); 
@@ -574,14 +550,14 @@ export const Drawer = (props) => {
 
         movedLengthRef.current = newLength
 
-        clearTimeout(moveTimeoutIDRef.current)
+        // clearTimeout(moveTimeoutIDRef.current)
 
-        moveTimeoutIDRef.current = setTimeout(()=>{ // in case drag past page
+        // moveTimeoutIDRef.current = setTimeout(()=>{ // in case drag past page
 
-            isDraggingRef.current = false
-            dragContainerRectRef.current = null
+        //     isDraggingRef.current = false
+        //     dragContainerRectRef.current = null
 
-        },500)
+        // },500)
 
         calculateDrawerLength()
 
@@ -591,28 +567,14 @@ export const Drawer = (props) => {
 
     const endDrag = (event) => {
 
-        if (!isDraggingRef.current) return
-
         event.preventDefault(); 
         event.stopPropagation(); 
 
-        clearTimeout(moveTimeoutIDRef.current)
-        isDraggingRef.current = false
+        // clearTimeout(moveTimeoutIDRef.current)
+        // isDraggingRef.current = false
         dragContainerRectRef.current = null
         // console.log('drag end')
         const pageElement = containerElementRef.current
-        if (isMobile) {
-
-            pageElement.removeEventListener('touchmove', dragMove)
-            pageElement.removeEventListener('touchend', endDrag)
-            pageElement.removeEventListener('touchcancel', endDrag)
-
-        } else {
-
-            pageElement.removeEventListener('mousemove', dragMove)
-            pageElement.removeEventListener('mouseup', endDrag)
-
-        }
 
         drawerStyleRef.current = {...drawerStyleRef.current,transition:TRANSITION_CSS}
 
@@ -663,15 +625,18 @@ export const Drawer = (props) => {
             updateLength = updatedLength
         }
 
+        console.log('udpateLength',updateLength)
+
         // adjust CSS
         if (['left','right'].includes(placementRef.current)) {
             drawerStyleRef.current = Object.assign(drawerStyleRef.current,{width:updateLength + 'px', height:'100%'})
+            setDrawerSpecs({length:updatedLength,width:updatedLength,height:containerDimensions.height})
         } else {
             drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updateLength + 'px', width:'100%'})
+            setDrawerSpecs({length:updatedLength,width:containerDimensions.width,height:updatedLength})
         }
 
         drawerRatioRef.current = updateLength === 0? 0:updatedLength/containerLength
-        setDrawerLength(updatedLength)
 
     }
 
@@ -684,7 +649,10 @@ export const Drawer = (props) => {
     // resizing
     useLayoutEffect(() => {
 
-        if (drawerStateRef.current == 'setup') return
+        if (drawerStateRef.current == 'setup') {
+            calculateDrawerLength()
+            return
+        }
 
         if (!isResizingRef.current) {
             setIsResizing(true)
@@ -717,9 +685,7 @@ export const Drawer = (props) => {
     useEffect(()=> {
 
         switch (drawerState) {
-        // case 'setup':
-        case 'revisedvisibility':
-        // case 'revisedlength':
+        case 'setup':
             setDrawerState('ready')
         }
 
@@ -732,6 +698,7 @@ export const Drawer = (props) => {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, width:drawerLengthRef.current, height:'100%'})
+                setDrawerSpecs({length:drawerLengthRef.current,height:containerDimensions.height,width:drawerLengthRef.current})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, width:0, height:'100%'})
             }
@@ -740,6 +707,7 @@ export const Drawer = (props) => {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, height:drawerLengthRef.current, width:'100%'})
+                setDrawerSpecs({length:drawerLengthRef.current,width:containerDimensions.width,height:drawerLengthRef.current})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, height:0, width:'100%'})
             }
@@ -748,30 +716,25 @@ export const Drawer = (props) => {
 
         return drawerStyleRef.current
 
-        // setOpenState(openParm)
-
     }, [openParm])
 
     // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
-                // <Workbox>
-                // {props.children}
-                // </Workbox>
-
-    console.log('tabRef.current',tabRef.current)
-
-    const resizeHandleAxis = 'w'
-
-        // <Box ref = {tabRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} >
-        //     <img style = {tabIconStyle} src = {handleIcon} />
-        // </Box>
+    console.log('drawerSpecs',drawerSpecs)
 
     return <Resizable data-inheritedtype = 'resizable' handle = {
-        <Box ref = {tabRef} data-type = {'resizable-handle-' + placement} style = {tabStyle} >
-            <img style = {tabIconStyle} src = {handleIcon} />
-        </Box>
-    } height = {50} width = {50}>
+
+        (handleAxis, ref) => <DrawerHandle 
+            innerRef = {ref} 
+            placement = {placement} 
+            tabStyle = {tabStyle} 
+            handleAxis = {handleAxis}
+            tabIconStyle = {tabIconStyle} 
+            handleIcon = {handleIcon} 
+        />
+
+    } height = {drawerSpecs.height} width = {drawerSpecs.width} axis = 'x' resizeHandles = {['w']}>
     <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
