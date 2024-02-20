@@ -8,6 +8,7 @@ import LayoutGeneral from '../components/Layout_General'
 
 import Signin from '../pages/Signin'
 import About from '../pages/About'
+import Workbox from '../pages/WorkboxShared'
 import Notices from '../pages/Notices'
 import Classifieds from '../pages/Classifieds'
 import Unauthorized from '../pages/Unauthorized'
@@ -135,6 +136,10 @@ const routes = [
             {
                 path: 'about',
                 element: <About />
+            },
+            {
+                path: 'workbox',
+                element: <Workbox />
             },
             {
                 path: '*',
