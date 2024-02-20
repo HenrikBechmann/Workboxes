@@ -38,7 +38,7 @@ const iconStyles = {
 
 const closeIconStyle = {
     position:'absolute',
-    margint:'3px',
+    margin:'3px',
     top:0,
     right:0,
     height:'24px',
@@ -81,18 +81,11 @@ const drawerTypes = {
 
 export const useDrawers = (completeFunctions) => { // callbacks
 
-     //-------------------- bootstrap and changedrawer cycles --------------
-
-     const [drawersState, setDrawersState] = useState('setup') // 'setup' to collect pageElementRef; 'changedrawers', 'ready'
-     const drawersStateRef = useRef(null)
-     drawersStateRef.current = drawersState
-
-    //---------------------- container resize support ----------------
-
-    const
+     const 
+        [drawersState, setDrawersState] = useState('setup'), // 'setup' to collect containerElementRef; 'changedrawers', 'ready'
         [containerDimensions, setContainerDimensions] = useState(null), // to rerender drawers on resize
         containerElementRef = useRef(null), // container element, to pass to drawers, instantiated by host
-        resizeObserverRef = useRef(null) // observe container, ref to disconnect
+        resizeObserverRef = useRef(null) // for observe container, ref to disconnect
 
     useEffect(()=>{
 
@@ -117,9 +110,6 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
         setContainerDimensions(containerDimensions)
 
-        // if (drawersState == 'setup') setDrawersState('ready')
-
-    // },[drawersState])
     },[])
 
     const updateDimensions = useCallback((containerDimensions) => {
@@ -162,22 +152,22 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
     // close (called by drawer, in response to user action)
     const closeLookup = useCallback(() => {
-        setDrawerCloseState(drawerTypes.LOOKUP)
+        setDrawerCloseProp(drawerTypes.LOOKUP)
         completeFunctions.lookup(null) // add context
         setDrawersState('changedrawers')
     },[])
     const closeData = useCallback(() => {
-        setDrawerCloseState(drawerTypes.DATA)
+        setDrawerCloseProp(drawerTypes.DATA)
         completeFunctions.data(null)
         setDrawersState('changedrawers')
     },[])
     const closeMessages = useCallback(() => {
-        setDrawerCloseState(drawerTypes.MESSAGES)
+        setDrawerCloseProp(drawerTypes.MESSAGES)
         completeFunctions.messages(null)
         setDrawersState('changedrawers')
     },[])
     const closeHelp = useCallback(() => {
-        setDrawerCloseState(drawerTypes.HELP)
+        setDrawerCloseProp(drawerTypes.HELP)
         completeFunctions.help(null)
         setDrawersState('changedrawers')
     },[])
@@ -196,7 +186,7 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
     },[])
 
-    const setDrawerCloseState = useCallback((drawerType) => {
+    const setDrawerCloseProp = useCallback((drawerType) => {
 
         drawerPropsRef.current[drawerType].isOpen = false
 
@@ -264,22 +254,22 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
 // ================================= [ Drawer ] ======================================
 
-// const DrawerHandle = forwardRef(function DrawerHandle(props:any, ref:any) {
-
-//     const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
-
-//     return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
-//             <img style = {tabIconStyle} src = {handleIcon} />
-//         </Box>
-// })
-
 const DrawerHandle = (props) => {
 
     const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
 
+    console.log('handleAxis',handleAxis)
+
     return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
             <img style = {tabIconStyle} src = {handleIcon} />
         </Box>
+}
+
+const resizeAxes = {
+    top:'n',
+    right:'e',
+    bottom:'s',
+    left:'w',
 }
 
 export const Drawer = (props) => {
@@ -287,13 +277,14 @@ export const Drawer = (props) => {
     const
         // props 
         { placement, containerElementRef, containerDimensions, isOpen, onClose, context } = props,
-        
+
+        resizeHandleAxis = resizeAxes[placement],
         openParm = isOpen?'open':'closed',
 
         // ----------------------------- state hooks --------------------------
 
         // states
-        [drawerState, setDrawerState] = useState('setup'),
+        [drawerState, setDrawerState] = useState('setup'), // ('setup'),
         drawerStateRef = useRef(drawerState),
         [drawerSpecs, setDrawerSpecs] = useState({length:0,height:0,width:0}),
         drawerRatioRef = useRef(null),
@@ -309,9 +300,7 @@ export const Drawer = (props) => {
             position:'absolute',
             backgroundColor:'#ffffcc', // 'yellow',
             boxSizing:'border-box',
-            // opacity:0,
             visibility:'hidden',
-            // width:0,
             transition:TRANSITION_CSS
         }),
 
@@ -734,7 +723,7 @@ export const Drawer = (props) => {
             handleIcon = {handleIcon} 
         />
 
-    } height = {drawerSpecs.height} width = {drawerSpecs.width} axis = 'x' resizeHandles = {['w']}>
+    } height = {drawerSpecs.height} width = {drawerSpecs.width} axis = 'x' resizeHandles = {[resizeHandleAxis]}>
     <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
