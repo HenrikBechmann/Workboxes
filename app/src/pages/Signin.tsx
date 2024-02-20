@@ -143,7 +143,7 @@ const Signin = (props) => {
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/>
                 </Text>
                 <Text>- Organize Workboxes into Work Windows, Work Panels, and Work Spaces.</Text>
-                <Text>- Even organize into Work Groups (Group Domains).</Text>
+                <Text>- Even organize into Work Groups (Domains).</Text>
             </Box>
             </VStack>
         </Center>

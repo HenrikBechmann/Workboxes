@@ -26,6 +26,7 @@ const displayNameStyles = {
 const iconStyles = {
     height:'20px',
     width:'20px',
+    borderRadius:'10px',
 }
 
 const arrowWrapperStyles = {
@@ -38,19 +39,17 @@ const arrowStyles = {
     alignItems:'center',
 }
 
+// TODO borderRadius for avatar only
 const MenuControl = (props) => {
 
     const 
-        { displayName, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props
-
-    const iconStylesLocal = {...iconStyles, ...moreStyles}
-
-    const moreArrowWrapperStyles = 
-        arrowdirection == 'down'
-        ? null
-        : {transform:'rotate(180deg)'}
-
-    const arrowWrapperStylesLocal = {...arrowWrapperStyles, ...moreArrowWrapperStyles}
+        { displayName, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props,
+        iconStylesLocal = {...iconStyles, ...moreStyles},
+        moreArrowWrapperStyles = 
+            arrowdirection == 'down'
+            ? null
+            : {transform:'rotate(180deg)'},
+        arrowWrapperStylesLocal = {...arrowWrapperStyles, ...moreArrowWrapperStyles}
 
     return <Box style = {{
         display:'flex',
