@@ -126,19 +126,19 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
     // open (called by host component)
     const openDataDrawer = (context) => {
-        openDrawer(drawerTypes.DATA, context)
+        setDrawerOpenProps(drawerTypes.DATA, context)
         setDrawersState('changedrawers')
     }
     const openLookupDrawer = (context) => {
-        openDrawer(drawerTypes.LOOKUP, context)
+        setDrawerOpenProps(drawerTypes.LOOKUP, context)
         setDrawersState('changedrawers')
     }
     const openHelpDrawer = (context) => {
-        openDrawer(drawerTypes.HELP, context)
+        setDrawerOpenProps(drawerTypes.HELP, context)
         setDrawersState('changedrawers')
     }
     const openMessagesDrawer = (context) => {
-        openDrawer(drawerTypes.MESSAGES, context)
+        setDrawerOpenProps(drawerTypes.MESSAGES, context)
         setDrawersState('changedrawers')
     }
 
@@ -180,7 +180,7 @@ export const useDrawers = (completeFunctions) => { // callbacks
     }
 
     // utilities
-    const openDrawer = useCallback((drawerType, context)=>{
+    const setDrawerOpenProps = useCallback((drawerType, context)=>{
 
         Object.assign(drawerPropsRef.current[drawerType], {isOpen:true, context})
 
@@ -285,15 +285,7 @@ export const Drawer = (props) => {
 
         // states
         [drawerState, setDrawerState] = useState('setup'), // ('setup'),
-        drawerStateRef = useRef(drawerState),
         [drawerSpecs, setDrawerSpecs] = useState({length:0,height:0,width:0}),
-        drawerRatioRef = useRef(null),
-        
-        // used for layouts
-        placementRef = useRef(null),
-        orientationRef = useRef(null),
-
-        // tabRef = useRef(null),
         
         // styles, set below, first cycle
         drawerStyleRef = useRef<CSSProperties>({
@@ -312,22 +304,29 @@ export const Drawer = (props) => {
         // control data
         // isDraggingRef = useRef(false),
         // moveTimeoutIDRef = useRef(null),
-        dragContainerRectRef = useRef(null), 
-        titleRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
 
-        drawerLengthRef = useRef(0), // set and revised after first cycle (setup)
+        // updated later
+        drawerRatioRef = useRef(null),
         movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
-        openParmRef = useRef(openParm)
+        dragContainerRectRef = useRef(null), 
+        titleRef = useRef(null),
+
+        // updated each cycle
+        openParmRef = useRef(null),
+        drawerStateRef = useRef(null),
+        placementRef = useRef(null),
+        orientationRef = useRef(null),
+        drawerLengthRef = useRef(null)
 
     // for closures
+    openParmRef.current = openParm
     drawerStateRef.current = drawerState
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
     drawerLengthRef.current = drawerSpecs.length
-    openParmRef.current = openParm
 
     // ------------------------- drawer styles -------------------------
 
@@ -629,13 +628,13 @@ export const Drawer = (props) => {
 
     }
 
+    // ------------------------------ effect hooks ----------------------------
+    
+    // resizing
     const [isResizing, setIsResizing] = useState(false)
     const isResizingRef = useRef(false)
     const resizingTimeoutIDRef = useRef(null)
 
-    // ------------------------------ effect hooks ----------------------------
-    
-    // resizing
     useLayoutEffect(() => {
 
         if (drawerStateRef.current == 'setup') {
@@ -671,6 +670,7 @@ export const Drawer = (props) => {
 
     },[containerDimensions])
 
+    // update drawer state
     useEffect(()=> {
 
         switch (drawerState) {
