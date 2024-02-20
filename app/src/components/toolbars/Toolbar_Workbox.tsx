@@ -30,6 +30,9 @@ import swapIcon from '../../../assets/swap.png'
 import settingsIcon from '../../../assets/settings.png'
 import expandMoreIcon from '../../../assets/expand_more.png'
 import shareIcon from '../../../assets/share.png'
+import commentIcon from '../../../assets/comment.png'
+import likeIcon from '../../../assets/like.png'
+
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
     padding:'2px',
@@ -176,6 +179,8 @@ const WorkboxToolbar = (props) => {
         <TypeControl workboxTypeName = {workboxTypeName} />
         <DomainControl workboxDomainTitle = {workboxDomainTitle} />
         <ToolbarVerticalDivider />
+        <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
+        <StandardIcon icon = {likeIcon} caption = 'like' tooltip = 'like this workbox'/>
         <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
