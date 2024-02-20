@@ -18,6 +18,7 @@ const DomainControl = (props) => {
         width:'24px', 
         height:'24px', 
         borderRadius:'12px',
+        opacity:0.7,
     }
 
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
