@@ -195,9 +195,9 @@ const StandardToolbar = (props) => {
             </>
         }
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
-        <ToolbarVerticalDivider />
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
         {isSuperUser && <>
             <ToolbarVerticalDivider />
             <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
