@@ -258,18 +258,16 @@ const DrawerHandle = (props) => {
 
     const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
 
-    console.log('handleAxis',handleAxis)
-
     return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
-            <img style = {tabIconStyle} src = {handleIcon} />
+            <img draggable = "false" style = {tabIconStyle} src = {handleIcon} />
         </Box>
 }
 
 const resizeAxes = {
-    top:'n',
-    right:'e',
-    bottom:'s',
-    left:'w',
+    top:'s',
+    right:'w',
+    bottom:'n',
+    left:'e',
 }
 
 export const Drawer = (props) => {
@@ -285,7 +283,17 @@ export const Drawer = (props) => {
 
         // states
         [drawerState, setDrawerState] = useState('setup'), // ('setup'),
-        [drawerSpecs, setDrawerSpecs] = useState({length:0,height:0,width:0}),
+        [drawerSpecs, setDrawerSpecs] = useState(() => {
+            let height, width
+            if (['left','right'].includes(placement)) {
+                height = containerDimensions.height
+                width = 0
+            } else {
+                height = 0
+                width = containerDimensions.width
+            }
+            return {height, width}
+        }),
         
         // styles, set below, first cycle
         drawerStyleRef = useRef<CSSProperties>({
@@ -302,8 +310,6 @@ export const Drawer = (props) => {
         }),
         
         // control data
-        // isDraggingRef = useRef(false),
-        // moveTimeoutIDRef = useRef(null),
         containerDimensionsRef = useRef(containerDimensions),
 
         // updated later
@@ -311,7 +317,6 @@ export const Drawer = (props) => {
         movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
-        dragContainerRectRef = useRef(null), 
         titleRef = useRef(null),
 
         // updated each cycle
@@ -326,7 +331,6 @@ export const Drawer = (props) => {
     drawerStateRef.current = drawerState
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
-    drawerLengthRef.current = drawerSpecs.length
 
     // ------------------------- drawer styles -------------------------
 
@@ -483,154 +487,27 @@ export const Drawer = (props) => {
     
     //-----------------------------[ drag tab ]-----------------------------
 
-    const onResizeStart = (event, data) => {
-        event.preventDefault()
-        event.stopPropagation()
+    const onResizeStart = (event, {size, handle}) => {
 
-        // isDraggingRef.current = true
-        dragContainerRectRef.current = containerElementRef.current.getBoundingClientRect()
-        movedLengthRef.current = 0
+        console.log('start resize: node, size, handle', size, handle)
 
-        const pageElement = containerElementRef.current
         drawerStyleRef.current.transition = 'unset'
 
-        return false
     }
 
-    const onResize = (event, data) => {
+    const onResize = (event, {size, handle}) => {
 
-        // if (!isDraggingRef.current) return
+        console.log('onResize handle, size',handle, size)
 
-        event.preventDefault(); 
-        event.stopPropagation(); 
-
-        // console.log('drag move')
-
-        let clientX, clientY
-        if (!isMobile) {
-            // mousemove
-            clientX = event.clientX
-            clientY = event.clientY
-        } else {
-            // touchmove - assuming a single touchpoint
-            clientX = event.changedTouches[0].clientX
-            clientY = event.changedTouches[0].clientY
-        }
-
-        const 
-            pageX = dragContainerRectRef.current?.x,
-            pageY = dragContainerRectRef.current?.y,
-            pageWidth = dragContainerRectRef.current?.width,
-            pageHeight = dragContainerRectRef.current?.height,
-            placement = placementRef.current,
-            orientation = orientationRef.current
-
-        let length
-        if (orientation == 'horizontal') {
-            if (placement == 'right') {
-                length = pageWidth - (clientX - pageX)
-            } else {
-                length = clientX - pageX
-            }
-        } else {
-            if (placement == 'top') {
-                length = clientY - pageY
-            } else {
-                length = pageHeight - (clientY - pageY)
-            }
-        }
-
-        const newLength = Math.min(Math.max(length, minLengthRef.current),maxLengthRef.current)
-
-        movedLengthRef.current = newLength
-
-        // clearTimeout(moveTimeoutIDRef.current)
-
-        // moveTimeoutIDRef.current = setTimeout(()=>{ // in case drag past page
-
-        //     isDraggingRef.current = false
-        //     dragContainerRectRef.current = null
-
-        // },500)
-
-        calculateDrawerLength()
-
-        return false;
+        setDrawerSpecs({width:size.width,height:size.height})
 
     }
 
-    const onResizeStop = (event, data) => {
+    const onResizeStop = (event, {size, handle}) => {
 
-        event.preventDefault(); 
-        event.stopPropagation(); 
-
-        // clearTimeout(moveTimeoutIDRef.current)
-        // isDraggingRef.current = false
-        dragContainerRectRef.current = null
-        // console.log('drag end')
-        const pageElement = containerElementRef.current
+        console.log('stop resize', size, handle)
 
         drawerStyleRef.current = {...drawerStyleRef.current,transition:TRANSITION_CSS}
-
-        return false;
-    }
-
-    // -------------------- utility: calculate drawer length -----------------------------
-
-    const calculateDrawerLength = () => {
-
-        const 
-            drawerLength = drawerLengthRef.current,
-            defaultRatio = isMobile?0.8:0.33,
-            maxRatio = 0.9,
-            minRatio = isMobile?0.5:0.2,
-            containerLength = 
-                (['right','left'].includes(placementRef.current))
-                    ? containerDimensions?.width
-                    : containerDimensions?.height,
-            minConst = 
-                (['right','left'].includes(placementRef.current))
-                    ? MIN_DRAWER_WIDTH
-                    : MIN_DRAWER_HEIGHT,
-
-            // calculate length and constraints from appropriate container measure
-            minLength = Math.max(Math.round(minRatio * containerLength),minConst),
-            maxLength = Math.round(maxRatio * containerLength),
-            defaultLength = Math.max(Math.round(defaultRatio * containerLength),minLength),
-            movedLength = movedLengthRef.current
-
-        let updatedLength
-        if (movedLength >= minLength && movedLength <= maxLength) {
-            updatedLength = movedLength
-        } else if (drawerLength >= minLength && drawerLength <= maxLength) {
-            updatedLength = drawerLength
-        } else {
-            updatedLength = defaultLength
-        }
-
-        // save results
-        minLengthRef.current = minLength
-        maxLengthRef.current = maxLength
-
-        let updateLength
-        if (openParmRef.current == 'closed') {
-            updateLength = 0 // hide
-        } else {
-            updateLength = updatedLength
-        }
-
-        console.log('udpateLength',updateLength)
-
-        // adjust CSS
-        if (['left','right'].includes(placementRef.current)) {
-            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{width:updateLength + 'px', height:'100%'})
-            setDrawerSpecs({length:updatedLength,width:updatedLength,height:containerDimensions.height})
-        } else {
-            drawerStyleRef.current = Object.assign(drawerStyleRef.current,{height:updateLength + 'px', width:'100%'})
-            setDrawerSpecs({length:updatedLength,width:containerDimensions.width,height:updatedLength})
-        }
-
-        drawerRatioRef.current = updateLength === 0? 0:updatedLength/containerLength
 
     }
 
@@ -644,7 +521,7 @@ export const Drawer = (props) => {
     useLayoutEffect(() => {
 
         if (drawerStateRef.current == 'setup') {
-            calculateDrawerLength()
+            // calculateDrawerLength()
             return
         }
 
@@ -672,8 +549,6 @@ export const Drawer = (props) => {
         movedLengthRef.current = 0
         drawerLengthRef.current = containerLength * ratio
 
-        calculateDrawerLength()
-
     },[containerDimensions])
 
     // update drawer state
@@ -689,22 +564,25 @@ export const Drawer = (props) => {
     // update display
     drawerStyleRef.current = useMemo(()=> {
 
+        console.log('setting drawerStyleRef for placement, openParm', placement, openParm)
         if (['right','left'].includes(placementRef.current)) {
 
             if (openParm == 'open') {
-                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, width:drawerLengthRef.current, height:'100%'})
-                setDrawerSpecs({length:drawerLengthRef.current,height:containerDimensions.height,width:drawerLengthRef.current})
+                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
+                setDrawerSpecs((oldState)=>{return {...oldState,width:MIN_DRAWER_WIDTH}})
             } else {
-                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, width:0, height:'100%'})
+                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
+                setDrawerSpecs((oldState)=>{return {...oldState,width:0}})
             }
 
         } else {
 
             if (openParm == 'open') {
-                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1, height:drawerLengthRef.current, width:'100%'})
-                setDrawerSpecs({length:drawerLengthRef.current,width:containerDimensions.width,height:drawerLengthRef.current})
+                Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
+                setDrawerSpecs((oldState)=>{return {...oldState,height:MIN_DRAWER_HEIGHT}})
             } else {
-                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0, height:0, width:'100%'})
+                Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
+                setDrawerSpecs((oldState)=>{return {...oldState,height:0}})
             }
 
         }
@@ -716,13 +594,7 @@ export const Drawer = (props) => {
     // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
-    console.log('drawerSpecs',drawerSpecs)
-
-// type ResizeCallbackData = {
-//   node: HTMLElement,
-//   size: {width: number, height: number},
-//   handle: ResizeHandleAxis
-// };
+    console.log('placement, drawerSpecs',placement, drawerSpecs)
 
     return <Resizable 
         data-inheritedtype = 'resizable' 
@@ -748,7 +620,7 @@ export const Drawer = (props) => {
         onResizeStop = {onResizeStop}
 
     >
-    <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
+    <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} width = {drawerSpecs.width + 'px'} height = {drawerSpecs.height + 'px'}>
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
           gridTemplateAreas={`"header"
