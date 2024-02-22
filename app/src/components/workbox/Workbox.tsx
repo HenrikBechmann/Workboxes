@@ -57,9 +57,4 @@ const Workbox = (props) => {
     </Grid>
 }
 
-// <Box data-type = 'content-holder' display = 'flex' overflowX = 'auto' position = 'relative' height = '100%' width = '100%'>
-//     <WorkboxContent workboxControls = {workboxControls} />
-// </Box>
-
-
 export default Workbox

@@ -64,7 +64,7 @@ const mirrorContentStyles = {
     position:'relative',
 } as CSSProperties
 
-export const PropertiesPanel = (props) => {
+export const SettingsPanel = (props) => {
     const
         {showPanel, children} = props,
         localPropertiesPanelStylesRef = useRef(propertiesPanelStyles),
@@ -223,7 +223,7 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
     return <Box data-type = 'central-panel' ref = {ref} style = {localStyles}>{children}</Box>
 })
 
-export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
+export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
@@ -287,7 +287,7 @@ export const DocumentPanel = forwardRef(function DocumentPanel(props:any, ref:an
     return <Box ref = {ref} data-type = 'document-panel' style = {localStylesRef.current}>{children}</Box>
 })
 
-export const FoldersPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
+export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
     const 
         { children, targetDisplay } = props,
         moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,

@@ -7,7 +7,7 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { CentralPanel, DocumentPanel, FoldersPanel, PropertiesPanel, MirrorPanel } from './Boxpanel'
+import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel, MirrorPanel } from './Boxpanels'
 
 const workboxContentStyles = {
     display:'flex',
@@ -53,21 +53,21 @@ const WorkboxContent = (props) => {
     },[])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <PropertiesPanel showPanel = {workboxControls.settings}>
+        <SettingsPanel showPanel = {workboxControls.settings}>
             Seettings
-        </PropertiesPanel>
+        </SettingsPanel>
         <CentralPanel 
             ref = {centralPanelElementRef} 
             targetDisplay = {toggleTargetDisplay} 
             documentElementRef = {documentElementRef} 
             foldersElementRef = {foldersElementRef} 
         >
-            <DocumentPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
+            <CoverPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
             Cover
-            </DocumentPanel>
-            <FoldersPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
+            </CoverPanel>
+            <ContentsPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
             Contents
-            </FoldersPanel>
+            </ContentsPanel>
         </CentralPanel>
         <MirrorPanel showPanel = {workboxControls.swap} >
             Mirror

@@ -10,8 +10,8 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-const Boxcolumn = (props) => {
+const Boxcolumns = (props) => {
     return <Box>Box column</Box>
 } 
 
-export default Boxcolumn
+export default Boxcolumns
