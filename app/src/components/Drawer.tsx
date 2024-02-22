@@ -330,7 +330,7 @@ export const Drawer = (props) => {
 
     // ------------------------- drawer styles -------------------------
 
-    const [drawerStyle, tabStyle, tabIconStyle] = useMemo(()=>{
+    const [drawerStyle, tabStyle, tabIconStyle, resizableAxis] = useMemo(()=>{
 
         // core styles
         const 
@@ -351,9 +351,12 @@ export const Drawer = (props) => {
                 opacity:.5
             }
 
+        let resizableAxis
+
         // enhanced styles
         switch (placement) {
             case 'right': { // data entry
+                resizableAxis = 'x',
                 titleRef.current = 'Edit'
                 Object.assign(drawerStyle,{
                     top:'auto',
@@ -384,6 +387,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'left': { // help
+                resizableAxis = 'x',
                 titleRef.current = 'Learn'
                 Object.assign(drawerStyle,{
                     top:'auto',
@@ -414,6 +418,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'top': { // lookup
+                resizableAxis = 'y',
                 titleRef.current = 'Lookup'
                 Object.assign(drawerStyle,{
                     top:0,
@@ -443,6 +448,7 @@ export const Drawer = (props) => {
                 break
             }
             case 'bottom': { // messages
+                resizableAxis = 'y',
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
                     top:'auto',
@@ -472,12 +478,12 @@ export const Drawer = (props) => {
                 break
             }
         }
-        return [drawerStyle, tabStyle, tabIconStyle]
+        return [drawerStyle, tabStyle, tabIconStyle, resizableAxis]
     },[placement])
     
     //-----------------------------[ drag tab ]-----------------------------
 
-    const startDrag = (event) => {
+    const onResizeStart = (event, data) => {
         event.preventDefault()
         event.stopPropagation()
 
@@ -491,7 +497,7 @@ export const Drawer = (props) => {
         return false
     }
 
-    const dragMove = (event) => {
+    const onResize = (event, data) => {
 
         // if (!isDraggingRef.current) return
 
@@ -553,7 +559,7 @@ export const Drawer = (props) => {
 
     }
 
-    const endDrag = (event) => {
+    const onResizeStop = (event, data) => {
 
         event.preventDefault(); 
         event.stopPropagation(); 
@@ -712,18 +718,36 @@ export const Drawer = (props) => {
 
     console.log('drawerSpecs',drawerSpecs)
 
-    return <Resizable data-inheritedtype = 'resizable' handle = {
+// type ResizeCallbackData = {
+//   node: HTMLElement,
+//   size: {width: number, height: number},
+//   handle: ResizeHandleAxis
+// };
 
-        (handleAxis, ref) => <DrawerHandle 
-            innerRef = {ref} 
-            placement = {placement} 
-            tabStyle = {tabStyle} 
-            handleAxis = {handleAxis}
-            tabIconStyle = {tabIconStyle} 
-            handleIcon = {handleIcon} 
-        />
+    return <Resizable 
+        data-inheritedtype = 'resizable' 
+        handle = {
 
-    } height = {drawerSpecs.height} width = {drawerSpecs.width} axis = 'x' resizeHandles = {[resizeHandleAxis]}>
+            (handleAxis, ref) => <DrawerHandle 
+                innerRef = {ref} 
+                placement = {placement} 
+                tabStyle = {tabStyle} 
+                handleAxis = {handleAxis}
+                tabIconStyle = {tabIconStyle} 
+                handleIcon = {handleIcon} 
+            />
+        } 
+        height = {drawerSpecs.height} 
+        width = {drawerSpecs.width} 
+        axis = {resizableAxis}
+        resizeHandles = {[resizeHandleAxis]}
+        minConstraints = {[10, 10]}
+        maxConstraints = {[Infinity, Infinity]}
+        onResizeStart = {onResizeStart}
+        onResize = {onResize}
+        onResizeStop = {onResizeStop}
+
+    >
     <Box data-type = {'drawer-' + placement} style = {renderDrawerStyle} >
         {drawerState != 'setup' && <Box data-type = 'slide-box' style = {slideBoxStyleRef.current} ><Box data-type = 'drawer-box' height = '100%' width = '100%'>
         <Grid data-type = 'drawer-grid' height = '100%' width = '100%'
