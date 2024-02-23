@@ -415,9 +415,9 @@ export const Drawer = (props) => {
                 Object.assign(tabStyle,{
                     top:'50%',
                     transform:'translateY(-50%)',
-                    left:'-24px',
-                    borderRight:'transparent',
-                    borderRadius: '8px 0 0 8px',
+                    left:'-12px',
+                    // borderRight:'transparent',
+                    borderRadius: '8px',
                     height:'48px',
                     width:'24px',
                     alignItems:'center',
@@ -446,9 +446,9 @@ export const Drawer = (props) => {
                 Object.assign(tabStyle,{
                     top:'50%',
                     transform:'translateY(-50%)',
-                    right:'-24px',
-                    borderLeft:'transparent',
-                    borderRadius: '0 8px 8px 0',
+                    right:'-12px',
+                    // borderLeft:'transparent',
+                    borderRadius: '8px',
                     height:'48px',
                     width:'24px',
                     alignItems:'center',
@@ -477,9 +477,9 @@ export const Drawer = (props) => {
                 Object.assign(tabStyle,{
                     left:'50%',
                     transform:'translateX(-50%)',
-                    bottom:'-24px',
-                    borderTop:'transparent',
-                    borderRadius: '0 0 8px 8px',
+                    bottom:'-12px',
+                    // borderTop:'transparent',
+                    borderRadius: '8px',
                     height:'25px', // anomalous by 1px
                     width:'48px',
                     justifyContent:'center',
@@ -495,6 +495,7 @@ export const Drawer = (props) => {
                 resizableAxis = 'y',
                 titleRef.current = 'Messages'
                 Object.assign(drawerStyle,{
+                    paddingTop:'8px',
                     top:'auto',
                     right:'auto',
                     bottom:0,
@@ -507,9 +508,9 @@ export const Drawer = (props) => {
                 Object.assign(tabStyle,{
                     left:'50%',
                     transform:'translateX(-50%)',
-                    top:'-24px',
-                    borderBottom:'transparent',
-                    borderRadius: '8px 8px 0 0',
+                    top:'-12px',
+                    // borderBottom:'transparent',
+                    borderRadius: '8px',
                     height:'24px',
                     width:'48px',
                     justifyContent:'center',
@@ -596,8 +597,6 @@ export const Drawer = (props) => {
             height = ratio * containerDimensions.height
         }
 
-        // console.log('ratio, height',ratio, height, placementRef.current)
-
         startingLengthRef.current = 
             ['left','right'].includes(placement)
                 ? width
@@ -660,9 +659,7 @@ export const Drawer = (props) => {
     }, [openParm])
 
     // ------------------------------ render ---------------------------
-    const renderDrawerStyle = {...drawerStyleRef.current}
-
-    // console.log('placement, drawerSpecs',placement, drawerSpecs)
+    const renderDrawerStyle = {...drawerStyleRef.current} // trigger re-render
 
     return <Resizable 
         data-inheritedtype = 'resizable' 
