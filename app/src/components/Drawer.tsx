@@ -565,13 +565,22 @@ export const Drawer = (props) => {
             height = ratio * containerDimensions.height
         }
 
+        // console.log('ratio, height',ratio, height, placementRef.current)
+
         startingLengthRef.current = 
             ['left','right'].includes(placement)
                 ? width
                 : height
 
-        setDrawerSpecs({width, height})
+        if (openParmRef.current == 'closed') {
+            if (['left','right'].includes(placement))
+                width = 0
+            else {
+                height = 0
+            }
+        }
 
+        setDrawerSpecs({width, height})
 
     },[containerDimensions])
 
@@ -617,7 +626,7 @@ export const Drawer = (props) => {
     // ------------------------------ render ---------------------------
     const renderDrawerStyle = {...drawerStyleRef.current}
 
-    console.log('placement, drawerSpecs',placement, drawerSpecs)
+    // console.log('placement, drawerSpecs',placement, drawerSpecs)
 
     return <Resizable 
         data-inheritedtype = 'resizable' 
