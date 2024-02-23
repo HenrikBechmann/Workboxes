@@ -77,6 +77,13 @@ const drawerTypes = {
     MESSAGES:'messages',
 }
 
+const resizeAxes = {
+    top:'s',
+    right:'w',
+    bottom:'n',
+    left:'e',
+}
+
 // =============================[ useDrawers ]===========================
 // establish drawers for any container
 
@@ -268,13 +275,6 @@ const DrawerHandle = (props) => {
             />
         </Box>
     )
-}
-
-const resizeAxes = {
-    top:'s',
-    right:'w',
-    bottom:'n',
-    left:'e',
 }
 
 export const Drawer = (props) => {
@@ -556,7 +556,7 @@ export const Drawer = (props) => {
 
     // ------------------------------ effect hooks ----------------------------
     
-    // resizing
+    // window resizing
     const [isResizing, setIsResizing] = useState(false)
     const isResizingRef = useRef(false)
     const resizingTimeoutIDRef = useRef(null)
