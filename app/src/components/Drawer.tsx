@@ -315,10 +315,13 @@ export const Drawer = (props) => {
         
         // control data
         containerDimensionsRef = useRef(containerDimensions),
+        defaultRatio = 
+            ['left','right'].includes(placement)
+                ? defaultLength/containerDimensions.width
+                : defaultLength/containerDimensions.height,
+        drawerRatioRef = useRef(defaultRatio),
 
         // updated later
-        drawerRatioRef = useRef(null),
-        // movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
         titleRef = useRef(null),
@@ -512,6 +515,11 @@ export const Drawer = (props) => {
             ['left','right'].includes(placement)
                 ? drawerSpecsRef.current.width
                 : drawerSpecsRef.current.height
+        drawerRatioRef.current =
+            ['left','right'].includes(placement)
+                ? startingLengthRef.current/containerDimensions.width
+                : startingLengthRef.current/containerDimensions.height
+
     }
 
     // ------------------------------ effect hooks ----------------------------
@@ -524,7 +532,6 @@ export const Drawer = (props) => {
     useLayoutEffect(() => {
 
         if (drawerStateRef.current == 'setup') {
-            // calculateDrawerLength()
             return
         }
 
@@ -544,13 +551,22 @@ export const Drawer = (props) => {
 
         const
             containerLength = 
-                (['right','left'].includes(placementRef.current))
+                ['right','left'].includes(placementRef.current)
                     ? containerDimensions?.width
                     : containerDimensions?.height,
             ratio = drawerRatioRef.current
 
-        // movedLengthRef.current = 0
-        // drawerLengthRef.current = containerLength * ratio
+        let width, height
+        if (['right','left'].includes(placementRef.current)) {
+            height = containerDimensions.height
+            width = ratio * containerDimensions.width
+        } else {
+            width = containerDimensions.width
+            height = ratio * containerDimensions.height
+        }
+
+        setDrawerSpecs({width, height})
+
 
     },[containerDimensions])
 
