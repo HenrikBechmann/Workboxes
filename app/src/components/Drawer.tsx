@@ -565,6 +565,11 @@ export const Drawer = (props) => {
             height = ratio * containerDimensions.height
         }
 
+        startingLengthRef.current = 
+            ['left','right'].includes(placement)
+                ? width
+                : height
+
         setDrawerSpecs({width, height})
 
 
