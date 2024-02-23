@@ -314,7 +314,7 @@ export const Drawer = (props) => {
 
         // updated later
         drawerRatioRef = useRef(null),
-        movedLengthRef = useRef(0), // based on drag
+        // movedLengthRef = useRef(0), // based on drag
         maxLengthRef = useRef(null),
         minLengthRef = useRef(null),
         titleRef = useRef(null),
@@ -323,8 +323,8 @@ export const Drawer = (props) => {
         openParmRef = useRef(null),
         drawerStateRef = useRef(null),
         placementRef = useRef(null),
-        orientationRef = useRef(null),
-        drawerLengthRef = useRef(null)
+        orientationRef = useRef(null)
+        // drawerLengthRef = useRef(null)
 
     // for closures
     openParmRef.current = openParm
@@ -487,9 +487,7 @@ export const Drawer = (props) => {
     
     //-----------------------------[ drag tab ]-----------------------------
 
-    const onResizeStart = (event, {size, handle}) => {
-
-        console.log('start resize: node, size, handle', size, handle)
+    const onResizeStart = () => {
 
         drawerStyleRef.current.transition = 'unset'
 
@@ -497,15 +495,11 @@ export const Drawer = (props) => {
 
     const onResize = (event, {size, handle}) => {
 
-        console.log('onResize handle, size',handle, size)
-
         setDrawerSpecs({width:size.width,height:size.height})
 
     }
 
-    const onResizeStop = (event, {size, handle}) => {
-
-        console.log('stop resize', size, handle)
+    const onResizeStop = () => {
 
         drawerStyleRef.current = {...drawerStyleRef.current,transition:TRANSITION_CSS}
 
@@ -546,8 +540,8 @@ export const Drawer = (props) => {
                     : containerDimensions?.height,
             ratio = drawerRatioRef.current
 
-        movedLengthRef.current = 0
-        drawerLengthRef.current = containerLength * ratio
+        // movedLengthRef.current = 0
+        // drawerLengthRef.current = containerLength * ratio
 
     },[containerDimensions])
 
