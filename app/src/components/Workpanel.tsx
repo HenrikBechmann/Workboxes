@@ -10,8 +10,18 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
+const workpanelStyles = {
+    position:'absolute',
+    inset: 0,
+} as CSSProperties
+
 const Workpanel = (props) => {
-    return <Box>Workspace</Box>
+
+    const { children } = props
+
+    return <Box data-type = 'workpanel' style = {workpanelStyles}>
+        {children}
+    </Box>
 } 
 
 export default Workpanel

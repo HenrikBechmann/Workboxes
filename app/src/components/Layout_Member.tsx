@@ -1,6 +1,6 @@
 // MembersLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React from 'react'
+import React, {CSSProperties} from 'react'
 import { Outlet } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
@@ -13,7 +13,8 @@ const bodyStyle = {
     backgroundColor:'ghostwhite',
     borderTop:'1px solid lightgray',
     overflow:'hidden', // hide drawers
-}
+    position: 'relative',
+} as CSSProperties
 
 const LayoutMember = (props) => {
 
