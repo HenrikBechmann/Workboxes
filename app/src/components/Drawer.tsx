@@ -282,7 +282,7 @@ export const Drawer = (props) => {
         // ----------------------------- state hooks --------------------------
 
         // states
-        [drawerState, setDrawerState] = useState('setup'), // ('setup'),
+        [drawerState, setDrawerState] = useState('setup'),
         [drawerSpecs, setDrawerSpecs] = useState(() => {
             let height, width
             if (['left','right'].includes(placement)) {
@@ -294,7 +294,11 @@ export const Drawer = (props) => {
             }
             return {height, width}
         }),
-        
+        defaultLength = 
+            ['left','right'].includes(placement)
+                    ? MIN_DRAWER_WIDTH
+                    : MIN_DRAWER_HEIGHT,
+        startingLengthRef = useRef(defaultLength),
         // styles, set below, first cycle
         drawerStyleRef = useRef<CSSProperties>({
             position:'absolute',
@@ -322,6 +326,7 @@ export const Drawer = (props) => {
         // updated each cycle
         openParmRef = useRef(null),
         drawerStateRef = useRef(null),
+        drawerSpecsRef = useRef(null),
         placementRef = useRef(null),
         orientationRef = useRef(null)
         // drawerLengthRef = useRef(null)
@@ -329,6 +334,7 @@ export const Drawer = (props) => {
     // for closures
     openParmRef.current = openParm
     drawerStateRef.current = drawerState
+    drawerSpecsRef.current = drawerSpecs
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
 
@@ -502,7 +508,10 @@ export const Drawer = (props) => {
     const onResizeStop = () => {
 
         drawerStyleRef.current = {...drawerStyleRef.current,transition:TRANSITION_CSS}
-
+        startingLengthRef.current = 
+            ['left','right'].includes(placement)
+                ? drawerSpecsRef.current.width
+                : drawerSpecsRef.current.height
     }
 
     // ------------------------------ effect hooks ----------------------------
@@ -558,12 +567,11 @@ export const Drawer = (props) => {
     // update display
     drawerStyleRef.current = useMemo(()=> {
 
-        console.log('setting drawerStyleRef for placement, openParm', placement, openParm)
         if (['right','left'].includes(placementRef.current)) {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
-                setDrawerSpecs((oldState)=>{return {...oldState,width:MIN_DRAWER_WIDTH}})
+                setDrawerSpecs((oldState)=>{return {...oldState,width:startingLengthRef.current}})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
                 setDrawerSpecs((oldState)=>{return {...oldState,width:0}})
@@ -573,7 +581,7 @@ export const Drawer = (props) => {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
-                setDrawerSpecs((oldState)=>{return {...oldState,height:MIN_DRAWER_HEIGHT}})
+                setDrawerSpecs((oldState)=>{return {...oldState,height:startingLengthRef.current}})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
                 setDrawerSpecs((oldState)=>{return {...oldState,height:0}})
