@@ -22,7 +22,8 @@ import closeIcon from '../../assets/close.png'
 // ==========================[ static CSS values ]===============================
 
 const MIN_DRAWER_WIDTH = 250
-const MIN_DRAWER_HEIGHT = 100
+const MIN_DRAWER_HEIGHT = 150
+const MAX_RATIO = .9
 // for restore after drag-resize and container-resize
 // the drawer frame's length is froxen during transition; otherwise set to width:100% and height:100%
 const TRANSITION_CSS = 'visibility .4s, opacity .4s, width .4s, height .4s'
@@ -199,7 +200,6 @@ export const useDrawers = (completeFunctions) => { // callbacks
         lookup:{
             isOpen:false,
             placement: 'top',
-            containerElementRef,
             containerDimensions,
             onClose:closeFunctions.lookup,
             context:null,
@@ -207,7 +207,6 @@ export const useDrawers = (completeFunctions) => { // callbacks
         data:{
             isOpen:false,
             placement: 'right',
-            containerElementRef,
             containerDimensions,
             onClose: closeFunctions.data,
             context:null,
@@ -215,7 +214,6 @@ export const useDrawers = (completeFunctions) => { // callbacks
         messages:{
             placement:'bottom',
             isOpen:false,
-            containerElementRef,
             containerDimensions,
             onClose:closeFunctions.messages,
             context:null,
@@ -223,7 +221,6 @@ export const useDrawers = (completeFunctions) => { // callbacks
         help:{
             isOpen: false,
             placement:'left',
-            containerElementRef,
             containerDimensions,
             onClose:closeFunctions.help,
             context:null,
@@ -256,11 +253,21 @@ export const useDrawers = (completeFunctions) => { // callbacks
 
 const DrawerHandle = (props) => {
 
+    // handleAxis for handle selection - n/a here
     const { placement, tabStyle, tabIconStyle, handleIcon, handleAxis, innerRef, ...rest } = props
 
-    return  <Box ref = {innerRef} data-type = {'drawer-tab-' + placement} style = {tabStyle} {...rest}>
-            <img draggable = "false" style = {tabIconStyle} src = {handleIcon} />
+    return (
+        <Box 
+            ref = {innerRef} 
+            data-type = {'drawer-tab-' + placement} 
+            style = {tabStyle} {...rest}>
+            <img 
+                draggable = "false" 
+                style = {tabIconStyle} 
+                src = {handleIcon} 
+            />
         </Box>
+    )
 }
 
 const resizeAxes = {
@@ -274,7 +281,7 @@ export const Drawer = (props) => {
 
     const
         // props 
-        { placement, containerElementRef, containerDimensions, isOpen, onClose, context } = props,
+        { placement, containerDimensions, isOpen, onClose, context } = props,
 
         resizeHandleAxis = resizeAxes[placement],
         openParm = isOpen?'open':'closed',
@@ -320,10 +327,35 @@ export const Drawer = (props) => {
                 ? defaultLength/containerDimensions.width
                 : defaultLength/containerDimensions.height,
         drawerRatioRef = useRef(defaultRatio),
-
+        defaultMaxLength =
+            ['left','right'].includes(placement)
+                ? MAX_RATIO * containerDimensions.width
+                : MAX_RATIO * containerDimensions.height,
+        defaultMinLength =
+            ['left','right'].includes(placement)
+                ? MIN_DRAWER_WIDTH
+                : MIN_DRAWER_HEIGHT,           
         // updated later
-        maxLengthRef = useRef(null),
-        minLengthRef = useRef(null),
+        maxLengthRef = useRef(defaultMaxLength),
+        minLengthRef = useRef(defaultMinLength),
+        maxWidth = 
+            ['left','right'].includes(placement)
+                ? maxLengthRef.current
+                : Infinity,
+        maxHeight = 
+            ['left','right'].includes(placement)
+                ? Infinity
+                : maxLengthRef.current,
+        maxConstraints = [maxWidth, maxHeight],
+        minWidth = 
+            ['left','right'].includes(placement)
+                ? minLengthRef.current
+                : 10,
+        minHeight = 
+            ['left','right'].includes(placement)
+                ? 10
+                : minLengthRef.current,
+        minConstraints = [minWidth, minHeight],
         titleRef = useRef(null),
 
         // updated each cycle
@@ -332,7 +364,6 @@ export const Drawer = (props) => {
         drawerSpecsRef = useRef(null),
         placementRef = useRef(null),
         orientationRef = useRef(null)
-        // drawerLengthRef = useRef(null)
 
     // for closures
     openParmRef.current = openParm
@@ -580,6 +611,11 @@ export const Drawer = (props) => {
             }
         }
 
+        maxLengthRef.current = 
+            ['right','left'].includes(placementRef.current)
+                ? MAX_RATIO * containerDimensions.width
+                : MAX_RATIO * containerDimensions.height
+
         setDrawerSpecs({width, height})
 
     },[containerDimensions])
@@ -645,8 +681,8 @@ export const Drawer = (props) => {
         width = {drawerSpecs.width} 
         axis = {resizableAxis}
         resizeHandles = {[resizeHandleAxis]}
-        minConstraints = {[10, 10]}
-        maxConstraints = {[Infinity, Infinity]}
+        minConstraints = {minConstraints}
+        maxConstraints = {maxConstraints}
         onResizeStart = {onResizeStart}
         onResize = {onResize}
         onResizeStop = {onResizeStop}
