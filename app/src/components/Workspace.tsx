@@ -13,12 +13,6 @@ import {
 
 import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
-
-const workspaceStyles = {
-    position:'absolute',
-    inset: 0,
-} as CSSProperties
-
 import Workwindow from './Workwindow'
 import Workpanel from './Workpanel'
 
@@ -33,11 +27,9 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box data-type = 'workspace-content' style = {workspaceStyles}>
-                <Workpanel>
-                    <Workwindow>Window</Workwindow>
-                </Workpanel>
-            </Box>
+            <Workpanel>
+                <Workwindow>Window</Workwindow>
+            </Workpanel>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%' >
