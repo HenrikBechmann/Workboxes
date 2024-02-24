@@ -20,7 +20,7 @@ const Workspace = (props) => {
 
     const [windowState, setWindowState] = useState('ready')
 
-    const setFocus = (sessionID, zOrder) => {
+    const setFocus = (zOrder) => {
         const windowsList = windowsListRef.current
         const numberOfWindows = windowsList.length
         for (let i = 0; i < numberOfWindows; i++) {
