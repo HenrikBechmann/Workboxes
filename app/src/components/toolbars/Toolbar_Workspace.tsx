@@ -101,11 +101,5 @@ const WorkspaceToolbar = (props) => {
     </Box>
 }
 
-// <LearnIcon tooltip = 'Explain this toolbar'/>
-// <ToolbarVerticalDivider />
-// <StandardIcon icon = {databaseIcon} caption = 'local' tooltip = 'save workspace config to local'/>
-// <StandardIcon icon = {uploadIcon} caption = 'cloud' tooltip = 'save workspace config to the cloud' />
-// <StandardIcon icon = {moreVertIcon} caption = 'more' tooltip = 'more options' />
-
 export default WorkspaceToolbar
 

@@ -29,6 +29,7 @@ import subscriptionsIcon from '../../../assets/subscriptions.png'
 import appSettingsIcon from '../../../assets/app_settings.png'
 import workspacesIcon from '../../../assets/workspaces.png'
 import cartIcon from '../../../assets/cart.png'
+import moreVerticalIcon from '../../../assets/more_vert.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -205,6 +206,8 @@ const StandardToolbar = (props) => {
         }
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {moreVerticalIcon} caption = 'nore' tooltip = 'More workspace options' />
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
