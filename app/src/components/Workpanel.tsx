@@ -11,8 +11,10 @@ import {
 } from '@chakra-ui/react'
 
 const workpanelStyles = {
-    position:'absolute',
-    inset: 0,
+    height:'100%',
+    width:'100%',
+    // position:'absolute',
+    // inset: 0,
     minWidth:'1000px',
 } as CSSProperties
 

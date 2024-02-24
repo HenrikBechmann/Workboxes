@@ -27,7 +27,7 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box position = 'absolute' inset = {0} overflow = 'auto'>
+            <Box data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
                 <Workpanel>
                     <Workwindow>Window</Workwindow>
                 </Workpanel>

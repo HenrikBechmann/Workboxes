@@ -30,6 +30,7 @@ const titleStyles = {
     borderRadius: '7px 7px 0 0',
     padding: '3px',
     backgroundColor:'lightskyblue',
+    display:'flex',
 } as CSSProperties
 
 const contentStyles = {
@@ -54,9 +55,7 @@ const handleStyles = {
 } as CSSProperties
 
 const windowIconGroupStyles = {
-    position:'absolute',
-    top:0,
-    right:0,
+    marginLeft:'auto',
     borderRadius: '0 7px 0 0',
     display:'flex',
 } as CSSProperties
@@ -80,12 +79,13 @@ const Workwindow = (props) => {
                                   "body"`}
         >
             <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
-                <Box data-type = 'window-title' style = {titleStyles}>Title</Box>
-                <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
-                    <img src = {windowMinimalIcon} />
-                    <img src = {windowFloatIcon} />
-                    <img src = {windowFullIcon} />
-                    <img src = {moreVertIcon} />
+                <Box data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
+                    <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
+                        <img src = {windowMinimalIcon} />
+                        <img src = {windowFloatIcon} />
+                        <img src = {windowFullIcon} />
+                        <img src = {moreVertIcon} />
+                    </Box>
                 </Box>
             </GridItem>
             <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative'>
