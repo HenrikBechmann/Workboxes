@@ -21,6 +21,7 @@ import moreVertIcon from '../../../assets/more_vert.png'
 import expandMoreIcon from '../../../assets/expand_more.png'
 import menuIcon from '../../../assets/menu.png'
 import addIcon from '../../../assets/add.png'
+import windowSelectIcon from '../../../assets/window_select.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -85,6 +86,7 @@ const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
+        <StandardIcon icon = {windowSelectIcon} tooltip = 'select a window'/>
         <StandardIcon icon = {menuIcon} tooltip = 'select a panel'/>
         <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
         <ToolbarVerticalDivider />
