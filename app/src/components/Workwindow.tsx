@@ -68,12 +68,14 @@ const handleIconStyles = {
 
 const Workwindow = (props) => {
 
-    const {children, defaults} = props
+    const {children, defaults:windowDefaults, sessionID, zOrder, setFocus} = props
 
     const windowElementRef = useRef(null)
     const titleElementRef = useRef(null)
+    const zOrderRef = useRef(null)
+    zOrderRef.current = zOrder
 
-    const localWindowStyles = {...windowStyles,...defaults}
+    const localWindowStyles = {...windowStyles,...windowDefaults}
 
     const localTitleStylesRef = useRef(titleStyles)
 
@@ -82,6 +84,7 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
 
         const onFocus = (event) => {
+            setFocus(sessionID, zOrderRef.current)
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
         }
 
