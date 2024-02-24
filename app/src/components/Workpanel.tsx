@@ -13,6 +13,7 @@ import {
 const workpanelStyles = {
     position:'absolute',
     inset: 0,
+    minWidth:'1000px',
 } as CSSProperties
 
 const Workpanel = (props) => {

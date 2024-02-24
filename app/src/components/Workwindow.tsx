@@ -12,7 +12,7 @@ import dragCornerIcon from '../../assets/drag-corner.png'
 import windowMinimalIcon from '../../assets/window-minimal.png'
 import windowFloatIcon from '../../assets/window-float.png'
 import windowFullIcon from '../../assets/window-full.png'
-import windowCloseIcon from '../../assets/window-close.png'
+import moreVertIcon from '../../assets/more_vert_light.png'
 
 const windowStyles = {
     position: 'absolute',
@@ -85,7 +85,7 @@ const Workwindow = (props) => {
                     <img src = {windowMinimalIcon} />
                     <img src = {windowFloatIcon} />
                     <img src = {windowFullIcon} />
-                    <img src = {windowCloseIcon} />
+                    <img src = {moreVertIcon} />
                 </Box>
             </GridItem>
             <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative'>

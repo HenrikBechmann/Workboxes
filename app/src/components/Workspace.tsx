@@ -27,9 +27,11 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Workpanel>
-                <Workwindow>Window</Workwindow>
-            </Workpanel>
+            <Box position = 'absolute' inset = {0} overflow = 'auto'>
+                <Workpanel>
+                    <Workwindow>Window</Workwindow>
+                </Workpanel>
+            </Box>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%' >
