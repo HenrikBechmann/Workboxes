@@ -15,7 +15,8 @@ const workpanelStyles = {
     width:'100%',
     // position:'absolute',
     // inset: 0,
-    minWidth:'1000px',
+    minWidth:'700px',
+    minHeight:'700px',
 } as CSSProperties
 
 const Workpanel = (props) => {

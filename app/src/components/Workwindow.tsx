@@ -29,7 +29,7 @@ const titleStyles = {
     borderBottom:'2px solid silver',
     borderRadius: '7px 7px 0 0',
     padding: '3px',
-    backgroundColor:'lightskyblue',
+    backgroundColor:'lightgray',
     display:'flex',
 } as CSSProperties
 
@@ -67,9 +67,40 @@ const handleIconStyles = {
 }
 
 const Workwindow = (props) => {
-    const {children} = props
 
-    return <Box data-type = 'window-frame' style = {windowStyles}>
+    const {children, defaults} = props
+
+    const windowElementRef = useRef(null)
+    const titleElementRef = useRef(null)
+
+    const localWindowStyles = {...windowStyles,...defaults}
+
+    const localTitleStylesRef = useRef(titleStyles)
+
+    useEffect(()=>{
+
+        const element = windowElementRef.current
+
+        const onFocus = (event) => {
+            titleElementRef.current.style.backgroundColor = 'lightskyblue'
+        }
+
+        const onBlur = (event) => {
+            titleElementRef.current.style.backgroundColor = 'lightgray'
+        }
+
+        element.addEventListener('focus',onFocus)
+
+        element.addEventListener('blur',onBlur)
+
+        return () => {
+            element.removeEventListener('focus', onFocus)
+            element.removeEventListener('blur', onBlur)
+        }
+
+    },[])
+
+    return <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
         <Grid 
             data-type = 'window-grid'
             height = '100%' 
@@ -79,7 +110,7 @@ const Workwindow = (props) => {
                                   "body"`}
         >
             <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
-                <Box data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
+                <Box ref = {titleElementRef} data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
                     <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
                         <img src = {windowMinimalIcon} />
                         <img src = {windowFloatIcon} />

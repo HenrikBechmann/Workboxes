@@ -29,7 +29,9 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
                 <Workpanel>
-                    <Workwindow>Window</Workwindow>
+                    <Workwindow key = {1} defaults = {{top:'20px',left:'20px'}} >Window</Workwindow>
+                    <Workwindow key = {2} defaults = {{top:'40px',left:'40px'}} >Window</Workwindow>
+                    <Workwindow key = {3} defaults = {{top:'60px',left:'60px'}} >Window</Workwindow>
                 </Workpanel>
             </Box>
         </GridItem>
