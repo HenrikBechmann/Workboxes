@@ -103,6 +103,12 @@ const Workwindow = (props) => {
 
     },[])
 
+    useEffect(()=>{
+
+        windowElementRef.current.style.zIndex = zOrder
+
+    },[zOrder])
+
     return <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
         <Grid 
             data-type = 'window-grid'
