@@ -9,6 +9,8 @@ import {
 } from '@chakra-ui/react'
 
 import Draggable from 'react-draggable'
+import { Resizable } from 'react-resizable'
+import "react-resizable/css/styles.css"
 
 import dragCornerIcon from '../../assets/drag-corner.png'
 import windowMinimalIcon from '../../assets/window-minimal.png'
@@ -18,8 +20,8 @@ import moreVertIcon from '../../assets/more_vert_light.png'
 
 const windowStyles = {
     position: 'absolute',
-    height:'300px',
-    width:'300px',
+    // height:'300px',
+    // width:'300px',
     top:'20px',
     left: '20px',
     border: '2px solid silver',
@@ -68,16 +70,30 @@ const handleIconStyles = {
     width:'12px',
 }
 
+const WindowHandle = (props) => {
+
+    // handleAxis for handle selection - n/a here
+    const { handleAxis, innerRef, ...rest } = props
+
+    return (
+        <Box ref = {innerRef} data-type = 'resize-handle' style = {handleStyles} {...rest}>
+            <img draggable = "false" src = {dragCornerIcon} style = {handleIconStyles} />
+        </Box>
+    )
+}
+
 const Workwindow = (props) => {
 
-    const {children, defaults:windowDefaults, sessionID, zOrder, setFocus} = props
+    const {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus} = props
+
+    const [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)})
 
     const windowElementRef = useRef(null)
     const titleElementRef = useRef(null)
     const zOrderRef = useRef(null)
     zOrderRef.current = zOrder
 
-    const localWindowStyles = {...windowStyles,...windowDefaults}
+    const localWindowStyles = {...windowStyles,...locationDefaults, width:windowSizeSpecs.width + 'px', height:windowSizeSpecs.height + 'px'}
 
     const localTitleStylesRef = useRef(titleStyles)
 
@@ -111,13 +127,45 @@ const Workwindow = (props) => {
 
     },[zOrder])
 
-    // offsetParent = {workpanelRef.current}
+    const onResizeStart = () => {
+
+    }
+
+    const onResize = (event, {size, handle}) => {
+
+        setWindowSizeSpecs({width:size.width,height:size.height})
+
+    }
+
+    const onResizeStop = () => {
+
+    }
 
     return (
     <Draggable
         handle = '#title'
         bounds = 'parent'
     >
+        <Resizable 
+                data-inheritedtype = 'resizable' 
+                handle = {
+
+                    (handleAxis, ref) => <WindowHandle 
+                        innerRef = {ref} 
+                        handleAxis = {handleAxis}
+                    />
+                } 
+                height = {windowSizeSpecs.height} 
+                width = {windowSizeSpecs.width} 
+                axis = 'both'
+                resizeHandles = {['se']}
+                minConstraints = {[200,200]}
+                maxConstraints = {[700,700]}
+                onResizeStart = {onResizeStart}
+                onResize = {onResize}
+                onResizeStop = {onResizeStop}
+
+            >
         <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
             <Grid 
                 data-type = 'window-grid'
@@ -148,6 +196,7 @@ const Workwindow = (props) => {
                 </GridItem>
             </Grid>
         </Box>
+        </Resizable>
     </Draggable>)
 
 } 
