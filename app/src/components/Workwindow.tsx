@@ -8,6 +8,8 @@ import {
     Box
 } from '@chakra-ui/react'
 
+import Draggable from 'react-draggable'
+
 import dragCornerIcon from '../../assets/drag-corner.png'
 import windowMinimalIcon from '../../assets/window-minimal.png'
 import windowFloatIcon from '../../assets/window-float.png'
@@ -109,36 +111,44 @@ const Workwindow = (props) => {
 
     },[zOrder])
 
-    return <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
-        <Grid 
-            data-type = 'window-grid'
-            height = '100%' 
-            gridTemplateColumns = '1fr' 
-            gridTemplateRows = 'auto 1fr'
-            gridTemplateAreas = {`"header"
-                                  "body"`}
-        >
-            <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
-                <Box ref = {titleElementRef} data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
-                    <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
-                        <img src = {windowMinimalIcon} />
-                        <img src = {windowFloatIcon} />
-                        <img src = {windowFullIcon} />
-                        <img src = {moreVertIcon} />
+    // offsetParent = {workpanelRef.current}
+
+    return (
+    <Draggable
+        handle = '#title'
+        bounds = 'parent'
+    >
+        <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
+            <Grid 
+                data-type = 'window-grid'
+                height = '100%' 
+                gridTemplateColumns = '1fr' 
+                gridTemplateRows = 'auto 1fr'
+                gridTemplateAreas = {`"header"
+                                      "body"`}
+            >
+                <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
+                    <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
+                        <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
+                            <img src = {windowMinimalIcon} />
+                            <img src = {windowFloatIcon} />
+                            <img src = {windowFullIcon} />
+                            <img src = {moreVertIcon} />
+                        </Box>
                     </Box>
-                </Box>
-            </GridItem>
-            <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative'>
-                <Box 
-                    data-type = 'window-content' 
-                    style = {contentStyles}
-                >{children}</Box>
-                <Box data-type = 'resize-handle' style = {handleStyles}>
-                    <img src = {dragCornerIcon} style = {handleIconStyles} />
-                </Box>
-            </GridItem>
-        </Grid>
-    </Box>
+                </GridItem>
+                <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative'>
+                    <Box 
+                        data-type = 'window-content' 
+                        style = {contentStyles}
+                    >{children}</Box>
+                    <Box data-type = 'resize-handle' style = {handleStyles}>
+                        <img src = {dragCornerIcon} style = {handleIconStyles} />
+                    </Box>
+                </GridItem>
+            </Grid>
+        </Box>
+    </Draggable>)
 
 } 
 

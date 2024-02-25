@@ -1,7 +1,7 @@
 // Workpanel.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
 
 import {
     Text, 
@@ -19,13 +19,13 @@ const workpanelStyles = {
     minHeight:'700px',
 } as CSSProperties
 
-const Workpanel = (props) => {
+const Workpanel = (props:any) => {
 
     const { children } = props
 
     return <Box data-type = 'workpanel' style = {workpanelStyles}>
         {children}
     </Box>
-} 
+}
 
 export default Workpanel
