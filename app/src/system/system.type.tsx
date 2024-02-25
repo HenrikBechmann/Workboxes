@@ -1,5 +1,5 @@
 export const metatype = {
-    systemdata: {
+    systemblock: {
         class: "system",
         variant: "type",
         type: "system.type",
@@ -27,9 +27,9 @@ export const metatype = {
             },
         },
     },
-    views:{},
+    noteblocks:{},
     settings:{},
-    data: {
+    datablock: {
         transitions:[],
         defaults:{
             system:{
@@ -64,20 +64,6 @@ export const metatype = {
         },
     },
     metadata: {
-        views:{
-            xs:{
-                component:"string",
-                props:{},
-                children:{},
-            },
-            sm:{},
-            md:{},
-            lg:{},
-            xl:{},
-            edit:{},
-        },
-        settings:{
-        },
         fields:{
             name:"",
             type: "map",
@@ -97,6 +83,7 @@ export const metatype = {
                     label: "string",
                     ingress: "namespace"
                 },
+                display:{},
                 edit: {
                     error_message: "string",
                     help_message:"string",
@@ -122,15 +109,6 @@ export const metatype = {
                     name: "string",
                     order: "number",
                     size: "number",
-                },
-                display: {
-                    views:{
-                        xs:{},
-                        sm:{},
-                        md:{},
-                        lg:{},
-                        xl:{},
-                    },
                 },
             },
         },
