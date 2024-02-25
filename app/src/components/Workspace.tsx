@@ -73,7 +73,7 @@ const Workspace = (props) => {
                     workboxItemIcon = {photoURL} 
                     workboxItemTitle = {displayName}
                     workboxDomainTitle = 'Henrik Bechmann'
-                    workboxTypeName = 'Domain Member'
+                    workboxTypeName = 'Domain'
                 />
             </Workwindow>,
             <Workwindow 
@@ -89,7 +89,7 @@ const Workspace = (props) => {
                     workboxItemIcon = {photoURL} 
                     workboxItemTitle = {displayName}
                     workboxDomainTitle = 'Henrik Bechmann'
-                    workboxTypeName = 'Domain Member'
+                    workboxTypeName = 'Domain'
                 />
             </Workwindow>,
             <Workwindow 
@@ -105,7 +105,7 @@ const Workspace = (props) => {
                     workboxItemIcon = {photoURL} 
                     workboxItemTitle = {displayName}
                     workboxDomainTitle = 'Henrik Bechmann'
-                    workboxTypeName = 'Domain Member'
+                    workboxTypeName = 'Domain'
                 />
             </Workwindow>,
         ])
