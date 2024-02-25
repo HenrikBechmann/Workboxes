@@ -20,12 +20,11 @@ import moreVertIcon from '../../assets/more_vert_light.png'
 
 const windowStyles = {
     position: 'absolute',
-    // height:'300px',
-    // width:'300px',
     top:'20px',
     left: '20px',
     border: '2px solid silver',
     borderRadius: '8px 8px 0 8px',
+    boxShadow: '0 2px 7px 3px gainsboro',
 } as CSSProperties
 
 const titleStyles = {
@@ -33,7 +32,7 @@ const titleStyles = {
     borderBottom:'2px solid silver',
     borderRadius: '7px 7px 0 0',
     padding: '3px',
-    backgroundColor:'lightgray',
+    backgroundColor:'gainsboro',
     display:'flex',
 } as CSSProperties
 
@@ -107,7 +106,7 @@ const Workwindow = (props) => {
         }
 
         const onBlur = (event) => {
-            titleElementRef.current.style.backgroundColor = 'lightgray'
+            titleElementRef.current.style.backgroundColor = 'gainsboro'
         }
 
         element.addEventListener('focus',onFocus)
@@ -141,10 +140,15 @@ const Workwindow = (props) => {
 
     }
 
+    const onDragStart = () => {
+        windowElementRef.current.focus()
+    }
+
     return (
     <Draggable
         handle = '#title'
         bounds = 'parent'
+        onStart = {onDragStart}
     >
         <Resizable 
             data-inheritedtype = 'resizable' 
