@@ -33,6 +33,21 @@ const titleStyles = {
     borderRadius: '7px 7px 0 0',
     padding: '3px',
     backgroundColor:'gainsboro',
+    display: 'grid',
+    gridAutoFlow: 'column',
+} as CSSProperties
+
+const textBlockStyles = {
+    overflow:'clip',
+    minWidth:0,
+    fontSize:'small', 
+    textWrap:'nowrap', 
+    textOverflow: 'ellipsis',   
+}  as CSSProperties
+
+const windowIconGroupStyles = {
+    marginLeft:'auto',
+    borderRadius: '0 7px 0 0',
     display:'flex',
 } as CSSProperties
 
@@ -55,12 +70,6 @@ const handleStyles = {
     padding:'2px',
     height:'24px',
     width: '24px',
-} as CSSProperties
-
-const windowIconGroupStyles = {
-    marginLeft:'auto',
-    borderRadius: '0 7px 0 0',
-    display:'flex',
 } as CSSProperties
 
 const handleIconStyles = {
@@ -128,6 +137,8 @@ const Workwindow = (props) => {
 
     const onResizeStart = () => {
 
+        windowElementRef.current.focus()
+
     }
 
     const onResize = (event, {size, handle}) => {
@@ -141,7 +152,9 @@ const Workwindow = (props) => {
     }
 
     const onDragStart = () => {
+
         windowElementRef.current.focus()
+
     }
 
     return (
@@ -180,7 +193,10 @@ const Workwindow = (props) => {
                                           "body"`}
                 >
                     <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
-                        <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {titleStyles}><Box data-type = 'text-block'>Title</Box>
+                        <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {titleStyles}>
+                            <Box data-type = 'text-block' style = {textBlockStyles}>
+                                Henrik Bechmann (Domain)
+                            </Box>
                             <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
                                 <img src = {windowMinimalIcon} />
                                 <img src = {windowFloatIcon} />

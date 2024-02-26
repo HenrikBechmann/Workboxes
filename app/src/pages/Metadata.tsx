@@ -68,12 +68,6 @@ const Metadata = (props) => {
         [dragState, setDragState] = useState(
         {
             activeDrags: 0,
-            // deltaPosition: {
-            //   x: 0, y: 0
-            // },
-            // controlledPosition: {
-            //   x: -400, y: 200
-            // }
         })
 
     const workboxDefaults = {
