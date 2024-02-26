@@ -110,7 +110,7 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
 
         const onFocus = (event) => {
-            setFocus(zOrderRef.current)
+            setFocus && setFocus(zOrderRef.current)
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
         }
 

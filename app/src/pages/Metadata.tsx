@@ -19,6 +19,9 @@ import Draggable from 'react-draggable'
 import { useTypes } from '../system/TribalopolisProvider'
 
 import Drawer, { useDrawers } from '../components/Drawer'
+
+import Workwindow from '../components/Workwindow'
+
 import Workbox from '../components/workbox/Workbox'
 
 import { metatype } from '../system/system.type'
@@ -119,6 +122,8 @@ const Metadata = (props) => {
 
     async function transferInDocument() { // in to database
 
+        if (!confirm('Transfer meta document type to database?')) return
+
         setIsInTransferProcessing(true)
         setReturnInData(null)
         let returnData
@@ -183,18 +188,24 @@ const Metadata = (props) => {
                         <Drawer {...drawerProps.messages} />
                         <Drawer {...drawerProps.help} />
                     </>}
+                    <Workwindow 
+                        key = {2} 
+                        sessionID = {2} 
+                        zOrder = {2} 
+                        sizeDefaults = {{width:'600px',height:'400px'}}
+                        locationDefaults = {{top:'40px',left:'40px'}} 
+                    >
+                        <Workbox 
+                            workboxDefaults = {workboxDefaults} 
+                            workboxItemIcon = {photoURL} 
+                            workboxItemTitle = {displayName}
+                            workboxDomainTitle = 'Henrik Bechmann'
+                            workboxTypeName = 'Domain'
+                        />
+                    </Workwindow>
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
                         <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-                            <ContentBox data-type = 'workbox-holder' styles = {{height:'500px',width:'400px'}}>
-                                <Workbox 
-                                    workboxDefaults = {workboxDefaults} 
-                                    workboxItemIcon = {photoURL} 
-                                    workboxItemTitle = {displayName}
-                                    workboxDomainTitle = 'Henrik Bechmann'
-                                    workboxTypeName = 'Domain'
-                                />
-                            </ContentBox>
-                            <Draggable ><Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
+                            <Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
                                 <VStack height = '100%'>
                                     <Text>User Controls</Text>
                                     <Button onClick = {openDataDrawer} >Data</Button> 
@@ -202,7 +213,7 @@ const Metadata = (props) => {
                                     <Button onClick = {openHelpDrawer}>Help</Button> 
                                     <Button onClick = {openMessageDrawer}>Messages</Button>
                                 </VStack>
-                            </ContentBox></Box></Draggable>
+                            </ContentBox></Box>
                             <ContentBox>
                                 <VStack data-type = 'vstack' padding = '3px' width = '100%'>
                                     <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>

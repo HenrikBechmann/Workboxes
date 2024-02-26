@@ -290,17 +290,7 @@ export const Drawer = (props) => {
 
         // states
         [drawerState, setDrawerState] = useState('setup'),
-        [drawerSpecs, setDrawerSpecs] = useState(() => {
-            let height, width
-            if (['left','right'].includes(placement)) {
-                height = containerDimensions.height
-                width = 0
-            } else {
-                height = 0
-                width = containerDimensions.width
-            }
-            return {height, width}
-        }),
+        [drawerSpecs, setDrawerSpecs] = useState({width:0,height:0}),
         defaultLength = 
             ['left','right'].includes(placement)
                     ? MIN_DRAWER_WIDTH
@@ -321,7 +311,6 @@ export const Drawer = (props) => {
         }),
         
         // control data
-        containerDimensionsRef = useRef(containerDimensions),
         defaultRatio = 
             ['left','right'].includes(placement)
                 ? defaultLength/containerDimensions.width
@@ -359,6 +348,7 @@ export const Drawer = (props) => {
         titleRef = useRef(null),
 
         // updated each cycle
+        containerDimensionsRef = useRef(null),
         openParmRef = useRef(null),
         drawerStateRef = useRef(null),
         drawerSpecsRef = useRef(null),
@@ -366,12 +356,26 @@ export const Drawer = (props) => {
         orientationRef = useRef(null)
 
     // for closures
+    containerDimensionsRef.current = containerDimensions
     openParmRef.current = openParm
     drawerStateRef.current = drawerState
     drawerSpecsRef.current = drawerSpecs
     placementRef.current = placement
     orientationRef.current = ['right','left'].includes(placement)?'horizontal':'vertical'
 
+
+    useEffect(()=>{
+        let height, width
+        const containerDimensions = containerDimensionsRef.current
+        if (['left','right'].includes(placementRef.current)) {
+            height = containerDimensions.height
+            width = 0
+        } else {
+            height = 0
+            width = containerDimensions.width
+        }
+        setDrawerSpecs({width,height})
+    },[])
     // ------------------------- drawer styles -------------------------
 
     const [drawerStyle, tabStyle, tabIconStyle, resizableAxis] = useMemo(()=>{

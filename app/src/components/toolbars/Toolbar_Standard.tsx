@@ -207,7 +207,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {moreVerticalIcon} caption = 'nore' tooltip = 'More workspace options' />
+        <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
