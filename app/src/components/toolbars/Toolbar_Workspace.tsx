@@ -12,6 +12,7 @@ import StandardIcon from './StandardIcon'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
+import DomainBase from './DomainBase'
 
 import panelIcon from '../../../assets/panel.png'
 import helpIcon from '../../../assets/help.png'
@@ -97,6 +98,8 @@ const WorkspaceToolbar = (props) => {
             tooltip = 'panel options'
             arrowdirection = 'up'
         />
+        <ToolbarVerticalDivider />
+        <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
         &nbsp; &nbsp;
     </Box>
 }
