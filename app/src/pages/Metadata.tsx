@@ -135,7 +135,7 @@ const Metadata = (props) => {
                 document:metatype, 
                 context:{
                     operation:'set', 
-                    path:'', collection:'system', documentID:'metatype'}})
+                    path:'', collection:'types', documentID:'system.class'}})
             console.log('returnData', returnData)
         } catch (e) {
             console.log('error',e)

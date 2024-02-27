@@ -72,7 +72,6 @@ export const metatype = {
                     name: "string",
                     type: "string",
                     value: "string | object",
-                    ingress:"namespace",
                 },
                 model:{
                     order:"number",
@@ -81,7 +80,6 @@ export const metatype = {
                     type: "string",
                     value: "string",
                     label: "string",
-                    ingress: "namespace"
                 },
                 display:{},
                 edit: {
