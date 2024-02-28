@@ -92,7 +92,7 @@ const WindowHandle = (props) => {
 
 const Workwindow = (props) => {
 
-    const {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus} = props
+    const {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props
 
     const [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)})
 
