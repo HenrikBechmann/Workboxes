@@ -23,17 +23,6 @@ const workpanelStyles = {
     minHeight:'700px',
 } as CSSProperties
 
-// const workboxDefaults = {
-//     settings:false,
-//     settingsDisabled:false,
-//     profile:true,
-//     profileDisabled:false,
-//     lists:true,
-//     listsDisabled:false,
-//     swap:false,
-//     swapDisabled:false,
-// }
-
 let sessionID = 0
 
 const Workpanel = (props:any) => {
@@ -86,57 +75,6 @@ const Workpanel = (props:any) => {
     },[panelWindowSpecsList])
 
     const windowsListRef = useRef(windowsList)
-
-    // const windowsListRef = useRef([
-    //         <Workwindow 
-    //             key = {1} 
-    //             sessionID = {1} 
-    //             setFocus = {setFocus} 
-    //             zOrder = {1} 
-    //             sizeDefaults = {{width:'600px',height:'400px'}}
-    //             locationDefaults = {{top:'20px',left:'20px'}} 
-    //         >
-    //             <Workbox 
-    //                 workboxDefaults = {workboxDefaults} 
-    //                 workboxItemIcon = {photoURL} 
-    //                 workboxItemTitle = {displayName}
-    //                 workboxDomainTitle = 'Henrik Bechmann'
-    //                 workboxTypeName = 'Domain'
-    //             />
-    //         </Workwindow>,
-    //         <Workwindow 
-    //             key = {2} 
-    //             sessionID = {2} 
-    //             setFocus = {setFocus} 
-    //             zOrder = {2} 
-    //             sizeDefaults = {{width:'600px',height:'400px'}}
-    //             locationDefaults = {{top:'40px',left:'40px'}} 
-    //         >
-    //             <Workbox 
-    //                 workboxDefaults = {workboxDefaults} 
-    //                 workboxItemIcon = {photoURL} 
-    //                 workboxItemTitle = {displayName}
-    //                 workboxDomainTitle = 'Henrik Bechmann'
-    //                 workboxTypeName = 'Domain'
-    //             />
-    //         </Workwindow>,
-    //         <Workwindow 
-    //             key = {3} 
-    //             sessionID = {3} 
-    //             setFocus = {setFocus} 
-    //             zOrder = {3}  
-    //             sizeDefaults = {{width:'600px',height:'400px'}}
-    //             locationDefaults = {{top:'60px',left:'60px'}} 
-    //         >
-    //             <Workbox 
-    //                 workboxDefaults = {workboxDefaults} 
-    //                 workboxItemIcon = {photoURL} 
-    //                 workboxItemTitle = {displayName}
-    //                 workboxDomainTitle = 'Henrik Bechmann'
-    //                 workboxTypeName = 'Domain'
-    //             />
-    //         </Workwindow>,
-    //     ])
 
     useEffect(() => {
 
