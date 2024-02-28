@@ -50,7 +50,7 @@ const Workbox = (props) => {
         </Box>
         </GridItem>
         <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden'>
-            <Box data-type = 'workbox' style = {workboxStyle} >
+            <Box data-type = 'workbox-frame' style = {workboxStyle} >
                 <WorkboxContent workboxControls = {workboxControls} />
             </Box>
         </GridItem>

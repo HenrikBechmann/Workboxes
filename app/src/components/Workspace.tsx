@@ -65,7 +65,7 @@ const Workspace = (props) => {
                 sessionID = {1} 
                 setFocus = {setFocus} 
                 zOrder = {1} 
-                sizeDefaults = {{width:'300px',height:'300px'}}
+                sizeDefaults = {{width:'600px',height:'400px'}}
                 locationDefaults = {{top:'20px',left:'20px'}} 
             >
                 <Workbox 
@@ -81,7 +81,7 @@ const Workspace = (props) => {
                 sessionID = {2} 
                 setFocus = {setFocus} 
                 zOrder = {2} 
-                sizeDefaults = {{width:'300px',height:'300px'}}
+                sizeDefaults = {{width:'600px',height:'400px'}}
                 locationDefaults = {{top:'40px',left:'40px'}} 
             >
                 <Workbox 
@@ -97,7 +97,7 @@ const Workspace = (props) => {
                 sessionID = {3} 
                 setFocus = {setFocus} 
                 zOrder = {3}  
-                sizeDefaults = {{width:'300px',height:'300px'}}
+                sizeDefaults = {{width:'600px',height:'400px'}}
                 locationDefaults = {{top:'60px',left:'60px'}} 
             >
                 <Workbox 
