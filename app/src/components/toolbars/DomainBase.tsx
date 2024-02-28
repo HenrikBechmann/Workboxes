@@ -24,7 +24,7 @@ const DomainBase = (props) => {
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
         <Box display = 'flex' flexWrap = 'nowrap' alignItems = 'center'>
             <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'xs'>Base Domain: </Text>
+            <Text fontSize = 'xs'>Base: </Text>
             <img style = {workboxItemIconStyles} src = {domainIcon} />
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'xs'>{workboxDomainTitle}</Text>
