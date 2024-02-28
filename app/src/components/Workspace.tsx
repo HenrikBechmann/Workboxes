@@ -4,18 +4,77 @@
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
 import {
-    Text, 
-    Button, 
-    Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center,
+    Box,
     Grid, GridItem 
 } from '@chakra-ui/react'
 
+import { useUserData } from '../system/FirebaseProviders'
 import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
+const workboxDefaults = {
+    settings:false,
+    settingsDisabled:false,
+    profile:true,
+    profileDisabled:false,
+    lists:true,
+    listsDisabled:false,
+    swap:false,
+    swapDisabled:false,
+}
+
 const Workspace = (props) => {
+
+    const userData = useUserData()
+    const { displayName, photoURL } = userData.authUser
+
+    const panelWindowSpecsRef = useRef([
+
+        {
+            windowSpecs:{
+                zOrder: 1,
+                sizeDefaults: {width:'600px',height:'400px'},
+                locationDefaults: {top:'20px',left:'20px'},
+            },
+            workboxSpecs: {
+                workboxDefaults:{...workboxDefaults},
+                workboxItemIcon: photoURL,
+                workboxItemTitle: displayName,
+                workboxDomainTitle: 'Henrik Bechmann',
+                workboxTypeName: 'Domain',
+            }
+        },
+        {
+            windowSpecs:{
+                zOrder: 2,
+                sizeDefaults: {width:'600px',height:'400px'},
+                locationDefaults: {top:'40px',left:'40px'},
+            },
+            workboxSpecs: {
+                workboxDefaults:{...workboxDefaults},
+                workboxItemIcon: photoURL,
+                workboxItemTitle: displayName,
+                workboxDomainTitle: 'Henrik Bechmann',
+                workboxTypeName: 'Domain',
+            }
+        },
+        {
+            windowSpecs:{
+                zOrder: 3,
+                sizeDefaults: {width:'600px',height:'400px'},
+                locationDefaults: {top:'60px',left:'60px'},
+            },
+            workboxSpecs: {
+                workboxDefaults:{...workboxDefaults},
+                workboxItemIcon: photoURL,
+                workboxItemTitle: displayName,
+                workboxDomainTitle: 'Henrik Bechmann',
+                workboxTypeName: 'Domain',
+            }
+        },
+
+    ])
 
     return <Grid 
           date-type = 'workspace'
@@ -27,7 +86,7 @@ const Workspace = (props) => {
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
-                <Workpanel />
+                <Workpanel panelWindowSpecsList = {panelWindowSpecsRef.current} />
             </Box>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
