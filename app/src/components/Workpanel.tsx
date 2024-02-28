@@ -17,8 +17,6 @@ import Workbox from './workbox/Workbox'
 const workpanelStyles = {
     height:'100%',
     width:'100%',
-    // position:'absolute',
-    // inset: 0,
     minWidth:'700px',
     minHeight:'700px',
 } as CSSProperties
@@ -27,12 +25,9 @@ let sessionID = 0
 
 const Workpanel = (props:any) => {
 
-    const [panelState, setPanelState] = useState('ready')
-
-    const { panelWindowSpecsList } = props
-
-    // const userData = useUserData()
-    // const { displayName, photoURL } = userData.authUser
+    const 
+        [panelState, setPanelState] = useState('ready'),
+        { panelWindowSpecsList } = props
 
     const setFocus = (zOrder) => {
         const windowsList = windowsListRef.current
@@ -49,32 +44,60 @@ const Workpanel = (props:any) => {
         setPanelState('resorted')
     }
 
+    const removeWindow = (zOrder) => {
+        const windowsList = windowsListRef.current
+        const numberOfWindows = windowsList.length
+        let deletePointer = null
+        for (let i = 0; i < numberOfWindows; i++) {
+            const component = windowsList[i]
+            const currentZOrder = component.props.zOrder
+            if (currentZOrder === zOrder) {
+                deletePointer = i
+            } else if (currentZOrder > zOrder) {
+                windowsList[i] = React.cloneElement(component, {zOrder:currentZOrder-1})
+            }
+        }
+    
+        windowsListRef.current.splice(deletePointer, 1)
+        setPanelState('resorted')
+    }
+
+    const createWindow = (specs) => {
+        sessionID++
+        return <Workwindow 
+            key = {sessionID} 
+            sessionID = {sessionID} 
+            setFocus = {setFocus} 
+            {... specs.windowSpecs}
+        >
+            <Workbox 
+                {...specs.workboxSpecs}
+            />
+        </Workwindow>
+    }
+
+    const addWindow = (specs) => {
+        windowsList.push(
+            createWindow(specs)
+        )
+    }
+
     const windowsList = useMemo(()=>{
 
         const list = []
 
-        for (const spec of panelWindowSpecsList) {
-            sessionID++
+        for (const specs of panelWindowSpecsList) {
             list.push(
-                <Workwindow 
-                    key = {sessionID} 
-                    sessionID = {sessionID} 
-                    setFocus = {setFocus} 
-                    { ... spec.windowSpecs}
-                >
-                    <Workbox 
-                        {...spec.workboxSpecs}
-                    />
-                </Workwindow>,
+                createWindow(specs)
             )
         }
 
         return list
 
+    },[panelWindowSpecsList]) // one-time - input never changes
 
-    },[panelWindowSpecsList])
-
-    const windowsListRef = useRef(windowsList)
+    const windowsListRef = useRef(null)
+    windowsListRef.current = windowsList
 
     useEffect(() => {
 
