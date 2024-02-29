@@ -96,7 +96,7 @@ const Workwindow = (props) => {
 
     const 
         {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
-        [windowState, setWindowState] = useState('setup'), // assure proper initialization of resizable
+        [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (!)
         [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)}),
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
@@ -107,6 +107,7 @@ const Workwindow = (props) => {
 
     zOrderRef.current = zOrder
 
+    // set onFocus and onBlur event listeners
     useEffect(()=>{
 
         const element = windowElementRef.current
@@ -131,19 +132,21 @@ const Workwindow = (props) => {
 
     },[])
 
+    // apply inherited zOrder on change
     useEffect(()=>{
 
         windowElementRef.current.style.zIndex = zOrder
 
     },[zOrder])
 
+    // resizable requires this assurance of proper internal initialization for first call from any window
     useEffect(()=>{
 
         if (windowState == 'setup') setWindowState('ready')
 
     },[windowState])
 
-    // adjust window to container size
+    // adjust window size to fit in container size
     useEffect(()=>{
 
         if (!containerSpecs) return
@@ -160,7 +163,7 @@ const Workwindow = (props) => {
         const heightBound = windowSpecs.height + windowSpecs.top
 
         if (containerSpecs.width < widthBound || containerSpecs.height < heightBound) {
-
+            // adjustment required
             let newWidth, newHeight, newLeft, newTop, widthDelta, heightDelta, widthApplied, heightApplied
             if (containerSpecs.width < widthBound) {
                 widthDelta = widthBound - containerSpecs.width
@@ -194,13 +197,13 @@ const Workwindow = (props) => {
 
         }
 
+        // maintain window resize within bounds
         maxConstraintsRef.current = [containerSpecs.width - windowSpecs.left, containerSpecs.height - windowSpecs.top]
 
     },[containerSpecs])
 
+    // resiable callbacks...
     const onResizeStart = (event, {size, handle}) => {
-
-        setWindowSizeSpecs({width:size.width,height:size.height})
 
         windowElementRef.current.focus()
 
@@ -216,12 +219,14 @@ const Workwindow = (props) => {
 
     }
 
+    // draggable callback
     const onDragStart = () => {
 
         windowElementRef.current.focus()
 
     }
 
+    // render
     return (
     <Draggable
         handle = '#title'
