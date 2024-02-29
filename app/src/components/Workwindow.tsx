@@ -143,6 +143,7 @@ const Workwindow = (props) => {
 
     },[windowState])
 
+    // adjust window to container size
     useEffect(()=>{
 
         if (!containerSpecs) return
