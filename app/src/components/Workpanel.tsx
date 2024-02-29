@@ -26,8 +26,9 @@ let sessionID = 0
 const Workpanel = (props:any) => {
 
     const 
-        [panelState, setPanelState] = useState('ready'),
-        { panelWindowSpecsList } = props
+        [panelState, setPanelState] = useState('setup'),
+        { panelWindowSpecsList } = props,
+        panelElementRef = useRef(null)
 
     const setFocus = (zOrder) => {
         const windowsList = windowsListRef.current
@@ -58,7 +59,7 @@ const Workpanel = (props:any) => {
             }
         }
     
-        windowsListRef.current.splice(deletePointer, 1)
+        if (deletePointer !== null) windowsListRef.current.splice(deletePointer, 1)
         setPanelState('resorted')
     }
 
@@ -68,6 +69,7 @@ const Workpanel = (props:any) => {
             key = {sessionID} 
             sessionID = {sessionID} 
             setFocus = {setFocus} 
+            containerSpecs = {null}
             {... specs.windowSpecs}
         >
             <Workbox 
@@ -77,12 +79,14 @@ const Workpanel = (props:any) => {
     }
 
     const addWindow = (specs) => {
-        windowsList.push(
+        windowsListRef.current.push(
             createWindow(specs)
         )
     }
 
-    const windowsList = useMemo(()=>{
+    const windowsListRef = useRef(null)
+    let windowsList
+    windowsListRef.current = useMemo(()=>{
 
         const list = []
 
@@ -96,20 +100,46 @@ const Workpanel = (props:any) => {
 
     },[panelWindowSpecsList]) // one-time - input never changes
 
-    const windowsListRef = useRef(null)
-    windowsListRef.current = windowsList
+    const onResize = useCallback(()=>{
+
+        const element = panelElementRef.current
+        const containerSpecs = {width:element.offsetWidth, height:element.offsetHeight}
+        const windowsList = windowsListRef.current
+        const length = windowsList.length
+        for (let index = 0; index < length; index++ ) {
+            const component = windowsList[index]
+            windowsList[index] = React.cloneElement(component, {containerSpecs})
+        }
+        setPanelState('resized')
+
+    },[])
+
+    const resizeObserverRef = useRef(null)
+    // set up and shut down resizeObserver
+    useEffect(()=>{
+
+        resizeObserverRef.current = new ResizeObserver(onResize)
+
+        resizeObserverRef.current.observe(panelElementRef.current)
+
+        return () => {
+            resizeObserverRef.current.disconnect()
+        }
+
+    },[]) 
 
     useEffect(() => {
 
-        if (panelState == 'resorted') {
+        if (['setup','resorted', 'resized'].includes(panelState)) {
             setPanelState('ready')
         }
 
     },[panelState])
 
+    windowsList = windowsListRef.current
 
-    return <Box data-type = 'workpanel' style = {workpanelStyles}>
-        {windowsList}
+    return <Box data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
+        {panelState != 'setup' && windowsList}
     </Box>
 }
 

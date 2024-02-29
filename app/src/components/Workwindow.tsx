@@ -18,6 +18,8 @@ import windowFloatIcon from '../../assets/window-float.png'
 import windowFullIcon from '../../assets/window-full.png'
 import moreVertIcon from '../../assets/more_vert_light.png'
 
+const MAX_RATIO = 0.9
+
 const windowStyles = {
     position: 'absolute',
     top:'20px',
@@ -92,18 +94,18 @@ const WindowHandle = (props) => {
 
 const Workwindow = (props) => {
 
-    const {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props
+    const 
+        {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
+        [windowState, setWindowState] = useState('setup'), // assure proper initialization of resizable
+        [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)}),
+        windowElementRef = useRef(null),
+        titleElementRef = useRef(null),
+        zOrderRef = useRef(null),
+        localWindowStyles = {...windowStyles,...locationDefaults, width:windowSizeSpecs.width + 'px', height:windowSizeSpecs.height + 'px'},
+        localTitleStylesRef = useRef(titleStyles),
+        maxConstraintsRef = useRef([700,700])
 
-    const [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)})
-
-    const windowElementRef = useRef(null)
-    const titleElementRef = useRef(null)
-    const zOrderRef = useRef(null)
     zOrderRef.current = zOrder
-
-    const localWindowStyles = {...windowStyles,...locationDefaults, width:windowSizeSpecs.width + 'px', height:windowSizeSpecs.height + 'px'}
-
-    const localTitleStylesRef = useRef(titleStyles)
 
     useEffect(()=>{
 
@@ -135,7 +137,69 @@ const Workwindow = (props) => {
 
     },[zOrder])
 
-    const onResizeStart = () => {
+    useEffect(()=>{
+
+        if (windowState == 'setup') setWindowState('ready')
+
+    },[windowState])
+
+    useEffect(()=>{
+
+        if (!containerSpecs) return
+
+        const element = windowElementRef.current
+        const windowSpecs = {
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            top: element.offsetTop,
+            left: element.offsetLeft
+        }
+
+        const widthBound = windowSpecs.width + windowSpecs.left
+        const heightBound = windowSpecs.height + windowSpecs.top
+
+        if (containerSpecs.width < widthBound || containerSpecs.height < heightBound) {
+
+            let newWidth, newHeight, newLeft, newTop, widthDelta, heightDelta, widthApplied, heightApplied
+            if (containerSpecs.width < widthBound) {
+                widthDelta = widthBound - containerSpecs.width
+                newLeft = Math.max(0,windowSpecs.left - widthDelta)
+                widthApplied = windowSpecs.left - newLeft
+                if (widthApplied) {
+                    element.style.left = newLeft + 'px'
+                    windowSpecs.left = newLeft
+                }
+                widthDelta -= widthApplied
+                newWidth = windowSpecs.width - widthDelta
+            } else {
+                newWidth = windowSpecs.width
+            }
+
+            if (containerSpecs.height < heightBound) {
+                heightDelta = heightBound - containerSpecs.height
+                newTop = Math.max(0,windowSpecs.top - heightDelta)
+                heightApplied = windowSpecs.top - newTop
+                if (heightApplied) {
+                    element.style.top = newTop + 'px'
+                    windowSpecs.top = newTop
+                }
+                heightDelta -= heightApplied
+                newHeight = windowSpecs.height - heightDelta
+            } else {
+                newHeight = windowSpecs.height
+            }
+
+            setWindowSizeSpecs({width:newWidth, height:newHeight})
+
+        }
+
+        maxConstraintsRef.current = [containerSpecs.width - windowSpecs.left, containerSpecs.height - windowSpecs.top]
+
+    },[containerSpecs])
+
+    const onResizeStart = (event, {size, handle}) => {
+
+        setWindowSizeSpecs({width:size.width,height:size.height})
 
         windowElementRef.current.focus()
 
@@ -177,7 +241,7 @@ const Workwindow = (props) => {
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[200,200]}
-            maxConstraints = {[700,700]}
+            maxConstraints = {maxConstraintsRef.current}
             onResizeStart = {onResizeStart}
             onResize = {onResize}
             onResizeStop = {onResizeStop}
