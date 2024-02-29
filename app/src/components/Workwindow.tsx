@@ -18,8 +18,6 @@ import windowFloatIcon from '../../assets/window-float.png'
 import windowFullIcon from '../../assets/window-full.png'
 import moreVertIcon from '../../assets/more_vert_light.png'
 
-const MAX_RATIO = 0.9
-
 const windowStyles = {
     position: 'absolute',
     top:'20px',
@@ -97,11 +95,25 @@ const Workwindow = (props) => {
     const 
         {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (!)
-        [windowSizeSpecs, setWindowSizeSpecs] = useState({width:parseInt(sizeDefaults.width), height:parseInt(sizeDefaults.height)}),
+        [windowConfigSpecs, setWindowConfigSpecs] = useState(
+            {
+                top:parseInt(locationDefaults.top), 
+                left: parseInt(locationDefaults.left), 
+                width:parseInt(sizeDefaults.width), 
+                height:parseInt(sizeDefaults.height)
+            }
+        ),
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         zOrderRef = useRef(null),
-        localWindowStyles = {...windowStyles,...locationDefaults, width:windowSizeSpecs.width + 'px', height:windowSizeSpecs.height + 'px'},
+        localWindowStyles = {
+            ...windowStyles,
+            ...locationDefaults, 
+            top:windowConfigSpecs.top + 'px',
+            left:windowConfigSpecs.left + 'px',
+            width:windowConfigSpecs.width + 'px', 
+            height:windowConfigSpecs.height + 'px'
+        },
         localTitleStylesRef = useRef(titleStyles),
         maxConstraintsRef = useRef([700,700])
 
@@ -142,7 +154,12 @@ const Workwindow = (props) => {
     // resizable requires this assurance of proper internal initialization for first call from any window
     useEffect(()=>{
 
-        if (windowState == 'setup') setWindowState('ready')
+        // const element = windowElementRef.current
+        // if (windowState == 'repositioned') {
+        //     element.style.top = element.offsetTop + 'px'
+        // }
+
+        if (windowState != 'ready') setWindowState('ready')
 
     },[windowState])
 
@@ -170,7 +187,7 @@ const Workwindow = (props) => {
                 newLeft = Math.max(0,windowSpecs.left - widthDelta)
                 widthApplied = windowSpecs.left - newLeft
                 if (widthApplied) {
-                    element.style.left = newLeft + 'px'
+                    // element.style.left = newLeft + 'px'
                     windowSpecs.left = newLeft
                 }
                 widthDelta -= widthApplied
@@ -184,7 +201,7 @@ const Workwindow = (props) => {
                 newTop = Math.max(0,windowSpecs.top - heightDelta)
                 heightApplied = windowSpecs.top - newTop
                 if (heightApplied) {
-                    element.style.top = newTop + 'px'
+                    // element.style.top = newTop + 'px'
                     windowSpecs.top = newTop
                 }
                 heightDelta -= heightApplied
@@ -193,12 +210,13 @@ const Workwindow = (props) => {
                 newHeight = windowSpecs.height
             }
 
-            setWindowSizeSpecs({width:newWidth, height:newHeight})
+            setWindowConfigSpecs({top:newTop, left:newLeft, width:newWidth, height:newHeight})
 
         }
 
         // maintain window resize within bounds
-        maxConstraintsRef.current = [containerSpecs.width - windowSpecs.left, containerSpecs.height - windowSpecs.top]
+        maxConstraintsRef.current = [containerSpecs.width, containerSpecs.height]
+        setWindowState('repositioned')
 
     },[containerSpecs])
 
@@ -211,7 +229,8 @@ const Workwindow = (props) => {
 
     const onResize = (event, {size, handle}) => {
 
-        setWindowSizeSpecs({width:size.width,height:size.height})
+        setWindowConfigSpecs((oldState)=>{
+            return {...oldState, width:size.width,height:size.height}})
 
     }
 
@@ -242,8 +261,8 @@ const Workwindow = (props) => {
                     handleAxis = {handleAxis}
                 />
             } 
-            height = {windowSizeSpecs.height} 
-            width = {windowSizeSpecs.width} 
+            height = {windowConfigSpecs.height} 
+            width = {windowConfigSpecs.width} 
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[200,200]}

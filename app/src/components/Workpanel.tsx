@@ -19,6 +19,8 @@ const workpanelStyles = {
     width:'100%',
     minWidth:'700px',
     minHeight:'700px',
+    overflow:'hidden',
+    position:'relative',
 } as CSSProperties
 
 let sessionID = 0
