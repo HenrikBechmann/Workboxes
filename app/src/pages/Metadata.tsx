@@ -192,8 +192,7 @@ const Metadata = (props) => {
                         key = {2} 
                         sessionID = {2} 
                         zOrder = {2} 
-                        sizeDefaults = {{width:'600px',height:'400px'}}
-                        locationDefaults = {{top:'40px',left:'60px'}} 
+                        configDefaults = {{top:'40px',left:'60px', width:'600px',height:'400px'}}
                     >
                         <Workbox 
                             workboxDefaults = {workboxDefaults} 

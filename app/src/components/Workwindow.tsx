@@ -93,14 +93,14 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     const 
-        {children, locationDefaults, sizeDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
+        {children, configDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (!)
         [windowConfigSpecs, setWindowConfigSpecs] = useState(
             {
-                top:parseInt(locationDefaults.top), 
-                left: parseInt(locationDefaults.left), 
-                width:parseInt(sizeDefaults.width), 
-                height:parseInt(sizeDefaults.height)
+                top:parseInt(configDefaults.top), 
+                left: parseInt(configDefaults.left), 
+                width:parseInt(configDefaults.width), 
+                height:parseInt(configDefaults.height)
             }
         ),
         windowElementRef = useRef(null),
@@ -108,7 +108,6 @@ const Workwindow = (props) => {
         zOrderRef = useRef(null),
         localWindowStyles = {
             ...windowStyles,
-            ...locationDefaults, 
             top:windowConfigSpecs.top + 'px',
             left:windowConfigSpecs.left + 'px',
             width:windowConfigSpecs.width + 'px', 
@@ -187,7 +186,6 @@ const Workwindow = (props) => {
                 newLeft = Math.max(0,windowSpecs.left - widthDelta)
                 widthApplied = windowSpecs.left - newLeft
                 if (widthApplied) {
-                    // element.style.left = newLeft + 'px'
                     windowSpecs.left = newLeft
                 }
                 widthDelta -= widthApplied
@@ -201,7 +199,6 @@ const Workwindow = (props) => {
                 newTop = Math.max(0,windowSpecs.top - heightDelta)
                 heightApplied = windowSpecs.top - newTop
                 if (heightApplied) {
-                    // element.style.top = newTop + 'px'
                     windowSpecs.top = newTop
                 }
                 heightDelta -= heightApplied
