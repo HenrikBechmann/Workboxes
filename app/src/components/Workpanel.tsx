@@ -19,7 +19,7 @@ const workpanelStyles = {
     width:'100%',
     minWidth:'700px',
     minHeight:'700px',
-    overflow:'hidden',
+    // overflow:'hidden',
     // position:'relative',
 } as CSSProperties
 
