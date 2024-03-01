@@ -101,6 +101,7 @@ const Workwindow = (props) => {
                 height:parseInt(configDefaults.height)
             }
         ),
+        windowConfigSpecsRef = useRef(null),
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         zOrderRef = useRef(null),
@@ -114,6 +115,7 @@ const Workwindow = (props) => {
         maxConstraintsRef = useRef([700,700])
 
     zOrderRef.current = zOrder
+    windowConfigSpecsRef.current = windowConfigSpecs
 
     // set onFocus and onBlur event listeners
     useEffect(()=>{
@@ -208,7 +210,10 @@ const Workwindow = (props) => {
         }
 
         // maintain window resize within bounds
-        maxConstraintsRef.current = [containerSpecs.width, containerSpecs.height]
+        maxConstraintsRef.current = [
+            containerSpecs.width - windowConfigSpecsRef.current.left, 
+            containerSpecs.height - windowConfigSpecsRef.current.top,
+        ]
         setWindowState('repositioned')
 
     },[containerSpecs])
@@ -243,6 +248,10 @@ const Workwindow = (props) => {
         setWindowConfigSpecs((oldState) => {
             return {...oldState, top:data.y, left: data.x}
         })
+        maxConstraintsRef.current = [
+            containerSpecs.width - data.x, 
+            containerSpecs.height - data.y,
+        ]
     }
 
     // render
