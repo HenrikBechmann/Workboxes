@@ -20,8 +20,6 @@ import moreVertIcon from '../../assets/more_vert_light.png'
 
 const windowStyles = {
     position: 'absolute',
-    // top:'20px',
-    // left: '20px',
     border: '2px solid silver',
     borderRadius: '8px 8px 0 8px',
     boxShadow: '0 2px 7px 3px gainsboro',
