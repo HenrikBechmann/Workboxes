@@ -10,7 +10,6 @@ import WorkboxContent from './WorkboxContent'
 const workboxStyle = {
     position:'absolute',
     inset:0,
-    display:'flex',
     overflow:'auto',
 } as CSSProperties
 
