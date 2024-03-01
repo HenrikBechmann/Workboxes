@@ -12,7 +12,7 @@ import {
 
 const panelBaseStyles = {
     height:'100%',
-    width: '250px',
+    // width: '250px',
     border: '5px ridge gray',
     backgroundColor:'ghostwhite',
     borderRadius:'8px',
@@ -23,7 +23,9 @@ const centralPanelStyles = {
     border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
-    transition: 'width .5s ease-in-out',
+    display:'flex',
+    // transition: 'width .5s ease-in-out',
+    flexGrow: '1'
 } as CSSProperties
 
 const propertiesPanelStyles = {
@@ -164,7 +166,8 @@ export const MirrorPanel = (props) => {
     </Box>
 }
 
-export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
+// export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
+export const CentralPanel = (props) => {
 
     const 
         { children, targetDisplay, documentElementRef, foldersElementRef } = props,
@@ -172,61 +175,65 @@ export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any)
         localStyles = {...panelBaseStyles, ...centralPanelStyles} as CSSProperties,
         timeoutRef = useRef(null)
 
-    useEffect(()=>{
+//     useEffect(()=>{
 
-        let timeout = 500
-        clearTimeout(timeoutRef.current)
+//         let timeout = 500
+//         clearTimeout(timeoutRef.current)
 
-        if (targetDisplay == 'both') {
+//         if (targetDisplay == 'both') {
 
-            const width = (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
-            ref.current.style.width = width    
+//             const width = (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//             ref.current.style.width = width    
 
-        } else if (targetDisplay == 'document') {
+//         } else if (targetDisplay == 'document') {
 
-            if (displayStateRef.current == 'folders') {
+//             if (displayStateRef.current == 'folders') {
 
-                timeout = 800
+//                 timeout = 800
 
-                ref.current.style.width = 
-                    (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//                 ref.current.style.width = 
+//                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
 
-            }
+//             }
 
-            timeoutRef.current = setTimeout(()=>{
-                ref.current.style.width = 
-                    documentElementRef.current.offsetWidth + 'px'
-            },timeout)
+//             timeoutRef.current = setTimeout(()=>{
+//                 ref.current.style.width = 
+//                     documentElementRef.current.offsetWidth + 'px'
+//             },timeout)
 
-        } else { // targetDisplay == 'folders'
+//         } else { // targetDisplay == 'folders'
 
-            if (displayStateRef.current == 'document') {
+//             if (displayStateRef.current == 'document') {
 
-                timeout = 800
+//                 timeout = 800
 
-                ref.current.style.width = 
-                    (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//                 ref.current.style.width = 
+//                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
 
-            }
+//             }
 
-            timeoutRef.current = setTimeout(()=>{
-                ref.current.style.width = 
-                    foldersElementRef.current.offsetWidth + 'px'
-            },timeout)
+//             timeoutRef.current = setTimeout(()=>{
+//                 ref.current.style.width = 
+//                     foldersElementRef.current.offsetWidth + 'px'
+//             },timeout)
 
-        }
+//         }
 
-        displayStateRef.current = targetDisplay
+//         displayStateRef.current = targetDisplay
 
-    },[targetDisplay])
+//     },[targetDisplay])
 
-    return <Box data-type = 'central-panel' ref = {ref} style = {localStyles}>{children}</Box>
-})
+    // console.log('central panel localStyles', localStyles)
+
+    // return <Box data-type = 'central-panel' ref = {ref} style = {localStyles}>{children}</Box>
+    return <Box data-type = 'central-panel' style = {localStyles}>{children}</Box>
+}
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
     const 
         { children, targetDisplay } = props,
-        moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
+        // moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
+        moreStyles = {width:'250px', flex:'0 0 auto', padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelBaseStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
@@ -290,7 +297,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
     const 
         { children, targetDisplay } = props,
-        moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
+        // moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
+        moreStyles = {flexGrow:'1', minWidth:'300px',padding: '3px'} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelBaseStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
         visibilityTimeoutRef = useRef(null),

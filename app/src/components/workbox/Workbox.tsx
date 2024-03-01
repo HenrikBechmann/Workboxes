@@ -11,6 +11,7 @@ const workboxStyle = {
     position:'absolute',
     inset:0,
     overflow:'auto',
+    display:'flex',
 } as CSSProperties
 
 import {
