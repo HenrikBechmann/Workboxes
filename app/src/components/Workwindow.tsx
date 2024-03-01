@@ -112,7 +112,7 @@ const Workwindow = (props) => {
             transform:'none'
         },
         localTitleStylesRef = useRef(titleStyles),
-        maxConstraintsRef = useRef([700,700])
+        maxConstraintsRef = useRef([700,700]) // default
 
     zOrderRef.current = zOrder
     windowConfigSpecsRef.current = windowConfigSpecs
