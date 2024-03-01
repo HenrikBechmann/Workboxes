@@ -20,8 +20,8 @@ import moreVertIcon from '../../assets/more_vert_light.png'
 
 const windowStyles = {
     position: 'absolute',
-    top:'20px',
-    left: '20px',
+    // top:'20px',
+    // left: '20px',
     border: '2px solid silver',
     borderRadius: '8px 8px 0 8px',
     boxShadow: '0 2px 7px 3px gainsboro',
@@ -108,10 +108,9 @@ const Workwindow = (props) => {
         zOrderRef = useRef(null),
         localWindowStyles = {
             ...windowStyles,
-            top:windowConfigSpecs.top + 'px',
-            left:windowConfigSpecs.left + 'px',
             width:windowConfigSpecs.width + 'px', 
-            height:windowConfigSpecs.height + 'px'
+            height:windowConfigSpecs.height + 'px',
+            transform:'none'
         },
         localTitleStylesRef = useRef(titleStyles),
         maxConstraintsRef = useRef([700,700])
@@ -153,11 +152,6 @@ const Workwindow = (props) => {
     // resizable requires this assurance of proper internal initialization for first call from any window
     useEffect(()=>{
 
-        // const element = windowElementRef.current
-        // if (windowState == 'repositioned') {
-        //     element.style.top = element.offsetTop + 'px'
-        // }
-
         if (windowState != 'ready') setWindowState('ready')
 
     },[windowState])
@@ -169,10 +163,10 @@ const Workwindow = (props) => {
 
         const element = windowElementRef.current
         const windowSpecs = {
-            width: element.offsetWidth,
-            height: element.offsetHeight,
-            top: element.offsetTop,
-            left: element.offsetLeft
+            width: windowConfigSpecs.width,
+            height: windowConfigSpecs.height,
+            top: windowConfigSpecs.top,
+            left: windowConfigSpecs.left,
         }
 
         const widthBound = windowSpecs.width + windowSpecs.left
@@ -191,6 +185,7 @@ const Workwindow = (props) => {
                 widthDelta -= widthApplied
                 newWidth = windowSpecs.width - widthDelta
             } else {
+                newLeft = windowSpecs.left
                 newWidth = windowSpecs.width
             }
 
@@ -204,10 +199,13 @@ const Workwindow = (props) => {
                 heightDelta -= heightApplied
                 newHeight = windowSpecs.height - heightDelta
             } else {
+                newTop = windowSpecs.top
                 newHeight = windowSpecs.height
             }
 
-            setWindowConfigSpecs({top:newTop, left:newLeft, width:newWidth, height:newHeight})
+            const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
+
+            setWindowConfigSpecs(adjustedWindowSpecs)
 
         }
 
@@ -236,18 +234,28 @@ const Workwindow = (props) => {
     }
 
     // draggable callback
-    const onDragStart = () => {
+    const onDragStart = (e, data) => {
 
         windowElementRef.current.focus()
 
     }
 
+    const onDragStop = (e, data) => {
+
+        setWindowConfigSpecs((oldState) => {
+            return {...oldState, top:data.y, left: data.x}
+        })
+    }
+
     // render
     return (
     <Draggable
+        defaultPosition = {{x:0,y:0}}
+        position = {{x:windowConfigSpecs.left, y:windowConfigSpecs.top}}
         handle = '#title'
         bounds = 'parent'
         onStart = {onDragStart}
+        onStop = {onDragStop}
     >
         <Resizable 
             data-inheritedtype = 'resizable' 
