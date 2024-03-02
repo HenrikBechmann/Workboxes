@@ -181,7 +181,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
 
     },[targetDisplay])
 
-    return <Box ref = {ref} data-type = 'document-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
+    return <Box ref = {ref} data-type = 'cover-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
 })
 
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
@@ -246,7 +246,7 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
 
     },[targetDisplay])
 
-    return <Box ref = {ref} data-type = 'folders-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
+    return <Box ref = {ref} data-type = 'contents-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
 
 })
 

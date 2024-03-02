@@ -25,9 +25,9 @@ const menubarStyles = {
 } as CSSProperties
 
 const scrollbarStyles = {
-    flexBasis:'auto', // these two flex settings allow scroll
-    flexShrink:0, // prevent shrink which prevents scroll
-    // height:'40px',
+    flex:'0 0 auto',
+    // flexBasis:'auto', // these two flex settings allow scroll
+    // flexShrink:0, // prevent shrink which prevents scroll
     minHeight:0,
 }  as CSSProperties
 
