@@ -1,4 +1,4 @@
-// Boxpanels.tsx
+// WorkboxPanels.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
@@ -12,20 +12,17 @@ import {
 
 const panelBaseStyles = {
     height:'100%',
-    // width: '250px',
-    border: '5px ridge gray',
     backgroundColor:'ghostwhite',
     borderRadius:'8px',
-    transition:'box-shadow .5s'
+    // transition:'box-shadow .5s'
 }
 
 const centralPanelStyles = {
-    border:'initial', 
+    // border:'initial', 
     backgroundColor:'transparent', 
     position:'relative',
     display:'flex',
-    // transition: 'width .5s ease-in-out',
-    flexGrow: '1'
+    flex: '1 0 auto'
 } as CSSProperties
 
 const propertiesPanelStyles = {
@@ -233,7 +230,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
     const 
         { children, targetDisplay } = props,
         // moreStyles = {position:'absolute', top:0,left:0, padding: '3px'} as CSSProperties,
-        moreStyles = {width:'250px', flex:'0 0 auto', padding: '3px'} as CSSProperties,
+        moreStyles = {width:'250px', flex:'0 0 auto', padding: '3px', transition:'box-shadow .5s', border: '5px ridge gray', minWidth: '250px',
+} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelBaseStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
@@ -298,7 +296,8 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
     const 
         { children, targetDisplay } = props,
         // moreStyles = {position:'absolute',top:0,right:0, padding: '3px'} as CSSProperties,
-        moreStyles = {flexGrow:'1', minWidth:'300px',padding: '3px'} as CSSProperties,
+        moreStyles = {flex:'1 0 auto', minWidth:'250px',padding: '3px', transition:'box-shadow .5s', border: '5px ridge gray',
+} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         localStylesRef = useRef({...panelBaseStyles, ...moreStyles, visibility:'hidden'} as CSSProperties),
         visibilityTimeoutRef = useRef(null),

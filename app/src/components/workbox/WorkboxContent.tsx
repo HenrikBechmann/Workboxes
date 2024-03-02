@@ -13,8 +13,6 @@ const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     flex: '1 0 auto',
-    // flexBasis: 'auto',
-    // flexShrink: 0,
     height:'100%',
     padding:'5px',
     position:'relative',

@@ -7,11 +7,12 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
-const workboxStyle = {
+const workboxFrameStyle = {
     position:'absolute',
     inset:0,
     overflow:'auto',
     display:'flex',
+    borderRadius: '0 0 0 7px'
 } as CSSProperties
 
 import {
@@ -34,6 +35,7 @@ const Workbox = (props) => {
                               "body"`}
         gridTemplateColumns = '1fr' 
         gridTemplateRows = 'auto 1fr'
+        borderRadius = "0 0 0 7px"
     >
         <GridItem data-type = 'workbox-header' area = 'header' overflow = 'hidden'>
         <Box position = 'relative' width = '100%'>
@@ -49,8 +51,8 @@ const Workbox = (props) => {
         </ToolbarFrame>
         </Box>
         </GridItem>
-        <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden'>
-            <Box data-type = 'workbox-frame' style = {workboxStyle} >
+        <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden' borderRadius = '0 0 0 7px'>
+            <Box data-type = 'workbox-frame' style = {workboxFrameStyle} >
                 <WorkboxContent workboxControls = {workboxControls} />
             </Box>
         </GridItem>

@@ -54,7 +54,7 @@ const contentStyles = {
     inset: 0, 
     padding: '3px', 
     backgroundColor: 'ghostwhite',
-    borderRadius: '0 0 7px 7px',
+    borderRadius: '0 0 0px 7px',
 } as CSSProperties
 
 const handleStyles = {
@@ -306,7 +306,7 @@ const Workwindow = (props) => {
                             </Box>
                         </Box>
                     </GridItem>
-                    <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative'>
+                    <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative' borderRadius = '0px 0px 0px 7px'>
                         <Box 
                             data-type = 'window-content' 
                             style = {contentStyles}
