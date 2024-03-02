@@ -3,11 +3,16 @@
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
+import {
+    Box,
+    Grid, GridItem
+} from '@chakra-ui/react'
+
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
-const workboxFrameStyle = {
+const workboxFrameStyles = {
     position:'absolute',
     inset:0,
     overflow:'auto',
@@ -15,41 +20,51 @@ const workboxFrameStyle = {
     borderRadius: '0 0 0 7px'
 } as CSSProperties
 
-import {
-    Box,
-    Grid, GridItem
-} from '@chakra-ui/react'
+const workboxGridStyles = {
+    height: '100%',
+    width: '100%',
+    gridTemplateAreas: `"header"
+                          "body"`,
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'auto 1fr',
+    borderRadius: "0 0 0 7px",
+}  as CSSProperties
+
+const workboxHeaderStyles = {
+    area: 'header',
+    overflow: 'hidden',
+}
+
+const workboxBodyStyles = {
+    area: 'body',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: '0 0 0 7px',
+} as CSSProperties
 
 const Workbox = (props) => {
-    const {workboxDefaults, workboxItemIcon, workboxItemTitle, workboxDomainTitle, workboxTypeName} = props
-    const [workboxControls, setWorkboxControls] = useState(workboxDefaults)
+    const 
+        {workboxDefaults, workboxItemIcon, workboxItemTitle, workboxTypeName, workboxDomainTitle } = props,
+        [workboxControls, setWorkboxControls] = useState(workboxDefaults)
     
     return <Grid
         data-type = 'workbox-grid'
-        height = '100%'
-        width = '100%'
-        gridTemplateAreas = {`"header"
-                              "body"`}
-        gridTemplateColumns = '1fr' 
-        gridTemplateRows = 'auto 1fr'
-        borderRadius = "0 0 0 7px"
+        style = {workboxGridStyles}
     >
-        <GridItem data-type = 'workbox-header' area = 'header' overflow = 'hidden'>
-        <Box position = 'relative' width = '100%'>
-        <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
-            <WorkboxToolbar 
-                workboxControls = {workboxControls} 
-                setWorkboxControls = {setWorkboxControls} 
-                workboxItemIcon = {workboxItemIcon} 
-                workboxItemTitle = {workboxItemTitle}
-                workboxDomainTitle = {workboxDomainTitle}
-                workboxTypeName = {workboxTypeName}
-            />
-        </ToolbarFrame>
-        </Box>
+        <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
+            <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
+                <WorkboxToolbar 
+                    workboxControls = {workboxControls} 
+                    setWorkboxControls = {setWorkboxControls} 
+                    workboxItemIcon = {workboxItemIcon} 
+                    workboxItemTitle = {workboxItemTitle}
+                    workboxDomainTitle = {workboxDomainTitle}
+                    workboxTypeName = {workboxTypeName}
+                />
+            </ToolbarFrame>
         </GridItem>
-        <GridItem data-type = 'workbox-body' area = 'body' position = 'relative' overflow = 'hidden' borderRadius = '0 0 0 7px'>
-            <Box data-type = 'workbox-frame' style = {workboxFrameStyle} >
+        <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
+            <Box data-type = 'workbox-frame' style = {workboxFrameStyles} >
                 <WorkboxContent workboxControls = {workboxControls} />
             </Box>
         </GridItem>
