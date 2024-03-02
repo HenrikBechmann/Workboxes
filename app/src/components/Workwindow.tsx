@@ -18,14 +18,29 @@ import windowFloatIcon from '../../assets/window-float.png'
 import windowFullIcon from '../../assets/window-full.png'
 import moreVertIcon from '../../assets/more_vert_light.png'
 
-const windowStyles = {
+const windowFrameStyles = {
     position: 'absolute',
     border: '2px solid silver',
     borderRadius: '8px 8px 0 8px',
     boxShadow: '0 2px 7px 3px gainsboro',
 } as CSSProperties
 
-const titleStyles = {
+const windowGridStyles = {
+    height: '100%',
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'auto 1fr',
+    gridTemplateAreas:
+        `"header"
+         "body"`,
+} as CSSProperties
+
+const windowHeaderStyles  = {
+    gridArea:'header',
+    width: '100%',
+    position: 'relative',
+}  as CSSProperties
+
+const windowTitleStyles = {
     width: '100%',
     borderBottom:'2px solid silver',
     borderRadius: '7px 7px 0 0',
@@ -35,7 +50,7 @@ const titleStyles = {
     gridAutoFlow: 'column',
 } as CSSProperties
 
-const textBlockStyles = {
+const titleTextBlockStyles = {
     overflow:'clip',
     minWidth:0,
     fontSize:'small', 
@@ -43,13 +58,20 @@ const textBlockStyles = {
     textOverflow: 'ellipsis',   
 }  as CSSProperties
 
-const windowIconGroupStyles = {
+const titleIconGroupStyles = {
     marginLeft:'auto',
     borderRadius: '0 7px 0 0',
     display:'flex',
 } as CSSProperties
 
-const contentStyles = {
+const windowBodyStyles = {
+    gridArea: 'body',
+    width: '100%',
+    position: 'relative',
+    borderRadius: '0px 0px 0px 7px',
+} as CSSProperties
+
+const windowContentStyles = {
     position: 'absolute',
     inset: 0, 
     padding: '3px', 
@@ -57,7 +79,7 @@ const contentStyles = {
     borderRadius: '0 0 0px 7px',
 } as CSSProperties
 
-const handleStyles = {
+const resizeHandleStyles = {
     position:'absolute',
     bottom:0,
     right:0,
@@ -70,7 +92,7 @@ const handleStyles = {
     width: '24px',
 } as CSSProperties
 
-const handleIconStyles = {
+const resizeHandleIconStyles = {
     opacity:0.5, 
     height:'12px', 
     width:'12px',
@@ -78,12 +100,12 @@ const handleIconStyles = {
 
 const WindowHandle = (props) => {
 
-    // handleAxis for handle selection - n/a here
+    // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
     const { handleAxis, innerRef, ...rest } = props
 
     return (
-        <Box ref = {innerRef} data-type = 'resize-handle' style = {handleStyles} {...rest}>
-            <img draggable = "false" src = {dragCornerIcon} style = {handleIconStyles} />
+        <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
+            <img draggable = "false" src = {dragCornerIcon} style = {resizeHandleIconStyles} />
         </Box>
     )
 }
@@ -105,13 +127,13 @@ const Workwindow = (props) => {
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         zOrderRef = useRef(null),
-        localWindowStyles = {
-            ...windowStyles,
+        appliedWindowFrameStyles = {
+            ...windowFrameStyles,
             width:windowConfigSpecs.width + 'px', 
             height:windowConfigSpecs.height + 'px',
             transform:'none'
         },
-        localTitleStylesRef = useRef(titleStyles),
+        localTitleStylesRef = useRef(windowTitleStyles),
         maxConstraintsRef = useRef([700,700]) // default
 
     zOrderRef.current = zOrder
@@ -132,7 +154,6 @@ const Workwindow = (props) => {
         }
 
         element.addEventListener('focus',onFocus)
-
         element.addEventListener('blur',onBlur)
 
         return () => {
@@ -161,16 +182,16 @@ const Workwindow = (props) => {
 
         if (!containerSpecs) return
 
-        const element = windowElementRef.current
-        const windowSpecs = {
-            width: windowConfigSpecs.width,
-            height: windowConfigSpecs.height,
-            top: windowConfigSpecs.top,
-            left: windowConfigSpecs.left,
-        }
-
-        const widthBound = windowSpecs.width + windowSpecs.left
-        const heightBound = windowSpecs.height + windowSpecs.top
+        const 
+            element = windowElementRef.current,
+            windowSpecs = {
+                width: windowConfigSpecs.width,
+                height: windowConfigSpecs.height,
+                top: windowConfigSpecs.top,
+                left: windowConfigSpecs.left,
+            },
+            widthBound = windowSpecs.width + windowSpecs.left,
+            heightBound = windowSpecs.height + windowSpecs.top
 
         if (containerSpecs.width < widthBound || containerSpecs.height < heightBound) {
             // adjustment required
@@ -218,7 +239,7 @@ const Workwindow = (props) => {
 
     },[containerSpecs])
 
-    // resiable callbacks...
+    // resizable callbacks...
     const onResizeStart = (event, {size, handle}) => {
 
         windowElementRef.current.focus()
@@ -229,10 +250,6 @@ const Workwindow = (props) => {
 
         setWindowConfigSpecs((oldState)=>{
             return {...oldState, width:size.width,height:size.height}})
-
-    }
-
-    const onResizeStop = () => {
 
     }
 
@@ -281,24 +298,19 @@ const Workwindow = (props) => {
             maxConstraints = {maxConstraintsRef.current}
             onResizeStart = {onResizeStart}
             onResize = {onResize}
-            onResizeStop = {onResizeStop}
 
         >
-            <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {localWindowStyles}>
+            <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {appliedWindowFrameStyles}>
                 <Grid 
                     data-type = 'window-grid'
-                    height = '100%' 
-                    gridTemplateColumns = '1fr' 
-                    gridTemplateRows = 'auto 1fr'
-                    gridTemplateAreas = {`"header"
-                                          "body"`}
+                    style = {windowGridStyles}
                 >
-                    <GridItem data-type = 'window-header' gridArea = 'header' width = '100%' position = 'relative'>
-                        <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {titleStyles}>
-                            <Box data-type = 'text-block' style = {textBlockStyles}>
+                    <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
+                        <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
+                            <Box data-type = 'text-block' style = {titleTextBlockStyles}>
                                 Henrik Bechmann (Domain)
                             </Box>
-                            <Box data-type = 'window-icon-group' style = {windowIconGroupStyles}>
+                            <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>
                                 <img src = {windowMinimalIcon} />
                                 <img src = {windowFloatIcon} />
                                 <img src = {windowFullIcon} />
@@ -306,20 +318,19 @@ const Workwindow = (props) => {
                             </Box>
                         </Box>
                     </GridItem>
-                    <GridItem data-type = 'window-body' gridArea = 'body' width = '100%' position = 'relative' borderRadius = '0px 0px 0px 7px'>
+                    <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 
                             data-type = 'window-content' 
-                            style = {contentStyles}
+                            style = {windowContentStyles}
                         >{children}</Box>
-                        <Box data-type = 'resize-handle' style = {handleStyles}>
-                            <img src = {dragCornerIcon} style = {handleIconStyles} />
+                        <Box data-type = 'resize-handle' style = {resizeHandleStyles}>
+                            <img src = {dragCornerIcon} style = {resizeHandleIconStyles} />
                         </Box>
                     </GridItem>
                 </Grid>
             </Box>
         </Resizable>
     </Draggable>)
-
-} 
+}
 
 export default Workwindow

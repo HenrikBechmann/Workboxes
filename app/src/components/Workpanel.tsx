@@ -4,10 +4,7 @@
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, useMemo } from 'react'
 
 import {
-    Text, 
-    Button, 
-    Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center
+    Box
 } from '@chakra-ui/react'
 
 import Workwindow from './Workwindow'
@@ -19,8 +16,6 @@ const workpanelStyles = {
     width:'100%',
     minWidth:'700px',
     minHeight:'700px',
-    // overflow:'hidden',
-    // position:'relative',
 } as CSSProperties
 
 let sessionID = 0
@@ -87,7 +82,7 @@ const Workpanel = (props:any) => {
     }
 
     const windowsListRef = useRef(null)
-    let windowsList
+    // let windowsList
     windowsListRef.current = useMemo(()=>{
 
         const list = []
@@ -104,10 +99,12 @@ const Workpanel = (props:any) => {
 
     const onResize = useCallback(()=>{
 
-        const element = panelElementRef.current
-        const containerSpecs = {width:element.offsetWidth, height:element.offsetHeight}
-        const windowsList = windowsListRef.current
-        const length = windowsList.length
+        const 
+            element = panelElementRef.current,
+            containerSpecs = {width:element.offsetWidth, height:element.offsetHeight},
+            windowsList = windowsListRef.current,
+            length = windowsList.length
+
         for (let index = 0; index < length; index++ ) {
             const component = windowsList[index]
             windowsList[index] = React.cloneElement(component, {containerSpecs})
@@ -132,13 +129,13 @@ const Workpanel = (props:any) => {
 
     useEffect(() => {
 
-        if (['setup','resorted', 'resized'].includes(panelState)) {
+        if (panelState != 'ready') {
             setPanelState('ready')
         }
 
     },[panelState])
 
-    windowsList = windowsListRef.current
+    const windowsList = windowsListRef.current
 
     return <Box data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
         {panelState != 'setup' && windowsList}

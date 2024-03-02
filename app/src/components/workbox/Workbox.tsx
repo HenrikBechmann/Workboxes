@@ -16,10 +16,7 @@ const workboxFrameStyle = {
 } as CSSProperties
 
 import {
-    Text, 
-    Button, 
-    Input, FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    Box, VStack, Center,
+    Box,
     Grid, GridItem
 } from '@chakra-ui/react'
 
