@@ -119,10 +119,16 @@ export const CentralPanel = (props) => {
     return <Box data-type = 'central-panel' style = {appliedCentralPanelStyles}>{children}</Box>
 }
 
-export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) {
+export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
     const 
         { children, targetDisplay } = props,
-        coverPanelStyles = {width:'250px', flex:'0 0 auto', padding: '3px', transition:'box-shadow .5s', border: '5px ridge gray', minWidth: '250px',
+        coverPanelStyles = {
+            position:'absolute', 
+            inset:0, 
+            padding: '3px', 
+            transition:'box-shadow .5s', 
+            border: '5px ridge gray',
+            minWidth:'250px',
 } as CSSProperties,
         displayStateRef = useRef(targetDisplay),
         appliedCoverPanelStylesRef = useRef({...workboxPanelBaseStyles, ...coverPanelStyles, visibility:'hidden'} as CSSProperties),
@@ -149,8 +155,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
         if (targetDisplay == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 0
-                ref.current.style.boxShadow = 'none'
+                coverFrameRef.current.style.zIndex = 0
+                coverFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -160,8 +166,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 1
-                ref.current.style.boxShadow = 'none'
+                coverFrameRef.current.style.zIndex = 1
+                coverFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
@@ -171,8 +177,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 0
-                ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                coverFrameRef.current.style.zIndex = 0
+                coverFrameRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
 
         }
@@ -181,10 +187,12 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, ref:any) 
 
     },[targetDisplay])
 
-    return <Box ref = {ref} data-type = 'cover-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
+    return <Box data-type = 'cover-frame' ref = {coverFrameRef} flex = '0 0 auto' minWidth = '250px' width = '250px' position = 'relative'>
+        <Box data-type = 'cover-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
+    </Box>
 })
 
-export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any) {
+export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameRef:any) {
     const 
         { children, targetDisplay } = props,
         contentsPanelStyles = {flex:'1 0 auto', minWidth:'250px',padding: '3px', transition:'box-shadow .5s', border: '5px ridge gray',
@@ -214,8 +222,8 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
         if (targetDisplay == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 0
-                ref.current.style.boxShadow = 'none'
+                contentsFrameRef.current.style.zIndex = 0
+                contentsFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (targetDisplay == 'over') {
@@ -225,8 +233,8 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 1
-                ref.current.style.boxShadow = 'none'
+                contentsFrameRef.current.style.zIndex = 1
+                contentsFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
@@ -236,8 +244,8 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                ref.current.style.zIndex = 0
-                ref.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                contentsFrameRef.current.style.zIndex = 0
+                contentsFrameRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
 
         }
@@ -246,8 +254,9 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, ref:any
 
     },[targetDisplay])
 
-    return <Box ref = {ref} data-type = 'contents-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
-
+    return <Box data-type = 'contents-frame' ref = {contentsFrameRef} flex = '1 0 auto' minWidth = '250px' position = 'relative'>
+        <Box data-type = 'contents-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
+    </Box>
 })
 
 export const SettingsPanel = (props) => {
@@ -293,8 +302,8 @@ export const SettingsPanel = (props) => {
 
     },[showPanel, transitioningCountRef.current])
 
-    return <Box data-type = 'properties-panel' ref = {panelRef} style = {localPropertiesPanelStylesRef.current} >
-        <Box data-type = 'properties-content' ref = {contentRef} style = {settingsContentStyles}>
+    return <Box data-type = 'settings-panel' ref = {panelRef} style = {localPropertiesPanelStylesRef.current} >
+        <Box data-type = 'settings-content' ref = {contentRef} style = {settingsContentStyles}>
             {children}
         </Box>
     </Box>
