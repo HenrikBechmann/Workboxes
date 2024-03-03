@@ -7,6 +7,8 @@ import {
     Box
 } from '@chakra-ui/react'
 
+const MIN_WIDTH = '250px'
+
 const centralPanelStyles = {
     height:'100%',
     borderRadius:'8px',
@@ -18,11 +20,11 @@ const centralPanelStyles = {
 
 const coverFrameStyles = {
     flex: '0 0 auto',
-    minWidth: '250px',
     width: '250px',
+    minWidth: MIN_WIDTH,
     position: 'relative',
     overflow: 'hidden',
-    transition:'box-shadow .5s', 
+    transition:'width .5s, flex .5s', 
     borderRadius:'8px',
 } as CSSProperties
 
@@ -30,20 +32,22 @@ const coverPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
-    inset:0, 
-    minWidth:'250px',
+    inset: 0, 
+    minWidth: MIN_WIDTH,
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
+    transition:'box-shadow .5s',
     boxShadow: 'none',
 } as CSSProperties
 
 const contentsFrameStyles = {
     flex: '1 0 auto',
-    minWidth: '250px',
+    width: 'auto',
+    minWidth: MIN_WIDTH,
     position: 'relative',
     overflow: 'hidden',
-    transition:'box-shadow .5s',
+    transition:'flex .5s',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -52,11 +56,12 @@ const contentsPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     inset:0, 
-    minWidth:'250px',
+    minWidth:MIN_WIDTH,
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
     overflow:'auto',
+    transition:'box-shadow .5s',
     boxShadow: 'none',
 } as CSSProperties
 
@@ -108,53 +113,63 @@ export const CentralPanel = (props) => {
         previousDisplayCodeRef = useRef(displayCode),
         timeoutRef = useRef(null)
 
-//     useEffect(()=>{
+    useEffect(()=>{
 
-//         let timeout = 500
-//         clearTimeout(timeoutRef.current)
+        const 
+            coverElement = coverFrameElementRef.current,
+            contentsElement = contentsFrameElementRef.current
+        let timeout = 500
+        clearTimeout(timeoutRef.current)
 
-//         if (displayCode == 'both') {
+        if (displayCode == 'both') {
 
-//             const width = (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
-//             ref.current.style.width = width    
+            coverElement.style.flex = '0 0 auto'
+            coverElement.style.width = '250px'
 
-//         } else if (displayCode == 'cover') {
+            contentsElement.style.flex = '1 0 auto'
+            contentsElement.style.width = 'auto'
 
-//             if (previousDisplayCodeRef.current == 'contents') {
+            timeoutRef.current = setTimeout(()=>{
 
-//                 timeout = 800
+                coverElement.style.minWidth = MIN_WIDTH
+                contentsElement.style.minWidth = MIN_WIDTH
 
-//                 ref.current.style.width = 
-//                     (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
+            },timeout)
 
-//             }
+        } else if (displayCode == 'cover') {
 
-//             timeoutRef.current = setTimeout(()=>{
-//                 ref.current.style.width = 
-//                     coverFrameElementRef.current.offsetWidth + 'px'
-//             },timeout)
+            coverElement.style.flex = '1 0 auto'
+            coverElement.style.width = 'auto'
 
-//         } else { // displayCode == 'contents'
+            contentsElement.style.flex = '0 0 auto'
+            contentsElement.style.width = 0
+            contentsElement.style.minWidth = 0
 
-//             if (previousDisplayCodeRef.current == 'cover') {
+            timeoutRef.current = setTimeout(()=>{
 
-//                 timeout = 800
+                coverElement.style.minWidth = MIN_WIDTH
 
-//                 ref.current.style.width = 
-//                     (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
+            },timeout)
 
-//             }
+        } else { // displayCode == 'contents'
 
-//             timeoutRef.current = setTimeout(()=>{
-//                 ref.current.style.width = 
-//                     contentsFrameElementRef.current.offsetWidth + 'px'
-//             },timeout)
+            coverElement.style.flex = '0 0 auto'
+            coverElement.style.width = 0
+            coverElement.style.minWidth = 0
 
-//         }
+            contentsElement.style.flex = '1 0 auto'
+            contentsElement.style.width = 'auto'
 
-//         previousDisplayCodeRef.current = displayCode
+            timeoutRef.current = setTimeout(()=>{
 
-//     },[displayCode])
+                contentsElement.style.minWidth = MIN_WIDTH
+
+            },timeout)
+        }
+
+        previousDisplayCodeRef.current = displayCode
+
+    },[displayCode])
 
     return <Box data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
@@ -166,8 +181,6 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         coverPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
-    console.log('CoverPanel displayCode', displayCode)
-
     useEffect(()=>{
 
         clearTimeout(targetTimeoutRef.current)
@@ -177,7 +190,6 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameElementRef.current.style.zIndex = 0
                 coverPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
@@ -188,7 +200,6 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameElementRef.current.style.zIndex = 1
                 coverPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
@@ -199,7 +210,6 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameElementRef.current.style.zIndex = 0
                 coverPanelElementRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
 
@@ -220,8 +230,6 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
         previousDisplayCodeRef = useRef(displayCode),
         contentsPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
-
-    console.log('ContentsPanel displayCode', displayCode)
 
     useEffect(()=>{
 
