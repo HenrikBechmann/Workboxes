@@ -34,11 +34,11 @@ const WorkboxContent = (props) => {
         coverDisplayCode = 'out'
         contentsDisplayCode = 'out'
     } else if (lists) {
-        workboxDisplayCode = 'folders'
+        workboxDisplayCode = 'contents'
         coverDisplayCode = 'under'
         contentsDisplayCode = 'over'
     } else { // profile
-        workboxDisplayCode = 'document'
+        workboxDisplayCode = 'cover'
         coverDisplayCode = 'over'
         contentsDisplayCode = 'under'
     }

@@ -23,6 +23,7 @@ const coverFrameStyles = {
     position: 'relative',
     overflow: 'hidden',
     transition:'box-shadow .5s', 
+    borderRadius:'8px',
 } as CSSProperties
 
 const coverPanelStyles = {
@@ -34,6 +35,7 @@ const coverPanelStyles = {
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
+    boxShadow: 'none',
 } as CSSProperties
 
 const contentsFrameStyles = {
@@ -41,7 +43,8 @@ const contentsFrameStyles = {
     minWidth: '250px',
     position: 'relative',
     overflow: 'hidden',
-    transition:'box-shadow .5s', 
+    transition:'box-shadow .5s',
+    borderRadius:'8px',
 } as CSSProperties
 
 const contentsPanelStyles = {
@@ -54,6 +57,7 @@ const contentsPanelStyles = {
     border: '5px ridge gray',
     borderRadius:'8px',
     overflow:'auto',
+    boxShadow: 'none',
 } as CSSProperties
 
 // ================
@@ -101,7 +105,7 @@ export const CentralPanel = (props) => {
 
     const 
         { children, displayCode, coverFrameElementRef, contentsFrameElementRef } = props,
-        displayCodeRef = useRef(displayCode),
+        previousDisplayCodeRef = useRef(displayCode),
         timeoutRef = useRef(null)
 
 //     useEffect(()=>{
@@ -114,9 +118,9 @@ export const CentralPanel = (props) => {
 //             const width = (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
 //             ref.current.style.width = width    
 
-//         } else if (displayCode == 'document') {
+//         } else if (displayCode == 'cover') {
 
-//             if (displayCodeRef.current == 'folders') {
+//             if (previousDisplayCodeRef.current == 'contents') {
 
 //                 timeout = 800
 
@@ -130,9 +134,9 @@ export const CentralPanel = (props) => {
 //                     coverFrameElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
-//         } else { // displayCode == 'folders'
+//         } else { // displayCode == 'contents'
 
-//             if (displayCodeRef.current == 'document') {
+//             if (previousDisplayCodeRef.current == 'cover') {
 
 //                 timeout = 800
 
@@ -148,23 +152,24 @@ export const CentralPanel = (props) => {
 
 //         }
 
-//         displayCodeRef.current = displayCode
+//         previousDisplayCodeRef.current = displayCode
 
 //     },[displayCode])
 
     return <Box data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
 
-export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
+export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
         { children, displayCode } = props,
-        displayCodeRef = useRef(displayCode),
-        visibilityTimeoutRef = useRef(null),
+        previousDisplayCodeRef = useRef(displayCode),
+        coverPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
+
+    console.log('CoverPanel displayCode', displayCode)
 
     useEffect(()=>{
 
-        clearTimeout(visibilityTimeoutRef.current)
         clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
@@ -172,53 +177,54 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameRef.current.style.zIndex = 0
-                coverFrameRef.current.style.boxShadow = 'none'
+                coverFrameElementRef.current.style.zIndex = 0
+                coverPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            if (displayCodeRef.current == 'out') {
+            if (previousDisplayCodeRef.current == 'out') {
                 timeout = 0
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameRef.current.style.zIndex = 1
-                coverFrameRef.current.style.boxShadow = 'none'
+                coverFrameElementRef.current.style.zIndex = 1
+                coverPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
 
-            if (displayCodeRef.current == 'out') {
+            if (previousDisplayCodeRef.current == 'out') {
                 timeout = 0
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverFrameRef.current.style.zIndex = 0
-                coverFrameRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                coverFrameElementRef.current.style.zIndex = 0
+                coverPanelElementRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
 
         }
 
-        displayCodeRef.current = displayCode
+        previousDisplayCodeRef.current = displayCode
 
     },[displayCode])
 
-    return <Box data-type = 'cover-frame' ref = {coverFrameRef} style = {coverFrameStyles}>
-        <Box data-type = 'cover-panel' style = {coverPanelStyles}>{children}</Box>
+    return <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
+        <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>{children}</Box>
     </Box>
 })
 
-export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameRef:any) {
+export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
     const 
         { children, displayCode } = props,
-        displayCodeRef = useRef(displayCode),
-        visibilityTimeoutRef = useRef(null),
+        previousDisplayCodeRef = useRef(displayCode),
+        contentsPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
+
+    console.log('ContentsPanel displayCode', displayCode)
 
     useEffect(()=>{
 
-        clearTimeout(visibilityTimeoutRef.current)
         clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
@@ -226,40 +232,40 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameRef.current.style.zIndex = 0
-                contentsFrameRef.current.style.boxShadow = 'none'
+                contentsFrameElementRef.current.style.zIndex = 0
+                contentsPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            if (displayCodeRef.current == 'out') {
+            if (previousDisplayCodeRef.current == 'out') {
                 timeout = 0
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameRef.current.style.zIndex = 1
-                contentsFrameRef.current.style.boxShadow = 'none'
+                contentsFrameElementRef.current.style.zIndex = 1
+                contentsPanelElementRef.current.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
 
-            if (displayCodeRef.current == 'out') {
+            if (previousDisplayCodeRef.current == 'out') {
                 timeout = 0
             }
 
             targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameRef.current.style.zIndex = 0
-                contentsFrameRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
+                contentsFrameElementRef.current.style.zIndex = 0
+                contentsPanelElementRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
             },timeout)
 
         }
 
-        displayCodeRef.current = displayCode
+        previousDisplayCodeRef.current = displayCode
 
     },[displayCode])
 
-    return <Box data-type = 'contents-frame' ref = {contentsFrameRef} style = {contentsFrameStyles}>
-        <Box data-type = 'contents-panel' style = {contentsPanelStyles}> {children}</Box>
+    return <Box data-type = 'contents-frame' ref = {contentsFrameElementRef} style = {contentsFrameStyles}>
+        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}> {children}</Box>
     </Box>
 })
 
