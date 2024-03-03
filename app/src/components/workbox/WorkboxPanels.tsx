@@ -1,7 +1,7 @@
 // WorkboxPanels.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
+import React, { useRef, useEffect, CSSProperties, forwardRef } from 'react'
 
 import {
     Box
@@ -56,6 +56,8 @@ const contentsPanelStyles = {
     overflow:'auto',
 } as CSSProperties
 
+// ================
+
 const settingsPanelStyles = {
     height: '100%',
     width:'0px',
@@ -98,7 +100,7 @@ const mirrorContentStyles = {
 export const CentralPanel = (props) => {
 
     const 
-        { children, targetDisplay, coverElementRef, contentsElementRef } = props,
+        { children, targetDisplay, coverFrameElementRef, contentsFrameElementRef } = props,
         displayStateRef = useRef(targetDisplay),
         timeoutRef = useRef(null)
 
@@ -109,7 +111,7 @@ export const CentralPanel = (props) => {
 
 //         if (targetDisplay == 'both') {
 
-//             const width = (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
+//             const width = (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
 //             ref.current.style.width = width    
 
 //         } else if (targetDisplay == 'document') {
@@ -119,13 +121,13 @@ export const CentralPanel = (props) => {
 //                 timeout = 800
 
 //                 ref.current.style.width = 
-//                     (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
+//                     (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
 
 //             }
 
 //             timeoutRef.current = setTimeout(()=>{
 //                 ref.current.style.width = 
-//                     coverElementRef.current.offsetWidth + 'px'
+//                     coverFrameElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
 //         } else { // targetDisplay == 'folders'
@@ -135,13 +137,13 @@ export const CentralPanel = (props) => {
 //                 timeout = 800
 
 //                 ref.current.style.width = 
-//                     (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
+//                     (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
 
 //             }
 
 //             timeoutRef.current = setTimeout(()=>{
 //                 ref.current.style.width = 
-//                     contentsElementRef.current.offsetWidth + 'px'
+//                     contentsFrameElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
 //         }

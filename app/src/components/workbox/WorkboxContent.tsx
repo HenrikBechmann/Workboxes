@@ -23,8 +23,8 @@ const WorkboxContent = (props) => {
     const 
         { workboxControls } = props,
         {lists, profile} = workboxControls,
-        coverElementRef = useRef(null),
-        contentsElementRef = useRef(null),
+        coverFrameElementRef = useRef(null),
+        contentsFrameElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         [contentState,setContentState] = useState('setup')
 
@@ -61,13 +61,13 @@ const WorkboxContent = (props) => {
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <CentralPanel 
             targetDisplay = {toggleTargetDisplay} 
-            coverElementRef = {coverElementRef} 
-            contentsElementRef = {contentsElementRef} 
+            coverFrameElementRef = {coverFrameElementRef} 
+            contentsFrameElementRef = {contentsFrameElementRef} 
         >
-            <CoverPanel ref = {coverElementRef} targetDisplay = {coverTargetDisplay} >
+            <CoverPanel ref = {coverFrameElementRef} targetDisplay = {coverTargetDisplay} >
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {contentsElementRef} targetDisplay = {contentsTargetDisplay} >
+            <ContentsPanel ref = {contentsFrameElementRef} targetDisplay = {contentsTargetDisplay} >
             Contents
             </ContentsPanel>
         </CentralPanel>
