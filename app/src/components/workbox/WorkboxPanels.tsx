@@ -214,7 +214,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
     },[displayCode])
 
     return <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
+
         <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>{children}</Box>
+        
     </Box>
 })
 
@@ -237,7 +239,6 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
             targetTimeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
-                element.style.width = '100%'
                 element.style.right = 'auto'
             },timeout)
 
@@ -245,14 +246,12 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
             targetTimeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
-                element.style.width = '100%'
                 element.style.right = 'auto'
             },timeout)
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
-            element.style.width = contentsFrameElementRef.current.offsetWidth + 'px'
             element.style.right = 0
 
         }
