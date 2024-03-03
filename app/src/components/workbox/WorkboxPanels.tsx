@@ -32,13 +32,14 @@ const coverPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
-    inset: 0, 
+    width:'100%',
     minWidth: MIN_WIDTH,
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
     transition:'box-shadow .5s',
     boxShadow: 'none',
+    boxSizing: 'border-box',
 } as CSSProperties
 
 const contentsFrameStyles = {
@@ -55,7 +56,7 @@ const contentsPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
-    inset:0, 
+    width: '100%',
     minWidth:MIN_WIDTH,
     padding: '3px', 
     border: '5px ridge gray',
@@ -63,6 +64,7 @@ const contentsPanelStyles = {
     overflow:'auto',
     transition:'box-shadow .5s',
     boxShadow: 'none',
+    boxSizing: 'border-box',
 } as CSSProperties
 
 // ================
@@ -116,53 +118,53 @@ export const CentralPanel = (props) => {
     useEffect(()=>{
 
         const 
-            coverElement = coverFrameElementRef.current,
-            contentsElement = contentsFrameElementRef.current
+            coverFrameElement = coverFrameElementRef.current,
+            contentsFrameElement = contentsFrameElementRef.current
         let timeout = 500
         clearTimeout(timeoutRef.current)
 
         if (displayCode == 'both') {
 
-            coverElement.style.flex = '0 0 auto'
-            coverElement.style.width = '250px'
+            coverFrameElement.style.flex = '0 0 auto'
+            coverFrameElement.style.width = '250px'
 
-            contentsElement.style.flex = '1 0 auto'
-            contentsElement.style.width = 'auto'
+            contentsFrameElement.style.flex = '1 0 auto'
+            contentsFrameElement.style.width = 'auto'
 
             timeoutRef.current = setTimeout(()=>{
 
-                coverElement.style.minWidth = MIN_WIDTH
-                contentsElement.style.minWidth = MIN_WIDTH
+                coverFrameElement.style.minWidth = MIN_WIDTH
+                contentsFrameElement.style.minWidth = MIN_WIDTH
 
             },timeout)
 
         } else if (displayCode == 'cover') {
 
-            coverElement.style.flex = '1 0 auto'
-            coverElement.style.width = 'auto'
+            coverFrameElement.style.flex = '1 0 auto'
+            coverFrameElement.style.width = 'auto'
 
-            contentsElement.style.flex = '0 0 auto'
-            contentsElement.style.width = 0
-            contentsElement.style.minWidth = 0
+            contentsFrameElement.style.flex = '0 0 auto'
+            contentsFrameElement.style.width = 0
+            contentsFrameElement.style.minWidth = 0
 
             timeoutRef.current = setTimeout(()=>{
 
-                coverElement.style.minWidth = MIN_WIDTH
+                coverFrameElement.style.minWidth = MIN_WIDTH
 
             },timeout)
 
         } else { // displayCode == 'contents'
 
-            coverElement.style.flex = '0 0 auto'
-            coverElement.style.width = 0
-            coverElement.style.minWidth = 0
+            coverFrameElement.style.flex = '0 0 auto'
+            coverFrameElement.style.width = 0
+            coverFrameElement.style.minWidth = 0
 
-            contentsElement.style.flex = '1 0 auto'
-            contentsElement.style.width = 'auto'
+            contentsFrameElement.style.flex = '1 0 auto'
+            contentsFrameElement.style.width = 'auto'
 
             timeoutRef.current = setTimeout(()=>{
 
-                contentsElement.style.minWidth = MIN_WIDTH
+                contentsFrameElement.style.minWidth = MIN_WIDTH
 
             },timeout)
         }
@@ -185,33 +187,25 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         clearTimeout(targetTimeoutRef.current)
 
+        const element = coverPanelElementRef.current
+
         let timeout = 500
 
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                coverPanelElementRef.current.style.boxShadow = 'none'
+                element.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            if (previousDisplayCodeRef.current == 'out') {
-                timeout = 0
-            }
-
             targetTimeoutRef.current = setTimeout(()=>{
-                coverPanelElementRef.current.style.boxShadow = 'none'
+                element.style.boxShadow = 'none'
             },timeout)
 
         } else { // 'under'
 
-            if (previousDisplayCodeRef.current == 'out') {
-                timeout = 0
-            }
-
-            targetTimeoutRef.current = setTimeout(()=>{
-                coverPanelElementRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-            },timeout)
+            element.style.boxShadow = '3px 3px 6px 6px inset silver'
 
         }
 
@@ -235,36 +229,31 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         clearTimeout(targetTimeoutRef.current)
 
+        const element = contentsPanelElementRef.current
+
         let timeout = 500
 
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameElementRef.current.style.zIndex = 0
-                contentsPanelElementRef.current.style.boxShadow = 'none'
+                element.style.boxShadow = 'none'
+                element.style.width = '100%'
+                element.style.right = 'auto'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            if (previousDisplayCodeRef.current == 'out') {
-                timeout = 0
-            }
-
             targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameElementRef.current.style.zIndex = 1
-                contentsPanelElementRef.current.style.boxShadow = 'none'
+                element.style.boxShadow = 'none'
+                element.style.width = '100%'
+                element.style.right = 'auto'
             },timeout)
 
         } else { // 'under'
 
-            if (previousDisplayCodeRef.current == 'out') {
-                timeout = 0
-            }
-
-            targetTimeoutRef.current = setTimeout(()=>{
-                contentsFrameElementRef.current.style.zIndex = 0
-                contentsPanelElementRef.current.style.boxShadow = '3px 3px 6px 6px inset silver'
-            },timeout)
+            element.style.boxShadow = '3px 3px 6px 6px inset silver'
+            element.style.width = contentsFrameElementRef.current.offsetWidth + 'px'
+            element.style.right = 0
 
         }
 
