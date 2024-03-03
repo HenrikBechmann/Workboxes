@@ -7,13 +7,9 @@ import {
     Box
 } from '@chakra-ui/react'
 
-const workboxPanelBaseStyles = {
-    height:'100%',
-    backgroundColor:'ghostwhite',
-    borderRadius:'8px',
-}
-
 const centralPanelStyles = {
+    height:'100%',
+    borderRadius:'8px',
     backgroundColor:'transparent', 
     position:'relative',
     display:'flex',
@@ -26,14 +22,16 @@ const coverFrameStyles = {
     width: '250px',
     position: 'relative',
     overflow: 'hidden',
+    transition:'box-shadow .5s', 
 } as CSSProperties
 
 const coverPanelStyles = {
+    height:'100%',
+    backgroundColor:'ghostwhite',
     position:'absolute', 
     inset:0, 
     minWidth:'250px',
     padding: '3px', 
-    // transition:'box-shadow .5s', 
     border: '5px ridge gray',
     borderRadius:'8px',
 } as CSSProperties
@@ -43,16 +41,19 @@ const contentsFrameStyles = {
     minWidth: '250px',
     position: 'relative',
     overflow: 'hidden',
+    transition:'box-shadow .5s', 
 } as CSSProperties
 
 const contentsPanelStyles = {
+    height:'100%',
+    backgroundColor:'ghostwhite',
     position:'absolute', 
     inset:0, 
     minWidth:'250px',
     padding: '3px', 
-    // transition:'box-shadow .5s', 
     border: '5px ridge gray',
     borderRadius:'8px',
+    overflow:'auto',
 } as CSSProperties
 
 const settingsPanelStyles = {
@@ -94,13 +95,11 @@ const mirrorContentStyles = {
 } as CSSProperties
 
 
-// export const CentralPanel = forwardRef(function CentralPanel(props:any, ref:any) {
 export const CentralPanel = (props) => {
 
     const 
         { children, targetDisplay, coverElementRef, contentsElementRef } = props,
         displayStateRef = useRef(targetDisplay),
-        appliedCentralPanelStyles = {...workboxPanelBaseStyles, ...centralPanelStyles} as CSSProperties,
         timeoutRef = useRef(null)
 
 //     useEffect(()=>{
@@ -151,14 +150,13 @@ export const CentralPanel = (props) => {
 
 //     },[targetDisplay])
 
-    return <Box data-type = 'central-panel' style = {appliedCentralPanelStyles}>{children}</Box>
+    return <Box data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
     const 
         { children, targetDisplay } = props,
         displayStateRef = useRef(targetDisplay),
-        appliedCoverPanelStylesRef = useRef({...workboxPanelBaseStyles, ...coverPanelStyles} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -168,16 +166,6 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
-
-        if (appliedCoverPanelStylesRef.current.visibility == 'hidden') {
-
-            const localTimeout = targetDisplay == 'under'?timeout:0
-
-            visibilityTimeoutRef.current = setTimeout(()=>{
-                appliedCoverPanelStylesRef.current = {...appliedCoverPanelStylesRef.current, visibility:'visible'}
-            },localTimeout)
-
-        }
 
         if (targetDisplay == 'out') {
 
@@ -215,7 +203,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
     },[targetDisplay])
 
     return <Box data-type = 'cover-frame' ref = {coverFrameRef} style = {coverFrameStyles}>
-        <Box data-type = 'cover-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
+        <Box data-type = 'cover-panel' style = {coverPanelStyles}>{children}</Box>
     </Box>
 })
 
@@ -223,7 +211,6 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
     const 
         { children, targetDisplay } = props,
         displayStateRef = useRef(targetDisplay),
-        appliedContentsStylesRef = useRef({...workboxPanelBaseStyles, ...contentsPanelStyles} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -233,16 +220,6 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
         clearTimeout(targetTimeoutRef.current)
 
         let timeout = 500
-
-        if (appliedContentsStylesRef.current.visibility == 'hidden') {
-
-            const localTimeout = targetDisplay == 'under'?timeout:0
-
-            visibilityTimeoutRef.current = setTimeout(()=>{
-                appliedContentsStylesRef.current = {...appliedContentsStylesRef.current, visibility:'visible'}
-            },localTimeout)
-
-        }
 
         if (targetDisplay == 'out') {
 
@@ -280,9 +257,11 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
     },[targetDisplay])
 
     return <Box data-type = 'contents-frame' ref = {contentsFrameRef} style = {contentsFrameStyles}>
-        <Box data-type = 'contents-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
+        <Box data-type = 'contents-panel' style = {contentsPanelStyles}> {children}</Box>
     </Box>
 })
+
+// ==========================
 
 export const SettingsPanel = (props) => {
     const

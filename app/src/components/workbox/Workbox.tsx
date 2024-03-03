@@ -16,7 +16,6 @@ const workboxFrameStyles = {
     position:'absolute',
     inset:0,
     overflow:'auto',
-    display:'flex',
     borderRadius: '0 0 0 7px'
 } as CSSProperties
 

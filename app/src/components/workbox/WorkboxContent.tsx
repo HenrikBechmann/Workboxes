@@ -12,7 +12,7 @@ import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel, MirrorPanel } f
 const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',
-    flex: '1 0 auto',
+    // flex: '1 0 auto',
     height:'100%',
     padding:'5px',
     position:'relative',
