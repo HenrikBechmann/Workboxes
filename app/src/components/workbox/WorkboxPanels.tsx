@@ -101,7 +101,7 @@ export const CentralPanel = (props) => {
 
     const 
         { children, displayCode, coverFrameElementRef, contentsFrameElementRef } = props,
-        displayStateRef = useRef(displayCode),
+        displayCodeRef = useRef(displayCode),
         timeoutRef = useRef(null)
 
 //     useEffect(()=>{
@@ -116,7 +116,7 @@ export const CentralPanel = (props) => {
 
 //         } else if (displayCode == 'document') {
 
-//             if (displayStateRef.current == 'folders') {
+//             if (displayCodeRef.current == 'folders') {
 
 //                 timeout = 800
 
@@ -132,7 +132,7 @@ export const CentralPanel = (props) => {
 
 //         } else { // displayCode == 'folders'
 
-//             if (displayStateRef.current == 'document') {
+//             if (displayCodeRef.current == 'document') {
 
 //                 timeout = 800
 
@@ -148,7 +148,7 @@ export const CentralPanel = (props) => {
 
 //         }
 
-//         displayStateRef.current = displayCode
+//         displayCodeRef.current = displayCode
 
 //     },[displayCode])
 
@@ -158,7 +158,7 @@ export const CentralPanel = (props) => {
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
     const 
         { children, displayCode } = props,
-        displayStateRef = useRef(displayCode),
+        displayCodeRef = useRef(displayCode),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -178,7 +178,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         } else if (displayCode == 'over') {
 
-            if (displayStateRef.current == 'out') {
+            if (displayCodeRef.current == 'out') {
                 timeout = 0
             }
 
@@ -189,7 +189,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         } else { // 'under'
 
-            if (displayStateRef.current == 'out') {
+            if (displayCodeRef.current == 'out') {
                 timeout = 0
             }
 
@@ -200,7 +200,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         }
 
-        displayStateRef.current = displayCode
+        displayCodeRef.current = displayCode
 
     },[displayCode])
 
@@ -212,7 +212,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameRef:any) {
     const 
         { children, displayCode } = props,
-        displayStateRef = useRef(displayCode),
+        displayCodeRef = useRef(displayCode),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -232,7 +232,7 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         } else if (displayCode == 'over') {
 
-            if (displayStateRef.current == 'out') {
+            if (displayCodeRef.current == 'out') {
                 timeout = 0
             }
 
@@ -243,7 +243,7 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         } else { // 'under'
 
-            if (displayStateRef.current == 'out') {
+            if (displayCodeRef.current == 'out') {
                 timeout = 0
             }
 
@@ -254,7 +254,7 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         }
 
-        displayStateRef.current = displayCode
+        displayCodeRef.current = displayCode
 
     },[displayCode])
 
