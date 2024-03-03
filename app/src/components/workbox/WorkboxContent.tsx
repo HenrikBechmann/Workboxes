@@ -28,19 +28,19 @@ const WorkboxContent = (props) => {
         centralPanelElementRef = useRef(null),
         [contentState,setContentState] = useState('setup')
 
-    let toggleTargetDisplay, coverTargetDisplay, contentsTargetDisplay
+    let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
     if (lists && profile) {
-        toggleTargetDisplay = 'both'
-        coverTargetDisplay = 'out'
-        contentsTargetDisplay = 'out'
+        workboxDisplayCode = 'both'
+        coverDisplayCode = 'out'
+        contentsDisplayCode = 'out'
     } else if (lists) {
-        toggleTargetDisplay = 'folders'
-        coverTargetDisplay = 'under'
-        contentsTargetDisplay = 'over'
+        workboxDisplayCode = 'folders'
+        coverDisplayCode = 'under'
+        contentsDisplayCode = 'over'
     } else { // profile
-        toggleTargetDisplay = 'document'
-        coverTargetDisplay = 'over'
-        contentsTargetDisplay = 'under'
+        workboxDisplayCode = 'document'
+        coverDisplayCode = 'over'
+        contentsDisplayCode = 'under'
     }
 
     useEffect(()=>{
@@ -60,14 +60,14 @@ const WorkboxContent = (props) => {
             // ref = {centralPanelElementRef} 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <CentralPanel 
-            targetDisplay = {toggleTargetDisplay} 
+            displayCode = {workboxDisplayCode} 
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
         >
-            <CoverPanel ref = {coverFrameElementRef} targetDisplay = {coverTargetDisplay} >
+            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} >
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {contentsFrameElementRef} targetDisplay = {contentsTargetDisplay} >
+            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} >
             Contents
             </ContentsPanel>
         </CentralPanel>

@@ -100,8 +100,8 @@ const mirrorContentStyles = {
 export const CentralPanel = (props) => {
 
     const 
-        { children, targetDisplay, coverFrameElementRef, contentsFrameElementRef } = props,
-        displayStateRef = useRef(targetDisplay),
+        { children, displayCode, coverFrameElementRef, contentsFrameElementRef } = props,
+        displayStateRef = useRef(displayCode),
         timeoutRef = useRef(null)
 
 //     useEffect(()=>{
@@ -109,12 +109,12 @@ export const CentralPanel = (props) => {
 //         let timeout = 500
 //         clearTimeout(timeoutRef.current)
 
-//         if (targetDisplay == 'both') {
+//         if (displayCode == 'both') {
 
 //             const width = (coverFrameElementRef.current.offsetWidth + contentsFrameElementRef.current.offsetWidth) + 'px'
 //             ref.current.style.width = width    
 
-//         } else if (targetDisplay == 'document') {
+//         } else if (displayCode == 'document') {
 
 //             if (displayStateRef.current == 'folders') {
 
@@ -130,7 +130,7 @@ export const CentralPanel = (props) => {
 //                     coverFrameElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
-//         } else { // targetDisplay == 'folders'
+//         } else { // displayCode == 'folders'
 
 //             if (displayStateRef.current == 'document') {
 
@@ -148,17 +148,17 @@ export const CentralPanel = (props) => {
 
 //         }
 
-//         displayStateRef.current = targetDisplay
+//         displayStateRef.current = displayCode
 
-//     },[targetDisplay])
+//     },[displayCode])
 
     return <Box data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
     const 
-        { children, targetDisplay } = props,
-        displayStateRef = useRef(targetDisplay),
+        { children, displayCode } = props,
+        displayStateRef = useRef(displayCode),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -169,14 +169,14 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         let timeout = 500
 
-        if (targetDisplay == 'out') {
+        if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
                 coverFrameRef.current.style.zIndex = 0
                 coverFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
-        } else if (targetDisplay == 'over') {
+        } else if (displayCode == 'over') {
 
             if (displayStateRef.current == 'out') {
                 timeout = 0
@@ -200,9 +200,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         }
 
-        displayStateRef.current = targetDisplay
+        displayStateRef.current = displayCode
 
-    },[targetDisplay])
+    },[displayCode])
 
     return <Box data-type = 'cover-frame' ref = {coverFrameRef} style = {coverFrameStyles}>
         <Box data-type = 'cover-panel' style = {coverPanelStyles}>{children}</Box>
@@ -211,8 +211,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameRef:any) {
     const 
-        { children, targetDisplay } = props,
-        displayStateRef = useRef(targetDisplay),
+        { children, displayCode } = props,
+        displayStateRef = useRef(displayCode),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -223,14 +223,14 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         let timeout = 500
 
-        if (targetDisplay == 'out') {
+        if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
                 contentsFrameRef.current.style.zIndex = 0
                 contentsFrameRef.current.style.boxShadow = 'none'
             },timeout)
 
-        } else if (targetDisplay == 'over') {
+        } else if (displayCode == 'over') {
 
             if (displayStateRef.current == 'out') {
                 timeout = 0
@@ -254,9 +254,9 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         }
 
-        displayStateRef.current = targetDisplay
+        displayStateRef.current = displayCode
 
-    },[targetDisplay])
+    },[displayCode])
 
     return <Box data-type = 'contents-frame' ref = {contentsFrameRef} style = {contentsFrameStyles}>
         <Box data-type = 'contents-panel' style = {contentsPanelStyles}> {children}</Box>
