@@ -20,6 +20,41 @@ const centralPanelStyles = {
     flex: '1 0 auto'
 } as CSSProperties
 
+const coverFrameStyles = {
+    flex: '0 0 auto',
+    minWidth: '250px',
+    width: '250px',
+    position: 'relative',
+    overflow: 'hidden',
+} as CSSProperties
+
+const coverPanelStyles = {
+    position:'absolute', 
+    inset:0, 
+    minWidth:'250px',
+    padding: '3px', 
+    // transition:'box-shadow .5s', 
+    border: '5px ridge gray',
+    borderRadius:'8px',
+} as CSSProperties
+
+const contentsFrameStyles = {
+    flex: '1 0 auto',
+    minWidth: '250px',
+    position: 'relative',
+    overflow: 'hidden',
+} as CSSProperties
+
+const contentsPanelStyles = {
+    position:'absolute', 
+    inset:0, 
+    minWidth:'250px',
+    padding: '3px', 
+    // transition:'box-shadow .5s', 
+    border: '5px ridge gray',
+    borderRadius:'8px',
+} as CSSProperties
+
 const settingsPanelStyles = {
     height: '100%',
     width:'0px',
@@ -63,7 +98,7 @@ const mirrorContentStyles = {
 export const CentralPanel = (props) => {
 
     const 
-        { children, targetDisplay, documentElementRef, foldersElementRef } = props,
+        { children, targetDisplay, coverElementRef, contentsElementRef } = props,
         displayStateRef = useRef(targetDisplay),
         appliedCentralPanelStyles = {...workboxPanelBaseStyles, ...centralPanelStyles} as CSSProperties,
         timeoutRef = useRef(null)
@@ -75,7 +110,7 @@ export const CentralPanel = (props) => {
 
 //         if (targetDisplay == 'both') {
 
-//             const width = (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//             const width = (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
 //             ref.current.style.width = width    
 
 //         } else if (targetDisplay == 'document') {
@@ -85,13 +120,13 @@ export const CentralPanel = (props) => {
 //                 timeout = 800
 
 //                 ref.current.style.width = 
-//                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//                     (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
 
 //             }
 
 //             timeoutRef.current = setTimeout(()=>{
 //                 ref.current.style.width = 
-//                     documentElementRef.current.offsetWidth + 'px'
+//                     coverElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
 //         } else { // targetDisplay == 'folders'
@@ -101,13 +136,13 @@ export const CentralPanel = (props) => {
 //                 timeout = 800
 
 //                 ref.current.style.width = 
-//                     (documentElementRef.current.offsetWidth + foldersElementRef.current.offsetWidth) + 'px'
+//                     (coverElementRef.current.offsetWidth + contentsElementRef.current.offsetWidth) + 'px'
 
 //             }
 
 //             timeoutRef.current = setTimeout(()=>{
 //                 ref.current.style.width = 
-//                     foldersElementRef.current.offsetWidth + 'px'
+//                     contentsElementRef.current.offsetWidth + 'px'
 //             },timeout)
 
 //         }
@@ -122,16 +157,8 @@ export const CentralPanel = (props) => {
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameRef:any) {
     const 
         { children, targetDisplay } = props,
-        coverPanelStyles = {
-            position:'absolute', 
-            inset:0, 
-            padding: '3px', 
-            transition:'box-shadow .5s', 
-            border: '5px ridge gray',
-            minWidth:'250px',
-} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
-        appliedCoverPanelStylesRef = useRef({...workboxPanelBaseStyles, ...coverPanelStyles, visibility:'hidden'} as CSSProperties),
+        appliedCoverPanelStylesRef = useRef({...workboxPanelBaseStyles, ...coverPanelStyles} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -187,7 +214,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
     },[targetDisplay])
 
-    return <Box data-type = 'cover-frame' ref = {coverFrameRef} flex = '0 0 auto' minWidth = '250px' width = '250px' position = 'relative'>
+    return <Box data-type = 'cover-frame' ref = {coverFrameRef} style = {coverFrameStyles}>
         <Box data-type = 'cover-panel' style = {appliedCoverPanelStylesRef.current}>{children}</Box>
     </Box>
 })
@@ -195,10 +222,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameRef:any) {
     const 
         { children, targetDisplay } = props,
-        contentsPanelStyles = {flex:'1 0 auto', minWidth:'250px',padding: '3px', transition:'box-shadow .5s', border: '5px ridge gray',
-} as CSSProperties,
         displayStateRef = useRef(targetDisplay),
-        appliedContentsStylesRef = useRef({...workboxPanelBaseStyles, ...contentsPanelStyles, visibility:'hidden'} as CSSProperties),
+        appliedContentsStylesRef = useRef({...workboxPanelBaseStyles, ...contentsPanelStyles} as CSSProperties),
         visibilityTimeoutRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
@@ -254,7 +279,7 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
     },[targetDisplay])
 
-    return <Box data-type = 'contents-frame' ref = {contentsFrameRef} flex = '1 0 auto' minWidth = '250px' position = 'relative'>
+    return <Box data-type = 'contents-frame' ref = {contentsFrameRef} style = {contentsFrameStyles}>
         <Box data-type = 'contents-panel' style = {appliedContentsStylesRef.current}> {children}</Box>
     </Box>
 })

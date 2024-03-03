@@ -23,24 +23,24 @@ const WorkboxContent = (props) => {
     const 
         { workboxControls } = props,
         {lists, profile} = workboxControls,
-        documentElementRef = useRef(null),
-        foldersElementRef = useRef(null),
+        coverElementRef = useRef(null),
+        contentsElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         [contentState,setContentState] = useState('setup')
 
-    let toggleTargetDisplay, documentTargetDisplay, foldersTargetDisplay
+    let toggleTargetDisplay, coverTargetDisplay, contentsTargetDisplay
     if (lists && profile) {
         toggleTargetDisplay = 'both'
-        documentTargetDisplay = 'out'
-        foldersTargetDisplay = 'out'
+        coverTargetDisplay = 'out'
+        contentsTargetDisplay = 'out'
     } else if (lists) {
         toggleTargetDisplay = 'folders'
-        documentTargetDisplay = 'under'
-        foldersTargetDisplay = 'over'
+        coverTargetDisplay = 'under'
+        contentsTargetDisplay = 'over'
     } else { // profile
         toggleTargetDisplay = 'document'
-        documentTargetDisplay = 'over'
-        foldersTargetDisplay = 'under'
+        coverTargetDisplay = 'over'
+        contentsTargetDisplay = 'under'
     }
 
     useEffect(()=>{
@@ -61,13 +61,13 @@ const WorkboxContent = (props) => {
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <CentralPanel 
             targetDisplay = {toggleTargetDisplay} 
-            documentElementRef = {documentElementRef} 
-            foldersElementRef = {foldersElementRef} 
+            coverElementRef = {coverElementRef} 
+            contentsElementRef = {contentsElementRef} 
         >
-            <CoverPanel ref = {documentElementRef} targetDisplay = {documentTargetDisplay} >
+            <CoverPanel ref = {coverElementRef} targetDisplay = {coverTargetDisplay} >
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {foldersElementRef} targetDisplay = {foldersTargetDisplay} >
+            <ContentsPanel ref = {contentsElementRef} targetDisplay = {contentsTargetDisplay} >
             Contents
             </ContentsPanel>
         </CentralPanel>
