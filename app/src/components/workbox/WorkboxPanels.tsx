@@ -128,7 +128,9 @@ export const CentralPanel = (props) => {
             centralPanelElement = centralPanelElementRef.current,
             coverFrameElement = coverFrameElementRef.current,
             contentsFrameElement = contentsFrameElementRef.current
+
         let timeout = 500
+
         clearTimeout(firstTimeoutRef.current)
         clearTimeout(secondTimeoutRef.current)
 
@@ -145,26 +147,27 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             coverFrameElement.style.flex = '0 0 auto'
 
-            // set targets
-            coverFrameElement.style.flex = '0 0 auto'
-            coverFrameElement.style.width = '300px'
+            // initialize contents
             contentsFrameElement.style.width = (centralPanelElement.offsetWidth - 300) + 'px'
             contentsFrameElement.style.flex = '0 0 auto'
+
+            // set targets
+            coverFrameElement.style.width = '300px'
 
             // wait for result
             secondTimeoutRef.current = setTimeout(()=>{
 
-                // restore minWidth for targets
+                // restore minWidth for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
-                coverFrameElement.firstChild.style.width = '100%'
-    
-                contentsFrameElement.firstChild.style.width = '100%'
 
                 contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.width = 'auto'
 
                 centralPanelElement.style.flex = '1 0 auto'
                 centralPanelElement.style.width = 'auto'
+
+                coverFrameElement.firstChild.style.width = '100%'
+                contentsFrameElement.firstChild.style.width = '100%'
 
             },timeout)
 
@@ -176,8 +179,8 @@ export const CentralPanel = (props) => {
 
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+            coverFrameElement.style.flex = '0 0 auto'
             contentsFrameElement.style.flex = '0 0 auto'
 
             // initialize contents panel
@@ -192,7 +195,6 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.transitionDelay = '.5s'
             coverFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
             coverFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
-            coverFrameElement.firstChild.style.width = '100%'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
@@ -202,7 +204,9 @@ export const CentralPanel = (props) => {
 
                 // restore values for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
+
                 coverFrameElement.firstChild.style.minWidth = 'auto'
+                coverFrameElement.firstChild.style.width = '100%'
 
                 // restore centralPanel to natural width
                 centralPanelElement.style.width = 'auto'
@@ -218,8 +222,8 @@ export const CentralPanel = (props) => {
 
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+            coverFrameElement.style.flex = '0 0 auto'
             contentsFrameElement.style.flex = '0 0 auto'
 
             // initialize cover panel
@@ -234,7 +238,6 @@ export const CentralPanel = (props) => {
             contentsFrameElement.style.transitionDelay = '.5s'
             contentsFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
             contentsFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
-            contentsFrameElement.firstChild.style.width = '100%'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
@@ -244,6 +247,7 @@ export const CentralPanel = (props) => {
 
                 // restore values for target
                 contentsFrameElement.firstChild.style.minWidth = 'auto'
+                contentsFrameElement.firstChild.style.width = '100%'
 
                 // restore centralPanel to natural width
                 centralPanelElement.style.width = 'auto'
