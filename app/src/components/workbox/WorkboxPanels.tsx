@@ -177,14 +177,15 @@ export const CentralPanel = (props) => {
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
+            // initialize contents panel
+            contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
+
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+
             coverFrameElement.style.flex = '0 0 auto'
             contentsFrameElement.style.flex = '0 0 auto'
-
-            // initialize contents panel
-            contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
 
             // set targets
             contentsFrameElement.style.transitionDelay = '.5s'
@@ -205,6 +206,7 @@ export const CentralPanel = (props) => {
                 // restore values for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
 
+                coverFrameElement.style.flex = '1 0 auto'
                 coverFrameElement.firstChild.style.minWidth = 'auto'
                 coverFrameElement.firstChild.style.width = '100%'
 
@@ -223,11 +225,12 @@ export const CentralPanel = (props) => {
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
-            contentsFrameElement.style.flex = '0 0 auto'
 
             // initialize cover panel
             coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
+
+            coverFrameElement.style.flex = '0 0 auto'
+            contentsFrameElement.style.flex = '0 0 auto'
 
             // set targets
             coverFrameElement.style.transitionDelay = '.5s'
