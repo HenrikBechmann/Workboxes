@@ -12,7 +12,6 @@ import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel, MirrorPanel } f
 const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',
-    // flex: '1 0 auto',
     height:'100%',
     padding:'5px',
     position:'relative',
@@ -26,6 +25,7 @@ const WorkboxContent = (props) => {
         coverFrameElementRef = useRef(null),
         contentsFrameElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
+        workboxContentElementRef = useRef(null),
         [contentState,setContentState] = useState('setup')
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
@@ -58,9 +58,11 @@ const WorkboxContent = (props) => {
         //     Mirror
         // </MirrorPanel>
             // ref = {centralPanelElementRef} 
-    return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
+    return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
         <CentralPanel 
             displayCode = {workboxDisplayCode} 
+            workboxContentElementRef = {workboxContentElementRef}
+            workboxPaddingCount = {10}
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
         >

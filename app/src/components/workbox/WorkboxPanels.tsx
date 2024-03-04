@@ -7,7 +7,7 @@ import {
     Box
 } from '@chakra-ui/react'
 
-const MIN_WIDTH = '250px'
+const MIN_WIDTH = '300px'
 
 const centralPanelStyles = {
     height:'100%',
@@ -15,12 +15,15 @@ const centralPanelStyles = {
     backgroundColor:'transparent', 
     position:'relative',
     display:'flex',
-    flex: '1 0 auto'
+    flexWrap: 'nowrap',
+    flex: '1 0 auto',
+    transition:'width .5s', 
+    boxSizing: 'border-box',
 } as CSSProperties
 
 const coverFrameStyles = {
     flex: '0 0 auto',
-    width: '250px',
+    width: '300px',
     minWidth: MIN_WIDTH,
     position: 'relative',
     overflow: 'hidden',
@@ -48,7 +51,7 @@ const contentsFrameStyles = {
     minWidth: MIN_WIDTH,
     position: 'relative',
     overflow: 'hidden',
-    transition:'flex .5s',
+    transition:'width .5s, flex .5s',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -84,7 +87,7 @@ const settingsContentStyles = {
     padding:'3px',
     boxSizing:'border-box',
     height: '100%',
-    width:'250px',
+    width:'300px',
     position:'relative',
 } as CSSProperties
 
@@ -103,7 +106,7 @@ const mirrorContentStyles = {
     padding:'3px',
     boxSizing:'border-box',
     height: '100%',
-    width:'250px',
+    width:'300px',
     position:'relative',
 } as CSSProperties
 
@@ -111,22 +114,27 @@ const mirrorContentStyles = {
 export const CentralPanel = (props) => {
 
     const 
-        { children, displayCode, coverFrameElementRef, contentsFrameElementRef } = props,
+        { children, displayCode, workboxContentElementRef, workboxPaddingCount, coverFrameElementRef, contentsFrameElementRef } = props,
         previousDisplayCodeRef = useRef(displayCode),
+        centralPanelElementRef = useRef(null),
         timeoutRef = useRef(null)
 
     useEffect(()=>{
 
         const 
             coverFrameElement = coverFrameElementRef.current,
-            contentsFrameElement = contentsFrameElementRef.current
+            contentsFrameElement = contentsFrameElementRef.current,
+            centralPanelElement = centralPanelElementRef.current
         let timeout = 500
         clearTimeout(timeoutRef.current)
 
         if (displayCode == 'both') {
 
+            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
+            // centralPanelElement.style.flex = '0 0 auto'
+
             coverFrameElement.style.flex = '0 0 auto'
-            coverFrameElement.style.width = '250px'
+            coverFrameElement.style.width = '300px'
 
             contentsFrameElement.style.flex = '1 0 auto'
             contentsFrameElement.style.width = 'auto'
@@ -135,10 +143,15 @@ export const CentralPanel = (props) => {
 
                 coverFrameElement.style.minWidth = MIN_WIDTH
                 contentsFrameElement.style.minWidth = MIN_WIDTH
+                centralPanelElement.style.width = 'auto'
+                // centralPanelElement.style.flex = '1 0 auto'
 
             },timeout)
 
         } else if (displayCode == 'cover') {
+
+            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
+            centralPanelElement.style.flex = '0 0 auto'
 
             coverFrameElement.style.flex = '1 0 auto'
             coverFrameElement.style.width = 'auto'
@@ -150,10 +163,20 @@ export const CentralPanel = (props) => {
             timeoutRef.current = setTimeout(()=>{
 
                 coverFrameElement.style.minWidth = MIN_WIDTH
+                const newWidth = (workboxContentElementRef.current.offsetWidth -workboxPaddingCount) + 'px'
+                centralPanelElement.style.width = newWidth
+
+                timeoutRef.current = setTimeout(()=>{
+                    centralPanelElement.style.flex = '1 0 auto'
+                    centralPanelElement.style.width = 'auto'
+                },timeout)
 
             },timeout)
 
         } else { // displayCode == 'contents'
+
+            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
+            centralPanelElement.style.flex = '0 0 auto'
 
             coverFrameElement.style.flex = '0 0 auto'
             coverFrameElement.style.width = 0
@@ -165,6 +188,8 @@ export const CentralPanel = (props) => {
             timeoutRef.current = setTimeout(()=>{
 
                 contentsFrameElement.style.minWidth = MIN_WIDTH
+                // centralPanelElement.style.flex = '1 0 auto'
+                // centralPanelElement.style.width = 'auto'
 
             },timeout)
         }
@@ -173,7 +198,7 @@ export const CentralPanel = (props) => {
 
     },[displayCode])
 
-    return <Box data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
+    return <Box ref = {centralPanelElementRef} data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
