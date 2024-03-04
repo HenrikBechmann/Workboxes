@@ -294,7 +294,7 @@ const Workwindow = (props) => {
             width = {windowConfigSpecs.width} 
             axis = 'both'
             resizeHandles = {['se']}
-            minConstraints = {[200,200]}
+            minConstraints = {[300,300]}
             maxConstraints = {maxConstraintsRef.current}
             onResizeStart = {onResizeStart}
             onResize = {onResize}

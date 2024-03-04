@@ -34,7 +34,7 @@ const Workspace = (props) => {
         {
             windowSpecs:{
                 zOrder: 1,
-                configDefaults: {top:'20px',left:'20px', width:'600px',height:'400px'},
+                configDefaults: {top:'20px',left:'20px', width:'610px',height:'400px'},
             },
             workboxSpecs: {
                 workboxDefaults:{...workboxDefaults},
@@ -47,7 +47,7 @@ const Workspace = (props) => {
         {
             windowSpecs:{
                 zOrder: 2,
-                configDefaults: {top:'40px',left:'40px', width:'600px',height:'400px'},
+                configDefaults: {top:'40px',left:'40px', width:'610px',height:'400px'},
             },
             workboxSpecs: {
                 workboxDefaults:{...workboxDefaults},
@@ -60,7 +60,7 @@ const Workspace = (props) => {
         {
             windowSpecs:{
                 zOrder: 3,
-                configDefaults: {top:'60px',left:'60px', width:'600px',height:'400px'},
+                configDefaults: {top:'60px',left:'60px', width:'610px',height:'400px'},
             },
             workboxSpecs: {
                 workboxDefaults:{...workboxDefaults},
