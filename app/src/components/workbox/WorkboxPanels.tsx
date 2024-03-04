@@ -29,6 +29,7 @@ const coverFrameStyles = {
     position: 'relative',
     overflow: 'hidden',
     transition:'width .5s', 
+    transitionDelay:'unset',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -51,6 +52,7 @@ const contentsFrameStyles = {
     position: 'relative',
     overflow: 'hidden',
     transition:'width .5s',
+    transitionDelay:'unset',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -130,15 +132,18 @@ export const CentralPanel = (props) => {
         clearTimeout(firstTimeoutRef.current)
         clearTimeout(secondTimeoutRef.current)
 
-        if (displayCode == 'both') {
+        coverFrameElement.style.transitionDelay = 'unset'
+        contentsFrameElement.style.transitionDelay = 'unset'
 
-            // initialize cover
-            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
+        if (displayCode == 'both') {
 
             // freeze central panel
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
+
+            // initialize cover
+            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
+            coverFrameElement.style.flex = '0 0 auto'
 
             // set targets
             coverFrameElement.style.flex = '0 0 auto'
@@ -151,6 +156,7 @@ export const CentralPanel = (props) => {
 
                 // restore minWidth for targets
                 coverFrameElement.style.minWidth = MIN_WIDTH
+                coverFrameElement.firstChild.style.width = '100%'
     
                 contentsFrameElement.firstChild.style.width = '100%'
 
@@ -160,9 +166,13 @@ export const CentralPanel = (props) => {
                 centralPanelElement.style.flex = '1 0 auto'
                 centralPanelElement.style.width = 'auto'
 
-            },timeout + 100)
+            },timeout)
 
         } else if (displayCode == 'cover') {
+
+            // freeze central panel
+            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
+            centralPanelElement.style.flex = '0 0 auto'
 
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
@@ -173,23 +183,26 @@ export const CentralPanel = (props) => {
             // initialize contents panel
             contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
 
-            // freeze central panel
-            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
-            centralPanelElement.style.flex = '0 0 auto'
-
             // set targets
+            contentsFrameElement.style.transitionDelay = '.5s'
             contentsFrameElement.style.width = 0
             contentsFrameElement.style.minWidth = 0
             contentsFrameElement.style.flex = '0 0 auto'
 
+            coverFrameElement.style.transitionDelay = '.5s'
             coverFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            coverFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
+            coverFrameElement.firstChild.style.width = '100%'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
+                contentsFrameElement.style.transitionDelay = 'unset'
+                coverFrameElement.style.transitionDelay = 'unset'
+
                 // restore values for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
-                coverFrameElement.firstChild.style.width = '100%'
+                coverFrameElement.firstChild.style.minWidth = 'auto'
 
                 // restore centralPanel to natural width
                 centralPanelElement.style.width = 'auto'
@@ -198,6 +211,10 @@ export const CentralPanel = (props) => {
             },timeout)
 
         } else { // displayCode == 'contents'
+
+            // freeze central panel
+            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
+            centralPanelElement.style.flex = '0 0 auto'
 
             // initialize frames
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
@@ -208,22 +225,25 @@ export const CentralPanel = (props) => {
             // initialize cover panel
             coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
 
-            // freeze central panel
-            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
-            centralPanelElement.style.flex = '0 0 auto'
-
             // set targets
+            coverFrameElement.style.transitionDelay = '.5s'
             coverFrameElement.style.width = 0
             coverFrameElement.style.minWidth = 0
             coverFrameElement.style.flex = '0 0 auto'
 
+            contentsFrameElement.style.transitionDelay = '.5s'
             contentsFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            contentsFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
+            contentsFrameElement.firstChild.style.width = '100%'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
+                contentsFrameElement.style.transitionDelay = 'unset'
+                coverFrameElement.style.transitionDelay = 'unset'
+
                 // restore values for target
-                coverFrameElement.firstChild.style.width = '100%'
+                contentsFrameElement.firstChild.style.minWidth = 'auto'
 
                 // restore centralPanel to natural width
                 centralPanelElement.style.width = 'auto'
@@ -254,21 +274,45 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         let timeout = 500
 
+        element.style.transitionDelay = 'unset'
+
+        // const previousTransition = element.style.transition
         if (displayCode == 'out') {
 
+            if (previousDisplayCodeRef.current == 'under') {
+
+                // element.style.transition = 'none'
+                element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            }
+
             targetTimeoutRef.current = setTimeout(()=>{
+                element.style.transitionDelay = '.5s'
                 element.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            targetTimeoutRef.current = setTimeout(()=>{
-                element.style.boxShadow = 'none'
-            },timeout)
+            // if (previousDisplayCodeRef.current == 'under') {
+
+            //     element.style.transition = 'none'
+            //     element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            // }
+
+            // targetTimeoutRef.current = setTimeout(()=>{
+            //     element.style.transition = previousTransition
+            //     element.style.boxShadow = 'none'
+            // },timeout)
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            targetTimeoutRef.current = setTimeout(()=>{
+                element.style.transitionDelay = '.5s'
+                element.style.boxShadow = 'none'
+            },timeout)
 
         }
 
@@ -298,21 +342,45 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         let timeout = 500
 
+        element.style.transitionDelay = 'unset'
+
         if (displayCode == 'out') {
 
+            if (previousDisplayCodeRef.current == 'under') {
+
+                // element.style.transition = 'none'
+                element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            }
+
             targetTimeoutRef.current = setTimeout(()=>{
+                element.style.transitionDelay = '.5s'
+                // element.style.transition = previousTransition
                 element.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
-            targetTimeoutRef.current = setTimeout(()=>{
-                element.style.boxShadow = 'none'
-            },timeout)
+            // if (previousDisplayCodeRef.current == 'under') {
+
+            //     element.style.transition = 'none'
+            //     element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            // }
+
+            // targetTimeoutRef.current = setTimeout(()=>{
+            //     element.style.transition = previousTransition
+            //     element.style.boxShadow = 'none'
+            // },timeout)
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            targetTimeoutRef.current = setTimeout(()=>{
+                element.style.transitionDelay = '.5s'
+                element.style.boxShadow = 'none'
+            },timeout)
 
         }
 
