@@ -183,23 +183,17 @@ export const CentralPanel = (props) => {
 
         } else if (displayCode == 'cover') {
 
+            // delay to establish shadow
+            transitionDelay = '0.3s'
+            coverFrameElement.style.transitionDelay = transitionDelay
+            contentsFrameElement.style.transitionDelay = transitionDelay
+            timeout = 800
+
             if (previousDisplayCodeRef.current == 'contents') {
 
-                // delay to establish shadow
-                transitionDelay = '0.3s'
-                coverFrameElement.style.transitionDelay = transitionDelay
-                contentsFrameElement.style.transitionDelay = transitionDelay
-                timeout = 800
                 coverFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
                 coverFrameElement.firstChild.style.right = 0
                 coverFrameElement.firstChild.style.left = 'auto'
-
-            } else { // previous is 'both'
-                // delay to establish shadow
-                transitionDelay = '0.3s'
-                coverFrameElement.style.transitionDelay = transitionDelay
-                contentsFrameElement.style.transitionDelay = transitionDelay
-                timeout = 800
 
             }
 
@@ -243,28 +237,21 @@ export const CentralPanel = (props) => {
 
         } else { // displayCode == 'contents'
 
+            // delay to establish shadow
+            transitionDelay = '0.3s'
+            coverFrameElement.style.transitionDelay = transitionDelay
+            contentsFrameElement.style.transitionDelay = transitionDelay
+            timeout = 800
+            contentsFrameElement.firstChild.style.right = 'auto'
+            contentsFrameElement.firstChild.style.left = 0
+
             if (previousDisplayCodeRef.current == 'cover') {
 
-                // delay to establish shadow
-                transitionDelay = '0.3s'
-                coverFrameElement.style.transitionDelay = transitionDelay
-                contentsFrameElement.style.transitionDelay = transitionDelay
-                timeout = 800
                 contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
-                contentsFrameElement.firstChild.style.right = 'auto'
-                contentsFrameElement.firstChild.style.left = 0
 
             } else { // previous is 'both'
 
-                // delay to establish shadow
-                transitionDelay = '0.3s'
-                coverFrameElement.style.transitionDelay = transitionDelay
-                contentsFrameElement.style.transitionDelay = transitionDelay
-                timeout = 800
-
                 contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-                contentsFrameElement.firstChild.style.right = 'auto'
-                contentsFrameElement.firstChild.style.left = 0
 
             }
 
