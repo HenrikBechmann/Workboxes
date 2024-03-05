@@ -188,6 +188,7 @@ export const CentralPanel = (props) => {
                 transitionDelay = '0.3s'
                 coverFrameElement.style.transitionDelay = transitionDelay
                 contentsFrameElement.style.transitionDelay = transitionDelay
+                timeout = 800
 
             }
 
@@ -240,6 +241,7 @@ export const CentralPanel = (props) => {
                 transitionDelay = '0.3s'
                 coverFrameElement.style.transitionDelay = transitionDelay
                 contentsFrameElement.style.transitionDelay = transitionDelay
+                timeout = 800
 
                 contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
 
