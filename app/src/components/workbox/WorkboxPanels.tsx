@@ -29,7 +29,7 @@ const coverFrameStyles = {
     position: 'relative',
     overflow: 'hidden',
     transition:'width .5s', 
-    transitionDelay:'unset',
+    // transitionDelay:'unset',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -52,7 +52,7 @@ const contentsFrameStyles = {
     position: 'relative',
     overflow: 'hidden',
     transition:'width .5s',
-    transitionDelay:'unset',
+    // transitionDelay:'unset',
     borderRadius:'8px',
 } as CSSProperties
 
@@ -134,10 +134,17 @@ export const CentralPanel = (props) => {
         clearTimeout(firstTimeoutRef.current)
         clearTimeout(secondTimeoutRef.current)
 
-        coverFrameElement.style.transitionDelay = 'unset'
-        contentsFrameElement.style.transitionDelay = 'unset'
-
         if (displayCode == 'both') {
+
+            if (previousDisplayCodeRef.current == 'contents') {
+
+                coverFrameElement.firstChild.style.width = '300px'
+
+            } else {
+
+                contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
+
+            }
 
             // freeze central frame
             centralFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
@@ -175,42 +182,43 @@ export const CentralPanel = (props) => {
 
         } else if (displayCode == 'cover') {
 
+            if (previousDisplayCodeRef.current == 'contents') {
+
+                coverFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth) + 'px'
+
+            } else { // 'both'
+
+                // coverFrameElement.firstChild.style.width = '300px'
+
+            }
+
             // freeze central frame
             centralFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
             centralFrameElement.style.flex = '0 0 auto'
 
-            // freeeze cover
-            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
-
-            // freeze contents
+            // freeze contents frame
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
             contentsFrameElement.style.flex = '0 0 auto'
-
             // freeze contents panel
             contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
 
             // set targets
-            contentsFrameElement.style.transitionDelay = '.5s'
             contentsFrameElement.style.width = 0
             contentsFrameElement.style.minWidth = 0
 
-            coverFrameElement.style.transitionDelay = '.5s'
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
-            // coverFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
-
-                contentsFrameElement.style.transitionDelay = 'unset'
-                coverFrameElement.style.transitionDelay = 'unset'
 
                 // restore values for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
 
                 coverFrameElement.style.flex = '1 0 auto'
+
                 coverFrameElement.firstChild.style.minWidth = 'auto'
                 coverFrameElement.firstChild.style.width = '100%'
+                contentsFrameElement.firstChild.style.width = '100%'
 
                 // restore centralPanel to natural width
                 centralFrameElement.style.width = 'auto'
@@ -220,39 +228,40 @@ export const CentralPanel = (props) => {
 
         } else { // displayCode == 'contents'
 
+            if (previousDisplayCodeRef.current == 'cover') {
+
+                contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
+
+            } else { // 'both'
+
+                // contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
+
+            }
+
             // freeze central frame
             centralFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
             centralFrameElement.style.flex = '0 0 auto'
 
-            // freeeze cover
+            // freeeze cover frame
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             coverFrameElement.style.flex = '0 0 auto'
-
-            // freeze contents
-            contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-            contentsFrameElement.style.flex = '0 0 auto'
-
             // freeze cover panel
             coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
 
             // set targets
-            coverFrameElement.style.transitionDelay = '.5s'
+            contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
+
             coverFrameElement.style.width = 0
             coverFrameElement.style.minWidth = 0
-
-            contentsFrameElement.style.transitionDelay = '.5s'
-            contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
-            // contentsFrameElement.firstChild.style.minWidth = contentsFrameElement.firstChild.offsetWidth + 'px'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
-                contentsFrameElement.style.transitionDelay = 'unset'
-                coverFrameElement.style.transitionDelay = 'unset'
-
                 // restore values for target
+
                 contentsFrameElement.firstChild.style.minWidth = 'auto'
                 contentsFrameElement.firstChild.style.width = '100%'
+                coverFrameElement.firstChild.style.width = '100%'
 
                 // restore centralPanel to natural width
                 centralFrameElement.style.width = 'auto'
@@ -276,6 +285,8 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
+
+        return
 
         clearTimeout(targetTimeoutRef.current)
 
@@ -333,6 +344,8 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
         targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
+
+        return
 
         clearTimeout(targetTimeoutRef.current)
 
