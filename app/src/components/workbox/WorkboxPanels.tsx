@@ -195,23 +195,22 @@ export const CentralPanel = (props) => {
 
             // set targets
             contentsFrameElement.style.width = 0
-
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
-                // restore values for target
+                // restore values for frames
                 coverFrameElement.style.width = '100%'
-
                 coverFrameElement.style.flex = '1 0 auto'
 
+                centralFrameElement.style.width = 'auto'
+                centralFrameElement.style.flex = '1 0 auto'
+
+                // restore panels
                 coverFrameElement.firstChild.style.width = '100%'
                 contentsFrameElement.firstChild.style.width = '100%'
 
-                // restore centralPanel to natural width
-                centralFrameElement.style.width = 'auto'
-                centralFrameElement.style.flex = '1 0 auto'
 
             },timeout)
 
@@ -239,22 +238,20 @@ export const CentralPanel = (props) => {
 
             // set targets
             contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
-
             coverFrameElement.style.width = 0
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
-                // restore values for target
-
+                // restore values for frames
                 contentsFrameElement.style.width = '100%'
 
-                contentsFrameElement.firstChild.style.width = '100%'
-                coverFrameElement.firstChild.style.width = '100%'
-
-                // restore centralPanel to natural width
                 centralFrameElement.style.width = 'auto'
                 centralFrameElement.style.flex = '1 0 auto'
+
+                // restore panels
+                contentsFrameElement.firstChild.style.width = '100%'
+                coverFrameElement.firstChild.style.width = '100%'
 
             },timeout)
         }
