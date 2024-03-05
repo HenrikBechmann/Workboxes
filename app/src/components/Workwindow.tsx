@@ -17,6 +17,7 @@ import windowMinimalIcon from '../../assets/window-minimal.png'
 import windowFloatIcon from '../../assets/window-float.png'
 import windowFullIcon from '../../assets/window-full.png'
 import moreVertIcon from '../../assets/more_vert_light.png'
+import closeLightIcon from '../../assets/close_light.png'
 
 const windowFrameStyles = {
     position: 'absolute',
@@ -46,8 +47,8 @@ const windowTitleStyles = {
     borderRadius: '7px 7px 0 0',
     padding: '3px',
     backgroundColor:'gainsboro',
-    display: 'grid',
-    gridAutoFlow: 'column',
+    display: 'flex',
+    alignItems: 'center',
 } as CSSProperties
 
 const titleTextBlockStyles = {
@@ -307,6 +308,7 @@ const Workwindow = (props) => {
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
                         <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
+                            <Box><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
                             <Box data-type = 'text-block' style = {titleTextBlockStyles}>
                                 Henrik Bechmann (Domain)
                             </Box>
