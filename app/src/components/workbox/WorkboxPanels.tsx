@@ -184,11 +184,7 @@ export const CentralPanel = (props) => {
 
             if (previousDisplayCodeRef.current == 'contents') {
 
-                coverFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth) + 'px'
-
-            } else { // 'both'
-
-                // coverFrameElement.firstChild.style.width = '300px'
+                coverFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
 
             }
 
@@ -213,6 +209,7 @@ export const CentralPanel = (props) => {
 
                 // restore values for target
                 coverFrameElement.style.minWidth = MIN_WIDTH
+                coverFrameElement.style.width = '100%'
 
                 coverFrameElement.style.flex = '1 0 auto'
 
@@ -232,9 +229,9 @@ export const CentralPanel = (props) => {
 
                 contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
 
-            } else { // 'both'
+            } else {
 
-                // contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
+                contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
 
             }
 
@@ -251,13 +248,15 @@ export const CentralPanel = (props) => {
             // set targets
             contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
-            coverFrameElement.style.width = 0
             coverFrameElement.style.minWidth = 0
+            coverFrameElement.style.width = 0
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
 
                 // restore values for target
+
+                contentsFrameElement.style.width = '100%'
 
                 contentsFrameElement.firstChild.style.minWidth = 'auto'
                 contentsFrameElement.firstChild.style.width = '100%'
