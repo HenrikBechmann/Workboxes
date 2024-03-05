@@ -41,9 +41,12 @@ const coverPanelStyles = {
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
-    transition:'box-shadow .5s',
+    transition:'box-shadow .3s',
+    transitionDelay:'unset',
     boxShadow: 'none',
     boxSizing: 'border-box',
+    left: 0,
+    right:'auto',
 } as CSSProperties
 
 const contentsFrameStyles = {
@@ -65,9 +68,11 @@ const contentsPanelStyles = {
     border: '5px ridge gray',
     borderRadius:'8px',
     overflow:'auto',
-    transition:'box-shadow .5s',
+    transition:'box-shadow .3s',
+    transitionDelay:'unset',
     boxShadow: 'none',
     boxSizing: 'border-box',
+    left: 'auto',
     right: 0,
 } as CSSProperties
 
@@ -180,8 +185,14 @@ export const CentralPanel = (props) => {
 
             if (previousDisplayCodeRef.current == 'contents') {
 
-                // no delay
+                // delay to establish shadow
+                transitionDelay = '0.3s'
+                coverFrameElement.style.transitionDelay = transitionDelay
+                contentsFrameElement.style.transitionDelay = transitionDelay
+                timeout = 800
                 coverFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
+                coverFrameElement.firstChild.style.right = 0
+                coverFrameElement.firstChild.style.left = 'auto'
 
             } else { // previous is 'both'
                 // delay to establish shadow
@@ -224,6 +235,8 @@ export const CentralPanel = (props) => {
 
                 // restore panels
                 coverFrameElement.firstChild.style.width = '100%'
+                coverFrameElement.firstChild.style.right = 'auto'
+                coverFrameElement.firstChild.style.left = 0
 
 
             },timeout)
@@ -232,8 +245,14 @@ export const CentralPanel = (props) => {
 
             if (previousDisplayCodeRef.current == 'cover') {
 
-                // no delay
+                // delay to establish shadow
+                transitionDelay = '0.3s'
+                coverFrameElement.style.transitionDelay = transitionDelay
+                contentsFrameElement.style.transitionDelay = transitionDelay
+                timeout = 800
                 contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
+                contentsFrameElement.firstChild.style.right = 'auto'
+                contentsFrameElement.firstChild.style.left = 0
 
             } else { // previous is 'both'
 
@@ -244,6 +263,8 @@ export const CentralPanel = (props) => {
                 timeout = 800
 
                 contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+                contentsFrameElement.firstChild.style.right = 'auto'
+                contentsFrameElement.firstChild.style.left = 0
 
             }
 
@@ -278,6 +299,8 @@ export const CentralPanel = (props) => {
 
                 // restore panels
                 contentsFrameElement.firstChild.style.width = '100%'
+                contentsFrameElement.firstChild.style.right = 0
+                contentsFrameElement.firstChild.style.left = 'auto'
 
             },timeout)
         }
@@ -292,13 +315,11 @@ export const CentralPanel = (props) => {
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
         { children, displayCode } = props,
-        previousDisplayCodeRef = useRef(displayCode),
         coverPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
-        return
 
         clearTimeout(targetTimeoutRef.current)
 
@@ -306,38 +327,21 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         let timeout = 500
 
-        element.style.transitionDelay = 'unset'
-
-        // const previousTransition = element.style.transition
         if (displayCode == 'out') {
 
-            if (previousDisplayCodeRef.current == 'under') {
-
-                // element.style.transition = 'none'
-                element.style.boxShadow = '3px 3px 6px 6px inset silver'
-
-            }
-
             targetTimeoutRef.current = setTimeout(()=>{
-                element.style.transitionDelay = '.5s'
                 element.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
+            element.style.boxShadow = 'none'
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
 
-            targetTimeoutRef.current = setTimeout(()=>{
-                element.style.transitionDelay = '.5s'
-                element.style.boxShadow = 'none'
-            },timeout)
-
         }
-
-        previousDisplayCodeRef.current = displayCode
 
     },[displayCode])
 
@@ -351,13 +355,10 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
     const 
         { children, displayCode } = props,
-        previousDisplayCodeRef = useRef(displayCode),
         contentsPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null)
 
     useEffect(()=>{
-
-        return
 
         clearTimeout(targetTimeoutRef.current)
 
@@ -365,38 +366,21 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
         let timeout = 500
 
-        element.style.transitionDelay = 'unset'
-
         if (displayCode == 'out') {
 
-            if (previousDisplayCodeRef.current == 'under') {
-
-                // element.style.transition = 'none'
-                element.style.boxShadow = '3px 3px 6px 6px inset silver'
-
-            }
-
             targetTimeoutRef.current = setTimeout(()=>{
-                element.style.transitionDelay = '.5s'
-                // element.style.transition = previousTransition
                 element.style.boxShadow = 'none'
             },timeout)
 
         } else if (displayCode == 'over') {
 
+            element.style.boxShadow = 'none'
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
 
-            targetTimeoutRef.current = setTimeout(()=>{
-                element.style.transitionDelay = '.5s'
-                element.style.boxShadow = 'none'
-            },timeout)
-
         }
-
-        previousDisplayCodeRef.current = displayCode
 
     },[displayCode])
 
