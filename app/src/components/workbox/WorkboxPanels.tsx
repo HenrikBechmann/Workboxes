@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react'
 
 const MIN_PANEL_FRAME_WIDTH = '300px'
+const MIN_CENTRAL_FRAME_WIDTH = '590px'
 
 const centralPanelStyles = {
     height:'100%',
@@ -17,7 +18,7 @@ const centralPanelStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     flex: '1 0 auto',
-    minWidth:'590px',
+    minWidth: MIN_CENTRAL_FRAME_WIDTH,
     transition:'width .5s', 
     boxSizing: 'border-box',
 } as CSSProperties
@@ -25,7 +26,6 @@ const centralPanelStyles = {
 const coverFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
-    // minWidth: MIN_PANEL_FRAME_WIDTH,
     position: 'relative',
     overflow: 'hidden',
     transition:'width .5s', 
@@ -118,8 +118,7 @@ export const CentralPanel = (props) => {
         { children, displayCode, workboxContentElementRef, workboxPaddingCount, coverFrameElementRef, contentsFrameElementRef } = props,
         previousDisplayCodeRef = useRef(displayCode),
         centralPanelElementRef = useRef(null),
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null)
+        firstTimeoutRef = useRef(null)
 
     useEffect(()=>{
 
@@ -131,7 +130,6 @@ export const CentralPanel = (props) => {
         let timeout = 500
 
         clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
 
         if (displayCode == 'both') {
 
@@ -162,11 +160,9 @@ export const CentralPanel = (props) => {
             contentsFrameElement.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
 
             // wait for result
-            secondTimeoutRef.current = setTimeout(()=>{
+            firstTimeoutRef.current = setTimeout(()=>{
 
                 // restore settings for frames
-                // coverFrameElement.style.minWidth = MIN_PANEL_FRAME_WIDTH
-
                 contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.width = 'auto'
 
@@ -199,7 +195,6 @@ export const CentralPanel = (props) => {
 
             // set targets
             contentsFrameElement.style.width = 0
-            // contentsFrameElement.style.minWidth = 0
 
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
@@ -207,12 +202,10 @@ export const CentralPanel = (props) => {
             firstTimeoutRef.current = setTimeout(()=>{
 
                 // restore values for target
-                // coverFrameElement.style.minWidth = MIN_PANEL_FRAME_WIDTH
                 coverFrameElement.style.width = '100%'
 
                 coverFrameElement.style.flex = '1 0 auto'
 
-                // coverFrameElement.firstChild.style.minWidth = 'auto'
                 coverFrameElement.firstChild.style.width = '100%'
                 contentsFrameElement.firstChild.style.width = '100%'
 
@@ -247,7 +240,6 @@ export const CentralPanel = (props) => {
             // set targets
             contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
-            // coverFrameElement.style.minWidth = 0
             coverFrameElement.style.width = 0
 
             // wait for result
@@ -257,7 +249,6 @@ export const CentralPanel = (props) => {
 
                 contentsFrameElement.style.width = '100%'
 
-                // contentsFrameElement.firstChild.style.minWidth = 'auto'
                 contentsFrameElement.firstChild.style.width = '100%'
                 coverFrameElement.firstChild.style.width = '100%'
 
