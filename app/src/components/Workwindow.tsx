@@ -75,7 +75,7 @@ const windowBodyStyles = {
 const windowContentStyles = {
     position: 'absolute',
     inset: 0, 
-    padding: '3px', 
+    // padding: '3px', 
     backgroundColor: 'ghostwhite',
     borderRadius: '0 0 0px 7px',
 } as CSSProperties

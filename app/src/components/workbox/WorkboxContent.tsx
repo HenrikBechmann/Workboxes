@@ -13,7 +13,7 @@ const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     height:'100%',
-    padding:'5px',
+    padding:'0 5px 5px 5px',
     position:'relative',
 } as CSSProperties
 
