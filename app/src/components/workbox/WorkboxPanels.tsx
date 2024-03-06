@@ -83,7 +83,7 @@ const settingsPanelStyles = {
     width:'0px',
     overflow:'hidden',
     position:'relative',
-    transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out'
+    transition: 'width 0.5s, opacity 0.5s'
 } as CSSProperties
 
 const settingsContentStyles = {
@@ -102,7 +102,7 @@ const mirrorPanelStyles = {
     width:'0px',
     overflow:'hidden',
     position:'relative',
-    transition: 'width .5s ease-in-out, opacity .5s ease-in-out'
+    transition: 'width .5s, opacity .5s'
 } as CSSProperties
 
 const mirrorContentStyles = {
