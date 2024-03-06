@@ -175,17 +175,14 @@ const StandardToolbar = (props) => {
 
     },[])
 
+// <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
+// <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
+// <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
     // render
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {tribalopolismenulist} />
         { isHome && <>
-            <ToolbarVerticalDivider />
-            <StandardIcon icon = {notificationsIcon} caption = 'notifications' tooltip = 'Notifications to this account' response = {gotoNotifications} />
-            <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
-            <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
-            <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
-            <ToolbarVerticalDivider />
-            {cartToggle}
+            <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
             <ToolbarVerticalDivider />
             <MenuControl 
                 icon = {workspacesIcon} 
@@ -195,21 +192,21 @@ const StandardToolbar = (props) => {
             />
             </>
         }
-        <ToolbarVerticalDivider />
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />
+        {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />}
+        {isHome && cartToggle}
         {isSuperUser && <>
-            <ToolbarVerticalDivider />
             <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
             </>
         }
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
+
+// <ToolbarVerticalDivider />
+// <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
 
 export default StandardToolbar
