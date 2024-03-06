@@ -388,10 +388,7 @@ export const Drawer = (props) => {
                 position:'absolute',
                 margin: 0,
                 backgroundColor:'#ffffcc', //'yellow',
-                borderTop:'1px solid gray',
-                borderRight:'1px solid gray',
-                borderBottom:'1px solid gray',
-                borderLeft:'1px solid gray',
+                border:'1px solid gray',
                 display:'flex'
             } as CSSProperties,
 
@@ -420,7 +417,6 @@ export const Drawer = (props) => {
                     top:'50%',
                     transform:'translateY(-50%)',
                     left:'-12px',
-                    // borderRight:'transparent',
                     borderRadius: '8px',
                     height:'48px',
                     width:'24px',
@@ -451,7 +447,6 @@ export const Drawer = (props) => {
                     top:'50%',
                     transform:'translateY(-50%)',
                     right:'-12px',
-                    // borderLeft:'transparent',
                     borderRadius: '8px',
                     height:'48px',
                     width:'24px',
@@ -482,7 +477,6 @@ export const Drawer = (props) => {
                     left:'50%',
                     transform:'translateX(-50%)',
                     bottom:'-12px',
-                    // borderTop:'transparent',
                     borderRadius: '8px',
                     height:'25px', // anomalous by 1px
                     width:'48px',
@@ -513,7 +507,6 @@ export const Drawer = (props) => {
                     left:'50%',
                     transform:'translateX(-50%)',
                     top:'-12px',
-                    // borderBottom:'transparent',
                     borderRadius: '8px',
                     height:'24px',
                     width:'48px',

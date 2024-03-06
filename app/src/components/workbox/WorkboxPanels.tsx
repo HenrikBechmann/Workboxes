@@ -1,14 +1,19 @@
 // WorkboxPanels.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useEffect, CSSProperties, forwardRef } from 'react'
+import React, { useRef, useEffect, useState, CSSProperties, forwardRef } from 'react'
 
 import {
     Box
 } from '@chakra-ui/react'
 
-const MIN_PANEL_FRAME_WIDTH = '300px'
-const MIN_CENTRAL_FRAME_WIDTH = '590px'
+import { Resizable } from 'react-resizable'
+import "react-resizable/css/styles.css"
+
+import handleIcon from '../../../assets/handle.png'
+
+const MIN_PANEL_FRAME_WIDTH = 250
+const MIN_CENTRAL_FRAME_WIDTH = 590
 
 const centralPanelStyles = {
     height:'100%',
@@ -18,7 +23,7 @@ const centralPanelStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     flex: '1 0 auto',
-    minWidth: MIN_CENTRAL_FRAME_WIDTH,
+    minWidth: MIN_CENTRAL_FRAME_WIDTH + 'px',
     transition:'width .5s', 
     boxSizing: 'border-box',
 } as CSSProperties
@@ -27,10 +32,10 @@ const coverFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
     position: 'relative',
-    overflow: 'hidden',
     transition:'width .5s', 
     transitionDelay:'unset',
     borderRadius:'8px',
+    overflow: 'hidden',
 } as CSSProperties
 
 const coverPanelStyles = {
@@ -38,6 +43,7 @@ const coverPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width:'100%',
+    minWidth: MIN_PANEL_FRAME_WIDTH + 'px',
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
@@ -53,10 +59,10 @@ const contentsFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     position: 'relative',
-    overflow: 'hidden',
     transition:'width .5s',
     transitionDelay:'unset',
     borderRadius:'8px',
+    overflow: 'hidden',
 } as CSSProperties
 
 const contentsPanelStyles = {
@@ -116,6 +122,28 @@ const mirrorContentStyles = {
     position:'relative',
 } as CSSProperties
 
+const tabStyle = {
+    position:'absolute',
+    margin: 0,
+    backgroundColor:'#ffffcc', //'yellow',
+    border:'1px solid gray',
+    display:'flex',
+    top:'50%',
+    transform:'translateY(-50%)',
+    right:'-12px',
+    borderRadius: '8px',
+    height:'48px',
+    width:'24px',
+    alignItems:'center',
+    // zIndex: 1,
+} as CSSProperties
+
+const tabIconStyle = {
+    opacity: 0.5,
+    height: '24px',
+    width: '48px',
+    transform: 'rotate(90deg)'
+} as CSSProperties
 
 export const CentralPanel = (props) => {
 
@@ -296,17 +324,43 @@ export const CentralPanel = (props) => {
 
     },[displayCode])
 
-    return <Box ref = {centralPanelElementRef} data-type = 'central-panel' style = {centralPanelStyles}>{children}</Box>
+    return <Box ref = {centralPanelElementRef} data-type = 'central-panel' id = 'central-panel' style = {centralPanelStyles}>{children}</Box>
+}
+
+const CoverHandle = (props) => {
+
+    // handleAxis for handle selection - n/a here
+    const { handleAxis, innerRef, ...rest } = props
+
+    return (
+        <Box 
+            ref = {innerRef} 
+            data-type = {'cover-handle'} 
+            style = {tabStyle} {...rest}>
+            <img 
+                draggable = "false" 
+                style = {tabIconStyle} 
+                src = {handleIcon} 
+            />
+        </Box>
+    )
 }
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
         { children, displayCode } = props,
         coverPanelElementRef = useRef(null),
-        targetTimeoutRef = useRef(null)
+        centralPanelElementRef = useRef(null),
+        targetTimeoutRef = useRef(null),
+        [coverResizeWidth, setCoverResizeWidth] = useState(300)
 
     useEffect(()=>{
 
+        centralPanelElementRef.current = coverPanelElementRef.current.closest('#central-panel')
+
+    },[])
+
+    useEffect(()=>{
 
         clearTimeout(targetTimeoutRef.current)
 
@@ -332,11 +386,63 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
     },[displayCode])
 
-    return <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
+    const constraintsRef = useRef({
+        minX:MIN_PANEL_FRAME_WIDTH,
+        minY:coverFrameElementRef.current?.offsetHeight || 0,
+        maxX:700,
+        maxY:coverFrameElementRef.current?.offsetHeight || 0,
+    })
 
-        <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>{children}</Box>
-        
-    </Box>
+    // resizable callbacks...
+    const onResizeStart = () => {
+        coverFrameElementRef.current.style.transition = 'none'
+        const constraints = {
+            minX:MIN_PANEL_FRAME_WIDTH,
+            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxX:centralPanelElementRef.current.offsetWidth * 0.8,
+            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+        }
+        constraintsRef.current = constraints
+    }
+
+    const onResize = (event, {size, handle}) => {
+
+        coverFrameElementRef.current.style.width = size.width + 'px'
+        setCoverResizeWidth(size.width)
+
+    }
+
+    const onResizeStop = () => {
+        coverFrameElementRef.current.style.transition = 'width 0.5s'
+    }
+
+    return (
+    <Resizable 
+        data-inheritedtype = 'resizable' 
+        handle = {
+
+            (handleAxis, ref) => <CoverHandle 
+                innerRef = {ref} 
+                handleAxis = {handleAxis}
+            />
+        } 
+        axis = 'x'
+        height = {coverFrameElementRef.current?.offsetHeigth || 0} 
+        width = {coverResizeWidth}
+        resizeHandles = {['e']}
+        minConstraints = {[constraintsRef.current.minX,constraintsRef.current.minY]}
+        maxConstraints = {[constraintsRef.current.maxX,constraintsRef.current.maxY]}
+        onResizeStart = {onResizeStart}
+        onResize = {onResize}
+        onResizeStop = {onResizeStop}
+
+    >
+        <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
+
+            <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>{children}</Box>
+            
+        </Box>
+    </Resizable>)
 })
 
 export const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
