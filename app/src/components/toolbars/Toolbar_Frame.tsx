@@ -35,7 +35,8 @@ const navBeforeStyles = {
     // zIndex:1,
     position:'absolute',
     left:'0px',
-    top:'3px',
+    top:'50%',
+    translate:'0 -50%',
     width:'20px',
     height:'32px',
     opacity:0.75,
@@ -64,10 +65,10 @@ const navAfterIconStyles = {
 } as CSSProperties
 
 const navNextStyles = {
-    // zIndex:1,
     position:'absolute',
     right:'0px',
-    top:'3px',
+    top:'50%',
+    translate:'0 -50%',
     width:'20px',
     height:'32px',
     opacity:0.75,
