@@ -66,7 +66,7 @@ const MenuControl = (props) => {
                 <Tooltip hasArrow label = {tooltip} >
                     <MenuButton >
                         <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
-                            <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>
+                            {icon && <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>}
                             <Box style = {displayNameStyles} >{displayName}</Box>
                             <Box style = {arrowWrapperStylesLocal} ><span style = {arrowStyles}>▼</span></Box>
                         </Box>

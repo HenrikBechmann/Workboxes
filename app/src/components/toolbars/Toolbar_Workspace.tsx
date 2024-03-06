@@ -83,6 +83,9 @@ const displayNameStyles = {
 
 // --------------------------- component ----------------------------
 // bottom toolbar
+// icon = {panelIcon} 
+// <ToolbarVerticalDivider />
+// <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
 const WorkspaceToolbar = (props) => {
 
     // render
@@ -92,14 +95,11 @@ const WorkspaceToolbar = (props) => {
         <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            icon = {panelIcon} 
             moreStyles = {{transform:'rotate(-90deg)'}}
-            displayName = 'main panel' 
+            displayName = 'Main panel' 
             tooltip = 'panel options'
             arrowdirection = 'up'
         />
-        <ToolbarVerticalDivider />
-        <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
         &nbsp; &nbsp;
     </Box>
 }
