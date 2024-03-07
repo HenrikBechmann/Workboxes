@@ -1,7 +1,7 @@
 // workwindow.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, createContext, useContext, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties } from 'react'
 
 import {
     Grid, GridItem,
@@ -186,11 +186,17 @@ const Workwindow = (props) => {
 
         const 
             element = windowElementRef.current,
+            // windowSpecs = {
+            //     width: windowConfigSpecs.width,
+            //     height: windowConfigSpecs.height,
+            //     top: windowConfigSpecs.top,
+            //     left: windowConfigSpecs.left,
+            // },
             windowSpecs = {
-                width: windowConfigSpecs.width,
-                height: windowConfigSpecs.height,
-                top: windowConfigSpecs.top,
-                left: windowConfigSpecs.left,
+                width: element.offsetWidth,
+                height: element.offsetHeight,
+                top: element.offsetTop,
+                left: element.offsetLeft,
             },
             widthBound = windowSpecs.width + windowSpecs.left,
             heightBound = windowSpecs.height + windowSpecs.top
@@ -202,9 +208,9 @@ const Workwindow = (props) => {
                 widthDelta = widthBound - containerSpecs.width
                 newLeft = Math.max(0,windowSpecs.left - widthDelta)
                 widthApplied = windowSpecs.left - newLeft
-                if (widthApplied) {
+                // if (widthApplied) {
                     windowSpecs.left = newLeft
-                }
+                // }
                 widthDelta -= widthApplied
                 newWidth = windowSpecs.width - widthDelta
             } else {
@@ -216,9 +222,9 @@ const Workwindow = (props) => {
                 heightDelta = heightBound - containerSpecs.height
                 newTop = Math.max(0,windowSpecs.top - heightDelta)
                 heightApplied = windowSpecs.top - newTop
-                if (heightApplied) {
+                // if (heightApplied) {
                     windowSpecs.top = newTop
-                }
+                // }
                 heightDelta -= heightApplied
                 newHeight = windowSpecs.height - heightDelta
             } else {
@@ -228,15 +234,22 @@ const Workwindow = (props) => {
 
             const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
 
+            maxConstraintsRef.current = [
+                containerSpecs.width - newLeft, 
+                containerSpecs.height - newTop,
+            ]
+
             setWindowConfigSpecs(adjustedWindowSpecs)
+
+        } else {
+
+            maxConstraintsRef.current = [
+                containerSpecs.width - windowConfigSpecsRef.current.left, 
+                containerSpecs.height - windowConfigSpecsRef.current.top,
+            ]
 
         }
 
-        // maintain window resize within bounds
-        maxConstraintsRef.current = [
-            containerSpecs.width - windowConfigSpecsRef.current.left, 
-            containerSpecs.height - windowConfigSpecsRef.current.top,
-        ]
         setWindowState('repositioned')
 
     },[containerSpecs])
@@ -249,7 +262,6 @@ const Workwindow = (props) => {
     }
 
     const onResize = (event, {size, handle}) => {
-
 
         setWindowConfigSpecs((oldState)=>{
             return {...oldState, width:size.width,height:size.height}})
