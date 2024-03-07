@@ -99,8 +99,6 @@ const resizeHandleIconStyles = {
     width:'12px',
 }
 
-export const WindowSizeContext = createContext({width:null, height:null})
-
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
@@ -253,8 +251,6 @@ const Workwindow = (props) => {
     const onResize = (event, {size, handle}) => {
 
 
-        windowSizeContextRef.current = {width:size.width, height: size.height}
-
         setWindowConfigSpecs((oldState)=>{
             return {...oldState, width:size.width,height:size.height}})
 
@@ -282,7 +278,6 @@ const Workwindow = (props) => {
 
     // render
     return (
-    <WindowSizeContext.Provider value = {windowSizeContextRef.current}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:windowConfigSpecs.left, y:windowConfigSpecs.top}}
@@ -341,8 +336,7 @@ const Workwindow = (props) => {
                 </Grid>
             </Box>
         </Resizable>
-    </Draggable>
-    </WindowSizeContext.Provider>)
+    </Draggable>)
 }
 
 export default Workwindow
