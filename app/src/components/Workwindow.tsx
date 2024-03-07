@@ -186,17 +186,11 @@ const Workwindow = (props) => {
 
         const 
             element = windowElementRef.current,
-            // windowSpecs = {
-            //     width: windowConfigSpecs.width,
-            //     height: windowConfigSpecs.height,
-            //     top: windowConfigSpecs.top,
-            //     left: windowConfigSpecs.left,
-            // },
             windowSpecs = {
                 width: element.offsetWidth,
                 height: element.offsetHeight,
-                top: element.offsetTop,
-                left: element.offsetLeft,
+                top: windowConfigSpecsRef.current.top, // tranlate value
+                left: windowConfigSpecsRef.current.left, // tranlate value
             },
             widthBound = windowSpecs.width + windowSpecs.left,
             heightBound = windowSpecs.height + windowSpecs.top
@@ -208,9 +202,9 @@ const Workwindow = (props) => {
                 widthDelta = widthBound - containerSpecs.width
                 newLeft = Math.max(0,windowSpecs.left - widthDelta)
                 widthApplied = windowSpecs.left - newLeft
-                // if (widthApplied) {
+                if (widthApplied) {
                     windowSpecs.left = newLeft
-                // }
+                }
                 widthDelta -= widthApplied
                 newWidth = windowSpecs.width - widthDelta
             } else {
@@ -222,9 +216,9 @@ const Workwindow = (props) => {
                 heightDelta = heightBound - containerSpecs.height
                 newTop = Math.max(0,windowSpecs.top - heightDelta)
                 heightApplied = windowSpecs.top - newTop
-                // if (heightApplied) {
+                if (heightApplied) {
                     windowSpecs.top = newTop
-                // }
+                }
                 heightDelta -= heightApplied
                 newHeight = windowSpecs.height - heightDelta
             } else {
