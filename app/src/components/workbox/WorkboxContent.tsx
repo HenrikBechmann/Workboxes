@@ -26,7 +26,8 @@ const WorkboxContent = (props) => {
         contentsFrameElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         workboxContentElementRef = useRef(null),
-        [contentState,setContentState] = useState('setup')
+        [contentState,setContentState] = useState('setup'),
+        contentConfigRef = useRef({cover:{width:300},contents:{}})
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
     if (lists && profile) {
@@ -62,14 +63,14 @@ const WorkboxContent = (props) => {
         <CentralPanel 
             displayCode = {workboxDisplayCode} 
             workboxContentElementRef = {workboxContentElementRef}
-            workboxPaddingCount = {10}
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
+            contentConfigRef = {contentConfigRef}
         >
-            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} >
+            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} contentConfigRef = {contentConfigRef}>
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} >
+            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} contentConfigRef = {contentConfigRef}>
             Contents
             </ContentsPanel>
         </CentralPanel>

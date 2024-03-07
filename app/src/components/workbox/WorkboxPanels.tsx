@@ -148,7 +148,7 @@ const tabIconStyle = {
 export const CentralPanel = (props) => {
 
     const 
-        { children, displayCode, workboxContentElementRef, workboxPaddingCount, coverFrameElementRef, contentsFrameElementRef } = props,
+        { children, displayCode, workboxContentElementRef, coverFrameElementRef, contentsFrameElementRef, contentConfigRef } = props,
         previousDisplayCodeRef = useRef(displayCode),
         centralPanelElementRef = useRef(null),
         firstTimeoutRef = useRef(null)
@@ -169,11 +169,11 @@ export const CentralPanel = (props) => {
             // no delay
             if (previousDisplayCodeRef.current == 'contents') {
 
-                coverFrameElement.firstChild.style.width = '300px'
+                coverFrameElement.firstChild.style.width = contentConfigRef.current.cover.width + 'px'
 
             } else {
 
-                contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
+                contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - contentConfigRef.current.cover.width) + 'px'
 
             }
 
@@ -190,8 +190,8 @@ export const CentralPanel = (props) => {
             contentsFrameElement.style.flex = '0 0 auto'
 
             // set targets
-            coverFrameElement.style.width = '300px'
-            contentsFrameElement.style.width = (centralFrameElement.offsetWidth - 300) + 'px'
+            coverFrameElement.style.width = contentConfigRef.current.cover.width + 'px'
+            contentsFrameElement.style.width = (centralFrameElement.offsetWidth - contentConfigRef.current.cover.width) + 'px'
 
             // wait for result
             firstTimeoutRef.current = setTimeout(()=>{
@@ -348,11 +348,11 @@ const CoverHandle = (props) => {
 
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
-        { children, displayCode } = props,
+        { children, displayCode, contentConfigRef } = props,
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null),
-        [coverResizeWidth, setCoverResizeWidth] = useState(300)
+        [coverResizeWidth, setCoverResizeWidth] = useState(contentConfigRef.current.cover.width)
 
     useEffect(()=>{
 
@@ -412,8 +412,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
     }
 
-    const onResizeStop = () => {
+    const onResizeStop = (e,{size, handle}) => {
         coverFrameElementRef.current.style.transition = 'width 0.5s'
+        contentConfigRef.current.cover.width = size.width
     }
 
     return (
