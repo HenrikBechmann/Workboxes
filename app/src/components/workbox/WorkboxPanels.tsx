@@ -13,6 +13,7 @@ import "react-resizable/css/styles.css"
 import handleIcon from '../../../assets/handle.png'
 
 const MIN_PANEL_FRAME_WIDTH = 250
+const MAX_PANEL_FRAME_RATIO = 0.75
 const MIN_CENTRAL_FRAME_WIDTH = 590
 
 const centralPanelStyles = {
@@ -125,17 +126,17 @@ const mirrorContentStyles = {
 const tabStyle = {
     position:'absolute',
     margin: 0,
-    backgroundColor:'#ffffcc', //'yellow',
+    backgroundColor:'white',
     border:'1px solid gray',
     display:'flex',
     top:'50%',
     transform:'translateY(-50%)',
-    right:'-12px',
+    right:'-6px',
     borderRadius: '8px',
     height:'48px',
     width:'24px',
     alignItems:'center',
-    // zIndex: 1,
+    opacity: 0.8,
 } as CSSProperties
 
 const tabIconStyle = {
@@ -360,6 +361,12 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
     },[])
 
+    // useEffect(() => {
+
+    //     console.log('centralPanelElementRef.current?.offsetWidth',centralPanelElementRef.current?.offsetWidth)
+
+    // },[centralPanelElementRef.current?.offsetWidth])
+
     useEffect(()=>{
 
         clearTimeout(targetTimeoutRef.current)
@@ -399,7 +406,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         const constraints = {
             minX:MIN_PANEL_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX:centralPanelElementRef.current.offsetWidth * 0.8,
+            maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints

@@ -32,7 +32,6 @@ const scrollbarStyles = {
 }  as CSSProperties
 
 const navBeforeStyles = {
-    // zIndex:1,
     position:'absolute',
     left:'0px',
     top:'50%',
