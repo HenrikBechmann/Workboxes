@@ -1,7 +1,7 @@
 // workwindow.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, useContext, CSSProperties } from 'react'
 
 import {
     Grid, GridItem,
@@ -99,6 +99,8 @@ const resizeHandleIconStyles = {
     width:'12px',
 }
 
+export const WindowSizeContext = createContext({width:null, height:null})
+
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
@@ -135,7 +137,8 @@ const Workwindow = (props) => {
             transform:'none'
         },
         localTitleStylesRef = useRef(windowTitleStyles),
-        maxConstraintsRef = useRef([700,700]) // default
+        maxConstraintsRef = useRef([700,700]), // default
+        windowSizeContextRef = useRef({width:null, height:null}) //= useContext(WindowSizeContext)
 
     zOrderRef.current = zOrder
     windowConfigSpecsRef.current = windowConfigSpecs
@@ -249,6 +252,9 @@ const Workwindow = (props) => {
 
     const onResize = (event, {size, handle}) => {
 
+
+        windowSizeContextRef.current = {width:size.width, height: size.height}
+
         setWindowConfigSpecs((oldState)=>{
             return {...oldState, width:size.width,height:size.height}})
 
@@ -272,8 +278,11 @@ const Workwindow = (props) => {
         ]
     }
 
+
+
     // render
     return (
+    <WindowSizeContext.Provider value = {windowSizeContextRef.current}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:windowConfigSpecs.left, y:windowConfigSpecs.top}}
@@ -332,7 +341,8 @@ const Workwindow = (props) => {
                 </Grid>
             </Box>
         </Resizable>
-    </Draggable>)
+    </Draggable>
+    </WindowSizeContext.Provider>)
 }
 
 export default Workwindow

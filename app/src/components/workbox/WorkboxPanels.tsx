@@ -1,7 +1,7 @@
 // WorkboxPanels.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useRef, useEffect, useState, CSSProperties, forwardRef } from 'react'
+import React, { useRef, useEffect, useState, useContext, CSSProperties, forwardRef } from 'react'
 
 import {
     Box
@@ -9,6 +9,8 @@ import {
 
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
+
+import { WindowSizeContext } from '../Workwindow'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -353,19 +355,14 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null),
-        [coverResizeWidth, setCoverResizeWidth] = useState(contentConfigRef.current.cover.width)
+        [coverResizeWidth, setCoverResizeWidth] = useState(contentConfigRef.current.cover.width),
+        windowSizeContext = useContext(WindowSizeContext)
 
     useEffect(()=>{
 
         centralPanelElementRef.current = coverPanelElementRef.current.closest('#central-panel')
 
     },[])
-
-    // useEffect(() => {
-
-    //     console.log('centralPanelElementRef.current?.offsetWidth',centralPanelElementRef.current?.offsetWidth)
-
-    // },[centralPanelElementRef.current?.offsetWidth])
 
     useEffect(()=>{
 
@@ -392,6 +389,26 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         }
 
     },[displayCode])
+
+    useEffect(()=>{
+
+        const centralWidth = centralPanelElementRef.current.offsetWidth
+        const coverWidth = coverFrameElementRef.current.offsetWidth
+
+        if (centralWidth < (coverWidth * 1/MAX_PANEL_FRAME_RATIO)) {
+
+            const newWidth = centralWidth * MAX_PANEL_FRAME_RATIO
+
+            coverFrameElementRef.current.style.transition = 'none'
+            coverFrameElementRef.current.style.width = newWidth + 'px'
+            setTimeout(()=>{
+                coverFrameElementRef.current.style.transition = 'width 0.5s'
+            },5)
+
+            setCoverResizeWidth(newWidth)
+
+        }
+    },[windowSizeContext])
 
     const constraintsRef = useRef({
         minX:MIN_PANEL_FRAME_WIDTH,
