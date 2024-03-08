@@ -43,7 +43,7 @@ const workboxBodyStyles = {
 
 const Workbox = (props) => {
     const 
-        {workboxDefaults, workboxItemIcon, workboxItemTitle, workboxTypeName, workboxDomainTitle } = props,
+        {workboxDefaults, itemIcon, itemTitle, typeName, domainTitle } = props,
         [workboxControls, setWorkboxControls] = useState(workboxDefaults)
     
     return <Grid
@@ -55,10 +55,10 @@ const Workbox = (props) => {
                 <WorkboxToolbar 
                     workboxControls = {workboxControls} 
                     setWorkboxControls = {setWorkboxControls} 
-                    workboxItemIcon = {workboxItemIcon} 
-                    workboxItemTitle = {workboxItemTitle}
-                    workboxDomainTitle = {workboxDomainTitle}
-                    workboxTypeName = {workboxTypeName}
+                    itemIcon = {itemIcon} 
+                    itemTitle = {itemTitle}
+                    domainTitle = {domainTitle}
+                    typeName = {typeName}
                 />
             </ToolbarFrame>
         </GridItem>

@@ -10,7 +10,7 @@ import {
 
 const ItemControl = (props) => {
 
-    const { workboxItemIcon, workboxItemTitle } = props
+    const { itemIcon, itemTitle } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -21,9 +21,9 @@ const ItemControl = (props) => {
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
         <Box display = 'flex' flexWrap = 'nowrap'>
             <span>&nbsp;&nbsp;</span>
-            <img style = {workboxItemIconStyles} src = {workboxItemIcon} />
+            <img style = {workboxItemIconStyles} src = {itemIcon} />
             <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'sm'>{workboxItemTitle}</Text>
+            <Text fontSize = 'sm'>{itemTitle}</Text>
         </Box>
         <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox name</span></Box>
     </Box>

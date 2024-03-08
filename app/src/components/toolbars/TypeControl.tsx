@@ -12,7 +12,7 @@ import typeIcon from '../../../assets/label.png'
 
 const DomainControl = (props) => {
 
-    const { workboxTypeName } = props
+    const { typeName } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -25,7 +25,7 @@ const DomainControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <img style = {workboxItemIconStyles} src = {typeIcon} />
             <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'sm'>{workboxTypeName}</Text>
+            <Text fontSize = 'sm'>{typeName}</Text>
         </Box>
         <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox type...</span></Box>
     </Box>

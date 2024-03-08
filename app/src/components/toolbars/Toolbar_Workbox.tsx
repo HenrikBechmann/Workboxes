@@ -66,7 +66,7 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControls, setWorkboxControls, workboxItemIcon, workboxItemTitle, workboxDomainTitle, workboxTypeName } = props,
+        { workboxControls, setWorkboxControls, itemIcon, itemTitle, domainTitle, typeName } = props,
 
         toggleOnProfileRef = useRef(workboxControls.profile),
         disabledProfileRef = useRef(workboxControls.profileDisabled),
@@ -176,9 +176,9 @@ const WorkboxToolbar = (props) => {
         { profileToggle }
         { listToggle }
         <ToolbarVerticalDivider />
-        <ItemControl workboxItemIcon = {workboxItemIcon} workboxItemTitle = {workboxItemTitle} />
-        <TypeControl workboxTypeName = {workboxTypeName} />
-        <DomainControl workboxDomainTitle = {workboxDomainTitle} />
+        <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
+        <TypeControl typeName = {typeName} />
+        <DomainControl domainTitle = {domainTitle} />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {likeIcon} caption = 'like' tooltip = 'like this workbox'/>
         <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>

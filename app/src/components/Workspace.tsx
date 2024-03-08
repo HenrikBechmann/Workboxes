@@ -1,6 +1,13 @@
 // Workspace.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+
+    Workspace holds a collection of workpanels. Its entire confiuratoin is saved to the device database (and optionally to the 
+    cloud database)
+
+*/
+
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
 import {
@@ -32,42 +39,42 @@ const Workspace = (props) => {
     const panelWindowSpecsRef = useRef([
 
         {
-            windowSpecs:{
+            window:{
                 zOrder: 1,
                 configDefaults: {top:'20px',left:'20px', width:'610px',height:'400px'},
             },
-            workboxSpecs: {
+            workbox: {
                 workboxDefaults:{...workboxDefaults},
-                workboxItemIcon: photoURL,
-                workboxItemTitle: displayName,
-                workboxDomainTitle: 'Henrik Bechmann',
-                workboxTypeName: 'Domain',
+                itemIcon: photoURL,
+                itemTitle: displayName,
+                domainTitle: 'Henrik Bechmann',
+                typeName: 'Domain',
             }
         },
         {
-            windowSpecs:{
+            window:{
                 zOrder: 2,
                 configDefaults: {top:'40px',left:'40px', width:'610px',height:'400px'},
             },
-            workboxSpecs: {
+            workbox: {
                 workboxDefaults:{...workboxDefaults},
-                workboxItemIcon: photoURL,
-                workboxItemTitle: displayName,
-                workboxDomainTitle: 'Henrik Bechmann',
-                workboxTypeName: 'Domain',
+                itemIcon: photoURL,
+                itemTitle: displayName,
+                domainTitle: 'Henrik Bechmann',
+                typeName: 'Domain',
             }
         },
         {
-            windowSpecs:{
+            window:{
                 zOrder: 3,
                 configDefaults: {top:'60px',left:'60px', width:'610px',height:'400px'},
             },
-            workboxSpecs: {
+            workbox: {
                 workboxDefaults:{...workboxDefaults},
-                workboxItemIcon: photoURL,
-                workboxItemTitle: displayName,
-                workboxDomainTitle: 'Henrik Bechmann',
-                workboxTypeName: 'Domain',
+                itemIcon: photoURL,
+                itemTitle: displayName,
+                domainTitle: 'Henrik Bechmann',
+                typeName: 'Domain',
             }
         },
 

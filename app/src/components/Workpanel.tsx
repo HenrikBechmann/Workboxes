@@ -67,10 +67,10 @@ const Workpanel = (props:any) => {
             sessionID = {sessionID} 
             setFocus = {setFocus} 
             containerSpecs = {null}
-            {... specs.windowSpecs}
+            {... specs.window}
         >
             <Workbox 
-                {...specs.workboxSpecs}
+                {...specs.workbox}
             />
         </Workwindow>
     }

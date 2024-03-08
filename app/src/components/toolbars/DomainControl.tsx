@@ -1,4 +1,4 @@
-// ItemControl.tsx
+// DomainControl.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {CSSProperties} from 'react'
@@ -12,7 +12,7 @@ import domainIcon from '../../../assets/domain_light.png'
 
 const DomainControl = (props) => {
 
-    const { workboxDomainTitle } = props
+    const { domainTitle } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -26,7 +26,7 @@ const DomainControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <img style = {workboxItemIconStyles} src = {domainIcon} />
             <span>&nbsp;&nbsp;</span>
-            <Text fontSize = 'sm'>{workboxDomainTitle}</Text>
+            <Text fontSize = 'sm'>{domainTitle}</Text>
         </Box>
         <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox domain...</span></Box>
     </Box>
