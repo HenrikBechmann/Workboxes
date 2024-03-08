@@ -137,6 +137,8 @@ const tabStyle = {
     width:'24px',
     alignItems:'center',
     opacity: 0.8,
+    visibility: 'visible',
+    transition: 'opacity 0.3s, visibility 0.3s'
 } as CSSProperties
 
 const tabIconStyle = {
@@ -154,7 +156,7 @@ export const CentralPanel = (props) => {
         { children, displayCode, workboxContentElementRef, coverFrameElementRef, contentsFrameElementRef, coverWidthRef } = props,
         previousDisplayCodeRef = useRef(displayCode),
         centralPanelElementRef = useRef(null),
-        firstTimeoutRef = useRef(null),
+        timeoutRef = useRef(null),
         [centralWidth, setCentralWidth] = useState(0)
 
     const resizeCallback = useCallback(()=> {
@@ -185,11 +187,11 @@ export const CentralPanel = (props) => {
 
         let timeout = 500, transitionDelay = 'unset'
 
-        clearTimeout(firstTimeoutRef.current)
+        clearTimeout(timeoutRef.current)
 
         if (displayCode == 'both') {
 
-            // no delay
+            // anticipate size
             if (previousDisplayCodeRef.current == 'contents') {
 
                 coverFrameElement.firstChild.style.width = coverWidthRef.current + 'px'
@@ -217,7 +219,7 @@ export const CentralPanel = (props) => {
             contentsFrameElement.style.width = (centralFrameElement.offsetWidth - coverWidthRef.current) + 'px'
 
             // wait for result
-            firstTimeoutRef.current = setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
 
                 // restore settings for frames
                 contentsFrameElement.style.flex = '1 0 auto'
@@ -264,7 +266,7 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
             // wait for result
-            firstTimeoutRef.current = setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
 
                 if (transitionDelay != 'unset') {
                     coverFrameElement.style.transitionDelay = 'unset'
@@ -322,7 +324,7 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.width = 0
 
             // wait for result
-            firstTimeoutRef.current = setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
 
                 if (transitionDelay != 'unset') {
                     coverFrameElement.style.transitionDelay = 'unset'
@@ -359,7 +361,8 @@ const CoverHandle = (props) => {
 
     return (
         <Box 
-            ref = {innerRef} 
+            ref = {innerRef}
+            id = 'handle'
             data-type = {'cover-handle'} 
             style = {tabStyle} {...rest}>
             <img 
@@ -379,11 +382,14 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         targetTimeoutRef = useRef(null),
         [coverResizeWidth, setCoverResizeWidth] = useState(coverWidthRef.current),
         observerTimeoutRef = useRef(null),
-        centralWidthContext = useContext(CentralWidthContext)
+        centralWidthContext = useContext(CentralWidthContext),
+        handleRef = useRef(null)
+
 
     useEffect(()=>{
 
         centralPanelElementRef.current = coverPanelElementRef.current.closest('#central-panel')
+        handleRef.current = centralPanelElementRef.current.querySelector('#handle')
 
     },[])
 
@@ -432,15 +438,21 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
             targetTimeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
+                handleRef.current.style.opacity = 0.8
+                handleRef.current.style.visibility = 'visible'
             },timeout)
 
         } else if (displayCode == 'over') {
 
             element.style.boxShadow = 'none'
+            handleRef.current.style.opacity = 0
+            handleRef.current.style.visibility = 'hidden'
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
+            handleRef.current.style.opacity = 0
+            handleRef.current.style.visibility = 'hidden'
 
         }
 
@@ -482,10 +494,11 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         data-inheritedtype = 'resizable' 
         handle = {
 
-            (handleAxis, ref) => <CoverHandle 
-                innerRef = {ref} 
-                handleAxis = {handleAxis}
-            />
+            (handleAxis, ref) => {
+                return <CoverHandle 
+                    innerRef = {ref} 
+                    handleAxis = {handleAxis}
+                />}
 
         } 
         axis = 'x'
