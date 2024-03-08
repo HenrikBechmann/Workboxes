@@ -155,29 +155,11 @@ export const CentralPanel = (props) => {
         previousDisplayCodeRef = useRef(displayCode),
         centralPanelElementRef = useRef(null),
         firstTimeoutRef = useRef(null),
-        [centralWidth, setCentralWidth] = useState(0),
-        observerTimeoutRef = useRef(null)
+        [centralWidth, setCentralWidth] = useState(0)
 
     const resizeCallback = useCallback(()=> {
 
         const centralWidth = centralPanelElementRef.current.offsetWidth
-        // const coverWidth = coverFrameElementRef.current.offsetWidth
-
-        // clearTimeout(observerTimeoutRef.current)
-
-        // if (centralWidth < (coverWidth * 1/MAX_PANEL_FRAME_RATIO)) {
-
-        //     const newWidth = centralWidth * MAX_PANEL_FRAME_RATIO
-
-        //     if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
-        //     coverFrameElementRef.current.style.width = newWidth + 'px'
-        //     coverWidthRef.current = newWidth
-
-        // }
-
-        // observerTimeoutRef.current = setTimeout(()=>{
-        //     if (coverFrameElementRef.current.style.transition == 'none') coverFrameElementRef.current.style.transition = 'width 0.5s'
-        // },500)
 
         setCentralWidth(centralWidth)
 
@@ -614,53 +596,53 @@ export const SettingsPanel = (props) => {
     </Box>
 }
 
-export const MirrorPanel = (props) => {
-    const
-        {showPanel, children} = props,
-        localMirrorPanelStylesRef = useRef(mirrorPanelStyles),
-        contentRef = useRef(null),
-        panelRef = useRef(null),
-        previousTransitioningValueRef = useRef(showPanel),
-        transitioningCountRef = useRef(0),
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null),
-        thirdTimeoutRef = useRef(null)
+// export const MirrorPanel = (props) => {
+//     const
+//         {showPanel, children} = props,
+//         localMirrorPanelStylesRef = useRef(mirrorPanelStyles),
+//         contentRef = useRef(null),
+//         panelRef = useRef(null),
+//         previousTransitioningValueRef = useRef(showPanel),
+//         transitioningCountRef = useRef(0),
+//         firstTimeoutRef = useRef(null),
+//         secondTimeoutRef = useRef(null),
+//         thirdTimeoutRef = useRef(null)
 
-    if (showPanel !== previousTransitioningValueRef.current) {
-        transitioningCountRef.current++
-        clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
-        clearTimeout(thirdTimeoutRef.current)
-    }
-    previousTransitioningValueRef.current = showPanel
+//     if (showPanel !== previousTransitioningValueRef.current) {
+//         transitioningCountRef.current++
+//         clearTimeout(firstTimeoutRef.current)
+//         clearTimeout(secondTimeoutRef.current)
+//         clearTimeout(thirdTimeoutRef.current)
+//     }
+//     previousTransitioningValueRef.current = showPanel
 
-    useEffect(()=>{
+//     useEffect(()=>{
 
-        const contentWidth = contentRef.current.offsetWidth
-        panelRef.current.style.width = contentWidth + 'px'
-        if (!showPanel) {
-            firstTimeoutRef.current = setTimeout(()=>{
-                panelRef.current.style.width = '0px'
-                panelRef.current.style.opacity = 0
-                secondTimeoutRef.current = setTimeout(()=>{
-                    localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'0px',opacity:0}
-                },500)
-            },50) // time for base to set
-        } else {
-            panelRef.current.style.opacity = 1
-            thirdTimeoutRef.current = setTimeout(()=>{
-                panelRef.current.style.width = 'auto'
-                panelRef.current.style.opacity = 1
-                localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'auto',opacity:1}
-            },500)
-        }
+//         const contentWidth = contentRef.current.offsetWidth
+//         panelRef.current.style.width = contentWidth + 'px'
+//         if (!showPanel) {
+//             firstTimeoutRef.current = setTimeout(()=>{
+//                 panelRef.current.style.width = '0px'
+//                 panelRef.current.style.opacity = 0
+//                 secondTimeoutRef.current = setTimeout(()=>{
+//                     localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'0px',opacity:0}
+//                 },500)
+//             },50) // time for base to set
+//         } else {
+//             panelRef.current.style.opacity = 1
+//             thirdTimeoutRef.current = setTimeout(()=>{
+//                 panelRef.current.style.width = 'auto'
+//                 panelRef.current.style.opacity = 1
+//                 localMirrorPanelStylesRef.current = {...localMirrorPanelStylesRef.current,width:'auto',opacity:1}
+//             },500)
+//         }
 
-    },[showPanel, transitioningCountRef.current])
+//     },[showPanel, transitioningCountRef.current])
 
-    return <Box data-type = 'mirror-panel' ref = {panelRef} style = {localMirrorPanelStylesRef.current} >
-        <Box data-type = 'mirror-content' ref = {contentRef} style = {mirrorContentStyles}>
-            {children}
-        </Box>
-    </Box>
-}
+//     return <Box data-type = 'mirror-panel' ref = {panelRef} style = {localMirrorPanelStylesRef.current} >
+//         <Box data-type = 'mirror-content' ref = {contentRef} style = {mirrorContentStyles}>
+//             {children}
+//         </Box>
+//     </Box>
+// }
 

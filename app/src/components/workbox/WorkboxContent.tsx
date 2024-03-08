@@ -7,7 +7,7 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel, MirrorPanel } from './WorkboxPanels'
+import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel } from './WorkboxPanels'
 
 const workboxContentStyles = {
     display:'flex',
@@ -21,13 +21,13 @@ const WorkboxContent = (props) => {
 
     const 
         { workboxControls } = props,
-        {lists, profile} = workboxControls,
-        coverFrameElementRef = useRef(null),
-        contentsFrameElementRef = useRef(null),
-        centralPanelElementRef = useRef(null),
-        workboxContentElementRef = useRef(null),
-        [contentState,setContentState] = useState('setup'),
-        coverWidthRef = useRef(300)
+        { lists, profile } = workboxControls,
+        coverFrameElementRef = useRef( null ),
+        contentsFrameElementRef = useRef( null ),
+        centralPanelElementRef = useRef( null ),
+        workboxContentElementRef = useRef( null ),
+        [contentState,setContentState] = useState( 'setup' ),
+        coverWidthRef = useRef( 300 )
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
     if (lists && profile) {
