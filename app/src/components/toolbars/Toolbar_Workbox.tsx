@@ -70,8 +70,8 @@ const WorkboxToolbar = (props) => {
 
         toggleOnCoverRef = useRef(workboxControls.cover),
         disabledCoverRef = useRef(workboxControls.coverDisabled),
-        toggleOnLinksRef = useRef(workboxControls.lists),
-        disabledLinksRef = useRef(workboxControls.listsDisabled),
+        toggleOnContentsRef = useRef(workboxControls.contents),
+        disabledContentsRef = useRef(workboxControls.contentsDisabled),
         toggleOnSwapRef = useRef(workboxControls.swap),
         disabledSwapRef = useRef(workboxControls.swapDisabled),
         toggleOnSettingsRef = useRef(workboxControls.settings),
@@ -84,12 +84,12 @@ const WorkboxToolbar = (props) => {
     const 
         currentIsProfile = toggleOnCoverRef.current,
         previousIsProfile = toggleHistoryRef.current.cover,
-        currentIsList = toggleOnLinksRef.current
+        currentIsList = toggleOnContentsRef.current
 
     if (!currentIsProfile && !currentIsList) {
         if (previousIsProfile) {
 
-            toggleOnLinksRef.current = true
+            toggleOnContentsRef.current = true
 
         } else {
 
@@ -103,8 +103,8 @@ const WorkboxToolbar = (props) => {
 
         workboxControls.cover = toggleOnCoverRef.current
         workboxControls.coverDisabled = disabledCoverRef.current
-        workboxControls.lists = toggleOnLinksRef.current
-        workboxControls.listsDisabled = disabledLinksRef.current
+        workboxControls.contents = toggleOnContentsRef.current
+        workboxControls.contentsDisabled = disabledContentsRef.current
         workboxControls.swap = toggleOnSwapRef.current
         workboxControls.swapDisabled = disabledSwapRef.current
         workboxControls.settings = toggleOnSettingsRef.current
@@ -115,8 +115,8 @@ const WorkboxToolbar = (props) => {
     },[
         toggleOnCoverRef.current,
         disabledCoverRef.current,
-        toggleOnLinksRef.current,
-        disabledLinksRef.current,
+        toggleOnContentsRef.current,
+        disabledContentsRef.current,
         toggleOnSwapRef.current,
         disabledSwapRef.current,
         toggleOnSettingsRef.current,
@@ -140,8 +140,8 @@ const WorkboxToolbar = (props) => {
             icon:listIcon, 
             tooltip:'Toggle workbox contents pane',
             caption:'contents',
-            toggleOnRef:toggleOnLinksRef,
-            disabledRef:disabledLinksRef, 
+            toggleOnRef:toggleOnContentsRef,
+            disabledRef:disabledContentsRef, 
         }),
 
         swapToggle = useToggleIcon({

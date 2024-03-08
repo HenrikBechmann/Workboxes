@@ -7,7 +7,7 @@ export const metatype = {
         version: 0,
         generation: 0,
         relations: {
-            lists:[],
+            contents:[],
             supers:[],
             controllers:[],
         },

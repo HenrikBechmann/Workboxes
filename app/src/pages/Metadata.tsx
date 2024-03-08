@@ -78,8 +78,8 @@ const Metadata = (props) => {
         settingsDisabled:false,
         cover:true,
         coverDisabled:false,
-        lists:true,
-        listsDisabled:false,
+        contents:true,
+        contentsDisabled:false,
         swap:false,
         swapDisabled:false,
     }

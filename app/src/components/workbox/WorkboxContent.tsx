@@ -21,7 +21,7 @@ const WorkboxContent = (props) => {
 
     const 
         { workboxControls } = props,
-        { lists, cover } = workboxControls,
+        { contents, cover } = workboxControls,
         coverFrameElementRef = useRef( null ),
         contentsFrameElementRef = useRef( null ),
         centralPanelElementRef = useRef( null ),
@@ -30,11 +30,11 @@ const WorkboxContent = (props) => {
         coverWidthRef = useRef( 300 )
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
-    if (lists && cover) {
+    if (contents && cover) {
         workboxDisplayCode = 'both'
         coverDisplayCode = 'out'
         contentsDisplayCode = 'out'
-    } else if (lists) {
+    } else if (contents) {
         workboxDisplayCode = 'contents'
         coverDisplayCode = 'under'
         contentsDisplayCode = 'over'
