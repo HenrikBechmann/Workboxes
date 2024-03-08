@@ -23,8 +23,8 @@ import Workpanel from './Workpanel'
 const workboxDefaults = {
     settings:false,
     settingsDisabled:false,
-    profile:true,
-    profileDisabled:false,
+    cover:true,
+    coverDisabled:false,
     lists:true,
     listsDisabled:false,
     swap:false,

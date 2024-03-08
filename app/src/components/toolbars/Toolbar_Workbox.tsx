@@ -68,8 +68,8 @@ const WorkboxToolbar = (props) => {
     const 
         { workboxControls, setWorkboxControls, itemIcon, itemTitle, domainTitle, typeName } = props,
 
-        toggleOnProfileRef = useRef(workboxControls.profile),
-        disabledProfileRef = useRef(workboxControls.profileDisabled),
+        toggleOnCoverRef = useRef(workboxControls.cover),
+        disabledCoverRef = useRef(workboxControls.coverDisabled),
         toggleOnLinksRef = useRef(workboxControls.lists),
         disabledLinksRef = useRef(workboxControls.listsDisabled),
         toggleOnSwapRef = useRef(workboxControls.swap),
@@ -78,12 +78,12 @@ const WorkboxToolbar = (props) => {
         disabledSettingsRef = useRef(workboxControls.settingsDisabled),
 
         toggleHistoryRef = useRef({
-            profile:toggleOnProfileRef.current,
+            cover:toggleOnCoverRef.current,
         })
 
     const 
-        currentIsProfile = toggleOnProfileRef.current,
-        previousIsProfile = toggleHistoryRef.current.profile,
+        currentIsProfile = toggleOnCoverRef.current,
+        previousIsProfile = toggleHistoryRef.current.cover,
         currentIsList = toggleOnLinksRef.current
 
     if (!currentIsProfile && !currentIsList) {
@@ -93,7 +93,7 @@ const WorkboxToolbar = (props) => {
 
         } else {
 
-            toggleOnProfileRef.current = true
+            toggleOnCoverRef.current = true
 
         }
     }
@@ -101,8 +101,8 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxControls.profile = toggleOnProfileRef.current
-        workboxControls.profileDisabled = disabledProfileRef.current
+        workboxControls.cover = toggleOnCoverRef.current
+        workboxControls.coverDisabled = disabledCoverRef.current
         workboxControls.lists = toggleOnLinksRef.current
         workboxControls.listsDisabled = disabledLinksRef.current
         workboxControls.swap = toggleOnSwapRef.current
@@ -113,8 +113,8 @@ const WorkboxToolbar = (props) => {
         setWorkboxControls({...workboxControls})
 
     },[
-        toggleOnProfileRef.current,
-        disabledProfileRef.current,
+        toggleOnCoverRef.current,
+        disabledCoverRef.current,
         toggleOnLinksRef.current,
         disabledLinksRef.current,
         toggleOnSwapRef.current,
@@ -124,7 +124,7 @@ const WorkboxToolbar = (props) => {
     ])
 
     toggleHistoryRef.current = {
-        profile:toggleOnProfileRef.current,
+        cover:toggleOnCoverRef.current,
     }
 
     const
@@ -132,8 +132,8 @@ const WorkboxToolbar = (props) => {
             icon:profileIcon, 
             tooltip:'Toggle workbox cover pane',
             caption:'cover',
-            toggleOnRef:toggleOnProfileRef,
-            disabledRef:disabledProfileRef, 
+            toggleOnRef:toggleOnCoverRef,
+            disabledRef:disabledCoverRef, 
         }),
 
         listToggle = useToggleIcon({
