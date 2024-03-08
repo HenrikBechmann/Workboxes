@@ -73,7 +73,7 @@ const Metadata = (props) => {
             activeDrags: 0,
         })
 
-    const workboxDefaults = {
+    const defaults = {
         settings:false,
         settingsDisabled:false,
         cover:true,
@@ -195,11 +195,11 @@ const Metadata = (props) => {
                         configDefaults = {{top:'40px',left:'60px', width:'600px',height:'400px'}}
                     >
                         <Workbox 
-                            workboxDefaults = {workboxDefaults} 
-                            workboxItemIcon = {photoURL} 
-                            workboxItemTitle = {displayName}
-                            workboxDomainTitle = 'Henrik Bechmann'
-                            workboxTypeName = 'Domain'
+                            defaults = {defaults} 
+                            itemIcon = {photoURL} 
+                            itemTitle = {displayName}
+                            domainTitle = 'Henrik Bechmann'
+                            typeName = 'Domain'
                         />
                     </Workwindow>
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>

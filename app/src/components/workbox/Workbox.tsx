@@ -43,8 +43,8 @@ const workboxBodyStyles = {
 
 const Workbox = (props) => {
     const 
-        {workboxDefaults, itemIcon, itemTitle, typeName, domainTitle } = props,
-        [workboxControls, setWorkboxControls] = useState(workboxDefaults)
+        {defaults, itemIcon, itemTitle, typeName, domainTitle } = props,
+        [workboxControls, setWorkboxControls] = useState(defaults)
     
     return <Grid
         data-type = 'workbox-grid'
