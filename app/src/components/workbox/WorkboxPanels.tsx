@@ -420,17 +420,25 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
             coverFrameElementRef.current.style.width = newWidth + 'px'
             coverWidthRef.current = newWidth
 
-            const constraints = {
-                minX:MIN_PANEL_FRAME_WIDTH,
-                minY:coverFrameElementRef.current?.offsetHeight || 0,
-                maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
-                maxY:coverFrameElementRef.current?.offsetHeight || 0,
-            }
-            constraintsRef.current = constraints
+            // const constraints = {
+            //     minX:MIN_PANEL_FRAME_WIDTH,
+            //     minY:coverFrameElementRef.current?.offsetHeight || 0,
+            //     maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
+            //     maxY:coverFrameElementRef.current?.offsetHeight || 0,
+            // }
+            // constraintsRef.current = constraints
 
             setCoverResizeWidth(newWidth)
 
         }
+
+        const constraints = {
+            minX:MIN_PANEL_FRAME_WIDTH,
+            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
+            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+        }
+        constraintsRef.current = constraints
 
         observerTimeoutRef.current = setTimeout(()=>{
             if (coverFrameElementRef.current.style.transition == 'none') coverFrameElementRef.current.style.transition = 'width 0.5s'
