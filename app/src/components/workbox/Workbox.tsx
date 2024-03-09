@@ -31,7 +31,7 @@ const workboxGridStyles = {
 
 const workboxHeaderStyles = {
     area: 'header',
-    overflow: 'hidden',
+    minWidth:0,
 }
 
 const workboxBodyStyles = {

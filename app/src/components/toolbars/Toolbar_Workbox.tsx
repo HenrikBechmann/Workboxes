@@ -160,7 +160,7 @@ const WorkboxToolbar = (props) => {
             disabledRef:disabledSettingsRef, 
         })
 
-    const workboxmenulist = <MenuList>
+    const workboxmenulist = <MenuList >
         <MenuItem >Workbox settings</MenuItem>
     </MenuList>
 

@@ -11,6 +11,7 @@ import navBeforeIcon from '../../../assets/nav_before.png'
 const menuWrapperStyles = {
     position:'relative',
     width:'100%',
+    zIndex:1000,
 } as CSSProperties
 
 const menubarStyles = {
