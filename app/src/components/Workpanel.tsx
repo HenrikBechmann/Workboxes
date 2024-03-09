@@ -82,7 +82,7 @@ const Workpanel = (props:any) => {
     }
 
     const windowsListRef = useRef(null)
-    // let windowsList
+
     windowsListRef.current = useMemo(()=>{
 
         const list = []
@@ -113,16 +113,16 @@ const Workpanel = (props:any) => {
 
     },[])
 
-    const resizeObserverRef = useRef(null)
+    // const resizeObserverRef = useRef(null)
     // set up and shut down resizeObserver
     useEffect(()=>{
 
-        resizeObserverRef.current = new ResizeObserver(onResize)
+        const observer =  new ResizeObserver(onResize)
 
-        resizeObserverRef.current.observe(panelElementRef.current)
+        observer.observe(panelElementRef.current)
 
         return () => {
-            resizeObserverRef.current.disconnect()
+            observer.disconnect()
         }
 
     },[]) 
