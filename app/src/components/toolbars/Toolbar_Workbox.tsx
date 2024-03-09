@@ -72,8 +72,6 @@ const WorkboxToolbar = (props) => {
         disabledCoverRef = useRef(workboxControls.coverDisabled),
         toggleOnContentsRef = useRef(workboxControls.contents),
         disabledContentsRef = useRef(workboxControls.contentsDisabled),
-        toggleOnSwapRef = useRef(workboxControls.swap),
-        disabledSwapRef = useRef(workboxControls.swapDisabled),
         toggleOnSettingsRef = useRef(workboxControls.settings),
         disabledSettingsRef = useRef(workboxControls.settingsDisabled),
 
@@ -105,8 +103,6 @@ const WorkboxToolbar = (props) => {
         workboxControls.coverDisabled = disabledCoverRef.current
         workboxControls.contents = toggleOnContentsRef.current
         workboxControls.contentsDisabled = disabledContentsRef.current
-        workboxControls.swap = toggleOnSwapRef.current
-        workboxControls.swapDisabled = disabledSwapRef.current
         workboxControls.settings = toggleOnSettingsRef.current
         workboxControls.settingsDisabled = disabledSettingsRef.current
 
@@ -117,8 +113,6 @@ const WorkboxToolbar = (props) => {
         disabledCoverRef.current,
         toggleOnContentsRef.current,
         disabledContentsRef.current,
-        toggleOnSwapRef.current,
-        disabledSwapRef.current,
         toggleOnSettingsRef.current,
         disabledSettingsRef.current,
     ])
@@ -142,14 +136,6 @@ const WorkboxToolbar = (props) => {
             caption:'contents',
             toggleOnRef:toggleOnContentsRef,
             disabledRef:disabledContentsRef, 
-        }),
-
-        swapToggle = useToggleIcon({
-            icon:swapIcon, 
-            tooltip:'Toggle swap pane',
-            caption:'mirror',
-            toggleOnRef:toggleOnSwapRef, 
-            disabledRef:disabledSwapRef, 
         }),
 
         settingsToggle = useToggleIcon({
