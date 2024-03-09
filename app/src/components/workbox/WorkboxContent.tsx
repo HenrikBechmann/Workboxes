@@ -52,14 +52,10 @@ const WorkboxContent = (props) => {
 
     },[])
 
-        // <SettingsPanel showPanel = {workboxControls.settings}>
-        //     Seettings
-        // </SettingsPanel>
-        // <MirrorPanel showPanel = {workboxControls.swap} >
-        //     Mirror
-        // </MirrorPanel>
-            // ref = {centralPanelElementRef} 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
+        <SettingsPanel showPanel = {workboxControls.settings}>
+            Settings
+        </SettingsPanel>
         <CentralPanel 
             displayCode = {workboxDisplayCode} 
             workboxContentElementRef = {workboxContentElementRef}

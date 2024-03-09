@@ -165,13 +165,11 @@ const WorkboxToolbar = (props) => {
     </MenuList>
 
 
-        // <ToolbarVerticalDivider />
-        // { settingsToggle }
-        // <ToolbarVerticalDivider />
-        // {swapToggle}
     // render
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
+        <ToolbarVerticalDivider />
+        { settingsToggle }
         <ToolbarVerticalDivider />
         { profileToggle }
         { listToggle }

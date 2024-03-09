@@ -56,6 +56,31 @@ const coverPanelStyles = {
     right:'auto',
 } as CSSProperties
 
+const coverTabStyle = {
+    position:'absolute',
+    margin: 0,
+    backgroundColor:'white',
+    border:'1px solid gray',
+    display:'flex',
+    top:'50%',
+    transform:'translateY(-50%)',
+    right:'-6px',
+    borderRadius: '8px',
+    height:'48px',
+    width:'24px',
+    alignItems:'center',
+    opacity: 0.8,
+    visibility: 'visible',
+    transition: 'opacity 0.3s, visibility 0.3s'
+} as CSSProperties
+
+const coverTabIconStyle = {
+    opacity: 0.5,
+    height: '24px',
+    width: '48px',
+    transform: 'rotate(90deg)'
+} as CSSProperties
+
 const contentsFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
@@ -83,69 +108,27 @@ const contentsPanelStyles = {
     right: 0,
 } as CSSProperties
 
-// ================
+const settingsFrameStyles = {
+    flex: '0 0 auto',
+    // height: '100%',
+    width:'0px',
+    overflow:'hidden',
+    position:'relative',
+    transition: 'width 0.5s',
+    borderRadius: '8px',
+} as CSSProperties
 
 const settingsPanelStyles = {
-    height: '100%',
-    width:'0px',
-    overflow:'hidden',
-    position:'relative',
-    transition: 'width 0.5s, opacity 0.5s'
-} as CSSProperties
-
-const settingsContentStyles = {
-    display:'block', 
-    border:'5px solid silver',
+    // display:'block', 
+    border:'5px ridge silver',
     borderRadius:'8px',
+    overflow:'auto',
     padding:'3px',
     boxSizing:'border-box',
     height: '100%',
     width:'300px',
-    position:'relative',
-} as CSSProperties
-
-const mirrorPanelStyles = {
-    height: '100%',
-    width:'0px',
-    overflow:'hidden',
-    position:'relative',
-    transition: 'width .5s, opacity .5s'
-} as CSSProperties
-
-const mirrorContentStyles = {
-    display:'block', 
-    border:'5px solid silver',
-    borderRadius:'8px',
-    padding:'3px',
-    boxSizing:'border-box',
-    height: '100%',
-    width:'300px',
-    position:'relative',
-} as CSSProperties
-
-const tabStyle = {
     position:'absolute',
-    margin: 0,
-    backgroundColor:'white',
-    border:'1px solid gray',
-    display:'flex',
-    top:'50%',
-    transform:'translateY(-50%)',
-    right:'-6px',
-    borderRadius: '8px',
-    height:'48px',
-    width:'24px',
-    alignItems:'center',
-    opacity: 0.8,
-    visibility: 'visible',
-    transition: 'opacity 0.3s, visibility 0.3s'
-} as CSSProperties
-
-const tabIconStyle = {
-    opacity: 0.5,
-    height: '24px',
-    width: '48px',
-    transform: 'rotate(90deg)'
+    left:0,
 } as CSSProperties
 
 const CentralWidthContext = createContext(null)
@@ -364,10 +347,10 @@ const CoverHandle = (props) => {
             ref = {innerRef}
             id = 'handle'
             data-type = {'cover-handle'} 
-            style = {tabStyle} {...rest}>
+            style = {coverTabStyle} {...rest}>
             <img 
                 draggable = "false" 
-                style = {tabIconStyle} 
+                style = {coverTabIconStyle} 
                 src = {handleIcon} 
             />
         </Box>
@@ -557,53 +540,27 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
     </Box>
 })
 
-// ==========================
-
 export const SettingsPanel = (props) => {
     const
         {showPanel, children} = props,
-        localPropertiesPanelStylesRef = useRef(settingsPanelStyles),
-        contentRef = useRef(null),
-        panelRef = useRef(null),
-        previousTransitioningValueRef = useRef(showPanel),
-        transitioningCountRef = useRef(0),
-        firstTimeoutRef = useRef(null),
-        secondTimeoutRef = useRef(null),
-        thirdTimeoutRef = useRef(null)
-
-    if (showPanel !== previousTransitioningValueRef.current) {
-        transitioningCountRef.current++
-        clearTimeout(firstTimeoutRef.current)
-        clearTimeout(secondTimeoutRef.current)
-        clearTimeout(thirdTimeoutRef.current)
-    }
-    previousTransitioningValueRef.current = showPanel
+        settingsPanelElementRef = useRef(null),
+        settingsFrameElementRef = useRef(null)
+        // timeoutRef = useRef(null)
 
     useEffect(()=>{
 
-        const contentWidth = contentRef.current.offsetWidth
-        panelRef.current.style.width = contentWidth + 'px'
+        // clearTimeout(timeoutRef.current)
         if (!showPanel) {
-            firstTimeoutRef.current = setTimeout(()=>{
-                panelRef.current.style.width = '0px'
-                panelRef.current.style.opacity = 0
-                secondTimeoutRef.current = setTimeout(()=>{
-                    localPropertiesPanelStylesRef.current = {...localPropertiesPanelStylesRef.current,width:'0px',opacity:0}
-                },500)
-            },50) // time for base to set
+            settingsFrameElementRef.current.style.width = 0
         } else {
-            panelRef.current.style.opacity = 1
-            thirdTimeoutRef.current = setTimeout(()=>{
-                panelRef.current.style.width = 'auto'
-                panelRef.current.style.opacity = 1
-                localPropertiesPanelStylesRef.current = {...localPropertiesPanelStylesRef.current,width:'auto',opacity:1}
-            },500)
+            const contentWidth = settingsPanelElementRef.current.offsetWidth
+            settingsFrameElementRef.current.style.width = contentWidth + 'px'
         }
 
-    },[showPanel, transitioningCountRef.current])
+    },[showPanel])
 
-    return <Box data-type = 'settings-panel' ref = {panelRef} style = {localPropertiesPanelStylesRef.current} >
-        <Box data-type = 'settings-content' ref = {contentRef} style = {settingsContentStyles}>
+    return <Box data-type = 'settings-frame' ref = {settingsFrameElementRef} style = {settingsFrameStyles} >
+        <Box data-type = 'settings-panel' ref = {settingsPanelElementRef} style = {settingsPanelStyles}>
             {children}
         </Box>
     </Box>
