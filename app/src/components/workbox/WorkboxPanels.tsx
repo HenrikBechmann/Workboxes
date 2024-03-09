@@ -12,8 +12,9 @@ import "react-resizable/css/styles.css"
 
 import handleIcon from '../../../assets/handle.png'
 
-const MIN_PANEL_FRAME_WIDTH = 250
-const MAX_PANEL_FRAME_RATIO = 0.75
+const MIN_COVER_FRAME_WIDTH = 250
+const MAX_COVER_FRAME_RATIO = 0.75
+const MIN_CONTENTS_FRAME_WIDTH = 250
 const MIN_CENTRAL_FRAME_WIDTH = 590
 
 const centralPanelStyles = {
@@ -44,7 +45,7 @@ const coverPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width:'100%',
-    minWidth: MIN_PANEL_FRAME_WIDTH + 'px',
+    minWidth: MIN_COVER_FRAME_WIDTH + 'px',
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
@@ -84,6 +85,7 @@ const coverTabIconStyle = {
 const contentsFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
+    // minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
     position: 'relative',
     transition:'width .5s',
     transitionDelay:'unset',
@@ -383,9 +385,12 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         clearTimeout(observerTimeoutRef.current)
 
-        if (centralWidth < (coverWidth * 1/MAX_PANEL_FRAME_RATIO)) {
+        const calculatedMaxCentralWidth = coverWidth * 1/MAX_COVER_FRAME_RATIO
+        //Math.min(coverWidth * 1/MAX_COVER_FRAME_RATIO,coverWidth + MIN_CONTENTS_FRAME_WIDTH)
 
-            const newWidth = centralWidth * MAX_PANEL_FRAME_RATIO
+        if (centralWidth < calculatedMaxCentralWidth) {
+
+            const newWidth = centralWidth * MAX_COVER_FRAME_RATIO
 
             if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
             coverFrameElementRef.current.style.width = newWidth + 'px'
@@ -396,9 +401,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         }
 
         const constraints = {
-            minX:MIN_PANEL_FRAME_WIDTH,
+            minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
+            maxX:centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
@@ -442,7 +447,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
     },[displayCode])
 
     const constraintsRef = useRef({
-        minX:MIN_PANEL_FRAME_WIDTH,
+        minX:MIN_COVER_FRAME_WIDTH,
         minY:coverFrameElementRef.current?.offsetHeight || 0,
         maxX:700,
         maxY:coverFrameElementRef.current?.offsetHeight || 0,
@@ -452,9 +457,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
     const onResizeStart = () => {
         coverFrameElementRef.current.style.transition = 'none'
         const constraints = {
-            minX:MIN_PANEL_FRAME_WIDTH,
+            minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX:centralPanelElementRef.current.offsetWidth * MAX_PANEL_FRAME_RATIO,
+            maxX:centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
