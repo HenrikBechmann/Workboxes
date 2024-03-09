@@ -15,6 +15,8 @@ const workboxContentStyles = {
     height:'100%',
     padding:'0 5px 5px 5px',
     position:'relative',
+    width:'100%',
+    overflow: 'auto',
 } as CSSProperties
 
 const WorkboxContent = (props) => {

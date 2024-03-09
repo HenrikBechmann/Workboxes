@@ -85,7 +85,7 @@ const coverTabIconStyle = {
 const contentsFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
-    // minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
+    minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
     position: 'relative',
     transition:'width .5s',
     transitionDelay:'unset',
@@ -209,6 +209,7 @@ export const CentralPanel = (props) => {
                 // restore settings for frames
                 contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.width = 'auto'
+                contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 centralFrameElement.style.flex = '1 0 auto'
                 centralFrameElement.style.width = 'auto'
@@ -248,6 +249,7 @@ export const CentralPanel = (props) => {
 
             // set targets
             contentsFrameElement.style.width = 0
+            contentsFrameElement.style.minWidth = 0
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
             // wait for result
@@ -318,6 +320,7 @@ export const CentralPanel = (props) => {
 
                 // restore values for frames
                 contentsFrameElement.style.width = '100%'
+                contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 centralFrameElement.style.width = 'auto'
                 centralFrameElement.style.flex = '1 0 auto'
