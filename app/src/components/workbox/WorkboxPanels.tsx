@@ -432,7 +432,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
             const newWidth = centralWidth * MAX_COVER_FRAME_RATIO
 
-            if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
+            // if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
             coverWidthRef.current = newWidth
 
@@ -448,9 +448,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         }
         constraintsRef.current = constraints
 
-        observerTimeoutRef.current = setTimeout(()=>{
-            if (coverFrameElementRef.current.style.transition == 'none') coverFrameElementRef.current.style.transition = 'width 0.5s'
-        },500)
+        // observerTimeoutRef.current = setTimeout(()=>{
+        //     if (coverFrameElementRef.current.style.transition == 'none') coverFrameElementRef.current.style.transition = 'width 0.5s'
+        // },500)
 
     },[centralWidthContext])
 
