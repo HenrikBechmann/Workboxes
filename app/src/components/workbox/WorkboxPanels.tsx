@@ -136,6 +136,19 @@ const settingsPanelStyles = {
 
 const CentralWidthContext = createContext(null)
 
+
+/*
+    Adjusts the CSS of 
+    - centralPanelElement: flex, width
+    - coverFrameElement: flex, width, minWidth, transition, transitionDelay
+    - coverFrameElement.firstChild: width, left, right
+    - contentsFrameElement: flex, width, minWidth, transition, transitionDelay
+    - contantsFrameElement.firstChild: width, left, right
+
+    
+
+    see useEffect for displayCode
+*/
 export const CentralPanel = (props) => {
 
     const 
@@ -164,11 +177,10 @@ export const CentralPanel = (props) => {
 
     },[])
 
+    // respond to change in displayCode
     useEffect(()=>{
 
-        console.log('displayCode',displayCode)
-
-        if (previousDisplayCodeRef.current == displayCode) return
+        if (previousDisplayCodeRef.current == displayCode) return // startup
 
         const 
             centralFrameElement = centralPanelElementRef.current,
@@ -176,35 +188,27 @@ export const CentralPanel = (props) => {
             contentsFrameElement = contentsFrameElementRef.current,
             transitionDelay = '0.3s'
 
-        coverFrameElement.style.transitionDelay = transitionDelay
         coverFrameElement.style.transition = 'width 0.5s'
-        contentsFrameElement.style.transitionDelay = transitionDelay
         contentsFrameElement.style.transition = 'width 0.5s'
 
-        let timeout = 500
+        let timeout = 800
 
         clearTimeout(timeoutRef.current)
 
         if (displayCode == 'both') {
 
-            // if (previousDisplayCodeRef.current == 'both')
-
-            // anticipate size
-            if (previousDisplayCodeRef.current == 'contents') {
+            // anticipate config of hidden elements
+            if (previousDisplayCodeRef.current == 'contents') { // cover was hidden
 
                 coverFrameElement.firstChild.style.width = coverWidthRef.current + 'px'
                 coverFrameElement.firstChild.style.left = 0
                 coverFrameElement.firstChild.style.right = 'auto'
 
-            } else if (previousDisplayCodeRef.current == 'cover') {
+            } else { // contents was hidden
 
-                contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - coverWidthRef.current) + 'px'
-                coverFrameElement.firstChild.style.right = 0
-                coverFrameElement.firstChild.style.left = 'auto'
-
-            } else {
-
-                return 
+                contentsFrameElement.firstChild.style.width = Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralFrameElement.offsetWidth - coverWidthRef.current)) + 'px'
+                contentsFrameElement.firstChild.style.left = 'auto'
+                contentsFrameElement.firstChild.style.right = 0
 
             }
 
@@ -222,155 +226,142 @@ export const CentralPanel = (props) => {
 
             // set targets
             coverFrameElement.style.width = coverWidthRef.current + 'px'
-            contentsFrameElement.style.width = (centralFrameElement.offsetWidth - coverWidthRef.current) + 'px'
+            contentsFrameElement.style.width = 
+                Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralFrameElement.offsetWidth - coverWidthRef.current)) + 'px'
 
-            // wait for result
+            // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
 
-                console.log('both timeout')
-
-                // if (previousDisplayCodeRef.current == 'both') return
-
+                // restore transition defaults
+                coverFrameElement.style.transition = 'none'
                 coverFrameElement.style.transitionDelay = 'unset'
+                contentsFrameElement.style.transition = 'none'
                 contentsFrameElement.style.transitionDelay = 'unset'
 
-                coverFrameElement.firstChild.style.width = '100%'
-                contentsFrameElement.firstChild.style.width = '100%'
-
-                centralFrameElement.style.width = 'auto'
-                centralFrameElement.style.flex = '1 0 auto'
-
-                // restore settings for frames
+                // restore contents frame defaults
                 contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.width = 'auto'
                 contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
-                console.log('cover frame and panel width',
-                    coverFrameElement.style.width,
-                    coverFrameElement.firstChild.style.width)
+                // restore panel defaults
+                contentsFrameElement.firstChild.style.width = '100%'
+                coverFrameElement.firstChild.style.width = '100%'
 
-                // restore panels
+                // restore central panel defaults
+                centralFrameElement.style.flex = '1 0 auto'
+                centralFrameElement.style.width = 'auto'
+
             },timeout)
 
         } else if (displayCode == 'cover') {
 
-            timeout = 800
+            // set tranision delay for shadow
+            coverFrameElement.style.transitionDelay = transitionDelay
+            contentsFrameElement.style.transitionDelay = transitionDelay
 
-            if (previousDisplayCodeRef.current == 'contents') {
+            // anticipate config of hidden element
+            if (previousDisplayCodeRef.current == 'contents') { // cover was hidden
 
                 coverFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
                 coverFrameElement.firstChild.style.right = 0
                 coverFrameElement.firstChild.style.left = 'auto'
 
-            } else {
-
-                coverFrameElement.firstChild.style.width = '100%'
-
             }
 
             // freeze central frame
             centralFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
             centralFrameElement.style.flex = '0 0 auto'
 
-            // freeeze cover
+            // freeze cover
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             coverFrameElement.style.flex = '0 0 auto'
 
-            // freeze contents frame
+            // freeze contents for hiding
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
             contentsFrameElement.style.flex = '0 0 auto'
-
-            // freeze open panel
             contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
+            contentsFrameElement.style.minWidth = 0
 
             // set targets
             contentsFrameElement.style.width = 0
-            contentsFrameElement.style.minWidth = 0
             coverFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
 
-            // wait for result
+            // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
 
-                console.log('cover timeout')
-
-                coverFrameElement.style.transitionDelay = 'unset'
+                // restore transition defaults
+                coverFrameElement.style.transition = 'none'
+                contentsFrameElement.style.transition = 'none'
                 contentsFrameElement.style.transitionDelay = 'unset'
 
-                // restore values for frames
+                // restore values for visible frame
                 coverFrameElement.style.flex = '1 0 auto'
                 coverFrameElement.style.width = 'auto'
 
-                centralFrameElement.style.flex = '1 0 auto'
-                centralFrameElement.style.width = 'auto'
-
-                // restore panels
+                // set visible panel config
                 coverFrameElement.firstChild.style.width = '100%'
                 coverFrameElement.firstChild.style.right = 'auto'
                 coverFrameElement.firstChild.style.left = 0
+
+                // restore central panel defaults
+                centralFrameElement.style.flex = '1 0 auto'
+                centralFrameElement.style.width = 'auto'
 
             },timeout)
 
         } else { // displayCode == 'contents'
 
-            // delay to establish shadow
-            timeout = 800
-            contentsFrameElement.firstChild.style.right = 'auto'
-            contentsFrameElement.firstChild.style.left = 0
-
-            if (previousDisplayCodeRef.current == 'cover') {
-
-                contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
-
-            } else { // previous is 'both'
-
-                contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-                contentsFrameElement.firstChild.style.width = '100%'
-
-            }
-
-            console.log('contents frame and panel width',
-                contentsFrameElement.style.width,
-                contentsFrameElement.firstChild.style.width)
-
-            // assert transitionDelay for certainty
+            // set tranision delay for shadow
             coverFrameElement.style.transitionDelay = transitionDelay
             contentsFrameElement.style.transitionDelay = transitionDelay
+
+            // anticipate config of hidden element
+            if (previousDisplayCodeRef.current == 'cover') { // contents was hidden
+
+                contentsFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
+                contentsFrameElement.firstChild.style.right = 'auto'
+                contentsFrameElement.firstChild.style.left = 0
+
+            }
 
             // freeze central frame
             centralFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
             centralFrameElement.style.flex = '0 0 auto'
 
-            // freeeze cover frame
+            // freeze cover for hiding
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             coverFrameElement.style.flex = '0 0 auto'
-
-            // freeze cover panel
             coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
+
+            // freeze contents
+            contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+            contentsFrameElement.style.flex = '0 0 auto'
 
             // set targets
             contentsFrameElement.style.width = centralFrameElement.offsetWidth + 'px'
             coverFrameElement.style.width = 0
 
-            // wait for result
+            // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
 
-                console.log('contents timeout')
-
+                // restore transition defaults
+                coverFrameElement.style.transition = 'none'
                 coverFrameElement.style.transitionDelay = 'unset'
-                contentsFrameElement.style.transitionDelay = 'unset'
+                contentsFrameElement.style.transition = 'none'
 
-                // restore values for frames
+                // set visible frame config
                 contentsFrameElement.style.width = 'auto'
                 contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
-                centralFrameElement.style.width = 'auto'
-                centralFrameElement.style.flex = '1 0 auto'
-
-                // restore panels
+                // restore visible panel defaults
                 contentsFrameElement.firstChild.style.width = '100%'
                 contentsFrameElement.firstChild.style.right = 0
                 contentsFrameElement.firstChild.style.left = 'auto'
+
+                // restore central panel defaults
+                centralFrameElement.style.width = 'auto'
+                centralFrameElement.style.flex = '1 0 auto'
 
             },timeout)
         }
@@ -407,6 +398,7 @@ const CoverHandle = (props) => {
 export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
         { children, displayCode, coverWidthRef } = props,
+        displayCodeRef = useRef(null),
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null),
         targetTimeoutRef = useRef(null),
@@ -415,6 +407,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         centralWidthContext = useContext(CentralWidthContext),
         handleRef = useRef(null)
 
+    displayCodeRef.current = displayCode
 
     useEffect(()=>{
 
@@ -426,7 +419,10 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
     useEffect(()=>{
 
         const centralWidth = centralPanelElementRef.current.offsetWidth
-        const coverWidth = coverFrameElementRef.current.offsetWidth
+        const coverWidth = 
+            displayCodeRef.current == 'out'
+                ? coverFrameElementRef.current.offsetWidth
+                : coverWidthRef.current
 
         clearTimeout(observerTimeoutRef.current)
 
@@ -437,7 +433,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
             const newWidth = centralWidth * MAX_COVER_FRAME_RATIO
 
             if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
-            coverFrameElementRef.current.style.width = newWidth + 'px'
+            displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
             coverWidthRef.current = newWidth
 
             setCoverResizeWidth(newWidth)
