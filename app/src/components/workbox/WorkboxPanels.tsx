@@ -187,16 +187,20 @@ export const CentralPanel = (props) => {
 
         if (displayCode == 'both') {
 
-            if (previousDisplayCodeRef.current == 'both')
+            // if (previousDisplayCodeRef.current == 'both')
 
             // anticipate size
             if (previousDisplayCodeRef.current == 'contents') {
 
                 coverFrameElement.firstChild.style.width = coverWidthRef.current + 'px'
+                coverFrameElement.firstChild.style.left = 0
+                coverFrameElement.firstChild.style.right = 'auto'
 
             } else if (previousDisplayCodeRef.current == 'cover') {
 
                 contentsFrameElement.firstChild.style.width = (centralFrameElement.offsetWidth - coverWidthRef.current) + 'px'
+                coverFrameElement.firstChild.style.right = 0
+                coverFrameElement.firstChild.style.left = 'auto'
 
             } else {
 
@@ -223,7 +227,9 @@ export const CentralPanel = (props) => {
             // wait for result
             timeoutRef.current = setTimeout(()=>{
 
-                if (previousDisplayCodeRef.current == 'both') return
+                console.log('both timeout')
+
+                // if (previousDisplayCodeRef.current == 'both') return
 
                 coverFrameElement.style.transitionDelay = 'unset'
                 contentsFrameElement.style.transitionDelay = 'unset'
@@ -239,6 +245,10 @@ export const CentralPanel = (props) => {
                 contentsFrameElement.style.width = 'auto'
                 contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
+                console.log('cover frame and panel width',
+                    coverFrameElement.style.width,
+                    coverFrameElement.firstChild.style.width)
+
                 // restore panels
             },timeout)
 
@@ -251,6 +261,10 @@ export const CentralPanel = (props) => {
                 coverFrameElement.firstChild.style.width = centralFrameElement.offsetWidth + 'px'
                 coverFrameElement.firstChild.style.right = 0
                 coverFrameElement.firstChild.style.left = 'auto'
+
+            } else {
+
+                coverFrameElement.firstChild.style.width = '100%'
 
             }
 
@@ -277,17 +291,17 @@ export const CentralPanel = (props) => {
             // wait for result
             timeoutRef.current = setTimeout(()=>{
 
-                // if (transitionDelay != 'unset') {
-                    coverFrameElement.style.transitionDelay = 'unset'
-                    contentsFrameElement.style.transitionDelay = 'unset'
-                // }
+                console.log('cover timeout')
+
+                coverFrameElement.style.transitionDelay = 'unset'
+                contentsFrameElement.style.transitionDelay = 'unset'
 
                 // restore values for frames
-                // coverFrameElement.style.width = 'auto'
                 coverFrameElement.style.flex = '1 0 auto'
+                coverFrameElement.style.width = 'auto'
 
-                centralFrameElement.style.width = 'auto'
                 centralFrameElement.style.flex = '1 0 auto'
+                centralFrameElement.style.width = 'auto'
 
                 // restore panels
                 coverFrameElement.firstChild.style.width = '100%'
@@ -310,8 +324,13 @@ export const CentralPanel = (props) => {
             } else { // previous is 'both'
 
                 contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
+                contentsFrameElement.firstChild.style.width = '100%'
 
             }
+
+            console.log('contents frame and panel width',
+                contentsFrameElement.style.width,
+                contentsFrameElement.firstChild.style.width)
 
             // assert transitionDelay for certainty
             coverFrameElement.style.transitionDelay = transitionDelay
@@ -335,13 +354,14 @@ export const CentralPanel = (props) => {
             // wait for result
             timeoutRef.current = setTimeout(()=>{
 
-                // if (transitionDelay != 'unset') {
-                    coverFrameElement.style.transitionDelay = 'unset'
-                    contentsFrameElement.style.transitionDelay = 'unset'
-                // }
+                console.log('contents timeout')
+
+                coverFrameElement.style.transitionDelay = 'unset'
+                contentsFrameElement.style.transitionDelay = 'unset'
 
                 // restore values for frames
-                contentsFrameElement.style.width = '100%'
+                contentsFrameElement.style.width = 'auto'
+                contentsFrameElement.style.flex = '1 0 auto'
                 contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 centralFrameElement.style.width = 'auto'
