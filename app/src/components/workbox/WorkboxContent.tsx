@@ -30,7 +30,7 @@ const WorkboxContent = (props) => {
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        coverUserWidthRef = useRef( 300 ) // shared with children for configuration
+        userCoverWidthRef = useRef( 300 ) // shared with children for configuration
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
     if (contentsShow && coverShow) {
@@ -60,15 +60,15 @@ const WorkboxContent = (props) => {
             Settings
         </SettingsPanel>
         <CentralPanel 
-            displayCode = {workboxDisplayCode} 
+            displayConfigCode = {workboxDisplayCode} 
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
-            coverUserWidthRef = {coverUserWidthRef}
+            userCoverWidthRef = {userCoverWidthRef}
         >
-            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} coverUserWidthRef = {coverUserWidthRef}>
+            <CoverPanel ref = {coverFrameElementRef} displayConfigCode = {coverDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} coverUserWidthRef = {coverUserWidthRef}>
+            <ContentsPanel ref = {contentsFrameElementRef} displayConfigCode = {contentsDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
             Contents
             </ContentsPanel>
         </CentralPanel>
