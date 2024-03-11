@@ -9,7 +9,6 @@ import {
 
 import Workwindow from './Workwindow'
 import Workbox from './workbox/Workbox'
-// import { useUserData } from '../system/FirebaseProviders'
 
 const workpanelStyles = {
     height:'100%',
@@ -18,13 +17,13 @@ const workpanelStyles = {
     minHeight:'700px',
 } as CSSProperties
 
-let sessionID = 0
+let sessionID = 0 // used for non-duplicate window component key; also future reference
 
 const Workpanel = (props:any) => {
 
     const 
-        [panelState, setPanelState] = useState('setup'),
-        { panelWindowSpecsList } = props,
+        [panelState, setPanelState] = useState('setup'), // setup, resorted, resized, ready
+        { panelWindowsSpecsList } = props,
         panelElementRef = useRef(null)
 
     const setFocus = (zOrder) => {
@@ -66,7 +65,7 @@ const Workpanel = (props:any) => {
             key = {sessionID} 
             sessionID = {sessionID} 
             setFocus = {setFocus} 
-            containerSpecs = {null}
+            containerConfigSpecs = {null}
             {... specs.window}
         >
             <Workbox 
@@ -87,7 +86,7 @@ const Workpanel = (props:any) => {
 
         const list = []
 
-        for (const specs of panelWindowSpecsList) {
+        for (const specs of panelWindowsSpecsList) {
             list.push(
                 createWindow(specs)
             )
@@ -95,25 +94,24 @@ const Workpanel = (props:any) => {
 
         return list
 
-    },[panelWindowSpecsList]) // one-time - input never changes
+    },[panelWindowsSpecsList]) // one-time - input never changes
 
     const onResize = useCallback(()=>{
 
         const 
             element = panelElementRef.current,
-            containerSpecs = {width:element.offsetWidth, height:element.offsetHeight},
+            containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight},
             windowsList = windowsListRef.current,
             length = windowsList.length
 
         for (let index = 0; index < length; index++ ) {
             const component = windowsList[index]
-            windowsList[index] = React.cloneElement(component, {containerSpecs})
+            windowsList[index] = React.cloneElement(component, {containerConfigSpecs})
         }
         setPanelState('resized')
 
     },[])
 
-    // const resizeObserverRef = useRef(null)
     // set up and shut down resizeObserver
     useEffect(()=>{
 

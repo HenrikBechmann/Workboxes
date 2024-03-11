@@ -114,9 +114,17 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     const 
-        {children, configDefaults, sessionID, zOrder, setFocus, containerSpecs} = props,
-        [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (!)
-        [windowConfigSpecs, setWindowConfigSpecs] = useState(
+        {
+            children, 
+            configDefaults, // for this Workwindow 
+            sessionID, 
+            zOrder, // inherited; modified by setFocus 
+            setFocus, // change zOrder
+            containerConfigSpecs // height, width; change can cause repositioning and resizing of window
+        } = props,
+        sessionIDRef = useRef(sessionID), // future reference
+        [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
+        [windowConfigSpecs, setWindowConfigSpecs] = useState( // top and left are translation values; styles are left at 0
             {
                 top:parseInt(configDefaults.top), 
                 left: parseInt(configDefaults.left), 
@@ -135,13 +143,12 @@ const Workwindow = (props) => {
             transform:'none'
         },
         localTitleStylesRef = useRef(windowTitleStyles),
-        maxConstraintsRef = useRef([700,700]), // default
-        windowSizeContextRef = useRef({width:null, height:null}) //= useContext(WindowSizeContext)
+        maxConstraintsRef = useRef([700,700]) // default
 
     zOrderRef.current = zOrder
     windowConfigSpecsRef.current = windowConfigSpecs
 
-    // set onFocus and onBlur event listeners
+    // set and clear onFocus and onBlur event listeners
     useEffect(()=>{
 
         const element = windowElementRef.current
@@ -165,14 +172,14 @@ const Workwindow = (props) => {
 
     },[])
 
-    // apply inherited zOrder on change
+    // apply inherited zOrder on change by parent
     useEffect(()=>{
 
         windowElementRef.current.style.zIndex = zOrder
 
     },[zOrder])
 
-    // resizable requires this assurance of proper internal initialization for first call from any window
+    // resizable requires this assurance of proper internal initialization for first call from any window (unknown reason)
     useEffect(()=>{
 
         if (windowState != 'ready') setWindowState('ready')
@@ -182,24 +189,24 @@ const Workwindow = (props) => {
     // adjust window size to fit in container size
     useEffect(()=>{
 
-        if (!containerSpecs) return
+        if (!containerConfigSpecs) return
 
         const 
             element = windowElementRef.current,
             windowSpecs = {
                 width: element.offsetWidth,
                 height: element.offsetHeight,
-                top: windowConfigSpecsRef.current.top, // tranlate value
-                left: windowConfigSpecsRef.current.left, // tranlate value
+                top: windowConfigSpecsRef.current.top, // translate value
+                left: windowConfigSpecsRef.current.left, // translate value
             },
             widthBound = windowSpecs.width + windowSpecs.left,
             heightBound = windowSpecs.height + windowSpecs.top
 
-        if (containerSpecs.width < widthBound || containerSpecs.height < heightBound) {
+        if (containerConfigSpecs.width < widthBound || containerConfigSpecs.height < heightBound) {
             // adjustment required
             let newWidth, newHeight, newLeft, newTop, widthDelta, heightDelta, widthApplied, heightApplied
-            if (containerSpecs.width < widthBound) {
-                widthDelta = widthBound - containerSpecs.width
+            if (containerConfigSpecs.width < widthBound) {
+                widthDelta = widthBound - containerConfigSpecs.width
                 newLeft = Math.max(0,windowSpecs.left - widthDelta)
                 widthApplied = windowSpecs.left - newLeft
                 if (widthApplied) {
@@ -212,8 +219,8 @@ const Workwindow = (props) => {
                 newWidth = windowSpecs.width
             }
 
-            if (containerSpecs.height < heightBound) {
-                heightDelta = heightBound - containerSpecs.height
+            if (containerConfigSpecs.height < heightBound) {
+                heightDelta = heightBound - containerConfigSpecs.height
                 newTop = Math.max(0,windowSpecs.top - heightDelta)
                 heightApplied = windowSpecs.top - newTop
                 if (heightApplied) {
@@ -229,8 +236,8 @@ const Workwindow = (props) => {
             const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
 
             maxConstraintsRef.current = [
-                containerSpecs.width - newLeft, 
-                containerSpecs.height - newTop,
+                containerConfigSpecs.width - newLeft, 
+                containerConfigSpecs.height - newTop,
             ]
 
             setWindowConfigSpecs(adjustedWindowSpecs)
@@ -238,15 +245,15 @@ const Workwindow = (props) => {
         } else {
 
             maxConstraintsRef.current = [
-                containerSpecs.width - windowConfigSpecsRef.current.left, 
-                containerSpecs.height - windowConfigSpecsRef.current.top,
+                containerConfigSpecs.width - windowConfigSpecsRef.current.left, 
+                containerConfigSpecs.height - windowConfigSpecsRef.current.top,
             ]
 
         }
 
         setWindowState('repositioned')
 
-    },[containerSpecs])
+    },[containerConfigSpecs])
 
     // resizable callbacks...
     const onResizeStart = (event, {size, handle}) => {
@@ -275,8 +282,8 @@ const Workwindow = (props) => {
             return {...oldState, top:data.y, left: data.x}
         })
         maxConstraintsRef.current = [
-            containerSpecs.width - data.x, 
-            containerSpecs.height - data.y,
+            containerConfigSpecs.width - data.x, 
+            containerConfigSpecs.height - data.y,
         ]
     }
 

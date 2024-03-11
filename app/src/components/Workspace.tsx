@@ -20,7 +20,7 @@ import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
-const workboxDefaults = {
+const workboxDefaultStates = {
     settingsShow:false,
     settingsDisabled:false,
     coverShow:true,
@@ -34,7 +34,7 @@ const Workspace = (props) => {
     const userData = useUserData()
     const { displayName, photoURL } = userData.authUser
 
-    const panelWindowSpecsRef = useRef([
+    const panelWindowsSpecsRef = useRef([
 
         {
             window:{
@@ -42,7 +42,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'20px',left:'20px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaults},
+                defaults:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
@@ -55,7 +55,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'40px',left:'40px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaults},
+                defaults:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
@@ -68,7 +68,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'60px',left:'60px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaults},
+                defaults:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
@@ -88,7 +88,7 @@ const Workspace = (props) => {
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
-                <Workpanel panelWindowSpecsList = {panelWindowSpecsRef.current} />
+                <Workpanel panelWindowsSpecsList = {panelWindowsSpecsRef.current} />
             </Box>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
