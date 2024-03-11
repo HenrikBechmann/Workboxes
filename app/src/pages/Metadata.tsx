@@ -73,7 +73,7 @@ const Metadata = (props) => {
             activeDrags: 0,
         })
 
-    const defaults = {
+    const defaultStates = {
         settingsShow:false,
         settingsDisabled:false,
         coverShow:true,
@@ -193,7 +193,7 @@ const Metadata = (props) => {
                         configDefaults = {{top:'40px',left:'60px', width:'600px',height:'400px'}}
                     >
                         <Workbox 
-                            defaults = {defaults} 
+                            defaultStates = {defaultStates} 
                             itemIcon = {photoURL} 
                             itemTitle = {displayName}
                             domainTitle = 'Henrik Bechmann'

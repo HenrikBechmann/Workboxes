@@ -42,7 +42,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'20px',left:'20px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaultStates},
+                defaultStates:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
@@ -55,7 +55,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'40px',left:'40px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaultStates},
+                defaultStates:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
@@ -68,7 +68,7 @@ const Workspace = (props) => {
                 configDefaults: {top:'60px',left:'60px', width:'610px',height:'400px'},
             },
             workbox: {
-                defaults:{...workboxDefaultStates},
+                defaultStates:{...workboxDefaultStates},
                 itemIcon: photoURL,
                 itemTitle: displayName,
                 domainTitle: 'Henrik Bechmann',
