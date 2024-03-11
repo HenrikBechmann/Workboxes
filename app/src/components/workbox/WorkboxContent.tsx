@@ -28,7 +28,7 @@ const WorkboxContent = (props) => {
         coverFrameElementRef = useRef( null ),
         contentsFrameElementRef = useRef( null ),
         // create delay to obtain forward references
-        [contentState,setContentState] = useState( 'setup' ),
+        [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
         coverUserWidthRef = useRef( 300 ) // shared with children for configuration
 
