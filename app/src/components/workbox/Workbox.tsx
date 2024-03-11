@@ -44,7 +44,7 @@ const workboxBodyStyles = {
 const Workbox = (props) => {
     const 
         {defaults, itemIcon, itemTitle, typeName, domainTitle } = props,
-        [workboxControls, setWorkboxControls] = useState(defaults)
+        [workboxControlStates, setWorkboxControls] = useState(defaults)
 
     return <Grid
         data-type = 'workbox-grid'
@@ -53,7 +53,7 @@ const Workbox = (props) => {
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
                 <WorkboxToolbar 
-                    workboxControls = {workboxControls} 
+                    workboxControlStates = {workboxControlStates} 
                     setWorkboxControls = {setWorkboxControls} 
                     itemIcon = {itemIcon} 
                     itemTitle = {itemTitle}
@@ -64,7 +64,7 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' style = {workboxFrameStyles} >
-                <WorkboxContent workboxControls = {workboxControls} />
+                <WorkboxContent workboxControlStates = {workboxControlStates} />
             </Box>
         </GridItem>
     </Grid>

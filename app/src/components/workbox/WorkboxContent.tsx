@@ -22,25 +22,26 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => {
 
     const 
-        { workboxControls } = props,
-        { contents, cover } = workboxControls,
+        { workboxControlStates } = props,
+        { contentsShow, coverShow } = workboxControlStates, // boolean - show/ noshow
+        // share cover and contents elements with children
         coverFrameElementRef = useRef( null ),
         contentsFrameElementRef = useRef( null ),
-        centralPanelElementRef = useRef( null ),
-        workboxContentElementRef = useRef( null ),
+        // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ),
-        coverWidthRef = useRef( 300 )
+        // set by user through drag tab, and possibly by changing window size
+        coverUserWidthRef = useRef( 300 ) // shared with children for configuration
 
-    let workboxDisplayCode, coverDisplayCode, contentsDisplayCode
-    if (contents && cover) {
+    let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
+    if (contentsShow && coverShow) {
         workboxDisplayCode = 'both'
         coverDisplayCode = 'out'
         contentsDisplayCode = 'out'
-    } else if (contents) {
+    } else if (contentsShow) {
         workboxDisplayCode = 'contents'
         coverDisplayCode = 'under'
         contentsDisplayCode = 'over'
-    } else { // cover
+    } else { // coverShow
         workboxDisplayCode = 'cover'
         coverDisplayCode = 'over'
         contentsDisplayCode = 'under'
@@ -54,21 +55,20 @@ const WorkboxContent = (props) => {
 
     },[])
 
-    return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsPanel showPanel = {workboxControls.settings}>
+    return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
+        <SettingsPanel showPanel = {workboxControlStates.settingsShow}>
             Settings
         </SettingsPanel>
         <CentralPanel 
             displayCode = {workboxDisplayCode} 
-            workboxContentElementRef = {workboxContentElementRef}
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
-            coverWidthRef = {coverWidthRef}
+            coverUserWidthRef = {coverUserWidthRef}
         >
-            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} coverWidthRef = {coverWidthRef}>
+            <CoverPanel ref = {coverFrameElementRef} displayCode = {coverDisplayCode} coverUserWidthRef = {coverUserWidthRef}>
             Cover
             </CoverPanel>
-            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} coverWidthRef = {coverWidthRef}>
+            <ContentsPanel ref = {contentsFrameElementRef} displayCode = {contentsDisplayCode} coverUserWidthRef = {coverUserWidthRef}>
             Contents
             </ContentsPanel>
         </CentralPanel>

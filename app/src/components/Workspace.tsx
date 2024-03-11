@@ -21,14 +21,12 @@ import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
 const workboxDefaults = {
-    settings:false,
+    settingsShow:false,
     settingsDisabled:false,
-    cover:true,
+    coverShow:true,
     coverDisabled:false,
-    contents:true,
+    contentsShow:true,
     contentsDisabled:false,
-    swap:false,
-    swapDisabled:false,
 }
 
 const Workspace = (props) => {

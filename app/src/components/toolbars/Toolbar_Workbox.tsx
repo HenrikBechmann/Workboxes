@@ -66,26 +66,26 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControls, setWorkboxControls, itemIcon, itemTitle, domainTitle, typeName } = props,
+        { workboxControlStates, setWorkboxControls, itemIcon, itemTitle, domainTitle, typeName } = props,
 
-        toggleOnCoverRef = useRef(workboxControls.cover),
-        disabledCoverRef = useRef(workboxControls.coverDisabled),
-        toggleOnContentsRef = useRef(workboxControls.contents),
-        disabledContentsRef = useRef(workboxControls.contentsDisabled),
-        toggleOnSettingsRef = useRef(workboxControls.settings),
-        disabledSettingsRef = useRef(workboxControls.settingsDisabled),
+        toggleOnCoverRef = useRef(workboxControlStates.coverShow),
+        disabledCoverRef = useRef(workboxControlStates.coverDisabled),
+        toggleOnContentsRef = useRef(workboxControlStates.contentsShow),
+        disabledContentsRef = useRef(workboxControlStates.contentsDisabled),
+        toggleOnSettingsRef = useRef(workboxControlStates.settingsShow),
+        disabledSettingsRef = useRef(workboxControlStates.settingsDisabled),
 
         toggleHistoryRef = useRef({
-            cover:toggleOnCoverRef.current,
+            coverShow:toggleOnCoverRef.current,
         })
 
     const 
-        currentIsProfile = toggleOnCoverRef.current,
-        previousIsProfile = toggleHistoryRef.current.cover,
-        currentIsList = toggleOnContentsRef.current
+        currentIsCover = toggleOnCoverRef.current,
+        previousIsCover = toggleHistoryRef.current.coverShow,
+        currentIsContents = toggleOnContentsRef.current
 
-    if (!currentIsProfile && !currentIsList) {
-        if (previousIsProfile) {
+    if (!currentIsCover && !currentIsContents) {
+        if (previousIsCover) {
 
             toggleOnContentsRef.current = true
 
@@ -99,14 +99,14 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxControls.cover = toggleOnCoverRef.current
-        workboxControls.coverDisabled = disabledCoverRef.current
-        workboxControls.contents = toggleOnContentsRef.current
-        workboxControls.contentsDisabled = disabledContentsRef.current
-        workboxControls.settings = toggleOnSettingsRef.current
-        workboxControls.settingsDisabled = disabledSettingsRef.current
+        workboxControlStates.coverShow = toggleOnCoverRef.current
+        workboxControlStates.coverDisabled = disabledCoverRef.current
+        workboxControlStates.contentsShow = toggleOnContentsRef.current
+        workboxControlStates.contentsDisabled = disabledContentsRef.current
+        workboxControlStates.settingsShow = toggleOnSettingsRef.current
+        workboxControlStates.settingsDisabled = disabledSettingsRef.current
 
-        setWorkboxControls({...workboxControls})
+        setWorkboxControls({...workboxControlStates})
 
     },[
         toggleOnCoverRef.current,
@@ -118,11 +118,11 @@ const WorkboxToolbar = (props) => {
     ])
 
     toggleHistoryRef.current = {
-        cover:toggleOnCoverRef.current,
+        coverShow:toggleOnCoverRef.current,
     }
 
     const
-        profileToggle = useToggleIcon({
+        coverToggle = useToggleIcon({
             icon:profileIcon, 
             tooltip:'Toggle workbox cover pane',
             caption:'cover',
@@ -130,7 +130,7 @@ const WorkboxToolbar = (props) => {
             disabledRef:disabledCoverRef, 
         }),
 
-        listToggle = useToggleIcon({
+        contentsToggle = useToggleIcon({
             icon:listIcon, 
             tooltip:'Toggle workbox contents pane',
             caption:'contents',
@@ -157,8 +157,8 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         { settingsToggle }
         <ToolbarVerticalDivider />
-        { profileToggle }
-        { listToggle }
+        { coverToggle }
+        { contentsToggle }
         <ToolbarVerticalDivider />
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
