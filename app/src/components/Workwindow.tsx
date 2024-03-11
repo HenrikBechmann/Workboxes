@@ -75,7 +75,6 @@ const windowBodyStyles = {
 const windowContentStyles = {
     position: 'absolute',
     inset: 0, 
-    // padding: '3px', 
     backgroundColor: 'ghostwhite',
     borderRadius: '0 0 0px 7px',
 } as CSSProperties
@@ -117,7 +116,7 @@ const Workwindow = (props) => {
         {
             children, 
             configDefaults, // for this Workwindow 
-            sessionID, 
+            sessionID, // system control
             zOrder, // inherited; modified by setFocus 
             setFocus, // change zOrder
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
@@ -136,13 +135,12 @@ const Workwindow = (props) => {
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         zOrderRef = useRef(null),
-        appliedWindowFrameStyles = {
+        appliedWindowFrameStyles = { // dynamic update with resizing
             ...windowFrameStyles,
             width:windowConfigSpecs.width + 'px', 
             height:windowConfigSpecs.height + 'px',
             transform:'none'
         },
-        localTitleStylesRef = useRef(windowTitleStyles),
         maxConstraintsRef = useRef([700,700]) // default
 
     zOrderRef.current = zOrder
@@ -186,51 +184,52 @@ const Workwindow = (props) => {
 
     },[windowState])
 
-    // adjust window size to fit in container size
+    // adjust window size to fit in container size; responds to new containerConfigSpecs object
     useEffect(()=>{
 
         if (!containerConfigSpecs) return
 
         const 
             element = windowElementRef.current,
-            windowSpecs = {
+            windowConfig = {
                 width: element.offsetWidth,
                 height: element.offsetHeight,
                 top: windowConfigSpecsRef.current.top, // translate value
                 left: windowConfigSpecsRef.current.left, // translate value
             },
-            widthBound = windowSpecs.width + windowSpecs.left,
-            heightBound = windowSpecs.height + windowSpecs.top
+            widthFitBound = windowConfig.width + windowConfig.left,
+            heightFitBound = windowConfig.height + windowConfig.top
 
-        if (containerConfigSpecs.width < widthBound || containerConfigSpecs.height < heightBound) {
+        // keep entire window inside panel boundaries
+        if (containerConfigSpecs.width < widthFitBound || containerConfigSpecs.height < heightFitBound) {
             // adjustment required
             let newWidth, newHeight, newLeft, newTop, widthDelta, heightDelta, widthApplied, heightApplied
-            if (containerConfigSpecs.width < widthBound) {
-                widthDelta = widthBound - containerConfigSpecs.width
-                newLeft = Math.max(0,windowSpecs.left - widthDelta)
-                widthApplied = windowSpecs.left - newLeft
+            if (containerConfigSpecs.width < widthFitBound) {
+                widthDelta = widthFitBound - containerConfigSpecs.width
+                newLeft = Math.max(0,windowConfig.left - widthDelta)
+                widthApplied = windowConfig.left - newLeft
                 if (widthApplied) {
-                    windowSpecs.left = newLeft
+                    windowConfig.left = newLeft
                 }
                 widthDelta -= widthApplied
-                newWidth = windowSpecs.width - widthDelta
+                newWidth = windowConfig.width - widthDelta
             } else {
-                newLeft = windowSpecs.left
-                newWidth = windowSpecs.width
+                newLeft = windowConfig.left
+                newWidth = windowConfig.width
             }
 
-            if (containerConfigSpecs.height < heightBound) {
-                heightDelta = heightBound - containerConfigSpecs.height
-                newTop = Math.max(0,windowSpecs.top - heightDelta)
-                heightApplied = windowSpecs.top - newTop
+            if (containerConfigSpecs.height < heightFitBound) {
+                heightDelta = heightFitBound - containerConfigSpecs.height
+                newTop = Math.max(0,windowConfig.top - heightDelta)
+                heightApplied = windowConfig.top - newTop
                 if (heightApplied) {
-                    windowSpecs.top = newTop
+                    windowConfig.top = newTop
                 }
                 heightDelta -= heightApplied
-                newHeight = windowSpecs.height - heightDelta
+                newHeight = windowConfig.height - heightDelta
             } else {
-                newTop = windowSpecs.top
-                newHeight = windowSpecs.height
+                newTop = windowConfig.top
+                newHeight = windowConfig.height
             }
 
             const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
@@ -269,7 +268,7 @@ const Workwindow = (props) => {
 
     }
 
-    // draggable callback
+    // draggable callbacks
     const onDragStart = (e, data) => {
 
         windowElementRef.current.focus()
@@ -286,8 +285,6 @@ const Workwindow = (props) => {
             containerConfigSpecs.height - data.y,
         ]
     }
-
-
 
     // render
     return (
