@@ -9,6 +9,8 @@ import {
 
 import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel } from './WorkboxPanels'
 
+export const WORKBOX_CONTENT_PADDING_WIDTH = 10
+
 const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',

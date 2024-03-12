@@ -18,14 +18,14 @@ import {
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
-import { WorkboxFrameWidthContext } from './Workbox'
+import { WorkboxInnerFrameWidthContext } from './Workbox'
 
 import handleIcon from '../../../assets/handle.png'
 
 const MIN_COVER_FRAME_WIDTH = 250
 const MAX_COVER_FRAME_RATIO = 0.75
 const MIN_CONTENTS_FRAME_WIDTH = 250
-const MIN_CENTRAL_FRAME_WIDTH = 590
+const MIN_CENTRAL_FRAME_WIDTH = MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH
 
 const centralPanelStyles = {
     height:'100%',
@@ -43,6 +43,7 @@ const centralPanelStyles = {
 const coverFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
+    minWidth: MIN_COVER_FRAME_WIDTH + 'px',
     position: 'relative',
     transition: 'none', // set as needed
     transitionDelay:'unset',
@@ -55,7 +56,7 @@ const coverPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width:'100%',
-    minWidth: MIN_COVER_FRAME_WIDTH + 'px',
+    // minWidth: MIN_COVER_FRAME_WIDTH + 'px',
     padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
@@ -330,6 +331,7 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
             coverFrameElement.style.flex = '0 0 auto'
             coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
+            coverFrameElement.style.minWidth = 0
 
             // freeze contents
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
@@ -401,10 +403,8 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         targetTimeoutRef = useRef(null),
         [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current),
         observerTimeoutRef = useRef(null),
-        workboxFrameWidthFromContext = useContext(WorkboxFrameWidthContext),
+        workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null)
-
-    // console.log('Cover run coverResizeWidth', coverResizeWidth)
 
     displayCodeRef.current = displayConfigCode
 
@@ -417,7 +417,7 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     useEffect(()=>{
 
-        if (workboxFrameWidthFromContext === 0) return
+        if (workboxInnerFrameWidthFromContext === 0) return
 
         const centralPanelWidth = centralPanelElementRef.current.offsetWidth
         const coverWidth = 
@@ -429,13 +429,8 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
         const calculatedMaxCoverWidth = 
             Math.min(
-                workboxFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
-                workboxFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH)
-            // Math.min(
-            //     centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
-            //     centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH)
-
-        // console.log('workboxFrameWidthFromContext, calculatedMaxCoverWidth, coverWidth', workboxFrameWidthFromContext, calculatedMaxCoverWidth, coverWidth)
+                workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
+                workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH)
 
         if (calculatedMaxCoverWidth < coverWidth) {
 
@@ -451,7 +446,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
                 },1)
             }
 
-            // console.log('setting  coverResizeWidth in response to workboxFrameWidthFromContext', newWidth)
             setCoverResizeWidth(newWidth) // coerce render
 
         }
@@ -460,14 +454,11 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
             minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
             maxX: calculatedMaxCoverWidth,
-            // Math.min(
-            //     centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
-            //     centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH),
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
-    },[workboxFrameWidthFromContext])
+    },[workboxInnerFrameWidthFromContext])
 
     useEffect(()=>{
 
@@ -515,21 +506,15 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
             minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
             maxX: Math.min(
-                workboxFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
-                workboxFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH),
-            // maxX:Math.min(
-            //     centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
-            //     centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH),
+                workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
+                workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH),
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
-        // console.log('constraints', {...constraints})
     }
 
     const onResize = (event, {size, handle}) => {
-
-        // console.log('setting coverResizeWidth from resize operation', size.width)
 
         coverFrameElementRef.current.style.width = size.width + 'px'
         setCoverResizeWidth(size.width)

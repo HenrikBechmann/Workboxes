@@ -12,7 +12,8 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
-export const WorkboxFrameWidthContext = createContext(null)
+export const WorkboxInnerFrameWidthContext = createContext(null)
+import { WORKBOX_CONTENT_PADDING_WIDTH } from './WorkboxContent'
 
 const workboxFrameStyles = {
     position:'absolute',
@@ -55,14 +56,14 @@ const Workbox = (props) => {
         } = props,
         [workboxControlStates, setWorkboxControls] = useState(defaultStates),
         workboxFrameElementRef = useRef(null),
-        [workboxFrameWidth, setWorkboxFrameWidth] = useState(0)
+        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
 
     // update the recorded with of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
-        const workboxFrameWidth = workboxFrameElementRef.current.offsetWidth
+        const workboxInnerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_PADDING_WIDTH
 
-        setWorkboxFrameWidth(workboxFrameWidth)
+        setWorkboxInnerFrameWidth(workboxInnerFrameWidth)
 
     },[])
 
@@ -79,7 +80,7 @@ const Workbox = (props) => {
     },[])
 
 
-    return <WorkboxFrameWidthContext.Provider value = {workboxFrameWidth} >
+    return <WorkboxInnerFrameWidthContext.Provider value = {workboxInnerFrameWidth} >
     <Grid
         data-type = 'workbox-grid'
         style = {workboxGridStyles}
@@ -102,7 +103,7 @@ const Workbox = (props) => {
             </Box>
         </GridItem>
     </Grid>
-    </WorkboxFrameWidthContext.Provider>
+    </WorkboxInnerFrameWidthContext.Provider>
 }
 
 export default Workbox
