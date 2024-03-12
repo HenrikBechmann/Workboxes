@@ -70,6 +70,7 @@ const windowBodyStyles = {
     width: '100%',
     position: 'relative',
     borderRadius: '0px 0px 0px 7px',
+    minWidth: 0,
 } as CSSProperties
 
 const windowContentStyles = {

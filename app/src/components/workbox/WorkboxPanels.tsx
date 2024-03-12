@@ -19,9 +19,9 @@ import {
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
-import handleIcon from '../../../assets/handle.png'
+import { WorkboxFrameWidthContext } from './Workbox'
 
-const CentralWidthContext = createContext(null)
+import handleIcon from '../../../assets/handle.png'
 
 const MIN_COVER_FRAME_WIDTH = 250
 const MAX_COVER_FRAME_RATIO = 0.75
@@ -157,29 +157,29 @@ export const CentralPanel = (props) => {
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
         centralPanelElementRef = useRef(null),
-        [centralPanelWidth, setCentralPanelWidth] = useState(0),
+        // [centralPanelWidth, setCentralPanelWidth] = useState(0),
         timeoutRef = useRef(null)
 
-    // update the recorded with of this panel on resize
-    const resizeObserverCallback = useCallback(()=> {
+    // // update the recorded with of this panel on resize
+    // const resizeObserverCallback = useCallback(()=> {
 
-        const centralPanelWidth = centralPanelElementRef.current.offsetWidth
+    //     const centralPanelWidth = centralPanelElementRef.current.offsetWidth
 
-        setCentralPanelWidth(centralPanelWidth)
+    //     setCentralPanelWidth(centralPanelWidth)
 
-    },[])
+    // },[])
 
-    // setup and shutdown resizeObserver
-    useEffect(()=>{
+    // // setup and shutdown resizeObserver
+    // useEffect(()=>{
 
-        const observer = new ResizeObserver(resizeObserverCallback)
-        observer.observe(centralPanelElementRef.current)
+    //     const observer = new ResizeObserver(resizeObserverCallback)
+    //     observer.observe(centralPanelElementRef.current)
 
-        return () => {
-            observer.disconnect()
-        }
+    //     return () => {
+    //         observer.disconnect()
+    //     }
 
-    },[])
+    // },[])
 
 /*
     Respond to change in displayConfigCode; causes direct DOM manipulation.
@@ -245,7 +245,7 @@ export const CentralPanel = (props) => {
             // set animation targets
             coverFrameElement.style.width = userCoverWidthRef.current + 'px'
             contentsFrameElement.style.width = 
-                Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - userCoverWidthRef.current)) + 'px'
+                (Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - userCoverWidthRef.current)) - 30) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
@@ -391,9 +391,7 @@ export const CentralPanel = (props) => {
     },[displayConfigCode])
 
     // CentralWidthContext informs CoverPanel
-    return <CentralWidthContext.Provider value = {centralPanelWidth} >
-        <Box ref = {centralPanelElementRef} data-type = 'central-panel' id = 'central-panel' style = {centralPanelStyles}>{children}</Box>
-    </CentralWidthContext.Provider>
+    return <Box ref = {centralPanelElementRef} data-type = 'central-panel' id = 'central-panel' style = {centralPanelStyles}>{children}</Box>
 }
 
 const CoverHandle = (props) => {
@@ -416,7 +414,7 @@ const CoverHandle = (props) => {
     )
 }
 
-export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
+export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRef:any) {
     const 
         { children, displayConfigCode, userCoverWidthRef } = props, // userCoverWidthRef informs "friends"
         displayCodeRef = useRef(null),
@@ -425,7 +423,7 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         targetTimeoutRef = useRef(null),
         [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current),
         observerTimeoutRef = useRef(null),
-        centralWidthFromContext = useContext(CentralWidthContext), // coerce render; comes from CentralPanel resize
+        workboxFrameWidthFromContext = useContext(WorkboxFrameWidthContext),
         handleRef = useRef(null)
 
     displayCodeRef.current = displayConfigCode
@@ -447,15 +445,26 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
 
         clearTimeout(observerTimeoutRef.current)
 
-        const calculatedMaxCentralWidth = coverWidth * 1/MAX_COVER_FRAME_RATIO
+        const calculatedMaxCoverWidth = 
+            Math.min(
+                centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
+                centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH)
 
-        if (centralPanelWidth < calculatedMaxCentralWidth) {
+        console.log('calculatedMaxCoverWidth, coverWidth', calculatedMaxCoverWidth, coverWidth)
 
-            const newWidth = centralPanelWidth * MAX_COVER_FRAME_RATIO
+        if (calculatedMaxCoverWidth < coverWidth) {
 
-            // if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
+            const newWidth = calculatedMaxCoverWidth
+
+            if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
             userCoverWidthRef.current = newWidth
+
+            if (coverFrameElementRef.current.style.transition == 'none') {
+                setTimeout(()=>{
+                    coverFrameElementRef.current.style.transition = 'width 0.5s'
+                },1)
+            }
 
             setCoverResizeWidth(newWidth) // coerce render
 
@@ -464,12 +473,14 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         const constraints = {
             minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX:centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
+            maxX:Math.min(
+                centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
+                centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH),
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
-    },[centralWidthFromContext])
+    },[workboxFrameWidthFromContext])
 
     useEffect(()=>{
 
@@ -516,7 +527,9 @@ export const CoverPanel = forwardRef(function DocumentPanel(props:any, coverFram
         const constraints = {
             minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX:centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
+            maxX:Math.min(
+                centralPanelElementRef.current.offsetWidth * MAX_COVER_FRAME_RATIO,
+                centralPanelElementRef.current.offsetWidth - MIN_CONTENTS_FRAME_WIDTH),
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints

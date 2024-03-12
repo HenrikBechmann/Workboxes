@@ -1,7 +1,7 @@
 // Workbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties } from 'react'
 
 import {
     Box,
@@ -11,6 +11,8 @@ import {
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
+
+export const WorkboxFrameWidthContext = createContext(null)
 
 const workboxFrameStyles = {
     position:'absolute',
@@ -39,6 +41,7 @@ const workboxBodyStyles = {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: '0 0 0 7px',
+    minWidth: 0,
 } as CSSProperties
 
 const Workbox = (props) => {
@@ -50,9 +53,34 @@ const Workbox = (props) => {
             typeName, 
             domainTitle 
         } = props,
-        [workboxControlStates, setWorkboxControls] = useState(defaultStates)
+        [workboxControlStates, setWorkboxControls] = useState(defaultStates),
+        workboxFrameElementRef = useRef(null),
+        [workboxFrameWidth, setWorkboxFrameWidth] = useState(0)
 
-    return <Grid
+    // update the recorded with of this panel on resize
+    const resizeObserverCallback = useCallback(()=> {
+
+        const workboxFrameWidth = workboxFrameElementRef.current.offsetWidth
+
+        setWorkboxFrameWidth(workboxFrameWidth)
+
+    },[])
+
+    // setup and shutdown resizeObserver
+    useEffect(()=>{
+
+        const observer = new ResizeObserver(resizeObserverCallback)
+        observer.observe(workboxFrameElementRef.current)
+
+        return () => {
+            observer.disconnect()
+        }
+
+    },[])
+
+
+    return <WorkboxFrameWidthContext.Provider value = {workboxFrameWidth} >
+    <Grid
         data-type = 'workbox-grid'
         style = {workboxGridStyles}
     >
@@ -69,11 +97,12 @@ const Workbox = (props) => {
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
-            <Box data-type = 'workbox-frame' style = {workboxFrameStyles} >
+            <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
                 <WorkboxContent workboxControlStates = {workboxControlStates} />
             </Box>
         </GridItem>
     </Grid>
+    </WorkboxFrameWidthContext.Provider>
 }
 
 export default Workbox

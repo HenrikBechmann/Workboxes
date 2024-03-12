@@ -16,7 +16,7 @@ const workboxContentStyles = {
     padding:'0 5px 5px 5px',
     position:'relative',
     width:'100%',
-    overflow: 'auto',
+    overflow: 'hidden', // 'auto',
 } as CSSProperties
 
 const WorkboxContent = (props) => {
@@ -30,7 +30,8 @@ const WorkboxContent = (props) => {
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        userCoverWidthRef = useRef( 300 ) // shared with children for configuration
+        userCoverWidthRef = useRef( 300 ), // shared with children for configuration
+        workboxContentElementRef = useRef(null)
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
     if (contentsShow && coverShow) {
@@ -55,7 +56,7 @@ const WorkboxContent = (props) => {
 
     },[])
 
-    return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
+    return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
         <SettingsPanel showPanel = {workboxControlStates.settingsShow}>
             Settings
         </SettingsPanel>
@@ -73,6 +74,7 @@ const WorkboxContent = (props) => {
             </ContentsPanel>
         </CentralPanel>
     </Box>
+    
 } 
 
 export default WorkboxContent
