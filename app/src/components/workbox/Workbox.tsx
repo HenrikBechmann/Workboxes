@@ -13,7 +13,7 @@ import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
 export const WorkboxInnerFrameWidthContext = createContext(null)
-import { WORKBOX_CONTENT_PADDING_WIDTH } from './WorkboxContent'
+import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
 const workboxFrameStyles = {
     position:'absolute',
@@ -61,7 +61,7 @@ const Workbox = (props) => {
     // update the recorded with of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
-        const workboxInnerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_PADDING_WIDTH
+        const workboxInnerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_TOTAL_PADDING_WIDTH
 
         setWorkboxInnerFrameWidth(workboxInnerFrameWidth)
 
