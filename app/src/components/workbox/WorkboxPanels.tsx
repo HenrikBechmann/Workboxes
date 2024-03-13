@@ -143,6 +143,8 @@ const settingsPanelStyles = {
     width:'300px',
     position:'absolute',
     left:0,
+    transition:'box-shadow .3s',
+    boxShadow: '3px 3px 6px 6px inset silver'
 } as CSSProperties
 
 export const CentralPanel = (props) => {
@@ -374,7 +376,14 @@ export const CentralPanel = (props) => {
     },[displayConfigCode])
 
     // CentralWidthContext informs CoverPanel
-    return <Box ref = {centralPanelElementRef} data-type = 'central-panel' id = 'central-panel' style = {centralPanelStyles}>{children}</Box>
+    return <Box 
+        data-type = 'central-panel' 
+        ref = {centralPanelElementRef} 
+        id = 'central-panel' 
+        style = {centralPanelStyles}
+    >
+        {children}
+    </Box>
 }
 
 const CoverHandle = (props) => {
@@ -599,23 +608,53 @@ export const ContentsPanel = forwardRef(function FoldersPanel(props:any, content
 
 export const SettingsPanel = (props) => {
     const
-        {showPanel, children} = props,
+        { showPanel, children } = props,
         settingsPanelElementRef = useRef(null),
-        settingsFrameElementRef = useRef(null)
+        settingsFrameElementRef = useRef(null),
+        showTimeoutRef = useRef(null),
+        hideTimeoutRef = useRef(null)
 
     useEffect(()=>{
+        const 
+            frameElement = settingsFrameElementRef.current,
+            panelElement = settingsPanelElementRef.current,
+            showTimeout = 500,
+            hideTimeout = 300
 
-        if (!showPanel) {
-            settingsFrameElementRef.current.style.width = 0
-        } else {
-            const contentWidth = settingsPanelElementRef.current.offsetWidth
-            settingsFrameElementRef.current.style.width = contentWidth + 'px'
+        clearTimeout(showTimeoutRef.current)
+
+        if (showPanel) {
+
+            const 
+                contentWidth = panelElement.offsetWidth
+                frameElement.style.width = contentWidth + 'px'
+
+            showTimeoutRef.current = setTimeout(()=>{
+                panelElement.style.boxShadow = 'none'
+            },showTimeout)
+
+        } else { // hide
+
+            panelElement.style.boxShadow = '3px 3px 6px 6px inset silver'
+
+            hideTimeoutRef.current = setTimeout(()=>{
+                frameElement.style.width = 0
+            },hideTimeout)
+
         }
 
     },[showPanel])
 
-    return <Box data-type = 'settings-frame' ref = {settingsFrameElementRef} style = {settingsFrameStyles} >
-        <Box data-type = 'settings-panel' ref = {settingsPanelElementRef} style = {settingsPanelStyles}>
+    return <Box 
+        data-type = 'settings-frame' 
+        ref = {settingsFrameElementRef} 
+        style = {settingsFrameStyles} 
+    >
+        <Box 
+            data-type = 'settings-panel' 
+            ref = {settingsPanelElementRef} 
+            style = {settingsPanelStyles}
+        >
             {children}
         </Box>
     </Box>
