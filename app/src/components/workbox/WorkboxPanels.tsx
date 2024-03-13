@@ -218,6 +218,7 @@ export const CentralPanel = (props) => {
             coverFrameElement.style.flex = '0 0 auto'
 
             // freeze contents
+            centralPanelElement.style.minWidth = (MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH) + 'px'
             contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
             contentsFrameElement.style.flex = '0 0 auto'
 
@@ -267,6 +268,7 @@ export const CentralPanel = (props) => {
             }
 
             // freeze central frame
+            centralPanelElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
@@ -324,6 +326,7 @@ export const CentralPanel = (props) => {
             }
 
             // freeze central frame
+            centralPanelElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
