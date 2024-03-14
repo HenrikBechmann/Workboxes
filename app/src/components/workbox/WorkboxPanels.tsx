@@ -58,7 +58,7 @@ const coverPanelStyles = {
     width:'100%',
     // minWidth: MIN_COVER_FRAME_WIDTH + 'px',
     padding: '3px', 
-    border: '5px ridge gray',
+    border: '5px ridge seagreen',
     borderRadius:'8px',
     transition:'box-shadow .3s',
     transitionDelay:'unset',
@@ -134,7 +134,7 @@ const settingsFrameStyles = {
 
 const settingsPanelStyles = {
     // display:'block', 
-    border:'5px ridge silver',
+    border:'5px ridge saddlebrown',
     borderRadius:'8px',
     overflow:'auto',
     padding:'3px',
