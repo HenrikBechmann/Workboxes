@@ -51,9 +51,9 @@ const Workpanel = (props:any) => {
             const component = createWindow(sessionID, specs)
 
             const record = {
-                specs,
+                window:specs.window,
+                workbox:specs.workbox,
                 sessionID,
-                state:'normal', // 'minimized', 'normal', 'panel'
             }
 
             windowsMap.set(sessionID, record)
