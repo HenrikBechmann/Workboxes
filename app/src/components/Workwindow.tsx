@@ -36,6 +36,7 @@ const windowHeaderStyles  = {
     gridArea:'header',
     width: '100%',
     position: 'relative',
+    minWidth:0,
 }  as CSSProperties
 
 const windowBodyStyles = {

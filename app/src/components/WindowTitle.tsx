@@ -21,36 +21,61 @@ const windowTitleStyles = {
     backgroundColor:'gainsboro',
     display: 'flex',
     alignItems: 'center',
+    minWidth: 0,
+    flexFlow: 'row nowrap'
 } as CSSProperties
 
 const titleTextBlockStyles = {
-    overflow:'clip',
     minWidth:0,
+    flex: '1 0 0%',  
+} as CSSProperties
+
+const titleContentStyles = {
     fontSize:'small', 
+    overflow:'hidden',
     textWrap:'nowrap', 
-    textOverflow: 'ellipsis',   
-}  as CSSProperties
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis', 
+} as CSSProperties
+
+const iconBoxStyles = {
+    width: '24px',
+    height: '24px',
+} as CSSProperties
 
 const titleIconGroupStyles = {
     marginLeft:'auto',
     borderRadius: '0 7px 0 0',
     display:'flex',
+    flex:'0 0 auto',
+} as CSSProperties
+
+const leftIconBoxStyles = {
+    display:'flex',
+    flex:'0 0 auto',
+    width: '24px',
+    height: '24px',
+    alignItems: 'center',
 } as CSSProperties
 
 const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef:any) {
 
     return <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
-        <Box><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
+        <Box data-type = 'window-close' style = {leftIconBoxStyles} ><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
         <Box data-type = 'text-block' style = {titleTextBlockStyles}>
+            <Box style = {titleContentStyles}>
             Henrik Bechmann (Domain)
+            </Box>
         </Box>
         <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>
-            <img src = {windowMinimalIcon} />
-            <img src = {windowFloatIcon} />
-            <img src = {windowFullIcon} />
-            <img src = {moreVertIcon} />
+            <Box style = {iconBoxStyles} ><img src = {windowMinimalIcon} /></Box>
+            <Box style = {iconBoxStyles} ><img src = {windowFloatIcon} /></Box>
+            <Box style = {iconBoxStyles} ><img src = {windowFullIcon} /></Box>
+            <Box style = {iconBoxStyles} ><img src = {moreVertIcon} /></Box>
         </Box>
     </Box>
 })
+
+
 
 export default WindowTitle
