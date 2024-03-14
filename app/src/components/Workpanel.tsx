@@ -59,12 +59,16 @@ const Workpanel = (props:any) => {
         setPanelState('resorted')
     }
 
+    const duplicateWindow = (zOrder) => {
+
+    }
+
     const createWindow = (specs) => {
         sessionID++
         return <Workwindow 
             key = {sessionID} 
             sessionID = {sessionID} 
-            setFocus = {setFocus} 
+            callbacks = {callbacks} 
             containerConfigSpecs = {null}
             {... specs.window}
         >
@@ -78,6 +82,12 @@ const Workpanel = (props:any) => {
         windowsListRef.current.push(
             createWindow(specs)
         )
+    }
+
+    const callbacks = {
+        setFocus,
+        removeWindow,
+        duplicateWindow,
     }
 
     const windowsListRef = useRef(null)

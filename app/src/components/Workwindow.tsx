@@ -93,7 +93,7 @@ const Workwindow = (props) => {
             configDefaults, // for this Workwindow 
             sessionID, // system control
             zOrder, // inherited; modified by setFocus 
-            setFocus, // change zOrder
+            callbacks, // change zOrder etc.
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
         } = props,
         sessionIDRef = useRef(sessionID), // future reference
@@ -127,7 +127,7 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
 
         const onFocus = (event) => {
-            setFocus && setFocus(zOrderRef.current)
+            callbacks?.setFocus && callbacks.setFocus(zOrderRef.current)
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
         }
 
