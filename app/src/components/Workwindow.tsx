@@ -93,6 +93,7 @@ const Workwindow = (props) => {
             configDefaults, // for this Workwindow 
             sessionID, // system control
             zOrder, // inherited; modified by setFocus 
+            state,
             callbacks, // change zOrder etc.
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
         } = props,

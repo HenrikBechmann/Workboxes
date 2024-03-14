@@ -66,14 +66,14 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxControlStates, setWorkboxControls, itemIcon, itemTitle, domainTitle, typeName } = props,
+        { workboxConfig, setWorkboxConfig, itemIcon, itemTitle, domainTitle, typeName } = props,
 
-        toggleOnCoverRef = useRef(workboxControlStates.coverShow),
-        disabledCoverRef = useRef(workboxControlStates.coverDisabled),
-        toggleOnContentsRef = useRef(workboxControlStates.contentsShow),
-        disabledContentsRef = useRef(workboxControlStates.contentsDisabled),
-        toggleOnSettingsRef = useRef(workboxControlStates.settingsShow),
-        disabledSettingsRef = useRef(workboxControlStates.settingsDisabled),
+        toggleOnCoverRef = useRef(workboxConfig.coverShow),
+        disabledCoverRef = useRef(workboxConfig.coverDisabled),
+        toggleOnContentsRef = useRef(workboxConfig.contentsShow),
+        disabledContentsRef = useRef(workboxConfig.contentsDisabled),
+        toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
+        disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
 
         toggleHistoryRef = useRef({
             coverShow:toggleOnCoverRef.current,
@@ -99,14 +99,14 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxControlStates.coverShow = toggleOnCoverRef.current
-        workboxControlStates.coverDisabled = disabledCoverRef.current
-        workboxControlStates.contentsShow = toggleOnContentsRef.current
-        workboxControlStates.contentsDisabled = disabledContentsRef.current
-        workboxControlStates.settingsShow = toggleOnSettingsRef.current
-        workboxControlStates.settingsDisabled = disabledSettingsRef.current
+        workboxConfig.coverShow = toggleOnCoverRef.current
+        workboxConfig.coverDisabled = disabledCoverRef.current
+        workboxConfig.contentsShow = toggleOnContentsRef.current
+        workboxConfig.contentsDisabled = disabledContentsRef.current
+        workboxConfig.settingsShow = toggleOnSettingsRef.current
+        workboxConfig.settingsDisabled = disabledSettingsRef.current
 
-        setWorkboxControls({...workboxControlStates})
+        setWorkboxConfig({...workboxConfig}) // trigger render
 
     },[
         toggleOnCoverRef.current,

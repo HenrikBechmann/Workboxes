@@ -17,14 +17,65 @@ const workpanelStyles = {
     minHeight:'700px',
 } as CSSProperties
 
-let sessionID = 0 // used for non-duplicate window component key; also future reference
+let nextSessionID = 0 // used for non-duplicate window component key; also future reference
 
 const Workpanel = (props:any) => {
 
     const 
         [panelState, setPanelState] = useState('setup'), // setup, resorted, resized, ready
-        { panelWindowsSpecsList } = props,
-        panelElementRef = useRef(null)
+        { startingWindowsSpecsList } = props,
+        startingWindowsSpecsListRef = useRef(startingWindowsSpecsList),
+        panelElementRef = useRef(null),
+        windowsListRef = useRef([]),
+        windowsMapRef = useRef(null)
+
+    // initialize windows map and list
+    useEffect(()=>{
+
+        const windowsMap = new Map()
+        windowsMapRef.current = windowsMap
+        const windowsList = windowsListRef.current
+        const startingWindowsSpecs = startingWindowsSpecsListRef.current
+
+        for (const startingspecs of startingWindowsSpecsList) {
+
+            const sessionID = nextSessionID
+            nextSessionID++
+
+            // TODO: anticipate possible transformation
+            const specs = {
+                window:startingspecs.window,
+                workbox:startingspecs.workbox
+            }
+
+            const component = createWindow(sessionID, specs)
+
+            const record = {
+                specs,
+                sessionID,
+                state:'normal', // 'minimized', 'normal', 'panel'
+            }
+
+            windowsMap.set(sessionID, record)
+            windowsList.push(component)
+
+        }
+
+    },[])
+
+    const createWindow = (sessionID, specs) => {
+        return <Workwindow 
+            key = {sessionID} 
+            sessionID = {sessionID} 
+            callbacks = {callbacks} 
+            containerConfigSpecs = {null}
+            {... specs.window}
+        >
+            <Workbox 
+                {...specs.workbox}
+            />
+        </Workwindow>
+    }
 
     const setFocus = (zOrder) => {
         const windowsList = windowsListRef.current
@@ -63,24 +114,13 @@ const Workpanel = (props:any) => {
 
     }
 
-    const createWindow = (specs) => {
-        sessionID++
-        return <Workwindow 
-            key = {sessionID} 
-            sessionID = {sessionID} 
-            callbacks = {callbacks} 
-            containerConfigSpecs = {null}
-            {... specs.window}
-        >
-            <Workbox 
-                {...specs.workbox}
-            />
-        </Workwindow>
-    }
-
     const addWindow = (specs) => {
+
+        const sessionID = nextSessionID
+        nextSessionID++
+
         windowsListRef.current.push(
-            createWindow(specs)
+            createWindow(sessionID, specs)
         )
     }
 
@@ -89,22 +129,6 @@ const Workpanel = (props:any) => {
         removeWindow,
         duplicateWindow,
     }
-
-    const windowsListRef = useRef(null)
-
-    windowsListRef.current = useMemo(()=>{
-
-        const list = []
-
-        for (const specs of panelWindowsSpecsList) {
-            list.push(
-                createWindow(specs)
-            )
-        }
-
-        return list
-
-    },[panelWindowsSpecsList]) // one-time - input never changes
 
     const onResize = useCallback(()=>{
 

@@ -26,8 +26,8 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => {
 
     const 
-        { workboxControlStates } = props,
-        { contentsShow, coverShow } = workboxControlStates, // boolean - show/ noshow
+        { workboxConfig } = props,
+        { contentsShow, coverShow } = workboxConfig, // boolean - show/ noshow
         // share cover and contents elements with children
         coverFrameElementRef = useRef( null ),
         contentsFrameElementRef = useRef( null ),
@@ -61,7 +61,7 @@ const WorkboxContent = (props) => {
     },[])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsPanel showPanel = {workboxControlStates.settingsShow}>
+        <SettingsPanel showPanel = {workboxConfig.settingsShow}>
             Settings
         </SettingsPanel>
         <CentralPanel 
