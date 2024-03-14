@@ -106,7 +106,7 @@ const Signin = (props) => {
             <Center>
             <VStack divider={<StackDivider />} spacing='4'>
             <Box style = {{textAlign:'center'}} >
-                <Heading size = 'lg'>Welcome!</Heading>
+                <Heading size = 'lg'>Welcome to the Workboxes App!</Heading>
                 <Heading size = 'xl'>
                     <Text>Use <Image style = {{display:"inline-block", verticalAlign:'baseline'}} src = {tribalopolisIcon} />Workboxes to...</Text>
                 </Heading>
