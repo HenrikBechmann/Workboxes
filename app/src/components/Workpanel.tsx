@@ -27,20 +27,18 @@ const Workpanel = (props:any) => {
         startingWindowsSpecsListRef = useRef(startingWindowsSpecsList),
         panelElementRef = useRef(null),
         windowsListRef = useRef([]),
-        windowsMapRef = useRef(null)
+        windowsMapRef = useRef(null),
+        highestZOrderRef = useRef(0)
 
     // initialize windows map and list
     useEffect(()=>{
 
         const windowsMap = new Map()
         windowsMapRef.current = windowsMap
-        const windowsList = windowsListRef.current
+
         const startingWindowsSpecs = startingWindowsSpecsListRef.current
 
         for (const startingspecs of startingWindowsSpecsList) {
-
-            const sessionID = nextSessionID
-            nextSessionID++
 
             // TODO: anticipate possible transformation
             const specs = {
@@ -48,21 +46,35 @@ const Workpanel = (props:any) => {
                 workbox:startingspecs.workbox
             }
 
-            const component = createWindow(sessionID, specs)
-
-            const record = {
-                window:specs.window,
-                workbox:specs.workbox,
-                sessionID,
-            }
-
-            windowsMap.set(sessionID, record)
-            windowsList.push(component)
+            addWindow(specs)
 
         }
 
     },[])
 
+    const addWindow = (specs) => {
+
+        const sessionID = nextSessionID
+        nextSessionID++
+
+        const 
+            windowsList = windowsListRef.current,
+            windowsMap = windowsMapRef.current,
+            record = {
+                window:specs.window,
+                workbox:specs.workbox,
+                sessionID,
+            },
+            zOrder = ++highestZOrderRef.current,
+            component = createWindow(sessionID, specs)
+
+        record.window.zOrder = zOrder
+        windowsMap.set(sessionID, record)
+        windowsList.push(component)
+
+    }
+
+    // ** private ** only called by addWindow above
     const createWindow = (sessionID, specs) => {
         return <Workwindow 
             key = {sessionID} 
@@ -77,57 +89,97 @@ const Workpanel = (props:any) => {
         </Workwindow>
     }
 
-    const setFocus = (zOrder) => {
-        const windowsList = windowsListRef.current
-        const numberOfWindows = windowsList.length
+    // remove window and update higher zOrders to compensate
+    // TODO move minimized windows to compensate
+    const removeWindow = (sessionID) => {
+        const 
+            windowsMap = windowsMapRef.current,
+            record = windowsMap.get(sessionID),
+            { zOrder } = record.window,
+            windowsList = windowsListRef.current,
+            numberOfWindows = windowsList.length
+
+        let removeIndex = null
         for (let i = 0; i < numberOfWindows; i++) {
             const component = windowsList[i]
             const currentZOrder = component.props.zOrder
-            if (currentZOrder === zOrder) {
-                windowsList[i] = React.cloneElement(component, {zOrder:numberOfWindows})
-            } else if (currentZOrder > zOrder) {
-                windowsList[i] = React.cloneElement(component, {zOrder:currentZOrder-1})
+            const currentSessionID = component.props.sessionID
+            if (currentSessionID === sessionID) {
+                removeIndex = i
+            }
+            if (zOrder > 0) {
+                if (currentZOrder > zOrder) {
+                    const newZOrder = currentZOrder - 1
+                    windowsList[i] = React.cloneElement(component, {zOrder:newZOrder})
+                    windowsMap.get(sessionID).window.zOrder = newZOrder
+                }
             }
         }
-        setPanelState('resorted')
-    }
 
-    const removeWindow = (zOrder) => {
-        const windowsList = windowsListRef.current
-        const numberOfWindows = windowsList.length
-        let deletePointer = null
-        for (let i = 0; i < numberOfWindows; i++) {
-            const component = windowsList[i]
-            const currentZOrder = component.props.zOrder
-            if (currentZOrder === zOrder) {
-                deletePointer = i
-            } else if (currentZOrder > zOrder) {
-                windowsList[i] = React.cloneElement(component, {zOrder:currentZOrder-1})
-            }
+        if (zOrder > 0) {
+            highestZOrderRef.current--
         }
     
-        if (deletePointer !== null) windowsListRef.current.splice(deletePointer, 1)
+        windowsListRef.current.splice(removeIndex, 1)
+
+        windowsMap.delete(sessionID)
+
         setPanelState('resorted')
     }
 
-    const duplicateWindow = (zOrder) => {
+    const duplicateWindow = (sessionID) => {
+
+        const record = windowsMapRef.current.get(sessionID)
+        record.window = {...record.window}
+        record.workbox = {...record.workbox}
+
+        addWindow(record)
 
     }
 
-    const addWindow = (specs) => {
+// minimizeWindow, normalizeWindow, maximizeWindow
+    const minimizeWindow = (sessionID) => {
 
-        const sessionID = nextSessionID
-        nextSessionID++
+    }
 
-        windowsListRef.current.push(
-            createWindow(sessionID, specs)
-        )
+    const normalizeWindow = (sessionID) => {
+        
+    }
+
+    const maximizeWindow = (sessionID) => {
+        
+    }
+
+    const setFocus = (sessionID) => {
+
+        const 
+            windowsMap = windowsMapRef.current,
+            windowsList = windowsListRef.current,
+            numberOfWindows = windowsList.length,
+            zOrder = windowsMap.get(sessionID).window.zOrder
+
+        for (let i = 0; i < numberOfWindows; i++) {
+            const component = windowsList[i]
+            const {zOrder: currentZOrder, sessionID: currentSessionID} = component.props
+
+            if (currentZOrder === zOrder) {
+                windowsList[i] = React.cloneElement(component, {zOrder:numberOfWindows})
+                windowsMap.get(currentSessionID).window.zOrder = numberOfWindows
+            } else if (currentZOrder > zOrder) {
+                windowsList[i] = React.cloneElement(component, {zOrder:currentZOrder - 1})
+                windowsMap.get(currentSessionID).window.zOrder = currentZOrder - 1
+            }
+        }
+        setPanelState('resorted')
     }
 
     const callbacks = {
         setFocus,
         removeWindow,
         duplicateWindow,
+        minimizeWindow,
+        normalizeWindow,
+        maximizeWindow,
     }
 
     const onResize = useCallback(()=>{

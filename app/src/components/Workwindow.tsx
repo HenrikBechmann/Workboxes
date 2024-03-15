@@ -110,7 +110,6 @@ const Workwindow = (props) => {
         windowConfigSpecsRef = useRef(null),
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
-        zOrderRef = useRef(null),
         appliedWindowFrameStyles = { // dynamic update with resizing
             ...windowFrameStyles,
             width:windowConfigSpecs.width + 'px', 
@@ -119,7 +118,6 @@ const Workwindow = (props) => {
         },
         maxConstraintsRef = useRef([700,700]) // default
 
-    zOrderRef.current = zOrder
     windowConfigSpecsRef.current = windowConfigSpecs
 
     // set and clear onFocus and onBlur event listeners
@@ -128,7 +126,7 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
 
         const onFocus = (event) => {
-            callbacks?.setFocus && callbacks.setFocus(zOrderRef.current)
+            callbacks?.setFocus && callbacks.setFocus(sessionID)
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
         }
 
