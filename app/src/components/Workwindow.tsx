@@ -97,6 +97,7 @@ const Workwindow = (props) => {
             callbacks, // change zOrder etc.
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
         } = props,
+        isMountedRef = useRef(true),
         sessionIDRef = useRef(sessionID), // future reference
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
         [windowConfigSpecs, setWindowConfigSpecs] = useState( // top and left are translation values; styles are left at 0
@@ -118,10 +119,24 @@ const Workwindow = (props) => {
         },
         maxConstraintsRef = useRef([700,700]) // default
 
+    console.log('running Workwindow: sessionID, zOrder, windowState, containerConfigSpecs',
+        sessionID, zOrder, windowState, containerConfigSpecs)
+
     windowConfigSpecsRef.current = windowConfigSpecs
+
+    useEffect(()=>{
+
+        isMountedRef.current = true
+        return () => {
+            isMountedRef.current = false
+        }
+
+    },[])
 
     // set and clear onFocus and onBlur event listeners
     useEffect(()=>{
+
+        if (!isMountedRef.current) return
 
         const element = windowElementRef.current
 
@@ -131,7 +146,7 @@ const Workwindow = (props) => {
         }
 
         const onBlur = (event) => {
-            titleElementRef.current.style.backgroundColor = 'gainsboro'
+            titleElementRef.current && (titleElementRef.current.style.backgroundColor = 'gainsboro')
         }
 
         element.addEventListener('focus',onFocus)
@@ -147,6 +162,9 @@ const Workwindow = (props) => {
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
+        console.log('Workwindow change of zOrder',zOrder, isMountedRef.current)
+        if (!isMountedRef.current) return
+
         windowElementRef.current.style.zIndex = zOrder
 
     },[zOrder])
@@ -154,12 +172,16 @@ const Workwindow = (props) => {
     // resizable requires this assurance of proper internal initialization for first call from any window (unknown reason)
     useEffect(()=>{
 
+        if (!isMountedRef.current) return
+
         if (windowState != 'ready') setWindowState('ready')
 
     },[windowState])
 
     // adjust window size to fit in container size; responds to new containerConfigSpecs object
     useEffect(()=>{
+
+        if (!isMountedRef.current) return
 
         if (!containerConfigSpecs) return
 
@@ -231,11 +253,15 @@ const Workwindow = (props) => {
     // resizable callbacks...
     const onResizeStart = (event, {size, handle}) => {
 
+        if (!isMountedRef.current) return
+
         windowElementRef.current.focus()
 
     }
 
     const onResize = (event, {size, handle}) => {
+
+        if (!isMountedRef.current) return
 
         setWindowConfigSpecs((oldState)=>{
             return {...oldState, width:size.width,height:size.height}})
@@ -245,11 +271,15 @@ const Workwindow = (props) => {
     // draggable callbacks
     const onDragStart = (e, data) => {
 
+        if (!isMountedRef.current) return
+
         windowElementRef.current.focus()
 
     }
 
     const onDragStop = (e, data) => {
+
+        if (!isMountedRef.current) return
 
         setWindowConfigSpecs((oldState) => {
             return {...oldState, top:data.y, left: data.x}
@@ -295,7 +325,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle ref = {titleElementRef} />
+                        <WindowTitle callbacks = {callbacks} sessionID = {sessionID} ref = {titleElementRef} />
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 

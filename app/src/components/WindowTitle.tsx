@@ -60,8 +60,14 @@ const leftIconBoxStyles = {
 
 const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef:any) {
 
+    const { callbacks, sessionID } = props
+
+    const closeWindow = () => {
+        callbacks.closeWindow(sessionID)
+    }
+
     return <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
-        <Box data-type = 'window-close' style = {leftIconBoxStyles} ><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
+        <Box data-type = 'window-close' onClick = {closeWindow} style = {leftIconBoxStyles} ><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
         <Box data-type = 'text-block' style = {titleTextBlockStyles}>
             <Box style = {titleContentStyles}>
             Henrik Bechmann (Domain)
