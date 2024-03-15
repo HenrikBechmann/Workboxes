@@ -148,13 +148,13 @@ const Workpanel = (props:any) => {
     
         windowsList.splice(removeIndex, 1)
 
-        windowsListRef.current = [...windowsList]
+        windowsListRef.current = [...windowsList] // trigger render
 
         windowsMap.delete(sessionID)
 
         console.log('windowsList, windowsMap',windowsList, windowsMap)
 
-        setPanelState('configured')
+        setPanelState('windowclosed')
     }
 
     const duplicateWindow = (sessionID) => {
@@ -203,8 +203,8 @@ const Workpanel = (props:any) => {
             }
         }
 
-        windowsListRef.current = [...windowsList] // triggerRender
-        setPanelState('configured')
+        windowsListRef.current = [...windowsList] // trigger render
+        setPanelState('windowfocused')
     }
 
     const callbacks = {
