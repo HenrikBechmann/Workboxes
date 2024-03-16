@@ -633,20 +633,20 @@ export const Drawer = (props) => {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
-                setDrawerSpecs((oldState)=>{return {...oldState,width:startingLengthRef.current}})
+                setDrawerSpecs((previousState)=>{return {...previousState,width:startingLengthRef.current}})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
-                setDrawerSpecs((oldState)=>{return {...oldState,width:0}})
+                setDrawerSpecs((previousState)=>{return {...previousState,width:0}})
             }
 
         } else {
 
             if (openParm == 'open') {
                 Object.assign(drawerStyleRef.current, {visibility:'visible', opacity:1})
-                setDrawerSpecs((oldState)=>{return {...oldState,height:startingLengthRef.current}})
+                setDrawerSpecs((previousState)=>{return {...previousState,height:startingLengthRef.current}})
             } else {
                 Object.assign(drawerStyleRef.current, {visibility:'hidden', opacity:0})
-                setDrawerSpecs((oldState)=>{return {...oldState,height:0}})
+                setDrawerSpecs((previousState)=>{return {...previousState,height:0}})
             }
 
         }

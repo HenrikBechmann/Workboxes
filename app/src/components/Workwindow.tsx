@@ -273,8 +273,8 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        setWindowConfigSpecs((oldState)=>{
-            return {...oldState, width:size.width,height:size.height}})
+        setWindowConfigSpecs((previousState)=>{
+            return {...previousState, width:size.width,height:size.height}})
 
     }
 
@@ -287,35 +287,35 @@ const Workwindow = (props) => {
 
     }
 
-    // const onDrag = (e, data) => {
-
-    //     console.log('onDrag: sessionID, data',sessionID, data)
-
-    //     // isDraggingRef.current = true
-
-    // }
-
+    // TODO: try setting bounds:{left, top, right, bottom} instead of a search handle
     const onDragStop = (e, data) => {
 
         if (!isMountedRef.current) return
 
-        // console.log('dragStop: sessionID, isDraggingRef.current, data',sessionID, data)
-
-        // if (!isDraggingRef.current) return
-
-        // isDraggingRef.current = false
-
+        // undo deltalY which causes scroll and window movement when title selected
+        // while window is partially out of view
         if (data.deltaY) {
+            // console.log('updating DeltaY',data.deltaY)
             panelFrameElementRef.current.scrollTop -= data.deltaY
         }
 
-        setWindowConfigSpecs((oldState) => {
-            return {...oldState, top:data.y - data.deltaY, left: data.x}
+        setWindowConfigSpecs((previousState) => {
+            return {...previousState, top:data.y - data.deltaY, left: data.x}
         })
+
         maxConstraintsRef.current = [
             containerConfigSpecs.width - data.x, 
-            containerConfigSpecs.height - data.y,
+            containerConfigSpecs.height - (data.y - data.deltaY),
         ]
+    }
+
+    // bounds = '#workpanel'
+    // this makes no difference to the deltaY shift problem...
+    const bounds = {
+        top:0, 
+        right:containerConfigSpecs.width - windowConfigSpecs.width, 
+        bottom:containerConfigSpecs.height - windowConfigSpecs.height, 
+        left:0,
     }
 
     // render
@@ -323,8 +323,8 @@ const Workwindow = (props) => {
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:windowConfigSpecs.left, y:windowConfigSpecs.top}}
-        handle = '#title'
-        bounds = '#workpanel'
+        handle = '#draghandle'
+        bounds = {bounds}
         onStart = {onDragStart}
         onStop = {onDragStop}
     >

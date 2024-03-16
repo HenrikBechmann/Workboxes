@@ -62,13 +62,14 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
 
     const { callbacks, sessionID } = props
 
-    const closeWindow = () => {
+    const closeWindow = (e) => {
+        e.preventDefault()
         callbacks.closeWindow(sessionID)
     }
 
     return <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
         <Box data-type = 'window-close' onClick = {closeWindow} style = {leftIconBoxStyles} ><img style = {{width:'20px'}} src = {closeLightIcon} /></Box>
-        <Box data-type = 'text-block' style = {titleTextBlockStyles}>
+        <Box data-type = 'text-block' id = 'draghandle' style = {titleTextBlockStyles}>
             <Box style = {titleContentStyles}>
             Henrik Bechmann (Domain)
             </Box>
