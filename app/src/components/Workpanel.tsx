@@ -20,7 +20,7 @@ const workpanelStyles = {
 const panelMessageStyles = {
     top:'50%',
     left: '50%',
-    width: '200px',
+    width: '300px',
     position: 'absolute',
     translate: '-50% -50%',
     color: 'lightgray',
@@ -261,7 +261,7 @@ const Workpanel = (props:any) => {
     return <Box data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
         {panelState != 'setup' && windowsList}
         {(panelState != 'setup' && windowCount === 0) && 
-            <Box style = {panelMessageStyles} >Tap here to load the base Domain for this panel</Box>
+            <Box style = {panelMessageStyles} >Tap here to load the base Workbox for this panel</Box>
         }
     </Box>
 }
