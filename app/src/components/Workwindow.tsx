@@ -119,8 +119,8 @@ const Workwindow = (props) => {
         },
         maxConstraintsRef = useRef([700,700]) // default
 
-    console.log('running Workwindow: sessionID, zOrder, windowState, containerConfigSpecs',
-        sessionID, zOrder, windowState, containerConfigSpecs)
+    // console.log('running Workwindow: sessionID, zOrder, windowState, props',
+    //     sessionID, zOrder, windowState, props)
 
     windowConfigSpecsRef.current = windowConfigSpecs
 
@@ -141,8 +141,8 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
 
         const onFocus = (event) => {
-            callbacks?.setFocus && callbacks.setFocus(sessionID)
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
+            callbacks?.setFocus && callbacks.setFocus(sessionID)
         }
 
         const onBlur = (event) => {
@@ -162,7 +162,7 @@ const Workwindow = (props) => {
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
-        console.log('Workwindow change of zOrder',zOrder, isMountedRef.current)
+        // console.log('Workwindow change of zOrder',zOrder, isMountedRef.current)
         if (!isMountedRef.current) return
 
         windowElementRef.current.style.zIndex = zOrder

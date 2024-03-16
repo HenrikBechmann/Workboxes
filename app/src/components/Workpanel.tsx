@@ -18,10 +18,10 @@ const workpanelStyles = {
 } as CSSProperties
 
 const panelMessageStyles = {
+    position: 'absolute',
+    width: '300px',
     top:'50%',
     left: '50%',
-    width: '300px',
-    position: 'absolute',
     translate: '-50% -50%',
     color: 'lightgray',
     fontSize: 'x-large',
@@ -43,7 +43,7 @@ const Workpanel = (props:any) => {
         highestZOrderRef = useRef(0),
         windowCountRef = useRef(0)
 
-    console.log('running Workpanel', panelState)
+    // console.log('running Workpanel', panelState)
 
     // initialize windows map and list
     useEffect(()=>{
@@ -105,7 +105,7 @@ const Workpanel = (props:any) => {
             {... specs.window}
         >
             <Workbox 
-                {...specs.workbox}
+                sessionID = {sessionID} {...specs.workbox}
             />
         </Workwindow>
     }
@@ -118,7 +118,7 @@ const Workpanel = (props:any) => {
             windowsMap = windowsMapRef.current,
             record = windowsMap.get(sessionID)
 
-        console.log('calling closeWindow: sessionID',sessionID, record, windowsMap)
+        // console.log('calling closeWindow: sessionID',sessionID, record, windowsMap)
 
         const
             { zOrder } = record.window,
@@ -148,11 +148,11 @@ const Workpanel = (props:any) => {
     
         windowsList.splice(removeIndex, 1)
 
-        windowsListRef.current = [...windowsList] // trigger render
+        // windowsListRef.current = [...windowsList] // trigger render
 
         windowsMap.delete(sessionID)
 
-        console.log('windowsList, windowsMap',windowsList, windowsMap)
+        // console.log('windowsList, windowsMap',windowsList, windowsMap)
 
         setPanelState('windowclosed')
     }
@@ -186,25 +186,42 @@ const Workpanel = (props:any) => {
             windowsMap = windowsMapRef.current,
             windowsList = windowsListRef.current,
             numberOfWindows = windowsList.length,
-            zOrder = windowsMap.get(sessionID).window.zOrder
+            record = windowsMap.get(sessionID),
+            zOrder = record.window.zOrder
 
-        console.log('inside setFocus: sessionID, zOrder',sessionID, zOrder)
+        // console.log('inside setFocus: sessionID, zOrder',sessionID, zOrder)
 
-        for (let i = 0; i < numberOfWindows; i++) {
-            const component = windowsList[i]
+        let isChange = false
+        for (let index = 0; index < numberOfWindows; index++) {
+            const component = windowsList[index]
             const {zOrder: currentZOrder, sessionID: currentSessionID} = component.props
 
+            // console.log('processing currentSessionID, currentZOrder, component', currentSessionID, currentZOrder, component)
+
             if (currentZOrder === zOrder) {
-                windowsList[i] = React.cloneElement(component, {zOrder:numberOfWindows})
-                windowsMap.get(currentSessionID).window.zOrder = numberOfWindows
+                if (zOrder !== numberOfWindows) {
+                    isChange = true
+                    windowsList[index] = React.cloneElement(component, {zOrder:numberOfWindows})
+                    windowsMap.get(currentSessionID).window.zOrder = numberOfWindows
+
+                // console.log('set window zOrder to top', numberOfWindows, windowsList[index])
+
+                }
+
             } else if (currentZOrder > zOrder) {
-                windowsList[i] = React.cloneElement(component, {zOrder:currentZOrder - 1})
+                windowsList[index] = React.cloneElement(component, {zOrder:currentZOrder - 1})
                 windowsMap.get(currentSessionID).window.zOrder = currentZOrder - 1
+
+                // console.log('adjust window zOrder lower', currentZOrder - 1, windowsList[index])
+
             }
         }
 
-        windowsListRef.current = [...windowsList] // trigger render
-        setPanelState('windowfocused')
+        if (isChange) {
+            windowsListRef.current = [...windowsList]
+            setPanelState('windowrefocused')
+        }
+
     }
 
     const callbacks = {
@@ -224,7 +241,7 @@ const Workpanel = (props:any) => {
             windowsList = windowsListRef.current,
             length = windowsList.length
 
-        console.log('Workpanel onResize callback, length, containerConfigSpecs', length, containerConfigSpecs)
+        // console.log('Workpanel onResize callback, length, containerConfigSpecs', length, containerConfigSpecs)
 
         for (let index = 0; index < length; index++ ) {
             const component = windowsList[index]
@@ -255,11 +272,13 @@ const Workpanel = (props:any) => {
 
     },[panelState])
 
-    const windowsList = windowsListRef.current
-    const windowCount = windowsList.length
+    // const windowsList = windowsListRef.current
+    const windowCount = windowsListRef.current.length
+
+    // console.log('rendering: panelState, windowsList',panelState, windowsListRef.current)
 
     return <Box data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
-        {panelState != 'setup' && windowsList}
+        {panelState != 'setup' && windowsListRef.current}
         {(panelState != 'setup' && windowCount === 0) && 
             <Box style = {panelMessageStyles} >Tap here to load the base Workbox for this panel</Box>
         }
