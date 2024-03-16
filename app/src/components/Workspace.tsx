@@ -90,7 +90,7 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
+            <Box id = 'panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
                 <Workpanel startingWindowsSpecsList = {panelWindowsSpecsRef.current} />
             </Box>
         </GridItem>

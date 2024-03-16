@@ -17,6 +17,8 @@ import WindowTitle from './WindowTitle'
 import dragCornerIcon from '../../assets/drag-corner.png'
 
 const windowFrameStyles = {
+    top:0,
+    left:0,
     position: 'absolute',
     border: '2px solid silver',
     borderRadius: '8px 8px 0 8px',
@@ -76,7 +78,9 @@ const resizeHandleIconStyles = {
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
-    const { handleAxis, innerRef, ...rest } = props
+    const { handleAxis, innerRef, sessionID, ...rest } = props
+
+    // console.log('WindowHandle drag props', sessionID, rest)
 
     return (
         <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
@@ -111,6 +115,8 @@ const Workwindow = (props) => {
         windowConfigSpecsRef = useRef(null),
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
+        panelFrameElementRef = useRef(null),
+        // isDraggingRef = useRef(false),
         appliedWindowFrameStyles = { // dynamic update with resizing
             ...windowFrameStyles,
             width:windowConfigSpecs.width + 'px', 
@@ -123,6 +129,8 @@ const Workwindow = (props) => {
     //     sessionID, zOrder, windowState, props)
 
     windowConfigSpecsRef.current = windowConfigSpecs
+
+    // console.log('sessionID, windowConfigSpecs', sessionID, windowConfigSpecs)
 
     useEffect(()=>{
 
@@ -137,6 +145,8 @@ const Workwindow = (props) => {
     useEffect(()=>{
 
         if (!isMountedRef.current) return
+
+        panelFrameElementRef.current = windowElementRef.current.closest('#panelframe')
 
         const element = windowElementRef.current
 
@@ -277,12 +287,30 @@ const Workwindow = (props) => {
 
     }
 
+    // const onDrag = (e, data) => {
+
+    //     console.log('onDrag: sessionID, data',sessionID, data)
+
+    //     // isDraggingRef.current = true
+
+    // }
+
     const onDragStop = (e, data) => {
 
         if (!isMountedRef.current) return
 
+        // console.log('dragStop: sessionID, isDraggingRef.current, data',sessionID, data)
+
+        // if (!isDraggingRef.current) return
+
+        // isDraggingRef.current = false
+
+        if (data.deltaY) {
+            panelFrameElementRef.current.scrollTop -= data.deltaY
+        }
+
         setWindowConfigSpecs((oldState) => {
-            return {...oldState, top:data.y, left: data.x}
+            return {...oldState, top:data.y - data.deltaY, left: data.x}
         })
         maxConstraintsRef.current = [
             containerConfigSpecs.width - data.x, 
@@ -296,7 +324,7 @@ const Workwindow = (props) => {
         defaultPosition = {{x:0,y:0}}
         position = {{x:windowConfigSpecs.left, y:windowConfigSpecs.top}}
         handle = '#title'
-        bounds = 'parent'
+        bounds = '#workpanel'
         onStart = {onDragStart}
         onStop = {onDragStop}
     >
@@ -305,6 +333,7 @@ const Workwindow = (props) => {
             handle = {
 
                 (handleAxis, ref) => <WindowHandle 
+                    sessionID = {sessionID}
                     innerRef = {ref} 
                     handleAxis = {handleAxis}
                 />

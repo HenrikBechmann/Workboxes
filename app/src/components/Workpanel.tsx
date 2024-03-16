@@ -148,9 +148,9 @@ const Workpanel = (props:any) => {
     
         windowsList.splice(removeIndex, 1)
 
-        // windowsListRef.current = [...windowsList] // trigger render
-
         windowsMap.delete(sessionID)
+
+        windowsListRef.current = [...windowsList] // trigger render
 
         // console.log('windowsList, windowsMap',windowsList, windowsMap)
 
@@ -277,7 +277,7 @@ const Workpanel = (props:any) => {
 
     // console.log('rendering: panelState, windowsList',panelState, windowsListRef.current)
 
-    return <Box data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
+    return <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
         {panelState != 'setup' && windowsListRef.current}
         {(panelState != 'setup' && windowCount === 0) && 
             <Box style = {panelMessageStyles} >Tap here to load the base Workbox for this panel</Box>
