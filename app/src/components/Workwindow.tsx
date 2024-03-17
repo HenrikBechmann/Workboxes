@@ -97,11 +97,12 @@ const Workwindow = (props) => {
             configDefaults, // for this Workwindow 
             sessionID, // system control
             zOrder, // inherited; modified by setFocus 
-            state,
+            viewData, // normalized, maximized, minimized
             callbacks, // change zOrder etc.
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
         } = props,
         isMountedRef = useRef(true),
+        isDisabledRef = useRef(false),
         sessionIDRef = useRef(sessionID), // future reference
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
         [windowConfigSpecs, setWindowConfigSpecs] = useState( // top and left are translation values; styles are left at 0
@@ -125,12 +126,10 @@ const Workwindow = (props) => {
         },
         maxConstraintsRef = useRef([700,700]) // default
 
-    // console.log('running Workwindow: sessionID, zOrder, windowState, props',
-    //     sessionID, zOrder, windowState, props)
+    // console.log('running Workwindow: sessionID, windowState, viewData, isDisabled',
+    //     sessionID, windowState, viewData, isDisabledRef.current)
 
     windowConfigSpecsRef.current = windowConfigSpecs
-
-    // console.log('sessionID, windowConfigSpecs', sessionID, windowConfigSpecs)
 
     useEffect(()=>{
 
@@ -169,10 +168,21 @@ const Workwindow = (props) => {
 
     },[])
 
+    useEffect(()=>{
+
+        // console.log('window useEffect view.viewData',sessionID, viewData.view)
+        if (['maximized','minimized'].includes(viewData.view)) {
+            isDisabledRef.current = true
+        } else {
+            isDisabledRef.current = false
+        }
+        setWindowState('viewchange')
+
+    },[viewData])
+
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
-        // console.log('Workwindow change of zOrder',zOrder, isMountedRef.current)
         if (!isMountedRef.current) return
 
         windowElementRef.current.style.zIndex = zOrder
@@ -265,6 +275,8 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
+        if (isDisabledRef.current) return
+
         windowElementRef.current.focus()
 
     }
@@ -272,6 +284,8 @@ const Workwindow = (props) => {
     const onResize = (event, {size, handle}) => {
 
         if (!isMountedRef.current) return
+
+        if (isDisabledRef.current) return
 
         setWindowConfigSpecs((previousState)=>{
             return {...previousState, width:size.width,height:size.height}})
@@ -309,7 +323,7 @@ const Workwindow = (props) => {
         ]
     }
 
-    // bounds = '#workpanel'
+    // bounds = '#workpanel' <- alternative
     // this makes no difference to the deltaY shift problem...
     const bounds = {
         top:0, 
@@ -327,6 +341,7 @@ const Workwindow = (props) => {
         bounds = {bounds}
         onStart = {onDragStart}
         onStop = {onDragStop}
+        disabled = {isDisabledRef.current}
     >
         <Resizable 
             data-inheritedtype = 'resizable' 

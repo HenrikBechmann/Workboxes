@@ -40,6 +40,8 @@ const Workpanel = (props:any) => {
         panelElementRef = useRef(null),
         windowsListRef = useRef([]),
         windowsMapRef = useRef(null),
+        windowMaximizedRef = useRef(null),
+        windowsMinimizedRef = useRef(null),
         highestZOrderRef = useRef(0),
         windowCountRef = useRef(0)
 
@@ -48,8 +50,12 @@ const Workpanel = (props:any) => {
     // initialize windows map and list
     useEffect(()=>{
 
-        const windowsMap = new Map()
+        const 
+            windowsMap = new Map(),
+            windowsMinimized = new Set()
+
         windowsMapRef.current = windowsMap
+        windowsMinimizedRef.current = windowsMinimized
 
         const startingWindowsSpecs = startingWindowsSpecsListRef.current
 
@@ -61,7 +67,13 @@ const Workpanel = (props:any) => {
                 workbox:startingspecs.workbox
             }
 
-            addWindow(specs)
+            const sessionID = addWindow(specs)
+            if (specs.window.view == 'minimized') {
+                minimizeWindow(sessionID)
+            }
+            if (specs.window.view == 'maximized') {
+                maximizeWindow(sessionID)
+            }
 
         }
 
@@ -89,10 +101,14 @@ const Workpanel = (props:any) => {
         windowsMap.set(sessionID, record)
         windowsList.push(component)
 
+        return sessionID
+
     }
 
     // ** private ** only called by addWindow above
     const createWindow = (sessionID, specs) => {
+
+        // console.log('creating window with specs',{...specs.window})
 
         const element = panelElementRef.current,
         containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight}
@@ -101,6 +117,7 @@ const Workpanel = (props:any) => {
             key = {sessionID} 
             sessionID = {sessionID} 
             callbacks = {callbacks} 
+            viewData = {{view:specs.window.view}}
             containerConfigSpecs = {containerConfigSpecs}
             {... specs.window}
         >
@@ -148,6 +165,14 @@ const Workpanel = (props:any) => {
     
         windowsList.splice(removeIndex, 1)
 
+        if (windowMaximizedRef.current === sessionID) {
+            windowMaximizedRef.current = null
+        }
+        if (windowsMinimizedRef.current.has(sessionID)) {
+            windowsMinimizedRef.current.delete(sessionID)
+            repositionMinimizedWindows()
+        }
+
         windowsMap.delete(sessionID)
 
         windowsListRef.current = [...windowsList] // trigger render
@@ -172,12 +197,63 @@ const Workpanel = (props:any) => {
 
     }
 
+    const repositionMinimizedWindows = () => {
+
+    }
+
     const normalizeWindow = (sessionID) => {
-        
+        const 
+            windowsMap = windowsMapRef.current,
+            record = windowsMap.get(sessionID),
+            windowsList = windowsListRef.current,
+            numberOfWindows = windowsList.length
+
+        if (windowMaximizedRef.current === sessionID) {
+            windowMaximizedRef.current = null
+        }
+        if (windowsMinimizedRef.current.has(sessionID)) {
+            windowsMinimizedRef.current.delete(sessionID)
+            repositionMinimizedWindows()
+        }
+
+        record.window.view = 'normalized'
+        const viewData = {view:'normalized'}
+        for (let index = 0; index < numberOfWindows; index++) {
+            const component = windowsList[index]
+            if (component.props.sessionID === sessionID) {
+                windowsList[index] = React.cloneElement(component,{viewData})
+                break
+            }
+        }
+        windowsListRef.current = [...windowsList]
+        setPanelState('normalizeWindow')
     }
 
     const maximizeWindow = (sessionID) => {
-        
+        const 
+            windowsMap = windowsMapRef.current,
+            record = windowsMap.get(sessionID),
+            windowsList = windowsListRef.current,
+            numberOfWindows = windowsList.length
+
+        if (windowMaximizedRef.current) {
+            const sessionID = windowMaximizedRef.current
+            windowMaximizedRef.current = null
+            normalizeWindow(sessionID)
+        }
+
+        record.window.view = 'maximized'
+        windowMaximizedRef.current = sessionID
+        const viewData = {view:'maximized'}
+        for (let index = 0; index < numberOfWindows; index++) {
+            const component = windowsList[index]
+            if (component.props.sessionID === sessionID) {
+                windowsList[index] = React.cloneElement(component,{viewData})
+                break
+            }
+        }
+        windowsListRef.current = [...windowsList]
+        setPanelState('maximizewindow')
     }
 
     const setFocus = (sessionID) => {

@@ -67,6 +67,21 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
         callbacks.closeWindow(sessionID)
     }
 
+    const minimizeWindow = (e) => {
+        e.preventDefault()
+        callbacks.minimizeWindow(sessionID)
+    }
+
+    const maximizeWindow = (e) => {
+        e.preventDefault()
+        callbacks.maximizeWindow(sessionID)
+    }
+
+    const normalizeWindow = (e) => {
+        e.preventDefault()
+        callbacks.normalizeWindow(sessionID)
+    }
+
     return <Box ref = {titleElementRef} id = 'title' data-type = 'window-title' style = {windowTitleStyles}>
         <Box data-type = 'window-close' onClick = {closeWindow} style = {leftIconBoxStyles} >
             <img draggable = "false" style = {{width:'20px'}} src = {closeLightIcon} />
@@ -77,9 +92,9 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
             </Box>
         </Box>
         <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>
-            <Box style = {iconBoxStyles} ><img draggable = "false" src = {windowMinimalIcon} /></Box>
-            <Box style = {iconBoxStyles} ><img draggable = "false" src = {windowFloatIcon} /></Box>
-            <Box style = {iconBoxStyles} ><img draggable = "false" src = {windowFullIcon} /></Box>
+            <Box onClick = {minimizeWindow} style = {iconBoxStyles} ><img draggable = "false" src = {windowMinimalIcon} /></Box>
+            <Box onClick = {normalizeWindow} style = {iconBoxStyles} ><img draggable = "false" src = {windowFloatIcon} /></Box>
+            <Box onClick = {maximizeWindow} style = {iconBoxStyles} ><img draggable = "false" src = {windowFullIcon} /></Box>
             <Box style = {iconBoxStyles} ><img draggable = "false" src = {moreVertIcon} /></Box>
         </Box>
     </Box>
