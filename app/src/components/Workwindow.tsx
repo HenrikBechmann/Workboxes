@@ -292,7 +292,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        // undo deltalY which causes scroll and window movement when title selected
+        // undo deltalY which causes scroll and window movement when drag handle (title) selected
         // while window is partially out of view
         if (data.deltaY) {
             // console.log('updating DeltaY',data.deltaY)
