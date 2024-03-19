@@ -120,6 +120,8 @@ const Workwindow = (props) => {
         dynamicConfigSnapshotRef = useRef({
             width:null,
             height:null,
+            top: null,
+            left: null,
             transform:null,
             view:null,
         }),
@@ -178,71 +180,106 @@ const Workwindow = (props) => {
     useEffect(()=>{
 
         clearTimeout(transitionTimeoutRef.current)
-        console.log('window useEffect view.viewData',sessionID, viewData.view)
+
         const element = windowElementRef.current
         const windowConfig = windowConfigSpecsRef.current
+
         if (['maximized','minimized'].includes(viewData.view)) {
-            if (viewData.view !== dynamicConfigSnapshotRef.current.view) {
-                isDisabledRef.current = true
-                dynamicConfigSnapshotRef.current = {
-                    width: element.offsetWidth,
-                    height: element.offsetHeight,
-                    transform: element.style.transform,
-                    view:viewData.view
-                }
-                const panelElement = panelFrameElementRef.current
-                if (viewData.view == 'maximized') {
-                    element.style.transform = 'none'
-                    element.style.top = windowConfig.top + 'px'
-                    element.style.left = windowConfig.left + 'px'
 
-                    setTimeout(()=>{
+            if (viewData.view == dynamicConfigSnapshotRef.current.view) return // changes aleady made
 
-                        element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
-                        element.style.top = '0px'
-                        element.style.left = '0px'
-                        element.style.width = panelElement.offsetWidth + 'px'
-                        element.style.height = panelElement.offsetHeight + 'px'
-
-
-                    },1)
-
-                    transitionTimeoutRef.current = setTimeout(()=>{
-
-                        element.style.transition = null
-                        element.style.top = null
-                        element.style.left = null
-                        element.style.width = null
-                        element.style.height = null
-                        element.style.inset = 0
-
-                    },501)
-
-                }
+            isDisabledRef.current = true
+            dynamicConfigSnapshotRef.current = {
+                width: element.offsetWidth,
+                height: element.offsetHeight,
+                top: windowConfig.top,
+                left: windowConfig.left,
+                transform: element.style.transform,
+                view:viewData.view
             }
+            const panelElement = panelFrameElementRef.current
+
+            if (viewData.view == 'maximized') {
+                element.style.transform = 'none'
+                element.style.top = windowConfig.top + 'px'
+                element.style.left = windowConfig.left + 'px'
+
+                setTimeout(()=>{
+
+                    element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
+                    element.style.top = '0px'
+                    element.style.left = '0px'
+                    element.style.width = panelElement.offsetWidth + 'px'
+                    element.style.height = panelElement.offsetHeight + 'px'
+
+
+                },1)
+
+                transitionTimeoutRef.current = setTimeout(()=>{
+
+                    element.style.transition = null
+                    element.style.top = null
+                    element.style.left = null
+                    element.style.width = null
+                    element.style.height = null
+                    element.style.inset = 0
+
+                },501)
+
+            } else { // 'minimized'
+
+            }
+
         } else { // 'normalized'
-            const config = dynamicConfigSnapshotRef.current
-            // console.log('normalizing', sessionID, ['maximized','minimized'].includes(config.view), config)
-            if (['maximized','minimized'].includes(config.view)) {
-                // console.log('updating window styles')
-                windowConfigSpecsRef.current.height = config.height
-                windowConfigSpecsRef.current.width = config.width
-                element.style.inset = null
-                element.style.width = config.width + 'px'
-                element.style.height = config.height + 'px'
-                element.style.transform = config.transform
+
+            const savedConfig = dynamicConfigSnapshotRef.current
+
+            if (!['maximized','minimized'].includes(savedConfig.view)) return // already normalized
+
+            const element = windowElementRef.current
+
+            // set base styles
+            const currentWidth = element.offsetWidth, currentHeight = element.offsetHeight
+            element.style.inset = null
+            element.style.top = 0
+            element.style.left = 0
+            element.style.width = currentWidth + 'px'
+            element.style.height = currentHeight + 'px'
+
+            // set targets
+            setTimeout(()=>{
+
+                element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
+                element.style.top = savedConfig.top + 'px'
+                element.style.left = savedConfig.left + 'px'
+                element.style.width = savedConfig.width + 'px'
+                element.style.height = savedConfig.height + 'px'
+
+            },1)
+
+            transitionTimeoutRef.current = setTimeout(()=>{
+
+                element.style.transition = null
                 element.style.top = 0
                 element.style.left = 0
-                element.style.animation = null
+                element.style.transform = savedConfig.transform
                 isDisabledRef.current = false
+
                 dynamicConfigSnapshotRef.current = {
                     width:null,
                     height:null,
+                    top:null,
+                    left:null,
                     transform:null,
                     view:null,                    
                 }
-            }
+
+                setWindowState('enabledynamics')
+
+            },501)
+
         }
+
         setWindowState('viewchange')
 
     },[viewData])
