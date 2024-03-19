@@ -356,7 +356,7 @@ const Workpanel = (props:any) => {
     return <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
         {panelState != 'setup' && windowsListRef.current}
         {(panelState != 'setup' && windowCount === 0) && 
-            <Box style = {panelMessageStyles} >Tap here to load the base Workbox for this panel</Box>
+            <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
         }
     </Box>
 }

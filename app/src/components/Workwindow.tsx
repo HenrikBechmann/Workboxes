@@ -117,6 +117,12 @@ const Workwindow = (props) => {
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         panelFrameElementRef = useRef(null),
+        dynamicConfigSnapshotRef = useRef({
+            width:null,
+            height:null,
+            transform:null,
+            view:null,
+        }),
         // isDraggingRef = useRef(false),
         appliedWindowFrameStyles = { // dynamic update with resizing
             ...windowFrameStyles,
@@ -171,10 +177,47 @@ const Workwindow = (props) => {
     useEffect(()=>{
 
         // console.log('window useEffect view.viewData',sessionID, viewData.view)
+        const element = windowElementRef.current
         if (['maximized','minimized'].includes(viewData.view)) {
-            isDisabledRef.current = true
-        } else {
-            isDisabledRef.current = false
+            if (viewData.view !== dynamicConfigSnapshotRef.current.view) {
+                isDisabledRef.current = true
+                dynamicConfigSnapshotRef.current = {
+                    width: element.offsetWidth,
+                    height: element.offsetHeight,
+                    transform: element.style.transform,
+                    view:viewData.view
+                }
+                if (viewData.view == 'maximized') {
+                    element.style.top = null
+                    element.style.left = null
+                    element.style.width = null
+                    element.style.height = null
+                    element.style.transform = 'none'
+
+                    element.style.inset = 0
+                }
+            }
+        } else { // 'normalized'
+            const config = dynamicConfigSnapshotRef.current
+            // console.log('normalizing', sessionID, ['maximized','minimized'].includes(config.view), config)
+            if (['maximized','minimized'].includes(config.view)) {
+                // console.log('updating window styles')
+                windowConfigSpecsRef.current.height = config.height
+                windowConfigSpecsRef.current.width = config.width
+                element.style.inset = null
+                element.style.width = config.width + 'px'
+                element.style.height = config.height + 'px'
+                element.style.transform = config.transform
+                element.style.top = 0
+                element.style.left = 0
+                isDisabledRef.current = false
+                dynamicConfigSnapshotRef.current = {
+                    width:null,
+                    height:null,
+                    transform:null,
+                    view:null,                    
+                }
+            }
         }
         setWindowState('viewchange')
 
