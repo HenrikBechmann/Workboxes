@@ -130,7 +130,8 @@ const Workwindow = (props) => {
             height:windowConfigSpecs.height + 'px',
             transform:'none'
         },
-        maxConstraintsRef = useRef([700,700]) // default
+        maxConstraintsRef = useRef([700,700]), // default
+        transitionTimeoutRef = useRef(null)
 
     // console.log('running Workwindow: sessionID, windowState, viewData, isDisabled',
     //     sessionID, windowState, viewData, isDisabledRef.current)
@@ -176,8 +177,10 @@ const Workwindow = (props) => {
 
     useEffect(()=>{
 
-        // console.log('window useEffect view.viewData',sessionID, viewData.view)
+        clearTimeout(transitionTimeoutRef.current)
+        console.log('window useEffect view.viewData',sessionID, viewData.view)
         const element = windowElementRef.current
+        const windowConfig = windowConfigSpecsRef.current
         if (['maximized','minimized'].includes(viewData.view)) {
             if (viewData.view !== dynamicConfigSnapshotRef.current.view) {
                 isDisabledRef.current = true
@@ -187,14 +190,34 @@ const Workwindow = (props) => {
                     transform: element.style.transform,
                     view:viewData.view
                 }
+                const panelElement = panelFrameElementRef.current
                 if (viewData.view == 'maximized') {
-                    element.style.top = null
-                    element.style.left = null
-                    element.style.width = null
-                    element.style.height = null
                     element.style.transform = 'none'
+                    element.style.top = windowConfig.top + 'px'
+                    element.style.left = windowConfig.left + 'px'
 
-                    element.style.inset = 0
+                    setTimeout(()=>{
+
+                        element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
+                        element.style.top = '0px'
+                        element.style.left = '0px'
+                        element.style.width = panelElement.offsetWidth + 'px'
+                        element.style.height = panelElement.offsetHeight + 'px'
+
+
+                    },1)
+
+                    transitionTimeoutRef.current = setTimeout(()=>{
+
+                        element.style.transition = null
+                        element.style.top = null
+                        element.style.left = null
+                        element.style.width = null
+                        element.style.height = null
+                        element.style.inset = 0
+
+                    },501)
+
                 }
             }
         } else { // 'normalized'
@@ -210,6 +233,7 @@ const Workwindow = (props) => {
                 element.style.transform = config.transform
                 element.style.top = 0
                 element.style.left = 0
+                element.style.animation = null
                 isDisabledRef.current = false
                 dynamicConfigSnapshotRef.current = {
                     width:null,

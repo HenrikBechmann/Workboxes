@@ -195,6 +195,14 @@ const Workpanel = (props:any) => {
 // minimizeWindow, normalizeWindow, maximizeWindow
     const minimizeWindow = (sessionID) => {
 
+        const 
+            windowsMap = windowsMapRef.current,
+            record = windowsMap.get(sessionID),
+            windowsList = windowsListRef.current,
+            numberOfWindows = windowsList.length
+
+        if (record.window.view == 'minimized') return
+
     }
 
     const repositionMinimizedWindows = () => {
@@ -207,6 +215,8 @@ const Workpanel = (props:any) => {
             record = windowsMap.get(sessionID),
             windowsList = windowsListRef.current,
             numberOfWindows = windowsList.length
+
+        if (record.window.view == 'normalized') return
 
         if (windowMaximizedRef.current === sessionID) {
             windowMaximizedRef.current = null
@@ -235,6 +245,8 @@ const Workpanel = (props:any) => {
             record = windowsMap.get(sessionID),
             windowsList = windowsListRef.current,
             numberOfWindows = windowsList.length
+
+        if (record.window.view == 'maximized') return
 
         if (windowMaximizedRef.current) {
             const sessionID = windowMaximizedRef.current
