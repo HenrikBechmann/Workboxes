@@ -120,7 +120,7 @@ const Workwindow = (props) => {
         // source of truth for normalized window
         [normalizedWindowConfig, setNormalizedWindowConfig] = useState( 
             {
-                top:configDefaults.top, 
+                top: configDefaults.top, 
                 left: configDefaults.left, 
                 width: configDefaults.width, 
                 height: configDefaults.height
@@ -152,10 +152,12 @@ const Workwindow = (props) => {
                     : null, // maximized
             transform:'none'
         },
+        viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
+    viewDeclarationRef.current = viewDeclaration
 
     // console.log('sessionID, normalizedWindowConfig, renderWindowFrameStyles',
     //     sessionID, {...normalizedWindowConfig} , {...renderWindowFrameStyles})
@@ -345,81 +347,78 @@ const Workwindow = (props) => {
 
         if (!containerConfigSpecs) return
 
-        // console.log('responding to containerConfigSpecs change', containerConfigSpecs)
-
         const 
             element = windowElementRef.current,
-            reservedWindowConfig = reservedNormalizedWindowConfigRef.current
+            reservedWindowConfig = reservedNormalizedWindowConfigRef.current,
+            normalizedWindowConfig = normalizedWindowConfigRef.current,
+            localViewDeclaration = viewDeclarationRef.current
 
-            reservedWindowConfig.view && console.log('sessionID, reservedWindowConfig, element.offsetWidth, element.offsetHeight',
-                sessionID, reservedWindowConfig, element.offsetWidth, element.offsetHeight)
+        let virtualWindowConfig
+        if (reservedWindowConfig.view) {
+            virtualWindowConfig = {
+                width: reservedWindowConfig.width,
+                height: reservedWindowConfig.height,
+                top: reservedWindowConfig.top, // translate value
+                left: reservedWindowConfig.left, // translate value
+            }
+        } else {
+
+            virtualWindowConfig = {
+                width: normalizedWindowConfig.width,
+                height: normalizedWindowConfig.height,
+                top: normalizedWindowConfig.top,
+                left: normalizedWindowConfig.left,
+            }
+        }
 
         const
-            windowConfig = {
-                width: reservedWindowConfig.view? reservedWindowConfig.width:element.offsetWidth,
-                height: reservedWindowConfig.view? reservedWindowConfig.height:element.offsetHeight,
-                top: normalizedWindowConfigRef.current.top, // translate value
-                left: normalizedWindowConfigRef.current.left, // translate value
-            },
-            widthFitBound = windowConfig.width + windowConfig.left,
-            heightFitBound = windowConfig.height + windowConfig.top
+            widthFitBound = virtualWindowConfig.width + virtualWindowConfig.left,
+            heightFitBound = virtualWindowConfig.height + virtualWindowConfig.top
 
         // keep entire window inside panel boundaries
         if (containerConfigSpecs.width < widthFitBound || containerConfigSpecs.height < heightFitBound) {
-            // adjustment required
-            let newWidth, newHeight, newLeft, newTop, widthDelta, heightDelta, widthApplied, heightApplied
+            // adjustments required
+
+            // adjust left and width
             if (containerConfigSpecs.width < widthFitBound) {
-                widthDelta = widthFitBound - containerConfigSpecs.width
-                newLeft = Math.max(0,windowConfig.left - widthDelta)
-                widthApplied = windowConfig.left - newLeft
+                let widthDelta = widthFitBound - containerConfigSpecs.width
+                const newLeft = Math.max(0,virtualWindowConfig.left - widthDelta)
+                const widthApplied = virtualWindowConfig.left - newLeft
                 if (widthApplied) {
-                    windowConfig.left = newLeft
+                    virtualWindowConfig.left = newLeft
                 }
                 widthDelta -= widthApplied
-                newWidth = windowConfig.width - widthDelta
-            } else {
-                newLeft = windowConfig.left
-                newWidth = windowConfig.width
+                virtualWindowConfig.width -= widthDelta
             }
 
+            // adjust top and height
             if (containerConfigSpecs.height < heightFitBound) {
-                heightDelta = heightFitBound - containerConfigSpecs.height
-                newTop = Math.max(0,windowConfig.top - heightDelta)
-                heightApplied = windowConfig.top - newTop
+                let heightDelta = heightFitBound - containerConfigSpecs.height
+                const newTop = Math.max(0,virtualWindowConfig.top - heightDelta)
+                const heightApplied = virtualWindowConfig.top - newTop
                 if (heightApplied) {
-                    windowConfig.top = newTop
+                    virtualWindowConfig.top = newTop
                 }
                 heightDelta -= heightApplied
-                newHeight = windowConfig.height - heightDelta
-            } else {
-                newTop = windowConfig.top
-                newHeight = windowConfig.height
+                virtualWindowConfig.height -= heightDelta
             }
 
-            const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
+            if (!reservedWindowConfig.view) {
 
-            reservedWindowConfig.view && console.log('sessionID, dynamicSavedConfig, adjustedWindowSpecs', sessionID, {...reservedWindowConfig}, {...adjustedWindowSpecs})
+                setNormalizedWindowConfig(virtualWindowConfig)
 
-            reservedWindowConfig.view && (reservedNormalizedWindowConfigRef.current = {...reservedWindowConfig,...adjustedWindowSpecs})
+            } else {
 
-            reservedWindowConfig.view && console.log('resize window revised dynamicConfigSnapshotRef.current', {...reservedNormalizedWindowConfigRef.current})
+                Object.assign(reservedWindowConfig, virtualWindowConfig)
 
-            maxConstraintsRef.current = [
-                containerConfigSpecs.width - newLeft, 
-                containerConfigSpecs.height - newTop,
-            ]
-
-            setNormalizedWindowConfig(adjustedWindowSpecs)
-
-        } else {
-
-            maxConstraintsRef.current = [
-                containerConfigSpecs.width - normalizedWindowConfigRef.current.left, 
-                containerConfigSpecs.height - normalizedWindowConfigRef.current.top,
-            ]
-            // console.log('updating maxConstraints: sessionID, maxConstraints', sessionID, maxConstraintsRef.current)
+            }
 
         }
+
+        maxConstraintsRef.current = [
+            containerConfigSpecs.width - virtualWindowConfig.left, 
+            containerConfigSpecs.height - virtualWindowConfig.top,
+        ]
 
         setWindowState('repositioned')
 
