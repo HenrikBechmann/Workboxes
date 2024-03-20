@@ -335,6 +335,8 @@ const Workpanel = (props:any) => {
             const component = windowsList[index]
             windowsList[index] = React.cloneElement(component, {containerConfigSpecs})
         }
+        windowsListRef.current = [...windowsList]
+        // console.log('updateing windows from panel resize containerConfigSpecs', containerConfigSpecs)
         setPanelState('resized')
 
     },[])
