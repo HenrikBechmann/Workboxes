@@ -225,8 +225,6 @@ const Workwindow = (props) => {
 
         clearTimeout(transitionTimeoutRef.current)
 
-        // console.log('updating view', sessionID, viewDeclaration)
-
         const element = windowElementRef.current
         const normalizedConfig = normalizedWindowConfigRef.current
 
@@ -244,15 +242,14 @@ const Workwindow = (props) => {
                 inprogress:true,
             }
 
-            // console.log('reservedNormalizedWindowConfigRef.current',reservedNormalizedWindowConfigRef.current)
-
             if (viewDeclaration.view == 'maximized') {
+
+                // set base for animation
                 element.style.transform = 'none'
                 element.style.top = normalizedConfig.top + 'px'
                 element.style.left = normalizedConfig.left + 'px'
 
-                // console.log('element style width, height, top, left ', element.style.width, element.style.height, element.style.top, element.style.left)
-
+                // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
                     const panelElement = panelFrameElementRef.current
@@ -264,6 +261,7 @@ const Workwindow = (props) => {
 
                 },1)
 
+                // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
                 transitionTimeoutRef.current = setTimeout(()=>{
 
                     element.style.transition = null
@@ -308,6 +306,7 @@ const Workwindow = (props) => {
 
             },1)
 
+            // set restored base
             transitionTimeoutRef.current = setTimeout(()=>{
 
                 element.style.transition = null
@@ -318,6 +317,7 @@ const Workwindow = (props) => {
 
                 Object.assign(normalizedConfig, reservedWindowConfig)
 
+                // reset reserved
                 reservedNormalizedWindowConfigRef.current = {
                     width:null,
                     height:null,
