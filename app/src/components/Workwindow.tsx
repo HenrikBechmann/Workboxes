@@ -97,15 +97,24 @@ const Workwindow = (props) => {
             configDefaults, // for this Workwindow 
             sessionID, // system control
             zOrder, // inherited; modified by setFocus 
-            viewData, // normalized, maximized, minimized
+            viewDeclaration, // normalized, maximized, minimized
             callbacks, // change zOrder etc.
             containerConfigSpecs // height, width; change can cause repositioning and resizing of window
         } = props,
+
+        windowElementRef = useRef(null),
+        titleElementRef = useRef(null),
+        panelFrameElementRef = useRef(null),
+
         isMountedRef = useRef(true),
         isDisabledRef = useRef(false),
         sessionIDRef = useRef(sessionID), // future reference
+
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
-        [realtimeWindowConfig, setRealtimeWindowConfig] = useState( // top and left are translation values; styles are left at 0
+
+        // top and left are translation values; styles are left at 0
+        // source of truth for normalized window
+        [normalizedWindowConfig, setRealtimeWindowConfig] = useState( 
             {
                 top:parseInt(configDefaults.top), 
                 left: parseInt(configDefaults.left), 
@@ -113,11 +122,8 @@ const Workwindow = (props) => {
                 height:parseInt(configDefaults.height)
             }
         ),
-        realtimeWindowConfigsRef = useRef(null),
-        windowElementRef = useRef(null),
-        titleElementRef = useRef(null),
-        panelFrameElementRef = useRef(null),
-        pendingConfigSnapshotRef = useRef({
+        normalizedWindowConfigRef = useRef(null),
+        reservedNormalizedWindowConfigRef = useRef({
             width:null,
             height:null,
             top: null,
@@ -127,17 +133,25 @@ const Workwindow = (props) => {
         }),
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
-            width:realtimeWindowConfig.width + 'px', 
-            height:realtimeWindowConfig.height + 'px',
+            width:(viewDeclaration.view == 'normalized')
+                ? normalizedWindowConfig.width + 'px'
+                : viewDeclaration == 'minimized'
+                    ? viewDeclaration.width + 'px'
+                    : 'auto', 
+            height:(viewDeclaration.view == 'normalized')
+                ? normalizedWindowConfig.height + 'px' 
+                : (viewDeclaration.view == 'minimized')
+                    ? viewDeclaration.height + 'px'
+                    : 'auto',
             transform:'none'
         },
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
-    // console.log('running Workwindow: sessionID, windowState, viewData, isDisabled',
-    //     sessionID, windowState, viewData, isDisabledRef.current)
+    // console.log('running Workwindow: sessionID, windowState, viewDeclaration, isDisabled',
+    //     sessionID, windowState, viewDeclaration, isDisabledRef.current)
 
-    realtimeWindowConfigsRef.current = realtimeWindowConfig
+    normalizedWindowConfigRef.current = normalizedWindowConfig
 
     useEffect(()=>{
 
@@ -176,29 +190,30 @@ const Workwindow = (props) => {
 
     },[])
 
+    // respond to changed viewDeclaration
     useEffect(()=>{
 
         clearTimeout(transitionTimeoutRef.current)
 
         const element = windowElementRef.current
-        const windowConfig = realtimeWindowConfigsRef.current
+        const windowConfig = normalizedWindowConfigRef.current
 
-        if (['maximized','minimized'].includes(viewData.view)) {
+        if (['maximized','minimized'].includes(viewDeclaration.view)) {
 
-            if (viewData.view == pendingConfigSnapshotRef.current.view) return // changes aleady made
+            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) return // changes aleady made
 
             isDisabledRef.current = true
-            pendingConfigSnapshotRef.current = {
+            reservedNormalizedWindowConfigRef.current = {
                 width: element.offsetWidth,
                 height: element.offsetHeight,
                 top: windowConfig.top,
                 left: windowConfig.left,
                 transform: element.style.transform,
-                view:viewData.view
+                view:viewDeclaration.view
             }
             const panelElement = panelFrameElementRef.current
 
-            if (viewData.view == 'maximized') {
+            if (viewDeclaration.view == 'maximized') {
                 element.style.transform = 'none'
                 element.style.top = windowConfig.top + 'px'
                 element.style.left = windowConfig.left + 'px'
@@ -231,9 +246,9 @@ const Workwindow = (props) => {
 
         } else { // 'normalized'
 
-            const pendingConfig = pendingConfigSnapshotRef.current
+            const reservedWindowConfig = reservedNormalizedWindowConfigRef.current
 
-            if (!['maximized','minimized'].includes(pendingConfig.view)) return // already normalized
+            if (!['maximized','minimized'].includes(reservedWindowConfig.view)) return // already normalized
 
             const element = windowElementRef.current
 
@@ -249,10 +264,10 @@ const Workwindow = (props) => {
             setTimeout(()=>{
 
                 element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
-                element.style.top = pendingConfig.top + 'px'
-                element.style.left = pendingConfig.left + 'px'
-                element.style.width = pendingConfig.width + 'px'
-                element.style.height = pendingConfig.height + 'px'
+                element.style.top = reservedWindowConfig.top + 'px'
+                element.style.left = reservedWindowConfig.left + 'px'
+                element.style.width = reservedWindowConfig.width + 'px'
+                element.style.height = reservedWindowConfig.height + 'px'
 
             },1)
 
@@ -261,12 +276,12 @@ const Workwindow = (props) => {
                 element.style.transition = null
                 element.style.top = 0
                 element.style.left = 0
-                element.style.transform = pendingConfig.transform
+                element.style.transform = reservedWindowConfig.transform
                 isDisabledRef.current = false
 
-                Object.assign(windowConfig, pendingConfig)
+                Object.assign(windowConfig, reservedWindowConfig)
 
-                pendingConfigSnapshotRef.current = {
+                reservedNormalizedWindowConfigRef.current = {
                     width:null,
                     height:null,
                     top:null,
@@ -283,7 +298,7 @@ const Workwindow = (props) => {
 
         setWindowState('viewchange')
 
-    },[viewData])
+    },[viewDeclaration])
 
     // apply inherited zOrder on change by parent
     useEffect(()=>{
@@ -314,17 +329,17 @@ const Workwindow = (props) => {
 
         const 
             element = windowElementRef.current,
-            pendingConfig = pendingConfigSnapshotRef.current
+            reservedWindowConfig = reservedNormalizedWindowConfigRef.current
 
-            pendingConfig.view && console.log('pendingConfig, element.offsetWidth, element.offsetHeight',
-                sessionID, pendingConfig, element.offsetWidth, element.offsetHeight)
+            reservedWindowConfig.view && console.log('sessionID, reservedWindowConfig, element.offsetWidth, element.offsetHeight',
+                sessionID, reservedWindowConfig, element.offsetWidth, element.offsetHeight)
 
         const
             windowConfig = {
-                width: pendingConfig.view? pendingConfig.width:element.offsetWidth,
-                height: pendingConfig.view? pendingConfig.height:element.offsetHeight,
-                top: realtimeWindowConfigsRef.current.top, // translate value
-                left: realtimeWindowConfigsRef.current.left, // translate value
+                width: reservedWindowConfig.view? reservedWindowConfig.width:element.offsetWidth,
+                height: reservedWindowConfig.view? reservedWindowConfig.height:element.offsetHeight,
+                top: normalizedWindowConfigRef.current.top, // translate value
+                left: normalizedWindowConfigRef.current.left, // translate value
             },
             widthFitBound = windowConfig.width + windowConfig.left,
             heightFitBound = windowConfig.height + windowConfig.top
@@ -363,11 +378,11 @@ const Workwindow = (props) => {
 
             const adjustedWindowSpecs = {top:newTop, left:newLeft, width:newWidth, height:newHeight}
 
-            pendingConfig.view && console.log('sessionID, dynamicSavedConfig, adjustedWindowSpecs', sessionID, {...pendingConfig}, {...adjustedWindowSpecs})
+            reservedWindowConfig.view && console.log('sessionID, dynamicSavedConfig, adjustedWindowSpecs', sessionID, {...reservedWindowConfig}, {...adjustedWindowSpecs})
 
-            pendingConfig.view && (pendingConfigSnapshotRef.current = {...pendingConfig,...adjustedWindowSpecs})
+            reservedWindowConfig.view && (reservedNormalizedWindowConfigRef.current = {...reservedWindowConfig,...adjustedWindowSpecs})
 
-            pendingConfig.view && console.log('resize window revised dynamicConfigSnapshotRef.current', {...pendingConfigSnapshotRef.current})
+            reservedWindowConfig.view && console.log('resize window revised dynamicConfigSnapshotRef.current', {...reservedNormalizedWindowConfigRef.current})
 
             maxConstraintsRef.current = [
                 containerConfigSpecs.width - newLeft, 
@@ -379,8 +394,8 @@ const Workwindow = (props) => {
         } else {
 
             maxConstraintsRef.current = [
-                containerConfigSpecs.width - realtimeWindowConfigsRef.current.left, 
-                containerConfigSpecs.height - realtimeWindowConfigsRef.current.top,
+                containerConfigSpecs.width - normalizedWindowConfigRef.current.left, 
+                containerConfigSpecs.height - normalizedWindowConfigRef.current.top,
             ]
             // console.log('updating maxConstraints: sessionID, maxConstraints', sessionID, maxConstraintsRef.current)
 
@@ -447,8 +462,8 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = {
         top:0, 
-        right:containerConfigSpecs.width - realtimeWindowConfig.width, 
-        bottom:containerConfigSpecs.height - realtimeWindowConfig.height, 
+        right:containerConfigSpecs.width - normalizedWindowConfig.width, 
+        bottom:containerConfigSpecs.height - normalizedWindowConfig.height, 
         left:0,
     }
 
@@ -456,7 +471,7 @@ const Workwindow = (props) => {
     return (
     <Draggable
         defaultPosition = {{x:0,y:0}}
-        position = {{x:realtimeWindowConfig.left, y:realtimeWindowConfig.top}}
+        position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
         handle = '#draghandle'
         bounds = {bounds}
         onStart = {onDragStart}
@@ -473,8 +488,8 @@ const Workwindow = (props) => {
                     handleAxis = {handleAxis}
                 />
             } 
-            height = {realtimeWindowConfig.height} 
-            width = {realtimeWindowConfig.width} 
+            height = {normalizedWindowConfig.height} 
+            width = {normalizedWindowConfig.width} 
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[300,300]}

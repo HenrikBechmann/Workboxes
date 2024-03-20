@@ -40,7 +40,7 @@ const Workspace = (props) => {
             window:{
                 zOrder: 1,
                 configDefaults: {top:'20px',left:'20px', width:'610px',height:'400px'},
-                view: 'normal',
+                view: 'normalized',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
@@ -54,7 +54,7 @@ const Workspace = (props) => {
             window:{
                 zOrder: 2,
                 configDefaults: {top:'40px',left:'40px', width:'610px',height:'400px'},
-                view: 'normal',
+                view: 'normalized',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
@@ -68,7 +68,7 @@ const Workspace = (props) => {
             window:{
                 zOrder: 3,
                 configDefaults: {top:'60px',left:'60px', width:'610px',height:'400px'},
-                view: 'normal',
+                view: 'normalized',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},

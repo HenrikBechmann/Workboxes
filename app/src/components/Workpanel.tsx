@@ -117,7 +117,7 @@ const Workpanel = (props:any) => {
             key = {sessionID} 
             sessionID = {sessionID} 
             callbacks = {callbacks} 
-            viewData = {{view:specs.window.view}}
+            viewDeclaration = {{view:specs.window.view}}
             containerConfigSpecs = {containerConfigSpecs}
             {... specs.window}
         >
@@ -227,11 +227,11 @@ const Workpanel = (props:any) => {
         }
 
         record.window.view = 'normalized'
-        const viewData = {view:'normalized'}
+        const viewDeclaration = {view:'normalized'}
         for (let index = 0; index < numberOfWindows; index++) {
             const component = windowsList[index]
             if (component.props.sessionID === sessionID) {
-                windowsList[index] = React.cloneElement(component,{viewData})
+                windowsList[index] = React.cloneElement(component,{viewDeclaration})
                 break
             }
         }
@@ -256,11 +256,11 @@ const Workpanel = (props:any) => {
 
         record.window.view = 'maximized'
         windowMaximizedRef.current = sessionID
-        const viewData = {view:'maximized'}
+        const viewDeclaration = {view:'maximized'}
         for (let index = 0; index < numberOfWindows; index++) {
             const component = windowsList[index]
             if (component.props.sessionID === sessionID) {
-                windowsList[index] = React.cloneElement(component,{viewData})
+                windowsList[index] = React.cloneElement(component,{viewDeclaration})
                 break
             }
         }
