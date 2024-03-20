@@ -16,6 +16,9 @@ import WindowTitle from './WindowTitle'
 
 import dragCornerIcon from '../../assets/drag-corner.png'
 
+const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
+const WINDOW_MINIMIZED_WIDTH = 250
+
 const windowFrameStyles = {
     top:0,
     left:0,
@@ -79,11 +82,13 @@ const resizeHandleIconStyles = {
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
-    const { handleAxis, innerRef, sessionID, ...rest } = props
+    const { handleAxis, innerRef, sessionID, viewDeclaration, ...rest } = props
 
     return (
         <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
-            <img draggable = "false" src = {dragCornerIcon} style = {resizeHandleIconStyles} />
+            {(viewDeclaration.view != 'minimized') &&
+                <img draggable = "false" src = {dragCornerIcon} style = {resizeHandleIconStyles} />
+            }
         </Box>
     )
 }
@@ -105,6 +110,7 @@ const Workwindow = (props) => {
 
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
+        titlebarElementRef = useRef(null),
         panelFrameElementRef = useRef(null),
 
         // basic controls
@@ -159,8 +165,7 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    // console.log('sessionID, normalizedWindowConfig, renderWindowFrameStyles',
-    //     sessionID, {...normalizedWindowConfig} , {...renderWindowFrameStyles})
+    // console.log('window windowState, viewDeclaration', windowState, sessionID, viewDeclaration)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
@@ -180,6 +185,7 @@ const Workwindow = (props) => {
         if (!isMountedRef.current) return
 
         panelFrameElementRef.current = windowElementRef.current.closest('#panelframe')
+        titlebarElementRef.current = windowElementRef.current.querySelector('#titlebar')
 
         const element = windowElementRef.current
 
@@ -255,7 +261,7 @@ const Workwindow = (props) => {
                 setTimeout(()=>{
 
                     const panelElement = panelFrameElementRef.current
-                    element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
+                    element.style.transition = WINDOW_TRANSITION
                     element.style.top = 0
                     element.style.left = 0
                     element.style.width = panelElement.offsetWidth + 'px'
@@ -279,6 +285,33 @@ const Workwindow = (props) => {
 
             } else { // 'minimized'
 
+                // set base for animation
+                element.style.transform = 'none'
+                element.style.top = normalizedConfig.top + 'px'
+                element.style.left = normalizedConfig.left + 'px'
+
+                // set targets for animation, yielding for base to take effect
+                setTimeout(()=>{
+
+                    const panelElement = panelFrameElementRef.current
+                    element.style.transition = WINDOW_TRANSITION
+                    element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    element.style.left = 0
+                    element.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
+                    element.style.height = titlebarElementRef.current.offsetHeight + 'px'
+                    element.style.overflow = 'hidden'
+
+                },1)
+
+                // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
+                transitionTimeoutRef.current = setTimeout(()=>{
+
+                    element.style.transition = null
+
+                    reservedNormalizedWindowConfigRef.current.inprogress = false
+
+                },501)
+
             }
 
         } else { // 'normalized'
@@ -300,7 +333,7 @@ const Workwindow = (props) => {
             // set targets
             setTimeout(()=>{
 
-                element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
+                element.style.transition = WINDOW_TRANSITION
                 element.style.top = reservedWindowConfig.top + 'px'
                 element.style.left = reservedWindowConfig.left + 'px'
                 element.style.width = reservedWindowConfig.width + 'px'
@@ -507,6 +540,7 @@ const Workwindow = (props) => {
                     sessionID = {sessionID}
                     innerRef = {ref} 
                     handleAxis = {handleAxis}
+                    viewDeclaration = {viewDeclaration}
                 />
             } 
             height = {normalizedWindowConfig.height} 
@@ -532,14 +566,16 @@ const Workwindow = (props) => {
                             data-type = 'window-content' 
                             style = {windowContentStyles}
                         >{children}</Box>
-                        <Box data-type = 'resize-handle' style = {resizeHandleStyles}>
-                            <img src = {dragCornerIcon} style = {resizeHandleIconStyles} />
-                        </Box>
                     </GridItem>
                 </Grid>
             </Box>
         </Resizable>
     </Draggable>)
 }
+
+                        // <Box data-type = 'resize-handle' style = {resizeHandleStyles}>
+                        //     <img src = {dragCornerIcon} style = {resizeHandleIconStyles} />
+                        // </Box>
+
 
 export default Workwindow

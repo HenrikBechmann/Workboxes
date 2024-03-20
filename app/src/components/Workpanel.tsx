@@ -203,9 +203,33 @@ const Workpanel = (props:any) => {
 
         if (record.window.view == 'minimized') return
 
+        if (windowMaximizedRef.current === sessionID) {
+            windowMaximizedRef.current = null
+        }
+
+        record.window.view = 'minimized'
+        const subjectZOrder = record.window.zOrder
+        windowsMinimizedRef.current.add(sessionID)
+        const stackOrder = windowsMinimizedRef.current.size - 1
+        const viewDeclaration = {view:'minimized', stackOrder}
+        for (let index = 0; index < numberOfWindows; index++) {
+            const component = windowsList[index]
+            if (component.props.sessionID === sessionID) {
+                windowsList[index] = React.cloneElement(component,{viewDeclaration, zOrder:0})
+            } else {
+                const indexZOrder = component.props.zOrder
+                if (indexZOrder > 0 && indexZOrder > subjectZOrder) {
+                    windowsList[index] = React.cloneElement(component,{viewDeclaration, zOrder:indexZOrder - 1})
+                }
+            }
+        }
+        windowsListRef.current = [...windowsList]
+        setPanelState('minimizewindow')
+
     }
 
     const repositionMinimizedWindows = () => {
+
 
     }
 
@@ -226,6 +250,7 @@ const Workpanel = (props:any) => {
             repositionMinimizedWindows()
         }
 
+        const previousView = record.window.view
         record.window.view = 'normalized'
         const viewDeclaration = {view:'normalized'}
         for (let index = 0; index < numberOfWindows; index++) {
@@ -236,7 +261,7 @@ const Workpanel = (props:any) => {
             }
         }
         windowsListRef.current = [...windowsList]
-        setPanelState('normalizeWindow')
+        setPanelState('normalizewindow')
     }
 
     const maximizeWindow = (sessionID) => {
@@ -288,11 +313,10 @@ const Workpanel = (props:any) => {
 
             if (currentZOrder === zOrder) {
                 if (zOrder !== numberOfWindows) {
+
                     isChange = true
                     windowsList[index] = React.cloneElement(component, {zOrder:numberOfWindows})
                     windowsMap.get(currentSessionID).window.zOrder = numberOfWindows
-
-                // console.log('set window zOrder to top', numberOfWindows, windowsList[index])
 
                 }
 
@@ -307,7 +331,7 @@ const Workpanel = (props:any) => {
 
         if (isChange) {
             windowsListRef.current = [...windowsList]
-            setPanelState('windowrefocused')
+            setPanelState('windowsetfocus')
         }
 
     }
