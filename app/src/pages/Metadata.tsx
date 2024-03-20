@@ -190,7 +190,7 @@ const Metadata = (props) => {
                         key = {2} 
                         sessionID = {2} 
                         zOrder = {2} 
-                        configDefaults = {{top:'40px',left:'60px', width:'600px',height:'400px'}}
+                        configDefaults = {{top:40,left:60, width:600,height:400}}
                     >
                         <Workbox 
                             defaultConfig = {defaultConfig} 

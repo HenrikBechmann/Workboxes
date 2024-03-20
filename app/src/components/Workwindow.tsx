@@ -75,12 +75,11 @@ const resizeHandleIconStyles = {
     width:'12px',
 }
 
+// for Resizable
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
     const { handleAxis, innerRef, sessionID, ...rest } = props
-
-    // console.log('WindowHandle drag props', sessionID, rest)
 
     return (
         <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
@@ -90,6 +89,8 @@ const WindowHandle = (props) => {
 }
 
 const Workwindow = (props) => {
+
+    // --------------------------------[ initialization ]-----------------------------
 
     const 
         {
@@ -106,20 +107,23 @@ const Workwindow = (props) => {
         titleElementRef = useRef(null),
         panelFrameElementRef = useRef(null),
 
+        // basic controls
         isMountedRef = useRef(true),
         isDisabledRef = useRef(false),
         sessionIDRef = useRef(sessionID), // future reference
 
+        // state managemement
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
 
-        // top and left are translation values; styles are left at 0
+        // window config varies for normalized, maximized, and minimizex windows
+        // top and left numger are translation values; styles are left at 0
         // source of truth for normalized window
-        [normalizedWindowConfig, setRealtimeWindowConfig] = useState( 
+        [normalizedWindowConfig, setNormalizedWindowConfig] = useState( 
             {
-                top:parseInt(configDefaults.top), 
-                left: parseInt(configDefaults.left), 
-                width:parseInt(configDefaults.width), 
-                height:parseInt(configDefaults.height)
+                top:configDefaults.top, 
+                left: configDefaults.left, 
+                width: configDefaults.width, 
+                height: configDefaults.height
             }
         ),
         normalizedWindowConfigRef = useRef(null),
@@ -130,29 +134,35 @@ const Workwindow = (props) => {
             left: null,
             transform:null,
             view:null,
+            inprogress:false,
         }),
+        reservedViewDeclaration = reservedNormalizedWindowConfigRef.current.view,
+        viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
-            width:(viewDeclaration.view == 'normalized')
+            width:(!reservedViewDeclaration || viewTransformationInProgress)
                 ? normalizedWindowConfig.width + 'px'
-                : viewDeclaration == 'minimized'
+                : reservedViewDeclaration == 'minimized'
                     ? viewDeclaration.width + 'px'
-                    : 'auto', 
-            height:(viewDeclaration.view == 'normalized')
+                    : null, // maximized
+            height:(!reservedViewDeclaration || viewTransformationInProgress)
                 ? normalizedWindowConfig.height + 'px' 
-                : (viewDeclaration.view == 'minimized')
+                : (reservedViewDeclaration == 'minimized')
                     ? viewDeclaration.height + 'px'
-                    : 'auto',
+                    : null, // maximized
             transform:'none'
         },
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
-    // console.log('running Workwindow: sessionID, windowState, viewDeclaration, isDisabled',
-    //     sessionID, windowState, viewDeclaration, isDisabledRef.current)
-
     normalizedWindowConfigRef.current = normalizedWindowConfig
 
+    // console.log('sessionID, normalizedWindowConfig, renderWindowFrameStyles',
+    //     sessionID, {...normalizedWindowConfig} , {...renderWindowFrameStyles})
+
+    // ------------------------------------[ setup effects ]-----------------------------------
+
+    // maintain mounded property in case needed
     useEffect(()=>{
 
         isMountedRef.current = true
@@ -190,42 +200,67 @@ const Workwindow = (props) => {
 
     },[])
 
+    // Resizable requires this assurance of proper internal initialization for first call from any window (unknown reason)
+    useEffect(()=>{
+
+        if (!isMountedRef.current) return
+
+        if (windowState != 'ready') setWindowState('ready')
+
+    },[windowState])
+
+    // ----------------------------[ reconfiguration effects ]------------------------
+
+    // apply inherited zOrder on change by parent
+    useEffect(()=>{
+
+        if (!isMountedRef.current) return
+
+        windowElementRef.current.style.zIndex = zOrder
+
+    },[zOrder])
+
     // respond to changed viewDeclaration
     useEffect(()=>{
 
         clearTimeout(transitionTimeoutRef.current)
 
+        // console.log('updating view', sessionID, viewDeclaration)
+
         const element = windowElementRef.current
-        const windowConfig = normalizedWindowConfigRef.current
+        const normalizedConfig = normalizedWindowConfigRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) {
 
             if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) return // changes aleady made
 
             isDisabledRef.current = true
+
+            // save normalized config for later restoration
             reservedNormalizedWindowConfigRef.current = {
-                width: element.offsetWidth,
-                height: element.offsetHeight,
-                top: windowConfig.top,
-                left: windowConfig.left,
+                ...normalizedConfig,
                 transform: element.style.transform,
-                view:viewDeclaration.view
+                view:viewDeclaration.view,
+                inprogress:true,
             }
-            const panelElement = panelFrameElementRef.current
+
+            // console.log('reservedNormalizedWindowConfigRef.current',reservedNormalizedWindowConfigRef.current)
 
             if (viewDeclaration.view == 'maximized') {
                 element.style.transform = 'none'
-                element.style.top = windowConfig.top + 'px'
-                element.style.left = windowConfig.left + 'px'
+                element.style.top = normalizedConfig.top + 'px'
+                element.style.left = normalizedConfig.left + 'px'
+
+                // console.log('element style width, height, top, left ', element.style.width, element.style.height, element.style.top, element.style.left)
 
                 setTimeout(()=>{
 
+                    const panelElement = panelFrameElementRef.current
                     element.style.transition = 'top .5s, left .5s, width .5s, height .5s'
-                    element.style.top = '0px'
-                    element.style.left = '0px'
+                    element.style.top = 0
+                    element.style.left = 0
                     element.style.width = panelElement.offsetWidth + 'px'
                     element.style.height = panelElement.offsetHeight + 'px'
-
 
                 },1)
 
@@ -237,6 +272,8 @@ const Workwindow = (props) => {
                     element.style.width = null
                     element.style.height = null
                     element.style.inset = 0
+
+                    reservedNormalizedWindowConfigRef.current.inprogress = false
 
                 },501)
 
@@ -279,7 +316,7 @@ const Workwindow = (props) => {
                 element.style.transform = reservedWindowConfig.transform
                 isDisabledRef.current = false
 
-                Object.assign(windowConfig, reservedWindowConfig)
+                Object.assign(normalizedConfig, reservedWindowConfig)
 
                 reservedNormalizedWindowConfigRef.current = {
                     width:null,
@@ -287,7 +324,8 @@ const Workwindow = (props) => {
                     top:null,
                     left:null,
                     transform:null,
-                    view:null,                    
+                    view:null,
+                    inprogress:false,
                 }
 
                 setWindowState('enabledynamics')
@@ -300,25 +338,7 @@ const Workwindow = (props) => {
 
     },[viewDeclaration])
 
-    // apply inherited zOrder on change by parent
-    useEffect(()=>{
-
-        if (!isMountedRef.current) return
-
-        windowElementRef.current.style.zIndex = zOrder
-
-    },[zOrder])
-
-    // resizable requires this assurance of proper internal initialization for first call from any window (unknown reason)
-    useEffect(()=>{
-
-        if (!isMountedRef.current) return
-
-        if (windowState != 'ready') setWindowState('ready')
-
-    },[windowState])
-
-    // adjust window size to fit in container size; responds to new containerConfigSpecs object
+    // adjust window size as necessary in changed container size; responds to new containerConfigSpecs object
     useEffect(()=>{
 
         if (!isMountedRef.current) return
@@ -389,7 +409,7 @@ const Workwindow = (props) => {
                 containerConfigSpecs.height - newTop,
             ]
 
-            setRealtimeWindowConfig(adjustedWindowSpecs)
+            setNormalizedWindowConfig(adjustedWindowSpecs)
 
         } else {
 
@@ -404,6 +424,8 @@ const Workwindow = (props) => {
         setWindowState('repositioned')
 
     },[containerConfigSpecs])
+
+    // -----------------------------[ callbacks ]-----------------------------
 
     // resizable callbacks...
     const onResizeStart = (event, {size, handle}) => {
@@ -422,7 +444,7 @@ const Workwindow = (props) => {
 
         if (isDisabledRef.current) return
 
-        setRealtimeWindowConfig((previousState)=>{
+        setNormalizedWindowConfig((previousState)=>{
             return {...previousState, width:size.width,height:size.height}})
 
     }
@@ -448,7 +470,7 @@ const Workwindow = (props) => {
             panelFrameElementRef.current.scrollTop -= data.deltaY
         }
 
-        setRealtimeWindowConfig((previousState) => {
+        setNormalizedWindowConfig((previousState) => {
             return {...previousState, top:data.y - data.deltaY, left: data.x}
         })
 
