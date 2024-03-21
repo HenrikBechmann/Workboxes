@@ -45,7 +45,7 @@ const Workpanel = (props:any) => {
         highestZOrderRef = useRef(0),
         windowCountRef = useRef(0)
 
-    // initialize windows map and list
+    // initialize windows record map, component list, and minimized list
     useEffect(()=>{
 
         const 
@@ -65,13 +65,7 @@ const Workpanel = (props:any) => {
                 workbox:startingspecs.workbox
             }
 
-            const sessionID = addWindow(specs)
-            if (specs.window.view == 'minimized') {
-                minimizeWindow(sessionID)
-            }
-            if (specs.window.view == 'maximized') {
-                maximizeWindow(sessionID)
-            }
+            addWindow(specs)
 
         }
 
@@ -85,37 +79,89 @@ const Workpanel = (props:any) => {
         const 
             windowsList = windowsListRef.current,
             windowsMap = windowsMapRef.current,
+            windowsSet = windowsMinimizedRef.current,
+
             record = {
                 window:specs.window,
                 workbox:specs.workbox,
                 sessionID,
-            },
-            zOrder = ++highestZOrderRef.current
+                index:null,
+            }
 
-            record.window.zOrder = zOrder
+        let 
+            zOrder, stackOrder
+
+        // set zOrder and stackOrder
+        if (record.window.view !== 'minimized') {
+
+            zOrder = ++highestZOrderRef.current
+            stackOrder = null
+            // if a maxed component exists, swap zOrders
+            if ((record.window.view == 'normalized') && windowMaximizedRef.current) {
+                const
+                    maxedSessionID = windowMaximizedRef.current,
+                    maxedRecord = windowsMap.get(maxedSessionID),
+                    maxedIndex = maxedRecord.index,
+                    maxedComponent = windowsList[maxedIndex]
+
+                maxedRecord.window.zOrder = zOrder
+                windowsList[maxedIndex] = React.cloneElement(maxedComponent, {zOrder})
+                zOrder--
+            }
+
+        } else {
+
+            zOrder = 0
+            windowsSet.add(sessionID)
+            stackOrder = windowsSet.size
+
+        }
+
+        // set windowMaximizedRef if 'maximized'; push any existing maxed window out
+        if (record.window.view == 'maximized') {
+            if (windowMaximizedRef.current) {
+                const 
+                    maxedSessionID = windowMaximizedRef.current,
+                    maxedRecord = windowsMap.get(maxedSessionID),
+                    maxedIndex = maxedRecord.index,
+                    maxedComponent = windowsList[maxedIndex]
+
+                    maxedRecord.window.view = 'normalized'
+                    windowsList[maxedIndex] = React.cloneElement(maxedComponent, {viewDeclaration:{view:maxedRecord.window.view}})
+            }
+            windowMaximizedRef.current = sessionID
+        }
+
+        record.window.zOrder = zOrder
+        record.window.stackOrder = stackOrder
 
         const component = createWindow(sessionID, record)
 
         windowsMap.set(sessionID, record)
         windowsList.push(component)
-
-        return sessionID
+        record.index = windowsList.length - 1
 
     }
 
     // ** private ** only called by addWindow above
     const createWindow = (sessionID, specs) => {
 
-        const element = panelElementRef.current,
-        containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight}
+        const 
+            element = panelElementRef.current,
+            containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight},
+            { view, stackOrder, ...theRest} = specs.window,
+            viewDeclaration = {
+                view,
+                stackOrder,
+            }
 
         return <Workwindow 
             key = {sessionID} 
-            sessionID = {sessionID} 
             callbacks = {callbacks} 
-            viewDeclaration = {{view:specs.window.view}}
+            sessionID = {sessionID}
+            viewDeclaration = {viewDeclaration}
             containerConfigSpecs = {containerConfigSpecs}
-            {... specs.window}
+            {... theRest}
         >
             <Workbox 
                 sessionID = {sessionID} {...specs.workbox}
@@ -130,8 +176,6 @@ const Workpanel = (props:any) => {
         const 
             windowsMap = windowsMapRef.current,
             record = windowsMap.get(sessionID)
-
-        // console.log('calling closeWindow: sessionID',sessionID, record, windowsMap)
 
         const
             { zOrder } = record.window,
@@ -172,8 +216,6 @@ const Workpanel = (props:any) => {
         windowsMap.delete(sessionID)
 
         windowsListRef.current = [...windowsList] // trigger render
-
-        // console.log('windowsList, windowsMap',windowsList, windowsMap)
 
         setPanelState('windowclosed')
     }
@@ -298,8 +340,6 @@ const Workpanel = (props:any) => {
             record = windowsMap.get(sessionID),
             zOrder = record.window.zOrder
 
-        // console.log('inside setFocus: sessionID, zOrder',sessionID, zOrder)
-
         let isChange = false
         for (let index = 0; index < numberOfWindows; index++) {
             const component = windowsList[index]
@@ -317,8 +357,6 @@ const Workpanel = (props:any) => {
             } else if (currentZOrder > zOrder) {
                 windowsList[index] = React.cloneElement(component, {zOrder:currentZOrder - 1})
                 windowsMap.get(currentSessionID).window.zOrder = currentZOrder - 1
-
-                // console.log('adjust window zOrder lower', currentZOrder - 1, windowsList[index])
 
             }
         }
