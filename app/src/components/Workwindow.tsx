@@ -224,7 +224,17 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        windowElementRef.current.style.zIndex = zOrder
+        let timeout = 0
+
+        if (viewDeclarationRef.current.view == 'minimized') {
+            timeout = 500
+        }
+
+        setTimeout(()=> {
+
+            windowElementRef.current.style.zIndex = zOrder
+
+        },timeout) 
 
     },[zOrder])
 
@@ -329,6 +339,8 @@ const Workwindow = (props) => {
             element.style.left = 0
             element.style.width = currentWidth + 'px'
             element.style.height = currentHeight + 'px'
+
+            reservedNormalizedWindowConfigRef.current.inprogress = true
 
             // set targets
             setTimeout(()=>{
