@@ -45,8 +45,6 @@ const Workpanel = (props:any) => {
         highestZOrderRef = useRef(0),
         windowCountRef = useRef(0)
 
-    // console.log('running Workpanel', panelState)
-
     // initialize windows map and list
     useEffect(()=>{
 
@@ -107,8 +105,6 @@ const Workpanel = (props:any) => {
 
     // ** private ** only called by addWindow above
     const createWindow = (sessionID, specs) => {
-
-        // console.log('creating window with specs',{...specs.window})
 
         const element = panelElementRef.current,
         containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight}
@@ -308,8 +304,6 @@ const Workpanel = (props:any) => {
         for (let index = 0; index < numberOfWindows; index++) {
             const component = windowsList[index]
             const {zOrder: currentZOrder, sessionID: currentSessionID} = component.props
-
-            // console.log('processing currentSessionID, currentZOrder, component', currentSessionID, currentZOrder, component)
 
             if (currentZOrder === zOrder) {
                 if (zOrder !== numberOfWindows) {

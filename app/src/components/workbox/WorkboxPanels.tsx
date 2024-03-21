@@ -26,6 +26,7 @@ const MIN_COVER_FRAME_WIDTH = 250
 const MAX_COVER_FRAME_RATIO = 0.75
 const MIN_CONTENTS_FRAME_WIDTH = 250
 const MIN_CENTRAL_FRAME_WIDTH = MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH
+const MIN_CONTENT_HEIGHT = 300
 
 const centralPanelStyles = {
     height:'100%',
@@ -36,6 +37,8 @@ const centralPanelStyles = {
     flexWrap: 'nowrap',
     flex: '1 0 auto',
     minWidth: MIN_CENTRAL_FRAME_WIDTH + 'px',
+    minHeight: MIN_CONTENT_HEIGHT + 'px',
+
     transition:'none', // set as needed
     boxSizing: 'border-box',
 } as CSSProperties
@@ -56,7 +59,6 @@ const coverPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width:'100%',
-    // minWidth: MIN_COVER_FRAME_WIDTH + 'px',
     padding: '3px', 
     border: '5px ridge seagreen',
     borderRadius:'8px',
@@ -97,6 +99,7 @@ const contentsFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
+    minHeight: MIN_CONTENT_HEIGHT + 'px',
     position: 'relative',
     transition:'none', // set as needed
     // transition:'width .5s',
@@ -124,7 +127,6 @@ const contentsPanelStyles = {
 
 const settingsFrameStyles = {
     flex: '0 0 auto',
-    // height: '100%',
     width:'0px',
     overflow:'hidden',
     position:'relative',
