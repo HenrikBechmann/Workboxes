@@ -34,18 +34,21 @@ let nextSessionID = 0 // used for non-duplicate window component key; also futur
 const Workpanel = (props:any) => {
 
     const 
-        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
         { startingWindowsSpecsList } = props,
         startingWindowsSpecsListRef = useRef(startingWindowsSpecsList),
+
+        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
+
         panelElementRef = useRef(null),
+
         windowsListRef = useRef([]),
         windowsMapRef = useRef(null),
         windowMaximizedRef = useRef(null),
         windowsMinimizedRef = useRef(null),
-        highestZOrderRef = useRef(0),
-        windowCountRef = useRef(0)
 
-    // initialize windows record map, component list, and minimized list
+        highestZOrderRef = useRef(0)
+
+    // initialize windows record map, component list, and minimized list; set maximized window if exists
     useEffect(()=>{
 
         const 
@@ -148,23 +151,24 @@ const Workpanel = (props:any) => {
 
         const 
             element = panelElementRef.current,
-            containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight},
-            { view, stackOrder, ...theRest} = specs.window,
+            containerConfigSpecs = { width:element.offsetWidth, height:element.offsetHeight },
+            { view, stackOrder, ...remaining } = specs.window,
             viewDeclaration = {
                 view,
                 stackOrder,
             }
 
+        // sessionID is passed to Workbox for information only
         return <Workwindow 
-            key = {sessionID} 
-            callbacks = {callbacks} 
-            sessionID = {sessionID}
-            viewDeclaration = {viewDeclaration}
-            containerConfigSpecs = {containerConfigSpecs}
-            {... theRest}
+            key = { sessionID } 
+            callbacks = { callbacks } 
+            sessionID = { sessionID }
+            viewDeclaration = { viewDeclaration }
+            containerConfigSpecs = { containerConfigSpecs }
+            { ...remaining }
         >
             <Workbox 
-                sessionID = {sessionID} {...specs.workbox}
+                sessionWindowID = {sessionID} {...specs.workbox}
             />
         </Workwindow>
     }
@@ -420,8 +424,6 @@ const Workpanel = (props:any) => {
 
     // const windowsList = windowsListRef.current
     const windowCount = windowsListRef.current.length
-
-    // console.log('rendering: panelState, windowsList',panelState, windowsListRef.current)
 
     return <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
         {panelState != 'setup' && windowsListRef.current}

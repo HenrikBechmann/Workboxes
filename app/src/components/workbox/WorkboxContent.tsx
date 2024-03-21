@@ -26,7 +26,7 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => {
 
     const 
-        { workboxConfig, sessionID } = props,
+        { workboxConfig, sessionWindowID } = props,
         { contentsShow, coverShow } = workboxConfig, // boolean - show/ noshow
         // share cover and contents elements with children
         coverFrameElementRef = useRef( null ),
@@ -71,7 +71,7 @@ const WorkboxContent = (props) => {
             userCoverWidthRef = {userCoverWidthRef}
         >
             <CoverPanel ref = {coverFrameElementRef} displayConfigCode = {coverDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
-            Cover ({sessionID})
+            Cover ({sessionWindowID})
             </CoverPanel>
             <ContentsPanel ref = {contentsFrameElementRef} displayConfigCode = {contentsDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
             Contents

@@ -48,7 +48,7 @@ const workboxBodyStyles = {
 const Workbox = (props) => {
     const 
         {
-            sessionID,
+            sessionWindowID,
             defaultConfig, 
             itemIcon, 
             itemTitle, 
@@ -100,7 +100,7 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                <WorkboxContent sessionID = {sessionID} workboxConfig = {workboxConfig} />
+                <WorkboxContent sessionWindowID = {sessionWindowID} workboxConfig = {workboxConfig} />
             </Box>
         </GridItem>
     </Grid>
