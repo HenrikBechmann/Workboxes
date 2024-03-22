@@ -221,6 +221,8 @@ const Workpanel = (props:any) => {
         windowsMap.delete(sessionID)
 
         windowsListRef.current = [...windowsList] // trigger render
+        // console.log('updated windowListRef.current', windowsListRef.current)
+
         setPanelState('windowclosed')
     }
 
@@ -277,22 +279,29 @@ const Workpanel = (props:any) => {
 
     const repositionMinimizedWindows = () => {
 
+        // console.log('repositioning minimized windows')
+
         const 
             windowsSet = windowsMinimizedRef.current,
             windowsMap = windowsMapRef.current,
             windowsList = windowsListRef.current
             let index = 0
 
-            windowsSet.forEach((sessionID)=>{
-                const record = windowsMap.get(sessionID)
-                if (record.window.stackOrder !== index) {
-                    record.window.stackOrder = index
-                    const component = windowsList[record.index]
-                    const viewDeclaration = component.props.viewDeclaration
-                    viewDeclaration.stackOrder = index
-                    windowsList[record.index] = React.cloneElement(component, {viewDeclaration})
-                }
-            })
+        windowsSet.forEach((sessionID)=>{
+            const record = windowsMap.get(sessionID)
+            // console.log('record.window.stackOrder, index', record.window.stackOrder, index)
+            if (record.window.stackOrder !== index) {
+                // console.log('updating stackorder', index)
+                record.window.stackOrder = index
+                const component = windowsList[record.index]
+                const viewDeclaration = component.props.viewDeclaration
+                // console.log('found viewDeclaration', {...viewDeclaration})
+                viewDeclaration.stackOrder = index
+                // console.log('updated viewDeclaration', {...viewDeclaration})
+                windowsList[record.index] = React.cloneElement(component, {viewDeclaration:{...viewDeclaration}})
+            }
+            index++
+        })
 
     }
 
@@ -335,7 +344,6 @@ const Workpanel = (props:any) => {
         const zOrder = record.window.zOrder
         record.window.stackOrder = null
 
-        // console.log('normalizeWindow subject record', {...record})
 
         const 
             viewDeclaration = {view:'normalized',stackOrder:null},

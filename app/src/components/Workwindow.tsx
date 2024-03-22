@@ -239,7 +239,10 @@ const Workwindow = (props) => {
     },[zOrder])
 
     // respond to changed viewDeclaration
+    // TODO: update stack order on existing minimized window
     useEffect(()=>{
+
+        console.log('processing viewDeclaration', sessionID, viewDeclaration)
 
         clearTimeout(transitionTimeoutRef.current)
 
