@@ -224,6 +224,8 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
+        // console.log('window processing sessionID, zOrder', sessionID, zOrder)
+
         let timeout = 0
 
         if (viewDeclarationRef.current.view == 'minimized') {
@@ -242,7 +244,7 @@ const Workwindow = (props) => {
     // TODO: update stack order on existing minimized window
     useEffect(()=>{
 
-        console.log('processing viewDeclaration', sessionID, viewDeclaration)
+        // console.log('window processing viewDeclaration', sessionID, viewDeclaration)
 
         clearTimeout(transitionTimeoutRef.current)
 
@@ -251,7 +253,12 @@ const Workwindow = (props) => {
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) {
 
-            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) return // changes aleady made
+            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) {
+                if (viewDeclaration.view == 'minimized') {
+                    element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                }
+                return // config changes aleady made
+            }
 
             isDisabledRef.current = true
 
