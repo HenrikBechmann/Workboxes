@@ -327,24 +327,22 @@ const Workpanel = (props:any) => {
         }
         if (windowsMinimizedRef.current.has(sessionID)) {
             windowsMinimizedRef.current.delete(sessionID)
+            record.window.zOrder = windowsList.length - 1
             repositionMinimizedWindows()
         }
 
         record.window.view = 'normalized'
+        const zOrder = record.window.zOrder
         record.window.stackOrder = null
 
-        console.log('normalizeWindow subject record', {...record})
+        // console.log('normalizeWindow subject record', {...record})
 
         const 
             viewDeclaration = {view:'normalized',stackOrder:null},
             index = record.index,
             component = windowsList[index]
 
-        console.log('component', component, windowsList)
-
-        if (component.props.sessionID === sessionID) {
-            windowsList[index] = React.cloneElement(component,{viewDeclaration})
-        }
+        windowsList[index] = React.cloneElement(component,{viewDeclaration, zOrder})
 
         windowsListRef.current = [...windowsList]
         setPanelState('normalizewindow')
