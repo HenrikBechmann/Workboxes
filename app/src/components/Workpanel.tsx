@@ -190,7 +190,7 @@ const Workpanel = (props:any) => {
     // remove window and update higher zOrders to compensate, or shuffle minimized windows
     const closeWindow = (sessionID) => {
 
-        console.log('panel close sessionID', sessionID)
+        // console.log('panel close sessionID', sessionID)
 
         const 
             windowsMap = windowsMapRef.current,
@@ -250,7 +250,7 @@ const Workpanel = (props:any) => {
 
     const minimizeWindow = (sessionID) => {
 
-        console.log('panel minimize sessionID', sessionID)
+        // console.log('panel minimize sessionID', sessionID)
 
         const 
             windowsMap = windowsMapRef.current,
@@ -343,7 +343,7 @@ const Workpanel = (props:any) => {
 
     const normalizeWindow = (sessionID) => {
 
-        console.log('panel normalize sessionID', sessionID)
+        // console.log('panel normalize sessionID', sessionID)
 
         const 
             windowsMap = windowsMapRef.current,
@@ -409,7 +409,7 @@ const Workpanel = (props:any) => {
 
     const maximizeWindow = (sessionID) => {
 
-        console.log('panel maximize sessionID', sessionID)
+        // console.log('panel maximize sessionID', sessionID)
 
         const 
             windowsMap = windowsMapRef.current,
@@ -485,7 +485,7 @@ const Workpanel = (props:any) => {
             windowRecord = windowsMap.get(sessionID),
             zOrder = windowRecord.window.zOrder
 
-        console.log('panel setFocus sessionID, windowRecord', sessionID, windowRecord)
+        // console.log('panel setFocus sessionID, windowRecord', sessionID, windowRecord)
 
         if (zOrder === 0) return
 
@@ -499,7 +499,7 @@ const Workpanel = (props:any) => {
             if (subjectZOrder === zOrder) {
                 if (zOrder !== highestZOrderRef.current) {
 
-                    console.log('updating sessionID, zOrder to highestZOrderRef.current', zOrder, highestZOrderRef.current)
+                    // console.log('updating sessionID, zOrder to highestZOrderRef.current', zOrder, highestZOrderRef.current)
 
                     isChange = true
                     windowsList[index] = React.cloneElement(component, {zOrder:highestZOrderRef.current})
@@ -509,7 +509,7 @@ const Workpanel = (props:any) => {
 
             } else if (subjectZOrder > zOrder) {
 
-                console.log('updating peer sessionID, zOrder to highestZOrderRef.current', subjectZOrder, subjectZOrder - 1)
+                // console.log('updating peer sessionID, zOrder to highestZOrderRef.current', subjectZOrder, subjectZOrder - 1)
 
                 isChange = true
                 windowsList[index] = React.cloneElement(component, {zOrder:subjectZOrder - 1})
