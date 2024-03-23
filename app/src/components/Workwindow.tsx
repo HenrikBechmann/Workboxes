@@ -165,7 +165,7 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
+    // console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
@@ -222,7 +222,7 @@ const Workwindow = (props) => {
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
-        console.log('window useEffect sessionID zOrder\n','-' + sessionID + '-', zOrder)
+        // console.log('window useEffect sessionID zOrder\n','-' + sessionID + '-', zOrder)
 
         if (!isMountedRef.current) return
 
@@ -245,7 +245,7 @@ const Workwindow = (props) => {
     // respond to changed viewDeclaration
     useEffect(()=>{
 
-        console.log('window useEffect sessionID viewDeclaration\n', '-' + sessionID + '-', viewDeclaration)
+        // console.log('window useEffect sessionID viewDeclaration\n', '-' + sessionID + '-', viewDeclaration)
 
         clearTimeout(transitionTimeoutRef.current)
 
