@@ -243,7 +243,6 @@ const Workwindow = (props) => {
     },[zOrder])
 
     // respond to changed viewDeclaration
-    // TODO: update stack order on existing minimized window
     useEffect(()=>{
 
         console.log('window useEffect sessionID viewDeclaration\n', '-' + sessionID + '-', viewDeclaration)

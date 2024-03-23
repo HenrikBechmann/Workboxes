@@ -271,7 +271,7 @@ const Workpanel = (props:any) => {
         }
 
         windowRecord.window.view = 'minimized'
-        const subjectZOrder = windowRecord.window.zOrder
+        const zOrder = windowRecord.window.zOrder
         windowsMinimizedRef.current.add(sessionID)
 
         const stackOrder = windowsMinimizedRef.current.size - 1
@@ -287,11 +287,11 @@ const Workpanel = (props:any) => {
                 windowRecord.window.zOrder = 0
             } else {
                 const indexZOrder = component.props.zOrder
-                if ((indexZOrder > 0) && (indexZOrder > subjectZOrder)) {
+                if ((indexZOrder > 0) && (indexZOrder > zOrder)) {
                     const subjectRecord = windowsMap.get(subjectSessionID)
                     subjectRecord.window.zOrder = indexZOrder - 1
-                    const viewDeclaration = {view:subjectRecord.window.view,stackOrder:subjectRecord.window.stackOrder}
-                    windowsList[index] = React.cloneElement(component,{viewDeclaration, zOrder:indexZOrder - 1})
+                    const subjectViewDeclaration = {view:subjectRecord.window.view,stackOrder:subjectRecord.window.stackOrder}
+                    windowsList[index] = React.cloneElement(component,{subjectViewDeclaration, zOrder:indexZOrder - 1})
                 }
             }
         }
@@ -379,11 +379,13 @@ const Workpanel = (props:any) => {
             windowsMinimizedRef.current.delete(sessionID)
             zOrder = ++highestZOrderRef.current
             console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
+            windowRecord.window.zOrder = zOrder
             repositionMinimizedWindows()
 
         } else {
             zOrder = highestZOrderRef.current
             windowRecord.window.zOrder = zOrder
+
             windowsList.forEach((component)=>{
                 const subjectSessionID = component.props.sessionID
                 if ( subjectSessionID !== sessionID) {
@@ -485,8 +487,6 @@ const Workpanel = (props:any) => {
 
     const setFocus = (sessionID) => {
 
-        console.log('*panel* setFocus: sessionID', '-' + sessionID + '-')
-
         const 
             windowsMap = windowsMapRef.current,
             windowsList = windowsListRef.current,
@@ -494,7 +494,7 @@ const Workpanel = (props:any) => {
             windowRecord = windowsMap.get(sessionID),
             zOrder = windowRecord.window.zOrder
 
-        // console.log('panel setFocus sessionID, windowRecord', sessionID, windowRecord)
+        console.log('*panel* setFocus: sessionID', '-' + sessionID + '-', windowRecord, zOrder)
 
         if (zOrder === 0) return
 
