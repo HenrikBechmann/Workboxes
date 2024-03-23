@@ -83,6 +83,8 @@ const Workpanel = (props:any) => {
         const sessionID = nextSessionID
         nextSessionID++
 
+        console.log('*panel* addWindow: sessionID', '-' + sessionID + '-')
+
         const 
             windowsList = windowsListRef.current,
             windowsMap = windowsMapRef.current,
@@ -102,6 +104,7 @@ const Workpanel = (props:any) => {
         if (windowRecord.window.view !== 'minimized') { // normalized or maximized
 
             zOrder = ++highestZOrderRef.current
+            console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
             stackOrder = null
             // if a maxed component exists, swap zOrders
             if ((windowRecord.window.view == 'normalized') && windowMaximizedRef.current) {
@@ -217,7 +220,10 @@ const Workpanel = (props:any) => {
                     }
                 }
             }
+
             highestZOrderRef.current--
+            console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
+
         }
 
         windowsList.splice(indexToRemove, 1)
@@ -290,6 +296,8 @@ const Workpanel = (props:any) => {
         }
 
         highestZOrderRef.current--
+
+        console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
 
         windowsListRef.current = [...windowsList]
         setPanelState('minimizewindow')
@@ -376,6 +384,7 @@ const Workpanel = (props:any) => {
         if (previousView == 'minimized') {
 
             zOrder = ++highestZOrderRef.current
+            console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
 
         } else {
             zOrder = highestZOrderRef.current
@@ -440,7 +449,10 @@ const Workpanel = (props:any) => {
 
         let zOrder
         if (previousView == 'minimized') {
+
             zOrder = ++highestZOrderRef.current
+            console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
+
         } else {
             zOrder = highestZOrderRef.current
             windowRecord.window.zOrder = zOrder
