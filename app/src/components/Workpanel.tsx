@@ -290,6 +290,7 @@ const Workpanel = (props:any) => {
                 if ((indexZOrder > 0) && (indexZOrder > subjectZOrder)) {
                     const subjectRecord = windowsMap.get(subjectSessionID)
                     subjectRecord.window.zOrder = indexZOrder - 1
+                    const viewDeclaration = {view:subjectRecord.window.view,stackOrder:subjectRecord.window.stackOrder}
                     windowsList[index] = React.cloneElement(component,{viewDeclaration, zOrder:indexZOrder - 1})
                 }
             }
@@ -369,22 +370,16 @@ const Workpanel = (props:any) => {
 
         }
 
-        if (windowsMinimizedRef.current.has(sessionID)) {
-
-            windowsMinimizedRef.current.delete(sessionID)
-            windowRecord.window.zOrder = highestZOrderRef.current++
-            repositionMinimizedWindows()
-
-        }
-
         windowRecord.window.view = 'normalized'
         windowRecord.window.stackOrder = null
 
         let zOrder
         if (previousView == 'minimized') {
 
+            windowsMinimizedRef.current.delete(sessionID)
             zOrder = ++highestZOrderRef.current
             console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
+            repositionMinimizedWindows()
 
         } else {
             zOrder = highestZOrderRef.current
