@@ -133,7 +133,7 @@ const Workwindow = (props) => {
             }
         ),
         normalizedWindowConfigRef = useRef(null),
-        reservedNormalizedWindowConfigRef = useRef({
+        reservedWindowConfigRef = useRef({
             width:null,
             height:null,
             top: null,
@@ -142,8 +142,8 @@ const Workwindow = (props) => {
             view:null,
             inprogress:false,
         }),
-        reservedViewDeclaration = reservedNormalizedWindowConfigRef.current.view,
-        viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
+        reservedViewDeclaration = reservedWindowConfigRef.current.view,
+        viewTransformationInProgress = reservedWindowConfigRef.current.inprogress,
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
             width:(!reservedViewDeclaration || viewTransformationInProgress)
@@ -165,7 +165,7 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    // console.log('window windowState, viewDeclaration', windowState, sessionID, viewDeclaration)
+    console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
@@ -222,6 +222,8 @@ const Workwindow = (props) => {
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
+        console.log('window useEffect sessionID zOrder\n','-' + sessionID + '-', zOrder)
+
         if (!isMountedRef.current) return
 
         // console.log('window processing sessionID, zOrder', sessionID, zOrder)
@@ -244,7 +246,7 @@ const Workwindow = (props) => {
     // TODO: update stack order on existing minimized window
     useEffect(()=>{
 
-        // console.log('window processing viewDeclaration', sessionID, viewDeclaration)
+        console.log('window useEffect sessionID viewDeclaration\n', '-' + sessionID + '-', viewDeclaration)
 
         clearTimeout(transitionTimeoutRef.current)
 
@@ -253,7 +255,7 @@ const Workwindow = (props) => {
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) {
 
-            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) {
+            if (viewDeclaration.view == reservedWindowConfigRef.current.view) {
                 if (viewDeclaration.view == 'minimized') {
                     element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
                 }
@@ -263,7 +265,7 @@ const Workwindow = (props) => {
             isDisabledRef.current = true
 
             // save normalized config for later restoration
-            reservedNormalizedWindowConfigRef.current = {
+            reservedWindowConfigRef.current = {
                 ...normalizedConfig,
                 transform: element.style.transform,
                 view:viewDeclaration.view,
@@ -299,7 +301,7 @@ const Workwindow = (props) => {
                     element.style.height = null
                     element.style.inset = 0
 
-                    reservedNormalizedWindowConfigRef.current.inprogress = false
+                    reservedWindowConfigRef.current.inprogress = false
 
                 },501)
 
@@ -328,7 +330,7 @@ const Workwindow = (props) => {
 
                     element.style.transition = null
 
-                    reservedNormalizedWindowConfigRef.current.inprogress = false
+                    reservedWindowConfigRef.current.inprogress = false
 
                 },501)
 
@@ -336,7 +338,7 @@ const Workwindow = (props) => {
 
         } else { // 'normalized'
 
-            const reservedWindowConfig = reservedNormalizedWindowConfigRef.current
+            const reservedWindowConfig = reservedWindowConfigRef.current
 
             if (!['maximized','minimized'].includes(reservedWindowConfig.view)) return // already normalized
 
@@ -350,7 +352,7 @@ const Workwindow = (props) => {
             element.style.width = currentWidth + 'px'
             element.style.height = currentHeight + 'px'
 
-            reservedNormalizedWindowConfigRef.current.inprogress = true
+            reservedWindowConfigRef.current.inprogress = true
 
             // set targets
             setTimeout(()=>{
@@ -375,7 +377,7 @@ const Workwindow = (props) => {
                 Object.assign(normalizedConfig, reservedWindowConfig)
 
                 // reset reserved
-                reservedNormalizedWindowConfigRef.current = {
+                reservedWindowConfigRef.current = {
                     width:null,
                     height:null,
                     top:null,
@@ -385,7 +387,7 @@ const Workwindow = (props) => {
                     inprogress:false,
                 }
 
-                setWindowState('enabledynamics')
+                setWindowState('activatenormalized')
 
             },501)
 
@@ -403,19 +405,19 @@ const Workwindow = (props) => {
         if (!containerConfigSpecs) return
 
         const 
-            element = windowElementRef.current,
-            reservedWindowConfig = reservedNormalizedWindowConfigRef.current,
-            normalizedWindowConfig = normalizedWindowConfigRef.current,
-            localViewDeclaration = viewDeclarationRef.current
+            reservedWindowConfig = reservedWindowConfigRef.current,
+            normalizedWindowConfig = normalizedWindowConfigRef.current
 
-        let virtualWindowConfig
+        let virtualWindowConfig // this is what is updated by change of containerConfigSpecs
         if (reservedWindowConfig.view) {
+
             virtualWindowConfig = {
                 width: reservedWindowConfig.width,
                 height: reservedWindowConfig.height,
                 top: reservedWindowConfig.top, // translate value
                 left: reservedWindowConfig.left, // translate value
             }
+
         } else {
 
             virtualWindowConfig = {
@@ -424,38 +426,51 @@ const Workwindow = (props) => {
                 top: normalizedWindowConfig.top,
                 left: normalizedWindowConfig.left,
             }
+
         }
 
         const
-            widthFitBound = virtualWindowConfig.width + virtualWindowConfig.left,
-            heightFitBound = virtualWindowConfig.height + virtualWindowConfig.top
+            widthFitBoundary = virtualWindowConfig.width + virtualWindowConfig.left,
+            heightFitBoundary = virtualWindowConfig.height + virtualWindowConfig.top
 
         // keep entire window inside panel boundaries
-        if (containerConfigSpecs.width < widthFitBound || containerConfigSpecs.height < heightFitBound) {
+        if (containerConfigSpecs.width < widthFitBoundary || containerConfigSpecs.height < heightFitBoundary) {
             // adjustments required
 
             // adjust left and width
-            if (containerConfigSpecs.width < widthFitBound) {
-                let widthDelta = widthFitBound - containerConfigSpecs.width
-                const newLeft = Math.max(0,virtualWindowConfig.left - widthDelta)
-                const widthApplied = virtualWindowConfig.left - newLeft
-                if (widthApplied) {
+            if (containerConfigSpecs.width < widthFitBoundary) {
+                let widthOversize = widthFitBoundary - containerConfigSpecs.width
+                const 
+                    newLeft = Math.max(0,virtualWindowConfig.left - widthOversize),
+                    widthShiftApplied = virtualWindowConfig.left - newLeft
+
+                if (widthShiftApplied) {
+
                     virtualWindowConfig.left = newLeft
+
                 }
-                widthDelta -= widthApplied
-                virtualWindowConfig.width -= widthDelta
+
+                widthOversize -= widthShiftApplied
+                virtualWindowConfig.width -= widthOversize
+
             }
 
             // adjust top and height
-            if (containerConfigSpecs.height < heightFitBound) {
-                let heightDelta = heightFitBound - containerConfigSpecs.height
-                const newTop = Math.max(0,virtualWindowConfig.top - heightDelta)
-                const heightApplied = virtualWindowConfig.top - newTop
-                if (heightApplied) {
+            if (containerConfigSpecs.height < heightFitBoundary) {
+                let heightOverize = heightFitBoundary - containerConfigSpecs.height
+                const 
+                    newTop = Math.max(0,virtualWindowConfig.top - heightOverize),
+                    heightShiftApplied = virtualWindowConfig.top - newTop
+
+                if (heightShiftApplied) {
+
                     virtualWindowConfig.top = newTop
+
                 }
-                heightDelta -= heightApplied
-                virtualWindowConfig.height -= heightDelta
+
+                heightOverize -= heightShiftApplied
+                virtualWindowConfig.height -= heightOverize
+
             }
 
             if (!reservedWindowConfig.view) {

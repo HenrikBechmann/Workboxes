@@ -190,7 +190,7 @@ const Workpanel = (props:any) => {
     // remove window and update higher zOrders to compensate, or shuffle minimized windows
     const closeWindow = (sessionID) => {
 
-        // console.log('panel close sessionID', sessionID)
+        console.log('*panel* closeWindow: sessionID', '-' + sessionID + '-')
 
         const 
             windowsMap = windowsMapRef.current,
@@ -250,7 +250,7 @@ const Workpanel = (props:any) => {
 
     const minimizeWindow = (sessionID) => {
 
-        // console.log('panel minimize sessionID', sessionID)
+        console.log('*panel* minimizeWindow: sessionID', '-' + sessionID + '-')
 
         const 
             windowsMap = windowsMapRef.current,
@@ -343,7 +343,7 @@ const Workpanel = (props:any) => {
 
     const normalizeWindow = (sessionID) => {
 
-        // console.log('panel normalize sessionID', sessionID)
+        console.log('*panel* normalizeWindow: sessionID', '-' + sessionID + '-')
 
         const 
             windowsMap = windowsMapRef.current,
@@ -409,7 +409,7 @@ const Workpanel = (props:any) => {
 
     const maximizeWindow = (sessionID) => {
 
-        // console.log('panel maximize sessionID', sessionID)
+        console.log('*panel* maximizeWindow: sessionID', '-' + sessionID + '-')
 
         const 
             windowsMap = windowsMapRef.current,
@@ -477,6 +477,8 @@ const Workpanel = (props:any) => {
     }
 
     const setFocus = (sessionID) => {
+
+        console.log('*panel* setFocus: sessionID', '-' + sessionID + '-')
 
         const 
             windowsMap = windowsMapRef.current,
