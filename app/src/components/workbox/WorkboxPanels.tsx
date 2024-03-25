@@ -19,6 +19,7 @@ import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
+import { ViewDeclarationContext } from '../Workwindow'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -418,6 +419,7 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current),
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
+        viewDeclarationContext = useContext(ViewDeclarationContext),
         handleRef = useRef(null)
 
     displayCodeRef.current = displayConfigCode

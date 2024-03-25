@@ -1,7 +1,7 @@
 // WorkWindow.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, CSSProperties, createContext } from 'react'
 
 import {
     Grid, GridItem,
@@ -77,6 +77,8 @@ const resizeHandleIconStyles = {
     height:'12px', 
     width:'12px',
 }
+
+export const ViewDeclarationContext = createContext(null)
 
 // for Resizable
 const WindowHandle = (props) => {
@@ -169,7 +171,7 @@ const Workwindow = (props) => {
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
-    // maintain mounded property in case needed
+    // maintain mounted property in case needed
     useEffect(()=>{
 
         isMountedRef.current = true
@@ -526,7 +528,6 @@ const Workwindow = (props) => {
 
     }
 
-    // TODO: try setting bounds:{left, top, right, bottom} instead of a search handle
     const onDragStop = (e, data) => {
 
         if (!isMountedRef.current) return
@@ -559,6 +560,7 @@ const Workwindow = (props) => {
 
     // render
     return (
+    <ViewDeclarationContext.Provider value = {viewDeclaration}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
@@ -606,12 +608,8 @@ const Workwindow = (props) => {
                 </Grid>
             </Box>
         </Resizable>
-    </Draggable>)
+    </Draggable>
+    </ViewDeclarationContext.Provider>)
 }
-
-                        // <Box data-type = 'resize-handle' style = {resizeHandleStyles}>
-                        //     <img src = {dragCornerIcon} style = {resizeHandleIconStyles} />
-                        // </Box>
-
 
 export default Workwindow
