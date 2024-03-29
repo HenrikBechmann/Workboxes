@@ -377,9 +377,9 @@ const Workwindow = (props) => {
             // set base styles
             const currentWidth = element.offsetWidth, currentHeight = element.offsetHeight
 
-            element.style.inset = null
-
             if (previousViewStateRef.current === 'maximized') {
+    
+                element.style.inset = null
                 element.style.top = 0
                 element.style.left = 0
             }
