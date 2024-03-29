@@ -158,7 +158,8 @@ const Workwindow = (props) => {
                     ? viewDeclaration.height + 'px'
                     : null, // maximized
         },
-        latestActiveViewRef = useRef(null),
+        // latestActiveViewRef = useRef(null),
+        previousViewStateRef = useRef(null),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
@@ -169,11 +170,11 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    if (viewDeclaration.view !== 'minimized') {
+    // if (viewDeclaration.view !== 'minimized') {
 
-        latestActiveViewRef.current = viewDeclaration.view
+    //     latestActiveViewRef.current = viewDeclaration.view
 
-    }
+    // }
 
     // console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
 
@@ -262,10 +263,10 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
         const normalizedConfig = normalizedWindowConfigRef.current
 
-        if (['maximized','minimized'].includes(viewDeclaration.view)) {
+        if (['maximized','minimized'].includes(viewDeclaration.view)) { // not normalized, that's below
 
-            if (viewDeclaration.view == reservedWindowConfigRef.current.view) {
-                if (viewDeclaration.view == 'minimized') {
+            if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted
+                if (viewDeclaration.view == 'minimized') { // adjust top position
                     element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
                 }
                 return // config changes aleady made
@@ -273,7 +274,7 @@ const Workwindow = (props) => {
 
             isDisabledRef.current = true
 
-            // save normalized config for later restoration
+            // save normalized config for later restoration; save target view
             reservedWindowConfigRef.current = {
                 ...normalizedConfig,
                 view:viewDeclaration.view,
@@ -284,8 +285,12 @@ const Workwindow = (props) => {
 
                 // set base for animation
                 element.style.transform = 'none'
-                element.style.top = normalizedConfig.top + 'px'
-                element.style.left = normalizedConfig.left + 'px'
+                if (previousViewStateRef.current == 'normalized') {
+
+                    element.style.top = normalizedConfig.top + 'px'
+                    element.style.left = normalizedConfig.left + 'px'
+
+                }
 
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
@@ -311,6 +316,8 @@ const Workwindow = (props) => {
 
                     reservedWindowConfigRef.current.inprogress = false
 
+                    previousViewStateRef.current = 'maximized'
+
                     setWindowState('activatemaximized')
 
                 },501)
@@ -320,7 +327,7 @@ const Workwindow = (props) => {
                 // set base for animation
                 element.style.transform = 'none'
 
-                if (latestActiveViewRef.current === 'maximized') {
+                if (previousViewStateRef.current === 'maximized') {
 
                     element.style.top = 0
                     element.style.left = 0
@@ -351,6 +358,8 @@ const Workwindow = (props) => {
 
                     reservedWindowConfigRef.current.inprogress = false
 
+                    previousViewStateRef.current = 'minimized'
+
                     setWindowState('activateminimized')
 
                 },501)
@@ -367,11 +376,19 @@ const Workwindow = (props) => {
 
             // set base styles
             const currentWidth = element.offsetWidth, currentHeight = element.offsetHeight
+
             element.style.inset = null
-            element.style.top = 0
-            element.style.left = 0
+
+            if (previousViewStateRef.current === 'maximized') {
+                element.style.top = 0
+                element.style.left = 0
+            }
+
             element.style.width = currentWidth + 'px'
             element.style.height = currentHeight + 'px'
+
+            console.log('changing to normalized: previousViewStateRef.current, top, left, reservedWindowConfig\n',
+                previousViewStateRef.current, element.offsetTop, element.offsetLeft, '\n', {...reservedWindowConfig})
 
             reservedWindowConfigRef.current.inprogress = true
 
@@ -410,6 +427,8 @@ const Workwindow = (props) => {
                     view:null,
                     inprogress:false,
                 }
+
+                previousViewStateRef.current = 'normalized'
 
                 setNormalizedWindowConfig(normalizedConfig)
 
