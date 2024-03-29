@@ -160,12 +160,22 @@ const Workwindow = (props) => {
                     : null, // maximized
             transform:'none'
         },
+        latestActiveViewRef = useRef(null),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
+        // console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
+        //         '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
+
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
+
+    if (viewDeclaration.view != 'minimized') {
+
+        latestActiveViewRef.current = viewDeclaration.view
+
+    }
 
     // console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
 
@@ -304,15 +314,26 @@ const Workwindow = (props) => {
 
                     reservedWindowConfigRef.current.inprogress = false
 
+                    setWindowState('activatemaximized')
+
                 },501)
 
             } else { // 'minimized'
 
                 // set base for animation
                 element.style.transform = 'none'
-                element.style.top = normalizedConfig.top + 'px'
-                element.style.left = normalizedConfig.left + 'px'
+                console.log('sessionID, latestActiveViewRef.current', sessionID, latestActiveViewRef.current)
+                if (latestActiveViewRef.current === 'maximized') {
 
+                    element.style.top = 0
+                    element.style.left = 0
+
+                } else {
+
+                    element.style.top = normalizedConfig.top + 'px'
+                    element.style.left = normalizedConfig.left + 'px'
+
+                }
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
@@ -332,6 +353,8 @@ const Workwindow = (props) => {
                     element.style.transition = null
 
                     reservedWindowConfigRef.current.inprogress = false
+
+                    setWindowState('activateminimized')
 
                 },501)
 
@@ -375,7 +398,9 @@ const Workwindow = (props) => {
                 element.style.transform = reservedWindowConfig.transform
                 isDisabledRef.current = false
 
-                Object.assign(normalizedConfig, reservedWindowConfig)
+                const {transform, view, inprogress, ...configData} = reservedWindowConfig
+
+                Object.assign(normalizedConfig, configData)
 
                 // reset reserved
                 reservedWindowConfigRef.current = {
