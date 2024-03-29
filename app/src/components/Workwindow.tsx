@@ -163,8 +163,8 @@ const Workwindow = (props) => {
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
-    console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
-            '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
+    // console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
+    //         '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -399,7 +399,7 @@ const Workwindow = (props) => {
 
                 Object.assign(normalizedConfig, configData)
 
-                console.log('normalizedConfig',normalizedConfig)
+                // console.log('normalizedConfig',normalizedConfig)
 
                 // reset reserved
                 reservedWindowConfigRef.current = {
@@ -583,7 +583,7 @@ const Workwindow = (props) => {
         left:0,
     }
 
-    console.log('rendering normalizedWindowConfig',normalizedWindowConfig)
+    // console.log('rendering normalizedWindowConfig',normalizedWindowConfig)
 
     // render
     return (
