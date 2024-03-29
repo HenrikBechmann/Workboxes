@@ -140,7 +140,6 @@ const Workwindow = (props) => {
             height:null,
             top: null,
             left: null,
-            transform:null,
             view:null,
             inprogress:false,
         }),
@@ -158,20 +157,19 @@ const Workwindow = (props) => {
                 : (reservedViewDeclaration == 'minimized')
                     ? viewDeclaration.height + 'px'
                     : null, // maximized
-            transform:'none'
         },
         latestActiveViewRef = useRef(null),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
-        // console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
-        //         '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
+    console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
+            '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    if (viewDeclaration.view != 'minimized') {
+    if (viewDeclaration.view !== 'minimized') {
 
         latestActiveViewRef.current = viewDeclaration.view
 
@@ -278,7 +276,6 @@ const Workwindow = (props) => {
             // save normalized config for later restoration
             reservedWindowConfigRef.current = {
                 ...normalizedConfig,
-                transform: element.style.transform,
                 view:viewDeclaration.view,
                 inprogress:true,
             }
@@ -322,7 +319,7 @@ const Workwindow = (props) => {
 
                 // set base for animation
                 element.style.transform = 'none'
-                console.log('sessionID, latestActiveViewRef.current', sessionID, latestActiveViewRef.current)
+
                 if (latestActiveViewRef.current === 'maximized') {
 
                     element.style.top = 0
@@ -395,12 +392,14 @@ const Workwindow = (props) => {
                 element.style.transition = null
                 element.style.top = 0
                 element.style.left = 0
-                element.style.transform = reservedWindowConfig.transform
+                element.style.transform = `translate(${reservedWindowConfig.left}px,${reservedWindowConfig.top}px)`
                 isDisabledRef.current = false
 
-                const {transform, view, inprogress, ...configData} = reservedWindowConfig
+                const {view, inprogress, ...configData} = reservedWindowConfig
 
                 Object.assign(normalizedConfig, configData)
+
+                console.log('normalizedConfig',normalizedConfig)
 
                 // reset reserved
                 reservedWindowConfigRef.current = {
@@ -408,10 +407,11 @@ const Workwindow = (props) => {
                     height:null,
                     top:null,
                     left:null,
-                    transform:null,
                     view:null,
                     inprogress:false,
                 }
+
+                setNormalizedWindowConfig(normalizedConfig)
 
                 setWindowState('activatenormalized')
 
@@ -582,6 +582,8 @@ const Workwindow = (props) => {
         bottom:containerConfigSpecs.height - normalizedWindowConfig.height, 
         left:0,
     }
+
+    console.log('rendering normalizedWindowConfig',normalizedWindowConfig)
 
     // render
     return (
