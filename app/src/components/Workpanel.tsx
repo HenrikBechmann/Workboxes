@@ -447,8 +447,10 @@ const Workpanel = (props:any) => {
         let zOrder
         if (previousView == 'minimized') {
 
+            windowsMinimizedRef.current.delete(sessionID)
             zOrder = ++highestZOrderRef.current
             // console.log('updated highestZOrderRef.current to ',highestZOrderRef.current)
+            repositionMinimizedWindows()
 
         } else {
             zOrder = highestZOrderRef.current

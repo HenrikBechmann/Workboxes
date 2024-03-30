@@ -159,13 +159,15 @@ const Workwindow = (props) => {
                     : null, // maximized
         },
         // latestActiveViewRef = useRef(null),
-        previousViewStateRef = useRef(null),
+        previousViewStateRef = useRef(viewDeclaration.view),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
     // console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
     //         '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
+
+    // console.log('sessionID, windowState, viewDeclaration', '-' + sessionID + '-',windowState, viewDeclaration)
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -387,8 +389,8 @@ const Workwindow = (props) => {
             element.style.width = currentWidth + 'px'
             element.style.height = currentHeight + 'px'
 
-            console.log('changing to normalized: previousViewStateRef.current, top, left, reservedWindowConfig\n',
-                previousViewStateRef.current, element.offsetTop, element.offsetLeft, '\n', {...reservedWindowConfig})
+            // console.log('changing to normalized: previousViewStateRef.current, top, left, reservedWindowConfig\n',
+            //     previousViewStateRef.current, element.offsetTop, element.offsetLeft, '\n', {...reservedWindowConfig})
 
             reservedWindowConfigRef.current.inprogress = true
 
