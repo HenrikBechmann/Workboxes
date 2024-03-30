@@ -78,7 +78,7 @@ const resizeHandleIconStyles = {
     width:'12px',
 }
 
-export const ViewDeclarationContext = createContext(null)
+export const ViewSelectorContext = createContext(null)
 
 // for Resizable
 const WindowHandle = (props) => {
@@ -587,7 +587,7 @@ const Workwindow = (props) => {
 
     // render
     return (
-    <ViewDeclarationContext.Provider value = {viewDeclaration}>
+    <ViewSelectorContext.Provider value = {viewDeclaration.view}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
@@ -636,7 +636,7 @@ const Workwindow = (props) => {
             </Box>
         </Resizable>
     </Draggable>
-    </ViewDeclarationContext.Provider>)
+    </ViewSelectorContext.Provider>)
 }
 
 export default Workwindow

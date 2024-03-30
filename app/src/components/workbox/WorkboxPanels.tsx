@@ -19,7 +19,7 @@ import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
-import { ViewDeclarationContext } from '../Workwindow'
+import { ViewSelectorContext } from '../Workwindow'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -39,7 +39,6 @@ const centralPanelStyles = {
     flex: '1 0 auto',
     minWidth: MIN_CENTRAL_FRAME_WIDTH + 'px',
     minHeight: MIN_CONTENT_HEIGHT + 'px',
-
     transition:'none', // set as needed
     boxSizing: 'border-box',
 } as CSSProperties
@@ -71,7 +70,7 @@ const coverPanelStyles = {
     right:'auto',
 } as CSSProperties
 
-const coverTabStyle = {
+const coverTabStyles = {
     position:'absolute',
     margin: 0,
     backgroundColor:'white',
@@ -89,7 +88,7 @@ const coverTabStyle = {
     transition: 'opacity 0.3s, visibility 0.3s'
 } as CSSProperties
 
-const coverTabIconStyle = {
+const coverTabIconStyles = {
     opacity: 0.5,
     height: '24px',
     width: '48px',
@@ -103,7 +102,6 @@ const contentsFrameStyles = {
     minHeight: MIN_CONTENT_HEIGHT + 'px',
     position: 'relative',
     transition:'none', // set as needed
-    // transition:'width .5s',
     transitionDelay:'unset',
     borderRadius:'8px',
     overflow: 'hidden',
@@ -136,7 +134,6 @@ const settingsFrameStyles = {
 } as CSSProperties
 
 const settingsPanelStyles = {
-    // display:'block', 
     border:'5px ridge saddlebrown',
     borderRadius:'8px',
     overflow:'auto',
@@ -399,10 +396,10 @@ const CoverHandle = (props) => {
             ref = {innerRef}
             id = 'handle'
             data-type = {'cover-handle'} 
-            style = {coverTabStyle} {...rest}>
+            style = {coverTabStyles} {...rest}>
             <img 
                 draggable = "false" 
-                style = {coverTabIconStyle} 
+                style = {coverTabIconStyles} 
                 src = {handleIcon} 
             />
         </Box>
@@ -419,8 +416,9 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current),
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
-        viewDeclarationContext = useContext(ViewDeclarationContext),
-        handleRef = useRef(null)
+        handleRef = useRef(null),
+        
+        viewSelectorContext = useContext(ViewSelectorContext)
 
     displayCodeRef.current = displayConfigCode
 
