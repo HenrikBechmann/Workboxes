@@ -250,7 +250,11 @@ const Workwindow = (props) => {
 
             if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted
                 if (viewDeclaration.view == 'minimized') { // adjust top position
+                    element.style.transition = 'top 0.3s'
                     element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    setTimeout(()=>{
+                        element.style.transition = null
+                    },300)
                 }
                 return // config changes aleady made
             }
