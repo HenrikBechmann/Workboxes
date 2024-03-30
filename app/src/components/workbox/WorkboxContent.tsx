@@ -1,7 +1,7 @@
 // WorkboxContent.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, CSSProperties, useContext } from 'react'
 
 import {
     Box, VStack, Center
@@ -26,7 +26,7 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => {
 
     const 
-        { workboxConfig, sessionWindowID } = props,
+        { workboxConfig, sessionWindowID, viewSelector } = props,
         { contentsShow, coverShow } = workboxConfig, // boolean - show/ noshow
         // share cover and contents elements with children
         coverFrameElementRef = useRef( null ),
@@ -34,8 +34,10 @@ const WorkboxContent = (props) => {
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        userCoverWidthRef = useRef( 300 ), // shared with children for configuration
+        userCoverWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
+
+    console.log('running WorkboxContent: , viewSelector\n', '-'+sessionWindowID+'-', viewSelector)    
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
     if (contentsShow && coverShow) {
@@ -60,20 +62,37 @@ const WorkboxContent = (props) => {
 
     },[])
 
+    useEffect(()=>{
+
+        if (contentState != 'ready') setContentState('ready')
+
+    },[contentState])
+
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
         <SettingsPanel showPanel = {workboxConfig.settingsShow}>
             Settings
         </SettingsPanel>
         <CentralPanel 
+            sessionWindowID = {sessionWindowID}
             displayConfigCode = {workboxDisplayCode} 
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
             userCoverWidthRef = {userCoverWidthRef}
+            viewSelector = {viewSelector}
         >
-            <CoverPanel ref = {coverFrameElementRef} displayConfigCode = {coverDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
+            <CoverPanel 
+                ref = {coverFrameElementRef} 
+                displayConfigCode = {coverDisplayCode} 
+                userCoverWidthRef = {userCoverWidthRef}
+                sessionWindowID =  {sessionWindowID}
+                viewSelector = {viewSelector}
+            >
             Cover ({sessionWindowID})
             </CoverPanel>
-            <ContentsPanel ref = {contentsFrameElementRef} displayConfigCode = {contentsDisplayCode} userCoverWidthRef = {userCoverWidthRef}>
+            <ContentsPanel 
+                ref = {contentsFrameElementRef} 
+                displayConfigCode = {contentsDisplayCode} 
+            >
             Contents
             </ContentsPanel>
         </CentralPanel>

@@ -183,7 +183,8 @@ const Workpanel = (props:any) => {
             { ...remainingWindowProps }
         >
             <Workbox 
-                sessionWindowID = {sessionID} {...specs.workbox}
+                sessionWindowID = {sessionID} 
+                {...specs.workbox}
             />
         </Workwindow>
     }

@@ -1,7 +1,7 @@
 // Workbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext } from 'react'
 
 import {
     Box,
@@ -14,6 +14,8 @@ import WorkboxContent from './WorkboxContent'
 
 export const WorkboxInnerFrameWidthContext = createContext(null)
 import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
+
+import { ViewSelectorContext } from '../Workwindow'
 
 const workboxFrameStyles = {
     position:'absolute',
@@ -55,9 +57,12 @@ const Workbox = (props) => {
             typeName, 
             domainTitle 
         } = props,
+        viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
         [workboxConfig, setWorkboxConfig] = useState({...defaultConfig}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
+
+    console.log('running Workbox: , viewSelectorContext\n', '-'+sessionWindowID+'-', viewSelectorContext)
 
     // update the recorded with of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
@@ -100,7 +105,7 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                <WorkboxContent sessionWindowID = {sessionWindowID} workboxConfig = {workboxConfig} />
+                <WorkboxContent viewSelector = {viewSelectorContext} sessionWindowID = {sessionWindowID} workboxConfig = {workboxConfig} />
             </Box>
         </GridItem>
     </Grid>

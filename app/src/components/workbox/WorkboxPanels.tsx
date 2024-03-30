@@ -19,7 +19,6 @@ import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
-import { ViewSelectorContext } from '../Workwindow'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -152,15 +151,21 @@ export const CentralPanel = (props) => {
     const 
         { 
             children, 
+            sessionWindowID,
             displayConfigCode, 
             coverFrameElementRef, 
             contentsFrameElementRef, 
-            userCoverWidthRef // set by user through drag tag
+            userCoverWidthRef, // set by user through drag tag
+            viewSelector,
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
         centralPanelElementRef = useRef(null),
-        // [centralPanelWidth, setCentralPanelWidth] = useState(0),
-        timeoutRef = useRef(null)
+        timeoutRef = useRef(null),
+        viewSelectorRef = useRef(viewSelector)
+
+        viewSelectorRef.current = viewSelector
+
+    console.log('running CentralPanel: , viewSelector\n', '-'+sessionWindowID+'-', viewSelector)
 
     /*
         Respond to change in displayConfigCode; causes direct DOM manipulation.
@@ -199,13 +204,15 @@ export const CentralPanel = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCodeRef.current == 'contents') { // cover was hidden
 
-                coverFrameElement.firstChild.style.width = userCoverWidthRef.current + 'px'
+                coverFrameElement.firstChild.style.width = userCoverWidthRef.current[viewSelectorRef.current] + 'px'
                 coverFrameElement.firstChild.style.left = 0
                 coverFrameElement.firstChild.style.right = 'auto'
 
             } else { // contents was hidden
 
-                contentsFrameElement.firstChild.style.width = Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - userCoverWidthRef.current)) + 'px'
+                contentsFrameElement.firstChild.style.width = 
+                    Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
+                        userCoverWidthRef.current[viewSelectorRef.current])) + 'px'
                 contentsFrameElement.firstChild.style.left = 'auto'
                 contentsFrameElement.firstChild.style.right = 0
 
@@ -227,7 +234,7 @@ export const CentralPanel = (props) => {
             // set animation targets
             coverFrameElement.style.width = userCoverWidthRef.current + 'px'
             contentsFrameElement.style.width = 
-                Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - userCoverWidthRef.current)) + 'px'
+                Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - userCoverWidthRef.current[viewSelectorRef.current])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
@@ -408,19 +415,22 @@ const CoverHandle = (props) => {
 
 export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRef:any) {
     const 
-        { children, displayConfigCode, userCoverWidthRef } = props, // userCoverWidthRef informs "friends"
+        { children, displayConfigCode, userCoverWidthRef, sessionWindowID, viewSelector } = props, // userCoverWidthRef informs "friends"
         displayCodeRef = useRef(null),
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
         targetTimeoutRef = useRef(null),
-        [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current),
+        [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current[viewSelector]),
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
-        
-        viewSelectorContext = useContext(ViewSelectorContext)
+        viewSelectorRef = useRef(viewSelector)
 
     displayCodeRef.current = displayConfigCode
+    viewSelectorRef.current = viewSelector
+
+    console.log('running CoverPanel: , viewSelector, coverResizeWidth, userCoverWidthRef.current[viewSelector]\n', 
+        '-'+sessionWindowID+'-', viewSelector, coverResizeWidth, userCoverWidthRef.current[viewSelector])
 
     useEffect(()=>{
 
@@ -431,13 +441,29 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     useEffect(()=>{
 
+        setTimeout(()=>{
+
+            console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
+            coverFrameElementRef.current.style.width = userCoverWidthRef.current[viewSelector] + 'px'
+            console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
+            setCoverResizeWidth(userCoverWidthRef.current[viewSelector])
+
+        },500)
+
+    },[viewSelector])
+
+    useEffect(()=>{
+
         if (workboxInnerFrameWidthFromContext === 0) return
+
+        console.log('updating from workboxInnerFrameWidthFromContext',
+            '-' + sessionWindowID + '-',workboxInnerFrameWidthFromContext)
 
         const centralPanelWidth = centralPanelElementRef.current.offsetWidth
         const coverWidth = 
             displayCodeRef.current == 'out'
                 ? coverFrameElementRef.current.offsetWidth
-                : userCoverWidthRef.current
+                : userCoverWidthRef.current[viewSelectorRef.current]
 
         clearTimeout(observerTimeoutRef.current)
 
@@ -452,7 +478,11 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
             if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
-            userCoverWidthRef.current = newWidth
+
+            userCoverWidthRef.current[viewSelectorRef.current] = newWidth
+
+            console.log('setting userCoverWidthRef.current[viewSelector] for workbox inner frame\n',
+                '-'+sessionWindowID+'-',viewSelectorRef.current, userCoverWidthRef.current )
 
             if (coverFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
@@ -537,7 +567,12 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     const onResizeStop = (e,{size, handle}) => {
         coverFrameElementRef.current.style.transition = 'width 0.5s'
-        userCoverWidthRef.current = size.width
+
+        userCoverWidthRef.current[viewSelectorRef.current] = size.width
+
+        console.log('setting userCoverWidthRef.current[viewSelectorRef.current] for resize\n',
+                '-'+sessionWindowID+'-',viewSelectorRef.current, userCoverWidthRef.current )
+
     }
 
     return (
