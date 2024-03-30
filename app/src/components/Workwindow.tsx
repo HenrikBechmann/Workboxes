@@ -164,21 +164,8 @@ const Workwindow = (props) => {
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
 
-    // console.log('running Workwindow: sessionID, windowState, reservedViewDeclaration, viewTransformationInProgress, viewDeclaration, normalizedWindowConfig\n',
-    //         '-' + sessionID + '-', windowState, reservedViewDeclaration, viewTransformationInProgress, '\n', viewDeclaration, normalizedWindowConfig)
-
-    // console.log('sessionID, windowState, viewDeclaration', '-' + sessionID + '-',windowState, viewDeclaration)
-
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
-
-    // if (viewDeclaration.view !== 'minimized') {
-
-    //     latestActiveViewRef.current = viewDeclaration.view
-
-    // }
-
-    // console.log('--------------------\n', 'RUN window sessionID windowState: zOrder, viewDeclaration\n', '-' + sessionID + '-', windowState, '\n', zOrder, viewDeclaration)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
@@ -235,11 +222,7 @@ const Workwindow = (props) => {
     // apply inherited zOrder on change by parent
     useEffect(()=>{
 
-        // console.log('window useEffect sessionID zOrder\n','-' + sessionID + '-', zOrder)
-
         if (!isMountedRef.current) return
-
-        // console.log('window processing sessionID, zOrder', sessionID, zOrder)
 
         let timeout = 0
 
@@ -257,8 +240,6 @@ const Workwindow = (props) => {
 
     // respond to changed viewDeclaration
     useEffect(()=>{
-
-        // console.log('window useEffect sessionID viewDeclaration\n', '-' + sessionID + '-', viewDeclaration)
 
         clearTimeout(transitionTimeoutRef.current)
 
@@ -389,9 +370,6 @@ const Workwindow = (props) => {
             element.style.width = currentWidth + 'px'
             element.style.height = currentHeight + 'px'
 
-            // console.log('changing to normalized: previousViewStateRef.current, top, left, reservedWindowConfig\n',
-            //     previousViewStateRef.current, element.offsetTop, element.offsetLeft, '\n', {...reservedWindowConfig})
-
             reservedWindowConfigRef.current.inprogress = true
 
             // set targets
@@ -417,8 +395,6 @@ const Workwindow = (props) => {
                 const {view, inprogress, ...configData} = reservedWindowConfig
 
                 Object.assign(normalizedConfig, configData)
-
-                // console.log('normalizedConfig',normalizedConfig)
 
                 // reset reserved
                 reservedWindowConfigRef.current = {
@@ -581,8 +557,9 @@ const Workwindow = (props) => {
         // undo deltalY which causes scroll and window movement when drag handle (title) selected
         // while window is partially out of view
         if (data.deltaY) {
-            // console.log('updating DeltaY',data.deltaY)
+
             panelFrameElementRef.current.scrollTop -= data.deltaY
+
         }
 
         setNormalizedWindowConfig((previousState) => {
@@ -603,8 +580,6 @@ const Workwindow = (props) => {
         bottom:containerConfigSpecs.height - normalizedWindowConfig.height, 
         left:0,
     }
-
-    // console.log('rendering normalizedWindowConfig',normalizedWindowConfig)
 
     // render
     return (
