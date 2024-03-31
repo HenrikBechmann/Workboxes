@@ -165,7 +165,7 @@ const Workpanel = (props:any) => {
         const 
             // required to position window
             element = panelElementRef.current,
-            containerConfigSpecs = { width:element.offsetWidth, height:element.offsetHeight },
+            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
             // required to configure window
             { view, stackOrder, ...remainingWindowProps } = specs.window,
             viewDeclaration = {
@@ -178,7 +178,7 @@ const Workpanel = (props:any) => {
             key = { sessionID } 
             sessionID = { sessionID }
             viewDeclaration = { viewDeclaration }
-            containerConfigSpecs = { containerConfigSpecs }
+            containerDimensionSpecs = { containerDimensionSpecs }
             callbacks = { callbacks } 
             { ...remainingWindowProps }
         >
@@ -531,13 +531,13 @@ const Workpanel = (props:any) => {
 
         const 
             element = panelElementRef.current,
-            containerConfigSpecs = {width:element.offsetWidth, height:element.offsetHeight},
+            containerDimensionSpecs = {width:element.offsetWidth, height:element.offsetHeight},
             windowsList = windowsListRef.current,
             length = windowsList.length
 
         for (let index = 0; index < length; index++ ) {
             const component = windowsList[index]
-            windowsList[index] = React.cloneElement(component, {containerConfigSpecs})
+            windowsList[index] = React.cloneElement(component, {containerDimensionSpecs})
         }
         windowsListRef.current = [...windowsList]
         setPanelState('resized')

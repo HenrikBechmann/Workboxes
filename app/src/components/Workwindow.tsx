@@ -108,7 +108,7 @@ const Workwindow = (props) => {
             zOrder, // inherited; modified by setFocus 
             viewDeclaration, // normalized, maximized, minimized
             callbacks, // change zOrder etc.
-            containerConfigSpecs // height, width; change can cause repositioning and resizing of window
+            containerDimensionSpecs // height, width; change can cause repositioning and resizing of window
         } = props,
 
         windowElementRef = useRef(null),
@@ -164,7 +164,7 @@ const Workwindow = (props) => {
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null),
-        windowCallbackRef = useRef({changeView:null})
+        windowCallbackRef = useRef({changeView:null}) // callback set in coverPanel for call after max/norm view change
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -313,7 +313,7 @@ const Workwindow = (props) => {
 
                     setWindowState('activatemaximized')
 
-                    windowCallbackRef.current.changeView()
+                    windowCallbackRef.current.changeView() // revert to previous cover width
 
                 },501)
 
@@ -428,7 +428,7 @@ const Workwindow = (props) => {
 
                 setWindowState('activatenormalized')
 
-                windowCallbackRef.current.changeView()
+                windowCallbackRef.current.changeView() // revert to previous cover width
 
             },501)
 
@@ -439,18 +439,18 @@ const Workwindow = (props) => {
     },[viewDeclaration])
 
     // adjust window size as necessary in changed container size; 
-    // responds to new containerConfigSpecs object
+    // responds to new containerDimensionSpecs object
     useEffect(()=>{
 
         if (!isMountedRef.current) return
 
-        if (!containerConfigSpecs) return
+        if (!containerDimensionSpecs) return
 
         const 
             reservedWindowConfig = reservedWindowConfigRef.current,
             normalizedWindowConfig = normalizedWindowConfigRef.current
 
-        let virtualWindowConfig // this is what is updated by change of containerConfigSpecs
+        let virtualWindowConfig // this is what is updated by change of containerDimensionSpecs
         if (reservedWindowConfig.view) {
 
             virtualWindowConfig = {
@@ -476,12 +476,12 @@ const Workwindow = (props) => {
             heightFitBoundary = virtualWindowConfig.height + virtualWindowConfig.top
 
         // keep entire window inside panel boundaries
-        if (containerConfigSpecs.width < widthFitBoundary || containerConfigSpecs.height < heightFitBoundary) {
+        if (containerDimensionSpecs.width < widthFitBoundary || containerDimensionSpecs.height < heightFitBoundary) {
             // adjustments required
 
             // adjust left and width
-            if (containerConfigSpecs.width < widthFitBoundary) {
-                let widthOversize = widthFitBoundary - containerConfigSpecs.width
+            if (containerDimensionSpecs.width < widthFitBoundary) {
+                let widthOversize = widthFitBoundary - containerDimensionSpecs.width
                 const 
                     newLeft = Math.max(0,virtualWindowConfig.left - widthOversize),
                     widthShiftApplied = virtualWindowConfig.left - newLeft
@@ -498,8 +498,8 @@ const Workwindow = (props) => {
             }
 
             // adjust top and height
-            if (containerConfigSpecs.height < heightFitBoundary) {
-                let heightOverize = heightFitBoundary - containerConfigSpecs.height
+            if (containerDimensionSpecs.height < heightFitBoundary) {
+                let heightOverize = heightFitBoundary - containerDimensionSpecs.height
                 const 
                     newTop = Math.max(0,virtualWindowConfig.top - heightOverize),
                     heightShiftApplied = virtualWindowConfig.top - newTop
@@ -528,15 +528,15 @@ const Workwindow = (props) => {
         }
 
         maxConstraintsRef.current = [
-            containerConfigSpecs.width - virtualWindowConfig.left, 
-            containerConfigSpecs.height - virtualWindowConfig.top,
+            containerDimensionSpecs.width - virtualWindowConfig.left, 
+            containerDimensionSpecs.height - virtualWindowConfig.top,
         ]
 
         setWindowState('repositioned')
 
-    },[containerConfigSpecs])
+    },[containerDimensionSpecs])
 
-    // -----------------------------[ callbacks ]-----------------------------
+    // -----------------------------[ resizeable and draggable callbacks ]-----------------------------
 
     // resizable callbacks...
     const onResizeStart = (event, {size, handle}) => {
@@ -586,8 +586,8 @@ const Workwindow = (props) => {
         })
 
         maxConstraintsRef.current = [
-            containerConfigSpecs.width - data.x, 
-            containerConfigSpecs.height - (data.y - data.deltaY),
+            containerDimensionSpecs.width - data.x, 
+            containerDimensionSpecs.height - (data.y - data.deltaY),
         ]
     }
 
@@ -595,8 +595,8 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = {
         top:0, 
-        right:containerConfigSpecs.width - normalizedWindowConfig.width, 
-        bottom:containerConfigSpecs.height - normalizedWindowConfig.height, 
+        right:containerDimensionSpecs.width - normalizedWindowConfig.width, 
+        bottom:containerDimensionSpecs.height - normalizedWindowConfig.height, 
         left:0,
     }
 
