@@ -19,14 +19,16 @@ import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
+import { WindowCallbackContext } from '../Workwindow'
 
 import handleIcon from '../../../assets/handle.png'
 
-const MIN_COVER_FRAME_WIDTH = 250
-const MAX_COVER_FRAME_RATIO = 0.75
-const MIN_CONTENTS_FRAME_WIDTH = 250
-const MIN_CENTRAL_FRAME_WIDTH = MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH
-const MIN_CONTENT_HEIGHT = 300
+const 
+    MIN_COVER_FRAME_WIDTH = 250,
+    MAX_COVER_FRAME_RATIO = 0.75,
+    MIN_CONTENTS_FRAME_WIDTH = 250,
+    MIN_CENTRAL_FRAME_WIDTH = MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH,
+    MIN_CONTENT_HEIGHT = 300
 
 const centralPanelStyles = {
     height:'100%',
@@ -425,8 +427,18 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
-        viewSelectorRef = useRef(null)
+        viewSelectorRef = useRef(null),
+        windowCallbackContext = useContext(WindowCallbackContext),
+        windowCallbackContextRef = useRef(windowCallbackContext),
+        constraintsRef = useRef({
+            minX:MIN_COVER_FRAME_WIDTH,
+            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxX:700,
+            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+        }),
+        workboxInnerFrameWidthFromContextRef = useRef(null)
 
+    workboxInnerFrameWidthFromContextRef.current = workboxInnerFrameWidthFromContext
     displayCodeRef.current = displayConfigCode
     viewSelectorRef.current = viewSelector
 
@@ -447,15 +459,25 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
             viewWidth = userCoverWidthRef.current[viewSelector],
             viewTrigger = viewSelector
 
-        setTimeout(()=>{
+        windowCallbackContextRef.current.changeView = ()=>{
 
+            const constraints = {
+                minX:MIN_COVER_FRAME_WIDTH,
+                minY:coverFrameElementRef.current?.offsetHeight || 0,
+                maxX: Math.min(
+                    workboxInnerFrameWidthFromContextRef.current * MAX_COVER_FRAME_RATIO,
+                    workboxInnerFrameWidthFromContextRef.current - MIN_CONTENTS_FRAME_WIDTH),
+                maxY:coverFrameElementRef.current?.offsetHeight || 0,
+            }
+            constraintsRef.current = constraints
+            const appliedWidth = Math.min(constraints.maxX, viewWidth)
             // console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
-            coverFrameElementRef.current.style.width = viewWidth + 'px'
+            coverFrameElementRef.current.style.width = appliedWidth + 'px'
             // console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
-            userCoverWidthRef.current[viewTrigger] = viewWidth
-            setCoverResizeWidth(viewWidth)
+            userCoverWidthRef.current[viewTrigger] = appliedWidth
+            setCoverResizeWidth(appliedWidth)
 
-        },600)
+        }
 
     },[viewSelector])
 
@@ -543,13 +565,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     },[displayConfigCode])
 
-    const constraintsRef = useRef({
-        minX:MIN_COVER_FRAME_WIDTH,
-        minY:coverFrameElementRef.current?.offsetHeight || 0,
-        maxX:700,
-        maxY:coverFrameElementRef.current?.offsetHeight || 0,
-    })
-
     // resizable callbacks...
     const onResizeStart = () => {
         coverFrameElementRef.current.style.transition = 'none'
@@ -562,6 +577,8 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
+
+        // console.log('onResizeStart constraints', constraints)
 
     }
 

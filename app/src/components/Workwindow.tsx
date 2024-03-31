@@ -17,6 +17,7 @@ import WindowTitle from './WindowTitle'
 import dragCornerIcon from '../../assets/drag-corner.png'
 
 export const ViewSelectorContext = createContext(null)
+export const WindowCallbackContext = createContext(null)
 
 const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
 const WINDOW_MINIMIZED_WIDTH = 250
@@ -162,7 +163,8 @@ const Workwindow = (props) => {
         previousViewStateRef = useRef(viewDeclaration.view),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
-        transitionTimeoutRef = useRef(null)
+        transitionTimeoutRef = useRef(null),
+        windowCallbackRef = useRef({changeView:null})
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -311,6 +313,8 @@ const Workwindow = (props) => {
 
                     setWindowState('activatemaximized')
 
+                    windowCallbackRef.current.changeView()
+
                 },501)
 
             // -----------------------[ transition to minimized view ]-------------------------
@@ -423,6 +427,8 @@ const Workwindow = (props) => {
                 setNormalizedWindowConfig(normalizedConfig)
 
                 setWindowState('activatenormalized')
+
+                windowCallbackRef.current.changeView()
 
             },501)
 
@@ -597,6 +603,7 @@ const Workwindow = (props) => {
     // render
     return (
     <ViewSelectorContext.Provider value = {viewDeclaration.view}>
+    <WindowCallbackContext.Provider value = {windowCallbackRef.current}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
@@ -645,6 +652,7 @@ const Workwindow = (props) => {
             </Box>
         </Resizable>
     </Draggable>
+    </WindowCallbackContext.Provider>
     </ViewSelectorContext.Provider>)
 }
 
