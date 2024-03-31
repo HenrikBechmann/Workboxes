@@ -149,7 +149,7 @@ const settingsPanelStyles = {
 export const CentralPanel = (props) => {
 
     const 
-        { 
+        {
             children, 
             sessionWindowID,
             displayConfigCode, 
@@ -161,7 +161,7 @@ export const CentralPanel = (props) => {
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
         centralPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
-        viewSelectorRef = useRef(viewSelector)
+        viewSelectorRef = useRef(null)
 
         viewSelectorRef.current = viewSelector
 
@@ -425,7 +425,7 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
-        viewSelectorRef = useRef(viewSelector)
+        viewSelectorRef = useRef(null)
 
     displayCodeRef.current = displayConfigCode
     viewSelectorRef.current = viewSelector
@@ -442,12 +442,15 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     useEffect(()=>{
 
+        console.log('switching coverPanel view, userCoverWidthRef','-'+sessionWindowID+'-', viewSelector, {...userCoverWidthRef.current})
+        const viewWidth = userCoverWidthRef.current[viewSelector]
+
         setTimeout(()=>{
 
             console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
-            coverFrameElementRef.current.style.width = userCoverWidthRef.current[viewSelector] + 'px'
+            coverFrameElementRef.current.style.width = viewWidth + 'px'
             console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
-            setCoverResizeWidth(userCoverWidthRef.current[viewSelector])
+            setCoverResizeWidth(viewWidth)
 
         },600)
 
@@ -570,6 +573,7 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         coverFrameElementRef.current.style.transition = 'width 0.5s'
 
         userCoverWidthRef.current[viewSelectorRef.current] = size.width
+        setCoverResizeWidth(size.width)
 
         // console.log('setting userCoverWidthRef.current[viewSelectorRef.current] for resize\n',
         //         '-'+sessionWindowID+'-',viewSelectorRef.current, userCoverWidthRef.current )

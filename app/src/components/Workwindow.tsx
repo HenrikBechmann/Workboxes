@@ -16,6 +16,8 @@ import WindowTitle from './WindowTitle'
 
 import dragCornerIcon from '../../assets/drag-corner.png'
 
+export const ViewSelectorContext = createContext(null)
+
 const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
 const WINDOW_MINIMIZED_WIDTH = 250
 
@@ -77,8 +79,6 @@ const resizeHandleIconStyles = {
     height:'12px', 
     width:'12px',
 }
-
-export const ViewSelectorContext = createContext(null)
 
 // for Resizable
 const WindowHandle = (props) => {
@@ -246,9 +246,11 @@ const Workwindow = (props) => {
         const element = windowElementRef.current
         const normalizedConfig = normalizedWindowConfigRef.current
 
-        if (['maximized','minimized'].includes(viewDeclaration.view)) { // not normalized, that's below
+        if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
 
-            if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted
+            // ---------------------------[ update minimized stack order ]--------------------------
+
+            if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted; maybe stackorder change
                 if (viewDeclaration.view == 'minimized') { // adjust top position
                     element.style.transition = 'top 0.3s'
                     element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
@@ -261,12 +263,14 @@ const Workwindow = (props) => {
 
             isDisabledRef.current = true
 
-            // save normalized config for later restoration; save target view
+            // save normalized config for later restoration; save target view, inprogress flag
             reservedWindowConfigRef.current = {
                 ...normalizedConfig,
                 view:viewDeclaration.view,
                 inprogress:true,
             }
+
+            // -----------------------[ transition to maximized view ]-------------------------
 
             if (viewDeclaration.view == 'maximized') {
 
@@ -308,6 +312,8 @@ const Workwindow = (props) => {
                     setWindowState('activatemaximized')
 
                 },501)
+
+            // -----------------------[ transition to minimized view ]-------------------------
 
             } else { // 'minimized'
 
@@ -352,6 +358,8 @@ const Workwindow = (props) => {
                 },501)
 
             }
+
+        // -----------------------[ transition to normalized view ]-------------------------
 
         } else { // 'normalized'
 
@@ -424,7 +432,8 @@ const Workwindow = (props) => {
 
     },[viewDeclaration])
 
-    // adjust window size as necessary in changed container size; responds to new containerConfigSpecs object
+    // adjust window size as necessary in changed container size; 
+    // responds to new containerConfigSpecs object
     useEffect(()=>{
 
         if (!isMountedRef.current) return
