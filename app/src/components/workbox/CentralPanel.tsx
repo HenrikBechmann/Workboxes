@@ -74,11 +74,8 @@ const CentralPanel = (props) => {
             coverFrameElement = coverFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             contentsFrameElement = contentsFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             transitionDelay = '0.3s',
-            timeout = 800
-
-        coverFrameElement.style.transition = 'width 0.5s'
-        contentsFrameElement.style.transition = 'width 0.5s'
-
+            timeout = 800,
+            previousDisplayConfigCode = previousDisplayConfigCodeRef.current
 
         clearTimeout(timeoutRef.current)
 
@@ -88,8 +85,11 @@ const CentralPanel = (props) => {
             coverFrameElement.style.transitionDelay = 'unset'
             contentsFrameElement.style.transitionDelay = 'unset'
 
+            coverFrameElement.style.transition = 'width 0.5s'
+            contentsFrameElement.style.transition = 'width 0.5s'
+
             // anticipate config of hidden elements
-            if (previousDisplayConfigCodeRef.current == 'contents') { // cover was hidden
+            if (previousDisplayConfigCode == 'contents') { // cover was hidden
 
                 coverFrameElement.firstChild.style.width = userCoverWidthRef.current[viewSelectorRef.current] + 'px'
                 coverFrameElement.firstChild.style.left = 0
@@ -119,7 +119,7 @@ const CentralPanel = (props) => {
             contentsFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            coverFrameElement.style.width = userCoverWidthRef.current + 'px'
+            coverFrameElement.style.width = userCoverWidthRef.current[viewSelectorRef.current] + 'px'
             contentsFrameElement.style.width = 
                 Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                     userCoverWidthRef.current[viewSelectorRef.current])) + 'px'
@@ -155,8 +155,11 @@ const CentralPanel = (props) => {
             coverFrameElement.style.transitionDelay = transitionDelay
             contentsFrameElement.style.transitionDelay = transitionDelay
 
+            coverFrameElement.style.transition = 'width 0.5s'
+            contentsFrameElement.style.transition = 'width 0.5s'
+
             // anticipate config of hidden element
-            if (previousDisplayConfigCodeRef.current == 'contents') { // cover was hidden
+            if (previousDisplayConfigCode == 'contents') { // cover was hidden
 
                 coverFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 coverFrameElement.firstChild.style.right = 0
@@ -213,8 +216,11 @@ const CentralPanel = (props) => {
             coverFrameElement.style.transitionDelay = transitionDelay
             contentsFrameElement.style.transitionDelay = transitionDelay
 
+            coverFrameElement.style.transition = 'width 0.5s'
+            contentsFrameElement.style.transition = 'width 0.5s'
+
             // anticipate config of hidden element
-            if (previousDisplayConfigCodeRef.current == 'cover') { // contents was hidden
+            if (previousDisplayConfigCode == 'cover') { // contents was hidden
 
                 contentsFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 contentsFrameElement.firstChild.style.right = 'auto'
