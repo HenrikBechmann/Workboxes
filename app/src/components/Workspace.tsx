@@ -46,7 +46,7 @@ const Workspace = (props) => {
                 defaultConfig:{...workboxDefaultConfig},
                 itemIcon: photoURL,
                 itemTitle: displayName,
-                domainTitle: 'Henrik Bechmann',
+                domainTitle: 'Henrik Bechmann Account',
                 typeName: 'Domain',
             }
         },
@@ -60,7 +60,7 @@ const Workspace = (props) => {
                 defaultConfig:{...workboxDefaultConfig},
                 itemIcon: photoURL,
                 itemTitle: displayName,
-                domainTitle: 'Henrik Bechmann',
+                domainTitle: 'Henrik Bechmann Account',
                 typeName: 'Domain',
             }
         },
@@ -74,7 +74,7 @@ const Workspace = (props) => {
                 defaultConfig:{...workboxDefaultConfig},
                 itemIcon: photoURL,
                 itemTitle: displayName,
-                domainTitle: 'Henrik Bechmann',
+                domainTitle: 'Henrik Bechmann Account',
                 typeName: 'Domain',
             }
         },
