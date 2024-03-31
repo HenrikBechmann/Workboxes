@@ -167,8 +167,6 @@ export const CentralPanel = (props) => {
 
         viewSelectorRef.current = viewSelector
 
-    // console.log('running CentralPanel: , viewSelector\n', '-'+sessionWindowID+'-', viewSelector)
-
     /*
         Respond to change in displayConfigCode; causes direct DOM manipulation.
         Adjusts the CSS of 
@@ -442,9 +440,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
     displayCodeRef.current = displayConfigCode
     viewSelectorRef.current = viewSelector
 
-    // console.log('running CoverPanel: , viewSelector, coverResizeWidth, userCoverWidthRef.current[viewSelector]\n', 
-    //     '-'+sessionWindowID+'-', viewSelector, coverResizeWidth, userCoverWidthRef.current[viewSelector])
-
     useEffect(()=>{
 
         centralPanelElementRef.current = coverPanelElementRef.current.closest('#central-panel')
@@ -454,7 +449,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     useEffect(()=>{
 
-        // console.log('switching coverPanel view, userCoverWidthRef','-'+sessionWindowID+'-', viewSelector, {...userCoverWidthRef.current})
         const 
             viewWidth = userCoverWidthRef.current[viewSelector],
             viewTrigger = viewSelector
@@ -470,12 +464,17 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
                 maxY:coverFrameElementRef.current?.offsetHeight || 0,
             }
             constraintsRef.current = constraints
+
             const appliedWidth = Math.min(constraints.maxX, viewWidth)
-            // console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
+
+            coverFrameElementRef.current.style.transition = 'width 0.3s'
             coverFrameElementRef.current.style.width = appliedWidth + 'px'
-            // console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
             userCoverWidthRef.current[viewTrigger] = appliedWidth
-            setCoverResizeWidth(appliedWidth)
+
+            setTimeout(()=>{
+                coverFrameElementRef.current.style.transition = 'none'
+                setCoverResizeWidth(appliedWidth)
+            },300)
 
         }
 
@@ -484,9 +483,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
     useEffect(()=>{
 
         if (workboxInnerFrameWidthFromContext === 0) return
-
-        // console.log('updating from workboxInnerFrameWidthFromContext',
-        //     '-' + sessionWindowID + '-',workboxInnerFrameWidthFromContext)
 
         const centralPanelWidth = centralPanelElementRef.current.offsetWidth
         const coverWidth = 
@@ -509,9 +505,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
             displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
 
             userCoverWidthRef.current[viewSelectorRef.current] = newWidth
-
-            // console.log('setting userCoverWidthRef.current[viewSelector] for workbox inner frame\n',
-            //     '-'+sessionWindowID+'-',viewSelectorRef.current, userCoverWidthRef.current )
 
             if (coverFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
@@ -578,8 +571,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
         }
         constraintsRef.current = constraints
 
-        // console.log('onResizeStart constraints', constraints)
-
     }
 
     const onResize = (event, {size, handle}) => {
@@ -594,9 +585,6 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
         userCoverWidthRef.current[viewSelectorRef.current] = size.width
         setCoverResizeWidth(size.width)
-
-        // console.log('setting userCoverWidthRef.current[viewSelectorRef.current] for resize\n',
-        //         '-'+sessionWindowID+'-',viewSelectorRef.current, userCoverWidthRef.current )
 
     }
 

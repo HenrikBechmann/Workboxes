@@ -37,8 +37,6 @@ const WorkboxContent = (props) => {
         userCoverWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
-    // console.log('running WorkboxContent: , viewSelector\n', '-'+sessionWindowID+'-', viewSelector)    
-
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
     if (contentsShow && coverShow) {
         workboxDisplayCode = 'both'

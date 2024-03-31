@@ -62,8 +62,6 @@ const Workbox = (props) => {
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
 
-    // console.log('running Workbox: , viewSelectorContext\n', '-'+sessionWindowID+'-', viewSelectorContext)
-
     // update the recorded with of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
