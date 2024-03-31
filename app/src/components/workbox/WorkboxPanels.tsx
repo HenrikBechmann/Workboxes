@@ -442,14 +442,17 @@ export const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameEl
 
     useEffect(()=>{
 
-        console.log('switching coverPanel view, userCoverWidthRef','-'+sessionWindowID+'-', viewSelector, {...userCoverWidthRef.current})
-        const viewWidth = userCoverWidthRef.current[viewSelector]
+        // console.log('switching coverPanel view, userCoverWidthRef','-'+sessionWindowID+'-', viewSelector, {...userCoverWidthRef.current})
+        const 
+            viewWidth = userCoverWidthRef.current[viewSelector],
+            viewTrigger = viewSelector
 
         setTimeout(()=>{
 
-            console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
+            // console.log('updating cover resize width', '-'+sessionWindowID+'-',viewSelector, userCoverWidthRef.current)
             coverFrameElementRef.current.style.width = viewWidth + 'px'
-            console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
+            // console.log('coverFrameElementRef.current.style.width',coverFrameElementRef.current.style.width)
+            userCoverWidthRef.current[viewTrigger] = viewWidth
             setCoverResizeWidth(viewWidth)
 
         },600)
