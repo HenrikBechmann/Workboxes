@@ -7,7 +7,10 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import { CentralPanel, CoverPanel, ContentsPanel, SettingsPanel } from './WorkboxPanels'
+import CentralPanel from './CentralPanel'
+import CoverPanel from './CoverPanel'
+import ContentsPanel from './ContentsPanel'
+import SettingsPanel from './SettingsPanel'
 
 // synchronize this with the total left and right padding of workboxContentStyles
 // imported and used by resize observer of Workbox
