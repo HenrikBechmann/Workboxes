@@ -14,6 +14,8 @@ import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 import DomainBase from './DomainBase'
 
+import { useToggleIcon } from './ToggleIcon'
+
 import panelIcon from '../../../assets/panel.png'
 import helpIcon from '../../../assets/help.png'
 import uploadIcon from '../../../assets/upload.png'
@@ -23,6 +25,7 @@ import expandMoreIcon from '../../../assets/expand_more.png'
 import menuIcon from '../../../assets/menu.png'
 import addIcon from '../../../assets/add.png'
 import windowSelectIcon from '../../../assets/window_select.png'
+import cartIcon from '../../../assets/cart.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -88,10 +91,20 @@ const displayNameStyles = {
 // <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
 const WorkspaceToolbar = (props) => {
 
+    const
+        cartToggle = useToggleIcon({
+            icon:cartIcon, 
+            tooltip:'hold workboxes for transfer',
+            caption:'transfer',
+            toggleOnRef:null,//toggleOnCartRef, 
+            disabledRef:null, //disabledCartRef, 
+        })
+
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {windowSelectIcon} tooltip = 'select a window'/>
         <StandardIcon icon = {menuIcon} tooltip = 'select a panel'/>
+        {cartToggle}
         <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 

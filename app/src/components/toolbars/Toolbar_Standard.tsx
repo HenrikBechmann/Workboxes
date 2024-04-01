@@ -118,14 +118,7 @@ const StandardToolbar = (props) => {
             ? homeFillIcon
             : homeIcon,
         toggleOnCartRef = useRef(false),
-        disabledCartRef = useRef(false),
-        cartToggle = useToggleIcon({
-            icon:cartIcon, 
-            tooltip:'hold workboxes for transfer',
-            caption:'transfer',
-            toggleOnRef:toggleOnCartRef, 
-            disabledRef:disabledCartRef, 
-        })
+        disabledCartRef = useRef(false)
 
     // --------------------- navigation functions ------------------
     const 
@@ -195,7 +188,6 @@ const StandardToolbar = (props) => {
         <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
         <ToolbarVerticalDivider />
         {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />}
-        {isHome && cartToggle}
         {isSuperUser && <>
             <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
             </>

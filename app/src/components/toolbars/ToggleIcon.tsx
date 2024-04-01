@@ -82,11 +82,11 @@ const ToggleIcon = (props) => {
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
 export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption}) => {
 
-    const [useToggleState, setUseToggleState] = useState(toggleOnRef.current)
+    const [useToggleState, setUseToggleState] = useState(toggleOnRef?.current)
 
     useEffect(()=>{
-        setUseToggleState(toggleOnRef.current) // creates host cycle
-    },[toggleOnRef.current])
+        setUseToggleState(toggleOnRef?.current) // creates host cycle
+    },[toggleOnRef?.current])
 
     const userChangeCallback = useCallback((toggleOn) =>{
 
@@ -99,8 +99,8 @@ export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption}
         icon = {icon} 
         tooltip = {tooltip} 
         caption = {caption}
-        toggleOn = {toggleOnRef.current} 
-        disabled = {disabledRef.current} 
+        toggleOn = {toggleOnRef?.current} 
+        disabled = {disabledRef?.current} 
         callback = {userChangeCallback} 
     />
 }
