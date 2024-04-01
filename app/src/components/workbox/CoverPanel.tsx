@@ -335,7 +335,7 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
         style = {coverGridStyles}
     >
         <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
-            <ToolbarFrame>
+            <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                 <CoverToolbar />
             </ToolbarFrame>
         </GridItem>

@@ -86,7 +86,7 @@ const ToolbarFrame = (props) => {
     // ----------------------------- state hooks ------------------
     const 
         [toolbarState, setToolbarState] = useState('setup'),
-        { children, scrollerStyles } = props,
+        { children, scrollerStyles, toolbarWrapperStyles } = props,
         [measurements, setMeasurements] = useState({scrollLeft:null,menubarWidth:null,scrollbarWidth:null}),
         measurementsRef = useRef(measurements),
         menubarRef = useRef(null),
@@ -97,6 +97,7 @@ const ToolbarFrame = (props) => {
         resizeObserverRef = useRef(null)
 
     const scrollbarStylesRef = useRef({...scrollbarStyles, ...scrollerStyles})
+    const menuWrapperStylesRef = useRef({...menuWrapperStyles, ...toolbarWrapperStyles})
 
     // -------------------------- effect hooks --------------
     useEffect(() => {
@@ -167,7 +168,7 @@ const ToolbarFrame = (props) => {
 
     // ------------------------- render --------------------------
     return (
-    <Box data-type = 'toolbar-wrapper' style = {menuWrapperStyles}>
+    <Box data-type = 'toolbar-wrapper' style = {menuWrapperStylesRef.current}>
         <Box data-type = 'toolbar' ref = {menubarRef} style = {menubarStyles}>
 
             <Box data-type = 'toolbar-scroller' ref = {menubarScrollerRef} style = {scrollbarStylesRef.current}>
