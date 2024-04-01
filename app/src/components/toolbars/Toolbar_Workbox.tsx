@@ -23,7 +23,8 @@ import TypeControl from './TypeControl'
 
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
-import listIcon from '../../../assets/list.png'
+// import listIcon from '../../../assets/list.png'
+import packageIcon from '../../../assets/package.png'
 import profileIcon from '../../../assets/profile.png'
 import swapIcon from '../../../assets/swap.png'
 // import linkIcon from '../../../assets/link.png'
@@ -131,7 +132,7 @@ const WorkboxToolbar = (props) => {
         }),
 
         contentsToggle = useToggleIcon({
-            icon:listIcon, 
+            icon:packageIcon, 
             tooltip:'Toggle workbox contents pane',
             caption:'contents',
             toggleOnRef:toggleOnContentsRef,

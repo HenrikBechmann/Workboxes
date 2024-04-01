@@ -12,8 +12,12 @@ import React, {
 } from 'react'
 
 import {
-    Box
+    Box,
+    Grid, GridItem,
 } from '@chakra-ui/react'
+
+import ToolbarFrame from '../toolbars/Toolbar_Frame'
+import ContentsToolbar from '../toolbars/Toolbar_Contents'
 
 const 
     MIN_CONTENTS_FRAME_WIDTH = 250,
@@ -36,7 +40,7 @@ const contentsPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width: '100%',
-    padding: '3px', 
+    // padding: '3px', 
     border: '5px ridge gray',
     borderRadius:'8px',
     overflow:'auto',
@@ -46,6 +50,31 @@ const contentsPanelStyles = {
     boxSizing: 'border-box',
     left: 'auto',
     right: 0,
+} as CSSProperties
+
+const contentsGridStyles = {
+    height: '100%',
+    width: '100%',
+    gridTemplateAreas: `"header"
+                          "body"`,
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'auto 1fr',
+    borderRadius: "0 0 0 7px",
+}  as CSSProperties
+
+const contentsHeaderStyles = {
+    area: 'header',
+    minWidth:0,
+    borderRadius:'8px 8px 0 0',
+    borderBottom:'1px solid silver',
+}
+
+const contentsBodyStyles = {
+    area: 'body',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: '0 0 0 7px',
+    minWidth: 0,
 } as CSSProperties
 
 const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
@@ -81,7 +110,21 @@ const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameE
     },[displayConfigCode])
 
     return <Box data-type = 'contents-frame' ref = {contentsFrameElementRef} style = {contentsFrameStyles}>
-        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}>{children}</Box>
+        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}>
+                <Grid
+                    data-type = 'cover-grid'
+                    style = {contentsGridStyles}
+                >
+                    <GridItem data-type = 'cover-header' style = {contentsHeaderStyles}>
+                        <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
+                            <ContentsToolbar />
+                        </ToolbarFrame>
+                    </GridItem>
+                    <GridItem data-type = 'cover-body' style = {contentsBodyStyles}>
+                        {children}
+                    </GridItem>
+                </Grid>
+        </Box>
     </Box>
 })
 

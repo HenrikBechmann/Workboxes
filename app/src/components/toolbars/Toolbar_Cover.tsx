@@ -41,13 +41,14 @@ const iconWrapperStyles = {
 
 const CoverToolbar = (props) => {
 
-    const workboxmenulist = <MenuList >
+    const covermenulist = <MenuList >
         <MenuItem >Download Cover Document</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
-        <MenuIcon icon = {profileIcon} caption = 'cover' tooltip = 'Workbox Cover' menulist = {workboxmenulist} />        
+
+        <MenuIcon icon = {profileIcon} caption = 'cover' tooltip = 'Workbox Cover' menulist = {covermenulist} />        
         <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit the cover'/>
 
     </Box>

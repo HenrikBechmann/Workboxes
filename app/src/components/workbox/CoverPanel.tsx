@@ -5,7 +5,6 @@ import React, {
     useRef, 
     useEffect, 
     useState, 
-    // useCallback, 
     useContext, 
     CSSProperties, 
     forwardRef 
@@ -330,19 +329,19 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
 
             <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>
 
-    <Grid
-        data-type = 'cover-grid'
-        style = {coverGridStyles}
-    >
-        <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
-            <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
-                <CoverToolbar />
-            </ToolbarFrame>
-        </GridItem>
-        <GridItem data-type = 'cover-body' style = {coverBodyStyles}>
-            {children}
-        </GridItem>
-    </Grid>
+                <Grid
+                    data-type = 'cover-grid'
+                    style = {coverGridStyles}
+                >
+                    <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
+                        <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
+                            <CoverToolbar />
+                        </ToolbarFrame>
+                    </GridItem>
+                    <GridItem data-type = 'cover-body' style = {coverBodyStyles}>
+                        {children}
+                    </GridItem>
+                </Grid>
 
             </Box>
             
