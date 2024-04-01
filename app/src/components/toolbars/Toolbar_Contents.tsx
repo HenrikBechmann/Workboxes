@@ -27,6 +27,10 @@ const contentsToolbarStyles = {
 
 import packageIcon from '../../../assets/package.png'
 import listIcon from '../../../assets/list.png'
+import addIcon from '../../../assets/add.png'
+import filterIcon from '../../../assets/filter.png'
+import sortIcon from '../../../assets/sort.png'
+import directionIcon from '../../../assets/direction.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -42,14 +46,18 @@ const iconWrapperStyles = {
 const ContentsToolbar = (props) => {
 
     const contentsmenulist = <MenuList >
-        <MenuItem>Something</MenuItem>
+        <MenuItem>Contents settings</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {contentsToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'contents' tooltip = 'Workbox Contents' menulist = {contentsmenulist} />        
+        <MenuIcon icon = {packageIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />        
         <StandardIcon icon = {listIcon} caption = 'format' tooltip = 'switch formats'/>
+        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add an item'/>
+        <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
+        <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>
+        <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
 
     </Box>
 }

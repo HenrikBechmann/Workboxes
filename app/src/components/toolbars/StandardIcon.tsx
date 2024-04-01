@@ -1,13 +1,13 @@
 // StandardIcon.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React from 'react'
+import React, {useRef} from 'react'
 
 import {
   Tooltip, Box,
 } from '@chakra-ui/react'
 
-const iconStyles = {
+const baseIconStyles = {
     height:'20px',
     width:'20px',
 }
@@ -21,7 +21,9 @@ const iconWrapperStyles = {
 
 const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, response, isDisabled = false } = props
+    const { icon, caption, tooltip, response, iconStyles, isDisabled = false } = props
+
+    const iconStylesRef = useRef({...baseIconStyles, ...iconStyles})
 
     let isDisabledLocal = isDisabled
     if (!isDisabled) isDisabledLocal = !tooltip
@@ -29,7 +31,7 @@ const StandardIcon = (props) => {
     return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px'>
         <Box style = { iconWrapperStyles } onClick = {response} >
             <Tooltip isDisabled = {isDisabledLocal} hasArrow label = { tooltip } >
-                <img style = { iconStyles } src = { icon } />
+                <img style = { iconStylesRef.current } src = { icon } />
             </Tooltip>
         </Box>
         <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{caption}</span></Box>

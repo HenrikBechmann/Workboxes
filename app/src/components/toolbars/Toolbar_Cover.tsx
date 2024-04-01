@@ -43,12 +43,13 @@ const CoverToolbar = (props) => {
 
     const covermenulist = <MenuList >
         <MenuItem >Download Cover Document</MenuItem>
+        <MenuItem >Cover Settings</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
 
-        <MenuIcon icon = {profileIcon} caption = 'cover' tooltip = 'Workbox Cover' menulist = {covermenulist} />        
+        <MenuIcon icon = {profileIcon} caption = 'cover page' tooltip = 'Workbox Cover Page' menulist = {covermenulist} />        
         <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit the cover'/>
 
     </Box>

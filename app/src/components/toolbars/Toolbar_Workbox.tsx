@@ -126,7 +126,7 @@ const WorkboxToolbar = (props) => {
         coverToggle = useToggleIcon({
             icon:profileIcon, 
             tooltip:'Toggle workbox cover pane',
-            caption:'cover',
+            caption:'cover page',
             toggleOnRef:toggleOnCoverRef,
             disabledRef:disabledCoverRef, 
         }),
@@ -134,7 +134,7 @@ const WorkboxToolbar = (props) => {
         contentsToggle = useToggleIcon({
             icon:packageIcon, 
             tooltip:'Toggle workbox contents pane',
-            caption:'contents',
+            caption:'resources',
             toggleOnRef:toggleOnContentsRef,
             disabledRef:disabledContentsRef, 
         }),
@@ -156,8 +156,6 @@ const WorkboxToolbar = (props) => {
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
-        { settingsToggle }
-        <ToolbarVerticalDivider />
         { coverToggle }
         { contentsToggle }
         <ToolbarVerticalDivider />
@@ -176,3 +174,6 @@ const WorkboxToolbar = (props) => {
 }
 
 export default WorkboxToolbar
+
+        // <ToolbarVerticalDivider />
+        // { settingsToggle }
