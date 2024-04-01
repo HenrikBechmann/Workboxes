@@ -27,6 +27,7 @@ const coverToolbarStyles = {
 
 import profileIcon from '../../../assets/profile.png'
 import editIcon from '../../../assets/edit.png'
+import insertIcon from '../../../assets/indent_increase.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -49,7 +50,8 @@ const CoverToolbar = (props) => {
     // render
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
 
-        <MenuIcon icon = {profileIcon} caption = 'work page' tooltip = 'Work Page' menulist = {covermenulist} />        
+        <MenuIcon icon = {profileIcon} caption = 'work page' tooltip = 'Work Page' menulist = {covermenulist} />  
+        <StandardIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section'/>
         <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit the work page'/>
 
     </Box>
