@@ -29,6 +29,7 @@ import profileIcon from '../../../assets/profile.png'
 import editIcon from '../../../assets/edit.png'
 import insertIcon from '../../../assets/input.png'
 import formIcon from '../../../assets/table_rows.png'
+import reorderIcon from '../../../assets/reorder.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -54,6 +55,7 @@ const CoverToolbar = (props) => {
         <MenuIcon icon = {profileIcon} caption = 'work page' tooltip = 'Work Page' menulist = {covermenulist} />  
         <StandardIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section'/>
         <StandardIcon icon = {formIcon} caption = 'form' tooltip = 'data input'/>
+        <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder work page sections'/>
 
     </Box>
 }
