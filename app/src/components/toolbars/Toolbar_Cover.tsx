@@ -42,8 +42,8 @@ const iconWrapperStyles = {
 const CoverToolbar = (props) => {
 
     const covermenulist = <MenuList >
-        <MenuItem >Download Cover Document</MenuItem>
-        <MenuItem >Cover Settings</MenuItem>
+        <MenuItem >Download Cover Page</MenuItem>
+        <MenuItem >Cover Page Settings</MenuItem>
     </MenuList>
 
     // render

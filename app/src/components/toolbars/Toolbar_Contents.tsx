@@ -46,7 +46,7 @@ const iconWrapperStyles = {
 const ContentsToolbar = (props) => {
 
     const contentsmenulist = <MenuList >
-        <MenuItem>Contents settings</MenuItem>
+        <MenuItem>Resource List settings</MenuItem>
     </MenuList>
 
     // render
