@@ -88,7 +88,7 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
         </Box>
         <Box data-type = 'text-block' id = 'draghandle' style = {titleTextBlockStyles}>
             <Box style = {titleContentStyles}>
-            { '-' + sessionID + '-' } Henrik Bechmann (Domain)
+            { '-' + sessionID + '-' } Henrik Bechmann [Domain]
             </Box>
         </Box>
         <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>

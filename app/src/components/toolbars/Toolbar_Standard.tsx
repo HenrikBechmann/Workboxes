@@ -189,10 +189,10 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main work page' response = {goHome} />}
         {isSuperUser && <>
-            <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
+                <StandardIcon icon = {appSettingsIcon} caption = 'system' tooltip = 'System settings' response = {gotoSysadmin} />
+                <ToolbarVerticalDivider />
             </>
         }
-        <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
