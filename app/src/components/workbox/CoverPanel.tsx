@@ -12,11 +12,15 @@ import React, {
 } from 'react'
 
 import {
-    Box
+    Box,
+    Grid, GridItem,
 } from '@chakra-ui/react'
 
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
+
+import ToolbarFrame from '../toolbars/Toolbar_Frame'
+import CoverToolbar from '../toolbars/Toolbar_Cover'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -44,7 +48,7 @@ const coverPanelStyles = {
     backgroundColor:'ghostwhite',
     position:'absolute', 
     width:'100%',
-    padding: '3px', 
+    // padding: '3px', 
     border: '5px ridge seagreen',
     borderRadius:'8px',
     transition:'box-shadow .3s',
@@ -78,6 +82,31 @@ const coverTabIconStyles = {
     height: '24px',
     width: '48px',
     transform: 'rotate(90deg)'
+} as CSSProperties
+
+const coverGridStyles = {
+    height: '100%',
+    width: '100%',
+    gridTemplateAreas: `"header"
+                          "body"`,
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'auto 1fr',
+    borderRadius: "0 0 0 7px",
+}  as CSSProperties
+
+const coverHeaderStyles = {
+    area: 'header',
+    minWidth:0,
+    borderRadius:'8px 8px 0 0',
+    borderBottom:'1px solid silver',
+}
+
+const coverBodyStyles = {
+    area: 'body',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: '0 0 0 7px',
+    minWidth: 0,
 } as CSSProperties
 
 const CoverHandle = (props) => {
@@ -299,10 +328,34 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
     >
         <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
 
-            <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>{children}</Box>
+            <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>
+
+    <Grid
+        data-type = 'cover-grid'
+        style = {coverGridStyles}
+    >
+        <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
+            <ToolbarFrame>
+                <CoverToolbar />
+            </ToolbarFrame>
+        </GridItem>
+        <GridItem data-type = 'cover-body' style = {coverBodyStyles}>
+            {children}
+        </GridItem>
+    </Grid>
+
+            </Box>
             
         </Box>
     </Resizable>)
 })
+
+                    // workboxConfig = {workboxConfig} 
+                    // setWorkboxConfig = {setWorkboxConfig} 
+                    // itemIcon = {itemIcon} 
+                    // itemTitle = {itemTitle}
+                    // domainTitle = {domainTitle}
+                    // typeName = {typeName}
+
 
 export default CoverPanel

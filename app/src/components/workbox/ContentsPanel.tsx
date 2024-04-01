@@ -81,7 +81,7 @@ const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameE
     },[displayConfigCode])
 
     return <Box data-type = 'contents-frame' ref = {contentsFrameElementRef} style = {contentsFrameStyles}>
-        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}> {children}</Box>
+        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}>{children}</Box>
     </Box>
 })
 
