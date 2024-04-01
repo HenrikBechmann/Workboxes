@@ -45,17 +45,17 @@ const iconWrapperStyles = {
 const CoverToolbar = (props) => {
 
     const covermenulist = <MenuList >
-        <MenuItem >Download Work Page</MenuItem>
-        <MenuItem >Work Page Settings</MenuItem>
+        <MenuItem >Download Document</MenuItem>
+        <MenuItem >Document Settings</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
 
-        <MenuIcon icon = {profileIcon} caption = 'work page' tooltip = 'Work Page' menulist = {covermenulist} />  
+        <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {covermenulist} />  
         <StandardIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section'/>
-        <StandardIcon icon = {formIcon} caption = 'form' tooltip = 'data input'/>
-        <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder work page sections'/>
+        <StandardIcon icon = {formIcon} caption = 'forms' tooltip = 'data input'/>
+        <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
 
     </Box>
 }

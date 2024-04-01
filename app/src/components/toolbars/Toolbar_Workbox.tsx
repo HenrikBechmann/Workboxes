@@ -125,16 +125,16 @@ const WorkboxToolbar = (props) => {
     const
         coverToggle = useToggleIcon({
             icon:profileIcon, 
-            tooltip:'Toggle workbox work pane',
-            caption:'work page',
+            tooltip:'Toggle workbox document',
+            caption:'document',
             toggleOnRef:toggleOnCoverRef,
             disabledRef:disabledCoverRef, 
         }),
 
         contentsToggle = useToggleIcon({
             icon:packageIcon, 
-            tooltip:'Toggle workbox contents pane',
-            caption:'resources',
+            tooltip:'Toggle workbox folders pane',
+            caption:'folders',
             toggleOnRef:toggleOnContentsRef,
             disabledRef:disabledContentsRef, 
         }),
