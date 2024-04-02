@@ -28,7 +28,6 @@ import Workpanel from '../components/Workpanel'
 
 import { metatype } from '../system/system.type'
 
-
 const contentBoxStyle = {
     position:'relative',
     flexBasis:'auto', 
@@ -54,7 +53,47 @@ const ContentBox = (props) => {
         </Box>
 }
 
+const workboxDefaultConfig = {
+    settingsShow:false,
+    settingsDisabled:false,
+    coverShow:true,
+    coverDisabled:false,
+    contentsShow:true,
+    contentsDisabled:false,
+}
+
 const Metadata = (props) => {
+
+    const
+        userData = useUserData(),
+        { displayName, photoURL } = userData.authUser,
+        startingWindowsSpecsList = [
+            {
+                window:{
+                    zOrder: 1,
+                    configDefaults: {top:20,left:20, width:610,height:400},
+                    view: 'normalized',
+                },
+                workbox: {
+                    defaultConfig:{...workboxDefaultConfig},
+                    itemIcon: photoURL,
+                    itemTitle: displayName,
+                    domainTitle: "Henrik Bechmann's Account",
+                    typeName: 'Domain',
+                }
+            }
+        ],
+        transferCollectionRef = useRef(null),
+        transferDocumentRef = useRef(null),
+        [isInTransferProcessing, setIsInTransferProcessing] = useState(false),
+        [returnInData, setReturnInData] = useState(null),
+        [pageState, setPageState] = useState('setup'),
+        db = useFirestore(),
+        getType = useTypes(),
+        [dragState, setDragState] = useState(
+        {
+            activeDrags: 0,
+        })
 
     const onStart = () => {
         dragState.activeDrags = ++dragState.activeDrags
@@ -66,33 +105,7 @@ const Metadata = (props) => {
         setDragState(dragState)
     }
 
-    const 
-        userData = useUserData(),
-        { displayName, photoURL } = userData.authUser,
-        dragHandlers = {onStart, onStop},
-        [dragState, setDragState] = useState(
-        {
-            activeDrags: 0,
-        })
-
-    const defaultConfig = {
-        settingsShow:false,
-        settingsDisabled:false,
-        coverShow:true,
-        coverDisabled:false,
-        contentsShow:true,
-        contentsDisabled:false,
-    }
-
-   const transferCollectionRef = useRef(null)
-   const transferDocumentRef = useRef(null)
-
-   const [isInTransferProcessing, setIsInTransferProcessing] = useState(false)
-   const [returnInData, setReturnInData] = useState(null)
-   const [pageState, setPageState] = useState('setup')
-
-   const db = useFirestore()
-   const getType = useTypes()
+    const dragHandlers = {onStart, onStop}
 
    useEffect(()=>{
 
@@ -172,30 +185,35 @@ const Metadata = (props) => {
 
     // --------------------------- render --------------------
 
-    // children, 
-    // configDefaults, // for this Workwindow 
-    // sessionID, // system control
-    // zOrder, // inherited; modified by setFocus 
-    // viewDeclaration, // normalized, maximized, minimized
-    // callbacks, // change zOrder etc.
-    // containerDimensionSpecs // height, width; change can cause repositioning and resizing of window
-
-    // {pageState != 'setup' && <Workwindow 
-    //     key = {2} 
-    //     sessionID = {2} 
-    //     zOrder = {2} 
-    //     configDefaults = {{top:40,left:60, width:600,height:400}}
-    //     viewDeclaration = {{view:'normalized',stackOrder:null}}
-    //     containerDimensionSpecs = {{width:containerElementRef.current.offsetWidth, height:containerElementRef.current.offsetHeigth}}
-    // >
-    //     <Workbox 
-    //         defaultConfig = {defaultConfig} 
-    //         itemIcon = {photoURL} 
-    //         itemTitle = {displayName}
-    //         domainTitle = 'Henrik Bechmann'
-    //         typeName = 'Domain'
-    //     />
-    // </Workwindow>}
+    // {pageState != 'setup' && <>
+    //     <Drawer {...drawerProps.lookup} />
+    //     <Drawer {...drawerProps.data} />
+    //     <Drawer {...drawerProps.messages} />
+    //     <Drawer {...drawerProps.help} />
+    // </>}
+    // <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
+    //     <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
+    //         <Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
+    //             <VStack height = '100%'>
+    //                 <Text>User Controls</Text>
+    //                 <Button onClick = {openDataDrawer} >Data</Button> 
+    //                 <Button onClick = {openLookupDrawer }>Lookup</Button> 
+    //                 <Button onClick = {openHelpDrawer}>Help</Button> 
+    //                 <Button onClick = {openMessageDrawer}>Messages</Button>
+    //             </VStack>
+    //         </ContentBox></Box>
+    //         <ContentBox>
+    //             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
+    //                 <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
+    //                 {isInTransferProcessing && <Text>Processing...</Text>}
+    //                 {returnInData && <Text>Status: {returnInData.status.toString()}, 
+    //                     error: {returnInData.error.toString()}, 
+    //                     message: {returnInData.message}, 
+    //                     docpath: {returnInData.docpath} </Text>}
+    //             </VStack>
+    //         </ContentBox>
+    //     </Box>        
+    // </Box>
 
     return <Grid
         data-type = 'page'
@@ -205,7 +223,7 @@ const Metadata = (props) => {
         gridTemplateColumns={'1fr'}
     >
         <GridItem data-type = 'page-body' area = 'body'>
-            <Box data-type = 'page-frame' height = '100%' position = 'relative'>
+            <Box id = 'panelframe' data-type = 'page-frame' height = '100%' position = 'relative'>
                 <Box 
                     data-type = 'page-liner' 
                     ref = {containerElementRef} 
@@ -214,37 +232,7 @@ const Metadata = (props) => {
                     inset = '0' 
                     overflow = 'hidden'
                 >
-                <Workpanel>
-                    {pageState != 'setup' && <>
-                        <Drawer {...drawerProps.lookup} />
-                        <Drawer {...drawerProps.data} />
-                        <Drawer {...drawerProps.messages} />
-                        <Drawer {...drawerProps.help} />
-                    </>}
-                    <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
-                        <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-                            <Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
-                                <VStack height = '100%'>
-                                    <Text>User Controls</Text>
-                                    <Button onClick = {openDataDrawer} >Data</Button> 
-                                    <Button onClick = {openLookupDrawer }>Lookup</Button> 
-                                    <Button onClick = {openHelpDrawer}>Help</Button> 
-                                    <Button onClick = {openMessageDrawer}>Messages</Button>
-                                </VStack>
-                            </ContentBox></Box>
-                            <ContentBox>
-                                <VStack data-type = 'vstack' padding = '3px' width = '100%'>
-                                    <Button onClick = {transferInDocument} colorScheme = 'blue'>Transfer metatype to database</Button>
-                                    {isInTransferProcessing && <Text>Processing...</Text>}
-                                    {returnInData && <Text>Status: {returnInData.status.toString()}, 
-                                        error: {returnInData.error.toString()}, 
-                                        message: {returnInData.message}, 
-                                        docpath: {returnInData.docpath} </Text>}
-                                </VStack>
-                            </ContentBox>
-                        </Box>        
-                    </Box>
-                </Workpanel>
+                    <Workpanel startingWindowsSpecsList = {startingWindowsSpecsList} />
                 </Box>
             </Box>
         </GridItem>
