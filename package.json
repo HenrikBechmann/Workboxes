@@ -18,6 +18,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@react-pdf/renderer": "^3.4.2",
     "firebase": "^10.6.0",
     "framer-motion": "^10.16.0",
     "is-mobile": "^4.0.0",
