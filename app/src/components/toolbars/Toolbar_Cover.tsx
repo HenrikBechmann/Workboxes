@@ -56,10 +56,10 @@ const CoverToolbar = (props) => {
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {covermenulist} />  
-        <StandardIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section'/>
+        <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
         <StandardIcon icon = {formIcon} caption = 'forms' tooltip = 'data input'/>
         <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
-        <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save edits'/>
+        <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
         <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
 

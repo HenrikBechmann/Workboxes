@@ -74,13 +74,13 @@ const ContentsToolbar = (props) => {
         })
 
     const contentsmenulist = <MenuList >
-        <MenuItem>Data Resources settings</MenuItem>
+        <MenuItem>Databox settings</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {contentsToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'data' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
+        <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
         <StandardIcon icon = {columnIcon} caption = 'columns' tooltip = 'switch formats'/>
         { dragToggle }
         { moveToggle }

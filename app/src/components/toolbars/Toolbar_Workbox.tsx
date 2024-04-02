@@ -128,7 +128,7 @@ const WorkboxToolbar = (props) => {
     const
         coverToggle = useToggleIcon({
             icon:profileIcon, 
-            tooltip:'Toggle workbox document',
+            tooltip:'Toggle workbox document pane',
             caption:'document',
             toggleOnRef:toggleOnCoverRef,
             disabledRef:disabledCoverRef, 
@@ -136,8 +136,8 @@ const WorkboxToolbar = (props) => {
 
         contentsToggle = useToggleIcon({
             icon:packageIcon, 
-            tooltip:'Toggle workbox data pane',
-            caption:'data',
+            tooltip:'Toggle workbox databox pane',
+            caption:'databox',
             toggleOnRef:toggleOnContentsRef,
             disabledRef:disabledContentsRef, 
         }),
