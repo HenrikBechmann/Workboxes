@@ -11,22 +11,16 @@ import {
     Box, VStack, Center,
     Grid, GridItem,
 } from '@chakra-ui/react'
-
 import { useFirestore, useUserData } from '../system/FirebaseProviders'
-
 import Draggable from 'react-draggable'
-
 import { useTypes } from '../system/TribalopolisProvider'
-
 import Drawer, { useDrawers } from '../components/Drawer'
-
 import Workwindow from '../components/Workwindow'
-
 import Workbox from '../components/workbox/Workbox'
-
 import Workpanel from '../components/Workpanel'
-
 import { metatype } from '../system/system.type'
+
+import appIcon from '../../assets/workbox-logo.png'
 
 const contentBoxStyle = {
     position:'relative',
@@ -76,10 +70,10 @@ const Metadata = (props) => {
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},
-                    itemIcon: photoURL,
-                    itemTitle: displayName,
-                    domainTitle: "Henrik Bechmann's Account",
-                    typeName: 'Domain',
+                    itemIcon: appIcon,
+                    itemTitle: 'Workbox types',
+                    domainTitle: 'WorkboxesApp',
+                    typeName: 'Collection',
                 }
             }
         ],
@@ -184,7 +178,7 @@ const Metadata = (props) => {
     }
 
     // --------------------------- render --------------------
-
+    // KEEP FOR LATER
     // {pageState != 'setup' && <>
     //     <Drawer {...drawerProps.lookup} />
     //     <Drawer {...drawerProps.data} />
