@@ -34,6 +34,7 @@ import shareIcon from '../../../assets/share.png'
 import commentIcon from '../../../assets/comment.png'
 import likeIcon from '../../../assets/like.png'
 import viewsIcon from '../../../assets/views.png'
+import commentsIcon from '../../../assets/comments.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -75,6 +76,8 @@ const WorkboxToolbar = (props) => {
         disabledContentsRef = useRef(workboxConfig.contentsDisabled),
         toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
         disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
+        toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
+        disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
 
         toggleHistoryRef = useRef({
             coverShow:toggleOnCoverRef.current,
@@ -133,8 +136,8 @@ const WorkboxToolbar = (props) => {
 
         contentsToggle = useToggleIcon({
             icon:packageIcon, 
-            tooltip:'Toggle workbox folders pane',
-            caption:'folders',
+            tooltip:'Toggle workbox data pane',
+            caption:'data',
             toggleOnRef:toggleOnContentsRef,
             disabledRef:disabledContentsRef, 
         }),
@@ -145,10 +148,19 @@ const WorkboxToolbar = (props) => {
             caption:'settings',
             toggleOnRef:toggleOnSettingsRef, 
             disabledRef:disabledSettingsRef, 
+        }),
+
+        commentsToggle = useToggleIcon({
+            icon:commentsIcon, 
+            tooltip:'Show comments',
+            caption:'see comments',
+            toggleOnRef:toggleOnCommentsRef, 
+            disabledRef:disabledCommentsRef, 
         })
 
     const workboxmenulist = <MenuList >
         <MenuItem >Workbox settings</MenuItem>
+        <MenuItem >Workbox profile</MenuItem>
     </MenuList>
 
 
@@ -163,15 +175,17 @@ const WorkboxToolbar = (props) => {
         <TypeControl typeName = {typeName} />
         <DomainControl domainTitle = {domainTitle} />
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {likeIcon} caption = 'like' tooltip = 'like this workbox'/>
         <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
-        <StandardIcon icon = {viewsIcon} caption = 'views' tooltip = 'views of this workbox'/>
+        { commentsToggle }
         <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
+
+        // <StandardIcon icon = {likeIcon} caption = 'like' tooltip = 'like this workbox'/>
+        // <StandardIcon icon = {viewsIcon} caption = 'views' tooltip = 'views of this workbox'/>
 
 export default WorkboxToolbar
 

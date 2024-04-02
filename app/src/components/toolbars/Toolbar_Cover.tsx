@@ -9,6 +9,7 @@ import {
 
 import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
+import LearnIcon from './LearnIcon'
 
 const coverToolbarStyles = {
     padding:'2px',
@@ -60,6 +61,7 @@ const CoverToolbar = (props) => {
         <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
         <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save edits'/>
         <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
 
     </Box>
 }

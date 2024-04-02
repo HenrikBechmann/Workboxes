@@ -10,6 +10,7 @@ import {
 import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
 import { useToggleIcon } from './ToggleIcon'
+import LearnIcon from './LearnIcon'
 
 const contentsToolbarStyles = {
     padding:'2px',
@@ -33,6 +34,7 @@ import filterIcon from '../../../assets/filter.png'
 import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
 import dragIcon from '../../../assets/drag.png'
+import moveIcon from '../../../assets/move.png'
 import columnIcon from '../../../assets/columns.png'
 
 const smallerIconStyles = {
@@ -50,28 +52,41 @@ const ContentsToolbar = (props) => {
 
 
     const
-        toggleOnCoverRef = useRef(null),
-        disabledCoverRef = useRef(null),
+        toggleOnDragRef = useRef(null),
+        disabledDragRef = useRef(null),
+        toggleOnMoveRef = useRef(null),
+        disabledMoveRef = useRef(null),
+
         dragToggle = useToggleIcon({
-        icon:dragIcon, 
-        tooltip:'Toggle drag and drop',
-        caption:'drag',
-        toggleOnRef:toggleOnCoverRef,
-        disabledRef:disabledCoverRef, 
-    })
+            icon:dragIcon, 
+            tooltip:'Toggle drag and drop',
+            caption:'drag',
+            toggleOnRef:toggleOnDragRef,
+            disabledRef:disabledDragRef, 
+        }),
+
+        moveToggle = useToggleIcon({
+            icon:moveIcon, 
+            tooltip:'Toggle move (vs copy)',
+            caption:'move',
+            toggleOnRef:toggleOnMoveRef,
+            disabledRef:disabledMoveRef, 
+        })
 
     const contentsmenulist = <MenuList >
-        <MenuItem>Resource List settings</MenuItem>
+        <MenuItem>Data Resources settings</MenuItem>
     </MenuList>
 
     // render
     return <Box data-type = 'cover-toolbar' style = {contentsToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'folders' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
-        <StandardIcon icon = {columnIcon} caption = 'format' tooltip = 'switch formats'/>
+        <MenuIcon icon = {packageIcon} caption = 'data' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
+        <StandardIcon icon = {columnIcon} caption = 'columns' tooltip = 'switch formats'/>
         { dragToggle }
+        { moveToggle }
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add an item'/>
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
+        <LearnIcon tooltip = 'Explain this toolbar'/>
 
     </Box>
 }
