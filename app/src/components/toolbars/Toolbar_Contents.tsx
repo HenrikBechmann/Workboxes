@@ -84,7 +84,7 @@ const ContentsToolbar = (props) => {
         <StandardIcon icon = {columnIcon} caption = 'columns' tooltip = 'switch formats'/>
         { dragToggle }
         { moveToggle }
-        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add an item'/>
+        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
 
