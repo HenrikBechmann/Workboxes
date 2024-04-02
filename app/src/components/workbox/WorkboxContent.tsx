@@ -88,13 +88,13 @@ const WorkboxContent = (props) => {
                 sessionWindowID =  {sessionWindowID}
                 viewSelector = {viewSelector}
             >
-            Document ({sessionWindowID}) - cover page
+            The workbox document ({sessionWindowID})
             </CoverPanel>
             <ContentsPanel 
                 ref = {contentsFrameElementRef} 
                 displayConfigCode = {contentsDisplayCode} 
             >
-            Databox resources - work boxes
+            The workbox databox - contains work boxes
             </ContentsPanel>
         </CentralPanel>
     </Box>
