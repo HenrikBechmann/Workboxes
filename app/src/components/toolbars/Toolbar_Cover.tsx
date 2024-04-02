@@ -31,6 +31,7 @@ import insertIcon from '../../../assets/input.png'
 import formIcon from '../../../assets/table_rows.png'
 import reorderIcon from '../../../assets/reorder.png'
 import uploadIcon from '../../../assets/upload.png'
+import viewIcon from '../../../assets/view.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -58,6 +59,7 @@ const CoverToolbar = (props) => {
         <StandardIcon icon = {formIcon} caption = 'forms' tooltip = 'data input'/>
         <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
         <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save edits'/>
+        <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
 
     </Box>
 }
