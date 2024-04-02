@@ -35,8 +35,7 @@ const Workpanel = (props:any) => {
 
     const 
         // windows setup
-        { startingWindowsSpecsList } = props,
-        startingWindowsSpecsListRef = useRef(startingWindowsSpecsList),
+        { startingWindowsSpecsList:startingList, children } = props,
 
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
@@ -49,7 +48,10 @@ const Workpanel = (props:any) => {
         windowsMinimizedRef = useRef(null),
 
         // track zOrder scope for assignment
-        highestZOrderRef = useRef(0)
+        highestZOrderRef = useRef(0),
+        startingWindowsSpecsList = startingList?startingList:[]
+
+    const startingWindowsSpecsListRef = useRef(startingWindowsSpecsList)
 
     // initialize windows windowRecord map, component list, and minimized list; set maximized window if exists
     useEffect(()=>{
@@ -573,6 +575,7 @@ const Workpanel = (props:any) => {
         {(panelState != 'setup' && windowCount === 0) && 
             <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
         }
+        {children}
     </Box>
 }
 

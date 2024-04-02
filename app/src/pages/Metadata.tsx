@@ -24,6 +24,8 @@ import Workwindow from '../components/Workwindow'
 
 import Workbox from '../components/workbox/Workbox'
 
+import Workpanel from '../components/Workpanel'
+
 import { metatype } from '../system/system.type'
 
 
@@ -178,6 +180,22 @@ const Metadata = (props) => {
     // callbacks, // change zOrder etc.
     // containerDimensionSpecs // height, width; change can cause repositioning and resizing of window
 
+    // {pageState != 'setup' && <Workwindow 
+    //     key = {2} 
+    //     sessionID = {2} 
+    //     zOrder = {2} 
+    //     configDefaults = {{top:40,left:60, width:600,height:400}}
+    //     viewDeclaration = {{view:'normalized',stackOrder:null}}
+    //     containerDimensionSpecs = {{width:containerElementRef.current.offsetWidth, height:containerElementRef.current.offsetHeigth}}
+    // >
+    //     <Workbox 
+    //         defaultConfig = {defaultConfig} 
+    //         itemIcon = {photoURL} 
+    //         itemTitle = {displayName}
+    //         domainTitle = 'Henrik Bechmann'
+    //         typeName = 'Domain'
+    //     />
+    // </Workwindow>}
 
     return <Grid
         data-type = 'page'
@@ -196,28 +214,13 @@ const Metadata = (props) => {
                     inset = '0' 
                     overflow = 'hidden'
                 >
+                <Workpanel>
                     {pageState != 'setup' && <>
                         <Drawer {...drawerProps.lookup} />
                         <Drawer {...drawerProps.data} />
                         <Drawer {...drawerProps.messages} />
                         <Drawer {...drawerProps.help} />
                     </>}
-                    {pageState != 'setup' && <Workwindow 
-                        key = {2} 
-                        sessionID = {2} 
-                        zOrder = {2} 
-                        configDefaults = {{top:40,left:60, width:600,height:400}}
-                        viewDeclaration = {{view:'normalized',stackOrder:null}}
-                        containerDimensionSpecs = {{width:containerElementRef.current.offsetWidth, height:containerElementRef.current.offsetHeigth}}
-                    >
-                        <Workbox 
-                            defaultConfig = {defaultConfig} 
-                            itemIcon = {photoURL} 
-                            itemTitle = {displayName}
-                            domainTitle = 'Henrik Bechmann'
-                            typeName = 'Domain'
-                        />
-                    </Workwindow>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
                         <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
                             <Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>
@@ -241,6 +244,7 @@ const Metadata = (props) => {
                             </ContentBox>
                         </Box>        
                     </Box>
+                </Workpanel>
                 </Box>
             </Box>
         </GridItem>
