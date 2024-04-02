@@ -94,7 +94,7 @@ const WorkboxContent = (props) => {
                 ref = {contentsFrameElementRef} 
                 displayConfigCode = {contentsDisplayCode} 
             >
-            The workbox databox - contains work boxes
+            The workbox databox - contains workboxes
             </ContentsPanel>
         </CentralPanel>
     </Box>
