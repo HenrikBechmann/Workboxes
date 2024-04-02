@@ -87,9 +87,16 @@ const Metadata = (props) => {
 
    const [isInTransferProcessing, setIsInTransferProcessing] = useState(false)
    const [returnInData, setReturnInData] = useState(null)
+   const [pageState, setPageState] = useState('setup')
 
    const db = useFirestore()
    const getType = useTypes()
+
+   useEffect(()=>{
+
+       if (pageState != 'ready') setPageState('ready')
+
+   },[pageState])
 
    const completeData = (context) => {
 
@@ -163,6 +170,15 @@ const Metadata = (props) => {
 
     // --------------------------- render --------------------
 
+    // children, 
+    // configDefaults, // for this Workwindow 
+    // sessionID, // system control
+    // zOrder, // inherited; modified by setFocus 
+    // viewDeclaration, // normalized, maximized, minimized
+    // callbacks, // change zOrder etc.
+    // containerDimensionSpecs // height, width; change can cause repositioning and resizing of window
+
+
     return <Grid
         data-type = 'page'
         height = '100%'
@@ -180,17 +196,19 @@ const Metadata = (props) => {
                     inset = '0' 
                     overflow = 'hidden'
                 >
-                    {drawersState != 'setup' && <>
+                    {pageState != 'setup' && <>
                         <Drawer {...drawerProps.lookup} />
                         <Drawer {...drawerProps.data} />
                         <Drawer {...drawerProps.messages} />
                         <Drawer {...drawerProps.help} />
                     </>}
-                    <Workwindow 
+                    {pageState != 'setup' && <Workwindow 
                         key = {2} 
                         sessionID = {2} 
                         zOrder = {2} 
                         configDefaults = {{top:40,left:60, width:600,height:400}}
+                        viewDeclaration = {{view:'normalized',stackOrder:null}}
+                        containerDimensionSpecs = {{width:containerElementRef.current.offsetWidth, height:containerElementRef.current.offsetHeigth}}
                     >
                         <Workbox 
                             defaultConfig = {defaultConfig} 
@@ -199,7 +217,7 @@ const Metadata = (props) => {
                             domainTitle = 'Henrik Bechmann'
                             typeName = 'Domain'
                         />
-                    </Workwindow>
+                    </Workwindow>}
                     <Box data-type = 'page-container' overflow = 'auto' height = '100%' position = 'relative'>
                         <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
                             <Box data-type = 'contentbox-wrapper' height = '310px' ><ContentBox>

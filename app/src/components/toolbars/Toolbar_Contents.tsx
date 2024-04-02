@@ -74,6 +74,7 @@ const ContentsToolbar = (props) => {
         })
 
     const contentsmenulist = <MenuList >
+        <MenuItem>Lock this databox</MenuItem>
         <MenuItem>Databox settings</MenuItem>
     </MenuList>
 
