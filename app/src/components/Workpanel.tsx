@@ -167,8 +167,13 @@ const Workpanel = (props:any) => {
         const 
             // required to position window
             element = panelElementRef.current,
-            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
-            // required to configure window
+            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight }
+        
+        specs.window.title = specs.workbox.itemTitle
+        specs.window.type = specs.workbox.typeName
+
+        // required to configure window
+        const
             { view, stackOrder, ...remainingWindowProps } = specs.window,
             viewDeclaration = {
                 view,

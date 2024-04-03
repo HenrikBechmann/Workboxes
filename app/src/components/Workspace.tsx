@@ -36,61 +36,70 @@ const workboxDefaultConfig = {
 
 const Workspace = (props) => {
 
-    const userData = useUserData()
-    const { displayName, photoURL } = userData.authUser
+    const 
+        [workspaceState,setWorkspaceState] = useState('setup'),
+        userData = useUserData(),
+        { displayName, photoURL } = userData.authUser,
+        panelsListRef = useRef([])
 
-    const panelWindowsSpecsRef = useRef([
+    useEffect(()=>{
+        // TODO placeholder logic
 
-        {
-            window:{
-                zOrder: 1,
-                configDefaults: {top:20,left:20, width:610,height:400},
-                view: 'normalized',
-                title:"Domain base",
-                type: 'Collection',
-            },
-            workbox: {
-                defaultConfig:{...workboxDefaultConfig},
-                itemIcon: homeIcon,
-                itemTitle: "Domain base",
-                domainTitle: displayName,
-                typeName: 'Collection',
-            }
-        },
-        {
-            window:{
-                zOrder: 2,
-                configDefaults: {top:40,left:40, width:610,height:400},
-                view: 'normalized',
-                title:'Notebooks',
-                type: 'Collection',
-            },
-            workbox: {
-                defaultConfig:{...workboxDefaultConfig},
-                itemIcon: notebookIcon,
-                itemTitle: 'Notebooks',
-                domainTitle: displayName,
-                typeName: 'Collection',
-            }
-        },
-        {
-            window:{
-                zOrder: 3,
-                configDefaults: {top:60,left:60, width:610,height:400},
-                view: 'normalized',
-                title:'Checklists',
-                type: 'Collection',
-            },
-            workbox: {
-                defaultConfig:{...workboxDefaultConfig},
-                itemIcon: checklistIcon,
-                itemTitle: 'Checklists',
-                domainTitle: displayName,
-                typeName: 'Collection',
-            }
-        },
+    const panelWindowsSpecs = [
 
-    ])
+            {
+                window:{
+                    zOrder: 1,
+                    configDefaults: {top:20,left:20, width:610,height:400},
+                    view: 'normalized',
+                },
+                workbox: {
+                    defaultConfig:{...workboxDefaultConfig},
+                    itemIcon: homeIcon,
+                    itemTitle: "Domain base",
+                    domainTitle: displayName,
+                    typeName: 'Collection',
+                }
+            },
+            {
+                window:{
+                    zOrder: 2,
+                    configDefaults: {top:40,left:40, width:610,height:400},
+                    view: 'normalized',
+                },
+                workbox: {
+                    defaultConfig:{...workboxDefaultConfig},
+                    itemIcon: notebookIcon,
+                    itemTitle: 'Notebooks',
+                    domainTitle: displayName,
+                    typeName: 'Collection',
+                }
+            },
+            {
+                window:{
+                    zOrder: 3,
+                    configDefaults: {top:60,left:60, width:610,height:400},
+                    view: 'normalized',
+                },
+                workbox: {
+                    defaultConfig:{...workboxDefaultConfig},
+                    itemIcon: checklistIcon,
+                    itemTitle: 'Checklists',
+                    domainTitle: displayName,
+                    typeName: 'Collection',
+                }
+            },
+
+        ]
+        panelsListRef.current = [<Workpanel key = {0} startingWindowsSpecsList = {panelWindowsSpecs} />]
+
+    },[])
+
+    useEffect(()=>{
+
+        if (workspaceState != 'ready') setWorkspaceState('ready')
+
+    },[workspaceState])
 
     return <Grid 
           date-type = 'workspace'
@@ -102,7 +111,7 @@ const Workspace = (props) => {
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box id = 'panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
-                <Workpanel startingWindowsSpecsList = {panelWindowsSpecsRef.current} />
+                {(workspaceState != 'setup') && panelsListRef.current}
             </Box>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
