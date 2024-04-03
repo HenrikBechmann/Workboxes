@@ -33,6 +33,7 @@ import formIcon from '../../../assets/table_rows.png'
 import reorderIcon from '../../../assets/reorder.png'
 import uploadIcon from '../../../assets/upload.png'
 import viewIcon from '../../../assets/view.png'
+import hideIcon from '../../../assets/expand_less.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -62,6 +63,7 @@ const CoverToolbar = (props) => {
         <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
         <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
 
     </Box>
 }

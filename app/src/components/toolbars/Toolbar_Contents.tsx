@@ -35,7 +35,8 @@ import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
 import dragIcon from '../../../assets/drag.png'
 import moveIcon from '../../../assets/move.png'
-import columnIcon from '../../../assets/columns.png'
+import hideIcon from '../../../assets/expand_less.png'
+// import columnIcon from '../../../assets/columns.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -82,12 +83,13 @@ const ContentsToolbar = (props) => {
     return <Box data-type = 'cover-toolbar' style = {contentsToolbarStyles}>
     
         <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
-        <StandardIcon icon = {columnIcon} caption = 'columns' tooltip = 'switch formats'/>
+        <StandardIcon icon = {listIcon} caption = 'list' tooltip = 'switch formats'/>
         { dragToggle }
         { moveToggle }
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
 
     </Box>
 }
