@@ -60,7 +60,7 @@ const leftIconBoxStyles = {
 
 const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef:any) {
 
-    const { callbacks, sessionID } = props
+    const { callbacks, sessionID, type, title } = props
 
     const closeWindow = (e) => {
         e.preventDefault()
@@ -88,7 +88,7 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
         </Box>
         <Box data-type = 'text-block' id = 'draghandle' style = {titleTextBlockStyles}>
             <Box style = {titleContentStyles}>
-            { '-' + sessionID + '-' } Henrik Bechmann [Domain]
+            { '-' + sessionID + '-' } {title} [{type}]
             </Box>
         </Box>
         <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>

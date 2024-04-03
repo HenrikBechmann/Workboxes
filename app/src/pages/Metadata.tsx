@@ -67,6 +67,8 @@ const Metadata = (props) => {
                     zOrder: 1,
                     configDefaults: {top:20,left:20, width:610,height:400},
                     view: 'normalized',
+                    type:'Collection',
+                    title:'Workbox types',
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},

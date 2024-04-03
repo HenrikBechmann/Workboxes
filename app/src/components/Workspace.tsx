@@ -41,6 +41,8 @@ const Workspace = (props) => {
                 zOrder: 1,
                 configDefaults: {top:20,left:20, width:610,height:400},
                 view: 'normalized',
+                title:displayName,
+                type: 'Domain',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
@@ -55,6 +57,8 @@ const Workspace = (props) => {
                 zOrder: 2,
                 configDefaults: {top:40,left:40, width:610,height:400},
                 view: 'normalized',
+                title:displayName,
+                type: 'Domain',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
@@ -69,6 +73,8 @@ const Workspace = (props) => {
                 zOrder: 3,
                 configDefaults: {top:60,left:60, width:610,height:400},
                 view: 'normalized',
+                title:displayName,
+                type: 'Domain',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},

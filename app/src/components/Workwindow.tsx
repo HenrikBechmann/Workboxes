@@ -108,7 +108,9 @@ const Workwindow = (props) => {
             zOrder, // inherited; modified by setFocus 
             viewDeclaration, // normalized, maximized, minimized
             callbacks, // change zOrder etc.
-            containerDimensionSpecs // height, width; change can cause repositioning and resizing of window
+            containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
+            type,
+            title,
         } = props,
 
         windowElementRef = useRef(null),
@@ -640,7 +642,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle callbacks = {callbacks} sessionID = {sessionID} ref = {titleElementRef} />
+                        <WindowTitle callbacks = {callbacks} sessionID = {sessionID} ref = {titleElementRef} type = {type} title = {title}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 
