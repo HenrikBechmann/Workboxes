@@ -30,6 +30,7 @@ import appSettingsIcon from '../../../assets/app_settings.png'
 import workspacesIcon from '../../../assets/workspaces.png'
 import cartIcon from '../../../assets/cart.png'
 import moreVerticalIcon from '../../../assets/more_vert.png'
+import hideIcon from '../../../assets/expand_less.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -194,6 +195,8 @@ const StandardToolbar = (props) => {
             </>
         }
         <LearnIcon tooltip = 'Explain this toolbar'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
     </Box>
 }
