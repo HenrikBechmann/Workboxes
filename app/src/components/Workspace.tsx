@@ -20,6 +20,11 @@ import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
+import collectionIcon from '../../assets/shelves.png'
+import notebookIcon from '../../assets/notebook.png'
+import checklistIcon from '../../assets/checklist.png'
+import homeIcon from '../../assets/home.png'
+
 const workboxDefaultConfig = {
     settingsShow:false,
     settingsDisabled:false,
@@ -41,15 +46,15 @@ const Workspace = (props) => {
                 zOrder: 1,
                 configDefaults: {top:20,left:20, width:610,height:400},
                 view: 'normalized',
-                title:displayName,
-                type: 'Domain',
+                title:"Domain base",
+                type: 'Collection',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
-                itemIcon: photoURL,
-                itemTitle: displayName,
-                domainTitle: "Henrik Bechmann's Account",
-                typeName: 'Domain',
+                itemIcon: homeIcon,
+                itemTitle: "Domain base",
+                domainTitle: displayName,
+                typeName: 'Collection',
             }
         },
         {
@@ -57,15 +62,15 @@ const Workspace = (props) => {
                 zOrder: 2,
                 configDefaults: {top:40,left:40, width:610,height:400},
                 view: 'normalized',
-                title:displayName,
-                type: 'Domain',
+                title:'Notebooks',
+                type: 'Collection',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
-                itemIcon: photoURL,
-                itemTitle: displayName,
-                domainTitle: "Henrik Bechmann's Account",
-                typeName: 'Domain',
+                itemIcon: notebookIcon,
+                itemTitle: 'Notebooks',
+                domainTitle: displayName,
+                typeName: 'Collection',
             }
         },
         {
@@ -73,15 +78,15 @@ const Workspace = (props) => {
                 zOrder: 3,
                 configDefaults: {top:60,left:60, width:610,height:400},
                 view: 'normalized',
-                title:displayName,
-                type: 'Domain',
+                title:'Checklists',
+                type: 'Collection',
             },
             workbox: {
                 defaultConfig:{...workboxDefaultConfig},
-                itemIcon: photoURL,
-                itemTitle: displayName,
-                domainTitle: "Henrik Bechmann's Account",
-                typeName: 'Domain',
+                itemIcon: checklistIcon,
+                itemTitle: 'Checklists',
+                domainTitle: displayName,
+                typeName: 'Collection',
             }
         },
 

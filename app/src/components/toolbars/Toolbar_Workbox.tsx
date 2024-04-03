@@ -171,9 +171,9 @@ const WorkboxToolbar = (props) => {
         { coverToggle }
         { contentsToggle }
         <ToolbarVerticalDivider />
+        <DomainControl domainTitle = {domainTitle} />
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
-        <DomainControl domainTitle = {domainTitle} />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
         { commentsToggle }
