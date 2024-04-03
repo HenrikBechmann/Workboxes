@@ -29,54 +29,56 @@ const profileTemplate = {
 }
 
 const documentTemplate = {
-    sections:[
-        {
-            id:'basic',
-            name:null,
-            description:null,
-            position:0,
-            icon:null,
-        },
-    ]
+    sections:null,
+    changed:false,
 }
 
 const databoxTemplate = {
-    accepts:null
+    accepts:null,
+    links:null,
+    changed:false,
 }
 
 class workboxGateway {
     constructor(defaults) {
 
+        // create skeleton
         this.profile = {...profileTemplate,
-            workbox:{ID:null, name:null},
-            owner:{ID:null, name:null},
-            domain:{ID:null, name:null},
-            type:{ID:null, name:null}, 
+            workbox:{ID:null, name:null, alias:null, icon:null},
+            owner:{ID:null, name:null, alias:null, icon:null},
+            domain:{ID:null, name:null, alias:null, icon:null},
+            type:{ID:null, name:null, alias:null, icon:null},
             defaultConfig:{...workboxDefaultConfig},
-            counts:{generation:0},
+            counts:{generation:null, links:null},
             commits: {
-                created_by:{ID:null, name:null},
+                created_by:{ID:null, name:null, alias:null},
                 created_time:null,
-                updated_by:{ID:null, name:null},
+                updated_by:{ID:null, name:null, alias:null},
                 updated_time:null,
-            }
-        }
-        this.document = {...documentTemplate, sections:[
-            {
-                id:'basic',
-                name:null,
-                description:null,
-                position:0,
-                icon:null,
             },
-        ]}
-        this.databox = {...databoxTemplate, accepts:[]}
+        }
+        this.document = {...documentTemplate, 
+            sections:[
+                {
+                    id:'basic',
+                    name:null,
+                    description:null,
+                    position:0,
+                    icon:null,
+                    changed:false,
+                },
+            ]}
+        this.databox = {...databoxTemplate, 
+            accepts:[], 
+            links:{preload:true, list:[], set:new Set()}
+        }
 
     }
 
     profile
     document
     databox
+
 }
 
 export default workboxGateway

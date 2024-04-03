@@ -9,6 +9,7 @@ import {
 
 import Workwindow from './Workwindow'
 import Workbox from './workbox/Workbox'
+import workboxGateway from '../gateways/workboxGateway'
 
 const workpanelStyles = {
     height:'100%',
@@ -167,7 +168,8 @@ const Workpanel = (props:any) => {
         const 
             // required to position window
             element = panelElementRef.current,
-            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight }
+            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
+            gateway = new workboxGateway(specs.workbox)
         
         specs.window.title = specs.workbox.itemTitle
         specs.window.type = specs.workbox.typeName
@@ -191,6 +193,7 @@ const Workpanel = (props:any) => {
         >
             <Workbox 
                 sessionWindowID = {sessionID} 
+                gateway = {gateway}
                 {...specs.workbox}
             />
         </Workwindow>

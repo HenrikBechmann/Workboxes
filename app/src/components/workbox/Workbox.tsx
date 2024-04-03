@@ -55,12 +55,15 @@ const Workbox = (props) => {
             itemIcon, 
             itemTitle, 
             typeName, 
-            domainTitle 
+            domainTitle,
+            gateway,
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
         [workboxConfig, setWorkboxConfig] = useState({...defaultConfig}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
+
+    // console.log('gateway', '-'+sessionWindowID+'-',gateway)
 
     // update the recorded with of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
