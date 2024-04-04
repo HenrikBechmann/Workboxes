@@ -12,7 +12,7 @@ import StandardIcon from './StandardIcon'
 import { useToggleIcon } from './ToggleIcon'
 import LearnIcon from './LearnIcon'
 
-const contentsToolbarStyles = {
+const databoxToolbarStyles = {
     padding:'2px',
     minHeight:0,
     display:'flex',
@@ -72,15 +72,15 @@ const DataboxToolbar = (props) => {
             disabledRef:disabledMoveRef, 
         })
 
-    const contentsmenulist = <MenuList >
+    const databoxmenulist = <MenuList >
         <MenuItem>Lock this databox</MenuItem>
         <MenuItem>Databox settings</MenuItem>
     </MenuList>
 
     // render
-    return <Box data-type = 'cover-toolbar' style = {contentsToolbarStyles}>
+    return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {contentsmenulist} />
+        <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
         <StandardIcon icon = {listIcon} caption = 'list' tooltip = 'switch formats'/>
         { dragToggle }
         { moveToggle }

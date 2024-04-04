@@ -76,22 +76,22 @@ const WorkboxToolbar = (props) => {
             typeName 
         } = props,
 
-        toggleOnDocumentRef = useRef(workboxConfig.coverShow),
-        disabledDocumentRef = useRef(workboxConfig.coverDisabled),
-        toggleOnDataboxRef = useRef(workboxConfig.contentsShow),
-        disabledDataboxRef = useRef(workboxConfig.contentsDisabled),
+        toggleOnDocumentRef = useRef(workboxConfig.documentShow),
+        disabledDocumentRef = useRef(workboxConfig.documentDisabled),
+        toggleOnDataboxRef = useRef(workboxConfig.databoxShow),
+        disabledDataboxRef = useRef(workboxConfig.databoxDisabled),
         toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
         disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
         toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
         disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
 
         toggleHistoryRef = useRef({
-            coverShow:toggleOnDocumentRef.current,
+            documentShow:toggleOnDocumentRef.current,
         })
 
     const 
         currentIsDocument = toggleOnDocumentRef.current,
-        previousIsDocument = toggleHistoryRef.current.coverShow,
+        previousIsDocument = toggleHistoryRef.current.documentShow,
         currentIsDatabox = toggleOnDataboxRef.current
 
     if (!currentIsDocument && !currentIsDatabox) {
@@ -109,10 +109,10 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxConfig.coverShow = toggleOnDocumentRef.current
-        workboxConfig.coverDisabled = disabledDocumentRef.current
-        workboxConfig.contentsShow = toggleOnDataboxRef.current
-        workboxConfig.contentsDisabled = disabledDataboxRef.current
+        workboxConfig.documentShow = toggleOnDocumentRef.current
+        workboxConfig.documentDisabled = disabledDocumentRef.current
+        workboxConfig.databoxShow = toggleOnDataboxRef.current
+        workboxConfig.databoxDisabled = disabledDataboxRef.current
         workboxConfig.settingsShow = toggleOnSettingsRef.current
         workboxConfig.settingsDisabled = disabledSettingsRef.current
 
@@ -128,11 +128,11 @@ const WorkboxToolbar = (props) => {
     ])
 
     toggleHistoryRef.current = {
-        coverShow:toggleOnDocumentRef.current,
+        documentShow:toggleOnDocumentRef.current,
     }
 
     const
-        coverToggle = useToggleIcon({
+        documentToggle = useToggleIcon({
             icon:profileIcon, 
             tooltip:'Toggle workbox document pane',
             caption:'document',
@@ -140,7 +140,7 @@ const WorkboxToolbar = (props) => {
             disabledRef:disabledDocumentRef, 
         }),
 
-        contentsToggle = useToggleIcon({
+        databoxToggle = useToggleIcon({
             icon:packageIcon, 
             tooltip:'Toggle workbox databox pane',
             caption:'databox',
@@ -174,8 +174,8 @@ const WorkboxToolbar = (props) => {
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
-        { coverToggle }
-        { contentsToggle }
+        { documentToggle }
+        { databoxToggle }
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />

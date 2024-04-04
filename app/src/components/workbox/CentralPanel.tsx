@@ -42,8 +42,8 @@ const CentralPanel = (props) => {
             children, 
             sessionWindowID,
             displayConfigCode, 
-            coverFrameElementRef, 
-            contentsFrameElementRef, 
+            documentFrameElementRef, 
+            databoxFrameElementRef, 
             userDocumentWidthRef, // set by user through drag tag
             viewSelector,
         } = props,
@@ -58,9 +58,9 @@ const CentralPanel = (props) => {
         Respond to change in displayConfigCode; causes direct DOM manipulation.
         Adjusts the CSS of 
         - centralPanelElement: flex, width
-        - coverFrameElement: flex, width, minWidth, transition, transitionDelay
-        - coverFrameElement.firstChild: width, left, right (panel)
-        - contentsFrameElement: flex, width, minWidth, transition, transitionDelay
+        - documentFrameElement: flex, width, minWidth, transition, transitionDelay
+        - documentFrameElement.firstChild: width, left, right (panel)
+        - databoxFrameElement: flex, width, minWidth, transition, transitionDelay
         - contantsFrameElement.firstChild: width, left, right (panel)
 
         see useEffect for displayConfigCode
@@ -71,8 +71,8 @@ const CentralPanel = (props) => {
 
         const 
             centralPanelElement = centralPanelElementRef.current, // flex, width
-            coverFrameElement = coverFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
-            contentsFrameElement = contentsFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            databoxFrameElement = databoxFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             transitionDelay = '0.3s',
             timeout = 800,
             previousDisplayConfigCode = previousDisplayConfigCodeRef.current
@@ -82,26 +82,26 @@ const CentralPanel = (props) => {
         if (displayConfigCode == 'both') {
 
             // baseline
-            coverFrameElement.style.transitionDelay = 'unset'
-            contentsFrameElement.style.transitionDelay = 'unset'
+            documentFrameElement.style.transitionDelay = 'unset'
+            databoxFrameElement.style.transitionDelay = 'unset'
 
-            coverFrameElement.style.transition = 'width 0.5s'
-            contentsFrameElement.style.transition = 'width 0.5s'
+            documentFrameElement.style.transition = 'width 0.5s'
+            databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden elements
-            if (previousDisplayConfigCode == 'contents') { // cover was hidden
+            if (previousDisplayConfigCode == 'databox') { // document was hidden
 
-                coverFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
-                coverFrameElement.firstChild.style.left = 0
-                coverFrameElement.firstChild.style.right = 'auto'
+                documentFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
+                documentFrameElement.firstChild.style.left = 0
+                documentFrameElement.firstChild.style.right = 'auto'
 
-            } else { // contents was hidden
+            } else { // databox was hidden
 
-                contentsFrameElement.firstChild.style.width = 
+                databoxFrameElement.firstChild.style.width = 
                     Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                         userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
-                contentsFrameElement.firstChild.style.left = 'auto'
-                contentsFrameElement.firstChild.style.right = 0
+                databoxFrameElement.firstChild.style.left = 'auto'
+                databoxFrameElement.firstChild.style.right = 0
 
             }
 
@@ -109,18 +109,18 @@ const CentralPanel = (props) => {
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
-            // freeze cover
-            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
+            // freeze document
+            documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
+            documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze contents
+            // freeze databox
             centralPanelElement.style.minWidth = (MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH) + 'px'
-            contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-            contentsFrameElement.style.flex = '0 0 auto'
+            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
+            databoxFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            coverFrameElement.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
-            contentsFrameElement.style.width = 
+            documentFrameElement.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
+            databoxFrameElement.style.width = 
                 Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                     userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
 
@@ -128,20 +128,20 @@ const CentralPanel = (props) => {
             timeoutRef.current = setTimeout(()=>{
 
                 // restore transition defaults
-                coverFrameElement.style.transition = 'none'
-                contentsFrameElement.style.transition = 'none'
+                documentFrameElement.style.transition = 'none'
+                databoxFrameElement.style.transition = 'none'
 
-                // restore contents frame defaults
-                contentsFrameElement.style.flex = '1 0 auto'
-                contentsFrameElement.style.width = 'auto'
-                contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                // restore databox frame defaults
+                databoxFrameElement.style.flex = '1 0 auto'
+                databoxFrameElement.style.width = 'auto'
+                databoxFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
-                // restore cover frame defaults
-                coverFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
+                // restore document frame defaults
+                documentFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
 
                 // restore panel defaults
-                contentsFrameElement.firstChild.style.width = '100%'
-                coverFrameElement.firstChild.style.width = '100%'
+                databoxFrameElement.firstChild.style.width = '100%'
+                documentFrameElement.firstChild.style.width = '100%'
 
                 // restore central panel defaults
                 centralPanelElement.style.flex = '1 0 auto'
@@ -149,21 +149,21 @@ const CentralPanel = (props) => {
 
             },timeout)
 
-        } else if (displayConfigCode == 'cover') {
+        } else if (displayConfigCode == 'document') {
 
             // set transition delay for shadow
-            coverFrameElement.style.transitionDelay = transitionDelay
-            contentsFrameElement.style.transitionDelay = transitionDelay
+            documentFrameElement.style.transitionDelay = transitionDelay
+            databoxFrameElement.style.transitionDelay = transitionDelay
 
-            coverFrameElement.style.transition = 'width 0.5s'
-            contentsFrameElement.style.transition = 'width 0.5s'
+            documentFrameElement.style.transition = 'width 0.5s'
+            databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'contents') { // cover was hidden
+            if (previousDisplayConfigCode == 'databox') { // document was hidden
 
-                coverFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
-                coverFrameElement.firstChild.style.right = 0
-                coverFrameElement.firstChild.style.left = 'auto'
+                documentFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
+                documentFrameElement.firstChild.style.right = 0
+                documentFrameElement.firstChild.style.left = 'auto'
 
             }
 
@@ -172,37 +172,37 @@ const CentralPanel = (props) => {
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
-            // freeze cover
-            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
+            // freeze document
+            documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
+            documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze contents frame for hiding
-            contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-            contentsFrameElement.style.flex = '0 0 auto'
-            contentsFrameElement.firstChild.style.width = contentsFrameElement.firstChild.offsetWidth + 'px'
-            contentsFrameElement.style.minWidth = 0
+            // freeze databox frame for hiding
+            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
+            databoxFrameElement.style.flex = '0 0 auto'
+            databoxFrameElement.firstChild.style.width = databoxFrameElement.firstChild.offsetWidth + 'px'
+            databoxFrameElement.style.minWidth = 0
 
             // set animation targets
-            contentsFrameElement.style.width = 0
-            coverFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            databoxFrameElement.style.width = 0
+            documentFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
 
                 // restore transition defaults
-                coverFrameElement.style.transition = 'none'
-                contentsFrameElement.style.transition = 'none'
-                contentsFrameElement.style.transitionDelay = 'unset'
+                documentFrameElement.style.transition = 'none'
+                databoxFrameElement.style.transition = 'none'
+                databoxFrameElement.style.transitionDelay = 'unset'
 
                 // set config for visible frame
-                coverFrameElement.style.flex = '1 0 auto'
-                coverFrameElement.style.width = 'auto'
-                coverFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
+                documentFrameElement.style.flex = '1 0 auto'
+                documentFrameElement.style.width = 'auto'
+                documentFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
 
                 // set visible panel config
-                coverFrameElement.firstChild.style.width = '100%'
-                coverFrameElement.firstChild.style.right = 'auto'
-                coverFrameElement.firstChild.style.left = 0
+                documentFrameElement.firstChild.style.width = '100%'
+                documentFrameElement.firstChild.style.right = 'auto'
+                documentFrameElement.firstChild.style.left = 0
 
                 // restore central panel defaults
                 centralPanelElement.style.flex = '1 0 auto'
@@ -210,21 +210,21 @@ const CentralPanel = (props) => {
 
             },timeout)
 
-        } else { // displayConfigCode == 'contents'
+        } else { // displayConfigCode == 'databox'
 
             // set tranision delay for shadow
-            coverFrameElement.style.transitionDelay = transitionDelay
-            contentsFrameElement.style.transitionDelay = transitionDelay
+            documentFrameElement.style.transitionDelay = transitionDelay
+            databoxFrameElement.style.transitionDelay = transitionDelay
 
-            coverFrameElement.style.transition = 'width 0.5s'
-            contentsFrameElement.style.transition = 'width 0.5s'
+            documentFrameElement.style.transition = 'width 0.5s'
+            databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'cover') { // contents was hidden
+            if (previousDisplayConfigCode == 'document') { // databox was hidden
 
-                contentsFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
-                contentsFrameElement.firstChild.style.right = 'auto'
-                contentsFrameElement.firstChild.style.left = 0
+                databoxFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
+                databoxFrameElement.firstChild.style.right = 'auto'
+                databoxFrameElement.firstChild.style.left = 0
 
             }
 
@@ -233,37 +233,37 @@ const CentralPanel = (props) => {
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
-            // freeze cover for hiding
-            coverFrameElement.style.width = coverFrameElement.offsetWidth + 'px'
-            coverFrameElement.style.flex = '0 0 auto'
-            coverFrameElement.firstChild.style.width = coverFrameElement.firstChild.offsetWidth + 'px'
-            coverFrameElement.style.minWidth = 0
+            // freeze document for hiding
+            documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
+            documentFrameElement.style.flex = '0 0 auto'
+            documentFrameElement.firstChild.style.width = documentFrameElement.firstChild.offsetWidth + 'px'
+            documentFrameElement.style.minWidth = 0
 
-            // freeze contents
-            contentsFrameElement.style.width = contentsFrameElement.offsetWidth + 'px'
-            contentsFrameElement.style.flex = '0 0 auto'
+            // freeze databox
+            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
+            databoxFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            contentsFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
-            coverFrameElement.style.width = 0
+            databoxFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            documentFrameElement.style.width = 0
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
 
                 // restore transition defaults
-                coverFrameElement.style.transition = 'none'
-                coverFrameElement.style.transitionDelay = 'unset'
-                contentsFrameElement.style.transition = 'none'
+                documentFrameElement.style.transition = 'none'
+                documentFrameElement.style.transitionDelay = 'unset'
+                databoxFrameElement.style.transition = 'none'
 
                 // set visible frame config
-                contentsFrameElement.style.width = 'auto'
-                contentsFrameElement.style.flex = '1 0 auto'
-                contentsFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                databoxFrameElement.style.width = 'auto'
+                databoxFrameElement.style.flex = '1 0 auto'
+                databoxFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 // restore visible panel config
-                contentsFrameElement.firstChild.style.width = '100%'
-                contentsFrameElement.firstChild.style.right = 0
-                contentsFrameElement.firstChild.style.left = 'auto'
+                databoxFrameElement.firstChild.style.width = '100%'
+                databoxFrameElement.firstChild.style.right = 0
+                databoxFrameElement.firstChild.style.left = 'auto'
 
                 // restore central panel defaults
                 centralPanelElement.style.width = 'auto'

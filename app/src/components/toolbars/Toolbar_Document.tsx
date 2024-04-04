@@ -11,7 +11,7 @@ import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
 import LearnIcon from './LearnIcon'
 
-const coverToolbarStyles = {
+const documentToolbarStyles = {
     padding:'2px',
     minHeight:0,
     display:'flex',
@@ -50,15 +50,15 @@ const DocumentToolbar = (props) => {
 
     const { mode } = props
 
-    const covermenulist = <MenuList >
+    const documentmenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
         <MenuItem >Document settings</MenuItem>
     </MenuList>
 
     // render
-    return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
+    return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
-        <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {covermenulist} />  
+        <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         {(mode == 'edit') && <>
                 <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
                 <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>

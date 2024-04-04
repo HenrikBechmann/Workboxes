@@ -31,7 +31,7 @@ const
     MAX_COVER_FRAME_RATIO = 0.75,
     MIN_CONTENTS_FRAME_WIDTH = 250
 
-const coverFrameStyles = {
+const documentFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
     minWidth: MIN_COVER_FRAME_WIDTH + 'px',
@@ -42,7 +42,7 @@ const coverFrameStyles = {
     overflow: 'hidden',
 } as CSSProperties
 
-const coverPanelStyles = {
+const documentPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
@@ -58,7 +58,7 @@ const coverPanelStyles = {
     right:'auto',
 } as CSSProperties
 
-const coverTabStyles = {
+const documentTabStyles = {
     position:'absolute',
     margin: 0,
     backgroundColor:'white',
@@ -76,14 +76,14 @@ const coverTabStyles = {
     transition: 'opacity 0.3s, visibility 0.3s'
 } as CSSProperties
 
-const coverTabIconStyles = {
+const documentTabIconStyles = {
     opacity: 0.5,
     height: '24px',
     width: '48px',
     transform: 'rotate(90deg)'
 } as CSSProperties
 
-const coverGridStyles = {
+const documentGridStyles = {
     height: '100%',
     width: '100%',
     gridTemplateAreas: `"header"
@@ -93,14 +93,14 @@ const coverGridStyles = {
     borderRadius: "0 0 0 7px",
 }  as CSSProperties
 
-const coverHeaderStyles = {
+const documentHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
     borderBottom:'1px solid silver',
 }
 
-const coverBodyStyles = {
+const documentBodyStyles = {
     area: 'body',
     position: 'relative',
     overflow: 'hidden',
@@ -117,18 +117,18 @@ const DocumentHandle = (props) => {
         <Box 
             ref = {innerRef}
             id = 'handle'
-            data-type = {'cover-handle'} 
-            style = {coverTabStyles} {...rest}>
+            data-type = {'document-handle'} 
+            style = {documentTabStyles} {...rest}>
             <img 
                 draggable = "false" 
-                style = {coverTabIconStyles} 
+                style = {documentTabIconStyles} 
                 src = {handleIcon} 
             />
         </Box>
     )
 }
 
-const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
+const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrameElementRef:any) {
     const 
         {
             children, 
@@ -140,10 +140,10 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
             profileData 
         } = props, 
         displayCodeRef = useRef(null),
-        coverPanelElementRef = useRef(null),
+        documentPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
         targetTimeoutRef = useRef(null),
-        [coverResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
+        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
@@ -152,9 +152,9 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
         windowCallbackContextRef = useRef(windowCallbackContext),
         constraintsRef = useRef({
             minX:MIN_COVER_FRAME_WIDTH,
-            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX:700,
-            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
         workboxInnerFrameWidthFromContextRef = useRef(null)
 
@@ -162,11 +162,11 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
     displayCodeRef.current = displayConfigCode
     viewSelectorRef.current = viewSelector
 
-    // console.log('cover profileData, documentData',profileData, documentData)
+    // console.log('document profileData, documentData',profileData, documentData)
 
     useEffect(()=>{
 
-        centralPanelElementRef.current = coverPanelElementRef.current.closest('#central-panel')
+        centralPanelElementRef.current = documentPanelElementRef.current.closest('#central-panel')
         handleRef.current = centralPanelElementRef.current.querySelector('#handle')
 
     },[])
@@ -181,22 +181,22 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
 
             const constraints = {
                 minX:MIN_COVER_FRAME_WIDTH,
-                minY:coverFrameElementRef.current?.offsetHeight || 0,
+                minY:documentFrameElementRef.current?.offsetHeight || 0,
                 maxX: Math.min(
                     workboxInnerFrameWidthFromContextRef.current * MAX_COVER_FRAME_RATIO,
                     workboxInnerFrameWidthFromContextRef.current - MIN_CONTENTS_FRAME_WIDTH),
-                maxY:coverFrameElementRef.current?.offsetHeight || 0,
+                maxY:documentFrameElementRef.current?.offsetHeight || 0,
             }
             constraintsRef.current = constraints
 
             const appliedWidth = Math.min(constraints.maxX, viewWidth)
 
-            coverFrameElementRef.current.style.transition = 'width 0.3s'
-            coverFrameElementRef.current.style.width = appliedWidth + 'px'
+            documentFrameElementRef.current.style.transition = 'width 0.3s'
+            documentFrameElementRef.current.style.width = appliedWidth + 'px'
             userDocumentWidthRef.current[viewTrigger] = appliedWidth
 
             setTimeout(()=>{
-                coverFrameElementRef.current.style.transition = 'none'
+                documentFrameElementRef.current.style.transition = 'none'
                 setDocumentResizeWidth(appliedWidth)
             },300)
 
@@ -209,9 +209,9 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
         if (workboxInnerFrameWidthFromContext === 0) return
 
         const centralPanelWidth = centralPanelElementRef.current.offsetWidth
-        const coverWidth = 
+        const documentWidth = 
             displayCodeRef.current == 'out'
-                ? coverFrameElementRef.current.offsetWidth
+                ? documentFrameElementRef.current.offsetWidth
                 : userDocumentWidthRef.current[viewSelectorRef.current]
 
         clearTimeout(observerTimeoutRef.current)
@@ -221,18 +221,18 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
                 workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
                 workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH)
 
-        if (calculatedMaxDocumentWidth < coverWidth) {
+        if (calculatedMaxDocumentWidth < documentWidth) {
 
             const newWidth = Math.max(MIN_COVER_FRAME_WIDTH, calculatedMaxDocumentWidth)
 
-            if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
-            displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
+            if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
+            displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
 
             userDocumentWidthRef.current[viewSelectorRef.current] = newWidth
 
-            if (coverFrameElementRef.current.style.transition == 'none') {
+            if (documentFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
-                    coverFrameElementRef.current.style.transition = 'width 0.5s'
+                    documentFrameElementRef.current.style.transition = 'width 0.5s'
                 },1)
             }
 
@@ -242,9 +242,9 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
 
         const constraints = {
             minX:MIN_COVER_FRAME_WIDTH,
-            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: calculatedMaxDocumentWidth,
-            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
@@ -255,7 +255,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
         clearTimeout(targetTimeoutRef.current)
 
         const 
-            element = coverPanelElementRef.current,
+            element = documentPanelElementRef.current,
             timeout = 500
 
         if (displayConfigCode == 'out') {
@@ -284,14 +284,14 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
 
     // resizable callbacks...
     const onResizeStart = () => {
-        coverFrameElementRef.current.style.transition = 'none'
+        documentFrameElementRef.current.style.transition = 'none'
         const constraints = {
             minX:MIN_COVER_FRAME_WIDTH,
-            minY:coverFrameElementRef.current?.offsetHeight || 0,
+            minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: Math.min(
                 workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
                 workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH),
-            maxY:coverFrameElementRef.current?.offsetHeight || 0,
+            maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
@@ -299,13 +299,13 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
 
     const onResize = (event, {size, handle}) => {
 
-        coverFrameElementRef.current.style.width = size.width + 'px'
+        documentFrameElementRef.current.style.width = size.width + 'px'
         setDocumentResizeWidth(size.width)
 
     }
 
     const onResizeStop = (e,{size, handle}) => {
-        coverFrameElementRef.current.style.transition = 'width 0.5s'
+        documentFrameElementRef.current.style.transition = 'width 0.5s'
 
         userDocumentWidthRef.current[viewSelectorRef.current] = size.width
         setDocumentResizeWidth(size.width)
@@ -325,8 +325,8 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
 
         } 
         axis = 'x'
-        height = {coverFrameElementRef.current?.offsetHeight || 0} 
-        width = {coverResizeWidth}
+        height = {documentFrameElementRef.current?.offsetHeight || 0} 
+        width = {documentResizeWidth}
         resizeHandles = {['e']}
         minConstraints = {[constraintsRef.current.minX,constraintsRef.current.minY]}
         maxConstraints = {[constraintsRef.current.maxX,constraintsRef.current.maxY]}
@@ -335,20 +335,20 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameEle
         onResizeStop = {onResizeStop}
 
     >
-        <Box data-type = 'cover-frame' ref = {coverFrameElementRef} style = {coverFrameStyles}>
+        <Box data-type = 'document-frame' ref = {documentFrameElementRef} style = {documentFrameStyles}>
 
-            <Box data-type = 'cover-panel' ref = {coverPanelElementRef} style = {coverPanelStyles}>
+            <Box data-type = 'document-panel' ref = {documentPanelElementRef} style = {documentPanelStyles}>
 
                 <Grid
-                    data-type = 'cover-grid'
-                    style = {coverGridStyles}
+                    data-type = 'document-grid'
+                    style = {documentGridStyles}
                 >
-                    <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
+                    <GridItem data-type = 'document-header' style = {documentHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DocumentToolbar />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'cover-body' style = {coverBodyStyles}>
+                    <GridItem data-type = 'document-body' style = {documentBodyStyles}>
                         {children}
                     </GridItem>
                 </Grid>

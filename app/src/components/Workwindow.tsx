@@ -166,7 +166,7 @@ const Workwindow = (props) => {
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null),
-        windowCallbackRef = useRef({changeView:null}) // callback set in coverPanel for call after max/norm view change
+        windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -315,7 +315,7 @@ const Workwindow = (props) => {
 
                     setWindowState('activatemaximized')
 
-                    windowCallbackRef.current.changeView() // revert to previous cover width
+                    windowCallbackRef.current.changeView() // revert to previous document width
 
                 },501)
 
@@ -430,7 +430,7 @@ const Workwindow = (props) => {
 
                 setWindowState('activatenormalized')
 
-                windowCallbackRef.current.changeView() // revert to previous cover width
+                windowCallbackRef.current.changeView() // revert to previous document width
 
             },501)
 

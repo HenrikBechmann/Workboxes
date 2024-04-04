@@ -4,10 +4,10 @@
 const workboxDefaultConfig = {
     settingsShow:false,
     settingsDisabled:false,
-    coverShow:true,
-    coverDisabled:false,
-    contentsShow:true,
-    contentsDisabled:false,
+    documentShow:true,
+    documentDisabled:false,
+    databoxShow:true,
+    databoxDisabled:false,
 }
 
 const workboxTemplate = {

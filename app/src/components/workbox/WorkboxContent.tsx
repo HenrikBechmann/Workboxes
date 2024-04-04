@@ -30,29 +30,29 @@ const WorkboxContent = (props) => {
 
     const 
         { workboxConfig, sessionWindowID, viewSelector, documentData, databoxData, profileData } = props,
-        { contentsShow, coverShow } = workboxConfig, // boolean - show/ noshow
-        // share cover and contents elements with children
-        coverFrameElementRef = useRef( null ),
-        contentsFrameElementRef = useRef( null ),
+        { databoxShow, documentShow } = workboxConfig, // boolean - show/ noshow
+        // share document and databox elements with children
+        documentFrameElementRef = useRef( null ),
+        databoxFrameElementRef = useRef( null ),
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
         userDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
-    let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
-    if (contentsShow && coverShow) {
+    let workboxDisplayCode, documentDisplayCode, databoxDisplayCode // configuration controls for children
+    if (databoxShow && documentShow) {
         workboxDisplayCode = 'both'
-        coverDisplayCode = 'out'
-        contentsDisplayCode = 'out'
-    } else if (contentsShow) {
-        workboxDisplayCode = 'contents'
-        coverDisplayCode = 'under'
-        contentsDisplayCode = 'over'
-    } else { // coverShow
-        workboxDisplayCode = 'cover'
-        coverDisplayCode = 'over'
-        contentsDisplayCode = 'under'
+        documentDisplayCode = 'out'
+        databoxDisplayCode = 'out'
+    } else if (databoxShow) {
+        workboxDisplayCode = 'databox'
+        documentDisplayCode = 'under'
+        databoxDisplayCode = 'over'
+    } else { // documentShow
+        workboxDisplayCode = 'document'
+        documentDisplayCode = 'over'
+        databoxDisplayCode = 'under'
     }
 
     useEffect(()=>{
@@ -76,14 +76,14 @@ const WorkboxContent = (props) => {
         <CentralPanel 
             sessionWindowID = {sessionWindowID}
             displayConfigCode = {workboxDisplayCode} 
-            coverFrameElementRef = {coverFrameElementRef} 
-            contentsFrameElementRef = {contentsFrameElementRef} 
+            documentFrameElementRef = {documentFrameElementRef} 
+            databoxFrameElementRef = {databoxFrameElementRef} 
             userDocumentWidthRef = {userDocumentWidthRef}
             viewSelector = {viewSelector}
         >
             <DocumentPanel 
-                ref = {coverFrameElementRef} 
-                displayConfigCode = {coverDisplayCode} 
+                ref = {documentFrameElementRef} 
+                displayConfigCode = {documentDisplayCode} 
                 userDocumentWidthRef = {userDocumentWidthRef}
                 sessionWindowID =  {sessionWindowID}
                 viewSelector = {viewSelector}
@@ -93,8 +93,8 @@ const WorkboxContent = (props) => {
             The workbox document ({sessionWindowID})
             </DocumentPanel>
             <DataboxPanel 
-                ref = {contentsFrameElementRef} 
-                displayConfigCode = {contentsDisplayCode} 
+                ref = {databoxFrameElementRef} 
+                displayConfigCode = {databoxDisplayCode} 
                 databoxData = { databoxData }
             >
             The workbox databox - contains workboxes

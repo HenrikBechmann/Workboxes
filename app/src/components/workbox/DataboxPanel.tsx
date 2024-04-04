@@ -23,7 +23,7 @@ const
     MIN_CONTENTS_FRAME_WIDTH = 250,
     MIN_CONTENT_HEIGHT = 300
 
-const contentsFrameStyles = {
+const databoxFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
@@ -35,7 +35,7 @@ const contentsFrameStyles = {
     overflow: 'hidden',
 } as CSSProperties
 
-const contentsPanelStyles = {
+const databoxPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
@@ -52,7 +52,7 @@ const contentsPanelStyles = {
     right: 0,
 } as CSSProperties
 
-const contentsGridStyles = {
+const databoxGridStyles = {
     height: '100%',
     width: '100%',
     gridTemplateAreas: `"header"
@@ -62,14 +62,14 @@ const contentsGridStyles = {
     borderRadius: "0 0 0 7px",
 }  as CSSProperties
 
-const contentsHeaderStyles = {
+const databoxHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
     borderBottom:'1px solid silver',
 }
 
-const contentsBodyStyles = {
+const databoxBodyStyles = {
     area: 'body',
     position: 'relative',
     overflow: 'hidden',
@@ -77,10 +77,10 @@ const contentsBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const DataboxPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
+const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
     const 
         { children, displayConfigCode, databoxData } = props,
-        contentsPanelElementRef = useRef(null),
+        databoxPanelElementRef = useRef(null),
         timeoutRef = useRef(null)
 
     // console.log('databoxData',databoxData)
@@ -90,7 +90,7 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, contentsFrameEl
         clearTimeout(timeoutRef.current)
 
         const 
-            element = contentsPanelElementRef.current,
+            element = databoxPanelElementRef.current,
             timeout = 500
 
         if (displayConfigCode == 'out') {
@@ -111,18 +111,18 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, contentsFrameEl
 
     },[displayConfigCode])
 
-    return <Box data-type = 'contents-frame' ref = {contentsFrameElementRef} style = {contentsFrameStyles}>
-        <Box data-type = 'contents-panel' ref = {contentsPanelElementRef} style = {contentsPanelStyles}>
+    return <Box data-type = 'databox-frame' ref = {databoxFrameElementRef} style = {databoxFrameStyles}>
+        <Box data-type = 'databox-panel' ref = {databoxPanelElementRef} style = {databoxPanelStyles}>
                 <Grid
-                    data-type = 'cover-grid'
-                    style = {contentsGridStyles}
+                    data-type = 'document-grid'
+                    style = {databoxGridStyles}
                 >
-                    <GridItem data-type = 'cover-header' style = {contentsHeaderStyles}>
+                    <GridItem data-type = 'document-header' style = {databoxHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DataboxToolbar />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'cover-body' style = {contentsBodyStyles}>
+                    <GridItem data-type = 'document-body' style = {databoxBodyStyles}>
                         {children}
                     </GridItem>
                 </Grid>
