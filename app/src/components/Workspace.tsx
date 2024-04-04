@@ -55,9 +55,10 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},
-                    itemIcon: homeIcon,
                     itemTitle: "Domain base",
+                    itemIcon: homeIcon,
                     domainTitle: displayName,
+                    domainIcon: photoURL,
                     typeName: 'Collection',
                 }
             },
@@ -69,9 +70,10 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},
-                    itemIcon: notebookIcon,
                     itemTitle: 'Notebooks',
+                    itemIcon: notebookIcon,
                     domainTitle: displayName,
+                    domainIcon: photoURL,
                     typeName: 'Collection',
                 }
             },
@@ -83,9 +85,10 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},
-                    itemIcon: checklistIcon,
                     itemTitle: 'Checklists',
+                    itemIcon: checklistIcon,
                     domainTitle: displayName,
+                    domainIcon: photoURL,
                     typeName: 'Collection',
                 }
             },

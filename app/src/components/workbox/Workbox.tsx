@@ -65,7 +65,7 @@ const Workbox = (props) => {
 
     // console.log('gateway', '-'+sessionWindowID+'-',gateway)
 
-    // update the recorded with of this panel on resize
+    // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
         const workboxInnerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_TOTAL_PADDING_WIDTH
