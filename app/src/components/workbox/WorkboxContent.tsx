@@ -8,8 +8,8 @@ import {
 } from '@chakra-ui/react'
 
 import CentralPanel from './CentralPanel'
-import CoverPanel from './CoverPanel'
-import ContentsPanel from './ContentsPanel'
+import DocumentPanel from './DocumentPanel'
+import DataboxPanel from './DataboxPanel'
 import SettingsPanel from './SettingsPanel'
 
 // synchronize this with the total left and right padding of workboxContentStyles
@@ -37,7 +37,7 @@ const WorkboxContent = (props) => {
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        userCoverWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
+        userDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
     let workboxDisplayCode, coverDisplayCode, contentsDisplayCode // configuration controls for children
@@ -78,27 +78,27 @@ const WorkboxContent = (props) => {
             displayConfigCode = {workboxDisplayCode} 
             coverFrameElementRef = {coverFrameElementRef} 
             contentsFrameElementRef = {contentsFrameElementRef} 
-            userCoverWidthRef = {userCoverWidthRef}
+            userDocumentWidthRef = {userDocumentWidthRef}
             viewSelector = {viewSelector}
         >
-            <CoverPanel 
+            <DocumentPanel 
                 ref = {coverFrameElementRef} 
                 displayConfigCode = {coverDisplayCode} 
-                userCoverWidthRef = {userCoverWidthRef}
+                userDocumentWidthRef = {userDocumentWidthRef}
                 sessionWindowID =  {sessionWindowID}
                 viewSelector = {viewSelector}
                 documentData = {documentData}
                 profileData = {profileData}
             >
             The workbox document ({sessionWindowID})
-            </CoverPanel>
-            <ContentsPanel 
+            </DocumentPanel>
+            <DataboxPanel 
                 ref = {contentsFrameElementRef} 
                 displayConfigCode = {contentsDisplayCode} 
                 databoxData = { databoxData }
             >
             The workbox databox - contains workboxes
-            </ContentsPanel>
+            </DataboxPanel>
         </CentralPanel>
     </Box>
     

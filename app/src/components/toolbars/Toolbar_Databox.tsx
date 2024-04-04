@@ -1,4 +1,4 @@
-// Toolbar_Contents.tsx
+// Toolbar_Databox.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
@@ -23,8 +23,6 @@ const contentsToolbarStyles = {
     boxSizing:'border-box',
     backgroundColor:'#f2f2f2',
     borderRadius:'8px 8px 0 0',
-    // borderBottom:'1px solid silver',
-
 } as CSSProperties
 
 import packageIcon from '../../../assets/package.png'
@@ -49,7 +47,7 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-const ContentsToolbar = (props) => {
+const DataboxToolbar = (props) => {
 
 
     const
@@ -97,4 +95,4 @@ const ContentsToolbar = (props) => {
         // <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
         // <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>
 
-export default ContentsToolbar
+export default DataboxToolbar

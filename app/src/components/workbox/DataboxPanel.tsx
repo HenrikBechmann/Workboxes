@@ -1,4 +1,4 @@
-// ContentsPanel.tsx
+// DataboxPanel.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import ContentsToolbar from '../toolbars/Toolbar_Contents'
+import DataboxToolbar from '../toolbars/Toolbar_Databox'
 
 const 
     MIN_CONTENTS_FRAME_WIDTH = 250,
@@ -77,7 +77,7 @@ const contentsBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
+const DataboxPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
     const 
         { children, displayConfigCode, databoxData } = props,
         contentsPanelElementRef = useRef(null),
@@ -119,7 +119,7 @@ const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameE
                 >
                     <GridItem data-type = 'cover-header' style = {contentsHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
-                            <ContentsToolbar />
+                            <DataboxToolbar />
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'cover-body' style = {contentsBodyStyles}>
@@ -130,4 +130,4 @@ const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameE
     </Box>
 })
 
-export default ContentsPanel
+export default DataboxPanel

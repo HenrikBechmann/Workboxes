@@ -3,13 +3,10 @@
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
-// import { useNavigate } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
   Tooltip, Box, Text, VStack,
 } from '@chakra-ui/react'
-
-// import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
@@ -69,36 +66,42 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxConfig, setWorkboxConfig, itemIcon, itemTitle, domainTitle, domainIcon, typeName } = props,
+        { 
+            workboxConfig, 
+            setWorkboxConfig, 
+            itemTitle, 
+            itemIcon, 
+            domainTitle, 
+            domainIcon, 
+            typeName 
+        } = props,
 
-        toggleOnCoverRef = useRef(workboxConfig.coverShow),
-        disabledCoverRef = useRef(workboxConfig.coverDisabled),
-        toggleOnContentsRef = useRef(workboxConfig.contentsShow),
-        disabledContentsRef = useRef(workboxConfig.contentsDisabled),
+        toggleOnDocumentRef = useRef(workboxConfig.coverShow),
+        disabledDocumentRef = useRef(workboxConfig.coverDisabled),
+        toggleOnDataboxRef = useRef(workboxConfig.contentsShow),
+        disabledDataboxRef = useRef(workboxConfig.contentsDisabled),
         toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
         disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
         toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
         disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
 
         toggleHistoryRef = useRef({
-            coverShow:toggleOnCoverRef.current,
+            coverShow:toggleOnDocumentRef.current,
         })
-        // userData = useUserData(),
-        // { displayName, photoURL } = userData.authUser
 
     const 
-        currentIsCover = toggleOnCoverRef.current,
-        previousIsCover = toggleHistoryRef.current.coverShow,
-        currentIsContents = toggleOnContentsRef.current
+        currentIsDocument = toggleOnDocumentRef.current,
+        previousIsDocument = toggleHistoryRef.current.coverShow,
+        currentIsDatabox = toggleOnDataboxRef.current
 
-    if (!currentIsCover && !currentIsContents) {
-        if (previousIsCover) {
+    if (!currentIsDocument && !currentIsDatabox) {
+        if (previousIsDocument) {
 
-            toggleOnContentsRef.current = true
+            toggleOnDataboxRef.current = true
 
         } else {
 
-            toggleOnCoverRef.current = true
+            toggleOnDocumentRef.current = true
 
         }
     }
@@ -106,26 +109,26 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxConfig.coverShow = toggleOnCoverRef.current
-        workboxConfig.coverDisabled = disabledCoverRef.current
-        workboxConfig.contentsShow = toggleOnContentsRef.current
-        workboxConfig.contentsDisabled = disabledContentsRef.current
+        workboxConfig.coverShow = toggleOnDocumentRef.current
+        workboxConfig.coverDisabled = disabledDocumentRef.current
+        workboxConfig.contentsShow = toggleOnDataboxRef.current
+        workboxConfig.contentsDisabled = disabledDataboxRef.current
         workboxConfig.settingsShow = toggleOnSettingsRef.current
         workboxConfig.settingsDisabled = disabledSettingsRef.current
 
         setWorkboxConfig({...workboxConfig}) // trigger render
 
     },[
-        toggleOnCoverRef.current,
-        disabledCoverRef.current,
-        toggleOnContentsRef.current,
-        disabledContentsRef.current,
+        toggleOnDocumentRef.current,
+        disabledDocumentRef.current,
+        toggleOnDataboxRef.current,
+        disabledDataboxRef.current,
         toggleOnSettingsRef.current,
         disabledSettingsRef.current,
     ])
 
     toggleHistoryRef.current = {
-        coverShow:toggleOnCoverRef.current,
+        coverShow:toggleOnDocumentRef.current,
     }
 
     const
@@ -133,16 +136,16 @@ const WorkboxToolbar = (props) => {
             icon:profileIcon, 
             tooltip:'Toggle workbox document pane',
             caption:'document',
-            toggleOnRef:toggleOnCoverRef,
-            disabledRef:disabledCoverRef, 
+            toggleOnRef:toggleOnDocumentRef,
+            disabledRef:disabledDocumentRef, 
         }),
 
         contentsToggle = useToggleIcon({
             icon:packageIcon, 
             tooltip:'Toggle workbox databox pane',
             caption:'databox',
-            toggleOnRef:toggleOnContentsRef,
-            disabledRef:disabledContentsRef, 
+            toggleOnRef:toggleOnDataboxRef,
+            disabledRef:disabledDataboxRef, 
         }),
 
         settingsToggle = useToggleIcon({

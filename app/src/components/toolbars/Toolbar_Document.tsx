@@ -1,4 +1,4 @@
-// Toolbar_Cover.tsx
+// Toolbar_Document.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
@@ -46,7 +46,7 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-const CoverToolbar = (props) => {
+const DocumentToolbar = (props) => {
 
     const { mode } = props
 
@@ -77,4 +77,4 @@ const CoverToolbar = (props) => {
 
         // <StandardIcon icon = {formIcon} caption = 'forms' tooltip = 'data input'/>
 
-export default CoverToolbar
+export default DocumentToolbar

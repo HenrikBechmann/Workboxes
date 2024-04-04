@@ -44,7 +44,7 @@ const CentralPanel = (props) => {
             displayConfigCode, 
             coverFrameElementRef, 
             contentsFrameElementRef, 
-            userCoverWidthRef, // set by user through drag tag
+            userDocumentWidthRef, // set by user through drag tag
             viewSelector,
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
@@ -91,7 +91,7 @@ const CentralPanel = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'contents') { // cover was hidden
 
-                coverFrameElement.firstChild.style.width = userCoverWidthRef.current[viewSelectorRef.current] + 'px'
+                coverFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
                 coverFrameElement.firstChild.style.left = 0
                 coverFrameElement.firstChild.style.right = 'auto'
 
@@ -99,7 +99,7 @@ const CentralPanel = (props) => {
 
                 contentsFrameElement.firstChild.style.width = 
                     Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                        userCoverWidthRef.current[viewSelectorRef.current])) + 'px'
+                        userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
                 contentsFrameElement.firstChild.style.left = 'auto'
                 contentsFrameElement.firstChild.style.right = 0
 
@@ -119,10 +119,10 @@ const CentralPanel = (props) => {
             contentsFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            coverFrameElement.style.width = userCoverWidthRef.current[viewSelectorRef.current] + 'px'
+            coverFrameElement.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
             contentsFrameElement.style.width = 
                 Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                    userCoverWidthRef.current[viewSelectorRef.current])) + 'px'
+                    userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
@@ -276,7 +276,7 @@ const CentralPanel = (props) => {
 
     },[displayConfigCode])
 
-    // CentralWidthContext informs CoverPanel
+    // CentralWidthContext informs DocumentPanel
     return <Box 
         data-type = 'central-panel' 
         ref = {centralPanelElementRef} 

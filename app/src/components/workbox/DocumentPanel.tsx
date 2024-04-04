@@ -19,7 +19,7 @@ import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import CoverToolbar from '../toolbars/Toolbar_Cover'
+import DocumentToolbar from '../toolbars/Toolbar_Document'
 
 import handleIcon from '../../../assets/handle.png'
 
@@ -108,7 +108,7 @@ const coverBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const CoverHandle = (props) => {
+const DocumentHandle = (props) => {
 
     // handleAxis for handle selection - n/a here
     const { handleAxis, innerRef, ...rest } = props
@@ -128,12 +128,12 @@ const CoverHandle = (props) => {
     )
 }
 
-const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRef:any) {
+const DocumentPanel = forwardRef(function DocumentPanel(props:any, coverFrameElementRef:any) {
     const 
         {
             children, 
             displayConfigCode, 
-            userCoverWidthRef, // userCoverWidthRef informs "friends"
+            userDocumentWidthRef, // userDocumentWidthRef informs "friends"
             sessionWindowID, 
             viewSelector, 
             documentData, 
@@ -143,7 +143,7 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
         targetTimeoutRef = useRef(null),
-        [coverResizeWidth, setCoverResizeWidth] = useState(userCoverWidthRef.current[viewSelector]),
+        [coverResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
         observerTimeoutRef = useRef(null),
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
@@ -174,7 +174,7 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
     useEffect(()=>{
 
         const 
-            viewWidth = userCoverWidthRef.current[viewSelector],
+            viewWidth = userDocumentWidthRef.current[viewSelector],
             viewTrigger = viewSelector
 
         windowCallbackContextRef.current.changeView = ()=>{
@@ -193,11 +193,11 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
 
             coverFrameElementRef.current.style.transition = 'width 0.3s'
             coverFrameElementRef.current.style.width = appliedWidth + 'px'
-            userCoverWidthRef.current[viewTrigger] = appliedWidth
+            userDocumentWidthRef.current[viewTrigger] = appliedWidth
 
             setTimeout(()=>{
                 coverFrameElementRef.current.style.transition = 'none'
-                setCoverResizeWidth(appliedWidth)
+                setDocumentResizeWidth(appliedWidth)
             },300)
 
         }
@@ -212,23 +212,23 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
         const coverWidth = 
             displayCodeRef.current == 'out'
                 ? coverFrameElementRef.current.offsetWidth
-                : userCoverWidthRef.current[viewSelectorRef.current]
+                : userDocumentWidthRef.current[viewSelectorRef.current]
 
         clearTimeout(observerTimeoutRef.current)
 
-        const calculatedMaxCoverWidth = 
+        const calculatedMaxDocumentWidth = 
             Math.min(
                 workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
                 workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH)
 
-        if (calculatedMaxCoverWidth < coverWidth) {
+        if (calculatedMaxDocumentWidth < coverWidth) {
 
-            const newWidth = Math.max(MIN_COVER_FRAME_WIDTH, calculatedMaxCoverWidth)
+            const newWidth = Math.max(MIN_COVER_FRAME_WIDTH, calculatedMaxDocumentWidth)
 
             if (coverFrameElementRef.current.style.transition != 'none') coverFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (coverFrameElementRef.current.style.width = newWidth + 'px')
 
-            userCoverWidthRef.current[viewSelectorRef.current] = newWidth
+            userDocumentWidthRef.current[viewSelectorRef.current] = newWidth
 
             if (coverFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
@@ -236,14 +236,14 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
                 },1)
             }
 
-            setCoverResizeWidth(newWidth) // coerce render
+            setDocumentResizeWidth(newWidth) // coerce render
 
         }
 
         const constraints = {
             minX:MIN_COVER_FRAME_WIDTH,
             minY:coverFrameElementRef.current?.offsetHeight || 0,
-            maxX: calculatedMaxCoverWidth,
+            maxX: calculatedMaxDocumentWidth,
             maxY:coverFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
@@ -300,15 +300,15 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
     const onResize = (event, {size, handle}) => {
 
         coverFrameElementRef.current.style.width = size.width + 'px'
-        setCoverResizeWidth(size.width)
+        setDocumentResizeWidth(size.width)
 
     }
 
     const onResizeStop = (e,{size, handle}) => {
         coverFrameElementRef.current.style.transition = 'width 0.5s'
 
-        userCoverWidthRef.current[viewSelectorRef.current] = size.width
-        setCoverResizeWidth(size.width)
+        userDocumentWidthRef.current[viewSelectorRef.current] = size.width
+        setDocumentResizeWidth(size.width)
 
     }
 
@@ -318,7 +318,7 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
         handle = {
 
             (handleAxis, ref) => {
-                return <CoverHandle 
+                return <DocumentHandle 
                     innerRef = {ref} 
                     handleAxis = {handleAxis}
                 />}
@@ -345,7 +345,7 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
                 >
                     <GridItem data-type = 'cover-header' style = {coverHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
-                            <CoverToolbar />
+                            <DocumentToolbar />
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'cover-body' style = {coverBodyStyles}>
@@ -367,4 +367,4 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
                     // typeName = {typeName}
 
 
-export default CoverPanel
+export default DocumentPanel
