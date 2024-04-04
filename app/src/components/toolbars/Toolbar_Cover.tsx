@@ -48,6 +48,8 @@ const iconWrapperStyles = {
 
 const CoverToolbar = (props) => {
 
+    const { mode } = props
+
     const covermenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
         <MenuItem >Document settings</MenuItem>
@@ -57,10 +59,16 @@ const CoverToolbar = (props) => {
     return <Box data-type = 'cover-toolbar' style = {coverToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {covermenulist} />  
-        <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
-        <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
-        <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
-        <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
+        {(mode == 'edit') && <>
+                <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
+                <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
+                <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
+                <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
+            </>
+        }
+        {(mode != 'edit') && 
+            <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit this document'/>
+        }        
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
 

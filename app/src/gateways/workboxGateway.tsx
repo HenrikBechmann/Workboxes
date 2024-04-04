@@ -20,6 +20,7 @@ const profileTemplate = {
 
     workbox:null,
     owner:null,
+    administrator:null,
     domain:null,
     type:null,
     counts:null,
@@ -46,6 +47,7 @@ class workboxGateway {
         this.profile = {...profileTemplate,
             workbox:{ID:null, name:null, alias:null, icon:null},
             owner:{ID:null, name:null, alias:null, icon:null},
+            administrator:{ID:null, name:null, alias:null, icon:null},
             domain:{ID:null, name:null, alias:null, icon:null},
             type:{ID:null, name:null, alias:null, icon:null},
             defaultConfig:{...workboxDefaultConfig},
@@ -56,9 +58,9 @@ class workboxGateway {
             },
             commits: {
                 created_by:{ID:null, name:null, alias:null},
-                created_time:null,
+                created_timestamp:null,
                 updated_by:{ID:null, name:null, alias:null},
-                updated_time:null,
+                updated_timestamp:null,
             },
         }
         this.document = {...documentTemplate, 
