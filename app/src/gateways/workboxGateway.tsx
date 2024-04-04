@@ -72,12 +72,15 @@ class workboxGateway {
             accepts:[], 
             links:{preload:true, list:[], set:new Set()}
         }
+        // save defaults for new instances
+        this.defaults = defaults
 
     }
 
     profile
     document
     databox
+    defaults
 
 }
 

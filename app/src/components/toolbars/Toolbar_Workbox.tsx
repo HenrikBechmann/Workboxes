@@ -82,7 +82,9 @@ const WorkboxToolbar = (props) => {
 
         toggleHistoryRef = useRef({
             coverShow:toggleOnCoverRef.current,
-        })
+        }),
+        userData = useUserData(),
+        { displayName, photoURL } = userData.authUser
 
     const 
         currentIsCover = toggleOnCoverRef.current,
@@ -172,7 +174,7 @@ const WorkboxToolbar = (props) => {
         { coverToggle }
         { contentsToggle }
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {domainTitle} />
+        <DomainControl domainTitle = {domainTitle} domainIcon = {photoURL}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
         <ToolbarVerticalDivider />

@@ -55,7 +55,7 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultConfig:{...workboxDefaultConfig},
-                    itemTitle: "Domain base",
+                    itemTitle: "Domain base workbox",
                     itemIcon: homeIcon,
                     domainTitle: displayName,
                     domainIcon: photoURL,

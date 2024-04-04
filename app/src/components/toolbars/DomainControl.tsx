@@ -8,11 +8,11 @@ import {
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
-import domainIcon from '../../../assets/domain_light.png'
+import defaultDomainIcon from '../../../assets/domain_light.png'
 
 const DomainControl = (props) => {
 
-    const { domainTitle } = props
+    const { domainTitle, domainIcon } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -21,10 +21,12 @@ const DomainControl = (props) => {
         opacity:0.7,
     }
 
+    const appliedIcon = domainIcon || defaultDomainIcon
+
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
         <Box display = 'flex' flexWrap = 'nowrap'>
             <span>&nbsp;&nbsp;</span>
-            <img style = {workboxItemIconStyles} src = {domainIcon} />
+            <img style = {workboxItemIconStyles} src = {appliedIcon} />
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'sm'>{domainTitle}</Text>
         </Box>
