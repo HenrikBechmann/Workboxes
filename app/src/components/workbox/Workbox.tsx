@@ -66,7 +66,7 @@ const Workbox = (props) => {
         { profile } = data,
         { itemName, itemIcon, domainName, domainIcon, typeName } = profile
 
-    // console.log('gateway', '-'+sessionWindowID+'-',gateway)
+    console.log('defaultConfig', '-'+sessionWindowID+'-',defaultConfig)
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
