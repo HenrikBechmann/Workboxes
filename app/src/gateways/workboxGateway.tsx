@@ -95,7 +95,9 @@ class workboxGateway {
                 itemName:defaults.itemTitle,
                 itemIcon:defaults.itemIcon,
                 typeName:defaults.typeName,
-            }
+            },
+            document:{...this.document},
+            databox:{...this.databox},
         }
         return data
     }

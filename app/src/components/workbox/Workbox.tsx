@@ -53,20 +53,16 @@ const Workbox = (props) => {
             sessionWindowID,
             defaultConfig, 
             data,
-            // itemIcon, 
-            // itemTitle, 
-            // typeName, 
-            // domainTitle,
 
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
         [workboxConfig, setWorkboxConfig] = useState({...defaultConfig}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
-        { profile } = data,
-        { itemName, itemIcon, domainName, domainIcon, typeName } = profile
+        { profile:profileData, document:documentData, databox:databoxData } = data,
+        { itemName, itemIcon, domainName, domainIcon, typeName } = profileData
 
-    console.log('defaultConfig', '-'+sessionWindowID+'-',defaultConfig)
+    // console.log('data', '-'+sessionWindowID+'-',data)
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
@@ -110,7 +106,14 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                <WorkboxContent viewSelector = {viewSelectorContext} sessionWindowID = {sessionWindowID} workboxConfig = {workboxConfig} />
+                <WorkboxContent 
+                    viewSelector = {viewSelectorContext} 
+                    sessionWindowID = {sessionWindowID} 
+                    workboxConfig = {workboxConfig} 
+                    profileData = {profileData}
+                    documentData = {documentData}
+                    databoxData = {databoxData}
+                />
             </Box>
         </GridItem>
     </Grid>

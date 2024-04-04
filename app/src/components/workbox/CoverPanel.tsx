@@ -130,7 +130,15 @@ const CoverHandle = (props) => {
 
 const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRef:any) {
     const 
-        { children, displayConfigCode, userCoverWidthRef, sessionWindowID, viewSelector } = props, // userCoverWidthRef informs "friends"
+        {
+            children, 
+            displayConfigCode, 
+            userCoverWidthRef, // userCoverWidthRef informs "friends"
+            sessionWindowID, 
+            viewSelector, 
+            documentData, 
+            profileData 
+        } = props, 
         displayCodeRef = useRef(null),
         coverPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
@@ -153,6 +161,8 @@ const CoverPanel = forwardRef(function CoverPanel(props:any, coverFrameElementRe
     workboxInnerFrameWidthFromContextRef.current = workboxInnerFrameWidthFromContext
     displayCodeRef.current = displayConfigCode
     viewSelectorRef.current = viewSelector
+
+    // console.log('cover profileData, documentData',profileData, documentData)
 
     useEffect(()=>{
 

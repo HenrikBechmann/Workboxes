@@ -79,9 +79,11 @@ const contentsBodyStyles = {
 
 const ContentsPanel = forwardRef(function FoldersPanel(props:any, contentsFrameElementRef:any) {
     const 
-        { children, displayConfigCode } = props,
+        { children, displayConfigCode, databoxData } = props,
         contentsPanelElementRef = useRef(null),
         timeoutRef = useRef(null)
+
+    // console.log('databoxData',databoxData)
 
     useEffect(()=>{
 
