@@ -169,10 +169,12 @@ const Workpanel = (props:any) => {
             // required to position window
             element = panelElementRef.current,
             containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
-            gateway = new workboxGateway(specs.workbox)
+            gateway = new workboxGateway(specs.workbox),
+            data = gateway.getData(),
+            { profile } = data
         
-        specs.window.title = specs.workbox.itemTitle
-        specs.window.type = specs.workbox.typeName
+        specs.window.title = profile.itemName
+        specs.window.type = profile.typeName
 
         // required to configure window
         const
@@ -193,8 +195,9 @@ const Workpanel = (props:any) => {
         >
             <Workbox 
                 sessionWindowID = {sessionID} 
-                gateway = {gateway}
-                {...specs.workbox}
+                defaultConfig = { specs.defaultConfig }
+                data = { data }
+                // {...specs.workbox}
             />
         </Workwindow>
     }

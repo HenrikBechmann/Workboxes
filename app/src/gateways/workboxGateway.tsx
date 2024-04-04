@@ -49,7 +49,11 @@ class workboxGateway {
             domain:{ID:null, name:null, alias:null, icon:null},
             type:{ID:null, name:null, alias:null, icon:null},
             defaultConfig:{...workboxDefaultConfig},
-            counts:{generation:null, links:null},
+            counts:{
+                generation:null, 
+                links:null,
+                acl:null,
+            },
             commits: {
                 created_by:{ID:null, name:null, alias:null},
                 created_time:null,
@@ -60,8 +64,8 @@ class workboxGateway {
         this.document = {...documentTemplate, 
             sections:[
                 {
-                    id:'basic',
-                    name:null,
+                    name:'basic',
+                    alias:null,
                     description:null,
                     position:0,
                     icon:null,
@@ -81,6 +85,20 @@ class workboxGateway {
     document
     databox
     defaults
+
+    getData = () => {
+        const { defaults } = this
+        const data = {
+            profile:{
+                domainName:defaults.domainTitle,
+                domainIcon:defaults.domainIcon,
+                itemName:defaults.itemTitle,
+                itemIcon:defaults.itemIcon,
+                typeName:defaults.typeName,
+            }
+        }
+        return data
+    }
 
 }
 

@@ -52,16 +52,19 @@ const Workbox = (props) => {
         {
             sessionWindowID,
             defaultConfig, 
-            itemIcon, 
-            itemTitle, 
-            typeName, 
-            domainTitle,
-            gateway,
+            data,
+            // itemIcon, 
+            // itemTitle, 
+            // typeName, 
+            // domainTitle,
+
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
         [workboxConfig, setWorkboxConfig] = useState({...defaultConfig}),
         workboxFrameElementRef = useRef(null),
-        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
+        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
+        { profile } = data,
+        { itemName, itemIcon, domainName, domainIcon, typeName } = profile
 
     // console.log('gateway', '-'+sessionWindowID+'-',gateway)
 
@@ -97,9 +100,10 @@ const Workbox = (props) => {
                 <WorkboxToolbar 
                     workboxConfig = {workboxConfig} 
                     setWorkboxConfig = {setWorkboxConfig} 
+                    itemTitle = {itemName}
                     itemIcon = {itemIcon} 
-                    itemTitle = {itemTitle}
-                    domainTitle = {domainTitle}
+                    domainTitle = {domainName}
+                    domainIcon = {domainIcon}
                     typeName = {typeName}
                 />
             </ToolbarFrame>

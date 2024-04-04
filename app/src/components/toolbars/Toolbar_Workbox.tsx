@@ -3,13 +3,13 @@
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
 import { signOut } from "firebase/auth"
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
   Tooltip, Box, Text, VStack,
 } from '@chakra-ui/react'
 
-import { useUserData, useAuth } from '../../system/FirebaseProviders'
+// import { useUserData, useAuth } from '../../system/FirebaseProviders'
 
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
@@ -69,7 +69,7 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { workboxConfig, setWorkboxConfig, itemIcon, itemTitle, domainTitle, typeName } = props,
+        { workboxConfig, setWorkboxConfig, itemIcon, itemTitle, domainTitle, domainIcon, typeName } = props,
 
         toggleOnCoverRef = useRef(workboxConfig.coverShow),
         disabledCoverRef = useRef(workboxConfig.coverDisabled),
@@ -82,9 +82,9 @@ const WorkboxToolbar = (props) => {
 
         toggleHistoryRef = useRef({
             coverShow:toggleOnCoverRef.current,
-        }),
-        userData = useUserData(),
-        { displayName, photoURL } = userData.authUser
+        })
+        // userData = useUserData(),
+        // { displayName, photoURL } = userData.authUser
 
     const 
         currentIsCover = toggleOnCoverRef.current,
@@ -174,7 +174,7 @@ const WorkboxToolbar = (props) => {
         { coverToggle }
         { contentsToggle }
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {domainTitle} domainIcon = {photoURL}/>
+        <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
         <ToolbarVerticalDivider />
