@@ -48,7 +48,8 @@ const iconWrapperStyles = {
 
 const DocumentToolbar = (props) => {
 
-    const { mode } = props
+    const 
+        { documentState, setDocumentState } = props
 
     const documentmenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
@@ -59,14 +60,14 @@ const DocumentToolbar = (props) => {
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
-        {(mode == 'edit') && <>
+        {(documentState.mode == 'edit') && <>
                 <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
                 <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
                 <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
             </>
         }
-        {(mode != 'edit') && 
+        {(documentState.mode == 'view') && 
             <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit this document'/>
         }        
         <LearnIcon tooltip = 'Explain this toolbar'/>

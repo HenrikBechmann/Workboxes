@@ -35,7 +35,7 @@ const workboxDefaultState = {
 }
 
 const documentDefaultState = {
-
+    mode:'view',
 }
 
 const databoxDefaultState = {
@@ -63,8 +63,8 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultState:{...workboxDefaultState},
-                    documentDefaultState: {...documentDefaultState},
-                    databoxDefaultState: {...databoxDefaultState},
+                    defaultDocumentState: {...documentDefaultState},
+                    defaultDataboxState: {...databoxDefaultState},
                     itemTitle: "Domain base workbox",
                     itemIcon: homeIcon,
                     domainTitle: displayName,
@@ -80,8 +80,8 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultState:{...workboxDefaultState},
-                    documentDefaultState: {...documentDefaultState},
-                    databoxDefaultState: {...databoxDefaultState},
+                    defaultDocumentState: {...documentDefaultState},
+                    defaultDataboxState: {...databoxDefaultState},
                     itemTitle: 'Notebooks',
                     itemIcon: notebookIcon,
                     domainTitle: displayName,
@@ -97,8 +97,8 @@ const Workspace = (props) => {
                 },
                 workbox: {
                     defaultState:{...workboxDefaultState},
-                    documentDefaultState: {...documentDefaultState},
-                    databoxDefaultState: {...databoxDefaultState},
+                    defaultDocumentState: {...documentDefaultState},
+                    defaultDataboxState: {...databoxDefaultState},
                     itemTitle: 'Checklists',
                     itemIcon: checklistIcon,
                     domainTitle: displayName,
