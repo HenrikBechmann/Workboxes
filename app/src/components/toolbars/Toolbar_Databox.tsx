@@ -34,6 +34,7 @@ import directionIcon from '../../../assets/direction.png'
 import dragIcon from '../../../assets/drag.png'
 import moveIcon from '../../../assets/move.png'
 import hideIcon from '../../../assets/expand_less.png'
+import arrowbackIcon from '../../../assets/arrow_back.png'
 // import columnIcon from '../../../assets/columns.png'
 
 const smallerIconStyles = {
@@ -59,7 +60,7 @@ const DataboxToolbar = (props) => {
         dragToggle = useToggleIcon({
             icon:dragIcon, 
             tooltip:'Toggle drag and drop',
-            caption:'drag',
+            caption:'drag or drop',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
         }),
@@ -81,6 +82,7 @@ const DataboxToolbar = (props) => {
     return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
         <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
+        <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         <StandardIcon icon = {listIcon} caption = 'list' tooltip = 'switch formats'/>
         { dragToggle }
         { moveToggle }
