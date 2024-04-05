@@ -71,10 +71,10 @@ const DocumentToolbar = (props) => {
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         {(documentState.mode == 'edit') && <>
+                <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'switch to view mode'/>
                 <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
                 <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
-                <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'switch to view mode'/>
             </>
         }
         {(documentState.mode == 'view') && 
