@@ -81,7 +81,7 @@ const DocumentToolbar = (props) => {
         <MenuItem >Document settings</MenuItem>
     </MenuList>
 
-    const insertMenuList = <MenuList>
+    const insertMenuList = <MenuList lineHeight = 'normal'>
         <MenuItem icon = { <img src = {noteIcon} /> }>Note</MenuItem>
         <MenuItem icon = { <img src = {imageIcon} /> }>Databox Image<br/><span style={{fontSize:'x-small'}}><i>or drop from databox</i></span></MenuItem>
         <MenuItem icon = { <img src = {linkIcon} /> }>Databox Weblink<br/><span style={{fontSize:'x-small'}}><i>or drop from databox</i></span></MenuItem>
