@@ -49,12 +49,22 @@ const iconWrapperStyles = {
 const DocumentToolbar = (props) => {
 
     const 
-        { documentState, setDocumentState } = props
+        { documentState, setDocumentState } = props,
+        [toolbarState, setToolbarState] = useState('ready')
 
     const documentmenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
         <MenuItem >Document settings</MenuItem>
     </MenuList>
+
+    const toggleDocumentMode = () => {
+        if (documentState.mode == 'edit') {
+            documentState.mode = 'view'
+        } else {
+            documentState.mode = 'edit'
+        }
+        setDocumentState({...documentState})
+    }
 
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
@@ -64,11 +74,11 @@ const DocumentToolbar = (props) => {
                 <StandardIcon icon = {insertIcon} caption = 'add section' tooltip = 'insert a section'/>
                 <StandardIcon icon = {reorderIcon} caption = 'reorder' tooltip = 'reorder document sections'/>
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
-                <StandardIcon icon = {viewIcon} caption = 'view' tooltip = 'switch to view mode'/>
+                <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'switch to view mode'/>
             </>
         }
         {(documentState.mode == 'view') && 
-            <StandardIcon icon = {editIcon} caption = 'edit' tooltip = 'edit this document'/>
+            <StandardIcon icon = {editIcon} response = {toggleDocumentMode} caption = 'edit' tooltip = 'edit this document'/>
         }        
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
