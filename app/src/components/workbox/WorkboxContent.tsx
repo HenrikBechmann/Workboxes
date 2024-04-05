@@ -29,8 +29,17 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => {
 
     const 
-        { workboxConfig, sessionWindowID, viewSelector, documentData, databoxData, profileData } = props,
-        { databoxShow, documentShow } = workboxConfig, // boolean - show/ noshow
+        { 
+            workboxState, 
+            defaultDocumentState,
+            defaultDataboxState,
+            sessionWindowID, 
+            viewSelector, 
+            documentData, 
+            databoxData, 
+            profileData 
+        } = props,
+        { databoxShow, documentShow } = workboxState, // boolean - show/ noshow
         // share document and databox elements with children
         documentFrameElementRef = useRef( null ),
         databoxFrameElementRef = useRef( null ),
@@ -70,7 +79,7 @@ const WorkboxContent = (props) => {
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsPanel showPanel = {workboxConfig.settingsShow}>
+        <SettingsPanel showPanel = {workboxState.settingsShow}>
             Settings
         </SettingsPanel>
         <CentralPanel 
@@ -84,6 +93,7 @@ const WorkboxContent = (props) => {
             <DocumentPanel 
                 ref = {documentFrameElementRef} 
                 displayConfigCode = {documentDisplayCode} 
+                defaultDocumentState = {defaultDocumentState}
                 userDocumentWidthRef = {userDocumentWidthRef}
                 sessionWindowID =  {sessionWindowID}
                 viewSelector = {viewSelector}
@@ -95,6 +105,7 @@ const WorkboxContent = (props) => {
             <DataboxPanel 
                 ref = {databoxFrameElementRef} 
                 displayConfigCode = {databoxDisplayCode} 
+                defaultDataboxState = {defaultDataboxState}
                 databoxData = { databoxData }
             >
             The workbox databox - contains workboxes

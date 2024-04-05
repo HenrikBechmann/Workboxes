@@ -51,12 +51,14 @@ const Workbox = (props) => {
     const 
         {
             sessionWindowID,
-            defaultConfig, 
+            defaultState,
+            defaultDocumentState,
+            defaultDataboxState,
             data,
 
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
-        [workboxConfig, setWorkboxConfig] = useState({...defaultConfig}),
+        [workboxState, setWorkboxState] = useState({...defaultState}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
         { profile:profileData, document:documentData, databox:databoxData } = data,
@@ -94,8 +96,8 @@ const Workbox = (props) => {
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
                 <WorkboxToolbar 
-                    workboxConfig = {workboxConfig} 
-                    setWorkboxConfig = {setWorkboxConfig} 
+                    workboxState = {workboxState} 
+                    setWorkboxState = {setWorkboxState} 
                     itemTitle = {itemName}
                     itemIcon = {itemIcon} 
                     domainTitle = {domainName}
@@ -109,10 +111,12 @@ const Workbox = (props) => {
                 <WorkboxContent 
                     viewSelector = {viewSelectorContext} 
                     sessionWindowID = {sessionWindowID} 
-                    workboxConfig = {workboxConfig} 
+                    workboxState = {workboxState} 
                     profileData = {profileData}
                     documentData = {documentData}
                     databoxData = {databoxData}
+                    defaultDocumentState = {defaultDocumentState}
+                    defaultDataboxState = {defaultDataboxState}
                 />
             </Box>
         </GridItem>

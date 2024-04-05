@@ -67,8 +67,8 @@ const WorkboxToolbar = (props) => {
 
     const 
         { 
-            workboxConfig, 
-            setWorkboxConfig, 
+            workboxState, 
+            setWorkboxState, 
             itemTitle, 
             itemIcon, 
             domainTitle, 
@@ -76,14 +76,14 @@ const WorkboxToolbar = (props) => {
             typeName 
         } = props,
 
-        toggleOnDocumentRef = useRef(workboxConfig.documentShow),
-        disabledDocumentRef = useRef(workboxConfig.documentDisabled),
-        toggleOnDataboxRef = useRef(workboxConfig.databoxShow),
-        disabledDataboxRef = useRef(workboxConfig.databoxDisabled),
-        toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
-        disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
-        toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
-        disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
+        toggleOnDocumentRef = useRef(workboxState.documentShow),
+        disabledDocumentRef = useRef(workboxState.documentDisabled),
+        toggleOnDataboxRef = useRef(workboxState.databoxShow),
+        disabledDataboxRef = useRef(workboxState.databoxDisabled),
+        toggleOnSettingsRef = useRef(workboxState.settingsShow),
+        disabledSettingsRef = useRef(workboxState.settingsDisabled),
+        toggleOnCommentsRef = useRef(workboxState.settingsShow),
+        disabledCommentsRef = useRef(workboxState.settingsDisabled),
 
         toggleHistoryRef = useRef({
             documentShow:toggleOnDocumentRef.current,
@@ -109,14 +109,14 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxConfig.documentShow = toggleOnDocumentRef.current
-        workboxConfig.documentDisabled = disabledDocumentRef.current
-        workboxConfig.databoxShow = toggleOnDataboxRef.current
-        workboxConfig.databoxDisabled = disabledDataboxRef.current
-        workboxConfig.settingsShow = toggleOnSettingsRef.current
-        workboxConfig.settingsDisabled = disabledSettingsRef.current
+        workboxState.documentShow = toggleOnDocumentRef.current
+        workboxState.documentDisabled = disabledDocumentRef.current
+        workboxState.databoxShow = toggleOnDataboxRef.current
+        workboxState.databoxDisabled = disabledDataboxRef.current
+        workboxState.settingsShow = toggleOnSettingsRef.current
+        workboxState.settingsDisabled = disabledSettingsRef.current
 
-        setWorkboxConfig({...workboxConfig}) // trigger render
+        setWorkboxState({...workboxState}) // trigger render
 
     },[
         toggleOnDocumentRef.current,

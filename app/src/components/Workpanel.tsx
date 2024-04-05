@@ -170,8 +170,8 @@ const Workpanel = (props:any) => {
             element = panelElementRef.current,
             containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
             gateway = new workboxGateway(specs.workbox),
-            data = gateway.getData(),
-            { profile } = data
+            workdata = gateway.getData(),
+            { profile } = workdata
         
         specs.window.title = profile.itemName
         specs.window.type = profile.typeName
@@ -195,9 +195,10 @@ const Workpanel = (props:any) => {
         >
             <Workbox 
                 sessionWindowID = {sessionID} 
-                defaultConfig = { specs.workbox.defaultConfig }
-                data = { data }
-                // {...specs.workbox}
+                defaultState = { specs.workbox.defaultState }
+                defaultDocumentState = { specs.workbox.defaultDocumentState }
+                defaultDataboxState = { specs.workbox.defaultDataboxState }
+                data = { workdata }
             />
         </Workwindow>
     }

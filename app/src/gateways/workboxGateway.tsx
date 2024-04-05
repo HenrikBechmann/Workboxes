@@ -1,7 +1,7 @@
 // workboxGateway.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-const workboxDefaultConfig = {
+const workboxDefaultState = {
     settingsShow:false,
     settingsDisabled:false,
     documentShow:true,
@@ -24,7 +24,7 @@ const profileTemplate = {
     domain:null,
     type:null,
     counts:null,
-    defaultConfig:null,
+    defaultState:null,
     commits:null,
 
 }
@@ -50,7 +50,7 @@ class workboxGateway {
             administrator:{ID:null, name:null, alias:null, icon:null},
             domain:{ID:null, name:null, alias:null, icon:null},
             type:{ID:null, name:null, alias:null, icon:null},
-            defaultConfig:{...workboxDefaultConfig},
+            defaultState:{...workboxDefaultState},
             counts:{
                 generation:null, 
                 links:null,

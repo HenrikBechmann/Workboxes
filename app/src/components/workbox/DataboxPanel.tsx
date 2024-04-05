@@ -4,7 +4,7 @@
 import React, { 
     useRef, 
     useEffect, 
-    // useState, 
+    useState, 
     // useCallback, 
     // useContext, 
     CSSProperties, 
@@ -79,9 +79,10 @@ const databoxBodyStyles = {
 
 const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
     const 
-        { children, displayConfigCode, databoxData } = props,
+        { children, displayConfigCode, databoxData, defaultDataboxState } = props,
         databoxPanelElementRef = useRef(null),
-        timeoutRef = useRef(null)
+        timeoutRef = useRef(null),
+        [databoxState, setDataboxState] = useState(defaultDataboxState)
 
     // console.log('databoxData',databoxData)
 
@@ -119,7 +120,7 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEle
                 >
                     <GridItem data-type = 'document-header' style = {databoxHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
-                            <DataboxToolbar />
+                            <DataboxToolbar databoxState = {databoxState} setDataboxState = {setDataboxState} />
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {databoxBodyStyles}>

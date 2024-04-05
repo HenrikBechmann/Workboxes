@@ -25,13 +25,21 @@ import notebookIcon from '../../assets/notebook.png'
 import checklistIcon from '../../assets/checklist.png'
 import homeIcon from '../../assets/home.png'
 
-const workboxDefaultConfig = {
+const workboxDefaultState = {
     settingsShow:false,
     settingsDisabled:false,
     documentShow:true,
     documentDisabled:false,
     databoxShow:true,
     databoxDisabled:false,
+}
+
+const documentDefaultState = {
+
+}
+
+const databoxDefaultState = {
+
 }
 
 const Workspace = (props) => {
@@ -54,7 +62,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultConfig:{...workboxDefaultConfig},
+                    defaultState:{...workboxDefaultState},
+                    documentDefaultState: {...documentDefaultState},
+                    databoxDefaultState: {...databoxDefaultState},
                     itemTitle: "Domain base workbox",
                     itemIcon: homeIcon,
                     domainTitle: displayName,
@@ -69,7 +79,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultConfig:{...workboxDefaultConfig},
+                    defaultState:{...workboxDefaultState},
+                    documentDefaultState: {...documentDefaultState},
+                    databoxDefaultState: {...databoxDefaultState},
                     itemTitle: 'Notebooks',
                     itemIcon: notebookIcon,
                     domainTitle: displayName,
@@ -84,7 +96,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultConfig:{...workboxDefaultConfig},
+                    defaultState:{...workboxDefaultState},
+                    documentDefaultState: {...documentDefaultState},
+                    databoxDefaultState: {...databoxDefaultState},
                     itemTitle: 'Checklists',
                     itemIcon: checklistIcon,
                     domainTitle: displayName,

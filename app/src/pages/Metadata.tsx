@@ -47,7 +47,7 @@ const ContentBox = (props) => {
         </Box>
 }
 
-const workboxDefaultConfig = {
+const workboxDefaultState = {
     settingsShow:false,
     settingsDisabled:false,
     documentShow:true,
@@ -71,7 +71,7 @@ const Metadata = (props) => {
                     title:'Workbox types',
                 },
                 workbox: {
-                    defaultConfig:{...workboxDefaultConfig},
+                    defaultState:{...workboxDefaultState},
                     itemIcon: appIcon,
                     itemTitle: 'Workbox types',
                     domainTitle: 'WorkboxesApp',

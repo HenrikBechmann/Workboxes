@@ -130,6 +130,7 @@ const DocumentHandle = (props) => {
 
 const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrameElementRef:any) {
     const 
+        // props
         {
             children, 
             displayConfigCode, 
@@ -137,26 +138,34 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             sessionWindowID, 
             viewSelector, 
             documentData, 
+            defaultDocumentState,
             profileData 
         } = props, 
-        displayCodeRef = useRef(null),
+        // context
+        workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
+        windowCallbackContext = useContext(WindowCallbackContext),
+        // persistence
         documentPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
         targetTimeoutRef = useRef(null),
-        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
         observerTimeoutRef = useRef(null),
-        workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
         handleRef = useRef(null),
-        viewSelectorRef = useRef(null),
-        windowCallbackContext = useContext(WindowCallbackContext),
-        windowCallbackContextRef = useRef(windowCallbackContext),
         constraintsRef = useRef({
             minX:MIN_COVER_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
-        workboxInnerFrameWidthFromContextRef = useRef(null)
+        windowCallbackContextRef = useRef(windowCallbackContext),
+        // state
+        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
+        [documentState, setDocumentState] = useState(defaultDocumentState)
+
+    // scope
+    const
+        workboxInnerFrameWidthFromContextRef = useRef(null),
+        displayCodeRef = useRef(null),
+        viewSelectorRef = useRef(null)
 
     workboxInnerFrameWidthFromContextRef.current = workboxInnerFrameWidthFromContext
     displayCodeRef.current = displayConfigCode
@@ -345,7 +354,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                 >
                     <GridItem data-type = 'document-header' style = {documentHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
-                            <DocumentToolbar />
+                            <DocumentToolbar documentState = {documentState} setDocumentState = {setDocumentState}/>
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
@@ -358,13 +367,5 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         </Box>
     </Resizable>)
 })
-
-                    // workboxConfig = {workboxConfig} 
-                    // setWorkboxConfig = {setWorkboxConfig} 
-                    // itemIcon = {itemIcon} 
-                    // itemTitle = {itemTitle}
-                    // domainTitle = {domainTitle}
-                    // typeName = {typeName}
-
 
 export default DocumentPanel
