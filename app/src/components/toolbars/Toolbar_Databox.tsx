@@ -38,6 +38,9 @@ import arrowbackIcon from '../../../assets/arrow_back.png'
 import resetIcon from '../../../assets/restart.png'
 import tilesIcon from '../../../assets/grid_view.png'
 import cardsIcon from '../../../assets/splitscreen.png'
+import settingsIcon from '../../../assets/settings.png'
+import lockIcon from '../../../assets/lock.png'
+import lockOpenIcon from '../../../assets/lock_open.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -76,8 +79,8 @@ const DataboxToolbar = (props) => {
         })
 
     const databoxmenulist = <MenuList >
-        <MenuItem>Lock this databox</MenuItem>
-        <MenuItem>Databox settings</MenuItem>
+        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this databox</MenuItem>
+        <MenuItem icon = {<img src = {settingsIcon} />}>Databox settings</MenuItem>
     </MenuList>
 
     const layoutmenulist = <MenuList >

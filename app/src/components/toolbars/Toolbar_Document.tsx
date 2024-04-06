@@ -40,6 +40,10 @@ import noteIcon from '../../../assets/note.png'
 import manifestIcon from '../../../assets/clipboard.png'
 import linkIcon from '../../../assets/link.png'
 import dragIcon from '../../../assets/drag.png'
+import settingsIcon from '../../../assets/settings.png'
+import lockIcon from '../../../assets/lock.png'
+import lockOpenIcon from '../../../assets/lock_open.png'
+import downloadIcon from '../../../assets/download.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -68,17 +72,10 @@ const DocumentToolbar = (props) => {
         })
 
     const documentmenulist = <MenuList >
-        <MenuItem >Download document as pdf</MenuItem>
-        <MenuItem >Document settings</MenuItem>
+        <MenuItem icon = {<img src = {downloadIcon} />}>Download document as pdf</MenuItem>
+        <MenuItem icon = {<img src = {lockOpenIcon} />}>Lock this document</MenuItem>
+        <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
     </MenuList>
-
-        // <MenuItem icon = { <img src = {imageIcon} /> }>Image<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
-        // <MenuItem icon = { <img src = {linkIcon} /> }>Weblink<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
-        // <MenuItem icon = { <img src = {profileIcon} /> } >Document<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
-        // <MenuItem icon = { <img src = {manifestIcon} /> }>Collection<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
-    // const insertMenuList = <MenuList lineHeight = 'normal'>
-    //     <MenuItem icon = { <img src = {noteIcon} /> }>New BlockNote</MenuItem>
-    // </MenuList>
 
     const toggleDocumentMode = () => {
         if (documentState.mode == 'edit') {

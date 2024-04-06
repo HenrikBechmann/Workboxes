@@ -15,6 +15,8 @@ import {
     Grid, GridItem 
 } from '@chakra-ui/react'
 
+import Scroller from 'react-infinite-grid-scroller'
+
 import { useUserData } from '../system/FirebaseProviders'
 import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
@@ -118,7 +120,7 @@ const Workspace = (props) => {
 
     },[workspaceState])
 
-    return <Grid 
+    const workspaceComponent = <Grid 
           date-type = 'workspace'
           height = '100%'
           gridTemplateAreas={`"body"
@@ -139,6 +141,8 @@ const Workspace = (props) => {
             </Box>
         </GridItem>
     </Grid>
+
+    return <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
 } 
 
 export default Workspace
