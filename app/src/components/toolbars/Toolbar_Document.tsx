@@ -61,20 +61,11 @@ const DocumentToolbar = (props) => {
         disabledDropRef = useRef(null),
         dropToggle = useToggleIcon({
             icon:dragIcon, 
-            tooltip:'Re-sort, and drop items from databox',
-            caption:'organize',
+            tooltip:'Re-sort, and import items from databox',
+            caption:'import',
             toggleOnRef:toggleOnDropRef,
             disabledRef:disabledDropRef, 
         })
-        // toggleOnReorderRef = useRef(null),
-        // disabledReorderRef = useRef(null),
-        // reorderToggle = useToggleIcon({
-        //     icon:reorderIcon, 
-        //     tooltip:'Reorder document sections',
-        //     caption:'reorder mode',
-        //     toggleOnRef:toggleOnReorderRef,
-        //     disabledRef:disabledReorderRef, 
-        // })
 
     const documentmenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
@@ -105,7 +96,7 @@ const DocumentToolbar = (props) => {
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         {(documentState.mode == 'edit') && <>
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'switch to view mode'/>
-                <StandardIcon icon = {insertIcon} caption = 'insert note' tooltip = 'insert a note'/>
+                <StandardIcon icon = {insertIcon} caption = 'add note' tooltip = 'insert a note'/>
                 {dropToggle}
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
             </>
