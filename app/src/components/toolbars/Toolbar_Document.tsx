@@ -61,33 +61,33 @@ const DocumentToolbar = (props) => {
         disabledDropRef = useRef(null),
         dropToggle = useToggleIcon({
             icon:dragIcon, 
-            tooltip:'Toggle drop',
-            caption:'drop',
+            tooltip:'Re-sort, and drop items from databox',
+            caption:'organize',
             toggleOnRef:toggleOnDropRef,
             disabledRef:disabledDropRef, 
-        }),
-        toggleOnReorderRef = useRef(null),
-        disabledReorderRef = useRef(null),
-        reorderToggle = useToggleIcon({
-            icon:reorderIcon, 
-            tooltip:'Reorder document sections',
-            caption:'reorder',
-            toggleOnRef:toggleOnReorderRef,
-            disabledRef:disabledReorderRef, 
         })
+        // toggleOnReorderRef = useRef(null),
+        // disabledReorderRef = useRef(null),
+        // reorderToggle = useToggleIcon({
+        //     icon:reorderIcon, 
+        //     tooltip:'Reorder document sections',
+        //     caption:'reorder mode',
+        //     toggleOnRef:toggleOnReorderRef,
+        //     disabledRef:disabledReorderRef, 
+        // })
 
     const documentmenulist = <MenuList >
         <MenuItem >Download document as pdf</MenuItem>
         <MenuItem >Document settings</MenuItem>
     </MenuList>
 
-    const insertMenuList = <MenuList lineHeight = 'normal'>
-        <MenuItem icon = { <img src = {noteIcon} /> }>New BlockNote</MenuItem>
-        <MenuItem icon = { <img src = {imageIcon} /> }>Databox Image<br/><span style={{fontSize:'x-small'}}><i>select, or drop from databox</i></span></MenuItem>
-        <MenuItem icon = { <img src = {linkIcon} /> }>Databox Weblink<br/><span style={{fontSize:'x-small'}}><i>select, or drop from databox</i></span></MenuItem>
-        <MenuItem icon = { <img src = {profileIcon} /> } >Databox Document<br/><span style={{fontSize:'x-small'}}><i>select, or drop from databox</i></span></MenuItem>
-        <MenuItem icon = { <img src = {manifestIcon} /> }>Databox Collection<br/><span style={{fontSize:'x-small'}}><i>select, or drop from databox</i></span></MenuItem>
-    </MenuList>
+        // <MenuItem icon = { <img src = {imageIcon} /> }>Image<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
+        // <MenuItem icon = { <img src = {linkIcon} /> }>Weblink<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
+        // <MenuItem icon = { <img src = {profileIcon} /> } >Document<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
+        // <MenuItem icon = { <img src = {manifestIcon} /> }>Collection<br/><span style={{fontSize:'x-small'}}><i>select, or drop here from databox</i></span></MenuItem>
+    // const insertMenuList = <MenuList lineHeight = 'normal'>
+    //     <MenuItem icon = { <img src = {noteIcon} /> }>New BlockNote</MenuItem>
+    // </MenuList>
 
     const toggleDocumentMode = () => {
         if (documentState.mode == 'edit') {
@@ -98,15 +98,15 @@ const DocumentToolbar = (props) => {
         setDocumentState({...documentState})
     }
 
+                // <MenuIcon icon = {insertIcon} caption = 'insert note' tooltip = 'insert a note' menulist = {insertMenuList}/>
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         {(documentState.mode == 'edit') && <>
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'switch to view mode'/>
-                <MenuIcon icon = {insertIcon} caption = 'insert section' tooltip = 'insert a section' menulist = {insertMenuList}/>
+                <StandardIcon icon = {insertIcon} caption = 'insert note' tooltip = 'insert a note'/>
                 {dropToggle}
-                {reorderToggle}
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
             </>
         }

@@ -60,7 +60,7 @@ const DataboxToolbar = (props) => {
         dragToggle = useToggleIcon({
             icon:dragIcon, 
             tooltip:'Toggle drag and drop',
-            caption:'drag or drop',
+            caption:'drag & drop',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
         }),
