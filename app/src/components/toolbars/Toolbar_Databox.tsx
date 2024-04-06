@@ -35,7 +35,9 @@ import dragIcon from '../../../assets/drag.png'
 import moveIcon from '../../../assets/move.png'
 import hideIcon from '../../../assets/expand_less.png'
 import arrowbackIcon from '../../../assets/arrow_back.png'
-// import columnIcon from '../../../assets/columns.png'
+import resetIcon from '../../../assets/restart.png'
+import tilesIcon from '../../../assets/grid_view.png'
+import cardsIcon from '../../../assets/splitscreen.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -78,16 +80,25 @@ const DataboxToolbar = (props) => {
         <MenuItem>Databox settings</MenuItem>
     </MenuList>
 
+    const layoutmenulist = <MenuList >
+        <MenuItem icon = {<img src = {listIcon}/>}>List</MenuItem>
+        <MenuItem icon = {<img src = {cardsIcon}/>}>Cards</MenuItem>
+        <MenuItem icon = {<img src = {tilesIcon}/>}>Tiles</MenuItem>
+    </MenuList>
+
+    const layoutIcon = listIcon
+
     // render
     return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
         <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
-        <StandardIcon icon = {listIcon} caption = 'list' tooltip = 'switch formats'/>
+        <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         { dragToggle }
         { moveToggle }
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
+        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
 
