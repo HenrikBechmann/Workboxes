@@ -29,9 +29,20 @@ const DocumentContent = (props) => {
 
     useEffect(()=>{
 
+        let standardSection
+        const {sections} = documentData
+        const sectionCount = sections.length
+        for (let index = 0; index < sectionCount; index++) {
+            const section = sections[index]
+            if (section.name = 'standard') {
+                standardSection = section
+                break
+            }
+        }
+
         standardComponentRef.current =
             React.createElement(documentTypeBundles[profileData.typeName].StandardDocumentSection,{
-                profileData, documentData, documentState
+                profileData, documentData:standardSection, documentState
             })
 
     },[])

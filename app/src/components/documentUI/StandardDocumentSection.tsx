@@ -7,17 +7,37 @@ import {
     Box,
 } from '@chakra-ui/react'
 
+const StandardDisplay = (props) => {
+    const {documentData} = props
+    const { data } = documentData
+
+    const name = data.alias || data.name
+    const { description, image, summary } = data
+
+    return <Box>
+        <Box>
+            {name}
+        </Box>
+        <Box>
+            {description}
+        </Box>
+        <Box>
+            {image}
+        </Box>
+        <Box>
+            {summary}
+        </Box>
+    </Box>
+}
+
 const StandardDocumentSection = (props) => {
 
     const {profileData, documentData, documentState} = props
 
-    const content = 
-        documentState.mode == 'view'
-        ? 'Standard Section'
-        : 'Standard Section (editing)'
+    console.log('documentData',documentData)
 
     return <Box>
-        {content}
+        {documentState.mode == 'view'? <StandardDisplay documentData = {documentData} />: null}
     </Box>
 }
 
