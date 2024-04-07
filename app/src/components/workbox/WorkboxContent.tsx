@@ -99,17 +99,13 @@ const WorkboxContent = (props) => {
                 viewSelector = {viewSelector}
                 documentData = {documentData}
                 profileData = {profileData}
-            >
-            The workbox document ({sessionWindowID})
-            </DocumentPanel>
+            />
             <DataboxPanel 
                 ref = {databoxFrameElementRef} 
                 displayConfigCode = {databoxDisplayCode} 
                 defaultDataboxState = {defaultDataboxState}
                 databoxData = { databoxData }
-            >
-            The workbox databox - contains workboxes
-            </DataboxPanel>
+            />
         </CentralPanel>
     </Box>
     

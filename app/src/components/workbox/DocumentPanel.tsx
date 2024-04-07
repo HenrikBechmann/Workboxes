@@ -132,7 +132,6 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     const 
         // props
         {
-            children, 
             displayConfigCode, 
             userDocumentWidthRef, // userDocumentWidthRef informs "friends"
             sessionWindowID, 
@@ -358,7 +357,6 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
-                        {children}
                     </GridItem>
                 </Grid>
 

@@ -72,8 +72,8 @@ const DataboxToolbar = (props) => {
 
         moveToggle = useToggleIcon({
             icon:moveIcon, 
-            tooltip:'Toggle move (vs copy)',
-            caption:'move',
+            tooltip:'Toggle drag & drop move (vs copy)',
+            caption:'d&d move',
             toggleOnRef:toggleOnMoveRef,
             disabledRef:disabledMoveRef, 
         })

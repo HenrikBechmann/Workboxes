@@ -104,6 +104,10 @@ class workboxGateway {
         return data
     }
 
+    setData = (data) => {
+        
+    }
+
 }
 
 export default workboxGateway

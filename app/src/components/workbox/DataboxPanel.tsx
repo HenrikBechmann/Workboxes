@@ -79,7 +79,7 @@ const databoxBodyStyles = {
 
 const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
     const 
-        { children, displayConfigCode, databoxData, defaultDataboxState } = props,
+        { displayConfigCode, databoxData, defaultDataboxState } = props,
         databoxPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
         [databoxState, setDataboxState] = useState(defaultDataboxState)
@@ -124,7 +124,7 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEle
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {databoxBodyStyles}>
-                        {children}
+                        Databox
                     </GridItem>
                 </Grid>
         </Box>
