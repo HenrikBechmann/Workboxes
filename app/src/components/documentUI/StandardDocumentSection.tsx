@@ -17,6 +17,7 @@ const helperText = {
     name:'This name will appear to app users. Can be changed. Up to 50 characters.'
 }
 
+// TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const StandardEdit = (props) => {
     
     const 
