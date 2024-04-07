@@ -1,5 +1,5 @@
 // DocumentPanels.tsx
-// copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
+// copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
     useRef, 
@@ -358,7 +358,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
-                        <DocumentContent documentData = {documentData} documentState = {documentState}/>
+                        <DocumentContent profileData = {profileData} documentData = {documentData} documentState = {documentState}/>
                     </GridItem>
                 </Grid>
 
