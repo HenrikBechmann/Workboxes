@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react'
 
 const errorMessages = {
-    name:'the Name can only be up to 50 characters, and cannot be blank.'
+    name:'The name can only be up to 50 characters, and cannot be blank.'
 }
 
 const helperText = {
-    name:'This name will appear to other app users. Can be changed. Up to 50 characters.'
+    name:'This name will appear to app users. Can be changed. Up to 50 characters.'
 }
 
 const StandardEdit = (props) => {
@@ -93,7 +93,7 @@ const StandardEdit = (props) => {
     return <Box padding = '3px'>
         <Box>
             <FormControl isInvalid = {invalidFieldFlags.name}>
-                <FormLabel fontSize = 'sm'>Name:</FormLabel>
+                <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                 <Input 
                     value = {editValues.name || ''} 
                     size = 'sm'
@@ -124,8 +124,7 @@ const StandardDisplay = (props) => {
     const {documentData} = props
     const { data } = documentData
 
-    const name = data.alias || data.name
-    const { description, image, summary } = data
+    const { name, description, image, summary } = data
 
     return <Box>
         <Box>

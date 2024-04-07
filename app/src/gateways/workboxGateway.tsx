@@ -45,10 +45,10 @@ class workboxGateway {
 
         // create skeleton
         this.profile = {...profileTemplate,
-            workbox:{ID:null, name:null, alias:null, icon:null},
-            owner:{ID:null, name:null, alias:null, icon:null},
-            administrator:{ID:null, name:null, alias:null, icon:null},
-            domain:{ID:null, name:null, alias:null, icon:null},
+            workbox:{ID:null, name:null, icon:null},
+            owner:{ID:null, handle:null, name:null, icon:null},
+            administrator:{ID:null, handle:null, name:null, icon:null},
+            domain:{ID:null, name:null, icon:null},
             type:{ID:null, name:null, alias:null, icon:null},
             defaultState:{...workboxDefaultState},
             counts:{
@@ -57,9 +57,9 @@ class workboxGateway {
                 acl:null,
             },
             commits: {
-                created_by:{ID:null, name:null, alias:null},
+                created_by:{ID:null, handle:null, name:null},
                 created_timestamp:null,
-                updated_by:{ID:null, name:null, alias:null},
+                updated_by:{ID:null, handle:null, name:null},
                 updated_timestamp:null,
             },
         }
@@ -72,7 +72,6 @@ class workboxGateway {
                     changed:false,
                     data:{
                         name:null,
-                        alias:null,
                         image:null,
                         description:null,
                         summary:null,                        
