@@ -357,6 +357,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
+                        Document
                     </GridItem>
                 </Grid>
 

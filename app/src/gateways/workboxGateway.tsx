@@ -66,12 +66,16 @@ class workboxGateway {
         this.document = {...documentTemplate, 
             sections:[
                 {
-                    name:'basic',
+                    name:'standard',
                     alias:null,
-                    description:null,
                     position:0,
-                    icon:null,
                     changed:false,
+                    data:{
+                        name:null,
+                        image:null,
+                        description:null,
+                        summary:null,                        
+                    },
                 },
             ]}
         this.databox = {...databoxTemplate, 
@@ -105,7 +109,7 @@ class workboxGateway {
     }
 
     setData = (data) => {
-        
+
     }
 
 }
