@@ -1,4 +1,4 @@
-// WorkboxPanels.tsx
+// DocumentPanels.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -25,6 +25,7 @@ import handleIcon from '../../../assets/handle.png'
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
 import { WindowCallbackContext } from '../Workwindow'
+import DocumentContent from '../documentUI/DocumentContent'
 
 const 
     MIN_COVER_FRAME_WIDTH = 250,
@@ -357,7 +358,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
-                        Document
+                        <DocumentContent documentData = {documentData} documentState = {documentState}/>
                     </GridItem>
                 </Grid>
 
