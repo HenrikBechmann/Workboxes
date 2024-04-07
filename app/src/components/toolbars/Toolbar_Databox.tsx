@@ -97,9 +97,9 @@ const DataboxToolbar = (props) => {
         <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
+        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         { dragToggle }
         { moveToggle }
-        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
         <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>

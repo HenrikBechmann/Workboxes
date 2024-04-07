@@ -44,6 +44,7 @@ import settingsIcon from '../../../assets/settings.png'
 import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
+import cancelEditIcon from '../../../assets/edit_off.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -96,6 +97,7 @@ const DocumentToolbar = (props) => {
                 <StandardIcon icon = {insertIcon} caption = 'add note' tooltip = 'insert a note'/>
                 {dropToggle}
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
+                <StandardIcon icon = {cancelEditIcon} caption = 'cancel' tooltip = 'cancel edit'/>
             </>
         }
         {(documentState.mode == 'view') && 

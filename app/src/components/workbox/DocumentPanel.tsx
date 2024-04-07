@@ -136,9 +136,9 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             userDocumentWidthRef, // userDocumentWidthRef informs "friends"
             sessionWindowID, 
             viewSelector, 
+            profileData,
             documentData, 
             defaultDocumentState,
-            profileData 
         } = props, 
         // context
         workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
