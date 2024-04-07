@@ -21,7 +21,11 @@ const DocumentContent = (props) => {
 
     const 
         {profileData, documentData, documentState} = props,
-        standardComponentRef = useRef(null)
+        standardComponentRef = useRef(null),
+        [contentState,setContentState] = useState('setup'),
+        contentStateRef = useRef(null)
+
+    contentStateRef.current = contentState
 
     useEffect(()=>{
 
@@ -31,6 +35,20 @@ const DocumentContent = (props) => {
             })
 
     },[])
+
+    useEffect(()=>{
+
+        if (contentState !== 'ready') setContentState('ready')
+
+    },[contentState])
+
+    useEffect(()=>{
+
+        if (contentStateRef.current != 'ready') return
+        standardComponentRef.current = React.cloneElement(standardComponentRef.current,{documentState})
+        setContentState('updating')
+
+    },[documentState])
 
 
     return <Box>

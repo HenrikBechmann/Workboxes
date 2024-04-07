@@ -11,8 +11,13 @@ const StandardDocumentSection = (props) => {
 
     const {profileData, documentData, documentState} = props
 
+    const content = 
+        documentState.mode == 'view'
+        ? 'Standard Section'
+        : 'Standard Section (editing)'
+
     return <Box>
-        Standard Section
+        {content}
     </Box>
 }
 

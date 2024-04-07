@@ -94,7 +94,7 @@ export const UserProvider = ({children}) => {
                 }
             }
 
-            console.log(userData)
+            // console.log(userData)
 
             setUserData(userData)
         })
