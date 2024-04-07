@@ -72,6 +72,7 @@ class workboxGateway {
                     changed:false,
                     data:{
                         name:null,
+                        alias:null,
                         image:null,
                         description:null,
                         summary:null,                        

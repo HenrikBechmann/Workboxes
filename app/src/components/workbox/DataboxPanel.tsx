@@ -79,7 +79,7 @@ const databoxBodyStyles = {
 
 const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
     const 
-        { displayConfigCode, databoxData, defaultDataboxState } = props,
+        { displayConfigCode, databoxData, profileData, defaultDataboxState } = props,
         databoxPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
         [databoxState, setDataboxState] = useState(defaultDataboxState)

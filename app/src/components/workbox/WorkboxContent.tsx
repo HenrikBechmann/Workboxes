@@ -105,6 +105,7 @@ const WorkboxContent = (props) => {
                 displayConfigCode = {databoxDisplayCode} 
                 defaultDataboxState = {defaultDataboxState}
                 databoxData = { databoxData }
+                profileData = { profileData }
             />
         </CentralPanel>
     </Box>
