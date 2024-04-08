@@ -104,7 +104,7 @@ const documentHeaderStyles = {
 const documentBodyStyles = {
     area: 'body',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'auto',
     borderRadius: '0 0 0 7px',
     minWidth: 0,
 } as CSSProperties

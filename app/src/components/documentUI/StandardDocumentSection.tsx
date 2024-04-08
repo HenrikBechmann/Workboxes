@@ -6,15 +6,17 @@ import React, {useRef, useState, useEffect} from 'react'
 import {
     Box,
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
-    Input,
+    Input, Textarea
 } from '@chakra-ui/react'
 
 const errorMessages = {
-    name:'The name can only be up to 50 characters, and cannot be blank.'
+    name:'The name can only be up to 50 characters, and cannot be blank.',
+    description:'The description can only be up to 140 characters.'
 }
 
 const helperText = {
-    name:'This name will appear to app users. Can be changed. Up to 50 characters.'
+    name:'This name will appear to app users. Can be changed. Up to 50 characters.',
+    description:'This description will appear to app users.'
 }
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
@@ -56,6 +58,13 @@ const StandardEdit = (props) => {
             editValues.name = value
             setEditValues({...editValues})
         },
+        description:(event) => {
+            const target = event.target as HTMLInputElement
+            const value = target.value
+            isInvalidTests.description(value)
+            editValues.description = value
+            setEditValues({...editValues})
+        },
     }
 
     // see db at system.settings.constraints.maxNameLength (set to 50)
@@ -76,7 +85,10 @@ const StandardEdit = (props) => {
         },
         description:(value) => {
             let isInvalid = false
-
+            if (value.length > 140) {
+                isInvalid = true
+            }
+            invalidFieldFlags.description = isInvalid
             return isInvalid
         },
         image:(value) => {
@@ -92,8 +104,8 @@ const StandardEdit = (props) => {
     }
 
     return <Box padding = '3px'>
-        <Box>
-            <FormControl isInvalid = {invalidFieldFlags.name}>
+        <Box data-type = 'namefield' >
+            <FormControl maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                 <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                 <Input 
                     value = {editValues.name || ''} 
@@ -109,11 +121,25 @@ const StandardEdit = (props) => {
                 </FormHelperText>
             </FormControl>
         </Box>
-        <Box>
-            Description: {description}
+        <Box data-type = 'descriptionfield'>
+            <FormControl marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
+                <Textarea 
+                    value = {editValues.description || ''} 
+                    size = 'sm'
+                    onChange = {onChangeFunctions.description}
+                >
+                </Textarea>
+                <FormErrorMessage>
+                    {errorMessages.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                </FormErrorMessage>
+                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
         </Box>
         <Box>
-            Image: {image}
+            Thumbnail image: {image}
         </Box>
         <Box>
             Summary: {summary}
