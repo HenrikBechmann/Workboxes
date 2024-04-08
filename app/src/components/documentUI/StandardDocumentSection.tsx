@@ -105,7 +105,7 @@ const StandardEdit = (props) => {
                     {errorMessages.name} Current length is {editValues.name?.length || '0 (blank)'}.
                 </FormErrorMessage>
                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.name}
+                    {helperText.name} Current length is {editValues.name?.length || '0 (blank)'}.
                 </FormHelperText>
             </FormControl>
         </Box>
