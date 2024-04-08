@@ -6,6 +6,7 @@ import React, {useRef, useState, useEffect} from 'react'
 import {
     Box,
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
+    Flex,
     Input, Textarea
 } from '@chakra-ui/react'
 
@@ -104,43 +105,45 @@ const StandardEdit = (props) => {
     }
 
     return <Box padding = '3px'>
-        <Box data-type = 'namefield' >
-            <FormControl maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
-                <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
-                <Input 
-                    value = {editValues.name || ''} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.name}
-                >
-                </Input>
-                <FormErrorMessage>
-                    {errorMessages.name} Current length is {editValues.name?.length || '0 (blank)'}.
-                </FormErrorMessage>
-                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.name} Current length is {editValues.name?.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
-        </Box>
-        <Box data-type = 'descriptionfield'>
-            <FormControl marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
-                <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
-                <Textarea 
-                    value = {editValues.description || ''} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.description}
-                >
-                </Textarea>
-                <FormErrorMessage>
-                    {errorMessages.description} Current length is {editValues.description?.length || '0 (blank)'}.
-                </FormErrorMessage>
-                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.description} Current length is {editValues.description?.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
-        </Box>
-        <Box>
-            Thumbnail image: {image}
-        </Box>
+        <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+            <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px solid silver'>
+                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
+                    <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
+                    <Input 
+                        value = {editValues.name || ''} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.name}
+                    >
+                    </Input>
+                    <FormErrorMessage>
+                        {errorMessages.name} Current length is {editValues.name?.length || '0 (blank)'}.
+                    </FormErrorMessage>
+                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                        {helperText.name} Current length is {editValues.name?.length || '0 (blank)'}.
+                    </FormHelperText>
+                </FormControl>
+            </Box>
+            <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px solid silver'>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                    <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
+                    <Textarea 
+                        value = {editValues.description || ''} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.description}
+                    >
+                    </Textarea>
+                    <FormErrorMessage>
+                        {errorMessages.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                    </FormErrorMessage>
+                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                        {helperText.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                    </FormHelperText>
+                </FormControl>
+            </Box>
+            <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px solid silver' >
+                Thumbnail image: {image}
+            </Box>
+        </Flex>
         <Box>
             Summary: {summary}
         </Box>
