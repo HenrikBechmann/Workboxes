@@ -50,12 +50,17 @@ const Workspace = (props) => {
         [workspaceState,setWorkspaceState] = useState('setup'),
         userData = useUserData(),
         { displayName, photoURL } = userData.authUser,
-        panelsListRef = useRef([])
+        panelsListRef = useRef([]),
+        workboxMapRef = useRef(null),
+        workboxGatewayMapRef = useRef(null)
 
     useEffect(()=>{
         // TODO placeholder logic
 
-    const panelWindowsSpecs = [
+        workboxMapRef.current = new Map()
+        workboxGatewayMapRef.current = new Map()
+
+        const panelWindowsSpecs = [
 
             {
                 window:{
@@ -116,7 +121,12 @@ const Workspace = (props) => {
             },
 
         ]
-        panelsListRef.current = [<Workpanel key = {0} startingWindowsSpecsList = {panelWindowsSpecs} />]
+        panelsListRef.current = [<Workpanel 
+            key = {0} 
+            startingWindowsSpecsList = {panelWindowsSpecs} 
+            workboxMapRef = {workboxMapRef}
+            workboxGatewayMapRef = {workboxGatewayMapRef}
+        />]
 
     },[])
 

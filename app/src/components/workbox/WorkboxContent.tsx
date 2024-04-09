@@ -33,7 +33,7 @@ const WorkboxContent = (props) => {
             workboxState, 
             defaultDocumentState,
             defaultDataboxState,
-            sessionWindowID, 
+            windowSessionID, 
             viewSelector, 
             documentData, 
             databoxData, 
@@ -83,7 +83,7 @@ const WorkboxContent = (props) => {
             Settings
         </SettingsPanel>
         <CentralPanel 
-            sessionWindowID = {sessionWindowID}
+            windowSessionID = {windowSessionID}
             displayConfigCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
             databoxFrameElementRef = {databoxFrameElementRef} 
@@ -95,7 +95,7 @@ const WorkboxContent = (props) => {
                 displayConfigCode = {documentDisplayCode} 
                 defaultDocumentState = {defaultDocumentState}
                 userDocumentWidthRef = {userDocumentWidthRef}
-                sessionWindowID =  {sessionWindowID}
+                windowSessionID =  {windowSessionID}
                 viewSelector = {viewSelector}
                 documentData = {documentData}
                 profileData = {profileData}

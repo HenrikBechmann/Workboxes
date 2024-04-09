@@ -135,7 +135,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         {
             displayConfigCode, 
             userDocumentWidthRef, // userDocumentWidthRef informs "friends"
-            sessionWindowID, 
+            windowSessionID, 
             viewSelector, 
             profileData,
             documentData, 

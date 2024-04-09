@@ -85,7 +85,7 @@ const resizeHandleIconStyles = {
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
-    const { handleAxis, innerRef, sessionID, viewDeclaration, ...rest } = props
+    const { handleAxis, innerRef, windowSessionID, viewDeclaration, ...rest } = props
 
     return (
         <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
@@ -104,7 +104,7 @@ const Workwindow = (props) => {
         {
             children, 
             configDefaults, // for this Workwindow 
-            sessionID, // system control
+            windowSessionID, // system control
             zOrder, // inherited; modified by setFocus 
             viewDeclaration, // normalized, maximized, minimized
             windowCallbacks, // change zOrder etc.
@@ -121,7 +121,7 @@ const Workwindow = (props) => {
         // basic controls
         isMountedRef = useRef(true),
         isDisabledRef = useRef(false),
-        sessionIDRef = useRef(sessionID), // future reference
+        sessionIDRef = useRef(windowSessionID), // future reference
 
         // state managemement
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
@@ -195,7 +195,7 @@ const Workwindow = (props) => {
 
         const onFocus = (event) => {
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
-            windowCallbacks?.setFocus && windowCallbacks.setFocus(sessionID)
+            windowCallbacks?.setFocus && windowCallbacks.setFocus(windowSessionID)
         }
 
         const onBlur = (event) => {
@@ -620,7 +620,7 @@ const Workwindow = (props) => {
             handle = {
 
                 (handleAxis, ref) => <WindowHandle 
-                    sessionID = {sessionID}
+                    windowSessionID = {windowSessionID}
                     innerRef = {ref} 
                     handleAxis = {handleAxis}
                     viewDeclaration = {viewDeclaration}
@@ -642,7 +642,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle windowCallbacks = {windowCallbacks} sessionID = {sessionID} ref = {titleElementRef} type = {type} title = {title}/>
+                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {titleElementRef} type = {type} title = {title}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 

@@ -50,7 +50,7 @@ const workboxBodyStyles = {
 const Workbox = (props) => {
     const 
         {
-            sessionWindowID,
+            windowSessionID,
             defaultWorkboxState,
             defaultDocumentState,
             defaultDataboxState,
@@ -64,7 +64,7 @@ const Workbox = (props) => {
         { profile:profileData, document:documentData, databox:databoxData } = data,
         { itemName, itemIcon, domainName, domainIcon, typeName } = profileData
 
-    // console.log('data', '-'+sessionWindowID+'-',data)
+    // console.log('data', '-'+windowSessionID+'-',data)
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
@@ -110,7 +110,7 @@ const Workbox = (props) => {
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
                 <WorkboxContent 
                     viewSelector = {viewSelectorContext} 
-                    sessionWindowID = {sessionWindowID} 
+                    windowSessionID = {windowSessionID} 
                     workboxState = {workboxState} 
                     profileData = {profileData}
                     documentData = {documentData}

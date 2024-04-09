@@ -60,26 +60,26 @@ const leftIconBoxStyles = {
 
 const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef:any) {
 
-    const { windowCallbacks, sessionID, type, title } = props
+    const { windowCallbacks, windowSessionID, type, title } = props
 
     const closeWindow = (e) => {
         e.preventDefault()
-        windowCallbacks.closeWindow(sessionID)
+        windowCallbacks.closeWindow(windowSessionID)
     }
 
     const minimizeWindow = (e) => {
         e.preventDefault()
-        windowCallbacks.minimizeWindow(sessionID)
+        windowCallbacks.minimizeWindow(windowSessionID)
     }
 
     const maximizeWindow = (e) => {
         e.preventDefault()
-        windowCallbacks.maximizeWindow(sessionID)
+        windowCallbacks.maximizeWindow(windowSessionID)
     }
 
     const normalizeWindow = (e) => {
         e.preventDefault()
-        windowCallbacks.normalizeWindow(sessionID)
+        windowCallbacks.normalizeWindow(windowSessionID)
     }
 
     return <Box ref = {titleElementRef} id = 'titlebar' data-type = 'window-title' style = {windowTitleStyles}>
@@ -88,7 +88,7 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
         </Box>
         <Box data-type = 'text-block' id = 'draghandle' style = {titleTextBlockStyles}>
             <Box style = {titleContentStyles}>
-            { '-' + sessionID + '-' } {title} [{type}]
+            { '-' + windowSessionID + '-' } {title} [{type}]
             </Box>
         </Box>
         <Box data-type = 'window-icon-group' style = {titleIconGroupStyles}>
