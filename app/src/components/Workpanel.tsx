@@ -190,7 +190,7 @@ const Workpanel = (props:any) => {
             sessionID = { sessionID }
             viewDeclaration = { viewDeclaration }
             containerDimensionSpecs = { containerDimensionSpecs }
-            callbacks = { callbacks } 
+            windowCallbacks = { windowCallbacks } 
             { ...remainingWindowProps }
         >
             <Workbox 
@@ -202,6 +202,11 @@ const Workpanel = (props:any) => {
             />
         </Workwindow>
     }
+
+    // ----------------------------[ data callbacks ]--------------------------
+
+
+    // -----------------------------[ window callbacks ]-----------------------------
 
     // remove window and update higher zOrders to compensate, or shuffle minimized windows
     const closeWindow = (sessionID) => {
@@ -532,7 +537,7 @@ const Workpanel = (props:any) => {
 
     }
 
-    const callbacks = {
+    const windowCallbacks = {
         setFocus,
         closeWindow,
         duplicateWindow,
@@ -540,6 +545,8 @@ const Workpanel = (props:any) => {
         normalizeWindow,
         maximizeWindow,
     }
+
+    // ----------------------------------[ end of windowCallbacks ]-------------------------------
 
     const onResize = useCallback(()=>{
 

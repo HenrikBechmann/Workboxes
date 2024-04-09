@@ -60,26 +60,26 @@ const leftIconBoxStyles = {
 
 const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef:any) {
 
-    const { callbacks, sessionID, type, title } = props
+    const { windowCallbacks, sessionID, type, title } = props
 
     const closeWindow = (e) => {
         e.preventDefault()
-        callbacks.closeWindow(sessionID)
+        windowCallbacks.closeWindow(sessionID)
     }
 
     const minimizeWindow = (e) => {
         e.preventDefault()
-        callbacks.minimizeWindow(sessionID)
+        windowCallbacks.minimizeWindow(sessionID)
     }
 
     const maximizeWindow = (e) => {
         e.preventDefault()
-        callbacks.maximizeWindow(sessionID)
+        windowCallbacks.maximizeWindow(sessionID)
     }
 
     const normalizeWindow = (e) => {
         e.preventDefault()
-        callbacks.normalizeWindow(sessionID)
+        windowCallbacks.normalizeWindow(sessionID)
     }
 
     return <Box ref = {titleElementRef} id = 'titlebar' data-type = 'window-title' style = {windowTitleStyles}>

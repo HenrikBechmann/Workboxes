@@ -107,7 +107,7 @@ const Workwindow = (props) => {
             sessionID, // system control
             zOrder, // inherited; modified by setFocus 
             viewDeclaration, // normalized, maximized, minimized
-            callbacks, // change zOrder etc.
+            windowCallbacks, // change zOrder etc.
             containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
             type,
             title,
@@ -195,7 +195,7 @@ const Workwindow = (props) => {
 
         const onFocus = (event) => {
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
-            callbacks?.setFocus && callbacks.setFocus(sessionID)
+            windowCallbacks?.setFocus && windowCallbacks.setFocus(sessionID)
         }
 
         const onBlur = (event) => {
@@ -642,7 +642,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle callbacks = {callbacks} sessionID = {sessionID} ref = {titleElementRef} type = {type} title = {title}/>
+                        <WindowTitle windowCallbacks = {windowCallbacks} sessionID = {sessionID} ref = {titleElementRef} type = {type} title = {title}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 

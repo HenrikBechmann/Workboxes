@@ -106,6 +106,11 @@ const DocumentToolbar = (props) => {
         setDocumentState({...documentState})
     }
 
+    const cancelEdit = () => {
+        documentState.mode = 'view'
+        setDocumentState({...documentState})
+    }
+
                 // <MenuIcon icon = {insertIcon} caption = 'insert note' tooltip = 'insert a note' menulist = {insertMenuList}/>
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
@@ -115,7 +120,7 @@ const DocumentToolbar = (props) => {
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
                 <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
                 {dropToggle}
-                <StandardIcon icon = {cancelEditIcon} caption = 'cancel' tooltip = 'cancel edit'/>
+                <StandardIcon icon = {cancelEditIcon} response = {cancelEdit} caption = 'cancel' tooltip = 'cancel edit'/>
             </>
         }
         {(documentState.mode == 'view') && 
