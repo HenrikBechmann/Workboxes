@@ -24,16 +24,14 @@ const helperText = {
 const StandardEdit = (props) => {
     
     const 
-        {documentData, editDataRef, invalidDataRef} = props,
+        {documentData, editDataRef, invalidStandardFieldFlagsRef} = props,
         { data } = documentData,
         { description, image, summary } = data,
-        invalidFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
         [editValues, setEditValues] = useState({...documentData.data}),
-        [editState,setEditState] = useState('ready')
-
-    const invalidFieldFlags = invalidFieldFlagsRef.current
+        [editState,setEditState] = useState('ready'),
+        invalidFieldFlags = invalidStandardFieldFlagsRef.current
+        
     editDataRef.current = editValues
-    invalidDataRef.current = invalidFieldFlagsRef.current
 
     useEffect(()=>{
 
@@ -175,14 +173,16 @@ const StandardDisplay = (props) => {
 const StandardDocumentSection = (props) => {
 
     const 
-        {profileData, documentData, documentState} = props,
-        editDataRef = useRef(null),
-        invalidDataRef = useRef(null)
+        {profileData, documentData, documentState, invalidStandardFieldFlagsRef} = props,
+        editDataRef = useRef(null)
 
     return <Box>
         {(documentState.mode == 'view')
             ? <StandardDisplay documentData = {documentData} />
-            : <StandardEdit documentData = {documentData} editDataRef = {editDataRef} invalidDataRef = {invalidDataRef}/>
+            : <StandardEdit 
+                documentData = {documentData} 
+                editDataRef = {editDataRef} 
+                invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}/>
         }
     </Box>
 }

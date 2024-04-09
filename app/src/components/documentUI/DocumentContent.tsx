@@ -20,7 +20,7 @@ import documentTypeBundles from './documentTypeBundles'
 const DocumentContent = (props) => {
 
     const 
-        {profileData, documentData, documentState} = props,
+        {profileData, documentData, documentState, invalidStandardFieldFlagsRef} = props,
         standardComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
         contentStateRef = useRef(null)
@@ -56,7 +56,13 @@ const DocumentContent = (props) => {
     useEffect(()=>{
 
         if (contentStateRef.current != 'ready') return
-        standardComponentRef.current = React.cloneElement(standardComponentRef.current,{documentState})
+        standardComponentRef.current = 
+            React.cloneElement(standardComponentRef.current,
+                {
+                    documentState, 
+                    invalidStandardFieldFlagsRef
+                }
+            )
         setContentState('updating')
 
     },[documentState])

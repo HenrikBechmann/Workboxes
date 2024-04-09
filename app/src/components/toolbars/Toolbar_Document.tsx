@@ -60,7 +60,7 @@ const iconWrapperStyles = {
 const DocumentToolbar = (props) => {
 
     const 
-        { documentState, setDocumentState } = props,
+        { documentState, setDocumentState, invalidStandardFieldFlagsRef } = props,
         [toolbarState, setToolbarState] = useState('ready'),
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
@@ -83,9 +83,23 @@ const DocumentToolbar = (props) => {
         <MenuItem icon = {<img src = {imageIcon} />}>Image</MenuItem>
     </MenuList>
 
+    const isInvalidStandardField = () => {
+        let isInvalid = false
+        const fieldFlags = invalidStandardFieldFlagsRef.current
+        for (const property in fieldFlags) {
+            if (fieldFlags[property]) isInvalid = true
+        }
+        return isInvalid
+    }
+
     const toggleDocumentMode = () => {
         if (documentState.mode == 'edit') {
-            documentState.mode = 'view'
+            if (isInvalidStandardField()) {
+                alert('Please correct errors, or cancel edit, before proceeding.')
+                return
+            } else {
+                documentState.mode = 'view'
+            }
         } else {
             documentState.mode = 'edit'
         }
