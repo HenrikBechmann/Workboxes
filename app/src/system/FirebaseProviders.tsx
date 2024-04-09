@@ -78,8 +78,15 @@ export const UserProvider = ({children}) => {
                         isSuperUser:false,
                         errorCondition:false,
                     },
+                    userRecords = {
+                        errorCondition:false,
+                        user:null,
+                        account:null,
+                        domain:null,
+                    },
                     functions = getFunctions(),
-                    isAdminUser = httpsCallable(functions, 'isAdminUser')
+                    isAdminUser = httpsCallable(functions, 'isAdminUser'),
+                    getUserRecords = httpsCallable(functions, 'getUserRecords')
 
                 try {
                     const result:any = await isAdminUser()
@@ -88,9 +95,17 @@ export const UserProvider = ({children}) => {
                     superUser.errorCondition = true
                 }
 
+                // try {
+                //     const result:any = await getUserRecords()
+                //     superUser.isSuperUser = result.data.records
+                // } catch (error) {
+                //     superUser.errorCondition = true
+                // }
+
                 userData = {
                     authUser:user,
-                    sysadminStatus:superUser
+                    sysadminStatus:superUser,
+                    userRecords,
                 }
             }
 
