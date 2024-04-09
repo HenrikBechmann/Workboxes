@@ -195,7 +195,7 @@ const Workpanel = (props:any) => {
         >
             <Workbox 
                 sessionWindowID = {sessionID} 
-                defaultState = { specs.workbox.defaultState }
+                defaultWorkboxState = { specs.workbox.defaultWorkboxState }
                 defaultDocumentState = { specs.workbox.defaultDocumentState }
                 defaultDataboxState = { specs.workbox.defaultDataboxState }
                 data = { workdata }

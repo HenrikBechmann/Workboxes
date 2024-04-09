@@ -56,6 +56,7 @@ const DocumentContent = (props) => {
     useEffect(()=>{
 
         if (contentStateRef.current != 'ready') return
+            
         standardComponentRef.current = 
             React.cloneElement(standardComponentRef.current,
                 {

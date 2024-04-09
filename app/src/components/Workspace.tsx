@@ -27,7 +27,7 @@ import notebookIcon from '../../assets/notebook.png'
 import checklistIcon from '../../assets/checklist.png'
 import homeIcon from '../../assets/home.png'
 
-const workboxDefaultState = {
+const defaultWorkboxState = {
     settingsShow:false,
     settingsDisabled:false,
     documentShow:true,
@@ -36,11 +36,11 @@ const workboxDefaultState = {
     databoxDisabled:false,
 }
 
-const documentDefaultState = {
+const defaultDocumentState = {
     mode:'view',
 }
 
-const databoxDefaultState = {
+const defaultDataboxState = {
 
 }
 
@@ -64,9 +64,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultState:{...workboxDefaultState},
-                    defaultDocumentState: {...documentDefaultState},
-                    defaultDataboxState: {...databoxDefaultState},
+                    defaultWorkboxState:{...defaultWorkboxState},
+                    defaultDocumentState: {...defaultDocumentState},
+                    defaultDataboxState: {...defaultDataboxState},
                     itemTitle: "Domain base workbox",
                     itemIcon: homeIcon,
                     domainTitle: displayName,
@@ -83,9 +83,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultState:{...workboxDefaultState},
-                    defaultDocumentState: {...documentDefaultState},
-                    defaultDataboxState: {...databoxDefaultState},
+                    defaultWorkboxState:{...defaultWorkboxState},
+                    defaultDocumentState: {...defaultDocumentState},
+                    defaultDataboxState: {...defaultDataboxState},
                     itemTitle: 'Notebooks',
                     itemIcon: notebookIcon,
                     domainTitle: displayName,
@@ -102,9 +102,9 @@ const Workspace = (props) => {
                     view: 'normalized',
                 },
                 workbox: {
-                    defaultState:{...workboxDefaultState},
-                    defaultDocumentState: {...documentDefaultState},
-                    defaultDataboxState: {...databoxDefaultState},
+                    defaultWorkboxState:{...defaultWorkboxState},
+                    defaultDocumentState: {...defaultDocumentState},
+                    defaultDataboxState: {...defaultDataboxState},
                     itemTitle: 'Checklists',
                     itemIcon: checklistIcon,
                     domainTitle: displayName,

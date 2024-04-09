@@ -111,7 +111,6 @@ const DocumentToolbar = (props) => {
         setDocumentState({...documentState})
     }
 
-                // <MenuIcon icon = {insertIcon} caption = 'insert note' tooltip = 'insert a note' menulist = {insertMenuList}/>
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 

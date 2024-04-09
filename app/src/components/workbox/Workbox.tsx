@@ -51,14 +51,14 @@ const Workbox = (props) => {
     const 
         {
             sessionWindowID,
-            defaultState,
+            defaultWorkboxState,
             defaultDocumentState,
             defaultDataboxState,
             data,
 
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
-        [workboxState, setWorkboxState] = useState({...defaultState}),
+        [workboxState, setWorkboxState] = useState({...defaultWorkboxState}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
         { profile:profileData, document:documentData, databox:databoxData } = data,
