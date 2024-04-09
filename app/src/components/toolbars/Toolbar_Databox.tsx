@@ -11,6 +11,7 @@ import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
 import { useToggleIcon } from './ToggleIcon'
 import LearnIcon from './LearnIcon'
+import ToolbarVerticalDivider from './VerticalDivider'
 
 const databoxToolbarStyles = {
     padding:'2px',
@@ -95,13 +96,17 @@ const DataboxToolbar = (props) => {
     return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
         <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
-        <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
+        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
+        <ToolbarVerticalDivider />
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
+        <ToolbarVerticalDivider />
         { dragToggle }
         { moveToggle }
+        <ToolbarVerticalDivider />
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
-        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
 

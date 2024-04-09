@@ -101,7 +101,6 @@ const DocumentToolbar = (props) => {
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
                 <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
                 {dropToggle}
-                <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
                 <StandardIcon icon = {cancelEditIcon} caption = 'cancel' tooltip = 'cancel edit'/>
             </>
         }
