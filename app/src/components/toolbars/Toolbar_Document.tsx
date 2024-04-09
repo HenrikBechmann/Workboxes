@@ -78,6 +78,11 @@ const DocumentToolbar = (props) => {
         <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
     </MenuList>
 
+    const insertmenulist = <MenuList >
+        <MenuItem icon = {<img src = {noteIcon} />}>Blocknote</MenuItem>
+        <MenuItem icon = {<img src = {imageIcon} />}>Image</MenuItem>
+    </MenuList>
+
     const toggleDocumentMode = () => {
         if (documentState.mode == 'edit') {
             documentState.mode = 'view'
@@ -94,7 +99,7 @@ const DocumentToolbar = (props) => {
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         {(documentState.mode == 'edit') && <>
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
-                <StandardIcon icon = {insertIcon} caption = 'add note' tooltip = 'insert a note'/>
+                <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
                 {dropToggle}
                 <StandardIcon icon = {uploadIcon} caption = 'upload' tooltip = 'upload and save changes'/>
                 <StandardIcon icon = {cancelEditIcon} caption = 'cancel' tooltip = 'cancel edit'/>

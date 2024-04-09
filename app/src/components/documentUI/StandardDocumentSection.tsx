@@ -17,7 +17,7 @@ const errorMessages = {
 
 const helperText = {
     name:'This name will appear to app users. Can be changed. Up to 50 characters.',
-    description:'This description will appear to app users.'
+    description:'This description will appear to app users. Max 150 characters.',
 }
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
@@ -106,7 +106,7 @@ const StandardEdit = (props) => {
 
     return <Box padding = '3px'>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
-            <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px solid silver'>
+            <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                     <Input 
@@ -123,7 +123,7 @@ const StandardEdit = (props) => {
                     </FormHelperText>
                 </FormControl>
             </Box>
-            <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px solid silver'>
+            <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
                     <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
                     <Textarea 
@@ -140,7 +140,7 @@ const StandardEdit = (props) => {
                     </FormHelperText>
                 </FormControl>
             </Box>
-            <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px solid silver' >
+            <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image: {image}
             </Box>
         </Flex>

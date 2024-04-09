@@ -154,15 +154,15 @@ const WorkboxToolbar = (props) => {
             caption:'settings',
             toggleOnRef:toggleOnSettingsRef, 
             disabledRef:disabledSettingsRef, 
-        }),
-
-        commentsToggle = useToggleIcon({
-            icon:commentsIcon, 
-            tooltip:'Show comments',
-            caption:'see comments',
-            toggleOnRef:toggleOnCommentsRef, 
-            disabledRef:disabledCommentsRef, 
         })
+
+        // commentsToggle = useToggleIcon({
+        //     icon:commentsIcon, 
+        //     tooltip:'Show comments',
+        //     caption:'see comments',
+        //     toggleOnRef:toggleOnCommentsRef, 
+        //     disabledRef:disabledCommentsRef, 
+        // })
 
     const workboxmenulist = <MenuList >
         <MenuItem >Workbox settings</MenuItem>
@@ -182,7 +182,6 @@ const WorkboxToolbar = (props) => {
         <TypeControl typeName = {typeName} />
         <ToolbarVerticalDivider />
         <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
-        { commentsToggle }
         <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
