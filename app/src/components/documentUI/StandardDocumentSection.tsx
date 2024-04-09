@@ -104,6 +104,7 @@ const StandardEdit = (props) => {
 
     return <Box padding = '3px'>
         <Heading size = 'sm'>Standard section</Heading>
+        <details>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
@@ -146,6 +147,7 @@ const StandardEdit = (props) => {
         <Box>
             Summary: {summary}
         </Box>
+    </details>
     </Box>
 }
 

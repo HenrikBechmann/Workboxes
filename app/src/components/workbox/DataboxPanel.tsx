@@ -115,15 +115,15 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEle
     return <Box data-type = 'databox-frame' ref = {databoxFrameElementRef} style = {databoxFrameStyles}>
         <Box data-type = 'databox-panel' ref = {databoxPanelElementRef} style = {databoxPanelStyles}>
                 <Grid
-                    data-type = 'document-grid'
+                    data-type = 'databox-grid'
                     style = {databoxGridStyles}
                 >
-                    <GridItem data-type = 'document-header' style = {databoxHeaderStyles}>
-                        <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
+                    <GridItem data-type = 'databox-header' style = {databoxHeaderStyles}>
+                        <ToolbarFrame>
                             <DataboxToolbar databoxState = {databoxState} setDataboxState = {setDataboxState} />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'document-body' style = {databoxBodyStyles}>
+                    <GridItem data-type = 'databox-body' style = {databoxBodyStyles}>
                         Databox
                     </GridItem>
                 </Grid>
