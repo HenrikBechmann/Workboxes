@@ -7,199 +7,222 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
+// firebase-functions
 import {onCall, HttpsError} from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
-import {initializeApp} from 'firebase/app'
-import {getFirestore} from "firebase-admin/firestore";
-import {getFirestore as getdb, collection, addDoc, serverTimestamp} from "firebase/firestore"
-import { auth as userAuth } from "firebase-functions"
+import {auth as userAuth} from "firebase-functions";
 import {
   beforeUserCreated,
   beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
 
-const app = initializeApp();
+// firebase-admin
+import * as admin from "firebase-admin";
+import {getFirestore} from "firebase-admin/firestore";
+
+// firebase
+import {initializeApp} from "firebase/app";
+import {getFirestore as getdb,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+
+import firebaseConfig from './firebaseConfig'
+
+const app = initializeApp(firebaseConfig);
 
 // This has to use version 1
 export const setupNewUser = userAuth.user().onCreate(async (user)=>{
-  const {displayName, photoURL, uid} = user
+  const {displayName, photoURL, uid} = user;
   const db = getdb(app);
 
-  const domainDocRef = await addDoc(collection(db,"domains"),
+  const domainDocRef = await addDoc(collection(db, "domains"),
     {
-      version:0,
-      profile:{
-        domain:{
-          name:displayName, 
-          image:{
-            source:photoURL,
-          }
+      version: 0,
+      profile: {
+        domain: {
+          name: displayName,
+          image: {
+            source: photoURL,
+          },
         },
-        owner:{
-          ID:uid,
-          name:displayName,
+        owner: {
+          ID: uid,
+          name: displayName,
         },
-        administrator:{
-          ID:null, 
-          name:null, 
+        administrator: {
+          ID: null,
+          name: null,
         },
         commits: {
-            created_by:{ID:uid, name:displayName},
-            created_timestamp:serverTimestamp(),
-            updated_by:{ID:null, name:null},
-            updated_timestamp:null,
+          created_by: {ID: uid, name: displayName},
+          created_timestamp: serverTimestamp(),
+          updated_by: {ID: null, name: null},
+          updated_timestamp: null,
         },
         counts: {
-          generation:0,
-          members:0,
-          workboxes:0,
-        }
-      }
+          generation: 0,
+          members: 0,
+          workboxes: 0,
+        },
+      },
     }
   );
 
-  const workboxDocRef = await addDoc(collection(db,"workboxes"),
+  const workboxDocRef = await addDoc(collection(db, "workboxes"),
     {
-      version:0,
-      profile:{
-        workbox:{
-          name:displayName, 
-          image:{
-            source:photoURL,
-          }
-        },
-        owner:{
-          ID:uid, 
-          name:displayName
-        },
-        domain:{
-          ID:domainDocRef.id, 
-          name:displayName
-        },
-        type:{
-          name:"container", 
-          alias:'Container', 
-          image:{
-            source:null,
-          }
-        },
-        commits: {
-            created_by:{
-              ID:uid, 
-              name:displayName
-            },
-            created_timestamp:serverTimestamp(),
-            updated_by:{ID:null, handle:null, name:null},
-            updated_timestamp:null,
-        },
-        read_role:"member",
-        write_role:null,
-        counts:{
-            generation:0, 
-            links:0,
-            references:0,
-        },
-      document: {
-        sections:[
-          {
-              name:'standard',
-              alias:'Standard',
-              position:0,
-              data:{
-                  name:displayName,
-                  image:{
-                    source:photoURL,
-                  },
-                  description:null,
-                  summary:null,                        
-              },
+      version: 0,
+      profile: {
+        workbox: {
+          name: displayName,
+          image: {
+            source: photoURL,
           },
-      ]},
-      databox: {
-          accepts:[], 
-          links:{
-            cached:true, 
-            cache:[], 
-          }
-        }
-      }
-    }
-  );
-
-  const accountDocumentRef = await addDoc(collection(db,"accounts"),
-    {
-      version:0,
-      profile:{
-        account:{
-          name:displayName,
-          image:{
-            source:photoURL,
-          }
         },
-        owner:{
-          ID:uid, 
-          name:displayName
+        owner: {
+          ID: uid,
+          name: displayName,
         },
-        commits: {
-            created_by:{
-              ID:uid, 
-              name:displayName
-            },
-            created_timestamp:serverTimestamp(),
-            updated_by:{ID:null, handle:null, name:null},
-            updated_timestamp:null,
-        },
-        counts:{
-            generation:0, 
-        },
-      }
-    }
-  );
-
-  await addDoc(collection(db,"users"),
-    {
-      version:0,
-      profile:{
-        is_abandoned:false,
-        user:{
-          name:displayName, 
-          image:{
-            source:photoURL,
-          }
-        },
-        domain:{
+        domain: {
           ID: domainDocRef.id,
           name: displayName,
         },
-        account:{
-          ID: accountDocumentRef.id,
-          name: displayName,
-        },
-        workbox:{
-          ID: workboxDocRef.id,
-          name:displayName,
+        type: {
+          name: "container",
+          alias: "Container",
+          image: {
+            source: null,
+          },
         },
         commits: {
-            created_by:{
-              ID:uid, 
-              name:displayName
+          created_by: {
+            ID: uid,
+            name: displayName,
+          },
+          created_timestamp: serverTimestamp(),
+          updated_by: {ID: null, name: null},
+          updated_timestamp: null,
+        },
+        read_role: "member",
+        write_role: null,
+        counts: {
+          generation: 0,
+          links: 0,
+          references: 0,
+        },
+      },
+      document: {
+        sections: [
+          {
+            name: "standard",
+            alias: "Standard",
+            position: 0,
+            data: {
+              name: displayName,
+              image: {
+                source: photoURL,
+              },
+              description: null,
+              summary: null,
             },
-            created_timestamp:serverTimestamp(),
-            updated_by:{ID:null, handle:null, name:null},
-            updated_timestamp:null,
+          },
+        ],
+        databox: {
+          accepts: [],
+          links: {
+            cached: true,
+            cache: [],
+          },
         },
-        counts:{
-            generation:0, 
-        },
-      }
+      },
     }
   );
 
-})
+  const accountDocumentRef = await addDoc(collection(db, "accounts"),
+    {
+      version: 0,
+      profile: {
+        account: {
+          name: displayName,
+          image: {
+            source: photoURL,
+          },
+        },
+        owner: {
+          ID: uid,
+          name: displayName,
+        },
+        commits: {
+          created_by: {
+            ID: uid,
+            name: displayName,
+          },
+          created_timestamp: serverTimestamp(),
+          updated_by: {ID: null, handle: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          generation: 0,
+        },
+      },
+    }
+  );
+
+  const userRecordRef = doc(db, "users", uid);
+  await setDoc(userRecordRef,
+
+    {
+      version: 0,
+      profile: {
+        is_abandoned: false,
+        user: {
+          name: displayName,
+          image: {
+            source: photoURL,
+          },
+        },
+        domain: {
+          ID: domainDocRef.id,
+          name: displayName,
+        },
+        account: {
+          ID: accountDocumentRef.id,
+          name: displayName,
+        },
+        workbox: {
+          ID: workboxDocRef.id,
+          name: displayName,
+        },
+        commits: {
+          created_by: {
+            ID: uid,
+            name: displayName,
+          },
+          created_timestamp: serverTimestamp(),
+          updated_by: {ID: null, handle: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          generation: 0,
+        },
+      },
+    }
+  );
+});
 
 // set is_abandoned = true in user record
 export const abandonUser = userAuth.user().onCreate(async (user)=>{
-
+  const {uid} = user;
+  const db = getdb(app);
+  const userRecordRef = doc(db, "users", uid);
+  await updateDoc(userRecordRef, {
+    profile: {
+      is_abandoned: true,
+    },
+  });
 });
 
 export const updateDatabase = onCall( async (request) => {
@@ -221,7 +244,6 @@ export const updateDatabase = onCall( async (request) => {
   const {document, context} = data;
   const {operation, path, collection, documentID} = context;
   const db = getFirestore(app);
-  // const db = getdb(app)
   const docpath = path + collection + "/" + documentID;
   response.docpath = docpath;
   switch (operation) {
