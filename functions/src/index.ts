@@ -19,7 +19,7 @@ import {
 import * as admin from "firebase-admin";
 import {getFirestore} from "firebase-admin/firestore";
 
-// firebase
+// firebase, apparently required for version 1 functions below
 import {initializeApp} from "firebase/app";
 import {getFirestore as getdb,
   collection,
@@ -213,6 +213,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   );
 });
 
+// This has to use version 1
 // set is_abandoned = true in user record
 export const abandonUser = userAuth.user().onCreate(async (user)=>{
   const {uid} = user;
@@ -225,6 +226,8 @@ export const abandonUser = userAuth.user().onCreate(async (user)=>{
   });
 });
 
+
+// the rest are version 2
 export const updateDatabase = onCall( async (request) => {
   const getAuthorization = () => {
     const isAdmin = !!request.auth?.token.admin === true;
