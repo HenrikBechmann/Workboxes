@@ -11,7 +11,7 @@ import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import {initializeApp} from 'firebase/app'
 import {getFirestore} from "firebase-admin/firestore";
-import {getFirestore as getdb, collection, addDoc} from "firebase/firestore"
+import {getFirestore as getdb, collection, addDoc, serverTimestamp} from "firebase/firestore"
 import { auth as userAuth } from "firebase-functions"
 import {
   beforeUserCreated,
@@ -24,43 +24,184 @@ const app = initializeApp();
 export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const {displayName, photoURL, uid} = user
   const db = getdb(app);
+
   const domainDocRef = await addDoc(collection(db,"domains"),
     {
+      version:0,
       profile:{
-        name:displayName, 
-        thumbnail:photoURL,
+        domain:{
+          name:displayName, 
+          image:{
+            source:photoURL,
+          }
+        },
         owner:{
           ID:uid,
           name:displayName,
+        },
+        administrator:{
+          ID:null, 
+          name:null, 
+        },
+        commits: {
+            created_by:{ID:uid, name:displayName},
+            created_timestamp:serverTimestamp(),
+            updated_by:{ID:null, name:null},
+            updated_timestamp:null,
+        },
+        counts: {
+          generation:0,
+          members:0,
+          workboxes:0,
         }
       }
     }
   );
+
   const workboxDocRef = await addDoc(collection(db,"workboxes"),
     {
+      version:0,
       profile:{
-        domain:{
-          ID:domainDocRef.id, 
-          name:displayName,
+        workbox:{
+          name:displayName, 
+          image:{
+            source:photoURL,
+          }
         },
         owner:{
-          ID:uid
+          ID:uid, 
+          name:displayName
+        },
+        domain:{
+          ID:domainDocRef.id, 
+          name:displayName
+        },
+        type:{
+          name:"container", 
+          alias:'Container', 
+          image:{
+            source:null,
+          }
+        },
+        commits: {
+            created_by:{
+              ID:uid, 
+              name:displayName
+            },
+            created_timestamp:serverTimestamp(),
+            updated_by:{ID:null, handle:null, name:null},
+            updated_timestamp:null,
+        },
+        read_role:"member",
+        write_role:null,
+        counts:{
+            generation:0, 
+            links:0,
+            references:0,
+        },
+      document: {
+        sections:[
+          {
+              name:'standard',
+              alias:'Standard',
+              position:0,
+              data:{
+                  name:displayName,
+                  image:{
+                    source:photoURL,
+                  },
+                  description:null,
+                  summary:null,                        
+              },
+          },
+      ]},
+      databox: {
+          accepts:[], 
+          links:{
+            cached:true, 
+            cache:[], 
+          }
         }
       }
     }
   );
-  // const accountDocumentRef = await db.doc("accounts").set({});
-  // const userDocRef = await db.doc("users").set({
-  //   profile:{
-  //     ID:uid, 
-  //     name:displayName, 
-  //     thumbnail:photoURL,
-  //   }
-  // });
+
+  const accountDocumentRef = await addDoc(collection(db,"accounts"),
+    {
+      version:0,
+      profile:{
+        account:{
+          name:displayName,
+          image:{
+            source:photoURL,
+          }
+        },
+        owner:{
+          ID:uid, 
+          name:displayName
+        },
+        commits: {
+            created_by:{
+              ID:uid, 
+              name:displayName
+            },
+            created_timestamp:serverTimestamp(),
+            updated_by:{ID:null, handle:null, name:null},
+            updated_timestamp:null,
+        },
+        counts:{
+            generation:0, 
+        },
+      }
+    }
+  );
+
+  await addDoc(collection(db,"users"),
+    {
+      version:0,
+      profile:{
+        is_abandoned:false,
+        user:{
+          name:displayName, 
+          image:{
+            source:photoURL,
+          }
+        },
+        domain:{
+          ID: domainDocRef.id,
+          name: displayName,
+        },
+        account:{
+          ID: accountDocumentRef.id,
+          name: displayName,
+        },
+        workbox:{
+          ID: workboxDocRef.id,
+          name:displayName,
+        },
+        commits: {
+            created_by:{
+              ID:uid, 
+              name:displayName
+            },
+            created_timestamp:serverTimestamp(),
+            updated_by:{ID:null, handle:null, name:null},
+            updated_timestamp:null,
+        },
+        counts:{
+            generation:0, 
+        },
+      }
+    }
+  );
 
 })
 
-// --
+// set is_abandoned = true in user record
+export const abandonUser = userAuth.user().onCreate(async (user)=>{
+
+});
+
 export const updateDatabase = onCall( async (request) => {
   const getAuthorization = () => {
     const isAdmin = !!request.auth?.token.admin === true;

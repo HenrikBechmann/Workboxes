@@ -85,7 +85,7 @@ export const UserProvider = ({children}) => {
                         domain:null,
                     },
                     functions = getFunctions(),
-                    isAdminUser = httpsCallable(functions, 'isAdminUser'),
+                    isAdminUser = httpsCallable(functions, 'isAdminUser')
 
                 try {
                     const result:any = await isAdminUser()
