@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 // firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, doc, onSnapshot } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
@@ -58,7 +58,7 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true)
 
     useEffect(()=>{
-
+        isMountedRef.current = true
         return () => {
             isMountedRef.current = false
         }
@@ -86,7 +86,6 @@ export const UserProvider = ({children}) => {
                     },
                     functions = getFunctions(),
                     isAdminUser = httpsCallable(functions, 'isAdminUser'),
-                    getUserRecords = httpsCallable(functions, 'getUserRecords')
 
                 try {
                     const result:any = await isAdminUser()
@@ -94,13 +93,6 @@ export const UserProvider = ({children}) => {
                 } catch (error) {
                     superUser.errorCondition = true
                 }
-
-                // try {
-                //     const result:any = await getUserRecords()
-                //     superUser.isSuperUser = result.data.records
-                // } catch (error) {
-                //     superUser.errorCondition = true
-                // }
 
                 userData = {
                     authUser:user,

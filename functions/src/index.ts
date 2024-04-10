@@ -9,13 +9,56 @@
 
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
+import {initializeApp} from 'firebase/app'
 import {getFirestore} from "firebase-admin/firestore";
+import {getFirestore as getdb, collection, addDoc} from "firebase/firestore"
+import { auth as userAuth } from "firebase-functions"
 import {
   beforeUserCreated,
   beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
 
-const app = admin.initializeApp();
+const app = initializeApp();
+
+// This has to use version 1
+export const setupNewUser = userAuth.user().onCreate(async (user)=>{
+  const {displayName, photoURL, uid} = user
+  const db = getdb(app);
+  const domainDocRef = await addDoc(collection(db,"domains"),
+    {
+      profile:{
+        name:displayName, 
+        thumbnail:photoURL,
+        owner:{
+          ID:uid,
+          name:displayName,
+        }
+      }
+    }
+  );
+  const workboxDocRef = await addDoc(collection(db,"workboxes"),
+    {
+      profile:{
+        domain:{
+          ID:domainDocRef.id, 
+          name:displayName,
+        },
+        owner:{
+          ID:uid
+        }
+      }
+    }
+  );
+  // const accountDocumentRef = await db.doc("accounts").set({});
+  // const userDocRef = await db.doc("users").set({
+  //   profile:{
+  //     ID:uid, 
+  //     name:displayName, 
+  //     thumbnail:photoURL,
+  //   }
+  // });
+
+})
 
 // --
 export const updateDatabase = onCall( async (request) => {
@@ -37,7 +80,7 @@ export const updateDatabase = onCall( async (request) => {
   const {document, context} = data;
   const {operation, path, collection, documentID} = context;
   const db = getFirestore(app);
-
+  // const db = getdb(app)
   const docpath = path + collection + "/" + documentID;
   response.docpath = docpath;
   switch (operation) {
@@ -264,7 +307,6 @@ export const isSuperUser = onCall(async (request) => {
   return isAdmin;
 });
 
-// --
 export const beforecreated = beforeUserCreated(async (event) => {
   const user = event.data;
   let email = user?.email;
