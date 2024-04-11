@@ -152,7 +152,7 @@ const Metadata = (props) => {
                 context:{
                     operation:'set', 
                     path:'', collection:'types', documentID:'system.class'}})
-            console.log('returnData', returnData)
+            // console.log('returnData', returnData)
         } catch (e) {
             console.log('error',e)
         }

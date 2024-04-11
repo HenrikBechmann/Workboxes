@@ -27,6 +27,8 @@ const LayoutGeneral = (props) => {
 
     const userData = useUserData()
 
+    // console.log('in LayoutGeneral: userData', userData)
+
     if (userData === undefined) return null
 
     return <Grid

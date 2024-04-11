@@ -26,6 +26,8 @@ const
 
     UserDataContext = React.createContext(null),
 
+    UserRecordsContext = React.createContext(null),
+
     firestore = getFirestore(firebaseApp),
     FirestoreContext = React.createContext(firestore),
 
@@ -55,10 +57,16 @@ export const UserProvider = ({children}) => {
     const 
         [userState, setUserState] = useState('setup'),
         [userData, setUserData] = useState(undefined),
+        [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
         db = useFirestore(),
-        userDataRef = useRef(null)
+        userDataRef = useRef(null),
+        unsubscribeUserRecordRef = useRef(null),
+        unsubscribeAccountRecordRef = useRef(null),
+        unsubscribeDomainRecordRef = useRef(null)
+
+    // console.log('UserProvider: userState',userState)
 
     userDataRef.current = userData
 
@@ -73,7 +81,10 @@ export const UserProvider = ({children}) => {
     useEffect(()=>{
 
         isMountedRef.current = true
+        // console.log('subscribing to onAuthStateChanged')
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
+
+            // console.log('call to onAuthStateChanged',user)
 
             let userData = null
 
@@ -82,12 +93,6 @@ export const UserProvider = ({children}) => {
                     superUser = {
                         isSuperUser:false,
                         errorCondition:false,
-                    },
-                    userRecords = {
-                        errorCondition:false,
-                        user:null,
-                        account:null,
-                        domain:null,
                     },
                     functions = getFunctions(),
                     isAdminUser = httpsCallable(functions, 'isAdminUser')
@@ -102,13 +107,17 @@ export const UserProvider = ({children}) => {
                 userData = {
                     authUser:user,
                     sysadminStatus:superUser,
-                    userRecords,
+                    // userRecords,
                 }
-                setUserData(userData)
-                setUserState('identified')
-                console.log('identified userdata', userData)
+                // console.log('identified userdata', userData)
+                setUserState('useridentified')
     
+            } else {
+                const unsubUserRecord = unsubscribeUserRecordRef.current
+                unsubUserRecord && unsubUserRecord()
             }
+
+            setUserData(userData)
 
         })
 
@@ -122,27 +131,29 @@ export const UserProvider = ({children}) => {
 
     useEffect(()=>{
 
-        let userUnsub
-        if (userState == 'identified') {
+        if (userState == 'useridentified') {
 
-            userUnsub = onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
-                userDataRef.current.userRecords.user = doc.data()
-                console.log('updated userDataRef.current', userDataRef)
-                setUserData({...userDataRef.current})
+            // console.log('registering user snapshot', userDataRef.current.authUser.uid)
+
+            unsubscribeUserRecordRef.current = onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
+                const userRecord = doc.data()
+                // console.log('updated userRecord', userRecord)
+                setUserRecords((previousState) => {
+                   previousState.user = userRecord
+                   return {...previousState}
+                })
             })
 
             setUserState('ready')
-        }
-
-        return ()=>{
-            userUnsub && userUnsub()
         }
 
     },[userState])
 
     return (
         <UserDataContext.Provider value = {userData} >
+        <UserRecordsContext.Provider value = {userRecords}>
             {children}
+        </UserRecordsContext.Provider>
         </UserDataContext.Provider>
     )
 
@@ -162,6 +173,10 @@ const useUserData = () => {
     return useContext(UserDataContext)
 }
 
+const useUserRecords = () => {
+    return useContext(UserRecordsContext)
+}
+
 const useFirestore = () => {
     return useContext(FirestoreContext)
 }
@@ -174,6 +189,7 @@ export {
     useFirebaseApp,
     useAuth,
     useUserData,
+    useUserRecords,
     useFirestore,
     useStorage,
 }

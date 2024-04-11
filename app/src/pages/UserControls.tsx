@@ -114,7 +114,7 @@ const UserControls = (props) => {
             return
         }
 
-        console.log('isAdmin',isAdmin)
+        // console.log('isAdmin',isAdmin)
 
     }
 

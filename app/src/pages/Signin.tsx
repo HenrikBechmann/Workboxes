@@ -42,17 +42,17 @@ const Signin = (props) => {
 
     userDataRef.current = useUserData()
 
-    console.log('useDataRef.current in signin', userDataRef.current)
+    // console.log('useDataRef.current in signin', userDataRef.current)
 
     useEffect (()=>{
 
-        console.log('calling getRedirectResult')
+        // console.log('calling getRedirectResult')
 
         getRedirectResult(auth)
             .then((result) => {
 
 
-                console.log('reulst of getRedirectResult', result)
+                // console.log('result of getRedirectResult', result)
 
                 if (result === null) return
 
@@ -104,9 +104,9 @@ const Signin = (props) => {
 
     }
 
-    // if (userDataRef.current === undefined) {
-    //     return <Box> Connecting... </Box>
-    // }
+    if (userDataRef.current === undefined) {
+        return <Box> Connecting... </Box>
+    }
 
     if (userDataRef.current) {
 
