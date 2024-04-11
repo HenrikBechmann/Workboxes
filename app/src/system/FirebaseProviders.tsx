@@ -53,9 +53,14 @@ export default FirebaseProviders
 export const UserProvider = ({children}) => {
 
     const 
+        [userState, setUserState] = useState('setup'),
         [userData, setUserData] = useState(undefined),
         authStateUnsubscribeRef = useRef(null),
-        isMountedRef = useRef(true)
+        isMountedRef = useRef(true),
+        db = useFirestore(),
+        userDataRef = useRef(null)
+
+    userDataRef.current = userData
 
     useEffect(()=>{
         isMountedRef.current = true
@@ -99,11 +104,12 @@ export const UserProvider = ({children}) => {
                     sysadminStatus:superUser,
                     userRecords,
                 }
+                setUserData(userData)
+                setUserState('identified')
+                console.log('identified userdata', userData)
+    
             }
 
-            // console.log(userData)
-
-            setUserData(userData)
         })
 
         return () => {
@@ -113,6 +119,26 @@ export const UserProvider = ({children}) => {
         }
 
     },[])
+
+    useEffect(()=>{
+
+        let userUnsub
+        if (userState == 'identified') {
+
+            userUnsub = onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
+                userDataRef.current.userRecords.user = doc.data()
+                console.log('updated userDataRef.current', userDataRef)
+                setUserData({...userDataRef.current})
+            })
+
+            setUserState('ready')
+        }
+
+        return ()=>{
+            userUnsub && userUnsub()
+        }
+
+    },[userState])
 
     return (
         <UserDataContext.Provider value = {userData} >

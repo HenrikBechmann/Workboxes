@@ -15,13 +15,14 @@ import {
   beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
 
-// firebase-admin
+// firebase-admin for version 2
 import * as admin from "firebase-admin";
-import {getFirestore} from "firebase-admin/firestore";
+import {getFirestore as getFirestoreV2} from "firebase-admin/firestore";
+import {initializeApp as initializeAppV2} from "firebase-admin/app";
 
 // firebase, apparently required for version 1 functions below
-import {initializeApp} from "firebase/app";
-import {getFirestore as getdb,
+import {initializeApp as initializeAppV1} from "firebase/app";
+import {getFirestore as getFirestoreV1,
   collection,
   doc,
   setDoc,
@@ -30,14 +31,15 @@ import {getFirestore as getdb,
   serverTimestamp,
 } from "firebase/firestore";
 
-import firebaseConfig from './firebaseConfig'
+import firebaseConfig from "./firebaseConfig";
 
-const app = initializeApp(firebaseConfig);
+const appV2 = initializeAppV2();
 
 // This has to use version 1
 export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const {displayName, photoURL, uid} = user;
-  const db = getdb(app);
+  const appV1 = initializeAppV1(firebaseConfig);
+  const db = getFirestoreV1(appV1);
 
   const domainDocRef = await addDoc(collection(db, "domains"),
     {
@@ -217,7 +219,8 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
 // set is_abandoned = true in user record
 export const abandonUser = userAuth.user().onCreate(async (user)=>{
   const {uid} = user;
-  const db = getdb(app);
+  const appV1 = initializeAppV1(firebaseConfig);
+  const db = getFirestoreV1(appV1);
   const userRecordRef = doc(db, "users", uid);
   await updateDoc(userRecordRef, {
     profile: {
@@ -246,7 +249,7 @@ export const updateDatabase = onCall( async (request) => {
   const {data} = request;
   const {document, context} = data;
   const {operation, path, collection, documentID} = context;
-  const db = getFirestore(app);
+  const db = getFirestoreV2(appV2);
   const docpath = path + collection + "/" + documentID;
   response.docpath = docpath;
   switch (operation) {
@@ -309,7 +312,7 @@ export const setAdminClaim = onCall( async (request) =>{
   // validate the caller
   let email = request.auth?.token.email || null;
   if (email) email = email.toLowerCase();
-  const db = getFirestore(app);
+  const db = getFirestoreV2(appV2);
   let result;
   try {
     result = await db.collection("sysadmins")
@@ -387,7 +390,7 @@ export const revokeAdminClaim = onCall( async (request) =>{
   // validate the caller
   let email = request.auth?.token.email || null;
   if (email) email = email.toLowerCase();
-  const db = getFirestore(app);
+  const db = getFirestoreV2(appV2);
   let result;
   try {
     result = await db.collection("sysadmins")
@@ -458,7 +461,7 @@ export const isSuperUser = onCall(async (request) => {
     errorCondition: false,
     role: undefined,
   };
-  const db = getFirestore(app);
+  const db = getFirestoreV2(appV2);
   let result;
   try {
     result = await db.collection("sysadmins")
@@ -477,7 +480,7 @@ export const beforecreated = beforeUserCreated(async (event) => {
   const user = event.data;
   let email = user?.email;
   if (email) email = email.toLowerCase();
-  const db = getFirestore(app);
+  const db = getFirestoreV2(appV2);
   let result;
   try {
     result = await db.collection("invitations")
@@ -499,19 +502,25 @@ export const beforesignedin = beforeUserSignedIn(async (event) => {
   const user = event.data;
   let email = user?.email;
   if (email) email = email.toLowerCase();
-  const db = getFirestore(app);
-  let result;
   try {
-    result = await db.collection("suspensions")
-      .where("properties.email", "==", email).get();
+    const db = getFirestoreV2(appV2);
+    let result;
+    try {
+      result = await db.collection("suspensions")
+        .where("properties.email", "==", email).get();
+    } catch (e) {
+      const error:Error = e as Error;
+      throw new HttpsError("internal",
+        "Internal error: " + error?.message);
+    }
+    if (result?.docs[0]) {
+      throw new HttpsError("permission-denied",
+        "Accounts must be in good standing to sign in to Tribalopolis.",
+        email + " was found in suspensions.");
+    }
   } catch (e) {
     const error:Error = e as Error;
     throw new HttpsError("internal",
-      "Internal error: " + error?.message);
-  }
-  if (result?.docs[0]) {
-    throw new HttpsError("permission-denied",
-      "Accounts must be in good standing to sign in to Tribalopolis.",
-      email + " was found in suspensions.");
+      "Internal error: getFirestore" + error?.message);
   }
 });

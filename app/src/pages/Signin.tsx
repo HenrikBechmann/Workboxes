@@ -32,7 +32,7 @@ const Signin = (props) => {
     const 
         [errorState,setErrorState] = useState<any>(null),
         auth = useAuth(),
-        userDataRef = useRef(),
+        userDataRef = useRef(null),
         navigate = useNavigate(),
         [searchParams] = useSearchParams(),
         from = searchParams.get('from') || '/',
@@ -42,10 +42,17 @@ const Signin = (props) => {
 
     userDataRef.current = useUserData()
 
+    console.log('useDataRef.current in signin', userDataRef.current)
+
     useEffect (()=>{
+
+        console.log('calling getRedirectResult')
 
         getRedirectResult(auth)
             .then((result) => {
+
+
+                console.log('reulst of getRedirectResult', result)
 
                 if (result === null) return
 
@@ -65,13 +72,21 @@ const Signin = (props) => {
 
             }).catch((error) => {
 
-                const jsonstring = error.message.match(/\{(.*)\}/)[0]
-                const json = JSON.parse(jsonstring)
-                const errorStatus = json.error?.status
-                if (errorStatus == 'PERMISSION_DENIED') {
-                    json.error.status = 'Sorry, permission is denied.'
+                console.log('signin error', error)
+
+                try {
+                    const jsonstring = error.message.match(/\{(.*)\}/)[0]
+                    const json = JSON.parse(jsonstring)
+                    const errorStatus = json.error?.status
+                    if (errorStatus == 'PERMISSION_DENIED') {
+                        json.error.status = 'Sorry, permission is denied.'
+                    }
+                    setErrorState(json)
+                } catch(e) {
+
+                    console.log('e', e)
+
                 }
-                setErrorState(json)
                 // Handle Errors here.
                 // const errorCode = error.code;
                 // const errorMessage = error.message;
@@ -89,9 +104,9 @@ const Signin = (props) => {
 
     }
 
-    if (userDataRef.current === undefined) {
-        return <Box> Connecting... </Box>
-    }
+    // if (userDataRef.current === undefined) {
+    //     return <Box> Connecting... </Box>
+    // }
 
     if (userDataRef.current) {
 

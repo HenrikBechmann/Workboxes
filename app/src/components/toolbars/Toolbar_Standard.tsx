@@ -138,8 +138,9 @@ const StandardToolbar = (props) => {
         gotoSubscriptions = () => { navigate('/account/subscriptions') },
         logOut = () => {
             signOut(auth).then(() => {
-              // Sign-out successful.
+              console.log('Sign-out successful.')
             }).catch((error) => {
+                console.log('signout error', error)
               // An error happened.
             })
         }
