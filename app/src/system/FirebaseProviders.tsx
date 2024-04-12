@@ -113,7 +113,7 @@ export const UserProvider = ({children}) => {
                 // console.log('identified userdata', userData)
                 setUserState('useridentified')
     
-            } else {
+            } else { // unsubscribe firestore listeners
                 const 
                     unsubUserRecord = unsubscribeUserRecordRef.current,
                     unsubAccountRecord = unsubscribeAccountRecordRef.current,
@@ -153,7 +153,6 @@ export const UserProvider = ({children}) => {
                     setUserState('userrecordcollected')
                 })
 
-            setUserState('ready')
         }
 
         if (userState == 'userrecordcollected') {
@@ -165,7 +164,11 @@ export const UserProvider = ({children}) => {
                 domainID = userRecord?.profile?.domain?.id
 
 
+            console.log('userrecordcollected: userRecords, accountID, domainID', 
+                userRecords, accountID, domainID)
+
             if (accountID) { 
+                console.log('subscribing to account', accountID)
                 unsubscribeAccountRecordRef.current = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
                         const accountRecord = doc.data()
@@ -173,28 +176,33 @@ export const UserProvider = ({children}) => {
                            previousState.account = accountRecord
                            return {...previousState}
                         })
+                        setUserState('userrecordscompleted')
                     })
+
             } else {
 
                 // create record
             }
 
             if (domainID) {
+                console.log('subscribing to domain', domainID)
                 unsubscribeDomainRecordRef.current = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
                         const domainRecord = doc.data()
+                        console.log('received domainRecord',domainRecord)
                         setUserRecords((previousState) => {
                            previousState.domain = domainRecord
                            return {...previousState}
                         })
+                        setUserState('userrecordscompleted')
                     })
+                
             } else {
 
                 // create record
 
             }
 
-            setUserState('userrecordscompleted')
         }
 
         if (userState == 'userrecordscompleted') {
@@ -202,6 +210,8 @@ export const UserProvider = ({children}) => {
             console.log('completed userRecords', userRecordsRef.current)
 
         }
+
+        setUserState('ready')
 
     },[userState])
 
