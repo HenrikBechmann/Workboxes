@@ -78,7 +78,7 @@ const Workspace = (props) => {
                     domainIcon: photoURL,
                     typeName: 'Collection',
                     type:'Collection',
-                    ID:null,
+                    id:null,
                 }
             },
             {
@@ -97,7 +97,7 @@ const Workspace = (props) => {
                     domainIcon: photoURL,
                     typeName: 'Collection',
                     type:'Collection',
-                    ID:null,
+                    id:null,
                 }
             },
             {
@@ -116,7 +116,7 @@ const Workspace = (props) => {
                     domainIcon: photoURL,
                     typeName: 'Collection',
                     type:'Collection',
-                    ID:null,
+                    id:null,
                 }
             },
 

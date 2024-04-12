@@ -56,12 +56,13 @@ export const UserProvider = ({children}) => {
 
     const 
         [userState, setUserState] = useState('setup'),
-        [userData, setUserData] = useState(undefined),
+        [userData, setUserData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
         db = useFirestore(),
         userDataRef = useRef(null),
+        userRecordsRef = useRef(null),
         unsubscribeUserRecordRef = useRef(null),
         unsubscribeAccountRecordRef = useRef(null),
         unsubscribeDomainRecordRef = useRef(null)
@@ -69,6 +70,7 @@ export const UserProvider = ({children}) => {
     // console.log('UserProvider: userState',userState)
 
     userDataRef.current = userData
+    userRecordsRef.current = userRecords
 
     useEffect(()=>{
         isMountedRef.current = true
@@ -107,14 +109,20 @@ export const UserProvider = ({children}) => {
                 userData = {
                     authUser:user,
                     sysadminStatus:superUser,
-                    // userRecords,
                 }
                 // console.log('identified userdata', userData)
                 setUserState('useridentified')
     
             } else {
-                const unsubUserRecord = unsubscribeUserRecordRef.current
+                const 
+                    unsubUserRecord = unsubscribeUserRecordRef.current,
+                    unsubAccountRecord = unsubscribeAccountRecordRef.current,
+                    unsubDomainRecord = unsubscribeDomainRecordRef.current
+
                 unsubUserRecord && unsubUserRecord()
+                unsubAccountRecord && unsubAccountRecord()
+                unsubDomainRecord && unsubDomainRecord()
+
             }
 
             setUserData(userData)
@@ -135,16 +143,64 @@ export const UserProvider = ({children}) => {
 
             // console.log('registering user snapshot', userDataRef.current.authUser.uid)
 
-            unsubscribeUserRecordRef.current = onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
-                const userRecord = doc.data()
-                // console.log('updated userRecord', userRecord)
-                setUserRecords((previousState) => {
-                   previousState.user = userRecord
-                   return {...previousState}
+            unsubscribeUserRecordRef.current = 
+                onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
+                    const userRecord = doc.data()
+                    setUserRecords((previousState) => {
+                       previousState.user = userRecord
+                       return {...previousState}
+                    })
+                    setUserState('userrecordcollected')
                 })
-            })
 
             setUserState('ready')
+        }
+
+        if (userState == 'userrecordcollected') {
+
+            const 
+                userRecords = userRecordsRef.current,
+                userRecord = userRecords.user,
+                accountID = userRecord?.profile?.account?.id,
+                domainID = userRecord?.profile?.domain?.id
+
+
+            if (accountID) { 
+                unsubscribeAccountRecordRef.current = 
+                    onSnapshot(doc(db, "accounts",accountID), (doc) =>{
+                        const accountRecord = doc.data()
+                        setUserRecords((previousState) => {
+                           previousState.account = accountRecord
+                           return {...previousState}
+                        })
+                    })
+            } else {
+
+                // create record
+            }
+
+            if (domainID) {
+                unsubscribeDomainRecordRef.current = 
+                    onSnapshot(doc(db, "domains",domainID), (doc) =>{
+                        const domainRecord = doc.data()
+                        setUserRecords((previousState) => {
+                           previousState.domain = domainRecord
+                           return {...previousState}
+                        })
+                    })
+            } else {
+
+                // create record
+
+            }
+
+            setUserState('userrecordscompleted')
+        }
+
+        if (userState == 'userrecordscompleted') {
+
+            console.log('completed userRecords', userRecordsRef.current)
+
         }
 
     },[userState])

@@ -52,17 +52,21 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           },
         },
         owner: {
-          ID: uid,
+          id: uid,
           name: displayName,
         },
         administrator: {
-          ID: null,
+          id: null,
+          name: null,
+        },
+        workbox: {
+          id: null,
           name: null,
         },
         commits: {
-          created_by: {ID: uid, name: displayName},
+          created_by: {id: uid, name: displayName},
           created_timestamp: serverTimestamp(),
-          updated_by: {ID: null, name: null},
+          updated_by: {id: null, name: null},
           updated_timestamp: null,
         },
         counts: {
@@ -85,11 +89,11 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           },
         },
         owner: {
-          ID: uid,
+          id: uid,
           name: displayName,
         },
         domain: {
-          ID: domainDocRef.id,
+          id: domainDocRef.id,
           name: displayName,
         },
         type: {
@@ -101,11 +105,11 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
         },
         commits: {
           created_by: {
-            ID: uid,
+            id: uid,
             name: displayName,
           },
           created_timestamp: serverTimestamp(),
-          updated_by: {ID: null, name: null},
+          updated_by: {id: null, name: null},
           updated_timestamp: null,
         },
         read_role: "member",
@@ -143,6 +147,15 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     }
   );
 
+  await updateDoc(domainDocRef, {
+    profile: {
+      workbox: {
+        id: workboxDocRef,
+        name: displayName,
+      },
+    },
+  });  
+
   const accountDocumentRef = await addDoc(collection(db, "accounts"),
     {
       version: 0,
@@ -154,16 +167,16 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           },
         },
         owner: {
-          ID: uid,
+          id: uid,
           name: displayName,
         },
         commits: {
           created_by: {
-            ID: uid,
+            id: uid,
             name: displayName,
           },
           created_timestamp: serverTimestamp(),
-          updated_by: {ID: null, handle: null, name: null},
+          updated_by: {id: null, handle: null, name: null},
           updated_timestamp: null,
         },
         counts: {
@@ -187,24 +200,24 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           },
         },
         domain: {
-          ID: domainDocRef.id,
+          id: domainDocRef.id,
           name: displayName,
         },
         account: {
-          ID: accountDocumentRef.id,
+          id: accountDocumentRef.id,
           name: displayName,
         },
         workbox: {
-          ID: workboxDocRef.id,
+          id: workboxDocRef.id,
           name: displayName,
         },
         commits: {
           created_by: {
-            ID: uid,
+            id: uid,
             name: displayName,
           },
           created_timestamp: serverTimestamp(),
-          updated_by: {ID: null, handle: null, name: null},
+          updated_by: {id: null, handle: null, name: null},
           updated_timestamp: null,
         },
         counts: {
