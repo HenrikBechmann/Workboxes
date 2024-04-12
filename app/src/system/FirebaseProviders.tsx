@@ -12,6 +12,8 @@ import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
 
+import { updateDocumentVersion } from './utilities'
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
