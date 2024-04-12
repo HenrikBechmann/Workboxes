@@ -82,6 +82,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     {
       version: 0,
       profile: {
+        userworkbox: true,
         workbox: {
           name: displayName,
           image: {
@@ -136,12 +137,12 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
             },
           },
         ],
-        databox: {
-          accepts: [],
-          links: {
-            cached: true,
-            cache: [],
-          },
+      },
+      databox: {
+        accepts: [],
+        links: {
+          cached: true,
+          cache: [],
         },
       },
     }
