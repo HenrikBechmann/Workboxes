@@ -164,11 +164,11 @@ export const UserProvider = ({children}) => {
                 domainID = userRecord?.profile?.domain?.id
 
 
-            console.log('userrecordcollected: userRecords, accountID, domainID', 
-                userRecords, accountID, domainID)
+            // console.log('userrecordcollected: userRecords, accountID, domainID', 
+            //     userRecords, accountID, domainID)
 
             if (accountID) { 
-                console.log('subscribing to account', accountID)
+                // console.log('subscribing to account', accountID)
                 unsubscribeAccountRecordRef.current = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
                         const accountRecord = doc.data()
@@ -185,11 +185,11 @@ export const UserProvider = ({children}) => {
             }
 
             if (domainID) {
-                console.log('subscribing to domain', domainID)
+                // console.log('subscribing to domain', domainID)
                 unsubscribeDomainRecordRef.current = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
                         const domainRecord = doc.data()
-                        console.log('received domainRecord',domainRecord)
+                        // console.log('received domainRecord',domainRecord)
                         setUserRecords((previousState) => {
                            previousState.domain = domainRecord
                            return {...previousState}
@@ -207,7 +207,7 @@ export const UserProvider = ({children}) => {
 
         if (userState == 'userrecordscompleted') {
 
-            console.log('completed userRecords', userRecordsRef.current)
+            // console.log('completed userRecords', userRecordsRef.current)
 
         }
 
