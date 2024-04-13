@@ -26,7 +26,7 @@ class snapshotControl {
     count = 0
 
     create = (index) => {
-        this.snapshotData.set(index,{unsub:null, count:0})
+        this.snapshotData.set(index,{unsub:null, count:0, doccheck:false})
     }
 
     registerUnsub = (index, unsub) => {
@@ -48,6 +48,14 @@ class snapshotControl {
 
         this.snapshotData.delete(index)
 
+    }
+
+    getDoccheck = (index) => {
+        return this.snapshotData.get(index).doccheck
+    }
+
+    setDoccheck = (index) => {
+        this.snapshotData.get(index).doccheck = true
     }
 
     unsubAll = () => {
