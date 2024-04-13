@@ -29,6 +29,7 @@ import {getFirestore as getFirestoreV1,
   addDoc,
   updateDoc,
   serverTimestamp,
+  increment,
 } from "firebase/firestore";
 
 import firebaseConfig from "./firebaseConfig";
@@ -44,6 +45,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const domainDocRef = await addDoc(collection(db, "domains"),
     {
       version: 0,
+      generation:0,
       profile: {
         is_userdomain: true,
         domain: {
@@ -75,7 +77,6 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           updated_timestamp: null,
         },
         counts: {
-          generation: 0,
           members: 0,
           workboxes: 0,
         },
@@ -86,6 +87,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const workboxDocRef = await addDoc(collection(db, "workboxes"),
     {
       version: 0,
+      generation:0,
       profile: {
         is_domainworkbox: true,
         workbox: {
@@ -121,7 +123,6 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
         read_role: "member",
         write_role: null,
         counts: {
-          generation: 0,
           links: 0,
           references: 0,
         },
@@ -152,9 +153,9 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
       },
     }
   );
-
   await updateDoc(domainDocRef, {
     profile: {
+      generation:increment(1),
       workbox: {
         id: workboxDocRef,
         name: displayName,
@@ -165,6 +166,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const accountDocumentRef = await addDoc(collection(db, "accounts"),
     {
       version: 0,
+      generation:0,
       profile: {
         account: {
           name: displayName,
@@ -186,7 +188,6 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           updated_timestamp: null,
         },
         counts: {
-          generation: 0,
         },
       },
     }
@@ -197,6 +198,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
 
     {
       version: 0,
+      generation:0,
       profile: {
         is_abandoned: false,
         user: {
@@ -227,7 +229,6 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           updated_timestamp: null,
         },
         counts: {
-          generation: 0,
         },
       },
     }
@@ -270,55 +271,25 @@ export const updateDatabase = onCall( async (request) => {
   const {operation, path, collection, documentID} = context;
   const db = getFirestoreV2(appV2);
   const docpath = path + collection + "/" + documentID;
+
   response.docpath = docpath;
+
   switch (operation) {
-  // case "add": {
-  //   const id = documentID || db.doc(docpath).id
-  //   docpath += id
-  //   try {
-  //     await db.doc(docpath).set(document)
-  //   } catch(error:any) {
-  //     response.error = true
-  //     response.message = error.message
-  //     return response
-  //   }
-  //   break;
-  // }
-  case "set": {
-    try {
-      await db.doc(docpath).set(document);
-    } catch (e) {
-      const error:Error = e as Error;
-      response.error = true;
-      response.message = error.message;
+    case "set": {
+      try {
+        await db.doc(docpath).set(document);
+      } catch (e) {
+        const error:Error = e as Error;
+        response.error = true;
+        response.message = error.message;
+        return response;
+      }
+      break;
+    }
+    default: {
+      response.message = "unrecognized operation requested";
       return response;
     }
-    break;
-  }
-  // case "update":{
-  //   try {
-  //     await db.doc(docpath).update(document)
-  //   } catch(error:any) {
-  //     response.error = true
-  //     response.message = error.message
-  //     return response
-  //   }
-  //   break;
-  // }
-  // case "delete":{
-  //   try {
-  //     await db.doc(docpath).delete(document)
-  //   } catch(error:any) {
-  //     response.error = true
-  //     response.message = error.message
-  //     return response
-  //   }
-  //   break
-  // }
-  default: {
-    response.message = "unrecognized operation requested";
-    return response;
-  }
   }
 
   response.message = "database update operation was completed";
