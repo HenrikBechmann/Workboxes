@@ -45,11 +45,16 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     {
       version: 0,
       profile: {
+        is_userdomain: true,
         domain: {
           name: displayName,
           image: {
             source: photoURL,
           },
+        },
+        handle: {
+          id: null,
+          name: null,
         },
         owner: {
           id: uid,
@@ -82,7 +87,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     {
       version: 0,
       profile: {
-        userworkbox: true,
+        is_domainworkbox: true,
         workbox: {
           name: displayName,
           image: {
@@ -204,12 +209,12 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
           id: domainDocRef.id,
           name: displayName,
         },
+        handle: {
+          id: null,
+          name: null,
+        },
         account: {
           id: accountDocumentRef.id,
-          name: displayName,
-        },
-        workbox: {
-          id: workboxDocRef.id,
           name: displayName,
         },
         commits: {
@@ -231,7 +236,7 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
 
 // This has to use version 1
 // set is_abandoned = true in user record
-export const abandonUser = userAuth.user().onCreate(async (user)=>{
+export const abandonUser = userAuth.user().onDelete (async (user)=>{
   const {uid} = user;
   const appV1 = initializeAppV1(firebaseConfig);
   const db = getFirestoreV1(appV1);

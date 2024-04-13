@@ -160,9 +160,9 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
             <MenuDivider />
             <MenuGroup title = 'MANAGE...'>
-                <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
-                <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
                 <MenuItem onClick = {gotoDomains}>Your domains</MenuItem>
+                <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
+                <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
             </MenuGroup>
             <MenuDivider />
             <MenuItem onClick = {logOut}>Sign out</MenuItem>
@@ -187,7 +187,13 @@ const StandardToolbar = (props) => {
             />
             </>
         }
-        <MenuControl displayName = {displayName} icon = {photoURL} tooltip = 'Options for current user' caption = 'current user' menulist = {currentusermenulist} />
+        <MenuControl 
+            displayName = {displayName} 
+            icon = {photoURL} 
+            tooltip = 'Options for current user' 
+            caption = '@HenrikBechmann' 
+            menulist = {currentusermenulist} 
+        />
         <ToolbarVerticalDivider />
         {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main workspace' response = {goHome} />}
         {isSuperUser && <>
