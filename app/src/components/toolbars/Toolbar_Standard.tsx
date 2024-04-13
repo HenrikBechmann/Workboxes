@@ -158,6 +158,7 @@ const StandardToolbar = (props) => {
 
         return <MenuList>
             <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
+            <MenuItem >User Preferences</MenuItem>
             <MenuDivider />
             <MenuGroup title = 'MANAGE...'>
                 <MenuItem onClick = {gotoDomains}>Your domains</MenuItem>
