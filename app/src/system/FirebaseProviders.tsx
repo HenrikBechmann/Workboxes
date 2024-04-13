@@ -2,7 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 // react
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
 
 // firebase
 import { initializeApp } from "firebase/app";
@@ -19,22 +19,71 @@ import { updateDocumentVersion } from './utilities'
 
 // FirebaseProvider
 
+class snapshotControl {
+
+    snapshotData = new Map()
+
+    count = 0
+
+    create = (index) => {
+        this.snapshotData.set(index,{unsub:null, count:0})
+    }
+
+    registerUnsub = (index, unsub) => {
+        this.snapshotData.get(index).unsub = unsub
+    }
+
+    incrementCount = (index, count) => {
+        this.snapshotData.get(index).count += count
+    }
+
+    unsub = (index) => {
+        const 
+            record = this.snapshotData.get(index),
+            unsubscribe = record.unsub
+
+        this.count += record.count
+
+        unsubscribe && unsubscribe()
+
+        this.snapshotData.delete(index)
+
+    }
+
+    unsubAll = () => {
+
+        // TODO: collect and save counts
+        this.snapshotData.forEach((record) => {
+            const unsubscribe = record.unsub
+            this.count += record.count
+            unsubscribe && unsubscribe()
+        })
+
+        this.snapshotData.clear()
+    }
+
+}
+
+const snapshotControlClass = new snapshotControl() // singleton
+
 const 
+    // snapshotControl = new Map(),
+    SnapshotControlContext = createContext(snapshotControlClass),
     firebaseApp = initializeApp(firebaseConfig),
-    FirebaseAppContext = React.createContext(firebaseApp),
+    FirebaseAppContext = createContext(firebaseApp),
 
     auth = getAuth(firebaseApp),
-    AuthContext = React.createContext(auth),
+    AuthContext = createContext(auth),
 
-    UserDataContext = React.createContext(null),
+    UserDataContext = createContext(null),
 
-    UserRecordsContext = React.createContext(null),
+    UserRecordsContext = createContext(null),
 
     firestore = getFirestore(firebaseApp),
-    FirestoreContext = React.createContext(firestore),
+    FirestoreContext = createContext(firestore),
 
     storage = getStorage(firebaseApp),
-    StorageContext = React.createContext(storage)
+    StorageContext = createContext(storage)
 
 const FirebaseProviders = ({children}) => {
 
@@ -64,10 +113,7 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true),
         db = useFirestore(),
         userDataRef = useRef(null),
-        userRecordsRef = useRef(null),
-        unsubscribeUserRecordRef = useRef(null),
-        unsubscribeAccountRecordRef = useRef(null),
-        unsubscribeDomainRecordRef = useRef(null)
+        userRecordsRef = useRef(null)
 
     // console.log('UserProvider: userState',userState)
 
@@ -85,6 +131,7 @@ export const UserProvider = ({children}) => {
     useEffect(()=>{
 
         isMountedRef.current = true
+
         // console.log('subscribing to onAuthStateChanged')
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
 
@@ -116,15 +163,7 @@ export const UserProvider = ({children}) => {
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
-                const 
-                    unsubUserRecord = unsubscribeUserRecordRef.current,
-                    unsubAccountRecord = unsubscribeAccountRecordRef.current,
-                    unsubDomainRecord = unsubscribeDomainRecordRef.current
-
-                unsubUserRecord && unsubUserRecord()
-                unsubAccountRecord && unsubAccountRecord()
-                unsubDomainRecord && unsubDomainRecord()
-
+                snapshotControlClass.unsubAll()
             }
 
             setUserData(userData)
@@ -144,9 +183,11 @@ export const UserProvider = ({children}) => {
         if (userState == 'useridentified') {
 
             // console.log('registering user snapshot', userDataRef.current.authUser.uid)
-
-            unsubscribeUserRecordRef.current = 
+            const snapshotIndex = "UserProvider.users." + userDataRef.current.authUser.uid
+            snapshotControlClass.create(snapshotIndex)
+            const unsubscribe = 
                 onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
+                    snapshotControlClass.incrementCount(snapshotIndex, 1)
                     const userRecord = doc.data()
                     setUserRecords((previousState) => {
                        previousState.user = userRecord
@@ -154,7 +195,7 @@ export const UserProvider = ({children}) => {
                     })
                     setUserState('userrecordcollected')
                 })
-
+            snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
         }
 
         if (userState == 'userrecordcollected') {
@@ -170,9 +211,12 @@ export const UserProvider = ({children}) => {
             //     userRecords, accountID, domainID)
 
             if (accountID) { 
+                const snapshotIndex = "UserProvider.accounts." + accountID
+                snapshotControlClass.create(snapshotIndex)
                 // console.log('subscribing to account', accountID)
-                unsubscribeAccountRecordRef.current = 
+                const unsubscribe = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
+                        snapshotControlClass.incrementCount(snapshotIndex, 1)
                         const accountRecord = doc.data()
                         setUserRecords((previousState) => {
                            previousState.account = accountRecord
@@ -180,6 +224,7 @@ export const UserProvider = ({children}) => {
                         })
                         setUserState('userrecordscompleted')
                     })
+                snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
 
             } else {
 
@@ -188,8 +233,11 @@ export const UserProvider = ({children}) => {
 
             if (domainID) {
                 // console.log('subscribing to domain', domainID)
-                unsubscribeDomainRecordRef.current = 
+                const snapshotIndex = "UserProvider.domains." + domainID
+                snapshotControlClass.create(snapshotIndex)
+                const unsubscribe = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
+                        snapshotControlClass.incrementCount(snapshotIndex, 1)
                         const domainRecord = doc.data()
                         // console.log('received domainRecord',domainRecord)
                         setUserRecords((previousState) => {
@@ -198,6 +246,7 @@ export const UserProvider = ({children}) => {
                         })
                         setUserState('userrecordscompleted')
                     })
+                snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
                 
             } else {
 
@@ -218,16 +267,22 @@ export const UserProvider = ({children}) => {
     },[userState])
 
     return (
+        <SnapshotControlContext.Provider value = {snapshotControlClass}>
         <UserDataContext.Provider value = {userData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
         </UserDataContext.Provider>
+        </SnapshotControlContext.Provider>
     )
 
 }
 
 // context access
+
+const useSnapshotControl = () => {
+    return useContext(SnapshotControlContext)
+}
 
 const useFirebaseApp = () => {
     return useContext(FirebaseAppContext)
@@ -254,6 +309,7 @@ const useStorage = () => {
 }
 
 export {
+    useSnapshotControl,
     useFirebaseApp,
     useAuth,
     useUserData,
