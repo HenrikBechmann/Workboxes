@@ -33,7 +33,7 @@ class snapshotControlClass {
         this.snapshotData.get(index).unsub = unsub
     }
 
-    incrementCount = (index, count) => {
+    incrementCallCount = (index, count) => {
         this.snapshotData.get(index).count += count
     }
 
@@ -195,8 +195,9 @@ export const UserProvider = ({children}) => {
             snapshotControl.create(snapshotIndex)
             const unsubscribe = 
                 onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
-                    snapshotControl.incrementCount(snapshotIndex, 1)
+                    snapshotControl.incrementCallCount(snapshotIndex, 1)
                     const userRecord = doc.data()
+                    console.log('userRecord',userRecord)
                     setUserRecords((previousState) => {
                        previousState.user = userRecord
                        return {...previousState}
@@ -224,7 +225,7 @@ export const UserProvider = ({children}) => {
                 // console.log('subscribing to account', accountID)
                 const unsubscribe = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
-                        snapshotControl.incrementCount(snapshotIndex, 1)
+                        snapshotControl.incrementCallCount(snapshotIndex, 1)
                         const accountRecord = doc.data()
                         setUserRecords((previousState) => {
                            previousState.account = accountRecord
@@ -245,7 +246,7 @@ export const UserProvider = ({children}) => {
                 snapshotControl.create(snapshotIndex)
                 const unsubscribe = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
-                        snapshotControl.incrementCount(snapshotIndex, 1)
+                        snapshotControl.incrementCallCount(snapshotIndex, 1)
                         const domainRecord = doc.data()
                         // console.log('received domainRecord',domainRecord)
                         setUserRecords((previousState) => {

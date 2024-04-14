@@ -14,7 +14,7 @@ export const updateDocumentVersion = (collection, type, source, defaults = {}) =
 
             updatedDocument[collection][type].profile.version = 
               versions[collection][type].profile.version
-              
+
         } else {
             updatedDocument = source
         }
@@ -132,11 +132,17 @@ const versions = {
       generation: 0,
       profile: {
         is_abandoned: false,
+        first_load: true,
+        fully_registered: false,
         user: {
           name: null,
           image: {
             source: null,
           },
+          handle: {
+            plain: null,
+            lower_case: null,
+          }
         },
         domain: {
           id: null,
@@ -178,10 +184,10 @@ const versions = {
           image: {
             source: null,
           },
-        },
-        handle: {
-          id: null,
-          name: null,
+          handle: {
+            plain: null,
+            lower_case: null,
+          },
         },
         owner: {
           id: null,
