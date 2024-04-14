@@ -19,7 +19,7 @@ import { updateDocumentVersion } from './utilities'
 
 // FirebaseProvider
 
-class snapshotControl {
+class snapshotControlClass {
 
     snapshotData = new Map()
 
@@ -72,11 +72,11 @@ class snapshotControl {
 
 }
 
-const snapshotControlClass = new snapshotControl() // singleton
+const snapshotControl = new snapshotControlClass() // singleton
 
 const 
     // snapshotControl = new Map(),
-    SnapshotControlContext = createContext(snapshotControlClass),
+    SnapshotControlContext = createContext(snapshotControl),
     firebaseApp = initializeApp(firebaseConfig),
     FirebaseAppContext = createContext(firebaseApp),
 
@@ -171,7 +171,7 @@ export const UserProvider = ({children}) => {
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
-                snapshotControlClass.unsubAll()
+                snapshotControl.unsubAll()
             }
 
             setUserData(userData)
@@ -192,10 +192,10 @@ export const UserProvider = ({children}) => {
 
             // console.log('registering user snapshot', userDataRef.current.authUser.uid)
             const snapshotIndex = "UserProvider.users." + userDataRef.current.authUser.uid
-            snapshotControlClass.create(snapshotIndex)
+            snapshotControl.create(snapshotIndex)
             const unsubscribe = 
                 onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
-                    snapshotControlClass.incrementCount(snapshotIndex, 1)
+                    snapshotControl.incrementCount(snapshotIndex, 1)
                     const userRecord = doc.data()
                     setUserRecords((previousState) => {
                        previousState.user = userRecord
@@ -203,7 +203,7 @@ export const UserProvider = ({children}) => {
                     })
                     setUserState('userrecordcollected')
                 })
-            snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
+            snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
         }
 
         if (userState == 'userrecordcollected') {
@@ -220,11 +220,11 @@ export const UserProvider = ({children}) => {
 
             if (accountID) { 
                 const snapshotIndex = "UserProvider.accounts." + accountID
-                snapshotControlClass.create(snapshotIndex)
+                snapshotControl.create(snapshotIndex)
                 // console.log('subscribing to account', accountID)
                 const unsubscribe = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
-                        snapshotControlClass.incrementCount(snapshotIndex, 1)
+                        snapshotControl.incrementCount(snapshotIndex, 1)
                         const accountRecord = doc.data()
                         setUserRecords((previousState) => {
                            previousState.account = accountRecord
@@ -232,7 +232,7 @@ export const UserProvider = ({children}) => {
                         })
                         setUserState('userrecordscompleted')
                     })
-                snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
+                snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
 
             } else {
 
@@ -242,10 +242,10 @@ export const UserProvider = ({children}) => {
             if (domainID) {
                 // console.log('subscribing to domain', domainID)
                 const snapshotIndex = "UserProvider.domains." + domainID
-                snapshotControlClass.create(snapshotIndex)
+                snapshotControl.create(snapshotIndex)
                 const unsubscribe = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
-                        snapshotControlClass.incrementCount(snapshotIndex, 1)
+                        snapshotControl.incrementCount(snapshotIndex, 1)
                         const domainRecord = doc.data()
                         // console.log('received domainRecord',domainRecord)
                         setUserRecords((previousState) => {
@@ -254,7 +254,7 @@ export const UserProvider = ({children}) => {
                         })
                         setUserState('userrecordscompleted')
                     })
-                snapshotControlClass.registerUnsub(snapshotIndex, unsubscribe)
+                snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
                 
             } else {
 
@@ -275,7 +275,7 @@ export const UserProvider = ({children}) => {
     },[userState])
 
     return (
-        <SnapshotControlContext.Provider value = {snapshotControlClass}>
+        <SnapshotControlContext.Provider value = {snapshotControl}>
         <UserDataContext.Provider value = {userData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
