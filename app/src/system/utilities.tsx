@@ -1,7 +1,7 @@
 // utilities.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import {merge as _merge} from 'lodash'
+import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
 export const updateDocumentVersion = (collection, type, source, defaults = {}) => {
 
@@ -10,10 +10,10 @@ export const updateDocumentVersion = (collection, type, source, defaults = {}) =
         const latest = versions[collection][type]
         if (source.version !== latest.version) {
 
-            updatedDocument = _merge(latest, defaults, source)
+            updatedDocument = _merge(_cloneDeep(latest), _cloneDeep(defaults), _cloneDeep(source))
 
-            updatedDocument[collection][type].profile.version = 
-              versions[collection][type].profile.version
+            updatedDocument.version = 
+              versions[collection][type].version
 
         } else {
             updatedDocument = source
@@ -35,6 +35,7 @@ const versions = {
       profile: {
         is_domainworkbox: null,
         workbox: {
+          id:null,
           name: null,
           image: {
             source: null,
@@ -103,6 +104,7 @@ const versions = {
       generation: 0,
       profile: {
         account: {
+          id:null,
           name: null,
           image: {
             source: null,
@@ -118,7 +120,7 @@ const versions = {
             name: null,
           },
           created_timestamp: null,
-          updated_by: {id: null, handle: null, name: null},
+          updated_by: {id: null, name: null},
           updated_timestamp: null,
         },
         counts: {
@@ -135,20 +137,17 @@ const versions = {
         first_load: true,
         fully_registered: false,
         user: {
+          id:null,
           name: null,
           image: {
             source: null,
           },
           handle: {
-            plain: null,
-            lower_case: null,
-          }
+            id: null,
+            name: null,
+          },
         },
         domain: {
-          id: null,
-          name: null,
-        },
-        handle: {
           id: null,
           name: null,
         },
@@ -180,6 +179,7 @@ const versions = {
       profile: {
         is_userdomain: null,
         domain: {
+          id:null,
           name: null,
           image: {
             source: null,

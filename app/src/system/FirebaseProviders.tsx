@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState, createContext, useContext } from 'r
 // firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore, doc, onSnapshot } from 'firebase/firestore'
+import { getFirestore, collection, doc, setDoc, onSnapshot, serverTimestamp } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
@@ -185,6 +185,173 @@ export const UserProvider = ({children}) => {
         }
 
     },[])
+    const addUserBaseRecords = (userData) => {
+
+        const
+            accountDocRef = doc(collection(db, 'accounts')),
+            domainDocRef = doc(collection(db, 'domains')),
+            workboxDocRef = doc(collection(db, 'workboxes'))
+
+        const {displayName, photoURL, uid} = userData.authUser
+
+        const userRecord = updateDocumentVersion('users','standard',{},{
+            profile: {
+              is_abandoned: false,
+              user: {
+                id: uid,
+                name: displayName,
+                image: {
+                  source: photoURL,
+                },
+              },
+              domain: {
+                id: domainDocRef.id,
+                name: displayName,
+              },
+              account: {
+                id: accountDocRef.id,
+                name: displayName,
+              },
+              commits: {
+                created_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                created_timestamp: serverTimestamp(),
+              },
+            },
+
+        })
+
+        const accountRecord = updateDocumentVersion('accounts','standard', {}, {
+            profile: {
+              account: {
+                id: accountDocRef.id,
+                name: displayName,
+                image: {
+                  source: photoURL,
+                },
+              },
+              owner: {
+                id: uid,
+                name: displayName,
+              },
+              commits: {
+                created_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                created_timestamp: serverTimestamp(),
+              },
+              counts: {
+              },
+            },
+        })
+
+        const domainRecord = updateDocumentVersion('domains','standard',{},{
+            profile: {
+                is_userdomain: true,
+                domain: {
+                  id: domainDocRef.id,
+                  name: displayName,
+                  image: {
+                    source: photoURL,
+                  },
+                },
+                workbox: {
+                    id: workboxDocRef.id,
+                    name: displayName,
+                },
+                owner: {
+                  id: uid,
+                  name: displayName,
+                },
+                commits: {
+                  created_by: {
+                      id: uid, 
+                      name: displayName
+                  },
+                  created_timestamp: serverTimestamp(),
+                },
+                counts: {
+                  members: 0,
+                  workboxes: 0,
+                },
+            }
+
+        })
+
+        const workboxRecord = updateDocumentVersion('workboxes','collection',{},{
+            version: 0,
+            generation: 0,
+            profile: {
+              is_domainworkbox: true,
+              workbox: {
+                id: workboxDocRef.id,
+                name: displayName,
+                image: {
+                  source: photoURL,
+                },
+              },
+              owner: {
+                id: uid,
+                name: displayName,
+              },
+              domain: {
+                id: domainDocRef.id,
+                name: displayName,
+              },
+              type: {
+                name: "container",
+                alias: "Container",
+              },
+              commits: {
+                created_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                created_timestamp: serverTimestamp(),
+              },
+              read_role: "member",
+              counts: {
+                links: 0,
+                references: 0,
+              },
+            },
+            document: {
+              sections: [
+                {
+                  name: "standard",
+                  alias: "Standard",
+                  position: 0,
+                  data: {
+                    name: displayName,
+                    image: {
+                      source: photoURL,
+                    },
+                  },
+                },
+              ],
+            },
+        })
+
+        console.log('base records: users, accounts, domains, workboxes', 
+            userRecord, accountRecord, domainRecord, workboxRecord)
+
+        // const docsets = []
+
+        // docsets.push(setDoc(doc(db,'users',uid),userRecord))
+        // docsets.push(setDoc(accountDocRef, accountRecord))
+        // docsets.push(setDoc(domainDocRef, domainRecord))
+        // docsets.push(setDoc(workboxDocRef, workboxRecord))
+
+        // Promise.all(docsets).then((value) => {
+
+        // },(reason) => {
+
+        // })
+
+    }
 
     useEffect(()=>{
 
@@ -193,16 +360,21 @@ export const UserProvider = ({children}) => {
             // console.log('registering user snapshot', userDataRef.current.authUser.uid)
             const snapshotIndex = "UserProvider.users." + userDataRef.current.authUser.uid
             snapshotControl.create(snapshotIndex)
+            const userData = userDataRef.current
             const unsubscribe = 
-                onSnapshot(doc(db, "users",userDataRef.current.authUser.uid), (doc) =>{
+                onSnapshot(doc(db, "users",userData.authUser.uid), (doc) =>{
                     snapshotControl.incrementCallCount(snapshotIndex, 1)
                     const userRecord = doc.data()
                     console.log('userRecord',userRecord)
-                    setUserRecords((previousState) => {
-                       previousState.user = userRecord
-                       return {...previousState}
-                    })
-                    setUserState('userrecordcollected')
+                    if (!userRecord) {
+                        addUserBaseRecords(userData)
+                    } else {
+                        setUserRecords((previousState) => {
+                           previousState.user = userRecord
+                           return {...previousState}
+                        })
+                        setUserState('userrecordcollected')
+                    }
                 })
             snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
         }
