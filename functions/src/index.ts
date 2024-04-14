@@ -10,6 +10,7 @@
 // firebase-functions
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import {auth as userAuth} from "firebase-functions";
+import {log} from "firebase-functions/logger";
 import {
   beforeUserCreated,
   beforeUserSignedIn,
@@ -42,10 +43,12 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   const appV1 = initializeAppV1(firebaseConfig);
   const db = getFirestoreV1(appV1);
 
+  log("start writing to domains");
+
   const domainDocRef = await addDoc(collection(db, "domains"),
     {
       version: 0,
-      generation:0,
+      generation: 0,
       profile: {
         is_userdomain: true,
         domain: {
@@ -84,10 +87,12 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     }
   );
 
+  log("written to domains");
+
   const workboxDocRef = await addDoc(collection(db, "workboxes"),
     {
       version: 0,
-      generation:0,
+      generation: 0,
       profile: {
         is_domainworkbox: true,
         workbox: {
@@ -153,20 +158,25 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
       },
     }
   );
+
+  log("written to workboxes");
+
   await updateDoc(domainDocRef, {
     profile: {
-      generation:increment(1),
+      generation: increment(1),
       workbox: {
         id: workboxDocRef,
         name: displayName,
       },
     },
-  });  
+  });
+
+  log("update domains");
 
   const accountDocumentRef = await addDoc(collection(db, "accounts"),
     {
       version: 0,
-      generation:0,
+      generation: 0,
       profile: {
         account: {
           name: displayName,
@@ -193,12 +203,14 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
     }
   );
 
+  log("written to accounts");
+
   const userRecordRef = doc(db, "users", uid);
   await setDoc(userRecordRef,
 
     {
       version: 0,
-      generation:0,
+      generation: 0,
       profile: {
         is_abandoned: false,
         user: {
@@ -235,9 +247,11 @@ export const setupNewUser = userAuth.user().onCreate(async (user)=>{
   );
 });
 
+log("written to users");
+
 // This has to use version 1
 // set is_abandoned = true in user record
-export const abandonUser = userAuth.user().onDelete (async (user)=>{
+export const abandonUser = userAuth.user().onDelete(async (user)=>{
   const {uid} = user;
   const appV1 = initializeAppV1(firebaseConfig);
   const db = getFirestoreV1(appV1);
@@ -275,21 +289,21 @@ export const updateDatabase = onCall( async (request) => {
   response.docpath = docpath;
 
   switch (operation) {
-    case "set": {
-      try {
-        await db.doc(docpath).set(document);
-      } catch (e) {
-        const error:Error = e as Error;
-        response.error = true;
-        response.message = error.message;
-        return response;
-      }
-      break;
-    }
-    default: {
-      response.message = "unrecognized operation requested";
+  case "set": {
+    try {
+      await db.doc(docpath).set(document);
+    } catch (e) {
+      const error:Error = e as Error;
+      response.error = true;
+      response.message = error.message;
       return response;
     }
+    break;
+  }
+  default: {
+    response.message = "unrecognized operation requested";
+    return response;
+  }
   }
 
   response.message = "database update operation was completed";
