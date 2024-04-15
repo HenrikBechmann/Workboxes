@@ -33,6 +33,10 @@ class snapshotControlClass {
         this.snapshotData.get(index).unsub = unsub
     }
 
+    has = (index) => {
+        return this.snapshotData.has(index)
+    }
+
     incrementCallCount = (index, count) => {
         this.snapshotData.get(index).count += count
     }
@@ -121,9 +125,10 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true),
         db = useFirestore(),
         userDataRef = useRef(null),
-        userRecordsRef = useRef(null)
+        userRecordsRef = useRef(null),
+        baseRecordsAvailableRef = useRef(true)
 
-    // console.log('UserProvider: userState',userState)
+    // console.log('UserProvider: userState, userData, userRecords, snapshotControl.snapshotData\n',userState,'\n' ,userData, userRecords, snapshotControl.snapshotData)
 
     userDataRef.current = userData
     userRecordsRef.current = userRecords
@@ -167,7 +172,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                // console.log('identified userdata', userData)
+                // console.log('acquired userdata', userData)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
@@ -185,7 +190,8 @@ export const UserProvider = ({children}) => {
         }
 
     },[])
-    const addUserBaseRecords = (userData) => {
+    
+    async function addUserBaseRecords(userData) {
 
         const
             accountDocRef = doc(collection(db, 'accounts')),
@@ -335,112 +341,101 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        console.log('base records: users, accounts, domains, workboxes', 
-            userRecord, accountRecord, domainRecord, workboxRecord)
+        // console.log('base records: users, accounts, domains, workboxes', 
+        //     userRecord, accountRecord, domainRecord, workboxRecord)
 
         // const docsets = []
 
-        // docsets.push(setDoc(doc(db,'users',uid),userRecord))
-        // docsets.push(setDoc(accountDocRef, accountRecord))
-        // docsets.push(setDoc(domainDocRef, domainRecord))
-        // docsets.push(setDoc(workboxDocRef, workboxRecord))
+        // console.log('setting user document', uid, userRecord)
+        await setDoc(doc(db,'users',uid),userRecord)
+        // console.log('setting account document', accountDocRef.id, accountRecord)
+        await setDoc(accountDocRef, accountRecord)
+        // console.log('setting domain document', domainDocRef.id, domainRecord)
+        await setDoc(domainDocRef, domainRecord)
+        // console.log('setting workbox document', workboxDocRef.id, workboxRecord)
+        await setDoc(workboxDocRef, workboxRecord)
 
-        // Promise.all(docsets).then((value) => {
-
-        // },(reason) => {
-
-        // })
+        setUserState('baserecordsavailable')
 
     }
 
     useEffect(()=>{
 
+        // console.log('responding to userState', userState)
+
         if (userState == 'useridentified') {
 
-            // console.log('registering user snapshot', userDataRef.current.authUser.uid)
-            const snapshotIndex = "UserProvider.users." + userDataRef.current.authUser.uid
-            snapshotControl.create(snapshotIndex)
-            const userData = userDataRef.current
-            const unsubscribe = 
-                onSnapshot(doc(db, "users",userData.authUser.uid), (doc) =>{
-                    snapshotControl.incrementCallCount(snapshotIndex, 1)
-                    const userRecord = doc.data()
-                    console.log('userRecord',userRecord)
-                    if (!userRecord) {
-                        addUserBaseRecords(userData)
-                    } else {
-                        setUserRecords((previousState) => {
-                           previousState.user = userRecord
-                           return {...previousState}
-                        })
-                        setUserState('userrecordcollected')
-                    }
-                })
-            snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
+            // console.log('useEffect userState useridentified, userDataRef.current.authUser.uid', userDataRef.current.authUser.uid)
+            const userIndex = "UserProvider.users." + userDataRef.current.authUser.uid
+            if (!snapshotControl.has(userIndex)) {
+                snapshotControl.create(userIndex)
+                const userData = userDataRef.current
+                // console.log('subscribing to user document', userData.authUser.uid)
+                const unsubscribeuser = 
+                    onSnapshot(doc(db, 'users', userData.authUser.uid), (doc) =>{
+                        snapshotControl.incrementCallCount(userIndex, 1)
+                        const userRecord = doc.data()
+                        // console.log('snapshot of userRecord',userRecord)
+                        if (!userRecord) {
+                            baseRecordsAvailableRef.current = false
+                            addUserBaseRecords(userData)
+                        } else {
+                            setUserRecords((previousState) => {
+                               previousState.user = userRecord
+                               return {...previousState}
+                            })
+                            // console.log('acquired userRecord', userRecord)
+                            setUserState('userrecordacquired')
+                        }
+                    })
+                snapshotControl.registerUnsub(userIndex, unsubscribeuser)
+            }
         }
 
-        if (userState == 'userrecordcollected') {
+        if ((userState == 'userrecordacquired' && baseRecordsAvailableRef.current) 
+            || userState == 'baserecordsavailable' ) {
+
+            // console.log('useEffect userState userrecordacquired')
 
             const 
                 userRecords = userRecordsRef.current,
                 userRecord = userRecords.user,
-                accountID = userRecord?.profile?.account?.id,
-                domainID = userRecord?.profile?.domain?.id
+                accountID = userRecord.profile.account.id,
+                domainID = userRecord?.profile.domain.id
 
-
-            // console.log('userrecordcollected: userRecords, accountID, domainID', 
-            //     userRecords, accountID, domainID)
-
-            if (accountID) { 
-                const snapshotIndex = "UserProvider.accounts." + accountID
-                snapshotControl.create(snapshotIndex)
-                // console.log('subscribing to account', accountID)
-                const unsubscribe = 
+            const accountIndex = "UserProvider.accounts." + accountID
+            if (!snapshotControl.has(accountIndex)) {
+                snapshotControl.create(accountIndex)
+                // console.log('subscribing to account document', accountID)
+                const unsubscribeaccount = 
                     onSnapshot(doc(db, "accounts",accountID), (doc) =>{
-                        snapshotControl.incrementCallCount(snapshotIndex, 1)
+                        snapshotControl.incrementCallCount(accountIndex, 1)
                         const accountRecord = doc.data()
+                        // console.log('snapshot of accountRecord',accountRecord)
                         setUserRecords((previousState) => {
                            previousState.account = accountRecord
                            return {...previousState}
                         })
-                        setUserState('userrecordscompleted')
                     })
-                snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
-
-            } else {
-
-                // create record
+                snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
             }
 
-            if (domainID) {
-                // console.log('subscribing to domain', domainID)
-                const snapshotIndex = "UserProvider.domains." + domainID
-                snapshotControl.create(snapshotIndex)
-                const unsubscribe = 
+            const domainIndex = "UserProvider.domains." + domainID
+            if (!snapshotControl.has(domainIndex)) {
+                snapshotControl.create(domainIndex)
+                // console.log('subscribing to domain document', domainID)
+                const unsubscribedomain = 
                     onSnapshot(doc(db, "domains",domainID), (doc) =>{
-                        snapshotControl.incrementCallCount(snapshotIndex, 1)
+                        snapshotControl.incrementCallCount(domainIndex, 1)
                         const domainRecord = doc.data()
-                        // console.log('received domainRecord',domainRecord)
+                        // console.log('snapshot of domainRecord',domainRecord)
                         setUserRecords((previousState) => {
                            previousState.domain = domainRecord
                            return {...previousState}
                         })
-                        setUserState('userrecordscompleted')
                     })
-                snapshotControl.registerUnsub(snapshotIndex, unsubscribe)
-                
-            } else {
-
-                // create record
-
-            }
-
-        }
-
-        if (userState == 'userrecordscompleted') {
-
-            // console.log('completed userRecords', userRecordsRef.current)
-
+                snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
+             }
         }
 
         setUserState('ready')
