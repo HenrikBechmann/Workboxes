@@ -19,64 +19,7 @@ import { updateDocumentVersion } from './utilities'
 
 // FirebaseProvider
 
-class snapshotControlClass {
-
-    snapshotData = new Map()
-
-    count = 0
-
-    create = (index) => {
-        this.snapshotData.set(index,{unsub:null, count:0, doccheck:false})
-    }
-
-    registerUnsub = (index, unsub) => {
-        this.snapshotData.get(index).unsub = unsub
-    }
-
-    has = (index) => {
-        return this.snapshotData.has(index)
-    }
-
-    incrementCallCount = (index, count) => {
-        this.snapshotData.get(index).count += count
-    }
-
-    unsub = (index) => {
-        const 
-            record = this.snapshotData.get(index),
-            unsubscribe = record.unsub
-
-        this.count += record.count
-
-        unsubscribe && unsubscribe()
-
-        this.snapshotData.delete(index)
-
-    }
-
-    getDoccheck = (index) => {
-        return this.snapshotData.get(index).doccheck
-    }
-
-    setDoccheck = (index) => {
-        this.snapshotData.get(index).doccheck = true
-    }
-
-    unsubAll = () => {
-
-        // TODO: collect and save counts
-        this.snapshotData.forEach((record) => {
-            const unsubscribe = record.unsub
-            this.count += record.count
-            unsubscribe && unsubscribe()
-        })
-
-        this.snapshotData.clear()
-    }
-
-}
-
-const snapshotControl = new snapshotControlClass() // singleton
+import snapshotControl from './snapshotControlClass'
 
 const 
     // snapshotControl = new Map(),
@@ -341,19 +284,17 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        // console.log('base records: users, accounts, domains, workboxes', 
-        //     userRecord, accountRecord, domainRecord, workboxRecord)
+        let baseResult
 
-        // const docsets = []
-
-        // console.log('setting user document', uid, userRecord)
-        await setDoc(doc(db,'users',uid),userRecord)
-        // console.log('setting account document', accountDocRef.id, accountRecord)
-        await setDoc(accountDocRef, accountRecord)
-        // console.log('setting domain document', domainDocRef.id, domainRecord)
-        await setDoc(domainDocRef, domainRecord)
-        // console.log('setting workbox document', workboxDocRef.id, workboxRecord)
-        await setDoc(workboxDocRef, workboxRecord)
+        try {
+            await setDoc(doc(db,'users',uid),userRecord)
+            await setDoc(accountDocRef, accountRecord)
+            await setDoc(domainDocRef, domainRecord)
+            await setDoc(workboxDocRef, workboxRecord)
+        } catch(error) {
+            // TODO handle error condition
+            baseResult = error
+        }
 
         setUserState('baserecordsavailable')
 
