@@ -4,7 +4,8 @@ class snapshotControlClass {
 
     snapshotData = new Map()
 
-    count = 0
+    // TODO save this, at least to local database
+    count = 0 // aggregate call count, collected on unsubscribe
 
     create = (index) => {
         this.snapshotData.set(index,{unsub:null, count:0, doccheck:false})

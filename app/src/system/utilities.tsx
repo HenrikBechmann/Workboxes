@@ -6,14 +6,14 @@ import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 export const updateDocumentVersion = (collection, type, source, defaults = {}) => {
 
     let updatedDocument
-    if (versions[collection] && versions[collection][type]) {
-        const latest = versions[collection][type]
+    if (versionData[collection] && versionData[collection][type]) {
+        const latest = versionData[collection][type][0]
         if (source.version !== latest.version) {
 
             updatedDocument = _merge(_cloneDeep(latest), _cloneDeep(defaults), _cloneDeep(source))
 
             updatedDocument.version = 
-              versions[collection][type].version
+              versionData[collection][type].version
 
         } else {
             updatedDocument = source
@@ -26,10 +26,42 @@ export const updateDocumentVersion = (collection, type, source, defaults = {}) =
 
 }
 
+const versionMaps = {
+  workboxes: {
+    collection: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
+  accounts: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
+  domains: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
+  users: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
+}
+
 // collection:type. Always increment version to larger number
-const versions = {
-  workboxes:{
-    collection:{
+const versionData = {
+  workboxes: {
+    collection: [
+    {
       version: 0,
       generation: 0,
       profile: {
@@ -96,10 +128,11 @@ const versions = {
           cache: [],
         },
       },
-    }
+    }],
   },
   accounts: {
-    standard: {
+    standard: [
+    {
       version: 0,
       generation: 0,
       profile: {
@@ -126,10 +159,11 @@ const versions = {
         counts: {
         },
       },
-    }
+    }],
   },
   users: {
-    standard: {
+    standard: [
+    {
       version: 0,
       generation: 0,
       profile: {
@@ -170,10 +204,11 @@ const versions = {
         counts: {
         },
       },
-    }
+    }],
   },
   domains: {
-    standard: {
+    standard: [
+    {
       version: 0,
       generation: 0,
       profile: {
@@ -218,7 +253,25 @@ const versions = {
           workboxes: 0,
         },
       },
-    }
+    }],
   },
-}
+};
+
+(function loadVersions (){
+  for (const collection in versionData) {
+    const typesHash = versionData[collection]
+    // console.log('collection, typesHash',collection, typesHash)
+
+    for (const type in typesHash) {
+      const versionArray = typesHash[type]
+      // console.log('type, versionArray', type, versionArray)
+      for (const version of versionArray) {
+        // console.log('version', version)
+        versionMaps[collection][type].datamap.set(version.version, version)
+      }
+    }
+  }
+  // console.log('versionMaps',versionMaps)
+}())
+
 
