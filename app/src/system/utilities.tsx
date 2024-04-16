@@ -6,20 +6,54 @@ import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 export const updateDocumentVersion = (collection, type, source, defaults = {}) => {
 
     let updatedDocument
-    if (versionData[collection] && versionData[collection][type]) {
-        const latest = versionData[collection][type][0]
-        if (source.version !== latest.version) {
+    if (versionMaps[collection] && versionMaps[collection][type]) {
+        const 
+          versionData = versionMaps[collection][type],
+          latestVersion = versionData.latest_version,
+          sourceVersion = source.version
 
-            updatedDocument = _merge(_cloneDeep(latest), _cloneDeep(defaults), _cloneDeep(source))
+        if (sourceVersion === latestVersion) return source // nothing to do
 
-            updatedDocument.version = 
-              versionData[collection][type].version
+        const noversion = sourceVersion ?? true
+        let startversion
+        if (noversion === true) {
+
+          startversion = 0
 
         } else {
-            updatedDocument = source
+
+          startversion = sourceVersion + 1
+
         }
+
+        let transitionDocument = source
+
+        for (let versionNumber = startversion; versionNumber <= latestVersion; versionNumber++) {
+
+          // run any transforms
+
+          // merge new structure/additions
+
+          const updateversion = versionData.datamap.get(versionNumber) || {}
+
+          if (updateversion) {
+
+            transitionDocument = _merge(_cloneDeep(updateversion), _cloneDeep(source))
+
+          }
+
+          transitionDocument.version = updateversion.version
+
+        }
+
+        transitionDocument = _merge(_cloneDeep(defaults), _cloneDeep(source))
+
+        updatedDocument = transitionDocument
+
     } else {
+
         updatedDocument = source
+
     }
 
     return updatedDocument
@@ -54,6 +88,21 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
+  },
+}
+
+const versionTransforms = {
+  workboxes: {
+    collection: [],
+  },
+  accounts: {
+    standard: [],
+  },
+  domains: {
+    standard: [],
+  },
+  users: {
+    standard: [],
   },
 }
 
@@ -258,19 +307,38 @@ const versionData = {
 };
 
 (function loadVersions (){
+  // load versionData
   for (const collection in versionData) {
+
     const typesHash = versionData[collection]
-    // console.log('collection, typesHash',collection, typesHash)
 
     for (const type in typesHash) {
+
       const versionArray = typesHash[type]
-      // console.log('type, versionArray', type, versionArray)
       for (const version of versionArray) {
-        // console.log('version', version)
+
         versionMaps[collection][type].datamap.set(version.version, version)
+
       }
     }
   }
+  // load versionTransforms
+
+  for (const collection in versionTransforms) {
+
+    const typesHash = versionTransforms[collection]
+
+    for (const type in typesHash) {
+
+      const versionArray = typesHash[type]
+      for (const version of versionArray) {
+
+        versionMaps[collection][type].functionmap.set(version.version, version)
+
+      }
+    }
+  }
+
   // console.log('versionMaps',versionMaps)
 }())
 
