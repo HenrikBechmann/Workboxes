@@ -31,10 +31,12 @@ const UserRegistration = (props) => {
             You'll have lots of ways to control this, as you wish.
         </Text>
         <Text mt = '6px'>
-            2. A "payment method" is of course required to help us pay the bills, and keep supporting you.
+            2. A "payment method" [pending for now] is of course required to help us pay the bills, and keep supporting you. 
+            [Again, this is pending -- the app is free for now for invited guests.]
         </Text>
         <Text mt = '6px'>
-            To continue to the app, click <Button colorScheme = 'blue'>Done</Button> when both the user handle and the payment method have been accepted.
+            To continue to the app, click <Button colorScheme = 'blue'>Done</Button> 
+            when the user handle has been accepted. [In future the payment method will need to be accepted as well].
         </Text>
         </Box >
         <Tabs variant = 'enclosed' margin = '3px'>
