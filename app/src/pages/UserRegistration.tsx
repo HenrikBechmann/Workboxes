@@ -52,7 +52,7 @@ const UserRegistration = (props) => {
                 </TabPanel>
                 <TabPanel>
                     <Text>
-                        [pending] Payment method                        
+                        [pending -- free to invited guests for now] Payment method                        
                     </Text>
                 </TabPanel>
             </TabPanels>
