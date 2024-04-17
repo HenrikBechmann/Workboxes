@@ -4,7 +4,7 @@ import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import { Text, Box, Grid, GridItem } from '@chakra-ui/react'
 
-import { useUserData } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords } from '../system/FirebaseProviders'
 
 import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import ToolbarStandard from '../components/toolbars/Toolbar_Standard'
@@ -25,11 +25,13 @@ const navlinkStyles = {
 
 const LayoutGeneral = (props) => {
 
-    const userData = useUserData()
+    const 
+        userData = useUserData(),
+        userRecords = useUserRecords()
 
-    // console.log('in LayoutGeneral: userData', userData)
+    if (userData === undefined || !userRecords.user) return null
 
-    if (userData === undefined) return null
+    // console.log('in LayoutGeneral: userData, userRecords.user', userData, userRecords.user)
 
     return <Grid
         data-type = 'layout-general'
@@ -45,7 +47,8 @@ const LayoutGeneral = (props) => {
                 {!userData && <Text ml = '6px'>Welcome to Workboxes! <NavLink to = '/signin'
                 style={navlinkStyles}
                     >Sign in</NavLink></Text>}
-                {userData && <ToolbarStandard />}
+                {!userRecords.user.profile.fully_registered && <Text ml = '6px'>Welcome to Workboxes!</Text>}
+                {(userData && userRecords.user.profile.fully_registered) && <ToolbarStandard />}
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>

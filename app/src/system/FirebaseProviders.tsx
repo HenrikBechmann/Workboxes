@@ -11,6 +11,7 @@ import { getFirestore, collection, doc, setDoc, onSnapshot, serverTimestamp } fr
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
+import { redirect } from 'react-router-dom'
 
 import { updateDocumentSchema } from './utilities'
 
@@ -409,6 +410,8 @@ export const UserProvider = ({children}) => {
         setUserState('ready')
 
     },[userState])
+
+    // console.log('UserProvider: userState, userRecords',userState, {...userRecords})
 
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
