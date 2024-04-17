@@ -12,7 +12,7 @@ import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
 
-import { updateDocumentVersion } from './utilities'
+import { updateDocumentSchema } from './utilities'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -143,7 +143,7 @@ export const UserProvider = ({children}) => {
 
         const {displayName, photoURL, uid} = userData.authUser
 
-        const userRecord = updateDocumentVersion('users','standard',{},{
+        const userRecord = updateDocumentSchema('users','standard',{},{
             profile: {
               is_abandoned: false,
               user: {
@@ -172,7 +172,7 @@ export const UserProvider = ({children}) => {
 
         })
 
-        const accountRecord = updateDocumentVersion('accounts','standard', {}, {
+        const accountRecord = updateDocumentSchema('accounts','standard', {}, {
             profile: {
               account: {
                 id: accountDocRef.id,
@@ -197,7 +197,7 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        const domainRecord = updateDocumentVersion('domains','standard',{},{
+        const domainRecord = updateDocumentSchema('domains','standard',{},{
             profile: {
                 is_userdomain: true,
                 domain: {
@@ -230,7 +230,7 @@ export const UserProvider = ({children}) => {
 
         })
 
-        const workboxRecord = updateDocumentVersion('workboxes','collection',{},{
+        const workboxRecord = updateDocumentSchema('workboxes','collection',{},{
             version: 0,
             generation: 0,
             profile: {
@@ -313,9 +313,9 @@ export const UserProvider = ({children}) => {
                 const userData = userDataRef.current
                 // console.log('subscribing to user document', userData.authUser.uid)
                 const unsubscribeuser = 
-                    onSnapshot(doc(db, 'users', userData.authUser.uid), (doc) =>{
+                    onSnapshot(doc(db, 'users', userData.authUser.uid), (returndoc) =>{
                         snapshotControl.incrementCallCount(userIndex, 1)
-                        const userRecord = doc.data()
+                        const userRecord = returndoc.data()
                         // console.log('snapshot of userRecord',userRecord)
                         if (!userRecord) {
                             baseRecordsAvailableRef.current = false
@@ -326,6 +326,15 @@ export const UserProvider = ({children}) => {
                                return {...previousState}
                             })
                             // console.log('acquired userRecord', userRecord)
+                            if (!snapshotControl.getDoccheck(userIndex)) {
+                                snapshotControl.setDoccheck(userIndex)
+                                const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
+                                if (!Object.is(userRecord, updatedRecord)) {
+
+                                    setDoc(doc(db,'users',userData.authUser.uid),updatedRecord)
+
+                                }
+                            }
                             setUserState('userrecordacquired')
                         }
                     })
@@ -342,21 +351,30 @@ export const UserProvider = ({children}) => {
                 userRecords = userRecordsRef.current,
                 userRecord = userRecords.user,
                 accountID = userRecord.profile.account.id,
-                domainID = userRecord?.profile.domain.id
+                domainID = userRecord.profile.domain.id
 
             const accountIndex = "UserProvider.accounts." + accountID
             if (!snapshotControl.has(accountIndex)) {
                 snapshotControl.create(accountIndex)
                 // console.log('subscribing to account document', accountID)
                 const unsubscribeaccount = 
-                    onSnapshot(doc(db, "accounts",accountID), (doc) =>{
+                    onSnapshot(doc(db, "accounts",accountID), (returndoc) =>{
                         snapshotControl.incrementCallCount(accountIndex, 1)
-                        const accountRecord = doc.data()
+                        const accountRecord = returndoc.data()
                         // console.log('snapshot of accountRecord',accountRecord)
                         setUserRecords((previousState) => {
                            previousState.account = accountRecord
                            return {...previousState}
                         })
+                        if (!snapshotControl.getDoccheck(accountIndex)) {
+                            snapshotControl.setDoccheck(accountIndex)
+                            const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
+                            if (!Object.is(accountRecord, updatedRecord)) {
+
+                                setDoc(doc(db,'accounts',accountID),updatedRecord)
+
+                            }
+                        }
                     })
                 snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
             }
@@ -366,14 +384,23 @@ export const UserProvider = ({children}) => {
                 snapshotControl.create(domainIndex)
                 // console.log('subscribing to domain document', domainID)
                 const unsubscribedomain = 
-                    onSnapshot(doc(db, "domains",domainID), (doc) =>{
+                    onSnapshot(doc(db, "domains",domainID), (returndoc) =>{
                         snapshotControl.incrementCallCount(domainIndex, 1)
-                        const domainRecord = doc.data()
+                        const domainRecord = returndoc.data()
                         // console.log('snapshot of domainRecord',domainRecord)
                         setUserRecords((previousState) => {
                            previousState.domain = domainRecord
                            return {...previousState}
                         })
+                        if (!snapshotControl.getDoccheck(domainIndex)) {
+                            snapshotControl.setDoccheck(domainIndex)
+                            const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
+                            if (!Object.is(domainRecord, updatedRecord)) {
+
+                                setDoc(doc(db,'domains',domainID),updatedRecord)
+
+                            }
+                        }
                     })
                 snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
              }
