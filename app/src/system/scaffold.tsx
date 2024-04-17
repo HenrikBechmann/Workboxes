@@ -23,6 +23,7 @@ import Account from '../pages/Account'
 import Domains from '../pages/Domains'
 import Memberships from '../pages/Memberships'
 import Subscriptions from '../pages/Subscriptions'
+import Registration from '../pages/Registration'
 
 // system support
 import RoutesSysadmin from '../components/Routes_Sysadmin'
@@ -87,6 +88,10 @@ const routes = [
                             {
                                 path:'subscriptions',
                                 element:<Subscriptions />
+                            },
+                            {
+                                path:'registration',
+                                element:<Registration />
                             },
                         ]
                     },
