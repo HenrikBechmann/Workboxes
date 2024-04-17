@@ -3,14 +3,20 @@
 
 import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
-export const updateDocumentVersion = (collection, type, source, defaults = {}) => {
+export const updateDocumentVersion = (collection, type, source, initialvalues = {}) => {
+
+    console.log('updateDocumentVersion: collection, type, source, initialvalues', 
+      collection, type, source, initialvalues)
 
     let updatedDocument
     if (versionMaps[collection] && versionMaps[collection][type]) {
+
         const 
           versionData = versionMaps[collection][type],
           latestVersion = versionData.latest_version,
           sourceVersion = source.version
+
+        console.log('versionData, latestVersion, sourceVersion',versionData, latestVersion, sourceVersion)
 
         if (sourceVersion === latestVersion) return source // nothing to do
 
@@ -26,15 +32,18 @@ export const updateDocumentVersion = (collection, type, source, defaults = {}) =
 
         }
 
+        console.log('startversion', startversion)
+
         let transitionDocument = source
 
-        for (let versionNumber = startversion; versionNumber <= latestVersion; versionNumber++) {
+        for (let targetVersionNumber = startversion; targetVersionNumber <= latestVersion; targetVersionNumber++) {
 
-          // run any transforms
+          // run transform function if exists - from targetVersion - 1 to targetVersion
+          const transform = versionData.functionmap.get(targetVersionNumber)
+          transform && transform(transitionDocument)
 
           // merge new structure/additions
-
-          const updateversion = versionData.datamap.get(versionNumber) || {}
+          const updateversion = versionData.datamap.get(targetVersionNumber)
 
           if (updateversion) {
 
@@ -44,9 +53,15 @@ export const updateDocumentVersion = (collection, type, source, defaults = {}) =
 
           transitionDocument.version = updateversion.version
 
+          console.log('targetVersionNumber, transform, updateversion, transitionDocument',
+            targetVersionNumber, transform, updateversion, {...transitionDocument})
+
         }
 
-        transitionDocument = _merge(_cloneDeep(defaults), _cloneDeep(source))
+        // finally apply defaults for any properties not represented in source
+        transitionDocument = _merge(_cloneDeep(transitionDocument), _cloneDeep(initialvalues))
+
+        console.log('transitionDocument merged with initialValues', transitionDocument)
 
         updatedDocument = transitionDocument
 
