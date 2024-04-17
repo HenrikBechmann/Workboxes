@@ -36,11 +36,11 @@ class snapshotControlClass {
 
     }
 
-    getDoccheck = (index) => {
+    getSchemaChecked = (index) => {
         return this.snapshotData.get(index).doccheck
     }
 
-    setDoccheck = (index) => {
+    setSchemaChecked = (index) => {
         this.snapshotData.get(index).doccheck = true
     }
 

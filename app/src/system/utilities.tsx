@@ -342,8 +342,8 @@ const versionData = {
       }
     }
   }
+  
   // load versionTransforms
-
   for (const collection in versionTransforms) {
 
     const typesHash = versionTransforms[collection]

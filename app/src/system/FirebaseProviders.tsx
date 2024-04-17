@@ -326,8 +326,8 @@ export const UserProvider = ({children}) => {
                                return {...previousState}
                             })
                             // console.log('acquired userRecord', userRecord)
-                            if (!snapshotControl.getDoccheck(userIndex)) {
-                                snapshotControl.setDoccheck(userIndex)
+                            if (!snapshotControl.getSchemaChecked(userIndex)) {
+                                snapshotControl.setSchemaChecked(userIndex)
                                 const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
                                 if (!Object.is(userRecord, updatedRecord)) {
 
@@ -366,8 +366,8 @@ export const UserProvider = ({children}) => {
                            previousState.account = accountRecord
                            return {...previousState}
                         })
-                        if (!snapshotControl.getDoccheck(accountIndex)) {
-                            snapshotControl.setDoccheck(accountIndex)
+                        if (!snapshotControl.getSchemaChecked(accountIndex)) {
+                            snapshotControl.setSchemaChecked(accountIndex)
                             const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
                             if (!Object.is(accountRecord, updatedRecord)) {
 
@@ -392,8 +392,8 @@ export const UserProvider = ({children}) => {
                            previousState.domain = domainRecord
                            return {...previousState}
                         })
-                        if (!snapshotControl.getDoccheck(domainIndex)) {
-                            snapshotControl.setDoccheck(domainIndex)
+                        if (!snapshotControl.getSchemaChecked(domainIndex)) {
+                            snapshotControl.setSchemaChecked(domainIndex)
                             const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
                             if (!Object.is(domainRecord, updatedRecord)) {
 
