@@ -1,10 +1,12 @@
 // GeneralLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React from 'react'
-import { Outlet, NavLink } from 'react-router-dom'
-import { Text, Box, Grid, GridItem } from '@chakra-ui/react'
+import React, {useRef, useState} from 'react'
+import { Outlet, NavLink, Navigate } from 'react-router-dom'
+import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
-import { useUserData, useUserRecords } from '../system/FirebaseProviders'
+import { signOut } from "firebase/auth"
+
+import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
 
 import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
 import ToolbarStandard from '../components/toolbars/Toolbar_Standard'
@@ -27,12 +29,33 @@ const LayoutGeneral = (props) => {
 
     const 
         userData = useUserData(),
-        userRecords = useUserRecords()
+        userRecords = useUserRecords(),
+        auth = useAuth(),
+        [layoutState, setLayoutState] = useState('ready')
 
-    if (userData === undefined || !userRecords.user) return null
+    console.log('LayoutGeneral:',userData, userRecords, layoutState)
 
-    // console.log('in LayoutGeneral: userData, userRecords.user', userData, userRecords.user)
+    if (userData === undefined) return null
 
+    if (userData && !userRecords.user) return null
+
+    const logOut = () => {
+            signOut(auth).then(() => {
+              setLayoutState('signedout')
+              // console.log('Sign-out successful.')
+            }).catch((error) => {
+                // console.log('signout error', error)
+              // An error happened.
+            })
+        }
+    // console.log('in LayoutGeneral: userData, userRecords.user', userData, userRecords.user, layoutState)
+
+    // TODO this should not be necessary
+    if (layoutState == 'signedout') {
+        return <Navigate to = {`/signin`}/>
+    }
+
+// <Link color = 'teal.500' onClick = {logOut}>Sign out</Link> if you like and sign back in later.
     return <Grid
         data-type = 'layout-general'
         height = '100vh' 
@@ -47,7 +70,9 @@ const LayoutGeneral = (props) => {
                 {!userData && <Text ml = '6px'>Welcome to Workboxes! <NavLink to = '/signin'
                 style={navlinkStyles}
                     >Sign in</NavLink></Text>}
-                {!userRecords.user.profile.fully_registered && <Text ml = '6px'>Welcome to Workboxes!</Text>}
+                {(userData && userRecords.user.profile && !userRecords.user.profile.fully_registered) && 
+                    <Text ml = '6px'>Welcome to Workboxes!</Text>
+                }
                 {(userData && userRecords.user.profile.fully_registered) && <ToolbarStandard />}
             </ToolbarFrame>
         </GridItem>

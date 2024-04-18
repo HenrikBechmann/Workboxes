@@ -15,7 +15,7 @@ function RoutesMember() {
 
   // console.log('userRecords',{...userRecords})
 
-  if (userdata === undefined || !userRecords.user) {
+  if (userdata === undefined) { // || !userRecords.user) {
 
       return <Box> Loading... </Box>
       
@@ -24,7 +24,11 @@ function RoutesMember() {
   if (!userdata) {
 
     const from = location.pathname || '/'
-    return <Navigate to = {`/signin?from=${from}`}/> // works
+    return <Navigate to = {`/signin?from=${from}`}/>
+
+  } else if (!userRecords.user) {
+
+    return null
 
   } else if (!userRecords.user.profile.fully_registered) {
 
