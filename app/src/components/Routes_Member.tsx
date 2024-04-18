@@ -28,7 +28,7 @@ function RoutesMember() {
 
   } else if (!userRecords.user) {
 
-    return null
+    return <Box> Registering... </Box>
 
   } else if (!userRecords.user.profile.fully_registered) {
 

@@ -32,15 +32,16 @@ const Signin = (props) => {
     const 
         [errorState,setErrorState] = useState<any>(null),
         auth = useAuth(),
-        userDataRef = useRef(null),
+        // userDataRef = useRef(null),
         navigate = useNavigate(),
         [searchParams] = useSearchParams(),
         from = searchParams.get('from') || '/',
-        location = useLocation()
+        location = useLocation(),
+        [signinState, setSigninState] = useState('ready'),
+        userData = useUserData()
+
 
     // console.log('location', location, from)
-
-    userDataRef.current = useUserData()
 
     // console.log('useDataRef.current in signin', userDataRef.current)
 
@@ -54,7 +55,10 @@ const Signin = (props) => {
 
                 // console.log('result of getRedirectResult', result)
 
-                if (result === null) return
+                if (result === null) {
+                    setSigninState('signedout')
+                    // return
+                }
 
                 // additional properties if needed
                 // const token = credential.accessToken
@@ -66,7 +70,8 @@ const Signin = (props) => {
                     // const credential = GoogleAuthProvider.credentialFromResult(result)
                     // const additionalInfo = getAdditionalUserInfo(result)
                     // console.log('credential, additionalInfo',credential, additionalInfo)
-                    navigate(from)
+                    setSigninState('signedin')
+                    // navigate(from)
 
                 }
 
@@ -104,12 +109,13 @@ const Signin = (props) => {
 
     }
 
-    if (userDataRef.current === undefined) {
+    if (userData === undefined) { // signin in progress
         return <Box> Connecting... </Box>
     }
 
-    if (userDataRef.current) {
+    if (userData) { // no need for signin
 
+        navigate(from)
         return null
 
     }

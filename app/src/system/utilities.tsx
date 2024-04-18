@@ -239,6 +239,7 @@ const versionData = {
         is_abandoned: false,
         first_load: true,
         fully_registered: false,
+        standing_code:0,
         user: {
           id:null,
           name: null,

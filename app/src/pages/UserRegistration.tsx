@@ -45,7 +45,7 @@ const UserRegistration = (props) => {
         <Box padding = '6px'>
         <Text>
             You are signed in as {userData.authUser.displayName}. <Link 
-            color = 'teal.500' onClick = {logOut}>Sign out</Link> if you like,
+            color = 'teal.500' onClick = {logOut}>Sign out</Link> any time you like,
             and come back later.
         </Text>
 
@@ -61,8 +61,8 @@ const UserRegistration = (props) => {
             [Again, this is pending -- the app is free for now for invited guests.]
         </Text>
         <Text mt = '6px'>
-            To continue to the app, click <Button mr = '3px' colorScheme = 'blue'>Done</Button> 
-            when the user handle has been accepted. [In future the payment method will need to be accepted as well].
+            You'll be able to continue to the app when the user handle has been accepted. 
+            [In future the payment method will need to be accepted as well].
         </Text>
         </Box >
         <Tabs variant = 'enclosed' margin = '3px'>

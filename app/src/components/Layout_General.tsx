@@ -73,7 +73,7 @@ const LayoutGeneral = (props) => {
                 {(userData && userRecords.user.profile && !userRecords.user.profile.fully_registered) && 
                     <Text ml = '6px'>Welcome to Workboxes!</Text>
                 }
-                {(userData && userRecords.user.profile.fully_registered) && <ToolbarStandard />}
+                {(userData && userRecords.user.profile && userRecords.user.profile.fully_registered) && <ToolbarStandard />}
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>
