@@ -494,25 +494,25 @@ export const beforesignedin = beforeUserSignedIn(async (event) => {
   const user = event.data;
   let email = user?.email;
   if (email) email = email.toLowerCase();
+  // try {
+  const db = getFirestoreV2(appV2);
+  let result;
   try {
-    const db = getFirestoreV2(appV2);
-    let result;
-    try {
-      result = await db.collection("suspensions")
-        .where("properties.email", "==", email).get();
-    } catch (e) {
-      const error:Error = e as Error;
-      throw new HttpsError("internal",
-        "Internal error: " + error?.message);
-    }
-    if (result?.docs[0]) {
-      throw new HttpsError("permission-denied",
-        "Accounts must be in good standing to sign in to Tribalopolis.",
-        email + " was found in suspensions.");
-    }
+    result = await db.collection("suspensions")
+      .where("properties.email", "==", email).get();
   } catch (e) {
     const error:Error = e as Error;
     throw new HttpsError("internal",
-      "Internal error: getFirestore" + error?.message);
+      "Internal error: " + error?.message);
   }
+  if (result?.docs[0]) {
+    throw new HttpsError("permission-denied",
+      "Accounts must be in good standing to sign in to Tribalopolis.",
+      email + " was found in suspensions.");
+  }
+  // } catch (e) {
+  //   const error:Error = e as Error;
+  //   throw new HttpsError("internal",
+  //     "Internal error: getFirestore" + error?.message);
+  // }
 });

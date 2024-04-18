@@ -161,7 +161,7 @@ const Signin = (props) => {
                 <Text>- Organize information into Workboxes, and do your work there. &nbsp;
                     <Image style = {{display:'inline-block', verticalAlign:'middle'}} src = {boxIcon}/>
                 </Text>
-                <Text>- Organize Workboxes into Work Windows, Work Panels, and Work Spaces.</Text>
+                <Text>- Organize Workboxes into Work Panels, and Work Spaces.</Text>
                 <Text>- Even organize into Work Groups (Domains).</Text>
             </Box>
             </VStack>
