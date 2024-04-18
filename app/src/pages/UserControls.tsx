@@ -114,7 +114,7 @@ const UserControls = (props) => {
             return
         }
 
-        // console.log('isAdmin',isAdmin)
+        console.log('isAdmin',isAdmin)
 
     }
 
@@ -169,6 +169,7 @@ const UserControls = (props) => {
                             </ContentBox>
                             <ContentBox>
                                 <Button onClick = {getAdminStatus} colorScheme = 'blue'>View signin's admin claim</Button>
+                                <Text>See console.</Text>
                             </ContentBox>
                             <ContentBox>
                             </ContentBox>

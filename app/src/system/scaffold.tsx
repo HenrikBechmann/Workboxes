@@ -99,7 +99,7 @@ const routes = [
         ],
     },
     {
-        path: 'sysadmin', // TODO s/b '/sysadmin' ?
+        path: '/sysadmin',
         element: <SysadminRoutesController />,
         children: [
             {

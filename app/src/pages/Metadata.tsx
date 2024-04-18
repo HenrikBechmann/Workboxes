@@ -22,6 +22,14 @@ import { metatype } from '../system/system.type'
 
 import appIcon from '../../assets/workbox-logo.png'
 
+const defaultDocumentState = {
+    mode:'view',
+}
+
+const defaultDataboxState = {
+
+}
+
 const contentBoxStyle = {
     position:'relative',
     flexBasis:'auto', 
@@ -56,6 +64,27 @@ const defaultWorkboxState = {
     databoxDisabled:false,
 }
 
+
+// {
+//     window:{
+//         zOrder: 1,
+//         configDefaults: {top:20,left:20, width:610,height:400},
+//         view: 'normalized',
+//     },
+//     workbox: {
+//         defaultWorkboxState:{...defaultWorkboxState},
+//         defaultDocumentState: {...defaultDocumentState},
+//         defaultDataboxState: {...defaultDataboxState},
+//         itemTitle: "[Henrik Bechmann]",
+//         itemIcon: homeIcon,
+//         domainTitle: displayName,
+//         domainIcon: photoURL,
+//         typeName: 'Collection',
+//         type:'Collection',
+//         id:null,
+//     }
+// },
+
 const Metadata = (props) => {
 
     const
@@ -67,15 +96,20 @@ const Metadata = (props) => {
                     zOrder: 1,
                     configDefaults: {top:20,left:20, width:610,height:400},
                     view: 'normalized',
-                    type:'Collection',
-                    title:'Workbox types',
+                    // type:'Collection',
+                    // title:'Workbox types',
                 },
                 workbox: {
                     defaultWorkboxState:{...defaultWorkboxState},
-                    itemIcon: appIcon,
+                    defaultDocumentState: {...defaultDocumentState},
+                    defaultDataboxState: {...defaultDataboxState},
                     itemTitle: 'Workbox types',
+                    itemIcon: appIcon,
                     domainTitle: 'WorkboxesApp',
+                    domainIcon: photoURL,
                     typeName: 'Collection',
+                    type:'Collection',
+                    id:null,
                 }
             }
         ],
@@ -89,7 +123,16 @@ const Metadata = (props) => {
         [dragState, setDragState] = useState(
         {
             activeDrags: 0,
-        })
+        }),
+        workboxMapRef = useRef(null),
+        workboxGatewayMapRef = useRef(null)
+
+    useEffect(()=>{
+
+        workboxMapRef.current = new Map()
+        workboxGatewayMapRef.current = new Map()
+
+    },[])
 
     const onStart = () => {
         dragState.activeDrags = ++dragState.activeDrags
@@ -228,7 +271,11 @@ const Metadata = (props) => {
                     inset = '0' 
                     overflow = 'hidden'
                 >
-                    <Workpanel startingWindowsSpecsList = {startingWindowsSpecsList} />
+                    {pageState != 'setup' && <Workpanel 
+                        workboxMapRef = {workboxMapRef}
+                        workboxGatewayMapRef = {workboxGatewayMapRef}
+                        startingWindowsSpecsList = {startingWindowsSpecsList} 
+                    />}
                 </Box>
             </Box>
         </GridItem>
