@@ -15,7 +15,7 @@ import WorkboxContent from './WorkboxContent'
 export const WorkboxInnerFrameWidthContext = createContext(null)
 import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
-import { ViewSelectorContext } from '../Workwindow'
+import { ViewSelectorContext } from '../workholders/Workwindow'
 
 const workboxFrameStyles = {
     position:'absolute',

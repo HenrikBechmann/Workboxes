@@ -8,8 +8,8 @@ import {
 } from '@chakra-ui/react'
 
 import Workwindow from './Workwindow'
-import Workbox from './workbox/Workbox'
-import workboxGateway from '../gateways/workboxGateway'
+import Workbox from './../workbox/Workbox'
+import workboxGateway from '../../gateways/workboxGateway'
 
 const workpanelStyles = {
     height:'100%',

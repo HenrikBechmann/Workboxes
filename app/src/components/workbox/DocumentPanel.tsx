@@ -24,7 +24,7 @@ import DocumentToolbar from '../toolbars/Toolbar_Document'
 import handleIcon from '../../../assets/handle.png'
 
 import { WorkboxInnerFrameWidthContext } from './Workbox'
-import { WindowCallbackContext } from '../Workwindow'
+import { WindowCallbackContext } from '../workholders/Workwindow'
 import DocumentContent from '../documentUI/DocumentContent'
 
 const 

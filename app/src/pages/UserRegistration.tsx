@@ -24,25 +24,24 @@ const UserRegistration = (props) => {
         [layoutState, setLayoutState] = useState('ready')
 
     const logOut = () => {
-            signOut(auth).then(() => {
-              setLayoutState('signedout')
-              // console.log('Sign-out successful.')
-            }).catch((error) => {
-                console.log('signout error', error)
-              // An error happened.
-            })
-        }
-
-    if (userRecords.user.profile.fully_registered) {
-        return <Navigate to = '/'/>
-    } 
-
-    if (!userData || (layoutState == 'signedout')) {
-        return <Navigate to = '/signin'/>
+        signOut(auth).then(() => {
+          setLayoutState('signedout')
+          // console.log('Sign-out successful.')
+        }).catch((error) => {
+            console.log('signout error', error)
+          // An error happened.
+        })
     }
-     //null
 
-    // console.log('in LayoutGeneral: userData, userRecords.user', userData, userRecords.user)
+    if (userRecords.user.profile.fully_registered) { // no need for user registration
+
+        return <Navigate to = '/'/>
+
+    } else if (!userData || (layoutState == 'signedout')) { // not signed in
+
+        return <Navigate to = '/signin'/>
+
+    }
 
     return <>
         <Box padding = '6px'>

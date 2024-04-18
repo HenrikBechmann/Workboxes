@@ -14,10 +14,10 @@ import {
 import { useFirestore, useUserData } from '../system/FirebaseProviders'
 import Draggable from 'react-draggable'
 import { useTypes } from '../system/TribalopolisProvider'
-import Drawer, { useDrawers } from '../components/Drawer'
-import Workwindow from '../components/Workwindow'
+import Drawer, { useDrawers } from '../components/workholders/Drawer'
+import Workwindow from '../components/workholders/Workwindow'
 import Workbox from '../components/workbox/Workbox'
-import Workpanel from '../components/Workpanel'
+import Workpanel from '../components/workholders/Workpanel'
 import { metatype } from '../system/system.type'
 
 import appIcon from '../../assets/workbox-logo.png'

@@ -6,10 +6,10 @@ import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
 import { signOut } from "firebase/auth"
 
-import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords, useAuth } from '../../system/FirebaseProviders'
 
-import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
-import ToolbarStandard from '../components/toolbars/Toolbar_Standard'
+import ToolbarFrame from '../toolbars/Toolbar_Frame'
+import ToolbarStandard from '../toolbars/Toolbar_Standard'
 
 const bodyStyle = {
     height: '100%', 

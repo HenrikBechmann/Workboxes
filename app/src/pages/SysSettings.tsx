@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback, CSSProperties } from '
 import {Text, Button, Box, Grid, GridItem} from '@chakra-ui/react'
 
 // import Drawer from '../components/Drawer'
-import Drawer, { useDrawers } from '../components/Drawer'
+import Drawer, { useDrawers } from '../components/workholders/Drawer'
 
 const SysSettings = (props) => {
 

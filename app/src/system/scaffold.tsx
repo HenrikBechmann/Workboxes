@@ -7,17 +7,17 @@ import React from 'react'
 import Signin from '../pages/Signin'
 
 // GeneralRouteController; GeneralLayout
-import GeneralLayoutController from '../components/GeneralLayoutController'
+import GeneralLayoutController from '../components/routing/GeneralLayoutController'
 // public
 import About from '../pages/About'
 import Workbox from '../pages/WorkboxShared'
 import NotFound from '../pages/NotFound'
 
 // user support
-import UserRouteController from '../components/UserRouteController'
+import UserRouteController from '../components/routing/UserRouteController'
 import UserRegistration from '../pages/UserRegistration' // TODO part of user support?
 
-import UserLayout from '../components/UserLayout'
+import UserLayout from '../components/routing/UserLayout'
 import Main from '../pages/Main'
 import Notices from '../pages/Notices'
 import Classifieds from '../pages/Classifieds'
@@ -30,9 +30,9 @@ import Subscriptions from '../pages/Subscriptions'
 import Unauthorized from '../pages/Unauthorized'
 
 // system support
-import AdminRouteController from '../components/AdminRouteController'
+import AdminRouteController from '../components/routing/AdminRouteController'
 
-import AdminLayout from '../components/AdminLayout'
+import AdminLayout from '../components/routing/AdminLayout'
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
 import Metadata from '../pages/Metadata'
@@ -64,7 +64,7 @@ const routes = [
                                 element: <Main />,
                             },
                             {
-                                path: ':workspaceID', // TODO verify name change
+                                path: ':workspaceID',
                                 element:<Main />,
                             },
                         ]

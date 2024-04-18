@@ -3,7 +3,7 @@
 
 import React, { useRef } from 'react'
 
-import Workspace from '../components/Workspace'
+import Workspace from '../components/workholders/Workspace'
 import { Box } from '@chakra-ui/react'
 
 export const Main = (props) => {

@@ -41,23 +41,15 @@ const Signin = (props) => {
         userData = useUserData()
 
 
-    // console.log('location', location, from)
-
-    // console.log('useDataRef.current in signin', userDataRef.current)
-
     useEffect (()=>{
-
-        // console.log('calling getRedirectResult')
 
         getRedirectResult(auth)
             .then((result) => {
 
-
-                // console.log('result of getRedirectResult', result)
-
                 if (result === null) {
-                    // setSigninState('signedout')
-                    // return
+
+                    return
+
                 }
 
                 // additional properties if needed
@@ -110,12 +102,11 @@ const Signin = (props) => {
     }
 
     if (userData === undefined) { // signin in progress
+
         return <Box> Connecting... </Box>
-    }
 
-    if (userData) { // no need for signin
+    } else if (userData) { // no need for signin
 
-        // navigate(from)
         return null
 
     }

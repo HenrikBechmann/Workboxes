@@ -17,9 +17,9 @@ import {
 
 import Scroller from 'react-infinite-grid-scroller'
 
-import { useUserData } from '../system/FirebaseProviders'
-import ToolbarFrame from '../components/toolbars/Toolbar_Frame'
-import WorkspaceToolbar from '../components/toolbars/Toolbar_Workspace'
+import { useUserData } from '../../system/FirebaseProviders'
+import ToolbarFrame from '../toolbars/Toolbar_Frame'
+import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
 import collectionIcon from '../../assets/shelves.png'
