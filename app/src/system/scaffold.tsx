@@ -15,8 +15,8 @@ import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
-import RoutesMember from '../components/Routes_Member'
-import LayoutMember from '../components/Layout_Member'
+import UserAuthRoutes from '../components/Routes_User'
+import UserLayout from '../components/Layout_User'
 
 import Main from '../pages/Main'
 import Account from '../pages/Account'
@@ -26,8 +26,8 @@ import Subscriptions from '../pages/Subscriptions'
 import UserRegistration from '../pages/UserRegistration'
 
 // system support
-import RoutesSysadmin from '../components/Routes_Sysadmin'
-import LayoutSysadmin from '../components/Layout_Sysadmin'
+import SysadminAuthRoutes from '../components/Routes_Sysadmin'
+import SysadminLayout from '../components/Layout_Sysadmin'
 
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
@@ -40,10 +40,10 @@ const routes = [
     
     {
         path: '/',
-        element: <RoutesMember />,
+        element: <UserAuthRoutes />,
         children: [
             {
-                element: <LayoutMember />,
+                element: <UserLayout />,
                 children:[
                     {
                         index: true,
@@ -101,10 +101,10 @@ const routes = [
     },
     {
         path: 'sysadmin',
-        element: <RoutesSysadmin />,
+        element: <SysadminAuthRoutes />,
         children: [
             {
-                element: <LayoutSysadmin />,
+                element: <SysadminLayout />,
                 children:[
                     {
                         index:true,

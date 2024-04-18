@@ -1,4 +1,4 @@
-// MembersLayout.tsx
+// Layout_User.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {CSSProperties} from 'react'
 import { Outlet } from 'react-router-dom'
@@ -16,7 +16,7 @@ const bodyStyle = {
     position: 'relative',
 } as CSSProperties
 
-const LayoutMember = (props) => {
+const UserLayout = (props) => {
 
     return <Grid 
         data-type = 'layout-member'
@@ -40,4 +40,4 @@ const LayoutMember = (props) => {
     </Grid>
 }
 
-export default LayoutMember
+export default UserLayout
