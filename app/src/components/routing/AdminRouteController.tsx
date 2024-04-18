@@ -4,31 +4,40 @@ import React from 'react'
 import { Navigate, Outlet as RouteController, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
-import { useUserData } from '../../system/FirebaseProviders'
+import { useUserData, useUserRecords } from '../../system/FirebaseProviders'
 
 function AdminRouteController() {
 
     const 
-        userdata = useUserData(),
+        userData = useUserData(),
+        userRecords = useUserRecords(),
         location = useLocation()
 
-    if (userdata === undefined) {
+    if (userData === undefined) {
 
         return <Box> Loading... </Box>
       
-    } else if (!userdata) {
+    } else if (!userData) {
 
         const from = location.pathname || '/'
 
         return <Navigate to = {`/signin?from=${from}`}/>
 
-    } else if (userdata.sysadminStatus.isSuperUser) {
+    } else if (userData && !userRecords.user) {
+
+        return <Box> Registering... </Box>
+        
+    } else if (!userRecords.user.profile.fully_registered) { // pre-empt anything else
+
+        return <Navigate to = 'user-registration' />
+
+    } else if (userData.sysadminStatus.isSuperUser) {
 
         return <RouteController />
 
     } else {
 
-        return <Navigate to = {`/unauthorized`} replace/>
+        return <Navigate to = '/unauthorized' replace/>
 
     }
 

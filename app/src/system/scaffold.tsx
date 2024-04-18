@@ -7,7 +7,7 @@ import React from 'react'
 import Signin from '../pages/Signin'
 
 // GeneralRouteController; GeneralLayout
-import GeneralLayoutController from '../components/routing/GeneralLayoutController'
+import GeneralRouteController from '../components/routing/GeneralRouteController'
 // public
 import About from '../pages/About'
 import Workbox from '../pages/WorkboxShared'
@@ -139,7 +139,7 @@ const routes = [
     },
     {
         path:'/',
-        element: <GeneralLayoutController />,
+        element: <GeneralRouteController />,
         children:[
             {
                 path: 'about',
