@@ -7,11 +7,11 @@ import {
     Box
 } from '@chakra-ui/react'
 
-import windowMinimalIcon from '../../assets/window-minimal.png'
-import windowFloatIcon from '../../assets/window-float.png'
-import windowFullIcon from '../../assets/window-full.png'
-import moreVertIcon from '../../assets/more_vert_light.png'
-import closeLightIcon from '../../assets/close_light.png'
+import windowMinimalIcon from '../../../assets/window-minimal.png'
+import windowFloatIcon from '../../../assets/window-float.png'
+import windowFullIcon from '../../../assets/window-full.png'
+import moreVertIcon from '../../../assets/more_vert_light.png'
+import closeLightIcon from '../../../assets/close_light.png'
 
 const windowTitleStyles = {
     width: '100%',

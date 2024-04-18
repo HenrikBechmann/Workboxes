@@ -14,7 +14,7 @@ import "react-resizable/css/styles.css"
 
 import WindowTitle from './WindowTitle'
 
-import dragCornerIcon from '../../assets/drag-corner.png'
+import dragCornerIcon from '../../../assets/drag-corner.png'
 
 export const ViewSelectorContext = createContext(null)
 export const WindowCallbackContext = createContext(null)

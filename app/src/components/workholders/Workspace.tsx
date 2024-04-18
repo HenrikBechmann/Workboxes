@@ -22,10 +22,10 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
 
-import collectionIcon from '../../assets/shelves.png'
-import notebookIcon from '../../assets/notebook.png'
-import checklistIcon from '../../assets/checklist.png'
-import homeIcon from '../../assets/home.png'
+import collectionIcon from '../../../assets/shelves.png'
+import notebookIcon from '../../../assets/notebook.png'
+import checklistIcon from '../../../assets/checklist.png'
+import homeIcon from '../../../assets/home.png'
 
 const defaultWorkboxState = {
     settingsShow:false,

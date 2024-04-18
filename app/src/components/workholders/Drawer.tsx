@@ -15,9 +15,9 @@ import { isMobile } from '../../index'
 
 import Workbox from './../workbox/Workbox'
 
-import handleIcon from '../../assets/handle.png'
-import helpIcon from '../../assets/help.png'
-import closeIcon from '../../assets/close.png'
+import handleIcon from '../../../assets/handle.png'
+import helpIcon from '../../../assets/help.png'
+import closeIcon from '../../../assets/close.png'
 
 // ==========================[ static CSS values ]===============================
 
