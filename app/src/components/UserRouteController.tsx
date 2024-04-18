@@ -1,7 +1,7 @@
 // UserRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
-import { Navigate, Outlet as RouteController, useLocation, redirect } from 'react-router-dom'
+import { Navigate, Outlet as RouteController, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords } from '../system/FirebaseProviders'
@@ -22,6 +22,7 @@ const UserRouteController = () => {
   if (!userdata) { // null = logged out
 
     const from = location.pathname || '/'
+
     return <Navigate to = {`/signin?from=${from}`}/>
 
   } else if (!userRecords.user) { // assembling user records is underway
@@ -30,12 +31,14 @@ const UserRouteController = () => {
 
   } else if (!userRecords.user.profile.fully_registered) { // pre-empt anything else
 
-    return <Navigate to = {`/user-registration`} />
+    if (location.pathname != '/user-registration') {
 
-  } else {
+      return <Navigate to = 'user-registration' />
 
-    return <RouteController /> // respond to router state
-
+    }
   }
+
+  return <RouteController /> // respond to router state
+
 }
 export default UserRouteController

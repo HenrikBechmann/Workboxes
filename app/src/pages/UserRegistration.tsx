@@ -8,7 +8,7 @@ import { Navigate } from 'react-router-dom'
 import { signOut } from "firebase/auth"
 
 import { 
-    Box, Text,
+    Box, Text, Heading,
     Tabs, TabList, Tab, TabPanels, TabPanel,
     Button, Link,
 } from '@chakra-ui/react'
@@ -21,8 +21,6 @@ const UserRegistration = (props) => {
         auth = useAuth(),
         userData = useUserData(),
         [layoutState, setLayoutState] = useState('ready')
-
-    console.log('UserRegistration: userData', userData)
 
     const logOut = () => {
             signOut(auth).then(() => {
@@ -43,10 +41,11 @@ const UserRegistration = (props) => {
 
     return <>
         <Box padding = '6px'>
+        <Heading mb = '3px' size = 'md'>Welcome to the Workboxes app!</Heading>
         <Text>
-            You are signed in as {userData.authUser.displayName}. <Link 
+            You are signed in as <b>{userData.authUser.displayName}</b>. <Link 
             color = 'teal.500' onClick = {logOut}>Sign out</Link> any time you like,
-            and come back later.
+            if you want to come back later.
         </Text>
 
         <Text mt = '6px'>
@@ -60,8 +59,9 @@ const UserRegistration = (props) => {
             2. A "payment method" [pending for now] is of course required to help us pay the bills, and keep supporting you. 
             [Again, this is pending -- the app is free for now for invited guests.]
         </Text>
+        <Text>3. Accept our (somewhat crude) terms and conditions.</Text>
         <Text mt = '6px'>
-            You'll be able to continue to the app when the user handle has been accepted. 
+            You'll be able to continue to the app when the user handle and terms have been accepted. 
             [In future the payment method will need to be accepted as well].
         </Text>
         </Box >
@@ -81,14 +81,17 @@ const UserRegistration = (props) => {
                 </TabPanel>
                 <TabPanel>
                     <Text>
-                        [pending -- free to invited guests for now] Payment method                        
+                        [pending -- free to invited guests for now] Payment method. I'm thinking about $10 per month for
+                        the base fee, but I need to study the cost structure more. Feedback is welcome. 
+                        More in increments (say $5) if metered usage gets beyond some point.                       
                     </Text>
                 </TabPanel>
                 <TabPanel>
                     <Text>
-                        [pending] Terms and Conditions. Basically, be constructive, be nice. Avoid misinformation. 
-                        Disinformation (deliberately misleading information) won't be tolerated. We reserve the right 
-                        to cancel your participation here at any time for any reason. My house, my rules.
+                        [pending] Terms and Conditions. Basically, be constructive, be polite, be honest. Avoid misinformation. 
+                        Disinformation (deliberately misleading information) won't be tolerated. Phishing or any devious 
+                        practices won't be tolerated. We reserve the right to cancel your participation here at any time 
+                        for any reason. My house, my rules. If we ever get big enough, we'll have an ethics committee.
                     </Text>
                 </TabPanel>
             </TabPanels>
