@@ -9,7 +9,7 @@ import ismobile from 'is-mobile'
 
 import FirebaseProviders from './system/FirebaseProviders'
 import TribalopolisProvider from './system/TribalopolisProvider'
-import scaffold from './system/scaffold'
+import scaffold from './system/routescaffold'
 
 export const isMobile = ismobile({featureDetect: true, tablet: true})
 
