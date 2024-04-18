@@ -1,12 +1,12 @@
 // RoutesSysadmin.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, Outlet as RouteController, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { useUserData } from '../system/FirebaseProviders'
 
-function RoutesSysadmin() {
+function SysadminRoutesController() {
 
   const 
     userdata = useUserData(),
@@ -25,7 +25,7 @@ function RoutesSysadmin() {
 
   } else if (userdata.sysadminStatus.isSuperUser) {
 
-    return <Outlet />
+    return <RouteController />
 
   } else {
 
@@ -34,4 +34,4 @@ function RoutesSysadmin() {
   }
 
 }
-export default RoutesSysadmin
+export default SysadminRoutesController

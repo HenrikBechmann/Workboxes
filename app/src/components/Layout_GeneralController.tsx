@@ -1,7 +1,7 @@
 // GeneralLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {useRef, useState} from 'react'
-import { Outlet, NavLink, Navigate } from 'react-router-dom'
+import { Outlet as RouteController, NavLink, Navigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
 import { signOut } from "firebase/auth"
@@ -25,7 +25,7 @@ const navlinkStyles = {
     color:'blue',
 }
 
-const LayoutGeneral = (props) => {
+const LayoutGeneralController = (props) => {
 
     const 
         userData = useUserData(),
@@ -78,10 +78,10 @@ const LayoutGeneral = (props) => {
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>
             <Box data-type = 'general-outlet' style = {bodyStyle}>
-                <Outlet />
+                <RouteController />
             </Box>
         </GridItem>
     </Grid>
 }
 
-export default LayoutGeneral
+export default LayoutGeneralController

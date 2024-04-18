@@ -4,7 +4,7 @@
 import React from 'react'
 
 // general support
-import LayoutGeneral from '../components/Layout_General'
+import GeneralLayoutController from '../components/Layout_GeneralController'
 
 import Signin from '../pages/Signin'
 import About from '../pages/About'
@@ -15,7 +15,7 @@ import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
-import UserAuthRoutes from '../components/Routes_User'
+import UserRoutesController from '../components/RoutesController_User'
 import UserLayout from '../components/Layout_User'
 
 import Main from '../pages/Main'
@@ -26,7 +26,7 @@ import Subscriptions from '../pages/Subscriptions'
 import UserRegistration from '../pages/UserRegistration'
 
 // system support
-import SysadminAuthRoutes from '../components/Routes_Sysadmin'
+import SysadminRoutesController from '../components/RoutesController_Sysadmin'
 import SysadminLayout from '../components/Layout_Sysadmin'
 
 import Sysadmin from '../pages/Sysadmin'
@@ -37,10 +37,9 @@ import HelpPanels from '../pages/HelpPanels'
 
 const routes = [
     
-    
     {
         path: '/',
-        element: <UserAuthRoutes />,
+        element: <UserRoutesController />,
         children: [
             {
                 element: <UserLayout />,
@@ -57,7 +56,7 @@ const routes = [
                                 element: <Main />,
                             },
                             {
-                                path: ':focus',
+                                path: ':workspaceID', // TODO verify name change
                                 element:<Main />,
                             },
                         ]
@@ -100,8 +99,8 @@ const routes = [
         ],
     },
     {
-        path: 'sysadmin',
-        element: <SysadminAuthRoutes />,
+        path: 'sysadmin', // TODO s/b '/sysadmin' ?
+        element: <SysadminRoutesController />,
         children: [
             {
                 element: <SysadminLayout />,
@@ -132,7 +131,7 @@ const routes = [
     },
     {
         path:'/',
-        element: <LayoutGeneral />,
+        element: <GeneralLayoutController />,
         children:[
             {
                 path: 'about',
