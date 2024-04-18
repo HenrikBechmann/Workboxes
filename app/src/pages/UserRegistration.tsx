@@ -69,6 +69,7 @@ const UserRegistration = (props) => {
             <TabList>
                 <Tab>User Handle</Tab>
                 <Tab>Payment Method</Tab>
+                <Tab>Terms and Conditions</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
@@ -81,6 +82,13 @@ const UserRegistration = (props) => {
                 <TabPanel>
                     <Text>
                         [pending -- free to invited guests for now] Payment method                        
+                    </Text>
+                </TabPanel>
+                <TabPanel>
+                    <Text>
+                        [pending] Terms and Conditions. Basically, be constructive, be nice. Avoid misinformation. 
+                        Disinformation (deliberately misleading information) won't be tolerated. We reserve the right 
+                        to cancel your participation here at any time for any reason. My house, my rules.
                     </Text>
                 </TabPanel>
             </TabPanels>

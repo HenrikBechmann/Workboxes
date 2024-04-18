@@ -15,7 +15,7 @@ const bodyStyle = {
     overflow:'hidden', // hide drawers
 }
 
-const LayoutSysadmin = (props) => {
+const SysadminLayout = (props) => {
 
     return <Grid 
         data-type = 'layout-sysadmin'
@@ -39,4 +39,4 @@ const LayoutSysadmin = (props) => {
     </Grid>
 }
 
-export default LayoutSysadmin
+export default SysadminLayout

@@ -1,4 +1,4 @@
-// Layout_User.tsx
+// UserLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {CSSProperties} from 'react'
 import { Outlet as RouteController } from 'react-router-dom'

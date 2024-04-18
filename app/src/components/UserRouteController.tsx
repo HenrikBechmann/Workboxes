@@ -1,4 +1,4 @@
-// RoutesMember.tsx
+// UserRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
 import { Navigate, Outlet as RouteController, useLocation, redirect } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords } from '../system/FirebaseProviders'
 
-const UserAuthRoutesController = () => {
+const UserRouteController = () => {
 
   const 
     userdata = useUserData(),
@@ -38,4 +38,4 @@ const UserAuthRoutesController = () => {
 
   }
 }
-export default UserAuthRoutesController
+export default UserRouteController

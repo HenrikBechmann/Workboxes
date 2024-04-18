@@ -1,4 +1,4 @@
-// GeneralLayout.tsx
+// GeneralLayoutController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {useRef, useState} from 'react'
 import { Outlet as RouteController, NavLink, Navigate } from 'react-router-dom'
@@ -25,7 +25,7 @@ const navlinkStyles = {
     color:'blue',
 }
 
-const LayoutGeneralController = (props) => {
+const GeneralLayoutController = (props) => {
 
     const 
         userData = useUserData(),
@@ -84,4 +84,4 @@ const LayoutGeneralController = (props) => {
     </Grid>
 }
 
-export default LayoutGeneralController
+export default GeneralLayoutController

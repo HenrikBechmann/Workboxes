@@ -4,31 +4,35 @@
 import React from 'react'
 
 // general support
-import GeneralLayoutController from '../components/Layout_GeneralController'
-
 import Signin from '../pages/Signin'
+
+// GeneralRouteController; GeneralLayout
+import GeneralLayoutController from '../components/GeneralLayoutController'
+// public
 import About from '../pages/About'
 import Workbox from '../pages/WorkboxShared'
-import Notices from '../pages/Notices'
-import Classifieds from '../pages/Classifieds'
-import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 
 // user support
-import UserRoutesController from '../components/RoutesController_User'
-import UserLayout from '../components/Layout_User'
+import UserRouteController from '../components/UserRouteController'
+import UserRegistration from '../pages/UserRegistration' // TODO part of user support?
 
+import UserLayout from '../components/UserLayout'
 import Main from '../pages/Main'
+import Notices from '../pages/Notices'
+import Classifieds from '../pages/Classifieds'
+
 import Account from '../pages/Account'
 import Domains from '../pages/Domains'
 import Memberships from '../pages/Memberships'
 import Subscriptions from '../pages/Subscriptions'
-import UserRegistration from '../pages/UserRegistration'
+
+import Unauthorized from '../pages/Unauthorized'
 
 // system support
-import SysadminRoutesController from '../components/RoutesController_Sysadmin'
-import SysadminLayout from '../components/Layout_Sysadmin'
+import AdminRouteController from '../components/AdminRouteController'
 
+import AdminLayout from '../components/AdminLayout'
 import Sysadmin from '../pages/Sysadmin'
 import SysSettings from '../pages/SysSettings'
 import Metadata from '../pages/Metadata'
@@ -39,8 +43,12 @@ const routes = [
     
     {
         path: '/',
-        element: <UserRoutesController />,
+        element: <UserRouteController />,
         children: [
+            {
+                path:'user-registration',
+                element:<UserRegistration />
+            },
             {
                 element: <UserLayout />,
                 children:[
@@ -100,10 +108,10 @@ const routes = [
     },
     {
         path: '/sysadmin',
-        element: <SysadminRoutesController />,
+        element: <AdminRouteController />,
         children: [
             {
-                element: <SysadminLayout />,
+                element: <AdminLayout />,
                 children:[
                     {
                         index:true,
@@ -140,10 +148,6 @@ const routes = [
             {
                 path: 'workbox',
                 element: <Workbox />
-            },
-            {
-                path:'user-registration',
-                element:<UserRegistration />
             },
             {
                 path: '*',
