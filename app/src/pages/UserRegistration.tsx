@@ -13,13 +13,14 @@ import {
     Button, Link,
 } from '@chakra-ui/react'
 
-import { useUserData, useAuth } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
 
 const UserRegistration = (props) => {
 
     const 
         auth = useAuth(),
         userData = useUserData(),
+        userRecords = useUserRecords(),
         [layoutState, setLayoutState] = useState('ready')
 
     const logOut = () => {
@@ -27,13 +28,17 @@ const UserRegistration = (props) => {
               setLayoutState('signedout')
               // console.log('Sign-out successful.')
             }).catch((error) => {
-                // console.log('signout error', error)
+                console.log('signout error', error)
               // An error happened.
             })
         }
 
+    if (userRecords.user.profile.fully_registered) {
+        return <Navigate to = '/'/>
+    } 
+
     if (!userData || (layoutState == 'signedout')) {
-        return <Navigate to = {`/signin`}/>
+        return <Navigate to = '/signin'/>
     }
      //null
 
@@ -59,7 +64,7 @@ const UserRegistration = (props) => {
             2. A "payment method" [pending for now] is of course required to help us pay the bills, and keep supporting you. 
             [Again, this is pending -- the app is free for now for invited guests.]
         </Text>
-        <Text>3. Accept our (somewhat crude) terms and conditions.</Text>
+        <Text>3. Accept our (somewhat preliminary) terms and conditions.</Text>
         <Text mt = '6px'>
             You'll be able to continue to the app when the user handle and terms have been accepted. 
             [In future the payment method will need to be accepted as well].
@@ -81,7 +86,7 @@ const UserRegistration = (props) => {
                 </TabPanel>
                 <TabPanel>
                     <Text>
-                        [pending -- free to invited guests for now] Payment method. I'm thinking about $10 per month for
+                        Payment method. [pending -- free to invited guests for now.] I'm thinking about $10 per month for
                         the base fee, but I need to study the cost structure more. Feedback is welcome. 
                         More in increments (say $5) if metered usage gets beyond some point.                       
                     </Text>

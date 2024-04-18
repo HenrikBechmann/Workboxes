@@ -236,10 +236,13 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        is_abandoned: false,
-        first_load: true,
-        fully_registered: false,
-        standing_code:0,
+        flags: {
+          is_abandoned: false,
+          first_load: true,
+          fully_registered: false,
+          standing_code:0,
+          terms_accepted: false,
+        },
         user: {
           id:null,
           name: null,

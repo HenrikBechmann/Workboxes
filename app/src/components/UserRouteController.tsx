@@ -19,6 +19,8 @@ const UserRouteController = () => {
       
   }
 
+  // console.log('userRecords.user.profile',{...userRecords.user?.profile} )
+
   if (!userdata) { // null = logged out
 
     const from = location.pathname || '/'
@@ -30,6 +32,8 @@ const UserRouteController = () => {
     return <Box> Registering... </Box>
 
   } else if (!userRecords.user.profile.fully_registered) { // pre-empt anything else
+
+    // console.log('UserRouteController: not fully registered', userRecords.user.profile)
 
     if (location.pathname != '/user-registration') {
 
