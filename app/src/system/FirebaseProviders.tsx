@@ -146,7 +146,6 @@ export const UserProvider = ({children}) => {
 
         const userRecord = updateDocumentSchema('users','standard',{},{
             profile: {
-              is_abandoned: false,
               user: {
                 id: uid,
                 name: displayName,

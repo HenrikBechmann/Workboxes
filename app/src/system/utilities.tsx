@@ -108,7 +108,19 @@ const versionMaps = {
   },
   users: {
     standard: {
-      latest_version:2,
+      latest_version:4,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
+  handles: {
+    user: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+    domain: {
+      latest_version:0,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -118,6 +130,10 @@ const versionMaps = {
 const versionTransforms = {
   workboxes: {
     collection: [],
+  },
+  handles: {
+    user: [],
+    domain: [],
   },
   accounts: {
     standard: [],
@@ -163,6 +179,14 @@ const versionTransforms = {
           delete profile.payment_method
           delete profile.user_handle
           delete profile.standing_code
+        }
+      },
+      {
+        version:4,
+        transform: (data) => {
+          const { profile } = data
+          delete profile.user.handle.id
+          delete profile.user.handle.name
         }
       },
     ],
@@ -276,7 +300,7 @@ const versionData = {
   users: {
     standard: [
     {
-      version: 2,
+      version: 4,
       generation: 0,
       profile: {
         flags: {
@@ -291,13 +315,17 @@ const versionData = {
         user: {
           id:null,
           name: null,
+          registered_name: null,
           image: {
             source: null,
           },
           handle: {
-            id: null,
-            name: null,
+            plain: null,
+            lower_case: null,
           },
+          location: null,
+          birthdate: null,
+          date_joined: null,
         },
         domain: {
           id: null,
@@ -341,6 +369,8 @@ const versionData = {
             plain: null,
             lower_case: null,
           },
+          location: null,
+          date_joined: null,
         },
         owner: {
           id: null,
@@ -373,6 +403,80 @@ const versionData = {
       },
     }],
   },
+  handles: {
+    user: [{
+      version: 0,
+      generation: 0,
+      profile: {
+        handle: {
+          plain: null,
+          lower_case: null,
+          name: null, // synchronize with user record
+          location: null, // synchronize with user record
+        },
+        type: {
+          name: 'user',
+          alias: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        commits: {
+          created_by: {
+            id: null, 
+            name: null
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+        },
+      },
+    }],
+    domain: [{
+      version: 0,
+      generation: 0,
+      profile: {
+        handle: {
+          plain: null,
+          lower_case: null,
+          name: null, // synchronize with domain record
+          location: null, // synchronize with domain record
+        },
+        type: {
+          name: 'domain',
+          alias: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        commits: {
+          created_by: {
+            id: null, 
+            name: null
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+        },
+      },
+    }],
+  },
 };
 
 (function loadVersions (){
@@ -384,6 +488,7 @@ const versionData = {
     for (const type in typesHash) {
 
       const versionArray = typesHash[type]
+      // console.log('loadVersions: collection, type, typesHash, versionArray\n',collection, type, typesHash, versionArray)
       for (const version of versionArray) {
 
         versionMaps[collection][type].datamap.set(version.version, version)

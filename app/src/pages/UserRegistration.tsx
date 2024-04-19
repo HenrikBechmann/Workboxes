@@ -70,7 +70,6 @@ const UserRegistration = (props) => {
           // console.log('Sign-out successful.')
         }).catch((error) => {
             console.log('signout error', error)
-          // An error happened.
         })
     }
 
@@ -127,7 +126,7 @@ const UserRegistration = (props) => {
                     <HandleAlert />                      
                     <Text>
                         Handle: required: handle (immutable), name; 
-                        optional: location, description, keyword, birth day; 
+                        optional: location, description, birth day; 
                         automated: date joined  
                     </Text>      
                 </TabPanel>
