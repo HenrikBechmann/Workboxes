@@ -39,7 +39,7 @@ const HandleAlert = (props) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              Are you sure? The user handle can't be changed afterwards.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -121,11 +121,11 @@ const UserRegistration = (props) => {
             </TabList>
             <TabPanels>
                 <TabPanel>
+                    <HandleAlert />                      
                     <Text>
                         Handle: required: handle (immutable), name; 
                         optional: location, description, keyword, birth day; 
                         automated: date joined  
-                        <HandleAlert />                      
                     </Text>      
                 </TabPanel>
                 <TabPanel>
