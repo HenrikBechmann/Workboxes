@@ -27,7 +27,7 @@ function AdminRouteController() {
 
         return <Box> Registering... </Box>
         
-    } else if (!userRecords.user.profile.fully_registered) { // pre-empt anything else
+    } else if (!userRecords.user.profile.flags.fully_registered) { // pre-empt anything else
 
         return <Navigate to = 'user-registration' />
 

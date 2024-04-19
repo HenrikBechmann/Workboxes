@@ -16,7 +16,7 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
           latestVersion = versionData.latest_version,
           sourceVersion = source.version
 
-        // console.log('versionData, latestVersion, sourceVersion',versionData, latestVersion, sourceVersion)
+        // console.log('sourceVersion, latestVersion, versionData ',sourceVersion, latestVersion, versionData )
 
         if (sourceVersion === latestVersion) {
 
@@ -45,6 +45,10 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
 
           // run transform function if exists - from targetVersion - 1 to targetVersion
           const transform = versionData.functionmap.get(targetVersionNumber)
+
+          // console.log('collection, type, targetVersionNumber, transform',
+          //   collection, type, targetVersionNumber, transform)
+
           transform && transform(transitionDocument)
 
           // merge new structure/additions
@@ -104,7 +108,7 @@ const versionMaps = {
   },
   users: {
     standard: {
-      latest_version:0,
+      latest_version:2,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -122,7 +126,46 @@ const versionTransforms = {
     standard: [],
   },
   users: {
-    standard: [],
+    standard: [
+      {
+        version:1,
+        transform: (data) => {
+          const { profile } = data
+          const {
+            is_abandoned,
+            first_load,
+            fully_registered,
+            terms_accepted,
+            payment_method,
+            user_handle,
+            standing_code,
+          } = profile
+          const flags = {
+            is_abandoned,
+            first_load,
+            fully_registered,
+            terms_accepted,
+            payment_method,
+            user_handle,
+            standing_code,
+          }
+          profile.flags = flags
+        }
+      },
+      {
+        version:2,
+        transform: (data) => {
+          const { profile } = data
+          delete profile.is_abandoned
+          delete profile.first_load
+          delete profile.fully_registered
+          delete profile.terms_accepted
+          delete profile.payment_method
+          delete profile.user_handle
+          delete profile.standing_code
+        }
+      },
+    ],
   },
 }
 
@@ -233,7 +276,7 @@ const versionData = {
   users: {
     standard: [
     {
-      version: 0,
+      version: 2,
       generation: 0,
       profile: {
         flags: {
@@ -359,7 +402,7 @@ const versionData = {
       const versionArray = typesHash[type]
       for (const version of versionArray) {
 
-        versionMaps[collection][type].functionmap.set(version.version, version)
+        versionMaps[collection][type].functionmap.set(version.version, version.transform)
 
       }
     }

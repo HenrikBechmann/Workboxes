@@ -74,7 +74,7 @@ const UserRegistration = (props) => {
         })
     }
 
-    if (userRecords.user.profile.fully_registered) { // no need for user registration
+    if (userRecords.user.profile.flags.fully_registered) { // no need for user registration
 
         return <Navigate to = '/'/>
 
