@@ -23,7 +23,7 @@ const HandleAlert = (props) => {
 
   return (
     <>
-      <Button colorScheme='blue' onClick={onOpen}>
+      <Button mr = '6px' colorScheme='blue' onClick={onOpen}>
         Save User Handle
       </Button>
 
@@ -104,7 +104,7 @@ const UserRegistration = (props) => {
             2. A "payment method" [pending for now] is of course required to help us pay the bills, and keep supporting you. 
             [Again, this is pending -- the app is free for now for invited guests.]
         </Text>
-        <Text>3. Accept our (somewhat preliminary) terms and conditions.</Text>
+        <Text>3. Acceptance of our (somewhat preliminary) terms and conditions.</Text>
         <Text mt = '6px' mb = '6px'>
             You'll be able to continue to the app when the user handle and terms have been accepted. 
             [In future the payment method will need to be accepted as well].
@@ -123,11 +123,9 @@ const UserRegistration = (props) => {
             </TabList>
             <TabPanels>
                 <TabPanel>
-                    <HandleAlert />                      
+                    <Text><HandleAlert />Press this button after filling in the fields below.</Text>
                     <Text>
-                        Handle: required: handle (immutable), name; 
-                        optional: location, description, birth day; 
-                        automated: date joined  
+                        handle, name, location, description, birthday
                     </Text>      
                 </TabPanel>
                 <TabPanel>
