@@ -2,7 +2,7 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useRef, useState} from 'react'
-import { Outlet as RouteController, NavLink, Navigate } from 'react-router-dom'
+import { Outlet as RouterOutput, NavLink, Navigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords, useAuth } from '../../system/FirebaseProviders'
@@ -65,7 +65,7 @@ const GeneralRouteController = (props) => {
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>
             <Box data-type = 'general-outlet' style = {bodyStyle}>
-                <RouteController />
+                <RouterOutput />
             </Box>
         </GridItem>
     </Grid>

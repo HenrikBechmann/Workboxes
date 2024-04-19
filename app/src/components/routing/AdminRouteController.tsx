@@ -1,7 +1,7 @@
 // AdminRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
-import { Navigate, Outlet as RouteController, useLocation } from 'react-router-dom'
+import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords } from '../../system/FirebaseProviders'
@@ -33,7 +33,7 @@ function AdminRouteController() {
 
     } else if (userData.sysadminStatus.isSuperUser) {
 
-        return <RouteController />
+        return <RouterOutput />
 
     } else {
 

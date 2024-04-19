@@ -1,7 +1,7 @@
 // UserRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
-import { Navigate, Outlet as RouteController, useLocation } from 'react-router-dom'
+import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords } from '../../system/FirebaseProviders'
@@ -37,7 +37,7 @@ const UserRouteController = () => {
 
     }
 
-    return <RouteController /> // respond to router state
+    return <RouterOutput /> // respond to router state
 
 }
 export default UserRouteController

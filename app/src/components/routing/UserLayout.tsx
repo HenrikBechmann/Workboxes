@@ -1,7 +1,7 @@
 // UserLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, {CSSProperties} from 'react'
-import { Outlet as RouteController } from 'react-router-dom'
+import { Outlet as RouterOutput } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
@@ -34,7 +34,7 @@ const UserLayout = (props) => {
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>        
             <Box data-type = 'members-outlet' style = {bodyStyle}>
-                <RouteController />
+                <RouterOutput />
             </Box>
         </GridItem>
     </Grid>
