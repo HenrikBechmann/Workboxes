@@ -111,7 +111,9 @@ const UserRegistration = (props) => {
             [In future the payment method will need to be accepted as well].
         </Text>
         <em>Accepted: <Checkbox isChecked = {true}>User Handle</Checkbox> 
-        <Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox></em>
+            <Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox>
+            <Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox>
+        </em>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Tabs variant = 'enclosed' margin = '3px'>
