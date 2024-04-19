@@ -113,6 +113,7 @@ const UserRegistration = (props) => {
         <em>Accepted: <Checkbox isChecked = {true}>User Handle</Checkbox> 
         <Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox></em>
         </Box >
+        <hr style = {{borderTop:'2px solid silver'}}/>
         <Tabs variant = 'enclosed' margin = '3px'>
             <TabList>
                 <Tab>User Handle</Tab>
