@@ -242,6 +242,7 @@ const versionData = {
           fully_registered: false,
           standing_code:0,
           terms_accepted: false,
+          payment_method: false,
         },
         user: {
           id:null,
