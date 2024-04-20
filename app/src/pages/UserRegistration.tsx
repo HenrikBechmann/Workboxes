@@ -102,7 +102,8 @@ const UserRegistration = (props) => {
         </Text>
         <Text mt = '6px'>
             2. A "payment method" [pending for now] is of course required to help us pay the bills, and keep supporting you. 
-            [Again, this is pending -- the app is free for now for invited guests.]
+            [Again, this is pending -- the app is free for now for invited guests.] Don't worry, the first month (with limits)
+            will be free.
         </Text>
         <Text>3. Acceptance of our (somewhat preliminary) terms and conditions.</Text>
         <Text mt = '6px' mb = '6px'>
