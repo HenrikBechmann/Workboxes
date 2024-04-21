@@ -295,6 +295,7 @@ const versionData = {
           payment_method: false,
           user_handle:false,
           standing_code:0,
+          settled: false,
         },
         user: {
           id:null,
@@ -499,5 +500,3 @@ const versionData = {
   }
 
 }())
-
-

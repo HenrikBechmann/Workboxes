@@ -17,7 +17,7 @@ import {
 
 import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
 
-const HandleAlert = (props) => {
+const SaveHandleAlert = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
 
@@ -56,6 +56,46 @@ const HandleAlert = (props) => {
     </>
   )
 }
+
+const HandleRegistration = (props) => {
+    return <><Text><SaveHandleAlert />Press this button after filling in the fields below.</Text>
+        <Text>
+            handle, name, location, description, birthday
+        </Text>      
+    </>
+}
+
+const TermsRegistration = (props) => {
+
+    return <>
+        <Text>
+            [preliminary] Terms and Conditions. Be constructive, be polite, be honest. Avoid misinformation. 
+            Disinformation (deliberately misleading information) won't be tolerated. Phishing or any devious 
+            practices won't be tolerated. No spam please. 
+        </Text>
+        <Text mt = '6px'>
+            We reserve the right to cancel your participation here at any time for any reason. 
+            If we ever get big enough, we'll have an ethics committee to oversee this.
+        </Text>
+        <Text mt = '6px' mb = '6px'>
+            I think that assets uploaded here will have to stay here under some kind of Creative Commons licence.
+            In the meantime refrain from uploading material which you consider to be private.
+        </Text>
+        <Text><Button colorScheme = 'blue'>I accept</Button> these terms and conditions.</Text>
+    </>
+}
+
+const PaymentMethodRegistration = (props) => {
+
+    return <>
+        <Text>
+            Payment method. [pending -- free to invited guests for now.] I'm thinking about $10 per month for
+            the base fee, but I need to study the cost structure more. Feedback is welcome. 
+            More in increments (say $5) if metered usage gets beyond some point.                       
+        </Text>
+    </>
+}
+
 const UserRegistration = (props) => {
 
     const 
@@ -63,6 +103,8 @@ const UserRegistration = (props) => {
         userData = useUserData(),
         userRecords = useUserRecords(),
         [layoutState, setLayoutState] = useState('ready')
+
+    // sign out option
 
     const logOut = () => {
         signOut(auth).then(() => {
@@ -83,6 +125,7 @@ const UserRegistration = (props) => {
 
     }
 
+    // registration
 
     return <>
         <Box padding = '6px'>
@@ -124,33 +167,19 @@ const UserRegistration = (props) => {
             </TabList>
             <TabPanels>
                 <TabPanel>
-                    <Text><HandleAlert />Press this button after filling in the fields below.</Text>
-                    <Text>
-                        handle, name, location, description, birthday
-                    </Text>      
+
+                    <HandleRegistration />
+
                 </TabPanel>
                 <TabPanel>
-                    <Text>
-                        Payment method. [pending -- free to invited guests for now.] I'm thinking about $10 per month for
-                        the base fee, but I need to study the cost structure more. Feedback is welcome. 
-                        More in increments (say $5) if metered usage gets beyond some point.                       
-                    </Text>
+
+                    <PaymentMethodRegistration />
+
                 </TabPanel>
                 <TabPanel>
-                    <Text>
-                        [preliminary] Terms and Conditions. Be constructive, be polite, be honest. Avoid misinformation. 
-                        Disinformation (deliberately misleading information) won't be tolerated. Phishing or any devious 
-                        practices won't be tolerated. No spam please. 
-                    </Text>
-                    <Text mt = '6px'>
-                        We reserve the right to cancel your participation here at any time for any reason. 
-                        If we ever get big enough, we'll have an ethics committee to oversee this.
-                    </Text>
-                    <Text mt = '6px' mb = '6px'>
-                        I think that assets uploaded here will have to stay here under some kind of Creative Commons licence.
-                        In the meantime refrain from uploading material which you consider to be private.
-                    </Text>
-                    <Text><Button colorScheme = 'blue'>I accept</Button> these terms and conditions.</Text>
+
+                    <TermsRegistration />
+
                 </TabPanel>
             </TabPanels>
         </Tabs>
