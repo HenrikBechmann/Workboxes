@@ -389,15 +389,19 @@ const versionData = {
     }],
   },
   handles: {
-    user: [{
+    user: [
+    {
       version: 0,
       generation: 0,
       profile: {
+        // synchronize with user record
+        name: null,
+        location: null,
+        birthdate: null,
+        description: null,
         handle: {
           plain: null,
           lower_case: null,
-          name: null, // synchronize with user record
-          location: null, // synchronize with user record
         },
         type: {
           name: 'user',
@@ -422,7 +426,8 @@ const versionData = {
         counts: {
         },
       },
-    }],
+    },
+    ],
     domain: [{
       version: 0,
       generation: 0,

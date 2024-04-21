@@ -12,7 +12,7 @@ import {
 
 const errorMessages = {
     name:'The name can only be up to 50 characters, and cannot be blank.',
-    description:'The description can only be up to 140 characters.'
+    description:'The description can only be up to 150 characters.'
 }
 
 const helperText = {
@@ -84,7 +84,7 @@ const StandardEdit = (props) => {
         },
         description:(value) => {
             let isInvalid = false
-            if (value.length > 140) {
+            if (value.length > 150) {
                 isInvalid = true
             }
             invalidFieldFlags.description = isInvalid
