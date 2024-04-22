@@ -120,9 +120,7 @@ const AlertForCancel = (props) => {
            await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
            await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
            const user = auth.currentUser
-           console.log('deleting user')
            await deleteUser(user)
-           console.log('signing out')
            await signOut(auth)
            onClose()
        } catch (e) {
