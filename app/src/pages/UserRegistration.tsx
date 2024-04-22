@@ -114,7 +114,8 @@ const AlertForCancel = (props) => {
 
    function cancelRegistration() {
        setCancelState('cancelling')
-       const provider = new OAuthProvider('google.com')
+       const provider = new OAuthProvider('google.com') // OAuthProvider should be taken from user data
+       // userData.authUser.providerData[0].providerData (object user email matches userData.authUser.email)
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => {
            snapshotControl.unsubAll()
            await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
