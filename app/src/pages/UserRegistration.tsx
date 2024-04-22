@@ -8,57 +8,94 @@ import { Navigate } from 'react-router-dom'
 import { signOut } from "firebase/auth"
 
 import { 
-    Box, Text, Heading,
+    Flex, Box, Text, Heading,
     Tabs, TabList, Tab, TabPanels, TabPanel,
     Button, Link, Checkbox, Textarea,
     InputGroup, InputLeftAddon, Input, 
     useDisclosure,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
-    Flex,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
 import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
 
 const AlertForSaveHandle = (props) => {
-  const 
-      { isOpen, onOpen, onClose } = useDisclosure(),
-      cancelRef = React.useRef()
+    const 
+        {invalidFlags, editValues} = props,
+        { isOpen, onOpen, onClose } = useDisclosure(),
+        userData = useUserData(),
+        userRecords = useUserRecords(),
+        cancelRef = React.useRef(),
+        [alertState,setAlertState] = useState('ready')
 
-  return (
-    <>
-      <Button mr = '6px' colorScheme='blue' onClick={onOpen}>
-        Save User Handle
-      </Button>
+    console.log('userData, userRecords, editValues', userData, userRecords, editValues)
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Save User Handle (and related identity information)
-            </AlertDialogHeader>
+    const isError = (invalidFlags) => {
+        let errorState = false
+        for (const property in invalidFlags) {
 
-            <AlertDialogBody>
-              Are you sure? The user handle [user handle] can't be changed afterwards.
-            </AlertDialogBody>
+            if (invalidFlags[property]) {
+                errorState = true
+                break
+            }
+        }
+        return errorState
+    }
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme='blue' onClick={onClose} ml={3}>
-                Save
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </>
-  )
+    const saveHandle = () => {
+        console.log('saving handle')
+        setAlertState('processing')
+        setTimeout(()=>{
+            onClose()
+            setAlertState('done')
+        },4000)
+    }
+
+    const isErrorState = isError(invalidFlags) 
+
+    return (<>
+        <Button mr = '6px' colorScheme='blue' onClick={onOpen}>
+            Save User Handle
+        </Button>
+
+        <AlertDialog
+            isOpen={(alertState == 'processing')? true: isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Save User Handle (and related identity information)
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        {((alertState != 'processing') && !isErrorState) && "Are you sure? The user handle [user handle] can't be changed afterwards."}
+                        {isErrorState && 'Error(s) found! Please go back and fix errors before saving.'}
+                        {(alertState == 'processing') && 'Processing...'}
+                    </AlertDialogBody>
+
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} 
+                            onClick={onClose} 
+                            colorScheme = {!isErrorState?'gray':'blue'}
+                            isDisabled = {alertState == 'processing'}
+                        >
+                            {!isErrorState && 'Cancel'}
+                            {isErrorState && 'OK'}
+                        </Button>
+                        {!isErrorState && <Button 
+                            colorScheme='blue' 
+                            onClick={saveHandle} ml={3}
+                            isDisabled = {alertState == 'processing'}
+                        >
+                            Save
+                        </Button>}
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
+    </>)
 }
 
 const AlertForCancel = (props) => {
@@ -80,7 +117,7 @@ const AlertForCancel = (props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Cancel registration. We'll remove any information we've gathered.
+              Cancel registration. We'll remove any information we've gathered from you.
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -273,7 +310,10 @@ const HandleRegistration = (props) => {
 
     return <Box padding = '3px'>
         <Heading size = 'sm'>Your basic identity information</Heading>
-        Fill in the fields below, and then hit -&gt; <AlertForSaveHandle />
+        Fill in the fields below, and then hit -&gt; <AlertForSaveHandle 
+            invalidFlags = {handleIsInvalidFieldFlags}
+            editValues = {editValues}
+        />
         <Flex data-type = 'register-handle-edit-flex' flexWrap = 'wrap'>
             <Box data-type = 'handlefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {handleIsInvalidFieldFlags.handle}>
