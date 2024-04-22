@@ -323,7 +323,7 @@ const HandleRegistration = (props) => {
 const TermsRegistration = (props) => {
 
     return <>
-        <Text>Review the terms and conditions and then hit -&gt; <Button colorScheme = 'blue'>I accept</Button> to
+        <Text>Review the terms and conditions below and then hit -&gt; <Button colorScheme = 'blue'>I accept</Button> to
             accept the terms and conditions.</Text>
         <Text mt = '6px'>
             If you don't wish to accept these terms and conditions, scroll to the very bottom of this page, where 
@@ -430,21 +430,21 @@ const UserRegistration = (props) => {
             You'll be able to continue to the app when the user handle and terms have been accepted. 
             [In future the payment method will need to be accepted as well].
         </Text>
-        <Text mt = '6px' mb = '6px'>
+        <Text mt = '6px'>
             If you change your mind and want to cancel this registration altogether, scoll to the very bottom of this page, 
             where you will see a cancel option. You'll be able to start over at any time.
         </Text>
-        <em>Accepted: <Checkbox isChecked = {true}>User Handle</Checkbox> 
-            <Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox>
-            <Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox>
-        </em>
+        <Text mt = '6px' mb = '6px'>
+            Now please process each of the three tabs below, and then hit -&gt; <Button isDisabled colorScheme = 'blue'>Ready!</Button> to proceed to the
+            Workboxes app.
+        </Text>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Tabs variant = 'enclosed' margin = '3px'>
             <TabList>
-                <Tab>User Handle</Tab>
-                <Tab>Payment Method</Tab>
-                <Tab>Terms and Conditions</Tab>
+                <Tab><Checkbox isChecked = {false}>User Handle</Checkbox></Tab>
+                <Tab><Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox></Tab>
+                <Tab><Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox></Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
@@ -464,6 +464,13 @@ const UserRegistration = (props) => {
                 </TabPanel>
             </TabPanels>
         </Tabs>
+        <hr style = {{borderTop:'2px solid silver'}}/>
+        <Box padding = '6px'>
+        <Text>
+            Hit -&gt; <Button colorScheme = 'blue'>Cancel</Button> to cancel this registration. We'll remove all the information you've given us.
+        </Text>
+        <Text>You'll be able to come back and restart the registration process any time you wish.</Text>
+        </Box>
     </>
 
 }
