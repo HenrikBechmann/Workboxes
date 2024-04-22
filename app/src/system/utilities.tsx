@@ -296,6 +296,7 @@ const versionData = {
           user_handle:false,
           standing_code:0,
           settled: false,
+          sample_workbox_created:false,
         },
         user: {
           id:null,

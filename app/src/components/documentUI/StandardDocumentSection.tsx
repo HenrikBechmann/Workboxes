@@ -35,10 +35,10 @@ const StandardEdit = (props) => {
 
     useEffect(()=>{
 
-        isInvalidTests.name(editValues.name??'')
-        isInvalidTests.description(editValues.description??'')
-        isInvalidTests.image(editValues.image??'')
-        isInvalidTests.summary(editValues.summary??'')
+        isInvalidTests.name(editValues.name ?? '')
+        isInvalidTests.description(editValues.description ?? '')
+        isInvalidTests.image(editValues.image ?? '')
+        isInvalidTests.summary(editValues.summary ?? '')
         setEditState('checking')
 
     },[])

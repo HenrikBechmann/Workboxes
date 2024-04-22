@@ -39,11 +39,11 @@ const AlertForSaveHandle = (props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Save User Handle
+              Save User Handle (and related identity information)
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? The user handle can't be changed afterwards.
+              Are you sure? The user handle [user handle] can't be changed afterwards.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -52,6 +52,47 @@ const AlertForSaveHandle = (props) => {
               </Button>
               <Button colorScheme='blue' onClick={onClose} ml={3}>
                 Save
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
+  )
+}
+
+const AlertForCancel = (props) => {
+  const 
+      { isOpen, onOpen, onClose } = useDisclosure(),
+      cancelRef = React.useRef()
+
+  return (
+    <>
+      <Button mr = '6px' colorScheme='blue' onClick={onOpen}>
+        Cancel
+      </Button>
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Cancel registration. We'll remove any information we've gathered.
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              If you cancel, you can come back and restart the process anytime.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Oops! Cancel the Cancel
+              </Button>
+              <Button colorScheme='blue' onClick={onClose} ml={3}>
+                Go ahead and cancel!
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -435,8 +476,8 @@ const UserRegistration = (props) => {
             where you will see a cancel option. You'll be able to start over at any time.
         </Text>
         <Text mt = '6px' mb = '6px'>
-            Now please process each of the three tabs below, and then hit -&gt; <Button isDisabled colorScheme = 'blue'>Ready!</Button> to proceed to the
-            Workboxes app.
+            Now please process each of the three tabs below, and then hit 
+            -&gt; <Button isDisabled = {true} colorScheme = 'blue'>Ready!</Button> to proceed to the Workboxes app.
         </Text>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
@@ -467,7 +508,7 @@ const UserRegistration = (props) => {
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Box padding = '6px'>
         <Text>
-            Hit -&gt; <Button colorScheme = 'blue'>Cancel</Button> to cancel this registration. We'll remove all the information you've given us.
+            Hit -&gt; <AlertForCancel />to cancel this registration. We'll remove all the information you've given us.
         </Text>
         <Text>You'll be able to come back and restart the registration process any time you wish.</Text>
         </Box>
