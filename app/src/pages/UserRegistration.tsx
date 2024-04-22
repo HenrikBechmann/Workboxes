@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { Navigate } from 'react-router-dom'
 
-import { signOut, getAuth, deleteUser } from "firebase/auth"
+import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
 import { doc, deleteDoc } from 'firebase/firestore'
 
@@ -112,9 +112,11 @@ const AlertForCancel = (props) => {
       cancelRef = React.useRef(),
       [cancelState, setCancelState] = useState('ready')
 
-   async function cancelRegistration() {
-       snapshotControl.unsubAll()
-       try {
+   function cancelRegistration() {
+       setCancelState('cancelling')
+       const provider = new OAuthProvider('google.com')
+       reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => {
+           snapshotControl.unsubAll()
            await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
            await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
            await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
@@ -123,10 +125,14 @@ const AlertForCancel = (props) => {
            await deleteUser(user)
            await signOut(auth)
            onClose()
-       } catch (e) {
-           alert('Sign in again. Then cancel again. Recent signin is required for deleting account.')
-           await signOut(auth)
-       }
+           }
+       ).catch(e => {
+
+           alert("Cancel failed. There was an error re-authenticating. Signing out. You'll have to sign in again, and try again.")
+           signOut(auth)
+
+           return
+       })
    }
 
   return (
@@ -136,7 +142,7 @@ const AlertForCancel = (props) => {
       </Button>
 
       <AlertDialog
-        isOpen={isOpen}
+        isOpen={(cancelState == 'cancelling')? true: isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
       >
@@ -147,14 +153,15 @@ const AlertForCancel = (props) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              If you cancel, you can come back and restart the process anytime.
+              <Text mb = '6px'>You'll be asked to re-authenticate, as cancelling will involve deleting your account with us.</Text>
+              <Text>If you cancel, you can come back and restart the process anytime.</Text>
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button ref={cancelRef} isDisabled = {cancelState == 'cancelling'} onClick={onClose}>
                 Oops! Cancel the Cancel
               </Button>
-              <Button colorScheme='blue' onClick={cancelRegistration} ml={3}>
+              <Button colorScheme='blue' isDisabled = {cancelState == 'cancelling'} onClick={cancelRegistration} ml={3}>
                 Go ahead and cancel!
               </Button>
             </AlertDialogFooter>
