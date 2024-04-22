@@ -134,38 +134,42 @@ const versionTransforms = {
         version:1,
         transform: (data) => {
           const { profile } = data
-          const {
-            is_abandoned,
-            first_load,
-            fully_registered,
-            terms_accepted,
-            payment_method,
-            user_handle,
-            standing_code,
-          } = profile
-          const flags = {
-            is_abandoned,
-            first_load,
-            fully_registered,
-            terms_accepted,
-            payment_method,
-            user_handle,
-            standing_code,
+          if (profile) {
+            const {
+              is_abandoned,
+              first_load,
+              fully_registered,
+              terms_accepted,
+              payment_method,
+              user_handle,
+              standing_code,
+            } = profile
+            const flags = {
+              is_abandoned,
+              first_load,
+              fully_registered,
+              terms_accepted,
+              payment_method,
+              user_handle,
+              standing_code,
+            }
+            profile.flags = flags
           }
-          profile.flags = flags
         }
       },
       {
         version:2,
         transform: (data) => {
           const { profile } = data
-          delete profile.is_abandoned
-          delete profile.first_load
-          delete profile.fully_registered
-          delete profile.terms_accepted
-          delete profile.payment_method
-          delete profile.user_handle
-          delete profile.standing_code
+          if (profile) {
+            delete profile.is_abandoned
+            delete profile.first_load
+            delete profile.fully_registered
+            delete profile.terms_accepted
+            delete profile.payment_method
+            delete profile.user_handle
+            delete profile.standing_code
+          }
         }
       },
       {

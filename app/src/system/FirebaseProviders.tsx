@@ -116,7 +116,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                // console.log('acquired userdata', userData)
+                console.log('acquired userdata', userData)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners

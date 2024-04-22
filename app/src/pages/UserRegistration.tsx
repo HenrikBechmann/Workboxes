@@ -109,20 +109,26 @@ const AlertForCancel = (props) => {
       userRecords = useUserRecords(),
       auth = useAuth(),
       { isOpen, onOpen, onClose } = useDisclosure(),
-      cancelRef = React.useRef()
+      cancelRef = React.useRef(),
+      [cancelState, setCancelState] = useState('ready')
 
    async function cancelRegistration() {
        snapshotControl.unsubAll()
-       await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
-       await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
-       await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
-       await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
-       const user = auth.currentUser
-       console.log('deleting user')
-       await deleteUser(user)
-       console.log('signing out')
-       await signOut(auth)
-       onClose()
+       try {
+           await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
+           await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
+           await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
+           await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
+           const user = auth.currentUser
+           console.log('deleting user')
+           await deleteUser(user)
+           console.log('signing out')
+           await signOut(auth)
+           onClose()
+       } catch (e) {
+           alert('Sign in again. Then cancel again. Recent signin is required for deleting account.')
+           await signOut(auth)
+       }
    }
 
   return (
