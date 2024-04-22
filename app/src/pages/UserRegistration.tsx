@@ -5,7 +5,9 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { Navigate } from 'react-router-dom'
 
-import { signOut } from "firebase/auth"
+import { signOut, getAuth, deleteUser } from "firebase/auth"
+
+import { doc, deleteDoc } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -17,7 +19,7 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import { useUserData, useUserRecords, useAuth } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
 
 const AlertForSaveHandle = (props) => {
     const 
@@ -28,7 +30,7 @@ const AlertForSaveHandle = (props) => {
         cancelRef = React.useRef(),
         [alertState,setAlertState] = useState('ready')
 
-    console.log('userData, userRecords, editValues', userData, userRecords, editValues)
+    // console.log('userData, userRecords, editValues', userData, userRecords, editValues)
 
     const isError = (invalidFlags) => {
         let errorState = false
@@ -100,8 +102,28 @@ const AlertForSaveHandle = (props) => {
 
 const AlertForCancel = (props) => {
   const 
+      { setRegistrationState } = props,
+      snapshotControl = useSnapshotControl(),
+      db = useFirestore(),
+      userData = useUserData(),
+      userRecords = useUserRecords(),
+      auth = useAuth(),
       { isOpen, onOpen, onClose } = useDisclosure(),
       cancelRef = React.useRef()
+
+   async function cancelRegistration() {
+       snapshotControl.unsubAll()
+       await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
+       await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
+       await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
+       await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
+       const user = auth.currentUser
+       console.log('deleting user')
+       await deleteUser(user)
+       console.log('signing out')
+       await signOut(auth)
+       onClose()
+   }
 
   return (
     <>
@@ -128,7 +150,7 @@ const AlertForCancel = (props) => {
               <Button ref={cancelRef} onClick={onClose}>
                 Oops! Cancel the Cancel
               </Button>
-              <Button colorScheme='blue' onClick={onClose} ml={3}>
+              <Button colorScheme='blue' onClick={cancelRegistration} ml={3}>
                 Go ahead and cancel!
               </Button>
             </AlertDialogFooter>
@@ -548,7 +570,7 @@ const UserRegistration = (props) => {
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Box padding = '6px'>
         <Text>
-            Hit -&gt; <AlertForCancel />to cancel this registration. We'll remove all the information you've given us.
+            Hit -&gt; <AlertForCancel setRegistrationState = {setRegistrationState} />to cancel this registration. We'll remove all the information you've given us.
         </Text>
         <Text>You'll be able to come back and restart the registration process any time you wish.</Text>
         </Box>

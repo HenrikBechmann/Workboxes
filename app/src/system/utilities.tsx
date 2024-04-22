@@ -23,7 +23,7 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
         let startversion
         if (noversion === true) {
 
-          startversion = 0
+          startversion = latestVersion
 
         } else {
 
@@ -48,6 +48,9 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
             transitionDocument = _merge(_cloneDeep(updateversion), _cloneDeep(source))
 
           }
+
+          // console.log('collection, type, sourceVersion, startversion, latestVersion, targetVersionNumber, updateversion, versionData.datamap, initialvalues', 
+          //   collection, type, sourceVersion, startversion, latestVersion, targetVersionNumber, updateversion, versionData.datamap, initialvalues)
 
           transitionDocument.version = updateversion.version
 
@@ -169,8 +172,11 @@ const versionTransforms = {
         version:4,
         transform: (data) => {
           const { profile } = data
-          delete profile.user.handle.id
-          delete profile.user.handle.name
+          // console.log('data, profile', data, profile)
+          if (profile) {
+            delete profile.user.handle.id
+            delete profile.user.handle.name
+          }
         }
       },
     ],
