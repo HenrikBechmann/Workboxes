@@ -1,6 +1,13 @@
 // UserRegistration.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    TODO
+
+    allow blank date - currently an error
+    set initial handleEditState from flag in user record
+
+*/
 import React, { useState, useEffect, useRef } from 'react'
 
 import { Navigate } from 'react-router-dom'
@@ -46,17 +53,20 @@ const UserRegistration = (props) => {
             birthdate: null,
         },
         [handleState, setHandleState] = useState('input'),
-        [paymentStatus, setPaymentStatus] = useState('input'),
-        [termsStatus, seTermsStatus] = useState('input')
+        [paymentState, setPaymentState] = useState('input'),
+        [termsState, setTermsState] = useState('input')
 
     // sign out option
 
     const logOut = () => {
         signOut(auth).then(() => {
+
           setRegistrationState('signedout')
-          // console.log('Sign-out successful.')
+
         }).catch((error) => {
+
             console.log('signout error', error)
+
         })
     }
 
@@ -188,26 +198,36 @@ const handleErrorMessages = {
 const RegistrationForHandle = (props) => {
     const 
         {defaultData, editDataRef, setHandleState} = props,
-        // { handle, name, description, location, birthdate } = defaultData,
+        userRecords = useUserRecords(),
         [editValues, setEditValues] = useState({...defaultData}),
-        [editState,setEditState] = useState('input')
-        
+        [handleEditState,setHandleEditState] = useState(userRecords.user.profile.flags.user_handle?'output':'input')
+
     editDataRef.current = editValues
 
     useEffect(()=>{
 
+        const userProfile = userRecords.user.profile
         // check required fields on load
         isInvalidTests.name(editValues.name??'')
         isInvalidTests.handle(editValues.handle??'')
-        setEditState('checking')
+        !userProfile.flags.user_handle && setHandleEditState('checking')
+            if (userProfile.flags.user_handle) { setEditValues({
+                name: userProfile.user.name,
+                description: userProfile.user.description,
+                handle: userProfile.handle.plain,
+                birthdate: userProfile.user.birthdate_string,
+                location: userProfile.user.location
+            })
+            setHandleState('output')
+        }
 
     },[])
 
     useEffect(()=>{
 
-        if (editState != 'output') setEditState('input')
+        if (handleEditState != 'output') setHandleEditState('input')
 
-    },[editState])
+    },[handleEditState])
 
     const onChangeFunctions = {
         handle:(event) => {
@@ -295,11 +315,11 @@ const RegistrationForHandle = (props) => {
 
     return <Box padding = '3px'>
         <Heading size = 'sm'>Your basic identity information</Heading>
-        {<>
+        {(handleEditState != 'output') && <>
         <span>Fill in the fields below, and then hit -&gt;</span> <DialogForSaveHandle 
             invalidFlags = {handleIsInvalidFieldFlags}
             editValues = {editValues}
-            setEditState = {setEditState}
+            setHandleEditState = {setHandleEditState}
             setHandleState = {setHandleState}
         />
         <Flex data-type = 'register-handle-edit-flex' flexWrap = 'wrap'>
@@ -386,6 +406,7 @@ const RegistrationForHandle = (props) => {
                 </FormControl>
             </Box>
         </Flex></>}
+        {(handleEditState == 'output') && 'Done!'}
     </Box>
 }
 
@@ -438,7 +459,7 @@ const PaymentMethodRegistration = (props) => {
 
 const DialogForSaveHandle = (props) => {
     const 
-        {invalidFlags, editValues, setEditState, setHandleState} = props,
+        {invalidFlags, editValues, setHandleEditState, setHandleState} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         userData = useUserData(),
         db = useFirestore(),
@@ -520,7 +541,8 @@ const DialogForSaveHandle = (props) => {
                 'profile.account.name':editValues.name,
 
                 // creation reference
-                'profile.commits.created_by.name':editValues.name
+                'profile.commits.created_by.name':editValues.name,
+                'profile.flags.user_handle':true,
             })
 
             // 3. domain
@@ -568,7 +590,7 @@ const DialogForSaveHandle = (props) => {
             onClose()
             setHandleState('output')
             setAlertState('done')
-            setEditState('output')
+            setHandleEditState('output')
         } catch(e) {
             console.log('failure to post',e)
             setAlertState('failure')
@@ -588,7 +610,7 @@ const DialogForSaveHandle = (props) => {
         let isInvalid = !editValues.birthdate || !_isDate(date)
         invalidFlags.birthdate = isInvalid
 
-        if (isInvalid) setEditState('error')
+        if (isInvalid) setHandleEditState('error')
         onOpen()
     }
 

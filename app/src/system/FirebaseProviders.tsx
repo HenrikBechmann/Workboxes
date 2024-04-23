@@ -116,7 +116,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                console.log('firebaseprovider userData', userData)
+                // console.log('firebaseprovider userData', userData)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
@@ -414,7 +414,7 @@ export const UserProvider = ({children}) => {
 
     },[userState])
 
-    console.log('UserProvider: userState, userRecords',userState, {...userRecords})
+    // console.log('UserProvider: userState, userRecords',userState, {...userRecords})
 
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
