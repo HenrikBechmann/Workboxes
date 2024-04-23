@@ -55,11 +55,15 @@ const AlertForSaveHandle = (props) => {
     async function saveHandle () {
         setAlertState('processing')
         try {
+            let date = new Date(editValues.birthdate)
+            date = new Date(date.getTime() + date.getTimezoneOffset() * 60000)
+            const datestring = date.toDateString()
             const data = updateDocumentSchema('handles','user',{},{
                 profile: {
                     name: editValues.name,
                     location: editValues.location,
                     birthdate: new Date(editValues.birthdate),
+                    birthdate_string: datestring,
                     description: editValues.description,
                     handle: {
                         plain: editValues.handle,

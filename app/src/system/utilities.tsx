@@ -409,6 +409,7 @@ const versionData = {
         name: null,
         location: null,
         birthdate: null,
+        birthdate_string: null,
         description: null,
         handle: {
           plain: null,
