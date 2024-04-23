@@ -3,7 +3,7 @@
 
 import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
-export const updateDocumentSchema = (collection, type, source, initialvalues = {}) => {
+export const updateDocumentSchema = (collection, type, data, initialvalues = {}) => {
 
     let updatedDocument
     if (versionMaps[collection] && versionMaps[collection][type]) {
@@ -11,11 +11,11 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
         const 
           versionData = versionMaps[collection][type],
           latestVersion = versionData.latest_version,
-          sourceVersion = source.version
+          sourceVersion = data.version
 
         if (sourceVersion === latestVersion) {
 
-          return source // nothing to do
+          return data // nothing to do
 
         }
 
@@ -31,7 +31,7 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
 
         }
 
-        let transitionDocument = source
+        let transitionDocument = data
 
         for (let targetVersionNumber = startversion; targetVersionNumber <= latestVersion; targetVersionNumber++) {
 
@@ -41,18 +41,18 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
           transform && transform(transitionDocument)
 
           // merge new structure/additions
-          const updateversion = versionData.datamap.get(targetVersionNumber)
+          const updateversiondata = versionData.datamap.get(targetVersionNumber)
 
-          if (updateversion) {
+          if (updateversiondata) {
 
-            transitionDocument = _merge(_cloneDeep(updateversion), _cloneDeep(source))
+            transitionDocument = _merge(_cloneDeep(updateversiondata), _cloneDeep(data))
 
           }
 
           // console.log('collection, type, sourceVersion, startversion, latestVersion, targetVersionNumber, updateversion, versionData.datamap, initialvalues', 
           //   collection, type, sourceVersion, startversion, latestVersion, targetVersionNumber, updateversion, versionData.datamap, initialvalues)
 
-          transitionDocument.version = updateversion.version
+          transitionDocument.version = updateversiondata.version
 
         }
 
@@ -63,7 +63,7 @@ export const updateDocumentSchema = (collection, type, source, initialvalues = {
 
     } else {
 
-        updatedDocument = source
+        updatedDocument = data
 
     }
 

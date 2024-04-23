@@ -1,6 +1,11 @@
 // UserRegistration.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    TODO
+    - delete handle with cancel
+*/
+
 import React, { useState, useEffect, useRef } from 'react'
 
 import { Navigate } from 'react-router-dom'
@@ -11,9 +16,9 @@ import { doc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
-    Tabs, TabList, Tab, TabPanels, TabPanel,
     Button, Link, Checkbox, Textarea,
     InputGroup, InputLeftAddon, Input, 
+    Tabs, TabList, Tab, TabPanels, TabPanel,
     useDisclosure,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -22,6 +27,8 @@ import {
 import {cloneDeep as _cloneDeep} from 'lodash'
 
 import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
+
+import { updateDocumentSchema } from '../system/utilities'
 
 const AlertForSaveHandle = (props) => {
     const 
@@ -32,8 +39,6 @@ const AlertForSaveHandle = (props) => {
         userRecords = useUserRecords(),
         cancelRef = React.useRef(),
         [alertState,setAlertState] = useState('ready')
-
-    // console.log('userData, userRecords, editValues', userData, userRecords, editValues)
 
     const isError = (invalidFlags) => {
         let errorState = false
@@ -55,14 +60,17 @@ const AlertForSaveHandle = (props) => {
             data.profile.owner.id = userData.authUser.uid
             data.profile.handle.plain = editValues.handle
             data.generation = 3
-            console.log('posting handle to ', data, editValues.handle)
             await setDoc(doc(db,'handles',editValues.handle), data)
-            console.log('successful save handle')
+            onClose()
+            setAlertState('done')
         } catch(e) {
-            console.log('failed save handle', e)
+            setAlertState('failure')
         }
+    }
+
+    const closeAlert = () => {
+        setAlertState('ready')
         onClose()
-        setAlertState('done')
     }
 
     const isErrorState = isError(invalidFlags) 
@@ -84,21 +92,22 @@ const AlertForSaveHandle = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        {((alertState != 'processing') && !isErrorState) && `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
+                        {((alertState != 'processing') && (alertState != 'failure') && !isErrorState) && `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
                         {isErrorState && 'Error(s) found! Please go back and fix errors before saving.'}
                         {(alertState == 'processing') && 'Processing...'}
+                        {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
                     </AlertDialogBody>
 
                     <AlertDialogFooter>
                         <Button ref={cancelRef} 
-                            onClick={onClose} 
-                            colorScheme = {!isErrorState?'gray':'blue'}
+                            onClick={closeAlert} 
+                            colorScheme = {(!isErrorState && (alertState != 'failure'))?'gray':'blue'}
                             isDisabled = {alertState == 'processing'}
                         >
-                            {!isErrorState && 'Cancel'}
-                            {isErrorState && 'OK'}
+                            {!isErrorState && !(alertState == 'failure') && 'Cancel'}
+                            {(isErrorState || (alertState == 'failure')) && 'OK'}
                         </Button>
-                        {!isErrorState && <Button 
+                        {!isErrorState && (!(alertState == 'failure')) && <Button 
                             colorScheme='blue' 
                             onClick={saveHandle} ml={3}
                             isDisabled = {alertState == 'processing'}
