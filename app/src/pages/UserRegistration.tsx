@@ -1,20 +1,13 @@
 // UserRegistration.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-/*
-    TODO
-    - delete handle with cancel
-    - location in user, domain, account
-
-*/
-
 import React, { useState, useEffect, useRef } from 'react'
 
 import { Navigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, deleteDoc, setDoc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -26,7 +19,7 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import {cloneDeep as _cloneDeep, isDate as _isDate} from 'lodash'
+import {isDate as _isDate} from 'lodash'
 
 import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
 
@@ -34,7 +27,7 @@ import { updateDocumentSchema } from '../system/utilities'
 
 // =================================[ User Registration Base ]==================================
 
-// ---------------------------------[ process user registration ]--------------------------------
+// ---------------------------------[ display user registration ]--------------------------------
 
 const UserRegistration = (props) => {
 
@@ -136,7 +129,7 @@ const UserRegistration = (props) => {
             <TabPanels>
                 <TabPanel>
 
-                    <HandleRegistration defaultData = {defaultData} editDataRef = {handleEditDataRef} setHandleState = {setHandleState}/>
+                    <RegistrationForHandle defaultData = {defaultData} editDataRef = {handleEditDataRef} setHandleState = {setHandleState}/>
 
                 </TabPanel>
                 <TabPanel>
@@ -154,7 +147,7 @@ const UserRegistration = (props) => {
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Box padding = '6px'>
         <Text>
-            Hit -&gt; <AlertForCancel setRegistrationState = {setRegistrationState} />to cancel this registration. We'll remove all the information you've given us.
+            Hit -&gt; <DialogForCancel setRegistrationState = {setRegistrationState} />to cancel this registration. We'll remove all the information you've given us.
         </Text>
         <Text>You'll be able to come back and restart the registration process any time you wish.</Text>
         </Box>
@@ -192,7 +185,7 @@ const handleErrorMessages = {
     birthdate: 'Optional. Must be a valid date.',
 }
 
-const HandleRegistration = (props) => {
+const RegistrationForHandle = (props) => {
     const 
         {defaultData, editDataRef, setHandleState} = props,
         // { handle, name, description, location, birthdate } = defaultData,
@@ -257,7 +250,6 @@ const HandleRegistration = (props) => {
 
     // see db at system.settings.constraints.maxNameLength (set to 50)
     const isInvalidTests = {
-        // TODO check for blank, string
         handle: (value) => {
             let isInvalid = false
             if (value.length > 25 || value.length < 6) {
@@ -468,6 +460,8 @@ const DialogForSaveHandle = (props) => {
 
     async function saveHandle () {
         setAlertState('processing')
+
+        // 1. handle
         try { // catch most likely if chosen handle already exists
             let date = new Date(editValues.birthdate)
             date = new Date(date.getTime() + date.getTimezoneOffset() * 60000)
@@ -508,6 +502,7 @@ const DialogForSaveHandle = (props) => {
             // add new name to user domain, user account, base user workbox, and their references 
             //     and to creation and owner references
 
+            // 2. user
             await updateDoc(doc(db,'users',userData.authUser.uid),{
                 // user handle
                 'profile.handle.plain':editValues.handle,
@@ -527,6 +522,8 @@ const DialogForSaveHandle = (props) => {
                 // creation reference
                 'profile.commits.created_by.name':editValues.name
             })
+
+            // 3. domain
             await updateDoc(doc(db,'domains',userRecords.domain.profile.domain.id),{
                 'profile.handle.plain':editValues.handle,
                 'profile.handle.lower_case':editValues.handle.toLowerCase(),
@@ -539,6 +536,8 @@ const DialogForSaveHandle = (props) => {
                 'profile.owner.name':editValues.name,
                 'profile.commits.created_by.name':editValues.name,
             })
+
+            // 4. account
             await updateDoc(doc(db,'accounts',userRecords.account.profile.account.id),{
                 // account name
                 'profile.account.name':editValues.name,
@@ -548,6 +547,7 @@ const DialogForSaveHandle = (props) => {
                 'profile.commits.created_by.name':editValues.name,
             })
 
+            // 5. workbox
             // update standard section name in base domain workbox
             const workbox = await getDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id))
             const workboxdata = workbox.data()
@@ -583,11 +583,12 @@ const DialogForSaveHandle = (props) => {
     const isInvalidState = isInvalidFlag(invalidFlags) 
 
     const onOpenForHandle = () => {
+        // date field requires special handling
         const date = new Date(editValues.birthdate)
         let isInvalid = !editValues.birthdate || !_isDate(date)
         invalidFlags.birthdate = isInvalid
+
         if (isInvalid) setEditState('error')
-        // console.log('invalidFlags.birthdate, editValues.birthdate, date',invalidFlags.birthdate, editValues.birthdate, date)
         onOpen()
     }
 
@@ -608,7 +609,8 @@ const DialogForSaveHandle = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
+                        {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
+                            `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
                         {isInvalidState && 'Error(s) found! Please go back and fix errors before saving.'}
                         {(alertState == 'processing') && 'Processing...'}
                         {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
@@ -639,7 +641,7 @@ const DialogForSaveHandle = (props) => {
 
 // -----------------------------------[ process cancel registration ]-----------------------------
 
-const AlertForCancel = (props) => {
+const DialogForCancel = (props) => {
   const 
       { setRegistrationState } = props,
       snapshotControl = useSnapshotControl(),
@@ -653,7 +655,7 @@ const AlertForCancel = (props) => {
 
    function cancelRegistration() {
        setCancelState('cancelling')
-       const provider = new OAuthProvider('google.com') // TODO OAuthProvider should be taken from user data
+       const provider = new OAuthProvider('google.com') // TODO OAuthProvider should be taken from user data:
        // userData.authUser.providerData[0].providerData (object user email matches userData.authUser.email)
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => { // required to delete user login account
            snapshotControl.unsubAll()
@@ -676,7 +678,6 @@ const AlertForCancel = (props) => {
            alert("Cancel failed. There was an error re-authenticating. Signing out. You'll have to sign in again, and try again.")
            signOut(auth)
 
-           return
        })
    }
 
