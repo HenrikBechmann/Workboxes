@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, deleteDoc } from 'firebase/firestore'
+import { doc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -19,6 +19,8 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
+import {cloneDeep as _cloneDeep} from 'lodash'
+
 import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
 
 const AlertForSaveHandle = (props) => {
@@ -26,6 +28,7 @@ const AlertForSaveHandle = (props) => {
         {invalidFlags, editValues} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         userData = useUserData(),
+        db = useFirestore(),
         userRecords = useUserRecords(),
         cancelRef = React.useRef(),
         [alertState,setAlertState] = useState('ready')
@@ -44,13 +47,22 @@ const AlertForSaveHandle = (props) => {
         return errorState
     }
 
-    const saveHandle = () => {
+    async function saveHandle () {
         console.log('saving handle')
         setAlertState('processing')
-        setTimeout(()=>{
-            onClose()
-            setAlertState('done')
-        },4000)
+        try {
+            const data = _cloneDeep(handleSchema)
+            data.profile.owner.id = userData.authUser.uid
+            data.profile.handle.plain = editValues.handle
+            data.generation = 3
+            console.log('posting handle to ', data, editValues.handle)
+            await setDoc(doc(db,'handles',editValues.handle), data)
+            console.log('successful save handle')
+        } catch(e) {
+            console.log('failed save handle', e)
+        }
+        onClose()
+        setAlertState('done')
     }
 
     const isErrorState = isError(invalidFlags) 
@@ -72,7 +84,7 @@ const AlertForSaveHandle = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        {((alertState != 'processing') && !isErrorState) && "Are you sure? The user handle [user handle] can't be changed afterwards."}
+                        {((alertState != 'processing') && !isErrorState) && `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
                         {isErrorState && 'Error(s) found! Please go back and fix errors before saving.'}
                         {(alertState == 'processing') && 'Processing...'}
                     </AlertDialogBody>
@@ -112,6 +124,7 @@ const AlertForCancel = (props) => {
       cancelRef = React.useRef(),
       [cancelState, setCancelState] = useState('ready')
 
+   // TODO delete any saved handle record
    function cancelRegistration() {
        setCancelState('cancelling')
        const provider = new OAuthProvider('google.com') // OAuthProvider should be taken from user data
