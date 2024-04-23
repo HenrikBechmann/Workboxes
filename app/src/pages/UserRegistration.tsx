@@ -336,7 +336,7 @@ const HandleRegistration = (props) => {
         },
         location:(value) => {
             let isInvalid = false
-            if (value.length > 50 || value.length < 6) {
+            if (value.length > 50) {
                 isInvalid = true
             }
             handleIsInvalidFieldFlags.location = isInvalid
