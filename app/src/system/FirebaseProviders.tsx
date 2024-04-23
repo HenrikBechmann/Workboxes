@@ -149,9 +149,11 @@ export const UserProvider = ({children}) => {
               user: {
                 id: uid,
                 name: displayName,
+                email_name: displayName,
                 image: {
                   source: photoURL,
                 },
+                date_joined: serverTimestamp(),
               },
               domain: {
                 id: domainDocRef.id,
@@ -180,6 +182,7 @@ export const UserProvider = ({children}) => {
                 image: {
                   source: photoURL,
                 },
+                date_joined: serverTimestamp(),
               },
               owner: {
                 id: uid,
@@ -206,6 +209,7 @@ export const UserProvider = ({children}) => {
                   image: {
                     source: photoURL,
                   },
+                  date_joined: serverTimestamp(),
                 },
                 workbox: {
                     id: workboxDocRef.id,
@@ -410,7 +414,7 @@ export const UserProvider = ({children}) => {
 
     },[userState])
 
-    // console.log('UserProvider: userState, userRecords',userState, {...userRecords})
+    console.log('UserProvider: userState, userRecords',userState, {...userRecords})
 
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>

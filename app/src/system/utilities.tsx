@@ -272,6 +272,7 @@ const versionData = {
           image: {
             source: null,
           },
+          date_joined: null,
         },
         owner: {
           id: null,
@@ -311,17 +312,18 @@ const versionData = {
         user: {
           id:null,
           name: null,
-          registered_name: null,
+          email_name: null,
           image: {
             source: null,
           },
-          handle: {
-            plain: null,
-            lower_case: null,
-          },
           location: null,
           birthdate: null,
+          description: null,
           date_joined: null,
+        },
+        handle: {
+          plain: null,
+          lower_case: null,
         },
         domain: {
           id: null,
@@ -361,12 +363,11 @@ const versionData = {
           image: {
             source: null,
           },
-          handle: {
-            plain: null,
-            lower_case: null,
-          },
-          location: null,
           date_joined: null,
+        },
+        handle: {
+          plain: null,
+          lower_case: null,
         },
         owner: {
           id: null,
@@ -405,12 +406,13 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        // synchronize with user record
-        name: null,
-        location: null,
-        birthdate: null,
-        birthdate_string: null,
-        description: null,
+        user: {
+          name: null,
+          location: null,
+          birthdate: null,
+          birthdate_string: null,
+          description: null,
+        },
         handle: {
           plain: null,
           lower_case: null,
@@ -448,7 +450,6 @@ const versionData = {
           plain: null,
           lower_case: null,
           name: null, // synchronize with domain record
-          location: null, // synchronize with domain record
         },
         type: {
           name: 'domain',
@@ -457,6 +458,7 @@ const versionData = {
         domain: {
           id: null,
           name: null,
+          location: null, // synchronize with domain record
         },
         owner: {
           id: null,

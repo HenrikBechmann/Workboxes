@@ -4,6 +4,8 @@
 /*
     TODO
     - delete handle with cancel
+    - location in user, domain, account
+
 */
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -12,7 +14,7 @@ import { Navigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, deleteDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, deleteDoc, setDoc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -32,7 +34,7 @@ import { updateDocumentSchema } from '../system/utilities'
 
 const AlertForSaveHandle = (props) => {
     const 
-        {invalidFlags, editValues, setEditState} = props,
+        {invalidFlags, editValues, setEditState, setHandleState} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         userData = useUserData(),
         db = useFirestore(),
@@ -60,11 +62,14 @@ const AlertForSaveHandle = (props) => {
             const datestring = date.toDateString()
             const data = updateDocumentSchema('handles','user',{},{
                 profile: {
-                    name: editValues.name,
-                    location: editValues.location,
-                    birthdate: new Date(editValues.birthdate),
-                    birthdate_string: datestring,
-                    description: editValues.description,
+                    user: {
+                        id: userData.authUser.uid,
+                        name: editValues.name,
+                        location: editValues.location,
+                        birthdate: new Date(editValues.birthdate),
+                        birthdate_string: datestring,
+                        description: editValues.description,
+                    },
                     handle: {
                         plain: editValues.handle,
                         lower_case: editValues.handle.toLowerCase()
@@ -82,10 +87,55 @@ const AlertForSaveHandle = (props) => {
                     }
                 }
             })
+            console.log('UserRecords',userRecords)
             await setDoc(doc(db,'handles',editValues.handle.toLowerCase()), data)
+            await updateDoc(doc(db,'users',userData.authUser.uid),{
+                'profile.handle.plain':editValues.handle,
+                'profile.handle.lower_case':editValues.handle.toLowerCase(),
+
+                'profile.user.name':editValues.name,
+                'profile.user.location':editValues.location,
+                'profile.user.birthdate': new Date(editValues.birthdate),
+                'profile.user.birthdate_string': datestring,
+                'profile.user.description':editValues.description,
+
+                'profile.domain.name':editValues.name,
+                'profile.account.name':editValues.name,
+
+                'profile.commits.created_by.name':editValues.name
+            })
+            await updateDoc(doc(db,'domains',userRecords.domain.profile.domain.id),{
+                'profile.handle.plain':editValues.handle,
+                'profile.handle.lower_case':editValues.handle.toLowerCase(),
+
+                'profile.domain.name':editValues.name,
+                'profile.workbox.name':editValues.name,
+                'profile.owner.name':editValues.name,
+                'profile.commits.created_by.name':editValues.name,
+            })
+            await updateDoc(doc(db,'accounts',userRecords.account.profile.account.id),{
+                'profile.account.name':editValues.name,
+                'profile.owner.name':editValues.name,
+                'profile.commits.created_by.name':editValues.name,
+            })
+            const workbox = await getDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id))
+            const workboxdata = workbox.data()
+            workboxdata.document.sections[0].data.name = editValues.name
+            // console.log('workboxdata',workboxdata)
+            await updateDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id),{
+                'document.sections':workboxdata.document.sections,
+
+                'profile.workbox.name':editValues.name,
+                'profile.domain.name':editValues.name,
+                'profile.owner.name':editValues.name,
+                'profile.commits.created_by.name':editValues.name,
+            })
             onClose()
+            setHandleState('output')
             setAlertState('done')
+            setEditState('output')
         } catch(e) {
+            console.log('failure to post',e)
             setAlertState('failure')
         }
     }
@@ -171,6 +221,9 @@ const AlertForCancel = (props) => {
        // userData.authUser.providerData[0].providerData (object user email matches userData.authUser.email)
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => {
            snapshotControl.unsubAll()
+           if (userRecords.user.profile.handle.lower_case) {
+               await deleteDoc(doc(db, 'handles', userRecords.user.profile.handle.lower_case))
+           }
            await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
            await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
            await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
@@ -254,10 +307,10 @@ const handleErrorMessages = {
 
 const HandleRegistration = (props) => {
     const 
-        {defaultData, editDataRef} = props,
+        {defaultData, editDataRef, setHandleState} = props,
         { handle, name, description, location, birthdate } = defaultData,
         [editValues, setEditValues] = useState({...defaultData}),
-        [editState,setEditState] = useState('setup')
+        [editState,setEditState] = useState('input')
         
     editDataRef.current = editValues
 
@@ -272,7 +325,7 @@ const HandleRegistration = (props) => {
 
     useEffect(()=>{
 
-        if (editState != 'ready') setEditState('ready')
+        if (editState != 'output') setEditState('input')
 
     },[editState])
 
@@ -366,10 +419,12 @@ const HandleRegistration = (props) => {
 
     return <Box padding = '3px'>
         <Heading size = 'sm'>Your basic identity information</Heading>
-        Fill in the fields below, and then hit -&gt; <AlertForSaveHandle 
+        {<>
+        <span>Fill in the fields below, and then hit -&gt;</span> <AlertForSaveHandle 
             invalidFlags = {handleIsInvalidFieldFlags}
             editValues = {editValues}
             setEditState = {setEditState}
+            setHandleState = {setHandleState}
         />
         <Flex data-type = 'register-handle-edit-flex' flexWrap = 'wrap'>
             <Box data-type = 'handlefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -454,7 +509,7 @@ const HandleRegistration = (props) => {
                     </FormHelperText>
                 </FormControl>
             </Box>
-        </Flex>
+        </Flex></>}
     </Box>
 }
 
@@ -506,13 +561,16 @@ const UserRegistration = (props) => {
         userRecords = useUserRecords(),
         [registrationState, setRegistrationState] = useState('setup'),
         handleEditDataRef = useRef(null),
-        handleData = {
+        defaultData = {
             handle:'',
             name: displayName,
             description: '',
             location: '',
             birthdate: null,
-        }
+        },
+        [handleState, setHandleState] = useState('input'),
+        [paymentStatus, setPaymentStatus] = useState('input'),
+        [termsStatus, seTermsStatus] = useState('input')
 
     // sign out option
 
@@ -587,14 +645,14 @@ const UserRegistration = (props) => {
         <hr style = {{borderTop:'2px solid silver'}}/>
         <Tabs variant = 'enclosed' margin = '3px'>
             <TabList>
-                <Tab><Checkbox isChecked = {false}>User Handle</Checkbox></Tab>
+                <Tab><Checkbox isChecked = {handleState == 'output'}>User Handle</Checkbox></Tab>
                 <Tab><Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox></Tab>
                 <Tab><Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox></Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
 
-                    <HandleRegistration defaultData = {handleData} editDataRef = {handleEditDataRef}/>
+                    <HandleRegistration defaultData = {defaultData} editDataRef = {handleEditDataRef} setHandleState = {setHandleState}/>
 
                 </TabPanel>
                 <TabPanel>
