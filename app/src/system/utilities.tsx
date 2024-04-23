@@ -3,7 +3,7 @@
 
 import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
-export const updateDocumentSchema = (collection, type, data, initialvalues = {}) => {
+export const updateDocumentSchema = (collection, type, document, initialvalues = {}) => {
 
     let updatedDocument
     if (versionMaps[collection] && versionMaps[collection][type]) {
@@ -11,11 +11,11 @@ export const updateDocumentSchema = (collection, type, data, initialvalues = {})
         const 
           versionData = versionMaps[collection][type],
           latestVersion = versionData.latest_version,
-          sourceVersion = data.version
+          sourceVersion = document.version
 
         if (sourceVersion === latestVersion) {
 
-          return data // nothing to do
+          return document // nothing to do
 
         }
 
@@ -31,7 +31,7 @@ export const updateDocumentSchema = (collection, type, data, initialvalues = {})
 
         }
 
-        let transitionDocument = data
+        let transitionDocument = document
 
         for (let targetVersionNumber = startversion; targetVersionNumber <= latestVersion; targetVersionNumber++) {
 
@@ -45,7 +45,7 @@ export const updateDocumentSchema = (collection, type, data, initialvalues = {})
 
           if (updateversiondata) {
 
-            transitionDocument = _merge(_cloneDeep(updateversiondata), _cloneDeep(data))
+            transitionDocument = _merge(_cloneDeep(updateversiondata), _cloneDeep(document))
 
           }
 
@@ -63,7 +63,7 @@ export const updateDocumentSchema = (collection, type, data, initialvalues = {})
 
     } else {
 
-        updatedDocument = data
+        updatedDocument = document
 
     }
 
@@ -416,7 +416,7 @@ const versionData = {
         },
         type: {
           name: 'user',
-          alias: null,
+          alias: 'user handle',
         },
         owner: {
           id: null,

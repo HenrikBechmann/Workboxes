@@ -12,7 +12,7 @@ import { Navigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, deleteDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -24,7 +24,7 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import {cloneDeep as _cloneDeep} from 'lodash'
+import {cloneDeep as _cloneDeep, isDate as _isDate} from 'lodash'
 
 import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
 
@@ -32,7 +32,7 @@ import { updateDocumentSchema } from '../system/utilities'
 
 const AlertForSaveHandle = (props) => {
     const 
-        {invalidFlags, editValues} = props,
+        {invalidFlags, editValues, setEditState} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         userData = useUserData(),
         db = useFirestore(),
@@ -53,14 +53,32 @@ const AlertForSaveHandle = (props) => {
     }
 
     async function saveHandle () {
-        console.log('saving handle')
         setAlertState('processing')
         try {
-            const data = _cloneDeep(handleSchema)
-            data.profile.owner.id = userData.authUser.uid
-            data.profile.handle.plain = editValues.handle
-            data.generation = 3
-            await setDoc(doc(db,'handles',editValues.handle), data)
+            const data = updateDocumentSchema('handles','user',{},{
+                profile: {
+                    name: editValues.name,
+                    location: editValues.location,
+                    birthdate: new Date(editValues.birthdate),
+                    description: editValues.description,
+                    handle: {
+                        plain: editValues.handle,
+                        lower_case: editValues.handle.toLowerCase()
+                    },
+                    owner: {
+                        id: userData.authUser.uid,
+                        name: editValues.name,
+                    },
+                    commits: {
+                        created_by: {
+                            id: userData.authUser.uid,
+                            name: editValues.name
+                        },
+                        created_timestamp: serverTimestamp()
+                    }
+                }
+            })
+            await setDoc(doc(db,'handles',editValues.handle.toLowerCase()), data)
             onClose()
             setAlertState('done')
         } catch(e) {
@@ -75,8 +93,17 @@ const AlertForSaveHandle = (props) => {
 
     const isErrorState = isError(invalidFlags) 
 
+    const onOpenForHandle = () => {
+        const date = new Date(editValues.birthdate)
+        let isInvalid = !editValues.birthdate || !_isDate(date)
+        invalidFlags.birthdate = isInvalid
+        if (isInvalid) setEditState('error')
+        // console.log('invalidFlags.birthdate, editValues.birthdate, date',invalidFlags.birthdate, editValues.birthdate, date)
+        onOpen()
+    }
+
     return (<>
-        <Button mr = '6px' colorScheme='blue' onClick={onOpen}>
+        <Button mr = '6px' colorScheme='blue' onClick={onOpenForHandle}>
             Save User Handle
         </Button>
 
@@ -195,50 +222,12 @@ const AlertForCancel = (props) => {
   )
 }
 
-const handleSchema = 
-{
-    version: 0,
-    generation: 0,
-    profile: {
-        // synchronized with user record
-        name: null,
-        location: null,
-        birthdate: null,
-        description: null,
-        handle: {
-          plain: null,
-          lower_case: null,
-        },
-        type: {
-            name: 'user',
-            alias: null,
-        },
-        owner: {
-            id: null,
-            name: null,
-        },
-        commits: {
-            created_by: {
-                id: null, 
-                name: null
-            },
-            created_timestamp: null,
-            updated_by: {
-                id: null, 
-                name: null
-            },
-            updated_timestamp: null,
-        },
-        counts: {
-        },
-    },
-}
-
 const handleHelperText = {
     handle: 'Required. This will be your permanent "@" link to let others connect and refer to you. 6-25 characters,\
      a-z, A-Z, 0-9, no spaces. Cannot be changed once saved.',
     name:'Required. This name will appear to app users. Can be changed. 6-50 characters.',
-    description:'Optional. Something about yourself. This description will appear to app users. Can be changed. Max 150 characters.',
+    description:'Optional. Something about yourself. This description will appear to app users with some communcications. \
+    Can be changed. Max 150 characters.',
     location: 'Optional. A hint about where you are. Will be shown to app users. Can be changed. Max 50 characters.',
     birthdate: 'Optional. Can be changed. Will be set to private until you set it otherwise.',
 }
@@ -248,7 +237,7 @@ const handleIsInvalidFieldFlags = {
     name: false,
     description: false,
     location: false,
-    birthdate: false,
+    birthdate: true,
 }
 
 const handleErrorMessages = {
@@ -315,6 +304,7 @@ const HandleRegistration = (props) => {
         birthdate:(event) => {
             const target = event.target as HTMLInputElement
             const value = target.value
+            // console.log('birthdate onChange, value',value)
             isInvalidTests.birthdate(value)
             editValues.birthdate = value
             setEditValues({...editValues})
@@ -346,7 +336,10 @@ const HandleRegistration = (props) => {
         },
         location:(value) => {
             let isInvalid = false
-
+            if (value.length > 50 || value.length < 6) {
+                isInvalid = true
+            }
+            handleIsInvalidFieldFlags.location = isInvalid
             return isInvalid
         },
         description: (value) => {
@@ -358,17 +351,21 @@ const HandleRegistration = (props) => {
             return isInvalid
         },
         birthdate:(value) => {
-            let isInvalid = false
-
+            let isInvalid = !value || !_isDate(new Date(value)) 
+            handleIsInvalidFieldFlags.birthdate = isInvalid
+            // console.log('isInvalidTests, isInvalid, date value, new Date', isInvalid, value, new Date(value))
             return isInvalid
         }
     }
+
+    // console.log('handleIsInvalidFieldFlags',handleIsInvalidFieldFlags)
 
     return <Box padding = '3px'>
         <Heading size = 'sm'>Your basic identity information</Heading>
         Fill in the fields below, and then hit -&gt; <AlertForSaveHandle 
             invalidFlags = {handleIsInvalidFieldFlags}
             editValues = {editValues}
+            setEditState = {setEditState}
         />
         <Flex data-type = 'register-handle-edit-flex' flexWrap = 'wrap'>
             <Box data-type = 'handlefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -535,9 +532,16 @@ const UserRegistration = (props) => {
     }
 
     useEffect(()=>{
+
         handleEditDataRef.current = {}
 
     },[])
+
+    useEffect(()=>{
+
+        if (registrationState != 'ready') setRegistrationState('ready')
+
+    },[registrationState])
 
     // registration
 
