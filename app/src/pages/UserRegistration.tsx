@@ -136,7 +136,7 @@ const UserRegistration = (props) => {
             <TabList>
                 <Tab><Checkbox isChecked = {handleState == 'output'}>User Handle</Checkbox></Tab>
                 <Tab><Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox></Tab>
-                <Tab><Checkbox isChecked = {false} ml = '10px'>Terms and Conditions</Checkbox></Tab>
+                <Tab><Checkbox isChecked = {termsState == 'output'} ml = '10px'>Terms and Conditions</Checkbox></Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
@@ -151,7 +151,7 @@ const UserRegistration = (props) => {
                 </TabPanel>
                 <TabPanel>
 
-                    <TermsRegistration />
+                    <TermsRegistration setTermsState = {setTermsState}/>
 
                 </TabPanel>
             </TabPanels>
@@ -210,17 +210,24 @@ const RegistrationForHandle = (props) => {
     useEffect(()=>{
 
         const userProfile = userRecords.user.profile
-        // check required fields on load
-        isInvalidTests.name(editValues.name??'')
-        isInvalidTests.handle(editValues.handle??'')
-        !userProfile.flags.user_handle && setHandleEditState('checking')
-            if (userProfile.flags.user_handle) { setEditValues({
+
+        if (!userProfile.flags.user_handle) {
+
+            // check required fields on load
+            isInvalidTests.name(editValues.name??'')
+            isInvalidTests.handle(editValues.handle??'')
+            setHandleEditState('checking')
+
+        } else { 
+
+            setEditValues({
                 name: userProfile.user.name,
                 description: userProfile.user.description,
                 handle: userProfile.handle.plain,
                 birthdate: userProfile.user.birthdate_string,
                 location: userProfile.user.location
             })
+
             setHandleState('output')
         }
 
@@ -412,8 +419,8 @@ const RegistrationForHandle = (props) => {
         </Flex></>}
         {(handleEditState == 'output') && 
             <Box padding = '6px'>
-                <Text>OK, so we've created your forever user handle [{editValues.handle}]. You won't be able to change this 
-                    (although in a pinch you could still cancel this registration and start over, but that would be it.)
+                <Text>OK, so we've created your forever user handle [@{editValues.handle}]. You won't be able to change this 
+                    (although in a pinch you could still cancel this registration below and start over, but that would be it.)
                 </Text>
                 <Text mt = '6px'>
                     We've created a user preferences record for you, which includes:
@@ -455,9 +462,47 @@ const RegistrationForHandle = (props) => {
 
 const TermsRegistration = (props) => {
 
+    const
+        { setTermsState } = props,
+        db = useFirestore(),
+        userRecords = useUserRecords(),
+        [termsRegistrationState, setTermsRegistrationState] = useState('pending')
+
+    useEffect(()=>{
+
+        const userProfile = userRecords.user.profile
+
+        if (userProfile.flags.terms_accepted) {
+            
+            setTermsRegistrationState('accepted')
+            setTermsState('output')
+
+        }
+
+    },[])
+
+    async function acceptTerms () {
+
+        try {
+            await updateDoc(doc(db, 'users',userRecords.user.profile.user.id),
+                {
+                    'profile.flags.terms_accepted':true
+                }
+            )
+
+            setTermsRegistrationState('accepted')
+            setTermsState('output')
+        } catch(error) {
+            console.log('error accepting terms',error)
+            alert('Something went wrong. Check the console')
+        }
+
+    }
+
     return <>
-        <Text>Review the terms and conditions below and then hit -&gt; <Button colorScheme = 'blue'>I accept</Button> to
-            accept the terms and conditions.</Text>
+        {(termsRegistrationState == 'pending') && <Text>Review the terms and conditions below and then hit -&gt; <Button onClick = {acceptTerms} colorScheme = 'blue'>I accept</Button> to
+            accept the terms and conditions.</Text>}
+        {(termsRegistrationState == 'accepted') && <Text>You have accepted the terms and conditions below.</Text>}
         <Text mt = '6px'>
             If you don't wish to accept these terms and conditions, scroll to the very bottom of this page, where 
             you will be able to cancel your registration with us.
