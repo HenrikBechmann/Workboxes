@@ -42,6 +42,7 @@ const UserRegistration = (props) => {
     const 
         auth = useAuth(),
         userData = useUserData(),
+        db = useFirestore(),
         { displayName } = userData.authUser,
         userRecords = useUserRecords(),
         [registrationState, setRegistrationState] = useState('setup'),
@@ -71,16 +72,6 @@ const UserRegistration = (props) => {
         })
     }
 
-    if (userRecords.user.profile.flags.fully_registered) { // no need for user registration
-
-        return <Navigate to = '/'/>
-
-    } else if (!userData || (registrationState == 'signedout')) { // not signed in
-
-        return <Navigate to = '/signin'/>
-
-    }
-
     useEffect(()=>{
 
         handleEditDataRef.current = {}
@@ -92,6 +83,34 @@ const UserRegistration = (props) => {
         if (registrationState != 'ready') setRegistrationState('ready')
 
     },[registrationState])
+
+    if (userRecords.user.profile.flags.fully_registered) { // no need for user registration
+
+        return <Navigate to = '/'/>
+
+    } else if (!userData || (registrationState == 'signedout')) { // not signed in
+
+        return <Navigate to = '/signin'/>
+
+    }
+
+    async function proceedToApp() {
+
+        try {
+            await updateDoc(doc(db, 'users',userRecords.user.profile.user.id),
+                {
+                    'profile.flags.fully_registered':true
+                }
+            )
+
+        } catch(error) {
+
+            console.log('error accepting terms',error)
+            alert('Something went wrong. Check the console')
+
+        }
+
+    }
 
     // registration
 
@@ -129,7 +148,11 @@ const UserRegistration = (props) => {
         <Text mt = '6px' mb = '6px'>
             {!registrationComplete && 'Now please process each of the three tabs below, and then hit'} 
             {registrationComplete && "You're all set! Now hit "}
-            -&gt; <Button isDisabled = {!registrationComplete} colorScheme = 'blue'>Ready!</Button> to proceed to the Workboxes app.
+            -&gt; <Button 
+                isDisabled = {!registrationComplete} 
+                colorScheme = 'blue'
+                onClick = {proceedToApp}
+            >Ready!</Button> to proceed to the Workboxes app.
         </Text>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
@@ -276,13 +299,15 @@ const RegistrationForHandle = (props) => {
         birthdatecheckbox: (event) => {
             const target = event.target as HTMLInputElement
             const value = target.checked
-            console.log('checkbox value', value)
             const birthdatefield = document.getElementById('birthdatefield') as HTMLInputElement
-            if (!value) {
-                isInvalidTests.birthdate(birthdatefield.value)
+            let isInvalid
+            if (!value) { // not checked, allow input
+                isInvalid = !birthdatefield.value || isInvalidTests.birthdate(birthdatefield.value)
+                handleIsInvalidFieldFlags.birthdate = isInvalid
             } else {
                 birthdatefield.value = ''
                 handleIsInvalidFieldFlags.birthdate = false
+                editValues.birthdate = null
             }
             setBirthdateOptionState(value?'later':'now')
         },
@@ -334,8 +359,11 @@ const RegistrationForHandle = (props) => {
             return isInvalid
         },
         birthdate:(value) => {
-            let isInvalid = !value || !_isDate(new Date(value)) 
-            handleIsInvalidFieldFlags.birthdate = isInvalid
+            let isInvalid = false
+            if (birthdateOptionState == 'now') {
+                isInvalid = !value || !_isDate(new Date(value)) 
+                handleIsInvalidFieldFlags.birthdate = isInvalid
+            }
             return isInvalid
         }
     }
@@ -349,6 +377,7 @@ const RegistrationForHandle = (props) => {
             editValues = {editValues}
             setHandleEditState = {setHandleEditState}
             setHandleState = {setHandleState}
+            birthdateOptionState = {birthdateOptionState}
         />
         <Flex data-type = 'register-handle-edit-flex' flexWrap = 'wrap'>
             <Box data-type = 'handlefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -431,7 +460,7 @@ const RegistrationForHandle = (props) => {
                     <FormLabel fontSize = 'sm'>Your birth date:</FormLabel>
                     <Input id = 'birthdatefield' placeholder='Select Date' size='md' type='date' onChange = {onChangeFunctions.birthdate}/>
                     <FormErrorMessage>
-                        {handleErrorMessages.birthdate}.
+                        {handleErrorMessages.birthdate}
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic'>
                         {handleHelperText.birthdate}
@@ -455,10 +484,10 @@ const RegistrationForHandle = (props) => {
                         Description: {userRecords.user.profile.user.description?userRecords.user.profile.user.description:'(blank)'}
                     </ListItem>
                     <ListItem>
-                        Location: {userRecords.user.profile.user.location?userRecords.user.profile.user.location:'blank'}
+                        Location: {userRecords.user.profile.user.location?userRecords.user.profile.user.location:'(blank)'}
                     </ListItem>
                     <ListItem>
-                        Birthdate: {userRecords.user.profile.user.birthdate_string?userRecords.user.profile.user.birthdate_string:'blank'}
+                        Birthdate: {userRecords.user.profile.user.birthdate_string?userRecords.user.profile.user.birthdate_string:'(blank)'}
                     </ListItem>
                 </UnorderedList>
                 <Text mt = '6px'>
@@ -573,7 +602,7 @@ const PaymentMethodRegistration = (props) => {
 
 const DialogForSaveHandle = (props) => {
     const 
-        {invalidFlags, editValues, setHandleEditState, setHandleState} = props,
+        {invalidFlags, editValues, setHandleEditState, setHandleState, birthdateOptionState} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         userData = useUserData(),
         db = useFirestore(),
@@ -600,9 +629,15 @@ const DialogForSaveHandle = (props) => {
         // 1. handle
         try { // catch most likely if chosen handle already exists
             // derive birthdate string to avoid birthday shift with UMT
-            let date = new Date(editValues.birthdate)
-            date = new Date(date.getTime() + date.getTimezoneOffset() * 60000)
-            const datestring = date.toDateString()
+            let birthdate, birthdatestring
+            if (editValues.birthdate) {
+                birthdate = new Date(editValues.birthdate)
+                const adjustedbirthdate = new Date(birthdate.getTime() + birthdate.getTimezoneOffset() * 60000)
+                birthdatestring = adjustedbirthdate.toDateString()
+            } else {
+                birthdate = null
+                birthdatestring = ''
+            }
 
             // assemble handle document structure
             const data = updateDocumentSchema('handles','user',{},{
@@ -611,8 +646,8 @@ const DialogForSaveHandle = (props) => {
                         id: userData.authUser.uid,
                         name: editValues.name,
                         location: editValues.location,
-                        birthdate: new Date(editValues.birthdate),
-                        birthdate_string: datestring,
+                        birthdate: birthdate,
+                        birthdate_string: birthdatestring,
                         description: editValues.description,
                     },
                     handle: {
@@ -652,8 +687,8 @@ const DialogForSaveHandle = (props) => {
                 // user identity
                 'profile.user.name':editValues.name,
                 'profile.user.location':editValues.location,
-                'profile.user.birthdate': new Date(editValues.birthdate),
-                'profile.user.birthdate_string': datestring,
+                'profile.user.birthdate': birthdate,
+                'profile.user.birthdate_string': birthdatestring,
                 'profile.user.description':editValues.description,
 
                 // domain and acount references
@@ -736,8 +771,10 @@ const DialogForSaveHandle = (props) => {
 
     const onOpenForHandle = () => {
         // date field requires special handling
-        const date = new Date(editValues.birthdate)
-        let isInvalid = !editValues.birthdate || !_isDate(date)
+        let isInvalid = false
+        if (birthdateOptionState == 'now') {
+            isInvalid = !editValues.birthdate || !_isDate(new Date(editValues.birthdate))
+        }
         invalidFlags.birthdate = isInvalid
 
         if (isInvalid) setHandleEditState('error')
