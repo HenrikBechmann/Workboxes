@@ -420,7 +420,7 @@ const RegistrationForHandle = (props) => {
         </Flex></>}
         {(handleEditState == 'output') && 
             <Box padding = '6px'>
-                <Text>OK, so we've created your forever user handle [@{editValues.handle}]. You won't be able to change this 
+                <Text>OK, so we've created your forever user handle (@{editValues.handle}). You won't be able to change this 
                     (although in a pinch you could still cancel this registration below and start over, but that would be it.)
                 </Text>
                 <Text mt = '6px'>
@@ -738,7 +738,7 @@ const DialogForSaveHandle = (props) => {
 
                     <AlertDialogBody>
                         {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
-                            `Are you sure? The user handle [@${editValues.handle}] can't be changed afterwards.`}
+                            `Are you sure? The user handle @${editValues.handle} can't be changed afterwards.`}
                         {isInvalidState && 'Error(s) found! Please go back and fix errors before saving.'}
                         {(alertState == 'processing') && 'Processing...'}
                         {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
