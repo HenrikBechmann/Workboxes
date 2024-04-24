@@ -55,10 +55,10 @@ const UserRegistration = (props) => {
         },
         [handleState, setHandleState] = useState('input'),
         [paymentState, setPaymentState] = useState('input'),
-        [termsState, setTermsState] = useState('input')
+        [termsState, setTermsState] = useState('input'),
+        registrationComplete = (handleState == 'output') && (termsState == 'output')
 
     // sign out option
-
     const logOut = () => {
         signOut(auth).then(() => {
 
@@ -127,8 +127,9 @@ const UserRegistration = (props) => {
             where you will see a cancel option. You'll be able to start over at any time.
         </Text>
         <Text mt = '6px' mb = '6px'>
-            Now please process each of the three tabs below, and then hit 
-            -&gt; <Button isDisabled = {true} colorScheme = 'blue'>Ready!</Button> to proceed to the Workboxes app.
+            {!registrationComplete && 'Now please process each of the three tabs below, and then hit'} 
+            {registrationComplete && "You're all set! Now hit "}
+            -&gt; <Button isDisabled = {!registrationComplete} colorScheme = 'blue'>Ready!</Button> to proceed to the Workboxes app.
         </Text>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
@@ -737,7 +738,7 @@ const DialogForSaveHandle = (props) => {
 
                     <AlertDialogBody>
                         {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
-                            `Are you sure? The user handle [${editValues.handle}] can't be changed afterwards.`}
+                            `Are you sure? The user handle [@${editValues.handle}] can't be changed afterwards.`}
                         {isInvalidState && 'Error(s) found! Please go back and fix errors before saving.'}
                         {(alertState == 'processing') && 'Processing...'}
                         {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
