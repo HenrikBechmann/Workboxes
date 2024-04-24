@@ -24,6 +24,7 @@ import {
     useDisclosure,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
+    UnorderedList, ListItem,
 } from '@chakra-ui/react'
 
 import {isDate as _isDate} from 'lodash'
@@ -131,7 +132,7 @@ const UserRegistration = (props) => {
         </Text>
         </Box >
         <hr style = {{borderTop:'2px solid silver'}}/>
-        <Tabs variant = 'enclosed' margin = '3px'>
+        <Tabs margin = '3px'>
             <TabList>
                 <Tab><Checkbox isChecked = {handleState == 'output'}>User Handle</Checkbox></Tab>
                 <Tab><Checkbox isDisabled isChecked = {false} ml = '10px'>Payment Method</Checkbox></Tab>
@@ -409,7 +410,44 @@ const RegistrationForHandle = (props) => {
                 </FormControl>
             </Box>
         </Flex></>}
-        {(handleEditState == 'output') && 'Done!'}
+        {(handleEditState == 'output') && 
+            <Box padding = '6px'>
+                <Text>OK, so we've created your forever user handle [{editValues.handle}]. You won't be able to change this 
+                    (although in a pinch you could still cancel this registration and start over, but that would be it.)
+                </Text>
+                <Text mt = '6px'>
+                    We've created a user preferences record for you, which includes:
+                </Text>
+                <UnorderedList>
+                    <ListItem>
+                        Name: {userRecords.user.profile.user.name}
+                    </ListItem>
+                    <ListItem>
+                        Description: {userRecords.user.profile.user.description?userRecords.user.profile.user.description:'(blank)'}
+                    </ListItem>
+                    <ListItem>
+                        Location: {userRecords.user.profile.user.location?userRecords.user.profile.user.location:'blank'}
+                    </ListItem>
+                    <ListItem>
+                        Birthdate: {userRecords.user.profile.user.birthdate_string?userRecords.user.profile.user.birthdate_string:'blank'}
+                    </ListItem>
+                </UnorderedList>
+                <Text mt = '6px'>
+                    Those last four you'll be able to change in your user preferences.
+                </Text>
+                <Text mt = '6px'>
+                    We've also created a couple of other things for you...
+                </Text>
+                <Text mt = '6px'>
+                    An account record, to deal with the business side of things, and...
+                </Text>
+                <Text mt = '6px'>
+                    Your own personal user domain, to keep your personal workboxes. You'll also be able to create additional 
+                    thematic domains, with specialized workboxes, and invite others to join those domains to help out.
+                </Text>
+
+            </Box>
+        }
     </Box>
 }
 
@@ -436,9 +474,12 @@ const TermsRegistration = (props) => {
             2. We reserve the right to cancel your participation here at any time for any reason. 
             If we ever get big enough, we'll have an ethics committee to oversee this.
         </Text>
+        <Text ml = '18px' mt = '6px'>
+            3. Assets uploaded here, and shared, will have to stay here under some kind of Creative Commons licence.
+            So refrain from uploading and sharing material which you consider to be private.
+        </Text>
         <Text ml = '18px' mt = '6px' mb = '6px'>
-            3. I think that assets uploaded here will have to stay here under some kind of Creative Commons licence.
-            In the meantime refrain from uploading material which you consider to be private.
+            4. We reserve the right to change these terms and conditions. Of course you'll be notified of any changes.
         </Text>
     </>
 }
@@ -585,9 +626,11 @@ const DialogForSaveHandle = (props) => {
             const workbox = await getDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id))
             const workboxdata = workbox.data()
             workboxdata.document.sections[0].data.name = editValues.name
+            workboxdata.document.sections[0].data.description = editValues.description
             // console.log('workboxdata',workboxdata)
 
             await updateDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id),{
+                // return the sections data
                 'document.sections':workboxdata.document.sections,
 
                 // workbox name and domain reference name
