@@ -4,8 +4,8 @@
 /*
     TODO
 
-    allow blank date - currently an error
-    set initial handleEditState from flag in user record
+    allow blank date - currently an error - use checkmark to include
+    useRef for userRecord line 209
 
 */
 import React, { useState, useEffect, useRef } from 'react'
@@ -96,6 +96,7 @@ const UserRegistration = (props) => {
 
     return <>
         <Box padding = '6px'>
+
         <Heading mb = '3px' size = 'md'>Welcome to the Workboxes app!</Heading>
         <Text>
             You are signed in as <b>{userData.authUser.displayName}</b> ({userData.authUser.email}). <Link 
@@ -160,6 +161,7 @@ const UserRegistration = (props) => {
             Hit -&gt; <DialogForCancel setRegistrationState = {setRegistrationState} />to cancel this registration. We'll remove all the information you've given us.
         </Text>
         <Text>You'll be able to come back and restart the registration process any time you wish.</Text>
+
         </Box>
     </>
 
@@ -314,6 +316,7 @@ const RegistrationForHandle = (props) => {
     }
 
     return <Box padding = '3px'>
+
         <Heading size = 'sm'>Your basic identity information</Heading>
         {(handleEditState != 'output') && <>
         <span>Fill in the fields below, and then hit -&gt;</span> <DialogForSaveHandle 
@@ -480,13 +483,17 @@ const DialogForSaveHandle = (props) => {
     }
 
     async function saveHandle () {
+
         setAlertState('processing')
 
         // 1. handle
         try { // catch most likely if chosen handle already exists
+            // derive birthdate string to avoid birthday shift with UMT
             let date = new Date(editValues.birthdate)
             date = new Date(date.getTime() + date.getTimezoneOffset() * 60000)
             const datestring = date.toDateString()
+
+            // assemble handle document structure
             const data = updateDocumentSchema('handles','user',{},{
                 profile: {
                     user: {
@@ -514,9 +521,11 @@ const DialogForSaveHandle = (props) => {
                     }
                 }
             })
-            console.log('UserRecords',userRecords)
-            // create handles doc
+
+            // create handles doc. will fail and get caught below if duplicate
             await setDoc(doc(db,'handles',editValues.handle.toLowerCase()), data)
+
+            // continue with integrating updates if handle successfully created
 
             // add handle to user and domain
             // add identity data to user
@@ -542,6 +551,8 @@ const DialogForSaveHandle = (props) => {
 
                 // creation reference
                 'profile.commits.created_by.name':editValues.name,
+
+                // progress flag
                 'profile.flags.user_handle':true,
             })
 
@@ -591,15 +602,21 @@ const DialogForSaveHandle = (props) => {
             setHandleState('output')
             setAlertState('done')
             setHandleEditState('output')
+
         } catch(e) {
+
+            // most likely indicates handle duplicate attempted and rejected
             console.log('failure to post',e)
             setAlertState('failure')
+
         }
     }
 
     const closeAlert = () => {
+
         setAlertState('ready')
         onClose()
+        
     }
 
     const isInvalidState = isInvalidFlag(invalidFlags) 
@@ -680,6 +697,7 @@ const DialogForCancel = (props) => {
        const provider = new OAuthProvider('google.com') // TODO OAuthProvider should be taken from user data:
        // userData.authUser.providerData[0].providerData (object user email matches userData.authUser.email)
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => { // required to delete user login account
+
            snapshotControl.unsubAll()
            if (userRecords.user.profile.handle.lower_case) {
                await deleteDoc(doc(db, 'handles', userRecords.user.profile.handle.lower_case))
@@ -695,6 +713,7 @@ const DialogForCancel = (props) => {
            }
            await signOut(auth)
            onClose()
+
         }).catch(e => {
 
            alert("Cancel failed. There was an error re-authenticating. Signing out. You'll have to sign in again, and try again.")
