@@ -180,7 +180,7 @@ const handleHelperText = {
     description:'Optional. Something about yourself. This description will appear to app users with some communcications. \
     Can be changed. Max 150 characters.',
     location: 'Optional. A hint about where you are. Will be shown to app users. Can be changed. Max 50 characters.',
-    birthdate: 'Optional. Can be changed. Will be set to private until you set it otherwise.',
+    birthdate: 'Optional. Can be changed. Will be set to private until you set it otherwise. Generally helpful for context.',
 }
 
 const handleIsInvalidFieldFlags = {
@@ -188,7 +188,7 @@ const handleIsInvalidFieldFlags = {
     name: false,
     description: false,
     location: false,
-    birthdate: true,
+    birthdate: false,
 }
 
 const handleErrorMessages = {
@@ -196,7 +196,7 @@ const handleErrorMessages = {
     name:'The name can only be 6 to 50 characters.',
     description:'The description can only be up to 150 characters.',
     location: 'The location is optional, but can only be up to 50 characters',
-    birthdate: 'Optional. Must be a valid date.',
+    birthdate: 'Must be a valid date.',
 }
 
 const RegistrationForHandle = (props) => {
@@ -204,7 +204,8 @@ const RegistrationForHandle = (props) => {
         {defaultData, editDataRef, setHandleState} = props,
         userRecords = useUserRecords(),
         [editValues, setEditValues] = useState({...defaultData}),
-        [handleEditState,setHandleEditState] = useState(userRecords.user.profile.flags.user_handle?'output':'input')
+        [handleEditState,setHandleEditState] = useState(userRecords.user.profile.flags.user_handle?'output':'input'),
+        [birthdateOptionState, setBirthdateOptionState] = useState('now')
 
     editDataRef.current = editValues
 
@@ -217,6 +218,9 @@ const RegistrationForHandle = (props) => {
             // check required fields on load
             isInvalidTests.name(editValues.name??'')
             isInvalidTests.handle(editValues.handle??'')
+            if (birthdateOptionState == 'now') {
+                isInvalidTests.birthdate(editValues.birthdate)
+            }
             setHandleEditState('checking')
 
         } else { 
@@ -269,10 +273,22 @@ const RegistrationForHandle = (props) => {
             editValues.description = value
             setEditValues({...editValues})
         },
+        birthdatecheckbox: (event) => {
+            const target = event.target as HTMLInputElement
+            const value = target.checked
+            console.log('checkbox value', value)
+            const birthdatefield = document.getElementById('birthdatefield') as HTMLInputElement
+            if (!value) {
+                isInvalidTests.birthdate(birthdatefield.value)
+            } else {
+                birthdatefield.value = ''
+                handleIsInvalidFieldFlags.birthdate = false
+            }
+            setBirthdateOptionState(value?'later':'now')
+        },
         birthdate:(event) => {
             const target = event.target as HTMLInputElement
             const value = target.value
-            // console.log('birthdate onChange, value',value)
             isInvalidTests.birthdate(value)
             editValues.birthdate = value
             setEditValues({...editValues})
@@ -406,9 +422,14 @@ const RegistrationForHandle = (props) => {
                 </FormControl>
             </Box>
             <Box data-type = 'datefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {handleIsInvalidFieldFlags.birthdate}>
+                <FormControl minWidth = '300px' marginTop = '6px'>
+                    <Checkbox size = 'sm' isChecked = {birthdateOptionState == 'later'} onChange = {onChangeFunctions.birthdatecheckbox}>
+                        Maybe I'll add my birth date later.
+                    </Checkbox>
+                </FormControl>
+                <FormControl isDisabled = {birthdateOptionState == 'later'} minWidth = '300px' maxWidth = '400px' isInvalid = {handleIsInvalidFieldFlags.birthdate}>
                     <FormLabel fontSize = 'sm'>Your birth date:</FormLabel>
-                    <Input placeholder='Select Date' size='md' type='date' onChange = {onChangeFunctions.birthdate}/>
+                    <Input id = 'birthdatefield' placeholder='Select Date' size='md' type='date' onChange = {onChangeFunctions.birthdate}/>
                     <FormErrorMessage>
                         {handleErrorMessages.birthdate}.
                     </FormErrorMessage>
