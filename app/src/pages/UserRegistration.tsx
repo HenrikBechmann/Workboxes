@@ -524,8 +524,11 @@ const TermsRegistration = (props) => {
             3. Assets uploaded here, and shared, will have to stay here under some kind of Creative Commons licence.
             So refrain from uploading and sharing material which you consider to be private.
         </Text>
+        <Text ml = '18px' mt = '6px'>
+            4. Sorry, we can't make any warranties or promises about the utility or robustness of this product.
+        </Text>
         <Text ml = '18px' mt = '6px' mb = '6px'>
-            4. We reserve the right to change these terms and conditions. Of course you'll be notified of any changes.
+            5. We reserve the right to change these terms and conditions. Of course you'll be notified of any changes.
         </Text>
     </>
 }
