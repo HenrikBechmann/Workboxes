@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import ismobile from 'is-mobile'
 
-import WorkboxProviders from './system/WorkboxProviders'
+import WorkboxesProvider from './system/WorkboxesProvider'
 // import TribalopolisProvider from './system/TribalopolisProvider'
 import scaffold from './system/routescaffold'
 
@@ -18,9 +18,9 @@ const router = createBrowserRouter(scaffold)
 const root = createRoot(document.getElementById('root'))
 
 root.render(
-    <WorkboxProviders>
+    <WorkboxesProvider>
         <ChakraProvider>
             <RouterProvider router = {router} />
         </ChakraProvider>
-    </WorkboxProviders>
+    </WorkboxesProvider>
 )

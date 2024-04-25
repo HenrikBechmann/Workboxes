@@ -4,7 +4,7 @@ import React from 'react'
 import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords } from '../../system/WorkboxProviders'
+import { useUserAuthData, useUserRecords } from '../../system/WorkboxesProvider'
 
 function AdminRouteController() {
 

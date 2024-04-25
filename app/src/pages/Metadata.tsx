@@ -11,7 +11,7 @@ import {
     Box, VStack, Center,
     Grid, GridItem,
 } from '@chakra-ui/react'
-import { useFirestore, useUserAuthData } from '../system/WorkboxProviders'
+import { useFirestore, useUserAuthData } from '../system/WorkboxesProvider'
 import Draggable from 'react-draggable'
 // import { useTypes } from '../system/TribalopolisProvider'
 import Drawer, { useDrawers } from '../components/workholders/Drawer'

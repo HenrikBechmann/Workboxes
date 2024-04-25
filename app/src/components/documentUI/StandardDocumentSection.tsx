@@ -10,7 +10,7 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import { useSystemRecords } from '../../system/WorkboxProviders'
+import { useSystemRecords } from '../../system/WorkboxesProvider'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const StandardEdit = (props) => {

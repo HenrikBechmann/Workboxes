@@ -17,7 +17,7 @@ import {
 
 import Scroller from 'react-infinite-grid-scroller'
 
-import { useUserAuthData } from '../../system/WorkboxProviders'
+import { useUserAuthData } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'

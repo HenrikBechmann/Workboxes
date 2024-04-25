@@ -9,7 +9,7 @@ import {
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useAuth } from '../../system/WorkboxProviders'
+import { useUserAuthData, useAuth } from '../../system/WorkboxesProvider'
 
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'

@@ -10,7 +10,7 @@ import {
     Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
-import { useAuth, useUserAuthData } from '../system/WorkboxProviders'
+import { useAuth, useUserAuthData } from '../system/WorkboxesProvider'
 
 import tribalopolisIcon from '../../assets/workbox-logo.png'
 import boxIcon from '../../assets/workbox.png'
