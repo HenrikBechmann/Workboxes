@@ -14,7 +14,7 @@ import { Navigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, increment } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -100,6 +100,11 @@ const UserRegistration = (props) => {
             await updateDoc(doc(db, 'users',userRecords.user.profile.user.id),
                 {
                     'profile.flags.fully_registered':true
+                }
+            )
+            await updateDoc(doc(db, 'system','usage'),
+                {
+                    'user_entries':increment(1)
                 }
             )
 

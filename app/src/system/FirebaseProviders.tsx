@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState, createContext, useContext } from 'r
 // firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore, collection, doc, setDoc, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, serverTimestamp } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
@@ -34,6 +34,8 @@ const
     UserDataContext = createContext(null),
 
     UserRecordsContext = createContext(null),
+
+    SystemRecordsContext = createContext(null),
 
     firestore = getFirestore(firebaseApp),
     FirestoreContext = createContext(firestore),
@@ -65,6 +67,7 @@ export const UserProvider = ({children}) => {
         [userState, setUserState] = useState('setup'),
         [userData, setUserData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
+        [systemRecords, setSystemRecords] = useState({settings:null}),
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
         db = useFirestore(),
@@ -84,6 +87,28 @@ export const UserProvider = ({children}) => {
         }
 
     },[])
+
+    async function updateLogins() {
+        await updateDoc(doc(db, 'system','usage'),
+            {
+                'log_ins':increment(1)
+            }
+        )        
+    }
+
+    async function getSystemRecords() {
+
+        if (!systemRecords.settings) {
+            try {
+                const systemSettings = await getDoc(doc(db, 'system','settings'))
+                const systemSettingsData = systemSettings.data()
+                setSystemRecords({settings:systemSettingsData})
+            } catch (error) {
+                console.log('error getting system settings', error)
+            }
+        }
+
+    }
 
     useEffect(()=>{
 
@@ -116,6 +141,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
+                updateLogins()
                 // console.log('firebaseprovider userData', userData)
                 setUserState('useridentified')
     
@@ -314,6 +340,8 @@ export const UserProvider = ({children}) => {
 
         if (userState == 'useridentified') {
 
+            getSystemRecords()
+
             // console.log('useEffect userState useridentified, userDataRef.current.authUser.uid', userDataRef.current.authUser.uid)
             const userIndex = "UserProvider.users." + userDataRef.current.authUser.uid
             if (!snapshotControl.has(userIndex)) {
@@ -422,11 +450,13 @@ export const UserProvider = ({children}) => {
 
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
+        <SystemRecordsContext.Provider value = {systemRecords} >
         <UserDataContext.Provider value = {userData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
         </UserDataContext.Provider>
+        </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
     )
 
@@ -454,6 +484,10 @@ const useUserRecords = () => {
     return useContext(UserRecordsContext)
 }
 
+const useSystemRecords = () => {
+    return useContext(SystemRecordsContext)
+}
+
 const useFirestore = () => {
     return useContext(FirestoreContext)
 }
@@ -466,6 +500,7 @@ export {
     useSnapshotControl,
     useFirebaseApp,
     useAuth,
+    useSystemRecords,
     useUserData,
     useUserRecords,
     useFirestore,
