@@ -88,7 +88,7 @@ export const UserProvider = ({children}) => {
     async function updateLogins() {
         await updateDoc(doc(db, 'system','usage'),
             {
-                'log_ins':increment(1)
+                'logins':increment(1)
             }
         )        
     }
@@ -330,6 +330,7 @@ export const UserProvider = ({children}) => {
 
     }
 
+    // open base listeners for user: user, account, and domain records
     useEffect(()=>{
 
         if (userState == 'useridentified') {
@@ -477,11 +478,11 @@ const useUserAuthData = () => {
     return useContext(UserAuthDataContext)
 }
 
-const useUserRecords = () => {
+const useUserRecords = () => { // dynamic listeners
     return useContext(UserRecordsContext)
 }
 
-const useSystemRecords = () => {
+const useSystemRecords = () => { // static
     return useContext(SystemRecordsContext)
 }
 
