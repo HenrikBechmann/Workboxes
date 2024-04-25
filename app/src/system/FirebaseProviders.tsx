@@ -202,7 +202,9 @@ export const UserProvider = ({children}) => {
 
         const domainRecord = updateDocumentSchema('domains','standard',{},{
             profile: {
-                is_userdomain: true,
+                roles: {
+                    is_userdomain: true,
+                },
                 domain: {
                   id: domainDocRef.id,
                   name: displayName,
@@ -238,13 +240,16 @@ export const UserProvider = ({children}) => {
             version: 0,
             generation: 0,
             profile: {
-              is_domainworkbox: true,
               workbox: {
                 id: workboxDocRef.id,
                 name: displayName,
                 image: {
                   source: photoURL,
                 },
+              },
+              roles: {
+                  read: "member",
+                  is_domainworkbox: true,
               },
               owner: {
                 id: uid,
@@ -265,7 +270,6 @@ export const UserProvider = ({children}) => {
                 },
                 created_timestamp: serverTimestamp(),
               },
-              read_role: "member",
               counts: {
                 links: 0,
                 references: 0,

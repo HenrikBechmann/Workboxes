@@ -195,13 +195,17 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        is_domainworkbox: null,
         workbox: {
           id:null,
           name: null,
           image: {
             source: null,
           },
+        },
+        roles: {
+          is_domainworkbox: null,
+          read: null,
+          write: null,
         },
         owner: {
           id: null,
@@ -227,8 +231,6 @@ const versionData = {
           updated_by: {id: null, name: null},
           updated_timestamp: null,
         },
-        read_role: null,
-        write_role: null,
         counts: {
           links: 0,
           references: 0,
@@ -356,7 +358,9 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        is_userdomain: null,
+        roles: {
+          is_userdomain: null,
+        },
         domain: {
           id:null,
           name: null,
