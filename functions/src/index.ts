@@ -2,7 +2,6 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 /**
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
@@ -21,54 +20,6 @@ import {getFirestore as getFirestoreV2} from "firebase-admin/firestore";
 import {initializeApp as initializeAppV2} from "firebase-admin/app";
 
 const appV2 = initializeAppV2();
-
-// the rest are version 2
-// TODO updateDatabase not needed
-// export const updateDatabase = onCall( async (request) => {
-//   const getAuthorization = () => {
-//     const isAdmin = !!request.auth?.token.admin === true;
-//     const isAuthorized = isAdmin;
-//     return isAuthorized;
-//   };
-
-//   const response = {status: false, error: false, message: "", docpath: ""};
-//   const isAuthorized = getAuthorization();
-
-//   if (!isAuthorized) {
-//     response.message = "requested database operation is not authorized";
-//     return response;
-//   }
-
-//   const {data} = request;
-//   const {document, context} = data;
-//   const {operation, path, collection, documentID} = context;
-//   const db = getFirestoreV2(appV2);
-//   const docpath = path + collection + "/" + documentID;
-
-//   response.docpath = docpath;
-
-//   switch (operation) {
-//   case "set": {
-//     try {
-//       await db.doc(docpath).set(document);
-//     } catch (e) {
-//       const error:Error = e as Error;
-//       response.error = true;
-//       response.message = error.message;
-//       return response;
-//     }
-//     break;
-//   }
-//   default: {
-//     response.message = "unrecognized operation requested";
-//     return response;
-//   }
-//   }
-
-//   response.message = "database update operation was completed";
-//   response.status = true;
-//   return response;
-// });
 
 // --
 export const setAdminClaim = onCall( async (request) =>{
@@ -281,9 +232,4 @@ export const beforesignedin = beforeUserSignedIn(async (event) => {
       "Accounts must be in good standing to sign in to Tribalopolis.",
       email + " was found in suspensions.");
   }
-  // } catch (e) {
-  //   const error:Error = e as Error;
-  //   throw new HttpsError("internal",
-  //     "Internal error: getFirestore" + error?.message);
-  // }
 });
