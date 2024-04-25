@@ -1,8 +1,8 @@
 // Metadata.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
-import { getFunctions, httpsCallable } from "firebase/functions"
-import { doc, getDoc } from "firebase/firestore"
+// import { getFunctions, httpsCallable } from "firebase/functions"
+// import { doc, getDoc } from "firebase/firestore"
 
 import {
     Text, 
@@ -18,7 +18,7 @@ import Drawer, { useDrawers } from '../components/workholders/Drawer'
 import Workwindow from '../components/workholders/Workwindow'
 import Workbox from '../components/workbox/Workbox'
 import Workpanel from '../components/workholders/Workpanel'
-import { metatype } from '../system/system.type'
+// import { metatype } from '../system/system.type'
 
 import appIcon from '../../assets/workbox-logo.png'
 
@@ -179,32 +179,32 @@ const Metadata = (props) => {
         openFunctions,
     } = useDrawers(completeFunctions)
 
-    async function transferInDocument() { // in to database
+    // async function transferInDocument() { // in to database
 
-        if (!confirm('Transfer meta document type to database?')) return
+    //     if (!confirm('Transfer meta document type to database?')) return
 
-        setIsInTransferProcessing(true)
-        setReturnInData(null)
-        let returnData
-        const functions = getFunctions()
+    //     setIsInTransferProcessing(true)
+    //     setReturnInData(null)
+    //     let returnData
+    //     const functions = getFunctions()
 
-        try {
-            const updateDatabase = httpsCallable(functions, 'updateDatabase')
-            returnData = await updateDatabase({
-                document:metatype, 
-                context:{
-                    operation:'set', 
-                    path:'', collection:'types', documentID:'system.class'}})
-            // console.log('returnData', returnData)
-        } catch (e) {
-            console.log('error',e)
-        }
+    //     try {
+    //         const updateDatabase = httpsCallable(functions, 'updateDatabase')
+    //         returnData = await updateDatabase({
+    //             document:metatype, 
+    //             context:{
+    //                 operation:'set', 
+    //                 path:'', collection:'types', documentID:'system.class'}})
+    //         // console.log('returnData', returnData)
+    //     } catch (e) {
+    //         console.log('error',e)
+    //     }
 
-        setReturnInData(returnData.data)
+    //     setReturnInData(returnData.data)
 
-        setIsInTransferProcessing(false)
+    //     setIsInTransferProcessing(false)
 
-    }
+    // }
 
     const openDataDrawer = () => {
         openFunctions.openDataDrawer(null) // add context

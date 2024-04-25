@@ -9,8 +9,7 @@
 
 // firebase-functions
 import {onCall, HttpsError} from "firebase-functions/v2/https";
-// import {auth as userAuth} from "firebase-functions";
-// import {log} from "firebase-functions/logger";
+
 import {
   beforeUserCreated,
   beforeUserSignedIn,
@@ -21,283 +20,55 @@ import * as admin from "firebase-admin";
 import {getFirestore as getFirestoreV2} from "firebase-admin/firestore";
 import {initializeApp as initializeAppV2} from "firebase-admin/app";
 
-// firebase, apparently required for version 1 functions below
-// import {initializeApp as initializeAppV1} from "firebase/app";
-// import {getFirestore as getFirestoreV1,
-//   collection,
-//   doc,
-//   setDoc,
-//   addDoc,
-//   updateDoc,
-//   serverTimestamp,
-//   increment,
-// } from "firebase/firestore";
-
-// import firebaseConfig from "./firebaseConfig";
-
 const appV2 = initializeAppV2();
 
-// // This has to use version 1
-// export const setupNewUser = userAuth.user().onCreate(async (user)=>{
-//   const {displayName, photoURL, uid} = user;
-//   const appV1 = initializeAppV1(firebaseConfig);
-//   const db = getFirestoreV1(appV1);
-
-//   // source of truth: utilities.updateDocumentVersion
-//   const domainDocRef = await addDoc(collection(db, "domains"),
-//     {
-//       version: 0,
-//       generation: 0,
-//       profile: {
-//         is_userdomain: true,
-//         domain: {
-//           name: displayName,
-//           image: {
-//             source: photoURL,
-//           },
-//         },
-//         handle: {
-//           id: null,
-//           name: null,
-//         },
-//         owner: {
-//           id: uid,
-//           name: displayName,
-//         },
-//         administrator: {
-//           id: null,
-//           name: null,
-//         },
-//         workbox: {
-//           id: null,
-//           name: null,
-//         },
-//         commits: {
-//           created_by: {id: uid, name: displayName},
-//           created_timestamp: serverTimestamp(),
-//           updated_by: {id: null, name: null},
-//           updated_timestamp: null,
-//         },
-//         counts: {
-//           members: 0,
-//           workboxes: 0,
-//         },
-//       },
-//     }
-//   );
-
-//   const workboxDocRef = await addDoc(collection(db, "workboxes"),
-//     {
-//       version: 0,
-//       generation: 0,
-//       profile: {
-//         is_domainworkbox: true,
-//         workbox: {
-//           name: displayName,
-//           image: {
-//             source: photoURL,
-//           },
-//         },
-//         owner: {
-//           id: uid,
-//           name: displayName,
-//         },
-//         domain: {
-//           id: domainDocRef.id,
-//           name: displayName,
-//         },
-//         type: {
-//           name: "container",
-//           alias: "Container",
-//           image: {
-//             source: null,
-//           },
-//         },
-//         commits: {
-//           created_by: {
-//             id: uid,
-//             name: displayName,
-//           },
-//           created_timestamp: serverTimestamp(),
-//           updated_by: {id: null, name: null},
-//           updated_timestamp: null,
-//         },
-//         read_role: "member",
-//         write_role: null,
-//         counts: {
-//           links: 0,
-//           references: 0,
-//         },
-//       },
-//       document: {
-//         sections: [
-//           {
-//             name: "standard",
-//             alias: "Standard",
-//             position: 0,
-//             data: {
-//               name: displayName,
-//               image: {
-//                 source: photoURL,
-//               },
-//               description: null,
-//               summary: null,
-//             },
-//           },
-//         ],
-//       },
-//       databox: {
-//         accepts: [],
-//         links: {
-//           cached: true,
-//           cache: [],
-//         },
-//       },
-//     }
-//   );
-
-//   await updateDoc(domainDocRef, {
-//     profile: {
-//       generation: increment(1),
-//       workbox: {
-//         id: workboxDocRef,
-//         name: displayName,
-//       },
-//     },
-//   });
-
-//   const accountDocumentRef = await addDoc(collection(db, "accounts"),
-//     {
-//       version: 0,
-//       generation: 0,
-//       profile: {
-//         account: {
-//           name: displayName,
-//           image: {
-//             source: photoURL,
-//           },
-//         },
-//         owner: {
-//           id: uid,
-//           name: displayName,
-//         },
-//         commits: {
-//           created_by: {
-//             id: uid,
-//             name: displayName,
-//           },
-//           created_timestamp: serverTimestamp(),
-//           updated_by: {id: null, handle: null, name: null},
-//           updated_timestamp: null,
-//         },
-//         counts: {
-//         },
-//       },
-//     }
-//   );
-
-//   const userRecordRef = doc(db, "users", uid);
-//   await setDoc(userRecordRef,
-
-//     {
-//       version: 0,
-//       generation: 0,
-//       profile: {
-//         is_abandoned: false,
-//         user: {
-//           name: displayName,
-//           image: {
-//             source: photoURL,
-//           },
-//         },
-//         domain: {
-//           id: domainDocRef.id,
-//           name: displayName,
-//         },
-//         handle: {
-//           id: null,
-//           name: null,
-//         },
-//         account: {
-//           id: accountDocumentRef.id,
-//           name: displayName,
-//         },
-//         commits: {
-//           created_by: {
-//             id: uid,
-//             name: displayName,
-//           },
-//           created_timestamp: serverTimestamp(),
-//           updated_by: {id: null, handle: null, name: null},
-//           updated_timestamp: null,
-//         },
-//         counts: {
-//         },
-//       },
-//     }
-//   );
-// });
-
-// // This has to use version 1
-// // set is_abandoned = true in user record
-// export const abandonUser = userAuth.user().onDelete(async (user)=>{
-//   const {uid} = user;
-//   const appV1 = initializeAppV1(firebaseConfig);
-//   const db = getFirestoreV1(appV1);
-//   const userRecordRef = doc(db, "users", uid);
-//   await updateDoc(userRecordRef, {
-//     profile: {
-//       is_abandoned: true,
-//     },
-//   });
-// });
-
 // the rest are version 2
-export const updateDatabase = onCall( async (request) => {
-  const getAuthorization = () => {
-    const isAdmin = !!request.auth?.token.admin === true;
-    const isAuthorized = isAdmin;
-    return isAuthorized;
-  };
+// TODO updateDatabase not needed
+// export const updateDatabase = onCall( async (request) => {
+//   const getAuthorization = () => {
+//     const isAdmin = !!request.auth?.token.admin === true;
+//     const isAuthorized = isAdmin;
+//     return isAuthorized;
+//   };
 
-  const response = {status: false, error: false, message: "", docpath: ""};
-  const isAuthorized = getAuthorization();
+//   const response = {status: false, error: false, message: "", docpath: ""};
+//   const isAuthorized = getAuthorization();
 
-  if (!isAuthorized) {
-    response.message = "requested database operation is not authorized";
-    return response;
-  }
+//   if (!isAuthorized) {
+//     response.message = "requested database operation is not authorized";
+//     return response;
+//   }
 
-  const {data} = request;
-  const {document, context} = data;
-  const {operation, path, collection, documentID} = context;
-  const db = getFirestoreV2(appV2);
-  const docpath = path + collection + "/" + documentID;
+//   const {data} = request;
+//   const {document, context} = data;
+//   const {operation, path, collection, documentID} = context;
+//   const db = getFirestoreV2(appV2);
+//   const docpath = path + collection + "/" + documentID;
 
-  response.docpath = docpath;
+//   response.docpath = docpath;
 
-  switch (operation) {
-  case "set": {
-    try {
-      await db.doc(docpath).set(document);
-    } catch (e) {
-      const error:Error = e as Error;
-      response.error = true;
-      response.message = error.message;
-      return response;
-    }
-    break;
-  }
-  default: {
-    response.message = "unrecognized operation requested";
-    return response;
-  }
-  }
+//   switch (operation) {
+//   case "set": {
+//     try {
+//       await db.doc(docpath).set(document);
+//     } catch (e) {
+//       const error:Error = e as Error;
+//       response.error = true;
+//       response.message = error.message;
+//       return response;
+//     }
+//     break;
+//   }
+//   default: {
+//     response.message = "unrecognized operation requested";
+//     return response;
+//   }
+//   }
 
-  response.message = "database update operation was completed";
-  response.status = true;
-  return response;
-});
+//   response.message = "database update operation was completed";
+//   response.status = true;
+//   return response;
+// });
 
 // --
 export const setAdminClaim = onCall( async (request) =>{

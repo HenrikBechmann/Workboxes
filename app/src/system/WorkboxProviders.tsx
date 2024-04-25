@@ -33,6 +33,8 @@ const
 
     // make workboxes resources available
     SnapshotControlContext = createContext(snapshotControl),
+
+    // for UserProvider
     UserAuthDataContext = createContext(null),
     UserRecordsContext = createContext(null),
     SystemRecordsContext = createContext(null)
@@ -71,8 +73,6 @@ export const UserProvider = ({children}) => {
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
         baseRecordsAvailableRef = useRef(true) 
-
-    // console.log('UserProvider: userState, userAuthData, userRecords, snapshotControl.snapshotData\n',userState,'\n' ,userAuthData, userRecords, snapshotControl.snapshotData)
 
     userDataRef.current = userAuthData
     userRecordsRef.current = userRecords
@@ -139,7 +139,6 @@ export const UserProvider = ({children}) => {
                     sysadminStatus:superUser,
                 }
                 updateLogins()
-                // console.log('firebaseprovider userAuthData', userAuthData)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
@@ -315,7 +314,7 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        let baseResult
+        // let baseResult
 
         try {
             await setDoc(doc(db,'users',uid),userRecord)
@@ -324,7 +323,7 @@ export const UserProvider = ({children}) => {
             await setDoc(workboxDocRef, workboxRecord)
         } catch(error) {
             // TODO handle error condition
-            baseResult = error
+            // baseResult = error
         }
 
         setUserState('baserecordsavailable')
@@ -333,13 +332,10 @@ export const UserProvider = ({children}) => {
 
     useEffect(()=>{
 
-        // console.log('responding to userState', userState)
-
         if (userState == 'useridentified') {
 
             getSystemRecords()
 
-            // console.log('useEffect userState useridentified, userDataRef.current.authUser.uid', userDataRef.current.authUser.uid)
             const userIndex = "UserProvider.users." + userDataRef.current.authUser.uid
             if (!snapshotControl.has(userIndex)) {
                 snapshotControl.create(userIndex)
@@ -349,16 +345,17 @@ export const UserProvider = ({children}) => {
                     onSnapshot(doc(db, 'users', userAuthData.authUser.uid), (returndoc) =>{
                         snapshotControl.incrementCallCount(userIndex, 1)
                         const userRecord = returndoc.data()
-                        // console.log('snapshot of userRecord',userRecord)
+
                         if (!userRecord) {
+
                             baseRecordsAvailableRef.current = false
                             addUserBaseRecords(userAuthData)
                         } else {
+
                             setUserRecords((previousState) => {
                                previousState.user = userRecord
                                return {...previousState}
                             })
-                            // console.log('acquired userRecord', userRecord)
                             if (!snapshotControl.getSchemaChecked(userIndex)) {
                                 snapshotControl.setSchemaChecked(userIndex)
                                 const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
@@ -371,14 +368,13 @@ export const UserProvider = ({children}) => {
                             setUserState('userrecordacquired')
                         }
                     })
+
                 snapshotControl.registerUnsub(userIndex, unsubscribeuser)
             }
         }
 
         if ((userState == 'userrecordacquired' && baseRecordsAvailableRef.current) 
             || userState == 'baserecordsavailable' ) {
-
-            // console.log('useEffect userState userrecordacquired')
 
             const 
                 userRecords = userRecordsRef.current,
@@ -389,7 +385,7 @@ export const UserProvider = ({children}) => {
             const accountIndex = "UserProvider.accounts." + accountID
             if (!snapshotControl.has(accountIndex)) {
                 snapshotControl.create(accountIndex)
-                // console.log('subscribing to account document', accountID)
+
                 const unsubscribeaccount = 
                     onSnapshot(doc(db, "accounts",accountID), (returndoc) =>{
                         snapshotControl.incrementCallCount(accountIndex, 1)
@@ -409,13 +405,14 @@ export const UserProvider = ({children}) => {
                             }
                         }
                     })
+
                 snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
             }
 
             const domainIndex = "UserProvider.domains." + domainID
             if (!snapshotControl.has(domainIndex)) {
                 snapshotControl.create(domainIndex)
-                // console.log('subscribing to domain document', domainID)
+
                 const unsubscribedomain = 
                     onSnapshot(doc(db, "domains",domainID), (returndoc) =>{
                         snapshotControl.incrementCallCount(domainIndex, 1)
@@ -435,6 +432,7 @@ export const UserProvider = ({children}) => {
                             }
                         }
                     })
+
                 snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
              }
         }
@@ -442,8 +440,6 @@ export const UserProvider = ({children}) => {
         setUserState('ready')
 
     },[userState])
-
-    // console.log('UserProvider: userState, userRecords',userState, {...userRecords})
 
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
@@ -457,20 +453,24 @@ export const UserProvider = ({children}) => {
         </SnapshotControlContext.Provider>
     )
 
-}
+} // UserProvider
 
 // context access
 
-const useSnapshotControl = () => {
-    return useContext(SnapshotControlContext)
-}
-
-// const useFirebaseApp = () => {
-//     return useContext(FirebaseAppContext)
-// }
-
 const useAuth = () => {
     return useContext(AuthContext)
+}
+
+const useFirestore = () => {
+    return useContext(FirestoreContext)
+}
+
+const useStorage = () => {
+    return useContext(StorageContext)
+}
+
+const useSnapshotControl = () => {
+    return useContext(SnapshotControlContext)
 }
 
 const useUserAuthData = () => {
@@ -485,19 +485,12 @@ const useSystemRecords = () => {
     return useContext(SystemRecordsContext)
 }
 
-const useFirestore = () => {
-    return useContext(FirestoreContext)
-}
-
-const useStorage = () => {
-    return useContext(StorageContext)
-}
-
 export {
     // firebase resources
     useAuth,
     useFirestore,
     useStorage,
+
     // workboxes resources
     useSnapshotControl,
     useSystemRecords,
