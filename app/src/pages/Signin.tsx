@@ -32,7 +32,6 @@ const Signin = (props) => {
     const 
         [errorState,setErrorState] = useState<any>(null),
         auth = useAuth(),
-        // userDataRef = useRef(null),
         navigate = useNavigate(),
         [searchParams] = useSearchParams(),
         from = searchParams.get('from') || '/',

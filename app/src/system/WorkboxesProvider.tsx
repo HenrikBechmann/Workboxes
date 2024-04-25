@@ -66,7 +66,7 @@ export const UserProvider = ({children}) => {
 
         // bootstrap resources
         db = useFirestore(),
-        userDataRef = useRef(null),
+        userAuthDataRef = useRef(null),
         userRecordsRef = useRef(null),
 
         // bootstrap control
@@ -74,7 +74,7 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true),
         baseRecordsAvailableRef = useRef(true) 
 
-    userDataRef.current = userAuthData
+    userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords
 
     useEffect(()=>{
@@ -113,8 +113,6 @@ export const UserProvider = ({children}) => {
 
         // console.log('subscribing to onAuthStateChanged')
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
-
-            // console.log('call to onAuthStateChanged',user)
 
             let userAuthData = null
 
@@ -337,10 +335,10 @@ export const UserProvider = ({children}) => {
 
             getSystemRecords()
 
-            const userIndex = "UserProvider.users." + userDataRef.current.authUser.uid
+            const userIndex = "UserProvider.users." + userAuthDataRef.current.authUser.uid
             if (!snapshotControl.has(userIndex)) {
                 snapshotControl.create(userIndex)
-                const userAuthData = userDataRef.current
+                const userAuthData = userAuthDataRef.current
                 // console.log('subscribing to user document', userAuthData.authUser.uid)
                 const unsubscribeuser = 
                     onSnapshot(doc(db, 'users', userAuthData.authUser.uid), (returndoc) =>{
