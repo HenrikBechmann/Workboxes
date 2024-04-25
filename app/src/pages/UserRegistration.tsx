@@ -29,7 +29,7 @@ import {
 
 import {isDate as _isDate} from 'lodash'
 
-import { useUserData, useUserRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -45,6 +45,7 @@ const UserRegistration = (props) => {
         db = useFirestore(),
         { displayName } = userData.authUser,
         userRecords = useUserRecords(),
+
         [registrationState, setRegistrationState] = useState('setup'),
         handleEditDataRef = useRef(null),
         defaultData = {
@@ -201,16 +202,7 @@ const UserRegistration = (props) => {
 
 // -----------------------------[ accept handle registration input ]--------------------------
 
-const handleHelperText = {
-    handle: 'Required. This will be your permanent "@" link to let others connect and refer to you. 6-25 characters,\
-     a-z, A-Z, 0-9, no spaces. Cannot be changed once saved.',
-    name:'Required. This name will appear to app users. Can be changed. 6-50 characters.',
-    description:'Optional. Something about yourself. This description will appear to app users with some communcications. \
-    Can be changed. Max 150 characters.',
-    location: 'Optional. A hint about where you are. Will be shown to app users. Can be changed. Max 50 characters.',
-    birthdate: 'Optional. Can be changed. Will be set to private until you set it otherwise. Generally helpful for context.',
-}
-
+// TODO s/b a state value
 const handleIsInvalidFieldFlags = {
     handle: false,
     name: false,
@@ -219,23 +211,41 @@ const handleIsInvalidFieldFlags = {
     birthdate: false,
 }
 
-const handleErrorMessages = {
-    handle: 'The handle is required, and can only be 6 to 25 characters. a-z, A-Z, 0-9, no spaces.',
-    name:'The name can only be 6 to 50 characters.',
-    description:'The description can only be up to 150 characters.',
-    location: 'The location is optional, but can only be up to 50 characters',
-    birthdate: 'Must be a valid date.',
-}
-
 const RegistrationForHandle = (props) => {
     const 
         {defaultData, editDataRef, setHandleState} = props,
         userRecords = useUserRecords(),
         [editValues, setEditValues] = useState({...defaultData}),
         [handleEditState,setHandleEditState] = useState(userRecords.user.profile.flags.user_handle?'output':'input'),
-        [birthdateOptionState, setBirthdateOptionState] = useState('now')
+        [birthdateOptionState, setBirthdateOptionState] = useState('now'),
+        systemRecords = useSystemRecords(),
+        maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
+        maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        maxHandleLength = systemRecords.settings.constraints.input.handleLength_max,
+        minHandleLength = systemRecords.settings.constraints.input.handleLength_min,
+        maxLocationLength = systemRecords.settings.constraints.input.locationLength_max
 
     editDataRef.current = editValues
+
+    const handleHelperText = {
+        handle: `Required. This will be your permanent "@" link to let others connect and refer to you. \
+        ${minHandleLength}-${maxHandleLength} characters, \
+         a-z, A-Z, 0-9, no spaces. Cannot be changed once saved.`,
+        name:`Required. This name will appear to app users. Can be changed. ${minNameLength}-${maxNameLength} characters.`,
+        description:`Optional. Something about yourself. This description will appear to app users with some communcications. \
+        Can be changed. Max ${maxDescriptionLength} characters.`,
+        location: `Optional. A hint about where you are. Will be shown to app users. Can be changed. Max ${maxLocationLength} characters.`,
+        birthdate: `Optional. Can be changed. Will be set to private until you set it otherwise. Generally helpful for context.`,
+    }
+
+    const handleErrorMessages = {
+        handle: `The handle is required, and can only be ${minHandleLength} to ${maxHandleLength} characters. a-z, A-Z, 0-9, no spaces.`,
+        name:`The name can only be ${minNameLength} to ${maxNameLength} characters.`,
+        description:`The description can only be up to ${maxDescriptionLength} characters.`,
+        location: `The location is optional, but can only be up to ${maxLocationLength} characters`,
+        birthdate: 'Must be a valid date.',
+    }
 
     useEffect(()=>{
 
@@ -329,7 +339,7 @@ const RegistrationForHandle = (props) => {
     const isInvalidTests = {
         handle: (value) => {
             let isInvalid = false
-            if (value.length > 25 || value.length < 6) {
+            if (value.length > maxHandleLength || value.length < minHandleLength) {
                 isInvalid = true
             }
             if (!isInvalid) {
@@ -341,7 +351,7 @@ const RegistrationForHandle = (props) => {
         },
         name: (value) => {
             let isInvalid = false
-            if (value.length > 50 || value.length < 6) {
+            if (value.length > maxNameLength || value.length < minNameLength) {
                 isInvalid = true
             }
             handleIsInvalidFieldFlags.name = isInvalid
@@ -349,7 +359,7 @@ const RegistrationForHandle = (props) => {
         },
         location:(value) => {
             let isInvalid = false
-            if (value.length > 50) {
+            if (value.length > maxLocationLength) {
                 isInvalid = true
             }
             handleIsInvalidFieldFlags.location = isInvalid
@@ -357,7 +367,7 @@ const RegistrationForHandle = (props) => {
         },
         description: (value) => {
             let isInvalid = false
-            if (value.length > 150) {
+            if (value.length > maxDescriptionLength) {
                 isInvalid = true
             }
             handleIsInvalidFieldFlags.description = isInvalid

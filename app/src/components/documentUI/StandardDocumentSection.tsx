@@ -23,11 +23,12 @@ const StandardEdit = (props) => {
         [editState,setEditState] = useState('ready'),
         invalidFieldFlags = invalidStandardFieldFlagsRef.current,
         systemRecords = useSystemRecords(),
-        maxDescriptionLength = systemRecords.settings.constraints.input.maxDescriptionLength,
-        maxNameLength = systemRecords.settings.constraints.input.maxNameLength
+        maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
+        maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min
 
     const errorMessages = {
-        name:`The name can only be up to ${maxNameLength} characters, and cannot be blank.`,
+        name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
         description:`The description can only be up to ${maxDescriptionLength} characters.`
     }
 
@@ -75,7 +76,7 @@ const StandardEdit = (props) => {
         // TODO check for blank, string
         name:(value) => {
             let isInvalid = false
-            if (value.length > maxNameLength) {
+            if (value.length > maxNameLength || value.length < minNameLength) {
                 isInvalid = true
             }
             if (!isInvalid) {
