@@ -10,15 +10,7 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-const errorMessages = {
-    name:'The name can only be up to 50 characters, and cannot be blank.',
-    description:'The description can only be up to 150 characters.'
-}
-
-const helperText = {
-    name:'This name will appear to app users. Can be changed. Up to 50 characters.',
-    description:'This description will appear to app users. Max 150 characters.',
-}
+import { useSystemRecords } from '../../system/FirebaseProviders'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const StandardEdit = (props) => {
@@ -29,8 +21,21 @@ const StandardEdit = (props) => {
         { description, image, summary } = data,
         [editValues, setEditValues] = useState({...documentData.data}),
         [editState,setEditState] = useState('ready'),
-        invalidFieldFlags = invalidStandardFieldFlagsRef.current
-        
+        invalidFieldFlags = invalidStandardFieldFlagsRef.current,
+        systemRecords = useSystemRecords(),
+        maxDescriptionLength = systemRecords.settings.constraints.input.maxDescriptionLength,
+        maxNameLength = systemRecords.settings.constraints.input.maxNameLength
+
+    const errorMessages = {
+        name:`The name can only be up to ${maxNameLength} characters, and cannot be blank.`,
+        description:`The description can only be up to ${maxDescriptionLength} characters.`
+    }
+
+    const helperText = {
+        name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
+        description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
+    }
+
     editDataRef.current = editValues
 
     useEffect(()=>{
@@ -66,12 +71,11 @@ const StandardEdit = (props) => {
         },
     }
 
-    // see db at system.settings.constraints.maxNameLength (set to 50)
     const isInvalidTests = {
         // TODO check for blank, string
         name:(value) => {
             let isInvalid = false
-            if (value.length > 50) {
+            if (value.length > maxNameLength) {
                 isInvalid = true
             }
             if (!isInvalid) {
@@ -84,7 +88,7 @@ const StandardEdit = (props) => {
         },
         description:(value) => {
             let isInvalid = false
-            if (value.length > 150) {
+            if (value.length > maxDescriptionLength) {
                 isInvalid = true
             }
             invalidFieldFlags.description = isInvalid
