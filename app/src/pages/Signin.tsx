@@ -10,7 +10,7 @@ import {
     Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
-import { useAuth, useUserData } from '../system/WorkboxProviders'
+import { useAuth, useUserAuthData } from '../system/WorkboxProviders'
 
 import tribalopolisIcon from '../../assets/workbox-logo.png'
 import boxIcon from '../../assets/workbox.png'
@@ -38,7 +38,7 @@ const Signin = (props) => {
         from = searchParams.get('from') || '/',
         location = useLocation(),
         [signinState, setSigninState] = useState('ready'),
-        userData = useUserData()
+        userAuthData = useUserAuthData()
 
 
     useEffect (()=>{
@@ -101,11 +101,11 @@ const Signin = (props) => {
 
     }
 
-    if (userData === undefined) { // signin in progress
+    if (userAuthData === undefined) { // signin in progress
 
         return <Box> Connecting... </Box>
 
-    } else if (userData) { // no need for signin
+    } else if (userAuthData) { // no need for signin
 
         return null
 

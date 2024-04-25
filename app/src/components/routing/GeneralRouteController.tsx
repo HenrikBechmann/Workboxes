@@ -5,7 +5,7 @@ import React, {useRef, useState} from 'react'
 import { Outlet as RouterOutput, NavLink, Navigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
-import { useUserData, useUserRecords, useAuth } from '../../system/WorkboxProviders'
+import { useUserAuthData, useUserRecords, useAuth } from '../../system/WorkboxProviders'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import ToolbarStandard from '../toolbars/Toolbar_Standard'
@@ -27,14 +27,14 @@ const navlinkStyles = {
 const GeneralRouteController = (props) => {
 
     const 
-        userData = useUserData(),
+        userAuthData = useUserAuthData(),
         userRecords = useUserRecords()
 
-    if (userData === undefined) {
+    if (userAuthData === undefined) {
 
         return <Box> Loading... </Box>
 
-    } else if (userData && !userRecords.user) {
+    } else if (userAuthData && !userRecords.user) {
 
         return <Box> Registering... </Box>
 
@@ -55,12 +55,12 @@ const GeneralRouteController = (props) => {
     >
         <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw'>
             <ToolbarFrame>
-                {!userData && <Text ml = '6px'>Welcome to Workboxes! 
+                {!userAuthData && <Text ml = '6px'>Welcome to Workboxes! 
                     <NavLink to = '/signin' style={navlinkStyles} >
                         Sign in
                     </NavLink>
                 </Text>}
-                {userData && <ToolbarStandard />}
+                {userAuthData && <ToolbarStandard />}
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>

@@ -29,7 +29,7 @@ import {
 
 import {isDate as _isDate} from 'lodash'
 
-import { useUserData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/WorkboxProviders'
+import { useUserAuthData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/WorkboxProviders'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -41,9 +41,9 @@ const UserRegistration = (props) => {
 
     const 
         auth = useAuth(),
-        userData = useUserData(),
+        userAuthData = useUserAuthData(),
         db = useFirestore(),
-        { displayName } = userData.authUser,
+        { displayName } = userAuthData.authUser,
         userRecords = useUserRecords(),
 
         [registrationState, setRegistrationState] = useState('setup'),
@@ -89,7 +89,7 @@ const UserRegistration = (props) => {
 
         return <Navigate to = '/'/>
 
-    } else if (!userData || (registrationState == 'signedout')) { // not signed in
+    } else if (!userAuthData || (registrationState == 'signedout')) { // not signed in
 
         return <Navigate to = '/signin'/>
 
@@ -125,7 +125,7 @@ const UserRegistration = (props) => {
 
         <Heading mb = '3px' size = 'md'>Welcome to the Workboxes app!</Heading>
         <Text>
-            You are signed in as <b>{userData.authUser.displayName}</b> ({userData.authUser.email}). <Link 
+            You are signed in as <b>{userAuthData.authUser.displayName}</b> ({userAuthData.authUser.email}). <Link 
             color = 'teal.500' onClick = {logOut}>Sign out</Link> any time you like,
             if you want to come back later to continue.
         </Text>
@@ -619,7 +619,7 @@ const DialogForSaveHandle = (props) => {
     const 
         {invalidFlags, editValues, setHandleEditState, setHandleState, birthdateOptionState} = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
-        userData = useUserData(),
+        userAuthData = useUserAuthData(),
         db = useFirestore(),
         userRecords = useUserRecords(),
         cancelRef = React.useRef(),
@@ -658,7 +658,7 @@ const DialogForSaveHandle = (props) => {
             const data = updateDocumentSchema('handles','user',{},{
                 profile: {
                     user: {
-                        id: userData.authUser.uid,
+                        id: userAuthData.authUser.uid,
                         name: editValues.name,
                         location: editValues.location,
                         birthdate: birthdate,
@@ -670,12 +670,12 @@ const DialogForSaveHandle = (props) => {
                         lower_case: editValues.handle.toLowerCase()
                     },
                     owner: {
-                        id: userData.authUser.uid,
+                        id: userAuthData.authUser.uid,
                         name: editValues.name,
                     },
                     commits: {
                         created_by: {
-                            id: userData.authUser.uid,
+                            id: userAuthData.authUser.uid,
                             name: editValues.name
                         },
                         created_timestamp: serverTimestamp()
@@ -694,7 +694,7 @@ const DialogForSaveHandle = (props) => {
             //     and to creation and owner references
 
             // 2. user
-            await updateDoc(doc(db,'users',userData.authUser.uid),{
+            await updateDoc(doc(db,'users',userAuthData.authUser.uid),{
                 // user handle
                 'profile.handle.plain':editValues.handle,
                 'profile.handle.lower_case':editValues.handle.toLowerCase(),
@@ -850,7 +850,7 @@ const DialogForCancel = (props) => {
       { setRegistrationState } = props,
       snapshotControl = useSnapshotControl(),
       db = useFirestore(),
-      userData = useUserData(),
+      userAuthData = useUserAuthData(),
       userRecords = useUserRecords(),
       auth = useAuth(),
       { isOpen, onOpen, onClose } = useDisclosure(),
@@ -860,7 +860,7 @@ const DialogForCancel = (props) => {
    function cancelRegistration() {
        setCancelState('cancelling')
        const provider = new OAuthProvider('google.com') // TODO OAuthProvider should be taken from user data:
-       // userData.authUser.providerData[0].providerData (object user email matches userData.authUser.email)
+       // userAuthData.authUser.providerData[0].providerData (object user email matches userAuthData.authUser.email)
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => { // required to delete user login account
 
            snapshotControl.unsubAll()
@@ -872,7 +872,7 @@ const DialogForCancel = (props) => {
            await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
            await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
 
-           if (!userData.sysadminStatus.isSuperUser) {
+           if (!userAuthData.sysadminStatus.isSuperUser) {
                const user = auth.currentUser
                await deleteUser(user)
            }

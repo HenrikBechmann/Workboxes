@@ -17,7 +17,7 @@ import {
 
 import Scroller from 'react-infinite-grid-scroller'
 
-import { useUserData } from '../../system/WorkboxProviders'
+import { useUserAuthData } from '../../system/WorkboxProviders'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -48,8 +48,8 @@ const Workspace = (props) => {
 
     const 
         [workspaceState,setWorkspaceState] = useState('setup'),
-        userData = useUserData(),
-        { displayName, photoURL } = userData.authUser,
+        userAuthData = useUserAuthData(),
+        { displayName, photoURL } = userAuthData.authUser,
         panelsListRef = useRef([]),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null)

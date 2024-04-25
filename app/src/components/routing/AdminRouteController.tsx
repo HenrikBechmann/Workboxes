@@ -4,26 +4,26 @@ import React from 'react'
 import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
-import { useUserData, useUserRecords } from '../../system/WorkboxProviders'
+import { useUserAuthData, useUserRecords } from '../../system/WorkboxProviders'
 
 function AdminRouteController() {
 
     const 
-        userData = useUserData(),
+        userAuthData = useUserAuthData(),
         userRecords = useUserRecords(),
         location = useLocation()
 
-    if (userData === undefined) {
+    if (userAuthData === undefined) {
 
         return <Box> Loading... </Box>
       
-    } else if (!userData) {
+    } else if (!userAuthData) {
 
         const from = location.pathname || '/'
 
         return <Navigate to = {`/signin?from=${from}`}/>
 
-    } else if (userData && !userRecords.user) {
+    } else if (userAuthData && !userRecords.user) {
 
         return <Box> Registering... </Box>
         
@@ -31,7 +31,7 @@ function AdminRouteController() {
 
         return <Navigate to = 'user-registration' />
 
-    } else if (userData.sysadminStatus.isSuperUser) {
+    } else if (userAuthData.sysadminStatus.isSuperUser) {
 
         return <RouterOutput />
 

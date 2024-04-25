@@ -11,7 +11,7 @@ import {
     Box, VStack, Center,
     Grid, GridItem,
 } from '@chakra-ui/react'
-import { useFirestore, useUserData } from '../system/WorkboxProviders'
+import { useFirestore, useUserAuthData } from '../system/WorkboxProviders'
 import Draggable from 'react-draggable'
 // import { useTypes } from '../system/TribalopolisProvider'
 import Drawer, { useDrawers } from '../components/workholders/Drawer'
@@ -88,8 +88,8 @@ const defaultWorkboxState = {
 const Metadata = (props) => {
 
     const
-        userData = useUserData(),
-        { displayName, photoURL } = userData.authUser,
+        userAuthData = useUserAuthData(),
+        { displayName, photoURL } = userAuthData.authUser,
         startingWindowsSpecsList = [
             {
                 window:{

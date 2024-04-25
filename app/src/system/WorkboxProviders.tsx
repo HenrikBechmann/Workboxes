@@ -33,14 +33,11 @@ const
 
     // make workboxes resources available
     SnapshotControlContext = createContext(snapshotControl),
-    UserDataContext = createContext(null),
+    UserAuthDataContext = createContext(null),
     UserRecordsContext = createContext(null),
     SystemRecordsContext = createContext(null)
 
 const WorkboxProviders = ({children}) => {
-
-// <FirebaseAppContext.Provider value = {firebaseApp}>
-// </FirebaseAppContext.Provider>
 
     return <AuthContext.Provider value = {auth} >
     <FirestoreContext.Provider value = {firestore}>
@@ -61,7 +58,7 @@ export const UserProvider = ({children}) => {
     const 
         [userState, setUserState] = useState('setup'),
         // for contexts...
-        [userData, setUserData] = useState(undefined), // undefined before call; null after logout
+        [userAuthData, setUserData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
 
@@ -75,9 +72,9 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true),
         baseRecordsAvailableRef = useRef(true) 
 
-    // console.log('UserProvider: userState, userData, userRecords, snapshotControl.snapshotData\n',userState,'\n' ,userData, userRecords, snapshotControl.snapshotData)
+    // console.log('UserProvider: userState, userAuthData, userRecords, snapshotControl.snapshotData\n',userState,'\n' ,userAuthData, userRecords, snapshotControl.snapshotData)
 
-    userDataRef.current = userData
+    userDataRef.current = userAuthData
     userRecordsRef.current = userRecords
 
     useEffect(()=>{
@@ -119,7 +116,7 @@ export const UserProvider = ({children}) => {
 
             // console.log('call to onAuthStateChanged',user)
 
-            let userData = null
+            let userAuthData = null
 
             if (user) {
                 const 
@@ -137,19 +134,19 @@ export const UserProvider = ({children}) => {
                     superUser.errorCondition = true
                 }
 
-                userData = {
+                userAuthData = {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
                 updateLogins()
-                // console.log('firebaseprovider userData', userData)
+                // console.log('firebaseprovider userAuthData', userAuthData)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners
                 snapshotControl.unsubAll()
             }
 
-            setUserData(userData)
+            setUserData(userAuthData)
 
         })
 
@@ -161,14 +158,14 @@ export const UserProvider = ({children}) => {
 
     },[])
     
-    async function addUserBaseRecords(userData) {
+    async function addUserBaseRecords(userAuthData) {
 
         const
             accountDocRef = doc(collection(db, 'accounts')),
             domainDocRef = doc(collection(db, 'domains')),
             workboxDocRef = doc(collection(db, 'workboxes'))
 
-        const {displayName, photoURL, uid} = userData.authUser
+        const {displayName, photoURL, uid} = userAuthData.authUser
 
         const userRecord = updateDocumentSchema('users','standard',{},{
             profile: {
@@ -346,16 +343,16 @@ export const UserProvider = ({children}) => {
             const userIndex = "UserProvider.users." + userDataRef.current.authUser.uid
             if (!snapshotControl.has(userIndex)) {
                 snapshotControl.create(userIndex)
-                const userData = userDataRef.current
-                // console.log('subscribing to user document', userData.authUser.uid)
+                const userAuthData = userDataRef.current
+                // console.log('subscribing to user document', userAuthData.authUser.uid)
                 const unsubscribeuser = 
-                    onSnapshot(doc(db, 'users', userData.authUser.uid), (returndoc) =>{
+                    onSnapshot(doc(db, 'users', userAuthData.authUser.uid), (returndoc) =>{
                         snapshotControl.incrementCallCount(userIndex, 1)
                         const userRecord = returndoc.data()
                         // console.log('snapshot of userRecord',userRecord)
                         if (!userRecord) {
                             baseRecordsAvailableRef.current = false
-                            addUserBaseRecords(userData)
+                            addUserBaseRecords(userAuthData)
                         } else {
                             setUserRecords((previousState) => {
                                previousState.user = userRecord
@@ -367,7 +364,7 @@ export const UserProvider = ({children}) => {
                                 const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
                                 if (!Object.is(userRecord, updatedRecord)) {
 
-                                    setDoc(doc(db,'users',userData.authUser.uid),updatedRecord)
+                                    setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
 
                                 }
                             }
@@ -451,11 +448,11 @@ export const UserProvider = ({children}) => {
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
-        <UserDataContext.Provider value = {userData} >
+        <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
-        </UserDataContext.Provider>
+        </UserAuthDataContext.Provider>
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
     )
@@ -476,8 +473,8 @@ const useAuth = () => {
     return useContext(AuthContext)
 }
 
-const useUserData = () => {
-    return useContext(UserDataContext)
+const useUserAuthData = () => {
+    return useContext(UserAuthDataContext)
 }
 
 const useUserRecords = () => {
@@ -504,7 +501,7 @@ export {
     // workboxes resources
     useSnapshotControl,
     useSystemRecords,
-    useUserData,
+    useUserAuthData,
     useUserRecords,
 }
 

@@ -4,12 +4,12 @@ import React from 'react'
 import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
-import { useUserData, useUserRecords } from '../../system/WorkboxProviders'
+import { useUserAuthData, useUserRecords } from '../../system/WorkboxProviders'
 
 const UserRouteController = () => {
 
     const 
-        userdata = useUserData(),
+        userdata = useUserAuthData(),
         userRecords = useUserRecords(),
         location = useLocation()
 
