@@ -1,7 +1,9 @@
-// FirebaseProviders.tsx
+// WorkboxProviders.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-// react
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
 
 // firebase
@@ -9,71 +11,69 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, serverTimestamp } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
-import firebaseConfig from '../firebaseConfig'
 import { getFunctions, httpsCallable } from "firebase/functions"
-import { redirect } from 'react-router-dom'
+import firebaseConfig from '../firebaseConfig'
 
+// workbox
 import { updateDocumentSchema } from './utilities'
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// FirebaseProvider
-
 import snapshotControl from './snapshotControlClass'
 
 const 
-    // snapshotControl = new Map(),
-    SnapshotControlContext = createContext(snapshotControl),
     firebaseApp = initializeApp(firebaseConfig),
-    FirebaseAppContext = createContext(firebaseApp),
 
+    // initialize firebase resources
     auth = getAuth(firebaseApp),
-    AuthContext = createContext(auth),
-
-    UserDataContext = createContext(null),
-
-    UserRecordsContext = createContext(null),
-
-    SystemRecordsContext = createContext(null),
-
     firestore = getFirestore(firebaseApp),
-    FirestoreContext = createContext(firestore),
-
     storage = getStorage(firebaseApp),
-    StorageContext = createContext(storage)
 
-const FirebaseProviders = ({children}) => {
+    // make firebase resources available
+    AuthContext = createContext(auth),
+    FirestoreContext = createContext(firestore),
+    StorageContext = createContext(storage),
 
-    return <FirebaseAppContext.Provider value = {firebaseApp}>
-    <AuthContext.Provider value = {auth} >
-    <UserProvider>
+    // make workboxes resources available
+    SnapshotControlContext = createContext(snapshotControl),
+    UserDataContext = createContext(null),
+    UserRecordsContext = createContext(null),
+    SystemRecordsContext = createContext(null)
+
+const WorkboxProviders = ({children}) => {
+
+// <FirebaseAppContext.Provider value = {firebaseApp}>
+// </FirebaseAppContext.Provider>
+
+    return <AuthContext.Provider value = {auth} >
     <FirestoreContext.Provider value = {firestore}>
     <StorageContext.Provider value = {storage}>
+    <UserProvider>
         {children}
+    </UserProvider>
     </StorageContext.Provider>
     </FirestoreContext.Provider>
-    </UserProvider>
     </AuthContext.Provider>
-    </FirebaseAppContext.Provider>
 }
 
-export default FirebaseProviders
+export default WorkboxProviders
 
 // special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
     const 
         [userState, setUserState] = useState('setup'),
+        // for contexts...
         [userData, setUserData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        authStateUnsubscribeRef = useRef(null),
-        isMountedRef = useRef(true),
+
+        // bootstrap resources
         db = useFirestore(),
         userDataRef = useRef(null),
         userRecordsRef = useRef(null),
-        baseRecordsAvailableRef = useRef(true)
+
+        // bootstrap control
+        authStateUnsubscribeRef = useRef(null),
+        isMountedRef = useRef(true),
+        baseRecordsAvailableRef = useRef(true) 
 
     // console.log('UserProvider: userState, userData, userRecords, snapshotControl.snapshotData\n',userState,'\n' ,userData, userRecords, snapshotControl.snapshotData)
 
@@ -468,9 +468,9 @@ const useSnapshotControl = () => {
     return useContext(SnapshotControlContext)
 }
 
-const useFirebaseApp = () => {
-    return useContext(FirebaseAppContext)
-}
+// const useFirebaseApp = () => {
+//     return useContext(FirebaseAppContext)
+// }
 
 const useAuth = () => {
     return useContext(AuthContext)
@@ -497,13 +497,14 @@ const useStorage = () => {
 }
 
 export {
-    useSnapshotControl,
-    useFirebaseApp,
+    // firebase resources
     useAuth,
+    useFirestore,
+    useStorage,
+    // workboxes resources
+    useSnapshotControl,
     useSystemRecords,
     useUserData,
     useUserRecords,
-    useFirestore,
-    useStorage,
 }
 

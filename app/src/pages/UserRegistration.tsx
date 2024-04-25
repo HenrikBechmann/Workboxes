@@ -29,7 +29,7 @@ import {
 
 import {isDate as _isDate} from 'lodash'
 
-import { useUserData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/FirebaseProviders'
+import { useUserData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/WorkboxProviders'
 
 import { updateDocumentSchema } from '../system/utilities'
 

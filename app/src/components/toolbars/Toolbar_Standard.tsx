@@ -9,7 +9,7 @@ import {
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserData, useAuth } from '../../system/FirebaseProviders'
+import { useUserData, useAuth } from '../../system/WorkboxProviders'
 
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'

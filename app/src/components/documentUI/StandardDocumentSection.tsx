@@ -10,7 +10,7 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import { useSystemRecords } from '../../system/FirebaseProviders'
+import { useSystemRecords } from '../../system/WorkboxProviders'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const StandardEdit = (props) => {

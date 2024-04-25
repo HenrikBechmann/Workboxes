@@ -11,9 +11,9 @@ import {
     Box, VStack, Center,
     Grid, GridItem,
 } from '@chakra-ui/react'
-import { useFirestore, useUserData } from '../system/FirebaseProviders'
+import { useFirestore, useUserData } from '../system/WorkboxProviders'
 import Draggable from 'react-draggable'
-import { useTypes } from '../system/TribalopolisProvider'
+// import { useTypes } from '../system/TribalopolisProvider'
 import Drawer, { useDrawers } from '../components/workholders/Drawer'
 import Workwindow from '../components/workholders/Workwindow'
 import Workbox from '../components/workbox/Workbox'
@@ -119,7 +119,7 @@ const Metadata = (props) => {
         [returnInData, setReturnInData] = useState(null),
         [pageState, setPageState] = useState('setup'),
         db = useFirestore(),
-        getType = useTypes(),
+        // getType = useTypes(),
         [dragState, setDragState] = useState(
         {
             activeDrags: 0,

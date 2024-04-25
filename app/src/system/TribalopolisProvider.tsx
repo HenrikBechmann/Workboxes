@@ -4,7 +4,7 @@
 // react
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-import { useFirestore } from './FirebaseProviders'
+import { useFirestore } from './WorkboxProviders'
 import { doc, getDoc } from "firebase/firestore"
 
 const types = new class {

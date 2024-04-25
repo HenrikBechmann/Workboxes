@@ -7,8 +7,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import ismobile from 'is-mobile'
 
-import FirebaseProviders from './system/FirebaseProviders'
-import TribalopolisProvider from './system/TribalopolisProvider'
+import WorkboxProviders from './system/WorkboxProviders'
+// import TribalopolisProvider from './system/TribalopolisProvider'
 import scaffold from './system/routescaffold'
 
 export const isMobile = ismobile({featureDetect: true, tablet: true})
@@ -18,11 +18,9 @@ const router = createBrowserRouter(scaffold)
 const root = createRoot(document.getElementById('root'))
 
 root.render(
-    <FirebaseProviders>
+    <WorkboxProviders>
         <ChakraProvider>
-            <TribalopolisProvider>
-                <RouterProvider router = {router} />
-            </TribalopolisProvider>
+            <RouterProvider router = {router} />
         </ChakraProvider>
-    </FirebaseProviders>
+    </WorkboxProviders>
 )
