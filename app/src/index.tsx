@@ -8,7 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import ismobile from 'is-mobile'
 
 import WorkboxesProvider from './system/WorkboxesProvider'
-// import TribalopolisProvider from './system/TribalopolisProvider'
+
 import scaffold from './system/routescaffold'
 
 export const isMobile = ismobile({featureDetect: true, tablet: true})
