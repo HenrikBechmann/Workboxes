@@ -8,7 +8,7 @@ import { Box } from '@chakra-ui/react'
 
 export const Main = (props) => {
 
-    return <Workspace></Workspace>
+    return <Workspace />
 }
 
 export default Main
