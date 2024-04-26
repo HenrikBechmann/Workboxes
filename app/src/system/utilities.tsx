@@ -527,6 +527,9 @@ const versionData = {
         counts: {
           panels:0,
         },
+        flags: {
+          first_time_loaded:true,
+        }
       },
       panels:[
         ],
