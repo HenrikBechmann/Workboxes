@@ -95,7 +95,7 @@ const versionMaps = {
   },
   users: {
     standard: {
-      latest_version:4,
+      latest_version:5,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -111,6 +111,13 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
+  },
+  workspaces: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    }
   },
 }
 
@@ -297,7 +304,7 @@ const versionData = {
   users: {
     standard: [
     {
-      version: 4,
+      version: 5,
       generation: 0,
       profile: {
         flags: {
@@ -348,7 +355,13 @@ const versionData = {
           updated_timestamp: null,
         },
         counts: {
+          workspaces:0,
+          workboxes:0,
         },
+      },
+      workspace: {
+        name:null,
+        id:null,
       },
     }],
   },
@@ -483,6 +496,40 @@ const versionData = {
         counts: {
         },
       },
+    }],
+  },
+  workspaces: {
+    standard: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        workspace:{
+          name: null,
+          id: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        commits: {
+          created_by: {
+            id: null, 
+            name: null
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+          panels:0,
+        },
+      },
+      panels:[
+        ],
     }],
   },
 };

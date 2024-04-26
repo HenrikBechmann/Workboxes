@@ -72,7 +72,7 @@ const Workspace = (props) => {
                     defaultWorkboxState:{...defaultWorkboxState},
                     defaultDocumentState: {...defaultDocumentState},
                     defaultDataboxState: {...defaultDataboxState},
-                    itemTitle: "[Henrik Bechmann]",
+                    itemTitle: "Base Workbox",
                     itemIcon: homeIcon,
                     domainTitle: displayName,
                     domainIcon: photoURL,
