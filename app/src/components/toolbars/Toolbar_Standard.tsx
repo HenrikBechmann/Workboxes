@@ -177,24 +177,27 @@ const StandardToolbar = (props) => {
     // render
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {tribalopolismenulist} />
+        <ToolbarVerticalDivider />
         { isHome && <>
             <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
             <ToolbarVerticalDivider />
-            <MenuControl 
-                icon = {workspacesIcon} 
-                displayName = 'main workspace' 
-                tooltip = 'select a workspace'
-                caption = 'workspace'
-            />
             </>
         }
         <MenuControl 
             displayName = {displayName} 
             icon = {photoURL} 
             tooltip = 'Options for current user' 
-            caption = '@HenrikBechmann' 
+            caption = 'user' 
             menulist = {currentusermenulist} 
         />
+        { isHome &&
+            <MenuControl 
+                icon = {workspacesIcon} 
+                displayName = 'main workspace' 
+                tooltip = 'select a workspace'
+                caption = 'workspace'
+            />
+        }
         <ToolbarVerticalDivider />
         {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main workspace' response = {goHome} />}
         {isSuperUser && <>
