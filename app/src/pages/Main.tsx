@@ -101,6 +101,8 @@ export const Main = (props) => {
                     ? {'workspace.mobile': {id:workspaceDocRef.id, name:'Main workspace'}}
                     : {'workspace.desktop': {id:workspaceDocRef.id, name:'Main workspace'}}
 
+                userUpdateData['profile.counts.workspaces'] = increment(1)
+
             await updateDoc(doc(collection(db,'users'),userInfo.user.id),userUpdateData)
 
             toast({description:`created new workspace`})
