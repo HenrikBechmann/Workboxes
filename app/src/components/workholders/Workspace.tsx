@@ -47,12 +47,15 @@ const defaultDataboxState = {
 const Workspace = (props) => {
 
     const 
+        { workspaceData } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelsListRef = useRef([]),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null)
+
+    console.log('workspaceData', workspaceData)
 
     useEffect(()=>{
         // TODO placeholder logic

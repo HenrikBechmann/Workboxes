@@ -11,6 +11,8 @@ import {
 
 import { useUserAuthData, useAuth } from '../../system/WorkboxesProvider'
 
+import { isMobile } from '../../index'
+
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
@@ -31,6 +33,8 @@ import workspacesIcon from '../../../assets/workspaces.png'
 import cartIcon from '../../../assets/cart.png'
 import moreVerticalIcon from '../../../assets/more_vert.png'
 import hideIcon from '../../../assets/expand_less.png'
+import mobileIcon from '../../../assets/smartphone.png'
+import desktopIcon from '../../../assets/laptop.png'
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -190,14 +194,18 @@ const StandardToolbar = (props) => {
             caption = 'user' 
             menulist = {currentusermenulist} 
         />
-        { isHome &&
-            <MenuControl 
-                icon = {workspacesIcon} 
-                displayName = 'main workspace' 
-                tooltip = 'select a workspace'
-                caption = 'workspace'
-            />
-        }
+        { isHome && 
+            <>
+                <ToolbarVerticalDivider />
+                <MenuControl 
+                    icon = {workspacesIcon} 
+                    displayName = 'main workspace' 
+                    tooltip = 'select a workspace'
+                    caption = 'workspace'
+                />
+                <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
+            </>
+        } 
         <ToolbarVerticalDivider />
         {!isHome && <StandardIcon icon = {currentHomeIcon} caption = 'home' tooltip = 'Go to the main workspace' response = {goHome} />}
         {isSuperUser && <>

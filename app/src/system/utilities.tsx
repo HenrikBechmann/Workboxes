@@ -360,8 +360,14 @@ const versionData = {
         },
       },
       workspace: {
-        name:null,
-        id:null,
+        mobile: {
+          name:null,
+          id:null,
+        },
+        desktop: {
+          name:null,
+          id:null,
+        }
       },
     }],
   },
@@ -507,6 +513,9 @@ const versionData = {
         workspace:{
           name: null,
           id: null,
+        },
+        device: {
+          name:null,
         },
         owner: {
           id: null,
