@@ -542,6 +542,10 @@ const versionData = {
       },
       panels:[
         ],
+      panel: {
+        id: null,
+        name: '',
+      }
     }],
   },
 };
