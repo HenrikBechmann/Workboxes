@@ -367,7 +367,11 @@ const versionData = {
         desktop: {
           name:null,
           id:null,
-        }
+        },
+        selection: {
+          name:null,
+          id:null,
+        },
       },
     }],
   },

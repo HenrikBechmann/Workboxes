@@ -1,15 +1,16 @@
 // Toolbar_Standard.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
+import { collection, query, getDocs } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
-  Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup,
+  Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords, useAuth } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useAuth, useFirestore } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
 
@@ -110,24 +111,21 @@ const StandardToolbar = (props) => {
         navigate = useNavigate(),
         location = useLocation(),
         { pathname } = location,
-        userAuthData = useUserAuthData(),
-        userRecords = useUserRecords(),
         auth = useAuth(),
-        { displayName, photoURL } = userAuthData.authUser,
+        userAuthData = useUserAuthData(),
+        db = useFirestore(),
+        { displayName:userDisplayName, photoURL:userPhotoURL } = userAuthData.authUser,
+        userRecords = useUserRecords(),
         isSuperUser = userAuthData.sysadminStatus.isSuperUser,
         homepath = '/workspace',
-        isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
-
-    const
-        workspaceName = userRecords.user.workspace.desktop.name
-
-    const 
+        isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
+        workspaceName = userRecords.user.workspace.selection.name,
+        [workspaceList,setWorkspaceList] = useState([]),
+        [workspaceMenuList, setWorkspaceMenuList] = useState(null),
         currentHomeIcon = 
             isHome
             ? homeFillIcon
-            : homeIcon,
-        toggleOnCartRef = useRef(false),
-        disabledCartRef = useRef(false)
+            : homeIcon
 
     // --------------------- navigation functions ------------------
     const 
@@ -153,6 +151,10 @@ const StandardToolbar = (props) => {
             })
         }
 
+    useEffect(()=>{
+        getWorkspaceList()
+    },[])
+
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
                 <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
@@ -160,19 +162,6 @@ const StandardToolbar = (props) => {
                 <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
-    },[])
-
-    const workspacesmenulist = useMemo(() => {
-       return <MenuList>
-                <MenuItem >Rename this workspace</MenuItem>
-                <MenuItem >Add a workspace</MenuItem>
-                <MenuItem >Delete a workspace</MenuItem>
-                <MenuDivider />
-                <MenuGroup fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
-                    <MenuItem >One</MenuItem>
-                    <MenuItem >Two</MenuItem>
-                </MenuGroup>
-                </MenuList>
     },[])
 
     const currentusermenulist = useMemo(() => {
@@ -190,9 +179,45 @@ const StandardToolbar = (props) => {
 
     },[])
 
+    async function getWorkspaceList() {
+        const workspaceList = []
+        const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'))
+        const querySnapshot = await getDocs(q)
+        querySnapshot.forEach((doc) => {
+            const data = doc.data()
+            workspaceList.push(data.profile.workspace)
+        })
+        console.log('querySnapshot, workspaceList',querySnapshot, workspaceList)
+        setWorkspaceList(workspaceList)
+    }
+
+    const workspaceSelection = useMemo(()=>{
+
+        const selection = []
+        workspaceList.forEach((item) => {
+            selection.push(<MenuItemOption value = {item.id}>{item.name}</MenuItemOption>)
+        })
+
+        return selection
+
+    },[workspaceList])
+
+    const workspacemenulist = useMemo(() => {
+       return <MenuList>
+                <MenuItem >Rename this workspace</MenuItem>
+                <MenuItem >Add a workspace</MenuItem>
+                <MenuItem >Delete a workspace</MenuItem>
+                <MenuDivider />
+                <MenuOptionGroup defaultValue = {userRecords.user.workspace.selection.id} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+                    {workspaceSelection}
+                </MenuOptionGroup>
+                </MenuList>
+    },[workspaceSelection])
+
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
+
     // render
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {workboxesmenulist} />
@@ -203,8 +228,8 @@ const StandardToolbar = (props) => {
             </>
         }
         <MenuControl 
-            displayName = {displayName} 
-            icon = {photoURL} 
+            displayName = {userDisplayName} 
+            icon = {userPhotoURL} 
             tooltip = 'Options for current user' 
             caption = 'user' 
             menulist = {currentusermenulist} 
@@ -217,7 +242,7 @@ const StandardToolbar = (props) => {
                     displayName = {workspaceName} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
-                    menulist = {workspacesmenulist} 
+                    menulist = {workspacemenulist} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
             </>
