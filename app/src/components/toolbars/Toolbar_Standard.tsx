@@ -9,7 +9,7 @@ import {
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useAuth } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useAuth } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
 
@@ -111,11 +111,15 @@ const StandardToolbar = (props) => {
         location = useLocation(),
         { pathname } = location,
         userAuthData = useUserAuthData(),
+        userRecords = useUserRecords(),
         auth = useAuth(),
         { displayName, photoURL } = userAuthData.authUser,
         isSuperUser = userAuthData.sysadminStatus.isSuperUser,
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath)
+
+    const
+        workspaceName = userRecords.user.workspace.desktop.name
 
     const 
         currentHomeIcon = 
@@ -149,13 +153,24 @@ const StandardToolbar = (props) => {
             })
         }
 
-    const tribalopolismenulist = useMemo(() => {
+    const workboxesmenulist = useMemo(() => {
        return <MenuList>
                 <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
                 <MenuDivider />
                 <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
                 <MenuItem onClick = {gotoAbout}>About</MenuItem>
             </MenuList>
+    },[])
+
+    const workspacesmenulist = useMemo(() => {
+       return <MenuList>
+                <MenuItem >Add a workspace</MenuItem>
+                <MenuDivider />
+                <MenuGroup fontStyle = 'italic' title = 'Select a workspace:'>
+                    <MenuItem >One</MenuItem>
+                    <MenuItem >Two</MenuItem>
+                </MenuGroup>
+                </MenuList>
     },[])
 
     const currentusermenulist = useMemo(() => {
@@ -180,7 +195,7 @@ const StandardToolbar = (props) => {
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
     // render
     return <Box style = {standardToolbarStyles}>
-        <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {tribalopolismenulist} />
+        <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {workboxesmenulist} />
         <ToolbarVerticalDivider />
         { isHome && <>
             <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
@@ -199,9 +214,10 @@ const StandardToolbar = (props) => {
                 <ToolbarVerticalDivider />
                 <MenuControl 
                     icon = {workspacesIcon} 
-                    displayName = 'main workspace' 
+                    displayName = {workspaceName} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
+                    menulist = {workspacesmenulist} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
             </>

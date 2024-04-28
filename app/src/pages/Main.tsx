@@ -30,7 +30,7 @@ export const Main = (props) => {
         let workspaceSelectionData
 
         const 
-            workspaceData = isMobile?userRecords.user.workspace.mobile.id:userRecords.user.workspace,
+            workspaceData = userRecords.user.workspace,
             mobileID = workspaceData.mobile.id,
             desktopID = workspaceData.desktop.id,
             workspaceID = 
