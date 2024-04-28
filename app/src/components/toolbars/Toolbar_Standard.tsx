@@ -164,9 +164,11 @@ const StandardToolbar = (props) => {
 
     const workspacesmenulist = useMemo(() => {
        return <MenuList>
+                <MenuItem >Rename this workspace</MenuItem>
                 <MenuItem >Add a workspace</MenuItem>
+                <MenuItem >Delete a workspace</MenuItem>
                 <MenuDivider />
-                <MenuGroup fontStyle = 'italic' title = 'Select a workspace:'>
+                <MenuGroup fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                     <MenuItem >One</MenuItem>
                     <MenuItem >Two</MenuItem>
                 </MenuGroup>
@@ -176,14 +178,12 @@ const StandardToolbar = (props) => {
     const currentusermenulist = useMemo(() => {
 
         return <MenuList>
-            <MenuItem onClick = {gotoAccount}>Account Settings</MenuItem>
-            <MenuItem >User Preferences</MenuItem>
+            <MenuItem >User preferences</MenuItem>
+            <MenuItem onClick = {gotoAccount}>Account settings</MenuItem>
+            <MenuItem onClick = {gotoDomains}>Domain settings</MenuItem>
             <MenuDivider />
-            <MenuGroup title = 'MANAGE...'>
-                <MenuItem onClick = {gotoDomains}>Your domains</MenuItem>
-                <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
-                <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
-            </MenuGroup>
+            <MenuItem onClick = {gotoMemberships}>Memberships</MenuItem>
+            <MenuItem onClick = {gotoSubscriptions}>Subscriptions</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {logOut}>Sign out</MenuItem>
         </MenuList>
