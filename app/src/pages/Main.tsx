@@ -12,7 +12,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore'
 
-import { useFirestore, useUserRecords } from '../system/WorkboxesProvider'
+import { useFirestore, useUserRecords, useWorkspaceSelection } from '../system/WorkboxesProvider'
 import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
@@ -21,53 +21,55 @@ export const Main = (props) => {
     const
         [mainState, setMainState] = useState('setup'),
         userRecords = useUserRecords(),
-        [workspaceData, setWorkspaceData] = useState(null),
+        workspaceSelection = useWorkspaceSelection(), // selection for toolbar, and to get workspaceData
+        [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
         db = useFirestore(),
         toast = useToast()
 
-    async function getWorkspaceData() {
+    async function getStartingWorkspaceData() {
 
-        let workspaceSelectionData
+        let workspaceSelectionRecord
 
+        // try to get workspaceSelection from most recent usage
         const 
-            workspaceData = userRecords.user.workspace,
-            mobileID = workspaceData.mobile.id,
-            desktopID = workspaceData.desktop.id,
+            userWorkspaceData = userRecords.user.workspace,
+            mobileID = userWorkspaceData.mobile.id,
+            desktopID = userWorkspaceData.desktop.id,
             workspaceID = 
                 isMobile
                     ? mobileID || desktopID
                     : desktopID || mobileID,
             workspaceIDtype = 
-                !workspaceID
+                !workspaceID // neither mobile nor desktop workspaceID was found
                     ? isMobile
                         ? 'mobile'
                         : 'desktop'
                     : mobileID === workspaceID
                         ? 'mobile'
                         : 'desktop',
-            userInfo = userRecords.user.profile
+            userProfileInfo = userRecords.user.profile.user
 
         // console.log('workspaceIDtype, mobileID, desktopID, workspaceID',workspaceIDtype, mobileID, desktopID, workspaceID)
 
         if (workspaceID) { // get existing workspace
             const 
-                workspaceDocRef = doc(collection(db,'users',userInfo.user.id,'workspaces'),workspaceID),
+                workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID),
                 dbdoc = await getDoc(workspaceDocRef)
 
-            workspaceSelectionData = dbdoc.data()
+            workspaceSelectionRecord = dbdoc.data()
 
-            const updatedData = updateDocumentSchema('workspaces','standard',workspaceSelectionData)
+            const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
 
-            if (!Object.is(workspaceSelectionData, updatedData)) {
-                await setDoc(workspaceDocRef, updatedData)
-                workspaceSelectionData = updatedData
+            if (!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) {
+                await setDoc(workspaceDocRef, updatedWorkspaceRecord)
+                workspaceSelectionRecord = updatedWorkspaceRecord
             }
 
             toast({description:`loaded workspace last used on ${workspaceIDtype}`})
 
-        } else { // create a workspace record
+        } else { // create first workspace record
 
-            const workspaceDocRef = doc(collection(db,'users',userInfo.user.id,'workspaces'))
+            const workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'))
 
             const workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
                 profile: {
@@ -79,20 +81,20 @@ export const Main = (props) => {
                         name:workspaceIDtype,
                     },
                     owner: {
-                        id: userInfo.user.id,
-                        name: userInfo.user.name,
+                        id: userProfileInfo.id,
+                        name: userProfileInfo.name,
                     },
                     commits: {
                         created_by: {
-                            id: userInfo.user.id, 
-                            name: userInfo.user.name
+                            id: userProfileInfo.id, 
+                            name: userProfileInfo.name
                         },
                         created_timestamp: serverTimestamp(),
                     },
                 }
             })
 
-            workspaceSelectionData = workspaceRecord
+            workspaceSelectionRecord = workspaceRecord
 
             await setDoc(workspaceDocRef,workspaceRecord)
 
@@ -103,24 +105,30 @@ export const Main = (props) => {
 
                 userUpdateData['profile.counts.workspaces'] = increment(1)
 
-            await updateDoc(doc(collection(db,'users'),userInfo.user.id),userUpdateData)
+            await updateDoc(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
 
             toast({description:`created new workspace`})
 
         }
 
-        setWorkspaceData(workspaceSelectionData)
+        setWorkspaceRecord(workspaceSelectionRecord)
+        const { setWorkspaceSelection } = workspaceSelection
+        setWorkspaceSelection({ // distribute workspaceSelection
+            id: workspaceSelectionRecord.profile.workspace.id,
+            name: workspaceSelectionRecord.profile.workspace.name,
+            setWorkspaceSelection,
+        })
         setMainState('ready')
 
     }
 
     useEffect(()=>{
 
-        getWorkspaceData() // setup only
+        getStartingWorkspaceData() // setup only
 
     },[])
 
-    return ((mainState != 'setup') && <Workspace workspaceData = {workspaceData}/>)
+    return ((mainState != 'setup') && <Workspace workspaceData = {workspaceRecord}/>)
 }
 
 export default Main

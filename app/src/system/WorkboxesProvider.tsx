@@ -37,7 +37,8 @@ const
     // for UserProvider
     UserAuthDataContext = createContext(null),
     UserRecordsContext = createContext(null),
-    SystemRecordsContext = createContext(null)
+    SystemRecordsContext = createContext(null),
+    WorkspaceSelectionContext = createContext(null)
 
 const WorkboxesProvider = ({children}) => {
 
@@ -63,6 +64,7 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
+        [workspaceSelection, setWorkspaceSelection] = useState({workspace:{id:null, name:null},setWorkspaceSelection:null}),
 
         // bootstrap resources
         db = useFirestore(),
@@ -83,6 +85,13 @@ export const UserProvider = ({children}) => {
             isMountedRef.current = false
         }
 
+    },[])
+
+    useEffect(()=>{
+        setWorkspaceSelection((previousState) => {
+            previousState.setWorkspaceSelection = setWorkspaceSelection
+            return previousState
+        })
     },[])
 
     async function updateLogins() {
@@ -443,11 +452,13 @@ export const UserProvider = ({children}) => {
     return (
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
+        <WorkspaceSelectionContext.Provider value = {workspaceSelection} >
         <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
         </UserAuthDataContext.Provider>
+        </WorkspaceSelectionContext.Provider>
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
     )
@@ -484,6 +495,10 @@ const useSystemRecords = () => { // static
     return useContext(SystemRecordsContext)
 }
 
+const useWorkspaceSelection = () => { // static
+    return useContext(WorkspaceSelectionContext)
+}
+
 export {
     // firebase resources
     useAuth,
@@ -495,5 +510,6 @@ export {
     useSystemRecords,
     useUserAuthData,
     useUserRecords,
+    useWorkspaceSelection,
 }
 

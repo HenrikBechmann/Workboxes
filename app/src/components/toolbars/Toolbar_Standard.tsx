@@ -3,14 +3,14 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { collection, query, getDocs } from 'firebase/firestore'
+import { collection, query, getDocs, orderBy } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
   Tooltip, Box
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords, useAuth, useFirestore } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useAuth, useFirestore, useWorkspaceSelection } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
 
@@ -114,12 +114,14 @@ const StandardToolbar = (props) => {
         auth = useAuth(),
         userAuthData = useUserAuthData(),
         db = useFirestore(),
+        // [toolbarState, setToolbarState] = useState('ready'),
+
+        workspaceSelection = useWorkspaceSelection(),
         { displayName:userDisplayName, photoURL:userPhotoURL } = userAuthData.authUser,
         userRecords = useUserRecords(),
         isSuperUser = userAuthData.sysadminStatus.isSuperUser,
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
-        workspaceName = userRecords.user.workspace.selection.name,
         [workspaceList,setWorkspaceList] = useState([]),
         [workspaceMenuList, setWorkspaceMenuList] = useState(null),
         currentHomeIcon = 
@@ -181,38 +183,45 @@ const StandardToolbar = (props) => {
 
     async function getWorkspaceList() {
         const workspaceList = []
-        const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'))
+        const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'), orderBy('profile.workspace.name'))
         const querySnapshot = await getDocs(q)
         querySnapshot.forEach((doc) => {
             const data = doc.data()
             workspaceList.push(data.profile.workspace)
         })
-        console.log('querySnapshot, workspaceList',querySnapshot, workspaceList)
+        // console.log('querySnapshot, workspaceList',querySnapshot, workspaceList)
         setWorkspaceList(workspaceList)
     }
 
-    const workspaceSelection = useMemo(()=>{
+    const workspacesMenu = useMemo(()=>{
 
-        const selection = []
+        const selectionList = []
         workspaceList.forEach((item) => {
-            selection.push(<MenuItemOption value = {item.id}>{item.name}</MenuItemOption>)
+            // console.log('item', item)
+            selectionList.push(<MenuItemOption value = {item.id}>{item.name}</MenuItemOption>)
         })
 
-        return selection
+        return selectionList
 
     },[workspaceList])
 
     const workspacemenulist = useMemo(() => {
-       return <MenuList>
-                <MenuItem >Rename this workspace</MenuItem>
-                <MenuItem >Add a workspace</MenuItem>
-                <MenuItem >Delete a workspace</MenuItem>
-                <MenuDivider />
-                <MenuOptionGroup defaultValue = {userRecords.user.workspace.selection.id} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
-                    {workspaceSelection}
-                </MenuOptionGroup>
-                </MenuList>
-    },[workspaceSelection])
+
+        console.log('workspacemenulist: workspaceSelection, workspacesMenu',workspaceSelection, workspacesMenu)
+
+        if (workspacesMenu.length === 0) return null
+
+        return <MenuList>
+            <MenuItem >Rename this workspace</MenuItem>
+            <MenuItem >Add a workspace</MenuItem>
+            <MenuItem >Delete a workspace</MenuItem>
+            <MenuDivider />
+            <MenuOptionGroup defaultValue = {workspaceSelection.id} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+                {workspacesMenu}
+            </MenuOptionGroup>
+        </MenuList>
+        // setToolbarState('update')
+    },[workspacesMenu, workspaceSelection])
 
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
@@ -239,7 +248,7 @@ const StandardToolbar = (props) => {
                 <ToolbarVerticalDivider />
                 <MenuControl 
                     icon = {workspacesIcon} 
-                    displayName = {workspaceName} 
+                    displayName = {workspaceSelection.name} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
                     menulist = {workspacemenulist} 
