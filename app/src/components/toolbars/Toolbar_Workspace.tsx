@@ -89,23 +89,26 @@ const displayNameStyles = {
 // icon = {panelIcon} 
 // <ToolbarVerticalDivider />
 // <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
-const WorkspaceToolbar = (props) => {
 
-    const
-        cartToggle = useToggleIcon({
-            icon:cartIcon, 
-            tooltip:'hold workboxes for transfer',
-            caption:'transfer',
-            toggleOnRef:null,//toggleOnCartRef, 
-            disabledRef:null, //disabledCartRef, 
-        })
+// {cartToggle}
+
+// const
+//     cartToggle = useToggleIcon({
+//         icon:cartIcon, 
+//         tooltip:'hold workboxes for transfer',
+//         caption:'transfer',
+//         toggleOnRef:null,//toggleOnCartRef, 
+//         disabledRef:null, //disabledCartRef, 
+//     })
+
+const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <StandardIcon icon = {windowSelectIcon} tooltip = 'select a window'/>
-        <StandardIcon icon = {menuIcon} tooltip = 'select a panel'/>
-        {cartToggle}
-        <StandardIcon icon = {addIcon} tooltip = 'add a panel'/>
+        <StandardIcon icon = {windowSelectIcon} caption = 'windows' tooltip = 'select a window'/>
+        <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
+        <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
+        <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />
         <MenuControl 
             moreStyles = {{transform:'rotate(-90deg)'}}
