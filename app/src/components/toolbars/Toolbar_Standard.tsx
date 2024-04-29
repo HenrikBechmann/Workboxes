@@ -9,12 +9,12 @@ import {
     Button,
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
     Tooltip, Box,
-    useDisclosure,
+    useDisclosure, Input,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords, useAuth, useFirestore, useWorkspaceSelection } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useAuth, useFirestore, useWorkspaceSelection, useSystemRecords } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
 
@@ -40,6 +40,9 @@ import moreVerticalIcon from '../../../assets/more_vert.png'
 import hideIcon from '../../../assets/expand_less.png'
 import mobileIcon from '../../../assets/smartphone.png'
 import desktopIcon from '../../../assets/laptop.png'
+
+
+// ==============================[ STANDARD TOOLBAR ]==========================
 
 // ----------------------------- static values -----------------------------
 const standardToolbarStyles = {
@@ -137,7 +140,7 @@ const StandardToolbar = (props) => {
             isHome
             ? homeFillIcon
             : homeIcon,
-        [dialogWriteState, setWriteDialogState] = useState(false),
+        [dialogWriteState, setWriteDialogState] = useState({open:false, action:null}),
         [dialogDeleteState, setDialogDeleteState] = useState(false)
 
     // --------------------- navigation functions ------------------
@@ -205,7 +208,7 @@ const StandardToolbar = (props) => {
     }
 
     const renameWorkspace = () => {
-        setWriteDialogState(true)
+        setWriteDialogState({open:true, action:'namechange'})
     }
 
     const workspacemenuList = useMemo(() => {
@@ -274,7 +277,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        <WorkspaceDialog doOpen = {dialogWriteState} setWriteDialogState = {setWriteDialogState}/>
+        <WorkspaceWriteDialog dialogState = {dialogWriteState} setWriteDialogState = {setWriteDialogState}/>
     </Box>
 }
 
@@ -283,6 +286,7 @@ const StandardToolbar = (props) => {
 
 export default StandardToolbar
 
+// ===================================[ WORKSPACE WRITE DIALOG ]===================================
 
             //             {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
             //                 `Are you sure? The user handle @${editValues.handle} can't be changed afterwards.`}
@@ -308,36 +312,102 @@ export default StandardToolbar
                     //     </Button>}
                     // </AlertDialogFooter>
 
-const WorkspaceDialog = (props) => {
+const writeValues = {
+    name:null
+}
+
+const WorkspaceWriteDialog = (props) => {
 
     const 
-        { doOpen, setWriteDialogState } = props,
+        { action, dialogState, setWriteDialogState } = props,
+        systemRecords = useSystemRecords(),
+        maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
+        minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
+        cancelRef = useRef(null),
         { isOpen, onOpen, onClose } = useDisclosure(),
-        cancelRef = useRef(null)
+        [editValues, setEditValues] = useState({name:null}),
+        writeIsInvalidFieldFlagsRef = useRef({
+            name: false,
+        })
+
+    const writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
+
+    const writeHelperText = {
+        name:`A name is required. ${minNameLength}-${maxNameLength} characters.`,
+    }
+
+    const writeErrorMessages = {
+        name:`The name can only be ${minNameLength} to ${maxNameLength} characters.`,
+    }
+
+    const onWriteChangeFunctions = {
+        name:(event) => {
+            const target = event.target as HTMLInputElement
+            const value = target.value
+            isWriteInvalidTests.name(value)
+            writeValues.name = value
+            setEditValues({...writeValues})
+        },
+    }
+
+    const isWriteInvalidTests = {
+        name: (value) => {
+            let isInvalid = false
+            if (value.length > maxNameLength || value.length < minNameLength) {
+                isInvalid = true
+            }
+            writeIsInvalidFieldFlags.name = isInvalid
+            return isInvalid
+        },        
+    }
 
     const doClose = () => {
-        setWriteDialogState(false)
+        setWriteDialogState((previousState)=>{
+            previousState.open = false
+            return {...previousState}
+        })
     }
 
     return (<>
         <AlertDialog
-            isOpen={doOpen}
+            isOpen={dialogState.open}
             leastDestructiveRef={cancelRef}
             onClose={onClose}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Save User Handle (and related identity information)
+                        {dialogState.action == 'namechange' && 'Change the name of the current workspace.'}
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
+                        <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+                            <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {writeIsInvalidFieldFlags.name}>
+                                <FormLabel fontSize = 'sm'>Workspace name:</FormLabel>
+                                <Input 
+                                    value = {writeValues.name || ''} 
+                                    size = 'sm'
+                                    onChange = {onWriteChangeFunctions.name}
+                                >
+                                </Input>
+                                <FormErrorMessage>
+                                    {writeErrorMessages.name} Current length is {writeValues.name?.length || '0 (blank)'}.
+                                </FormErrorMessage>
+                                <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
+                                    {writeHelperText.name} Current length is {writeValues.name?.length || '0 (blank)'}.
+                                </FormHelperText>
+                            </FormControl>
+                        </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} 
                             onClick = {doClose}
                         >
-                          Button
+                          Cancel
+                        </Button>
+                        <Button ml = '8px' colorScheme = 'blue'
+                        >
+                          Save
                         </Button>
                     </AlertDialogFooter>
 
