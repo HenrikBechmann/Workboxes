@@ -170,7 +170,7 @@ const StandardToolbar = (props) => {
     // initialize
     useEffect(()=>{
         getWorkspaceList()
-    },[])
+    },[workspaceSelection])
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
@@ -406,7 +406,7 @@ const WorkspaceWriteDialog = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        <Text>Processing...</Text>
+                        {alertState == 'processing' && <Text>Processing...</Text>}
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>
                             <FormControl isDisabled = {alertState == 'processing'} minWidth = '300px' maxWidth = '400px' isInvalid = {writeIsInvalidFieldFlags.name}>
                                 <FormLabel fontSize = 'sm'>Workspace name:</FormLabel>
