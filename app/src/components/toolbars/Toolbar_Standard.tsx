@@ -3,10 +3,10 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { collection, query, getDocs, orderBy } from 'firebase/firestore'
+import { doc, collection, query, getDocs, orderBy, updateDoc } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
-    Button,
+    Button, Text,
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
     Tooltip, Box,
     useDisclosure, Input,
@@ -140,8 +140,8 @@ const StandardToolbar = (props) => {
             isHome
             ? homeFillIcon
             : homeIcon,
-        [dialogWriteState, setWriteDialogState] = useState({open:false, action:null}),
-        [dialogDeleteState, setDialogDeleteState] = useState(false)
+        [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
+        [deleteDialogState, setDialogDeleteState] = useState(false)
 
     // --------------------- navigation functions ------------------
     const 
@@ -277,7 +277,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        <WorkspaceWriteDialog dialogState = {dialogWriteState} setWriteDialogState = {setWriteDialogState}/>
+        {writeDialogState.open && <WorkspaceWriteDialog dialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
     </Box>
 }
 
@@ -288,52 +288,35 @@ export default StandardToolbar
 
 // ===================================[ WORKSPACE WRITE DIALOG ]===================================
 
-            //             {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
-            //                 `Are you sure? The user handle @${editValues.handle} can't be changed afterwards.`}
-            //             {isInvalidState && 'Error(s) found! Please go back and fix errors before saving.'}
-            //             {(alertState == 'processing') && 'Processing...'}
-            //             {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
-
-                    // <AlertDialogFooter>
-                    //     <Button ref={cancelRef} 
-                    //         onClick={closeAlert} 
-                    //         colorScheme = {(!isInvalidState && (alertState != 'failure'))?'gray':'blue'}
-                    //         isDisabled = {alertState == 'processing'}
-                    //     >
-                    //         {!isInvalidState && !(alertState == 'failure') && 'Cancel'}
-                    //         {(isInvalidState || (alertState == 'failure')) && 'OK'}
-                    //     </Button>
-                    //     {!isInvalidState && !(alertState == 'failure') && <Button 
-                    //         colorScheme='blue' 
-                    //         onClick={saveHandle} ml={3}
-                    //         isDisabled = {alertState == 'processing'}
-                    //     >
-                    //         Save
-                    //     </Button>}
-                    // </AlertDialogFooter>
-
-const writeValues = {
-    name:null
-}
-
 const WorkspaceWriteDialog = (props) => {
 
     const 
         { action, dialogState, setWriteDialogState } = props,
         systemRecords = useSystemRecords(),
+        userRecords = useUserRecords(),
+        db = useFirestore(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
         cancelRef = useRef(null),
-        { isOpen, onOpen, onClose } = useDisclosure(),
-        [editValues, setEditValues] = useState({name:null}),
+        [writeValues, setWriteValues] = useState({name:null}),
         writeIsInvalidFieldFlagsRef = useRef({
             name: false,
-        })
+        }),
+        newInvocationRef = useRef(true),
+        workspaceSelection = useWorkspaceSelection(),
+        [alertState, setAlertState] = useState('ready'),
+        writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
 
-    const writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
+    useEffect(()=>{
+        if (newInvocationRef.current) {
+            setWriteValues({name:workspaceSelection.name})
+            newInvocationRef.current = false
+        }
+    },[newInvocationRef.current, workspaceSelection])
+
 
     const writeHelperText = {
-        name:`A name is required. ${minNameLength}-${maxNameLength} characters.`,
+        name:`The workspace name can be ${minNameLength}-${maxNameLength} characters long.`,
     }
 
     const writeErrorMessages = {
@@ -344,13 +327,13 @@ const WorkspaceWriteDialog = (props) => {
         name:(event) => {
             const target = event.target as HTMLInputElement
             const value = target.value
-            isWriteInvalidTests.name(value)
+            writeIsInvalidTests.name(value)
             writeValues.name = value
-            setEditValues({...writeValues})
+            setWriteValues({...writeValues})
         },
     }
 
-    const isWriteInvalidTests = {
+    const writeIsInvalidTests = {
         name: (value) => {
             let isInvalid = false
             if (value.length > maxNameLength || value.length < minNameLength) {
@@ -361,7 +344,49 @@ const WorkspaceWriteDialog = (props) => {
         },        
     }
 
+    async function doSaveWrite() {
+        if (writeIsInvalidFieldFlags.name) {
+            alert('Please correct errors before saving')
+            return
+        }
+        setAlertState('processing')
+        // change user workspace data
+        const 
+            userRecord = userRecords.user,
+            userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
+            workspaceID = workspaceSelection.id,
+            workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
+            updateBlock = {}
+
+        let fieldsToUpdateCount = 0
+
+        if (workspaceID == userRecord.workspace.mobile.id) {
+            updateBlock['workspace.mobile.name'] = writeValues.name
+            fieldsToUpdateCount++
+        }
+        if (workspaceID == userRecord.workspace.desktop.id) {
+            updateBlock['workspace.desktop.name'] = writeValues.name
+            fieldsToUpdateCount++
+        }
+        if (fieldsToUpdateCount) {
+            await updateDoc(userDocRef,updateBlock)
+        }
+        await updateDoc(workspaceDocRef, {
+            'profile.workspace.name':writeValues.name
+        })
+        // change workspaceSelection
+        const { setWorkspaceSelection } = workspaceSelection
+        setWorkspaceSelection((previousState) => {
+            previousState.name = writeValues.name
+            return {...previousState}
+        })
+
+        doClose()
+
+    }
+
     const doClose = () => {
+        newInvocationRef.current = true
         setWriteDialogState((previousState)=>{
             previousState.open = false
             return {...previousState}
@@ -372,7 +397,7 @@ const WorkspaceWriteDialog = (props) => {
         <AlertDialog
             isOpen={dialogState.open}
             leastDestructiveRef={cancelRef}
-            onClose={onClose}
+            onClose={doClose}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
@@ -381,8 +406,9 @@ const WorkspaceWriteDialog = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
+                        <Text>Processing...</Text>
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>
-                            <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {writeIsInvalidFieldFlags.name}>
+                            <FormControl isDisabled = {alertState == 'processing'} minWidth = '300px' maxWidth = '400px' isInvalid = {writeIsInvalidFieldFlags.name}>
                                 <FormLabel fontSize = 'sm'>Workspace name:</FormLabel>
                                 <Input 
                                     value = {writeValues.name || ''} 
@@ -400,12 +426,13 @@ const WorkspaceWriteDialog = (props) => {
                         </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button ref={cancelRef} 
+                        <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
                             onClick = {doClose}
                         >
                           Cancel
                         </Button>
-                        <Button ml = '8px' colorScheme = 'blue'
+                        <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
+                            onClick = {doSaveWrite}
                         >
                           Save
                         </Button>
@@ -417,6 +444,3 @@ const WorkspaceWriteDialog = (props) => {
         </AlertDialog>
     </>)
 }
-
-
-
