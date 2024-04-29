@@ -208,7 +208,11 @@ const StandardToolbar = (props) => {
     }
 
     const renameWorkspace = () => {
-        setWriteDialogState({open:true, action:'namechange'})
+        setWriteDialogState({open:true, action:'changename'})
+    }
+
+    const createWorkspace = () => {
+        setWriteDialogState({open:true, action:'createworkspace'})
     }
 
     const workspacemenuList = useMemo(() => {
@@ -219,7 +223,7 @@ const StandardToolbar = (props) => {
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
-            <MenuItem >Add a workspace</MenuItem>
+            <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuItem >Delete a workspace</MenuItem>
             <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {
@@ -292,6 +296,7 @@ const WorkspaceWriteDialog = (props) => {
 
     const 
         { action, dialogState, setWriteDialogState } = props,
+        dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
         userRecords = useUserRecords(),
         db = useFirestore(),
@@ -307,9 +312,16 @@ const WorkspaceWriteDialog = (props) => {
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
 
+    dialogStateRef.current = dialogState
+
     useEffect(()=>{
         if (newInvocationRef.current) {
-            setWriteValues({name:workspaceSelection.name})
+            (dialogStateRef.current.action == 'changename')
+                ? setWriteValues({name:workspaceSelection.name})
+                : setWriteValues({name:''})
+            if (dialogStateRef.current.action == 'createworkspace') {
+                writeIsInvalidTests.name('')
+            }
             newInvocationRef.current = false
         }
     },[newInvocationRef.current, workspaceSelection])
@@ -350,7 +362,7 @@ const WorkspaceWriteDialog = (props) => {
             return
         }
         setAlertState('processing')
-        // change user workspace data
+        // changename user workspace data
         const 
             userRecord = userRecords.user,
             userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
@@ -374,7 +386,48 @@ const WorkspaceWriteDialog = (props) => {
         await updateDoc(workspaceDocRef, {
             'profile.workspace.name':writeValues.name
         })
-        // change workspaceSelection
+        // changename workspaceSelection
+        const { setWorkspaceSelection } = workspaceSelection
+        setWorkspaceSelection((previousState) => {
+            previousState.name = writeValues.name
+            return {...previousState}
+        })
+
+        doClose()
+
+    }
+
+    async function doCreateWorkspace() {
+        if (writeIsInvalidFieldFlags.name) {
+            alert('Please correct errors before saving')
+            return
+        }
+        setAlertState('processing')
+        // changename user workspace data
+        const 
+            userRecord = userRecords.user,
+            userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
+            workspaceID = workspaceSelection.id,
+            workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
+            updateBlock = {}
+
+        let fieldsToUpdateCount = 0
+
+        if (workspaceID == userRecord.workspace.mobile.id) {
+            updateBlock['workspace.mobile.name'] = writeValues.name
+            fieldsToUpdateCount++
+        }
+        if (workspaceID == userRecord.workspace.desktop.id) {
+            updateBlock['workspace.desktop.name'] = writeValues.name
+            fieldsToUpdateCount++
+        }
+        if (fieldsToUpdateCount) {
+            await updateDoc(userDocRef,updateBlock)
+        }
+        await updateDoc(workspaceDocRef, {
+            'profile.workspace.name':writeValues.name
+        })
+        // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
             previousState.name = writeValues.name
@@ -402,7 +455,8 @@ const WorkspaceWriteDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        {dialogState.action == 'namechange' && 'Change the name of the current workspace.'}
+                        {dialogState.action == 'changename' && 'Change the name of the current workspace.'}
+                        {dialogState.action == 'createworkspace' && 'Create a new workspace.'}
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -432,9 +486,9 @@ const WorkspaceWriteDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
-                            onClick = {doSaveWrite}
+                            onClick = {dialogState.action == 'changename'? doSaveWrite:doCreateWorkspace}
                         >
-                          Save
+                          {dialogState.action == 'changename'?'Save':'Create'}
                         </Button>
                     </AlertDialogFooter>
 
