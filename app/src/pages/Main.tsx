@@ -133,11 +133,23 @@ export const Main = (props) => {
 
     },[])
 
-    async function getWorkspace(workspaceID) {
+    async function getWorkspaceData(workspaceID) {
 
-        const workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
-        const dbdoc = await getDoc(workspaceRecordRef)
-        const workspaceData = dbdoc.data()
+        const 
+            workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID),
+            dbdoc = await getDoc(workspaceRecordRef),
+            workspaceData = dbdoc.data(),
+            workspaceName = workspaceData.profile.workspace.name
+
+        const userUpdateData = 
+            isMobile
+                ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
+                : {'workspace.desktop': {id:workspaceID.id, name:workspaceName}}
+
+            userUpdateData['profile.counts.workspaces'] = increment(1)
+
+        await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
+        
         setWorkspaceRecord(workspaceData)
 
     }
@@ -146,7 +158,7 @@ export const Main = (props) => {
 
         if (mainStateRef.current == 'setup') return
         if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
-            getWorkspace(workspaceSelection.id)
+            getWorkspaceData(workspaceSelection.id)
         }
 
     },[workspaceSelection])

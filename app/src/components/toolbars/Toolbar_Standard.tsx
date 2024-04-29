@@ -442,20 +442,21 @@ const WorkspaceWriteDialog = (props) => {
 
         await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
 
-        let updateBlock
-        if (isMobile) {
-            updateBlock = {
-                'workspace.mobile.id':newWorkspaceDocRef.id,
-                'workspace.mobile.name':writeValues.name
-            }
-        } else {
-            updateBlock = {
-                'workspace.desktop.id':newWorkspaceDocRef.id,
-                'workspace.desktop.name':writeValues.name
-            }
-        }
+        // // TODO update this in Main instead!!
+        // let updateBlock
+        // if (isMobile) {
+        //     updateBlock = {
+        //         'workspace.mobile.id':newWorkspaceDocRef.id,
+        //         'workspace.mobile.name':writeValues.name
+        //     }
+        // } else {
+        //     updateBlock = {
+        //         'workspace.desktop.id':newWorkspaceDocRef.id,
+        //         'workspace.desktop.name':writeValues.name
+        //     }
+        // }
 
-        await updateDoc(userDocRef, updateBlock)
+        // await updateDoc(userDocRef, updateBlock)
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
