@@ -138,14 +138,12 @@ export const Main = (props) => {
         const workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
         const dbdoc = await getDoc(workspaceRecordRef)
         const workspaceData = dbdoc.data()
-        console.log('newly created workspaceData', workspaceData)
         setWorkspaceRecord(workspaceData)
 
     }
 
     useEffect(()=>{
 
-        console.log('workspaceSelection, workspaceRecordRef.current',workspaceSelection, workspaceRecordRef.current)
         if (mainStateRef.current == 'setup') return
         if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
             getWorkspace(workspaceSelection.id)
