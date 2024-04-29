@@ -103,6 +103,8 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
+let workspaceMenuIteration = 0
+
 // --------------------------- component ----------------------------
 const StandardToolbar = (props) => {
 
@@ -182,46 +184,36 @@ const StandardToolbar = (props) => {
     },[])
 
     async function getWorkspaceList() {
-        const workspaceList = []
+        const workingWorkspaceList = []
         const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'), orderBy('profile.workspace.name'))
         const querySnapshot = await getDocs(q)
         querySnapshot.forEach((doc) => {
             const data = doc.data()
-            workspaceList.push(data.profile.workspace)
+            workingWorkspaceList.push(data.profile.workspace)
         })
-        // console.log('querySnapshot, workspaceList',querySnapshot, workspaceList)
-        setWorkspaceList(workspaceList)
+        setWorkspaceList(workingWorkspaceList)
     }
 
-    const workspacesMenu = useMemo(()=>{
+    const workspacemenuList = useMemo(() => {
 
-        const selectionList = []
-        workspaceList.forEach((item) => {
-            // console.log('item', item)
-            selectionList.push(<MenuItemOption value = {item.id}>{item.name}</MenuItemOption>)
-        })
-
-        return selectionList
-
-    },[workspaceList])
-
-    const workspacemenulist = useMemo(() => {
-
-        console.log('workspacemenulist: workspaceSelection, workspacesMenu',workspaceSelection, workspacesMenu)
-
-        if (workspacesMenu.length === 0) return null
+        // if (workspacesMenu.length === 0) return null
+        const defaultValue = workspaceSelection.id
 
         return <MenuList>
             <MenuItem >Rename this workspace</MenuItem>
             <MenuItem >Add a workspace</MenuItem>
             <MenuItem >Delete a workspace</MenuItem>
-            <MenuDivider />
-            <MenuOptionGroup defaultValue = {workspaceSelection.id} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
-                {workspacesMenu}
+            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+                {
+                    workspaceList.map((item) => {
+                        return <MenuItemOption key = {item.id} value = {item.id}>{item.name}</MenuItemOption>
+                    })
+                }
             </MenuOptionGroup>
+            <MenuDivider />
         </MenuList>
-        // setToolbarState('update')
-    },[workspacesMenu, workspaceSelection])
+
+    },[workspaceList, workspaceSelection])
 
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
@@ -251,7 +243,7 @@ const StandardToolbar = (props) => {
                     displayName = {workspaceSelection.name} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
-                    menulist = {workspacemenulist} 
+                    menulist = {workspacemenuList} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
             </>
