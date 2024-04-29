@@ -6,8 +6,12 @@ import { signOut } from "firebase/auth"
 import { collection, query, getDocs, orderBy } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
-  Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
-  Tooltip, Box
+    Button,
+    Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
+    Tooltip, Box,
+    useDisclosure,
+    AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
+    FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
 import { useUserAuthData, useUserRecords, useAuth, useFirestore, useWorkspaceSelection } from '../../system/WorkboxesProvider'
@@ -132,7 +136,8 @@ const StandardToolbar = (props) => {
         currentHomeIcon = 
             isHome
             ? homeFillIcon
-            : homeIcon
+            : homeIcon,
+        [dialogState, setDialogState] = useState(false)
 
     // --------------------- navigation functions ------------------
     const 
@@ -198,6 +203,10 @@ const StandardToolbar = (props) => {
         setWorkspaceList(workingWorkspaceList)
     }
 
+    const renameWorkspace = () => {
+        setDialogState(true)
+    }
+
     const workspacemenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
@@ -205,7 +214,7 @@ const StandardToolbar = (props) => {
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList>
-            <MenuItem >Rename this workspace</MenuItem>
+            <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem >Add a workspace</MenuItem>
             <MenuItem >Delete a workspace</MenuItem>
             <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
@@ -264,6 +273,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
+        <WorkspaceDialog doOpen = {dialogState} setDialogState = {setDialogState}/>
     </Box>
 }
 
@@ -271,3 +281,71 @@ const StandardToolbar = (props) => {
 // <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
 
 export default StandardToolbar
+
+
+            //             {((alertState != 'processing') && (alertState != 'failure') && !isInvalidState) && 
+            //                 `Are you sure? The user handle @${editValues.handle} can't be changed afterwards.`}
+            //             {isInvalidState && 'Error(s) found! Please go back and fix errors before saving.'}
+            //             {(alertState == 'processing') && 'Processing...'}
+            //             {(alertState == 'failure') && 'Save handle failed. Try a different handle.'}
+
+                    // <AlertDialogFooter>
+                    //     <Button ref={cancelRef} 
+                    //         onClick={closeAlert} 
+                    //         colorScheme = {(!isInvalidState && (alertState != 'failure'))?'gray':'blue'}
+                    //         isDisabled = {alertState == 'processing'}
+                    //     >
+                    //         {!isInvalidState && !(alertState == 'failure') && 'Cancel'}
+                    //         {(isInvalidState || (alertState == 'failure')) && 'OK'}
+                    //     </Button>
+                    //     {!isInvalidState && !(alertState == 'failure') && <Button 
+                    //         colorScheme='blue' 
+                    //         onClick={saveHandle} ml={3}
+                    //         isDisabled = {alertState == 'processing'}
+                    //     >
+                    //         Save
+                    //     </Button>}
+                    // </AlertDialogFooter>
+
+const WorkspaceDialog = (props) => {
+
+    const 
+        { doOpen, setDialogState } = props,
+        { isOpen, onOpen, onClose } = useDisclosure(),
+        cancelRef = useRef(null)
+
+    const doClose = () => {
+        setDialogState(false)
+    }
+
+    return (<>
+        <AlertDialog
+            isOpen={doOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Save User Handle (and related identity information)
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} 
+                            onClick = {doClose}
+                        >
+                          Button
+                        </Button>
+                    </AlertDialogFooter>
+
+
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
+    </>)
+}
+
+
+
