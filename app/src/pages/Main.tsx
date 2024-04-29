@@ -20,11 +20,16 @@ import { isMobile } from '../index'
 export const Main = (props) => {
     const
         [mainState, setMainState] = useState('setup'),
+        mainStateRef = useRef(null),
         userRecords = useUserRecords(),
         workspaceSelection = useWorkspaceSelection(), // selection for toolbar, and to get workspaceData
         [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
+        workspaceRecordRef = useRef(null),
         db = useFirestore(),
         toast = useToast()
+
+    workspaceRecordRef.current = workspaceRecord
+    mainStateRef.current = mainState
 
     async function getStartingWorkspaceData() {
 
@@ -127,6 +132,26 @@ export const Main = (props) => {
         getStartingWorkspaceData() // setup only
 
     },[])
+
+    async function getWorkspace(workspaceID) {
+
+        const workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
+        const dbdoc = await getDoc(workspaceRecordRef)
+        const workspaceData = dbdoc.data()
+        console.log('newly created workspaceData', workspaceData)
+        setWorkspaceRecord(workspaceData)
+
+    }
+
+    useEffect(()=>{
+
+        console.log('workspaceSelection, workspaceRecordRef.current',workspaceSelection, workspaceRecordRef.current)
+        if (mainStateRef.current == 'setup') return
+        if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
+            getWorkspace(workspaceSelection.id)
+        }
+
+    },[workspaceSelection])
 
     return ((mainState != 'setup') && <Workspace workspaceData = {workspaceRecord}/>)
 }

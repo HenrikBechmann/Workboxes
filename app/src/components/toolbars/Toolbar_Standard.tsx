@@ -3,7 +3,7 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { doc, collection, query, getDocs, orderBy, updateDoc } from 'firebase/firestore'
+import { doc, setDoc, collection, query, getDocs, orderBy, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text,
@@ -14,7 +14,16 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords, useAuth, useFirestore, useWorkspaceSelection, useSystemRecords } from '../../system/WorkboxesProvider'
+import { 
+    useUserAuthData, 
+    useUserRecords, 
+    useAuth, 
+    useFirestore, 
+    useWorkspaceSelection, 
+    useSystemRecords 
+} from '../../system/WorkboxesProvider'
+
+import { updateDocumentSchema } from '../../system/utilities'
 
 import { isMobile } from '../../index'
 
@@ -407,30 +416,51 @@ const WorkspaceWriteDialog = (props) => {
         const 
             userRecord = userRecords.user,
             userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-            workspaceID = workspaceSelection.id,
-            workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
-            updateBlock = {}
+            newWorkspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces')),
+            newWorkspaceRecord = updateDocumentSchema('workspaces','standard',{},{
+                    profile: {
+                        workspace:{
+                            name: writeValues.name,
+                            id: newWorkspaceDocRef.id,
+                        },
+                        device: {
+                            name:isMobile?'mobile':'desktop',
+                        },
+                        owner: {
+                            id: userRecord.profile.user.id,
+                            name: userRecord.profile.user.name,
+                        },
+                        commits: {
+                            created_by: {
+                                id: userRecord.profile.user.id,
+                                name: userRecord.profile.user.name,
+                            },
+                            created_timestamp: serverTimestamp(),
+                        },
+                    }
+                })
 
-        let fieldsToUpdateCount = 0
+        await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
 
-        if (workspaceID == userRecord.workspace.mobile.id) {
-            updateBlock['workspace.mobile.name'] = writeValues.name
-            fieldsToUpdateCount++
+        let updateBlock
+        if (isMobile) {
+            updateBlock = {
+                'workspace.mobile.id':newWorkspaceDocRef.id,
+                'workspace.mobile.name':writeValues.name
+            }
+        } else {
+            updateBlock = {
+                'workspace.desktop.id':newWorkspaceDocRef.id,
+                'workspace.desktop.name':writeValues.name
+            }
         }
-        if (workspaceID == userRecord.workspace.desktop.id) {
-            updateBlock['workspace.desktop.name'] = writeValues.name
-            fieldsToUpdateCount++
-        }
-        if (fieldsToUpdateCount) {
-            await updateDoc(userDocRef,updateBlock)
-        }
-        await updateDoc(workspaceDocRef, {
-            'profile.workspace.name':writeValues.name
-        })
+
+        await updateDoc(userDocRef, updateBlock)
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
             previousState.name = writeValues.name
+            previousState.id = newWorkspaceDocRef.id
             return {...previousState}
         })
 
