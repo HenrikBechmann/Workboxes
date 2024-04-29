@@ -137,7 +137,8 @@ const StandardToolbar = (props) => {
             isHome
             ? homeFillIcon
             : homeIcon,
-        [dialogState, setDialogState] = useState(false)
+        [dialogWriteState, setWriteDialogState] = useState(false),
+        [dialogDeleteState, setDialogDeleteState] = useState(false)
 
     // --------------------- navigation functions ------------------
     const 
@@ -204,7 +205,7 @@ const StandardToolbar = (props) => {
     }
 
     const renameWorkspace = () => {
-        setDialogState(true)
+        setWriteDialogState(true)
     }
 
     const workspacemenuList = useMemo(() => {
@@ -273,7 +274,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        <WorkspaceDialog doOpen = {dialogState} setDialogState = {setDialogState}/>
+        <WorkspaceDialog doOpen = {dialogWriteState} setWriteDialogState = {setWriteDialogState}/>
     </Box>
 }
 
@@ -310,12 +311,12 @@ export default StandardToolbar
 const WorkspaceDialog = (props) => {
 
     const 
-        { doOpen, setDialogState } = props,
+        { doOpen, setWriteDialogState } = props,
         { isOpen, onOpen, onClose } = useDisclosure(),
         cancelRef = useRef(null)
 
     const doClose = () => {
-        setDialogState(false)
+        setWriteDialogState(false)
     }
 
     return (<>
