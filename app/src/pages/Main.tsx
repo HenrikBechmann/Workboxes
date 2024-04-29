@@ -49,8 +49,6 @@ export const Main = (props) => {
                         : 'desktop',
             userProfileInfo = userRecords.user.profile.user
 
-        // console.log('workspaceIDtype, mobileID, desktopID, workspaceID',workspaceIDtype, mobileID, desktopID, workspaceID)
-
         if (workspaceID) { // get existing workspace
             const 
                 workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID),
@@ -69,30 +67,30 @@ export const Main = (props) => {
 
         } else { // create first workspace record
 
-            const workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'))
-
-            const workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
-                profile: {
-                    workspace:{
-                        name: 'Main workspace',
-                        id: workspaceDocRef.id,
-                    },
-                    device: {
-                        name:workspaceIDtype,
-                    },
-                    owner: {
-                        id: userProfileInfo.id,
-                        name: userProfileInfo.name,
-                    },
-                    commits: {
-                        created_by: {
-                            id: userProfileInfo.id, 
-                            name: userProfileInfo.name
+            const 
+                workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces')),
+                workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
+                    profile: {
+                        workspace:{
+                            name: 'Main workspace',
+                            id: workspaceDocRef.id,
                         },
-                        created_timestamp: serverTimestamp(),
-                    },
-                }
-            })
+                        device: {
+                            name:workspaceIDtype,
+                        },
+                        owner: {
+                            id: userProfileInfo.id,
+                            name: userProfileInfo.name,
+                        },
+                        commits: {
+                            created_by: {
+                                id: userProfileInfo.id, 
+                                name: userProfileInfo.name
+                            },
+                            created_timestamp: serverTimestamp(),
+                        },
+                    }
+                })
 
             workspaceSelectionRecord = workspaceRecord
 
@@ -111,13 +109,15 @@ export const Main = (props) => {
 
         }
 
-        setWorkspaceRecord(workspaceSelectionRecord)
-        const { setWorkspaceSelection } = workspaceSelection
+        setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
+
+        const { setWorkspaceSelection } = workspaceSelection // for standard toolbar component
         setWorkspaceSelection({ // distribute workspaceSelection
             id: workspaceSelectionRecord.profile.workspace.id,
             name: workspaceSelectionRecord.profile.workspace.name,
             setWorkspaceSelection,
         })
+
         setMainState('ready')
 
     }

@@ -110,22 +110,25 @@ const StandardToolbar = (props) => {
 
     // ------------------------------ hooks ------------------------
     const 
+        // system resources
         navigate = useNavigate(),
         location = useLocation(),
-        { pathname } = location,
         auth = useAuth(),
-        userAuthData = useUserAuthData(),
         db = useFirestore(),
-        // [toolbarState, setToolbarState] = useState('ready'),
-
-        workspaceSelection = useWorkspaceSelection(),
+        // user resources
+        userAuthData = useUserAuthData(),
         { displayName:userDisplayName, photoURL:userPhotoURL } = userAuthData.authUser,
-        userRecords = useUserRecords(),
         isSuperUser = userAuthData.sysadminStatus.isSuperUser,
+        userRecords = useUserRecords(),
+        // router data
+        { pathname } = location,
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
-        [workspaceList,setWorkspaceList] = useState([]),
+        // workspace data
+        workspaceSelection = useWorkspaceSelection(),
+        [workspaceList,setWorkspaceList] = useState([]), // empty array to avoid menu processing error
         [workspaceMenuList, setWorkspaceMenuList] = useState(null),
+        // toolbar resources
         currentHomeIcon = 
             isHome
             ? homeFillIcon
@@ -155,6 +158,7 @@ const StandardToolbar = (props) => {
             })
         }
 
+    // initialize
     useEffect(()=>{
         getWorkspaceList()
     },[])
@@ -199,6 +203,7 @@ const StandardToolbar = (props) => {
         // if (workspacesMenu.length === 0) return null
         const defaultValue = workspaceSelection.id
 
+        // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList>
             <MenuItem >Rename this workspace</MenuItem>
             <MenuItem >Add a workspace</MenuItem>
