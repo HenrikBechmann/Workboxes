@@ -198,8 +198,9 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {gotoAccount}>Account settings</MenuItem>
             <MenuItem onClick = {gotoDomains}>Domain settings</MenuItem>
             <MenuDivider />
-            <MenuItem onClick = {gotoMemberships}>Workshop memberships</MenuItem>
-            <MenuItem onClick = {gotoSubscriptions}>Subscriptions</MenuItem>
+            <MenuItem onClick = {gotoMemberships}>Workgroup memberships</MenuItem>
+            <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
+            <MenuItem >Forum memberships</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {logOut}>Sign out</MenuItem>
         </MenuList>
@@ -354,7 +355,7 @@ const WorkspaceWriteDialog = (props) => {
     }
 
     const writeErrorMessages = {
-        name:`The name can only be ${minNameLength} to ${maxNameLength} characters.`,
+        name:`The name must be ${minNameLength} to ${maxNameLength} characters.`,
     }
 
     const onWriteChangeFunctions = {
@@ -455,21 +456,6 @@ const WorkspaceWriteDialog = (props) => {
 
         await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
 
-        // // TODO update this in Main instead!!
-        // let updateBlock
-        // if (isMobile) {
-        //     updateBlock = {
-        //         'workspace.mobile.id':newWorkspaceDocRef.id,
-        //         'workspace.mobile.name':writeValues.name
-        //     }
-        // } else {
-        //     updateBlock = {
-        //         'workspace.desktop.id':newWorkspaceDocRef.id,
-        //         'workspace.desktop.name':writeValues.name
-        //     }
-        // }
-
-        // await updateDoc(userDocRef, updateBlock)
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {

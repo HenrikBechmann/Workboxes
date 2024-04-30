@@ -26,6 +26,7 @@ import menuIcon from '../../../assets/menu.png'
 import addIcon from '../../../assets/add.png'
 import windowSelectIcon from '../../../assets/window_select.png'
 import cartIcon from '../../../assets/cart.png'
+import hideIcon from '../../../assets/expand_more.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -109,6 +110,7 @@ const WorkspaceToolbar = (props) => {
         <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
         <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
         <LearnIcon tooltip = 'explain this toolbar' />
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             moreStyles = {{transform:'rotate(-90deg)'}}

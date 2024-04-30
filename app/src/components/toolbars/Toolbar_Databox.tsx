@@ -36,6 +36,7 @@ import dragIcon from '../../../assets/drag.png'
 import moveIcon from '../../../assets/move.png'
 import hideIcon from '../../../assets/expand_less.png'
 import arrowbackIcon from '../../../assets/arrow_back.png'
+import arrowforwardIcon from '../../../assets/arrow_forward.png'
 import resetIcon from '../../../assets/restart.png'
 import tilesIcon from '../../../assets/grid_view.png'
 import cardsIcon from '../../../assets/splitscreen.png'
@@ -99,6 +100,7 @@ const DataboxToolbar = (props) => {
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
+        <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
         <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
