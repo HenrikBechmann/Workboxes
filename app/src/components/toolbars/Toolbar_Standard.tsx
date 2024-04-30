@@ -6,10 +6,9 @@ import { signOut } from "firebase/auth"
 import { doc, setDoc, collection, query, getDocs, orderBy, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
-    Button, Text,
+    Button, Text, Input,
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
     Tooltip, Box,
-    useDisclosure, Input,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
@@ -119,7 +118,7 @@ const displayNameStyles = {
     marginRight:'3px', 
 } as CSSProperties
 
-let workspaceMenuIteration = 0
+let workspaceMenuIteration = 0 // used for key to brute force re-creation to resync MenuOptionItems
 
 // --------------------------- component ----------------------------
 const StandardToolbar = (props) => {
@@ -167,14 +166,10 @@ const StandardToolbar = (props) => {
         gotoAccount = () => { navigate('/account') },
         gotoDomains = () => { navigate('/account/domains') },
         gotoMemberships = () => { navigate('/account/memberships') },
-        gotoSubscriptions = () => { navigate('/account/subscriptions') },
-        logOut = () => {
-            signOut(auth).then(() => {
-              // console.log('Sign-out successful.')
-            }).catch((error) => {
-                // console.log('signout error', error)
-              // An error happened.
-            })
+        gotoSubscriptions = () => { navigate('/account/subscriptions') }
+
+    async function logOut() {
+            await signOut(auth)
         }
 
     // initialize

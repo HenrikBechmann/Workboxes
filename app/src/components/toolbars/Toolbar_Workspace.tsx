@@ -86,21 +86,6 @@ const displayNameStyles = {
 } as CSSProperties
 
 // --------------------------- component ----------------------------
-// bottom toolbar
-// icon = {panelIcon} 
-// <ToolbarVerticalDivider />
-// <DomainBase workboxDomainTitle = 'Henrik Bechmann' />
-
-// {cartToggle}
-
-// const
-//     cartToggle = useToggleIcon({
-//         icon:cartIcon, 
-//         tooltip:'hold workboxes for transfer',
-//         caption:'transfer',
-//         toggleOnRef:null,//toggleOnCartRef, 
-//         disabledRef:null, //disabledCartRef, 
-//     })
 
 const WorkspaceToolbar = (props) => {
 
