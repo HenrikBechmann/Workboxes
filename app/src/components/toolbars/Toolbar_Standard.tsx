@@ -120,7 +120,8 @@ const displayNameStyles = {
 
 let workspaceMenuIteration = 0 // used for key to brute force re-creation to resync MenuOptionItems
 
-// --------------------------- component ----------------------------
+// ============================[ StandardToolbar component ]=============================
+
 const StandardToolbar = (props) => {
 
     // ------------------------------ hooks ------------------------
@@ -169,8 +170,8 @@ const StandardToolbar = (props) => {
         gotoSubscriptions = () => { navigate('/account/subscriptions') }
 
     async function logOut() {
-            await signOut(auth)
-        }
+        await signOut(auth)
+    }
 
     // initialize
     useEffect(()=>{
@@ -242,7 +243,8 @@ const StandardToolbar = (props) => {
         return <MenuList ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
-            <MenuItem >Delete a workspace</MenuItem>
+            <MenuItem >Delete this workspace</MenuItem>
+            <MenuDivider />
             <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {newWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {
                     workspaceList.map((item) => {
@@ -299,7 +301,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        {writeDialogState.open && <WorkspaceWriteDialog dialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
+        {writeDialogState.open && <WorkspaceWriteDialog writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
     </Box>
 }
 
@@ -313,7 +315,7 @@ export default StandardToolbar
 const WorkspaceWriteDialog = (props) => {
 
     const 
-        { action, dialogState, setWriteDialogState } = props,
+        { action, writeDialogState, setWriteDialogState } = props,
         dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
         userRecords = useUserRecords(),
@@ -330,7 +332,7 @@ const WorkspaceWriteDialog = (props) => {
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
 
-    dialogStateRef.current = dialogState
+    dialogStateRef.current = writeDialogState
 
     useEffect(()=>{
         if (newInvocationRef.current) {
@@ -473,15 +475,15 @@ const WorkspaceWriteDialog = (props) => {
 
     return (<>
         <AlertDialog
-            isOpen={dialogState.open}
+            isOpen={writeDialogState.open}
             leastDestructiveRef={cancelRef}
             onClose={doClose}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        {dialogState.action == 'changename' && 'Change the name of the current workspace.'}
-                        {dialogState.action == 'createworkspace' && 'Create a new workspace.'}
+                        {writeDialogState.action == 'changename' && 'Change the name of the current workspace.'}
+                        {writeDialogState.action == 'createworkspace' && 'Create a new workspace.'}
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -511,9 +513,9 @@ const WorkspaceWriteDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
-                            onClick = {dialogState.action == 'changename'? doSaveWrite:doCreateWorkspace}
+                            onClick = {writeDialogState.action == 'changename'? doSaveWrite:doCreateWorkspace}
                         >
-                          {dialogState.action == 'changename'?'Save':'Create'}
+                          {writeDialogState.action == 'changename'?'Save':'Create'}
                         </Button>
                     </AlertDialogFooter>
 
@@ -522,4 +524,31 @@ const WorkspaceWriteDialog = (props) => {
             </AlertDialogOverlay>
         </AlertDialog>
     </>)
+}
+
+// ===================================[ WORKSPACE DELETE DIALOG ]===================================
+
+const WorkspaceDeleteDialog = (props) => {
+
+    const 
+        { action, writeDialogState, setWriteDialogState } = props,
+        dialogStateRef = useRef(null),
+        systemRecords = useSystemRecords(),
+        userRecords = useUserRecords(),
+        db = useFirestore(),
+        maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
+        minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
+        cancelRef = useRef(null),
+        [writeValues, setWriteValues] = useState({name:null}),
+        writeIsInvalidFieldFlagsRef = useRef({
+            name: false,
+        }),
+        newInvocationRef = useRef(true),
+        workspaceSelection = useWorkspaceSelection(),
+        [alertState, setAlertState] = useState('ready'),
+        writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
+
+    dialogStateRef.current = writeDialogState
+
+    return null
 }

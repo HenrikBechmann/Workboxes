@@ -3,12 +3,15 @@
 
 import React, {CSSProperties} from 'react'
 
+import { useUserAuthData } from '../../system/WorkboxesProvider'
+
 import {
   Box,
   Tooltip,
 } from '@chakra-ui/react'
 
 import StandardIcon from './StandardIcon'
+import DomainControl from './DomainControl'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
@@ -27,6 +30,7 @@ import addIcon from '../../../assets/add.png'
 import windowSelectIcon from '../../../assets/window_select.png'
 import cartIcon from '../../../assets/cart.png'
 import hideIcon from '../../../assets/expand_more.png'
+import resetIcon from '../../../assets/restart.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -87,22 +91,37 @@ const displayNameStyles = {
 
 // --------------------------- component ----------------------------
 
+        // <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
+        // <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
+
 const WorkspaceToolbar = (props) => {
+
+    const userAuthData = useUserAuthData()
+
+    const {displayName, photoURL, uid} = userAuthData.authUser
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <StandardIcon icon = {windowSelectIcon} caption = 'windows' tooltip = 'select a window'/>
-        <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
-        <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
-        <LearnIcon tooltip = 'explain this toolbar' />
-        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
+        <MenuControl 
+            displayName = 'Main panel' 
+            tooltip = 'select a panel'
+            arrowdirection = 'up'
+            icon = {panelIcon}
+            caption = 'workspace panel'
+        />
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel base domain (user)'/>
+        <StandardIcon icon = {resetIcon} caption = 'reset panel' tooltip = 'reset panel to base domain workbox'/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            moreStyles = {{transform:'rotate(-90deg)'}}
-            displayName = 'Main panel' 
-            tooltip = 'panel options'
+            tooltip = 'select a window'
             arrowdirection = 'up'
+            icon = {windowSelectIcon}
+            caption = 'panel windows'
         />
+        <ToolbarVerticalDivider />
+        <LearnIcon tooltip = 'explain this toolbar' />
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         &nbsp; &nbsp;
     </Box>
 }

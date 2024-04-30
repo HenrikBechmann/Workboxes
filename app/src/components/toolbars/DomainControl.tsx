@@ -12,7 +12,7 @@ import defaultDomainIcon from '../../../assets/domain_light.png'
 
 const DomainControl = (props) => {
 
-    const { domainTitle, domainIcon } = props
+    const { domainTitle, domainIcon, caption } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -20,6 +20,8 @@ const DomainControl = (props) => {
         borderRadius:'12px',
         opacity:0.7,
     }
+
+    const localCaption = caption || 'domain'
 
     const appliedIcon = domainIcon || defaultDomainIcon
 
@@ -30,7 +32,7 @@ const DomainControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'sm'>{domainTitle}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>domain</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{localCaption}</span></Box>
     </Box>
 }
 
