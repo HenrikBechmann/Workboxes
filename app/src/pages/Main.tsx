@@ -5,6 +5,7 @@
     TODO
         - provide message to user 'loading workspace last used on {mobile/desktop}'
         - save mobile window positions separately
+        - use dbdoc.exists() to verify doc's existence
 
 */
 
@@ -133,7 +134,7 @@ export const Main = (props) => {
 
     },[])
 
-    async function getWorkspaceData(workspaceID) {
+    async function getNewWorkspaceData(workspaceID) {
 
         const 
             workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID),
@@ -156,9 +157,9 @@ export const Main = (props) => {
 
     useEffect(()=>{
 
-        if (mainStateRef.current == 'setup') return
+        if (mainStateRef.current == 'setup') return // handled by startup
         if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
-            getWorkspaceData(workspaceSelection.id)
+            getNewWorkspaceData(workspaceSelection.id)
         }
 
     },[workspaceSelection])
