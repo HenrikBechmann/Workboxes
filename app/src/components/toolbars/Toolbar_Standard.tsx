@@ -150,7 +150,8 @@ const StandardToolbar = (props) => {
             ? homeFillIcon
             : homeIcon,
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
-        [deleteDialogState, setDialogDeleteState] = useState(false)
+        [deleteDialogState, setDialogDeleteState] = useState(false),
+        workspaceMenuRef = useRef(null)
 
     // --------------------- navigation functions ------------------
     const 
@@ -197,7 +198,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {gotoAccount}>Account settings</MenuItem>
             <MenuItem onClick = {gotoDomains}>Domain settings</MenuItem>
             <MenuDivider />
-            <MenuItem onClick = {gotoMemberships}>Memberships</MenuItem>
+            <MenuItem onClick = {gotoMemberships}>Workshop memberships</MenuItem>
             <MenuItem onClick = {gotoSubscriptions}>Subscriptions</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {logOut}>Sign out</MenuItem>
@@ -224,20 +225,32 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
 
+    const newWorkspaceSelection = (workspaceID) => {
+        const selection = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
+        const workspaceName = selection.dataset.name
+        // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
+        const { setWorkspaceSelection } = workspaceSelection
+        setWorkspaceSelection((previousState) => {
+            previousState.id = workspaceID
+            previousState.name = workspaceName
+            return {...previousState}
+        })
+    }
+
     const workspacemenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
         const defaultValue = workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList>
+        return <MenuList ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuItem >Delete a workspace</MenuItem>
-            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {newWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {
                     workspaceList.map((item) => {
-                        return <MenuItemOption key = {item.id} value = {item.id}>{item.name}</MenuItemOption>
+                        return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>
                     })
                 }
             </MenuOptionGroup>

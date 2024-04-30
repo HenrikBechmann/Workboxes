@@ -5,6 +5,9 @@ import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
 export const updateDocumentSchema = (collection, type, document, initialvalues = {}) => {
 
+    // console.log('updateDocumentSchema: collection, type, document, initialvalues', 
+    //   collection, type, {...document}, initialvalues)
+
     let updatedDocument
     if (versionMaps[collection] && versionMaps[collection][type]) {
 

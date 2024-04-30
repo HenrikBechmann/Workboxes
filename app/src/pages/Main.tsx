@@ -55,12 +55,16 @@ export const Main = (props) => {
                         : 'desktop',
             userProfileInfo = userRecords.user.profile.user
 
+        // console.log('userRecords, userWorkspaceData', {...userRecords}, {...userWorkspaceData})
+
         if (workspaceID) { // get existing workspace
             const 
                 workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID),
                 dbdoc = await getDoc(workspaceDocRef)
 
             workspaceSelectionRecord = dbdoc.data()
+
+            // console.log('workspaceID, userProfileInfo.id, workspaceSelectionRecord',workspaceID, userProfileInfo.id, {...workspaceSelectionRecord})
 
             const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
 
@@ -145,11 +149,17 @@ export const Main = (props) => {
         const userUpdateData = 
             isMobile
                 ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
-                : {'workspace.desktop': {id:workspaceID.id, name:workspaceName}}
+                : {'workspace.desktop': {id:workspaceID, name:workspaceName}}
 
             userUpdateData['profile.counts.workspaces'] = increment(1)
 
-        await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
+        // console.log('userUpdateData', userUpdateData)
+
+        try {
+            await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
+        } catch (error) {
+            console.log('error in update user doc for workspace', error)
+        }
         
         setWorkspaceRecord(workspaceData)
 
@@ -158,6 +168,7 @@ export const Main = (props) => {
     useEffect(()=>{
 
         if (mainStateRef.current == 'setup') return // handled by startup
+            // console.log('workspaceSelection', workspaceSelection)
         if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
             getNewWorkspaceData(workspaceSelection.id)
         }
