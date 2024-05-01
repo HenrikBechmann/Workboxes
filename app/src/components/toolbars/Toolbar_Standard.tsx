@@ -3,7 +3,7 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { doc, setDoc, collection, query, getDoc, getDocs, orderBy, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, collection, query, where, getDoc, getDocs, orderBy, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
@@ -11,6 +11,7 @@ import {
     Tooltip, Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
+    useToast,
 } from '@chakra-ui/react'
 
 import { 
@@ -226,7 +227,7 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
 
-    const newWorkspaceSelection = (workspaceID) => {
+    const changeWorkspaceSelection = (workspaceID) => {
         const selection = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selection.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
@@ -250,7 +251,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuDivider />
-            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {newWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {changeWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {
                     workspaceList.map((item) => {
                         return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>
@@ -553,7 +554,8 @@ const WorkspaceDeleteDialog = (props) => {
         workspaceSelection = useWorkspaceSelection(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
-        workspaceRecordRef = useRef(null)
+        workspaceRecordRef = useRef(null),
+        toast = useToast()
 
     // let isOpen = true
 
@@ -582,9 +584,48 @@ const WorkspaceDeleteDialog = (props) => {
 
     async function doDeleteWorkspace() {
 
+        // get default workspace
+        const 
+            dbWorkspaceCollection = collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),
+            dbQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true)),
+            dbDefaultWorkspace = await getDocs(dbQuery)
+
+        let dbdoc, defaultWorkspace
+        if (dbDefaultWorkspace.size == 1) {
+            dbdoc = dbDefaultWorkspace.docs[0]
+            defaultWorkspace = dbdoc.data()
+        } else {
+            // error condition
+            console.log('error fetching default workspace for delete workspace')
+            return
+        }
+
+        const 
+            previousWorkspaceName = workspaceSelection.name,
+            defaultWorkspaceName = defaultWorkspace.profile.workspace.name
+
+        // delete current workspace
+        await deleteDoc(doc(dbWorkspaceCollection, workspaceSelection.id))
+
+        // set current workspace to default
+
+        const {setWorkspaceSelection} = workspaceSelection
+        setWorkspaceSelection((previousState)=>{
+            previousState.id = defaultWorkspace.profile.workspace.id
+            previousState.name = defaultWorkspace.profile.workspace.name
+            return {...previousState}
+        })
+
+        toast({
+            description: 
+                `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
+        })
+
         setDeleteDialogState(false)
+
     }
 
+    // TODO to come
     async function doResetWorkspace() {
 
         setDeleteDialogState(false)
