@@ -261,13 +261,18 @@ const StandardToolbar = (props) => {
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
+// <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
 
     // render
     return <Box style = {standardToolbarStyles}>
         <MenuIcon icon = {fireIcon} caption = 'Workboxes' tooltip = 'Workboxes menu' menulist = {workboxesmenulist} />
         <ToolbarVerticalDivider />
         { isHome && <>
-            <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
+            <MenuControl 
+                tooltip = 'Notifications to this account'
+                icon = {notificationsIcon}
+                caption = 'alerts'
+            />
             <ToolbarVerticalDivider />
             </>
         }
@@ -379,6 +384,7 @@ const WorkspaceWriteDialog = (props) => {
 
     async function doSaveWrite() {
         if (writeIsInvalidFieldFlags.name) {
+            // TODO use chakra Alert instead
             alert('Please correct errors before saving')
             return
         }
@@ -420,6 +426,7 @@ const WorkspaceWriteDialog = (props) => {
 
     async function doCreateWorkspace() {
         if (writeIsInvalidFieldFlags.name) {
+            // TODO use chakra Alert instead
             alert('Please correct errors before saving')
             return
         }
