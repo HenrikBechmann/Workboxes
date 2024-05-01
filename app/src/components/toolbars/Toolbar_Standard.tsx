@@ -274,7 +274,7 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         { isHome && <>
             <MenuControl 
-                tooltip = 'Notifications to this account'
+                tooltip = 'Notifications to this user'
                 icon = {notificationsIcon}
                 caption = 'alerts'
             />
