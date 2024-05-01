@@ -95,6 +95,8 @@ const displayNameStyles = {
 
         // <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
         // <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
+        // <ToolbarVerticalDivider />
+        // <StandardIcon icon = {resetIcon} caption = 'panel reset' tooltip = 'reset panel to base domain workbox'/>
 
 const WorkspaceToolbar = (props) => {
 
@@ -112,8 +114,6 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
         />
         <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel base domain (user)'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {resetIcon} caption = 'panel reset' tooltip = 'reset panel to base domain workbox'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {navBeforeIcon} caption = 'left' tooltip = 'change to next left panel'/>
         <StandardIcon icon = {navNextIcon} caption = 'right' tooltip = 'change to next right panel'/>
