@@ -3,7 +3,7 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { doc, setDoc, collection, query, getDocs, orderBy, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, collection, query, getDoc, getDocs, orderBy, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
@@ -551,9 +551,15 @@ const WorkspaceDeleteDialog = (props) => {
         cancelRef = useRef(null),
         newInvocationRef = useRef(true),
         workspaceSelection = useWorkspaceSelection(),
-        [alertState, setAlertState] = useState('ready')
+        [alertState, setAlertState] = useState('ready'),
+        [isDefaultState, setIsDefaultState] = useState(false),
+        workspaceRecordRef = useRef(null)
 
     // let isOpen = true
+
+    useEffect(()=>{
+        checkIsDefaultWorkspace()
+    },[])
 
     const doClose = () => {
 
@@ -562,7 +568,20 @@ const WorkspaceDeleteDialog = (props) => {
 
     }
 
+    async function checkIsDefaultWorkspace() {
+        const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceSelection.id)
+        const dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
+        const workspaceRecord = dbWorkspaceRecord.data()
+        workspaceRecordRef.current = workspaceRecord
+        setIsDefaultState(workspaceRecord.profile.flags.is_default)
+    }
+
     async function doDeleteWorkspace() {
+
+        setDeleteDialogState(false)
+    }
+
+    async function doResetWorkspace() {
 
         setDeleteDialogState(false)
     }
@@ -581,10 +600,14 @@ const WorkspaceDeleteDialog = (props) => {
 
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
-                        <Text>
+                        {!isDefaultState && <Text>
                             Continue? The current workspace (<span style = {{fontStyle:'italic'}}>{workspaceSelection.name}</span>) will be deleted, 
                             and replaced by the default workspace.
-                        </Text>
+                        </Text>}
+                        {isDefaultState && <><Text>The workspace <span style = {{fontStyle:'italic'}}>{workspaceSelection.name}</span> cannot
+                        be deleted because it is the default workspace. </Text>
+                        <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
+                        the default panel.</Text></>}
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
@@ -593,9 +616,11 @@ const WorkspaceDeleteDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
-                            onClick = {doDeleteWorkspace}
+                            onClick = {!isDefaultState? doDeleteWorkspace: doResetWorkspace}
                         >
-                          Delete
+                          {!isDefaultState && 'Delete'}
+                          {isDefaultState && 'Reset'}
+
                         </Button>
                     </AlertDialogFooter>
 
