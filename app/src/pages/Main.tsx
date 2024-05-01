@@ -154,7 +154,7 @@ export const Main = (props) => {
                 ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
                 : {'workspace.desktop': {id:workspaceID, name:workspaceName}}
 
-            userUpdateData['profile.counts.workspaces'] = increment(1)
+            // userUpdateData['profile.counts.workspaces'] = increment(1)
 
         // console.log('userUpdateData', userUpdateData)
 

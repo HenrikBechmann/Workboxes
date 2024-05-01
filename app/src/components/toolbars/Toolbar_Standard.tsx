@@ -3,7 +3,7 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { doc, setDoc, collection, query, where, getDoc, getDocs, orderBy, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, collection, query, where, getDoc, getDocs, orderBy, updateDoc, deleteDoc, increment, serverTimestamp } from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
@@ -467,6 +467,8 @@ const WorkspaceWriteDialog = (props) => {
 
         await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
 
+        await updateDoc(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
+
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
@@ -606,6 +608,7 @@ const WorkspaceDeleteDialog = (props) => {
 
         // delete current workspace
         await deleteDoc(doc(dbWorkspaceCollection, workspaceSelection.id))
+        await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
 
         // set current workspace to default
 
