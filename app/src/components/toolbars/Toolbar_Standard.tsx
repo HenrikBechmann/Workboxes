@@ -244,6 +244,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuItem >Delete this workspace</MenuItem>
+            <MenuItem >Reset this workspace</MenuItem>
             <MenuDivider />
             <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {newWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {

@@ -541,6 +541,7 @@ const versionData = {
         },
         flags: {
           first_time_loaded:true,
+          is_default: false,
         }
       },
       panels:[

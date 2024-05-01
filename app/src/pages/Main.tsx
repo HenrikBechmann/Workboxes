@@ -99,6 +99,9 @@ export const Main = (props) => {
                             },
                             created_timestamp: serverTimestamp(),
                         },
+                        flags: {
+                            is_default: true,
+                        }
                     }
                 })
 
