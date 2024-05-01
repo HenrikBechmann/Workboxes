@@ -82,7 +82,7 @@ export const Main = (props) => {
                 workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
                     profile: {
                         workspace:{
-                            name: 'Main workspace',
+                            name: 'Main workspace (default)',
                             id: workspaceDocRef.id,
                         },
                         device: {
@@ -111,8 +111,8 @@ export const Main = (props) => {
 
             const userUpdateData = 
                 isMobile
-                    ? {'workspace.mobile': {id:workspaceDocRef.id, name:'Main workspace'}}
-                    : {'workspace.desktop': {id:workspaceDocRef.id, name:'Main workspace'}}
+                    ? {'workspace.mobile': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
+                    : {'workspace.desktop': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
 
                 userUpdateData['profile.counts.workspaces'] = increment(1)
 

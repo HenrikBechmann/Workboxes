@@ -31,6 +31,8 @@ import windowSelectIcon from '../../../assets/window_select.png'
 import cartIcon from '../../../assets/cart.png'
 import hideIcon from '../../../assets/expand_more.png'
 import resetIcon from '../../../assets/restart.png'
+import navNextIcon from '../../../assets/nav_next.png'
+import navBeforeIcon from '../../../assets/nav_before.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -109,14 +111,18 @@ const WorkspaceToolbar = (props) => {
             icon = {panelIcon}
             caption = 'workspace panel'
         />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel: base domain (user)'/>
-        <StandardIcon icon = {resetIcon} caption = 'panel: reset' tooltip = 'reset panel to base domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel base domain (user)'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {resetIcon} caption = 'panel reset' tooltip = 'reset panel to base domain workbox'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {navBeforeIcon} caption = 'left' tooltip = 'change to next left panel'/>
+        <StandardIcon icon = {navNextIcon} caption = 'right' tooltip = 'change to next right panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'
             arrowdirection = 'up'
             icon = {windowSelectIcon}
-            caption = 'panel: windows'
+            caption = 'windows'
         />
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
