@@ -571,9 +571,13 @@ const WorkspaceDeleteDialog = (props) => {
     async function checkIsDefaultWorkspace() {
         const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceSelection.id)
         const dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
-        const workspaceRecord = dbWorkspaceRecord.data()
-        workspaceRecordRef.current = workspaceRecord
-        setIsDefaultState(workspaceRecord.profile.flags.is_default)
+        if (dbWorkspaceRecord.exists()) {
+            const workspaceRecord = dbWorkspaceRecord.data()
+            workspaceRecordRef.current = workspaceRecord
+            setIsDefaultState(workspaceRecord.profile.flags.is_default)
+        } else {
+            // handle error
+        }
     }
 
     async function doDeleteWorkspace() {
