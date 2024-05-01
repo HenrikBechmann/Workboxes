@@ -150,7 +150,7 @@ const StandardToolbar = (props) => {
             ? homeFillIcon
             : homeIcon,
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
-        [deleteDialogState, setDialogDeleteState] = useState(false),
+        [deleteDialogState, setDeleteDialogState] = useState(false),
         workspaceMenuRef = useRef(null)
 
     // --------------------- navigation functions ------------------
@@ -218,6 +218,10 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'changename'})
     }
 
+    const deleteWorkspace = () => {
+        setDeleteDialogState(true)
+    }
+
     const createWorkspace = () => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
@@ -242,9 +246,9 @@ const StandardToolbar = (props) => {
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
-            <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
-            <MenuItem >Delete this workspace</MenuItem>
             <MenuItem >Reset this workspace</MenuItem>
+            <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
+            <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuDivider />
             <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {newWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
                 {
@@ -308,6 +312,7 @@ const StandardToolbar = (props) => {
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
         {writeDialogState.open && <WorkspaceWriteDialog writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
+        {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
     </Box>
 }
 
@@ -321,7 +326,7 @@ export default StandardToolbar
 const WorkspaceWriteDialog = (props) => {
 
     const 
-        { action, writeDialogState, setWriteDialogState } = props,
+        { writeDialogState, setWriteDialogState } = props,
         dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
         userRecords = useUserRecords(),
@@ -474,7 +479,7 @@ const WorkspaceWriteDialog = (props) => {
     }
 
     const doClose = () => {
-        newInvocationRef.current = true
+        newInvocationRef.current = true // TODO not required; dialog is destoroyed after use
         setWriteDialogState((previousState)=>{
             previousState.open = false
             return {...previousState}
@@ -539,24 +544,64 @@ const WorkspaceWriteDialog = (props) => {
 const WorkspaceDeleteDialog = (props) => {
 
     const 
-        { action, writeDialogState, setWriteDialogState } = props,
+        { setDeleteDialogState } = props,
         dialogStateRef = useRef(null),
-        systemRecords = useSystemRecords(),
         userRecords = useUserRecords(),
         db = useFirestore(),
-        maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
-        minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
         cancelRef = useRef(null),
-        [writeValues, setWriteValues] = useState({name:null}),
-        writeIsInvalidFieldFlagsRef = useRef({
-            name: false,
-        }),
         newInvocationRef = useRef(true),
         workspaceSelection = useWorkspaceSelection(),
-        [alertState, setAlertState] = useState('ready'),
-        writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
+        [alertState, setAlertState] = useState('ready')
 
-    dialogStateRef.current = writeDialogState
+    // let isOpen = true
 
-    return null
+    const doClose = () => {
+
+        // isOpen = false
+        setDeleteDialogState(false)
+
+    }
+
+    async function doDeleteWorkspace() {
+
+        setDeleteDialogState(false)
+    }
+
+    return (<>
+        <AlertDialog
+            isOpen={true}
+            leastDestructiveRef={cancelRef}
+            onClose={doClose}
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Delete the current workspace
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        {alertState == 'processing' && <Text>Processing...</Text>}
+                        <Text>
+                            Continue? The current workspace (<span style = {{fontStyle:'italic'}}>{workspaceSelection.name}</span>) will be deleted, 
+                            and replaced by the default workspace.
+                        </Text>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
+                            onClick = {doClose}
+                        >
+                          Cancel
+                        </Button>
+                        <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
+                            onClick = {doDeleteWorkspace}
+                        >
+                          Delete
+                        </Button>
+                    </AlertDialogFooter>
+
+
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
+    </>)
 }

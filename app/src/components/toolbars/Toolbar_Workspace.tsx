@@ -109,14 +109,14 @@ const WorkspaceToolbar = (props) => {
             icon = {panelIcon}
             caption = 'workspace panel'
         />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel base domain (user)'/>
-        <StandardIcon icon = {resetIcon} caption = 'reset panel' tooltip = 'reset panel to base domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel: base domain (user)'/>
+        <StandardIcon icon = {resetIcon} caption = 'panel: reset' tooltip = 'reset panel to base domain workbox'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'
             arrowdirection = 'up'
             icon = {windowSelectIcon}
-            caption = 'panel windows'
+            caption = 'panel: windows'
         />
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
