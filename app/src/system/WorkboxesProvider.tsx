@@ -34,6 +34,8 @@ const
 
     // make workboxes resources available
     SnapshotControlContext = createContext(snapshotControl),
+    errorArray = [],
+    ErrorControlContext = createContext(null),
 
     // for UserProvider
     UserAuthDataContext = createContext(null),
@@ -459,6 +461,7 @@ export const UserProvider = ({children}) => {
     },[userState])
 
     return (
+        <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
         <WorkspaceSelectionContext.Provider value = {workspaceSelection} >
@@ -470,6 +473,7 @@ export const UserProvider = ({children}) => {
         </WorkspaceSelectionContext.Provider>
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
+        </ErrorControlContext.Provider>
     )
 
 } // UserProvider
@@ -508,6 +512,10 @@ const useWorkspaceSelection = () => { // static
     return useContext(WorkspaceSelectionContext)
 }
 
+const useErrorControl = () => {
+    return useContext(ErrorControlContext)
+}
+
 export {
     // firebase resources
     useAuth,
@@ -516,6 +524,7 @@ export {
 
     // workboxes resources
     useSnapshotControl,
+    useErrorControl,
     useSystemRecords,
     useUserAuthData,
     useUserRecords,
