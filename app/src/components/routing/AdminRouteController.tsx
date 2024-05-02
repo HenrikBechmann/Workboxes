@@ -1,17 +1,21 @@
 // AdminRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React from 'react'
-import { Navigate, Outlet as RouterOutput, useLocation } from 'react-router-dom'
+import { Navigate, Outlet as RouterOutput, useLocation, useNavigate } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useErrorControl } from '../../system/WorkboxesProvider'
 
 function AdminRouteController() {
 
     const 
         userAuthData = useUserAuthData(),
         userRecords = useUserRecords(),
-        location = useLocation()
+        location = useLocation(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    if (errorControl.length) navigate('/error')
 
     if (userAuthData === undefined) {
 

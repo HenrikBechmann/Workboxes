@@ -35,7 +35,7 @@ const
     // make workboxes resources available
     SnapshotControlContext = createContext(snapshotControl),
     errorArray = [],
-    ErrorControlContext = createContext(null),
+    ErrorControlContext = createContext(errorArray),
 
     // for UserProvider
     UserAuthDataContext = createContext(null),
@@ -77,11 +77,13 @@ export const UserProvider = ({children}) => {
         // bootstrap control
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
-        baseRecordsAvailableRef = useRef(true)
-        // navigate = useNavigate()
+        baseRecordsAvailableRef = useRef(true),
+        errorControl = useErrorControl(),
+        errorControlRef = useRef(null)
 
     userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords
+    errorControlRef.current = errorControl
 
     useEffect(()=>{
         isMountedRef.current = true
@@ -107,6 +109,7 @@ export const UserProvider = ({children}) => {
             )
         } catch(error) {
             console.log('error incrementing logins', error)
+            errorControl.push({description:'error incrementing logins',error})
         }
     }
 
@@ -119,6 +122,7 @@ export const UserProvider = ({children}) => {
                 setSystemRecords({settings:systemSettingsData})
             } catch (error) {
                 console.log('error getting system settings', error)
+                errorControl.push({description:'error getting system settings',error})
             }
         }
 
@@ -148,6 +152,7 @@ export const UserProvider = ({children}) => {
                 } catch (error) {
                     console.log('error getting isAdmin', error)
                     superUser.errorCondition = true
+                    errorControlRef.current.push({description:'error getting isAdmin',error})
                 }
 
                 userAuthData = {
@@ -337,9 +342,7 @@ export const UserProvider = ({children}) => {
             await setDoc(workboxDocRef, workboxRecord)
         } catch(error) {
             console.log('error getting setting initial userRecords', error)
-            // navigate('/error', {replace:true})
-            // TODO handle error condition
-            // baseResult = error
+            errorControl.push({description:'error getting setting initial userRecords',error})
         }
 
         setUserState('baserecordsavailable')

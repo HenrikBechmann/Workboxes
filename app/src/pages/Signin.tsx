@@ -10,7 +10,7 @@ import {
     Text, Heading, Image, Button
 } from '@chakra-ui/react'
 
-import { useAuth, useUserAuthData } from '../system/WorkboxesProvider'
+import { useAuth, useUserAuthData, useErrorControl } from '../system/WorkboxesProvider'
 
 import tribalopolisIcon from '../../assets/workbox-logo.png'
 import boxIcon from '../../assets/workbox.png'
@@ -37,7 +37,23 @@ const Signin = (props) => {
         from = searchParams.get('from') || '/',
         location = useLocation(),
         [signinState, setSigninState] = useState('ready'),
-        userAuthData = useUserAuthData()
+        userAuthData = useUserAuthData(),
+        userAuthDataRef = useRef(null),
+        errorControl = useErrorControl(),
+        errorControlRef = useRef(null)
+
+    userAuthDataRef.current = userAuthData
+
+    // console.log('userAuthData',userAuthData)
+
+    useEffect(()=>{
+
+        if (userAuthData) { // shouldn't be here
+            // console.log('redirecting to home')
+            navigate('/',{replace:true})
+        }
+
+    },[userAuthData])
 
 
     useEffect (()=>{
@@ -81,6 +97,8 @@ const Signin = (props) => {
                 } catch(e) {
 
                     console.log('e', e)
+                    errorControlRef.current.push({description: 'error interpreting server error',error:e})
+                    navigate('/error',{replace:true})
 
                 }
                 // Handle Errors here.

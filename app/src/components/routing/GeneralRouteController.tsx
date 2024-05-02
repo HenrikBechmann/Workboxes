@@ -2,10 +2,10 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useRef, useState} from 'react'
-import { Outlet as RouterOutput, NavLink, Navigate } from 'react-router-dom'
+import { Outlet as RouterOutput, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
-import { useUserAuthData, useUserRecords, useAuth } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useAuth, useErrorControl } from '../../system/WorkboxesProvider'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import ToolbarStandard from '../toolbars/Toolbar_Standard'
@@ -28,7 +28,11 @@ const GeneralRouteController = (props) => {
 
     const 
         userAuthData = useUserAuthData(),
-        userRecords = useUserRecords()
+        userRecords = useUserRecords(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    if (errorControl.length) navigate('/error')
 
     if (userAuthData === undefined) {
 

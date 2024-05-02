@@ -1,7 +1,7 @@
 // NotFound.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 
 import { signOut } from "firebase/auth"
 
@@ -16,10 +16,25 @@ const ErrorPage = (props) => {
     const 
         errorControl = useErrorControl(),
         auth = useAuth(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        errorControlRef = useRef(null)
+
+    errorControlRef.current = errorControl
+
+    useEffect(()=>{
+
+        if (!errorControl.length) navigate('/', {replace:true})
+
+    },[])
+
+    if (errorControl.length) console.log('errorControl from error page', errorControl)
 
     async function logOut() {
-        await signOut(auth)
+        try {
+            await signOut(auth)
+        } catch (error) {
+            console.log('error logging out on error page', error)
+        }
         navigate('/signin')
     }
 
