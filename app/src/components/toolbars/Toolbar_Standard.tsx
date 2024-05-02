@@ -334,7 +334,7 @@ const WorkspaceWriteDialog = (props) => {
         db = useFirestore(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
-        cancelRef = useRef(null),
+        focusRef = useRef(null),
         [writeValues, setWriteValues] = useState({name:null}),
         writeIsInvalidFieldFlagsRef = useRef({
             name: false,
@@ -492,7 +492,7 @@ const WorkspaceWriteDialog = (props) => {
     return (<>
         <AlertDialog
             isOpen={writeDialogState.open}
-            leastDestructiveRef={cancelRef}
+            leastDestructiveRef={focusRef}
             onClose={doClose}
         >
             <AlertDialogOverlay>
@@ -511,6 +511,7 @@ const WorkspaceWriteDialog = (props) => {
                                     value = {writeValues.name || ''} 
                                     size = 'sm'
                                     onChange = {onWriteChangeFunctions.name}
+                                    ref = {focusRef}
                                 >
                                 </Input>
                                 <FormErrorMessage>
@@ -523,7 +524,7 @@ const WorkspaceWriteDialog = (props) => {
                         </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
+                        <Button isDisabled = {alertState == 'processing'} 
                             onClick = {doClose}
                         >
                           Cancel
