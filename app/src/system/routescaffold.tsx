@@ -151,14 +151,14 @@ const routes = [
                 element: <Workbox />
             },
             {
-                path: 'error',
-                element: <ErrorPage />
-            },
-            {
                 path: '*',
                 element: <NotFound />,
             },
         ],
+    },
+    {
+        path: '/error',
+        element: <ErrorPage />
     },
     {
         path: 'signin',

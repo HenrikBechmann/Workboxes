@@ -105,8 +105,6 @@ export const UserProvider = ({children}) => {
                     'logins':increment(1)
                 }
             )
-            console.log('redirecting after incrementing logins')
-            // navigate('/error',{replace:true})
         } catch(error) {
             console.log('error incrementing logins', error)
         }
