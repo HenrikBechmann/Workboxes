@@ -6,6 +6,7 @@
         - provide message to user 'loading workspace last used on {mobile/desktop}'
         - save mobile window positions separately
         - use dbdoc.exists() to verify doc's existence
+        - search for default workspace if no id is listed in user record
 
 */
 
@@ -68,6 +69,10 @@ export const Main = (props) => {
 
             try {
                 dbdoc = await getDoc(workspaceDocRef)
+
+                if (!dbdoc.exists()) { // TODO this can be corrected by nulling source and searching for default workspace
+                    throw('expected workspaceID not found in database ['+ workspaceID + '] for user record [' + userProfileInfo.id + ']')
+                }
 
                 workspaceSelectionRecord = dbdoc.data()
 
@@ -171,7 +176,9 @@ export const Main = (props) => {
 
         let dbdoc 
         try {
-            dbdoc= await getDoc(workspaceRecordRef)
+
+            dbdoc = await getDoc(workspaceRecordRef)
+
         } catch (error) {
 
             console.log('error getting new workspace data', error)
