@@ -20,7 +20,8 @@ import {
     useAuth, 
     useFirestore, 
     useWorkspaceSelection, 
-    useSystemRecords 
+    useSystemRecords,
+    useErrorControl,
 } from '../../system/WorkboxesProvider'
 
 import { updateDocumentSchema } from '../../system/utilities'
@@ -152,7 +153,8 @@ const StandardToolbar = (props) => {
             : homeIcon,
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
         [deleteDialogState, setDeleteDialogState] = useState(false),
-        workspaceMenuRef = useRef(null)
+        workspaceMenuRef = useRef(null),
+        errorControl = useErrorControl()
 
     // --------------------- navigation functions ------------------
     const 
@@ -171,7 +173,13 @@ const StandardToolbar = (props) => {
         gotoSubscriptions = () => { navigate('/account/subscriptions') }
 
     async function logOut() {
-        await signOut(auth)
+        try {
+            await signOut(auth)
+        } catch (error) {
+            console.log('signout error from standard toolbar', error)
+            errorControl.push({description:'signout error from standard toolbar', error})
+            navigate('/error')            
+        }
     }
 
     // initialize
@@ -207,7 +215,14 @@ const StandardToolbar = (props) => {
     async function getWorkspaceList() {
         const workingWorkspaceList = []
         const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'), orderBy('profile.workspace.name'))
-        const querySnapshot = await getDocs(q)
+        let querySnapshot
+        try {
+            querySnapshot = await getDocs(q)
+        } catch (error) {
+            console.log('error getting workspace list on standard toolbar', error)
+            errorControl.push({description:'signout error from standard toolbar', error})
+            navigate('/error')            
+        }
         querySnapshot.forEach((doc) => {
             const data = doc.data()
             workingWorkspaceList.push(data.profile.workspace)
@@ -343,7 +358,8 @@ const WorkspaceWriteDialog = (props) => {
         workspaceSelection = useWorkspaceSelection(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        errorControl = useErrorControl()
 
     dialogStateRef.current = writeDialogState
 
@@ -415,11 +431,23 @@ const WorkspaceWriteDialog = (props) => {
             fieldsToUpdateCount++
         }
         if (fieldsToUpdateCount) {
-            await updateDoc(userDocRef,updateBlock)
+            try {
+                await updateDoc(userDocRef,updateBlock)
+            } catch (error) {
+                console.log('error updating user workspace name from standard toolbar', error)
+                errorControl.push({description:'error updating user workspace name from standard toolbar', error})
+                navigate('/error')            
+            }
         }
-        await updateDoc(workspaceDocRef, {
-            'profile.workspace.name':writeValues.name
-        })
+        try {
+            await updateDoc(workspaceDocRef, {
+                'profile.workspace.name':writeValues.name
+            })
+        } catch (error) {
+            console.log('error updating workspace name from standard toolbar', error)
+            errorControl.push({description:'error updating workspace name from standard toolbar', error})
+            navigate('/error')            
+        }
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
@@ -465,10 +493,14 @@ const WorkspaceWriteDialog = (props) => {
                         },
                     }
                 })
-
-        await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
-
-        await updateDoc(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
+        try {
+            await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
+            await updateDoc(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
+        } catch (error) {
+            console.log('error creating new workspace record (or updating count) from standard toolbar', error)
+            errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
+            navigate('/error')            
+        }
 
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
@@ -559,9 +591,9 @@ const WorkspaceDeleteDialog = (props) => {
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         workspaceRecordRef = useRef(null),
-        toast = useToast()
-
-    // let isOpen = true
+        toast = useToast(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     useEffect(()=>{
         checkIsDefaultWorkspace()
@@ -576,13 +608,23 @@ const WorkspaceDeleteDialog = (props) => {
 
     async function checkIsDefaultWorkspace() {
         const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceSelection.id)
-        const dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
+        let dbWorkspaceRecord 
+        try {
+            dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
+        } catch (error) {
+            console.log('error getting workspace record to check for default status from standard toolbar', error)
+            errorControl.push({description:'error getting workspace record to check for default status from standard toolbar', error})
+            navigate('/error')            
+        }
         if (dbWorkspaceRecord.exists()) {
             const workspaceRecord = dbWorkspaceRecord.data()
             workspaceRecordRef.current = workspaceRecord
             setIsDefaultState(workspaceRecord.profile.flags.is_default)
         } else {
-            // handle error
+            // TODO should try to recover from this
+            console.log('error no workspace record found to check for default status from standard toolbar')
+            errorControl.push({description:'error no workspace record found to check for default status from standard toolbar', error:'N/A'})
+            navigate('/error')            
         }
     }
 
@@ -599,9 +641,10 @@ const WorkspaceDeleteDialog = (props) => {
             dbdoc = dbDefaultWorkspace.docs[0]
             defaultWorkspace = dbdoc.data()
         } else {
-            // error condition
+            // TODO should try to recover from this
             console.log('error fetching default workspace for delete workspace')
-            return
+            errorControl.push({description:'error no default workspace record found to deleted workspace from standard toolbar', error:'N/A'})
+            navigate('/error')            
         }
 
         const 
@@ -609,11 +652,17 @@ const WorkspaceDeleteDialog = (props) => {
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
-        await deleteDoc(doc(dbWorkspaceCollection, workspaceSelection.id))
-        await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+        try {
+            await deleteDoc(doc(dbWorkspaceCollection, workspaceSelection.id))
+            await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+        } catch (error) {
+            // TODO should try to recover from this
+            console.log('error deleting workspace or incrementing workspace count')
+            errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
+            navigate('/error')            
+        }
 
         // set current workspace to default
-
         const {setWorkspaceSelection} = workspaceSelection
         setWorkspaceSelection((previousState)=>{
             previousState.id = defaultWorkspace.profile.workspace.id
