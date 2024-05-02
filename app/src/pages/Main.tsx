@@ -12,8 +12,9 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUserRecords, useWorkspaceSelection } from '../system/WorkboxesProvider'
+import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl } from '../system/WorkboxesProvider'
 import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
@@ -27,7 +28,9 @@ export const Main = (props) => {
         [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
         workspaceRecordRef = useRef(null),
         db = useFirestore(),
-        toast = useToast()
+        toast = useToast(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     workspaceRecordRef.current = workspaceRecord
     mainStateRef.current = mainState
@@ -59,18 +62,29 @@ export const Main = (props) => {
 
         if (workspaceID) { // get existing workspace
             const 
-                workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID),
+                workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID)
+
+            let dbdoc 
+
+            try {
                 dbdoc = await getDoc(workspaceDocRef)
 
-            workspaceSelectionRecord = dbdoc.data()
+                workspaceSelectionRecord = dbdoc.data()
 
-            // console.log('workspaceID, userProfileInfo.id, workspaceSelectionRecord',workspaceID, userProfileInfo.id, {...workspaceSelectionRecord})
+                // console.log('workspaceID, userProfileInfo.id, workspaceSelectionRecord',workspaceID, userProfileInfo.id, {...workspaceSelectionRecord})
 
-            const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
+                const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
 
-            if (!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) {
-                await setDoc(workspaceDocRef, updatedWorkspaceRecord)
-                workspaceSelectionRecord = updatedWorkspaceRecord
+                if (!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) {
+                    await setDoc(workspaceDocRef, updatedWorkspaceRecord)
+                    workspaceSelectionRecord = updatedWorkspaceRecord
+                }
+            } catch (error) {
+
+                console.log('error getting starting workspace data', error)
+                errorControl.push({description:'error getting staring workspace data in Main', error})
+                navigate('/error')
+
             }
 
             toast({description:`loaded workspace last used on ${workspaceIDtype}`})
@@ -107,16 +121,25 @@ export const Main = (props) => {
 
             workspaceSelectionRecord = workspaceRecord
 
-            await setDoc(workspaceDocRef,workspaceRecord)
+            try {
+                await setDoc(workspaceDocRef,workspaceRecord)
 
-            const userUpdateData = 
-                isMobile
-                    ? {'workspace.mobile': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
-                    : {'workspace.desktop': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
+                const userUpdateData = 
+                    isMobile
+                        ? {'workspace.mobile': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
+                        : {'workspace.desktop': {id:workspaceDocRef.id, name:'Main workspace (default)'}}
 
-                userUpdateData['profile.counts.workspaces'] = increment(1)
+                    userUpdateData['profile.counts.workspaces'] = increment(1)
 
-            await updateDoc(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
+                await updateDoc(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
+
+            } catch (error) {
+
+                console.log('error saving new workspace data', error)
+                errorControl.push({description:'error saving new workspace data in Main', error})
+                navigate('/error')
+
+            }
 
             toast({description:`created new workspace`})
 
@@ -144,10 +167,23 @@ export const Main = (props) => {
     async function getNewWorkspaceData(workspaceID) {
 
         const 
-            workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID),
-            dbdoc = await getDoc(workspaceRecordRef),
+            workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
+
+        let dbdoc 
+        try {
+            dbdoc= await getDoc(workspaceRecordRef)
+        } catch (error) {
+
+            console.log('error getting new workspace data', error)
+            errorControl.push({description:'error getting new workspace data in Main', error})
+            navigate('/error')
+
+        }
+
+        const
             workspaceData = dbdoc.data(),
             workspaceName = workspaceData.profile.workspace.name
+
 
         const userUpdateData = 
             isMobile
@@ -162,6 +198,8 @@ export const Main = (props) => {
             await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
         } catch (error) {
             console.log('error in update user doc for workspace', error)
+            errorControl.push({description:'in update user doc for workspace in Main', error})
+            navigate('/error')
         }
         
         setWorkspaceRecord(workspaceData)

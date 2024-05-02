@@ -10,7 +10,7 @@
 */
 import React, { useState, useEffect, useRef } from 'react'
 
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
@@ -29,7 +29,7 @@ import {
 
 import {isDate as _isDate} from 'lodash'
 
-import { useUserAuthData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore } from '../system/WorkboxesProvider'
+import { useUserAuthData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore, useErrorControl } from '../system/WorkboxesProvider'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -58,21 +58,11 @@ const UserRegistration = (props) => {
         [handleState, setHandleState] = useState('input'),
         [paymentState, setPaymentState] = useState('input'),
         [termsState, setTermsState] = useState('input'),
-        registrationComplete = (handleState == 'output') && (termsState == 'output')
+        registrationComplete = (handleState == 'output') && (termsState == 'output'),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     // sign out option
-    const logOut = () => {
-        signOut(auth).then(() => {
-
-          setRegistrationState('signedout')
-
-        }).catch((error) => {
-
-            console.log('signout error', error)
-
-        })
-    }
-
     useEffect(()=>{
 
         handleEditDataRef.current = {} // TODO ???
@@ -84,6 +74,20 @@ const UserRegistration = (props) => {
         if (registrationState != 'ready') setRegistrationState('ready')
 
     },[registrationState])
+
+    const logOut = () => {
+        signOut(auth).then(() => {
+
+          setRegistrationState('signedout')
+
+        }).catch((error) => {
+
+            console.log('signout error', error)
+            errorControl.push({description:'signout error on registration page', error})
+            navigate('/error')
+
+        })
+    }
 
     if (userRecords.user.profile.flags.fully_registered) { // no need for user registration
 
@@ -112,7 +116,8 @@ const UserRegistration = (props) => {
         } catch(error) {
 
             console.log('error accepting terms',error)
-            alert('Something went wrong. Check the console')
+            errorControl.push({description:'error accepting terms on registration page', error})
+            navigate('/error')
 
         }
 
@@ -532,7 +537,9 @@ const TermsRegistration = (props) => {
         { setTermsState } = props,
         db = useFirestore(),
         userRecords = useUserRecords(),
-        [termsRegistrationState, setTermsRegistrationState] = useState('pending')
+        [termsRegistrationState, setTermsRegistrationState] = useState('pending'),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     useEffect(()=>{
 
@@ -560,7 +567,8 @@ const TermsRegistration = (props) => {
             setTermsState('output')
         } catch(error) {
             console.log('error accepting terms',error)
-            alert('Something went wrong. Check the console')
+            errorControl.push({description:'error accepting terms on registration page', error})
+            navigate('/error')
         }
 
     }
@@ -623,7 +631,9 @@ const DialogForSaveHandle = (props) => {
         db = useFirestore(),
         userRecords = useUserRecords(),
         cancelRef = React.useRef(),
-        [alertState,setAlertState] = useState('ready')
+        [alertState,setAlertState] = useState('ready'),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     const isInvalidFlag = (invalidFlags) => {
         let errorState = false
@@ -766,11 +776,12 @@ const DialogForSaveHandle = (props) => {
             setAlertState('done')
             setHandleEditState('output')
 
-        } catch(e) {
+        } catch(error) {
 
             // most likely indicates handle duplicate attempted and rejected
-            console.log('failure to post',e)
-            setAlertState('failure')
+            console.log('failure to post handle data',error)
+            errorControl.push({description:'error posting handle data on registration page', error})
+            navigate('/error')
 
         }
     }
@@ -846,16 +857,18 @@ const DialogForSaveHandle = (props) => {
 // -----------------------------------[ process cancel registration ]-----------------------------
 
 const DialogForCancel = (props) => {
-  const 
-      { setRegistrationState } = props,
-      snapshotControl = useSnapshotControl(),
-      db = useFirestore(),
-      userAuthData = useUserAuthData(),
-      userRecords = useUserRecords(),
-      auth = useAuth(),
-      { isOpen, onOpen, onClose } = useDisclosure(),
-      cancelRef = React.useRef(),
-      [cancelState, setCancelState] = useState('ready')
+    const 
+        { setRegistrationState } = props,
+        snapshotControl = useSnapshotControl(),
+        db = useFirestore(),
+        userAuthData = useUserAuthData(),
+        userRecords = useUserRecords(),
+        auth = useAuth(),
+        { isOpen, onOpen, onClose } = useDisclosure(),
+        cancelRef = React.useRef(),
+        [cancelState, setCancelState] = useState('ready'),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
    function cancelRegistration() {
        setCancelState('cancelling')
