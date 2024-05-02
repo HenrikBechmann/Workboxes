@@ -12,6 +12,7 @@ import GeneralRouteController from '../components/routing/GeneralRouteController
 import About from '../pages/About'
 import Workbox from '../pages/WorkboxShared'
 import NotFound from '../pages/NotFound'
+import ErrorPage from '../pages/ErrorPage'
 
 // user support
 import UserRouteController from '../components/routing/UserRouteController'
@@ -148,6 +149,10 @@ const routes = [
             {
                 path: 'workbox',
                 element: <Workbox />
+            },
+            {
+                path: 'error',
+                element: <ErrorPage />
             },
             {
                 path: '*',

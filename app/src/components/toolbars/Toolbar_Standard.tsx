@@ -342,7 +342,8 @@ const WorkspaceWriteDialog = (props) => {
         newInvocationRef = useRef(true),
         workspaceSelection = useWorkspaceSelection(),
         [alertState, setAlertState] = useState('ready'),
-        writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current
+        writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
+        navigate = useNavigate()
 
     dialogStateRef.current = writeDialogState
 

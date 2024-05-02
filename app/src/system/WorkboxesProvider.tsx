@@ -5,6 +5,7 @@
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
+// import { useNavigate } from 'react-router-dom'
 
 // firebase
 import { initializeApp } from "firebase/app";
@@ -74,7 +75,8 @@ export const UserProvider = ({children}) => {
         // bootstrap control
         authStateUnsubscribeRef = useRef(null),
         isMountedRef = useRef(true),
-        baseRecordsAvailableRef = useRef(true) 
+        baseRecordsAvailableRef = useRef(true)
+        // navigate = useNavigate()
 
     userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords
@@ -95,11 +97,17 @@ export const UserProvider = ({children}) => {
     },[])
 
     async function updateLogins() {
-        await updateDoc(doc(db, 'system','usage'),
-            {
-                'logins':increment(1)
-            }
-        )        
+        try {
+            await updateDoc(doc(db, 'system','usage'),
+                {
+                    'logins':increment(1)
+                }
+            )
+            console.log('redirecting after incrementing logins')
+            // navigate('/error',{replace:true})
+        } catch(error) {
+            console.log('error incrementing logins', error)
+        }
     }
 
     async function getSystemRecords() {
@@ -138,6 +146,7 @@ export const UserProvider = ({children}) => {
                     const result:any = await isAdminUser()
                     superUser.isSuperUser = result.data.status
                 } catch (error) {
+                    console.log('error getting isAdmin', error)
                     superUser.errorCondition = true
                 }
 
@@ -321,14 +330,14 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        // let baseResult
-
         try {
             await setDoc(doc(db,'users',uid),userRecord)
             await setDoc(accountDocRef, accountRecord)
             await setDoc(domainDocRef, domainRecord)
             await setDoc(workboxDocRef, workboxRecord)
         } catch(error) {
+            console.log('error getting setting initial userRecords', error)
+            // navigate('/error', {replace:true})
             // TODO handle error condition
             // baseResult = error
         }
