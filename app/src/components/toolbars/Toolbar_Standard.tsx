@@ -7,7 +7,7 @@ import { doc, setDoc, collection, query, where, getDoc, getDocs, orderBy, update
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
-    Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, MenuItemOption, MenuOptionGroup,
+    MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
     Tooltip, Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -266,7 +266,14 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuDivider />
-            <MenuOptionGroup key = {workspaceMenuIteration++} defaultValue = {defaultValue} onChange = {changeWorkspaceSelection} fontSize = 'medium' fontStyle = 'italic' title = 'Select a workspace:'>
+            <MenuOptionGroup 
+                key = {workspaceMenuIteration++} 
+                defaultValue = {defaultValue} 
+                onChange = {changeWorkspaceSelection} 
+                fontSize = 'medium' 
+                fontStyle = 'italic' 
+                title = 'Select a workspace:'
+            >
                 {
                     workspaceList.map((item) => {
                         return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>

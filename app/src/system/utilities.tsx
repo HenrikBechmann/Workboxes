@@ -544,8 +544,6 @@ const versionData = {
           is_default: false,
         }
       },
-      panels:[
-        ],
       panel: {
         id: null,
         name: '',

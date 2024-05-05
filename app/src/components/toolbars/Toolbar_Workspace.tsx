@@ -1,13 +1,14 @@
 // Toolbar_Worspace.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {CSSProperties} from 'react'
+import React, {useMemo, useRef, useState, CSSProperties} from 'react'
 
 import { useUserAuthData } from '../../system/WorkboxesProvider'
 
 import {
   Box,
   Tooltip,
+  MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
 } from '@chakra-ui/react'
 
 import StandardIcon from './StandardIcon'
@@ -98,11 +99,66 @@ const displayNameStyles = {
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {resetIcon} caption = 'panel reset' tooltip = 'reset panel to base domain workbox'/>
 
+let panelMenuIteration = 0
+
 const WorkspaceToolbar = (props) => {
 
-    const userAuthData = useUserAuthData()
+    const 
+        userAuthData = useUserAuthData(),
+        { displayName, photoURL, uid } = userAuthData.authUser,
+        { workspaceData } = props,
+        panelSelection = workspaceData.panel,
+        panelMenuRef = useRef(null),
+        [ panelList, setPanelList] = useState([])
 
-    const {displayName, photoURL, uid} = userAuthData.authUser
+    const renamePanel = () => {
+
+    }
+
+    const deletePanel = () => {
+
+    }
+
+    const createPanel = () => {
+
+    }
+
+    const changePanelSelection = () => {
+
+    }
+
+    const panelmenuList = useMemo(() => {
+
+        // if (workspacesMenu.length === 0) return null
+        const defaultValue = panelSelection.id
+
+        // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
+        return <MenuList ref = {panelMenuRef}>
+            <MenuItem onClick = {renamePanel} >Rename this panel</MenuItem>
+            <MenuItem >Reset this panel</MenuItem>
+            <MenuItem onClick = {deletePanel} >Delete this panel</MenuItem>
+            <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
+            <MenuDivider />
+            <MenuOptionGroup 
+                key = {panelMenuIteration++} 
+                defaultValue = {defaultValue} 
+                onChange = {changePanelSelection} 
+                fontSize = 'medium' 
+                fontStyle = 'italic' 
+                title = 'Select a panel:'
+            >
+                {
+                    panelList.map((item) => {
+                        return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>
+                    })
+                }
+            </MenuOptionGroup>
+            <MenuDivider />
+        </MenuList>
+
+    },[panelList, panelSelection])
+
+    // TODO hide user identity in user domain panel
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -112,9 +168,10 @@ const WorkspaceToolbar = (props) => {
             arrowdirection = 'up'
             icon = {panelIcon}
             caption = 'workspace panel'
+            menulist = {panelmenuList}
         />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel base domain (user)'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'user domain identity'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel domain'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'user identity'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {navBeforeIcon} caption = 'switch' tooltip = 'change to next left panel'/>
         <StandardIcon icon = {navNextIcon} caption = 'panel' tooltip = 'change to next right panel'/>

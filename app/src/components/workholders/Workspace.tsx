@@ -155,7 +155,7 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-footer' area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%' >
                 <ToolbarFrame>
-                    <WorkspaceToolbar />
+                    <WorkspaceToolbar workspaceData = {workspaceData}/>
                 </ToolbarFrame>
             </Box>
         </GridItem>
