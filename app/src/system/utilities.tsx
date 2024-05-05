@@ -74,6 +74,7 @@ export const updateDocumentSchema = (collection, type, document, initialvalues =
 
 }
 
+// property names are collection names
 const versionMaps = {
   workboxes: {
     collection: {
