@@ -86,6 +86,16 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
+    domain: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+    member: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
   },
   accounts: {
     standard: {
@@ -247,7 +257,7 @@ const versionData = {
           updated_timestamp: null,
         },
         counts: {
-          links: 0,
+          connectors: 0,
           references: 0,
         },
       },
@@ -270,7 +280,7 @@ const versionData = {
       },
       databox: {
         accepts: [],
-        links: {
+        connectors: {
           cached: null,
           cache: [],
         },
@@ -318,7 +328,7 @@ const versionData = {
           updated_timestamp: null,
         },
         counts: {
-          links: 0,
+          connectors: 0,
           references: 0,
         },
       },
@@ -341,7 +351,149 @@ const versionData = {
       },
       databox: {
         accepts: [],
-        links: {
+        connectors: {
+          cached: null,
+          cache: [],
+        },
+      },
+    }],
+    domain: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        workbox: {
+          id:null,
+          name: null,
+          image: {
+            source: null,
+          },
+        },
+        roles: {
+          is_domainworkbox: null,
+          read: null,
+          write: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        type: {
+          name: "domain",
+          alias: "Domain",
+          image: {
+            source: null,
+          },
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {id: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          connectors: 0,
+          references: 0,
+        },
+      },
+      document: {
+        sections: [
+          {
+            name: "standard",
+            alias: "Standard",
+            position: 0,
+            data: {
+              name: null,
+              image: {
+                source: null,
+              },
+              description: null,
+              summary: null,
+            },
+          },
+        ],
+      },
+      databox: {
+        accepts: [],
+        connectors: {
+          cached: null,
+          cache: [],
+        },
+      },
+    }],
+    member: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        workbox: {
+          id:null,
+          name: null,
+          image: {
+            source: null,
+          },
+        },
+        roles: {
+          is_domainworkbox: null,
+          read: null,
+          write: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        type: {
+          name: "member",
+          alias: "Member",
+          image: {
+            source: null,
+          },
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {id: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          connectors: 0,
+          references: 0,
+        },
+      },
+      document: {
+        sections: [
+          {
+            name: "standard",
+            alias: "Standard",
+            position: 0,
+            data: {
+              name: null,
+              image: {
+                source: null,
+              },
+              description: null,
+              summary: null,
+            },
+          },
+        ],
+      },
+      databox: {
+        accepts: [],
+        connectors: {
           cached: null,
           cache: [],
         },

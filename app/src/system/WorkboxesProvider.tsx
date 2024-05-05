@@ -334,7 +334,7 @@ export const UserProvider = ({children}) => {
                 updated_timestamp: serverTimestamp(),
               },
               counts: {
-                links: 0,
+                connectors: 0,
                 references: 0,
               },
             },

@@ -36,7 +36,7 @@ const documentTemplate = {
 
 const databoxTemplate = {
     accepts:null,
-    links:null,
+    connectors:null,
     changed:false,
 }
 
@@ -53,7 +53,7 @@ class workboxGateway {
             defaultWorkboxState:{...defaultWorkboxState},
             counts:{
                 generation:null, 
-                links:null,
+                connectors:null,
                 acl:null,
             },
             commits: {
@@ -80,7 +80,7 @@ class workboxGateway {
             ]}
         this.databox = {...databoxTemplate, 
             accepts:[], 
-            links:{preload:true, list:[], set:new Set()}
+            connectors:{preload:true, list:[], set:new Set()}
         }
         // save defaults for new instances
         this.defaults = defaults
