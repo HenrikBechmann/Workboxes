@@ -212,6 +212,11 @@ export const UserProvider = ({children}) => {
                   name: displayName,
                 },
                 created_timestamp: serverTimestamp(),
+                updated_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                updated_timestamp: serverTimestamp(),
               },
             },
 
@@ -237,6 +242,11 @@ export const UserProvider = ({children}) => {
                   name: displayName,
                 },
                 created_timestamp: serverTimestamp(),
+                updated_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                updated_timestamp: serverTimestamp(),
               },
               counts: {
               },
@@ -270,6 +280,11 @@ export const UserProvider = ({children}) => {
                       name: displayName
                   },
                   created_timestamp: serverTimestamp(),
+                  updated_by: {
+                      id: uid, 
+                      name: displayName
+                  },
+                  updated_timestamp: serverTimestamp(),
                 },
                 counts: {
                   members: 0,
@@ -303,8 +318,8 @@ export const UserProvider = ({children}) => {
                 name: displayName,
               },
               type: {
-                name: "container",
-                alias: "Container",
+                name: "appuser",
+                alias: "App User",
               },
               commits: {
                 created_by: {
@@ -312,6 +327,11 @@ export const UserProvider = ({children}) => {
                   name: displayName,
                 },
                 created_timestamp: serverTimestamp(),
+                updated_by: {
+                  id: uid,
+                  name: displayName,
+                },
+                updated_timestamp: serverTimestamp(),
               },
               counts: {
                 links: 0,

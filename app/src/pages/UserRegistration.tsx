@@ -688,7 +688,12 @@ const DialogForSaveHandle = (props) => {
                             id: userAuthData.authUser.uid,
                             name: editValues.name
                         },
-                        created_timestamp: serverTimestamp()
+                        created_timestamp: serverTimestamp(),
+                        updated_by: {
+                            id: userAuthData.authUser.uid,
+                            name: editValues.name
+                        },
+                        updated_timestamp: serverTimestamp(),
                     }
                 }
             })

@@ -81,6 +81,11 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
+    appuser: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
   },
   accounts: {
     standard: {
@@ -226,8 +231,79 @@ const versionData = {
           name: null,
         },
         type: {
-          name: "container",
-          alias: "Container",
+          name: "collection",
+          alias: "Collection",
+          image: {
+            source: null,
+          },
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {id: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          links: 0,
+          references: 0,
+        },
+      },
+      document: {
+        sections: [
+          {
+            name: "standard",
+            alias: "Standard",
+            position: 0,
+            data: {
+              name: null,
+              image: {
+                source: null,
+              },
+              description: null,
+              summary: null,
+            },
+          },
+        ],
+      },
+      databox: {
+        accepts: [],
+        links: {
+          cached: null,
+          cache: [],
+        },
+      },
+    }],
+    appuser: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        workbox: {
+          id:null,
+          name: null,
+          image: {
+            source: null,
+          },
+        },
+        roles: {
+          is_domainworkbox: null,
+          read: null,
+          write: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        type: {
+          name: "appuser",
+          alias: "App User",
           image: {
             source: null,
           },

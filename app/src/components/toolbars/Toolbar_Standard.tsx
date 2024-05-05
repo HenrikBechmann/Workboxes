@@ -497,6 +497,11 @@ const WorkspaceWriteDialog = (props) => {
                                 name: userRecord.profile.user.name,
                             },
                             created_timestamp: serverTimestamp(),
+                            udpated_by: {
+                                id: userRecord.profile.user.id,
+                                name: userRecord.profile.user.name,
+                            },
+                            updated_timestamp: serverTimestamp(),
                         },
                     }
                 })

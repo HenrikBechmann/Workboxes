@@ -117,6 +117,11 @@ export const Main = (props) => {
                                 name: userProfileInfo.name
                             },
                             created_timestamp: serverTimestamp(),
+                            updated_by: {
+                                id: userProfileInfo.id, 
+                                name: userProfileInfo.name
+                            },
+                            updated_timestamp: serverTimestamp(),
                         },
                         flags: {
                             is_default: true,
