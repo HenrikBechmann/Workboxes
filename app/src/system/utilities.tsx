@@ -137,6 +137,13 @@ const versionMaps = {
       functionmap: new Map(),
     }
   },
+  panels: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    }
+  },
 }
 
 const versionTransforms = {
@@ -776,6 +783,42 @@ const versionData = {
         id: null,
         name: '',
       }
+    }],
+  },
+  panels: {
+    standard: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        panel:{
+          name: null,
+          id: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        commits: {
+          created_by: {
+            id: null, 
+            name: null
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+          panels:0,
+        },
+        flags: {
+          is_default: false,
+        }
+      },
+      windows: []
     }],
   },
 };
