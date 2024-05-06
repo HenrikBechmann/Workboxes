@@ -29,7 +29,7 @@ export const Main = (props) => {
         [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
         workspaceRecordRef = useRef(null),
         db = useFirestore(),
-        toast = useToast(),
+        toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
         navigate = useNavigate()
 

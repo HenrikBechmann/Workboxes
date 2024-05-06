@@ -21,16 +21,20 @@ const iconWrapperStyles = {
 
 const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, response, iconStyles, isDisabled = false } = props
+    const { icon, caption, tooltip, response, iconStyles, isDisabledTooltip = false, isDisabled = false } = props
 
     const iconStylesRef = useRef({...baseIconStyles, ...iconStyles})
 
-    let isDisabledLocal = isDisabled
-    if (!isDisabled) isDisabledLocal = !tooltip
+    let isDisabledTooltipLocal = isDisabledTooltip
+    if (!isDisabledTooltip) isDisabledTooltipLocal = !tooltip
 
-    return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px'>
-        <Box style = { iconWrapperStyles } onClick = {response} >
-            <Tooltip isDisabled = {isDisabledLocal} hasArrow label = { tooltip } >
+    const opacity = isDisabled
+        ? 0.5
+        :1
+
+    return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px' opacity = {opacity}>
+        <Box style = { iconWrapperStyles } onClick = {!isDisabled?response:null} >
+            <Tooltip isDisabled = {isDisabledTooltipLocal} hasArrow label = { tooltip } >
                 <img style = { iconStylesRef.current } src = { icon } />
             </Tooltip>
         </Box>

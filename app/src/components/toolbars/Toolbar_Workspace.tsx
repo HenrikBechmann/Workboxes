@@ -1,7 +1,7 @@
 // Toolbar_Worspace.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, useRef, useState, CSSProperties} from 'react'
+import React, {useMemo, useRef, useState, useEffect, CSSProperties} from 'react'
 
 import { useUserAuthData } from '../../system/WorkboxesProvider'
 
@@ -106,10 +106,22 @@ const WorkspaceToolbar = (props) => {
     const 
         userAuthData = useUserAuthData(),
         { displayName, photoURL, uid } = userAuthData.authUser,
-        { workspaceData } = props,
+        { workspaceData, panelSelectionNumber, setPanelSelectionNumber } = props,
         panelSelection = workspaceData.panel,
+        panelCount = workspaceData.profile.counts.panels,
         panelMenuRef = useRef(null),
-        [ panelList, setPanelList] = useState([])
+        [ panelList, setPanelList] = useState([]),
+        [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
+
+    useEffect(()=>{
+
+        const navState = {
+            previousDisabled: panelSelectionNumber == 0,
+            nextDisabled: panelSelectionNumber == panelCount - 1,
+        }
+        setNavState(navState)
+
+    },[panelCount, panelSelectionNumber])
 
     const renamePanel = () => {
 
@@ -125,6 +137,18 @@ const WorkspaceToolbar = (props) => {
 
     const changePanelSelection = () => {
 
+    }
+
+    const nextPanel = () => {
+        if (panelSelectionNumber < (panelCount -1)) {
+            setPanelSelectionNumber(panelSelectionNumber + 1)
+        }
+    }
+
+    const previousPanel = () => {
+        if (panelSelectionNumber > 0) {
+            setPanelSelectionNumber(panelSelectionNumber - 1)
+        }
     }
 
     const panelmenuList = useMemo(() => {
@@ -162,6 +186,12 @@ const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
+            response = {previousPanel} isDisabled = {navState.previousDisabled}/>
+        <StandardIcon icon = {navNextIcon} caption = 'next' tooltip = 'change to next right panel' 
+            response = {nextPanel} isDisabled = {navState.nextDisabled}/>
+        <ToolbarVerticalDivider />
         <MenuControl 
             displayName = 'Main panel' 
             tooltip = 'select a panel'
@@ -170,11 +200,6 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'member'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {navBeforeIcon} caption = 'switch' tooltip = 'change to next left panel'/>
-        <StandardIcon icon = {navNextIcon} caption = 'panel' tooltip = 'change to next right panel'/>
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'
@@ -182,6 +207,9 @@ const WorkspaceToolbar = (props) => {
             icon = {windowSelectIcon}
             caption = 'windows'
         />
+        <ToolbarVerticalDivider />
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'member'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />

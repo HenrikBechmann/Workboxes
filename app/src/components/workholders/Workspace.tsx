@@ -51,13 +51,15 @@ const Workspace = (props) => {
     const 
         { workspaceData } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
-        [panelSelectionNumber, setPanelSelectionNumber] = useState(-3),
+        [panelSelectionNumber, setPanelSelectionNumber] = useState(3),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelsListRef = useRef([]),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
         workspaceElementRef = useRef(null)
+
+    workspaceData.profile.counts.panels = 5
 
     console.log('workspaceData', workspaceData)
 
@@ -176,7 +178,7 @@ const Workspace = (props) => {
 
     useEffect(()=>{
 
-        document.documentElement.style.setProperty('--wb_panel_selection',panelSelectionNumber.toString())
+        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionNumber).toString())
 
     },[panelSelectionNumber])
 
@@ -205,7 +207,7 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                 <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
-                transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 1s ease'>
+                transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
                 {(workspaceState != 'setup') && panelsListRef.current}
                 </Box>
             </Box>
@@ -213,7 +215,7 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-footer' area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%' >
                 <ToolbarFrame>
-                    <WorkspaceToolbar workspaceData = {workspaceData}/>
+                    <WorkspaceToolbar panelSelectionNumber = {panelSelectionNumber} setPanelSelectionNumber = {setPanelSelectionNumber} workspaceData = {workspaceData}/>
                 </ToolbarFrame>
             </Box>
         </GridItem>

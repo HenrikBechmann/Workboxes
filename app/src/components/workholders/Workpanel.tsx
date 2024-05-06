@@ -16,6 +16,8 @@ const workpanelStyles = {
     width:'100%',
     minWidth:'700px',
     minHeight:'700px',
+    border: '2px ridge silver',
+    borderRadius: '8px',
 } as CSSProperties
 
 const panelMessageStyles = {
