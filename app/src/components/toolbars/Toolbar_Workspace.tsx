@@ -170,8 +170,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'user identity'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'member'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {navBeforeIcon} caption = 'switch' tooltip = 'change to next left panel'/>
         <StandardIcon icon = {navNextIcon} caption = 'panel' tooltip = 'change to next right panel'/>
