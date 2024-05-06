@@ -148,8 +148,10 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box id = 'panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0} overflow = 'auto'>
+            <Box id = 'panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
+                <Box data-type = 'panel-scroller' position = 'absolute' inset = {0} overflow = 'auto'>
                 {(workspaceState != 'setup') && panelsListRef.current}
+                </Box>
             </Box>
         </GridItem>
         <GridItem data-type = 'workspace-footer' area = 'footer'>
