@@ -131,7 +131,37 @@ const Workspace = (props) => {
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-        />]
+            offset = '0px'
+        />,
+        <Workpanel 
+            key = {1} 
+            startingWindowsSpecsList = {panelWindowsSpecs} 
+            workboxMapRef = {workboxMapRef}
+            workboxGatewayMapRef = {workboxGatewayMapRef}
+            offset = '700px'
+        />,
+        <Workpanel 
+            key = {2} 
+            startingWindowsSpecsList = {panelWindowsSpecs} 
+            workboxMapRef = {workboxMapRef}
+            workboxGatewayMapRef = {workboxGatewayMapRef}
+            offset = '700px'
+        />,
+        <Workpanel 
+            key = {3} 
+            startingWindowsSpecsList = {panelWindowsSpecs} 
+            workboxMapRef = {workboxMapRef}
+            workboxGatewayMapRef = {workboxGatewayMapRef}
+            offset = '700px'
+        />,
+        <Workpanel 
+            key = {4} 
+            startingWindowsSpecsList = {panelWindowsSpecs} 
+            workboxMapRef = {workboxMapRef}
+            workboxGatewayMapRef = {workboxGatewayMapRef}
+            offset = '700px'
+        />,
+        ]
 
     },[])
 
@@ -151,7 +181,7 @@ const Workspace = (props) => {
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
-                <Box data-type = 'panel-scroller' height = '100%'>
+                <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}>
                 {(workspaceState != 'setup') && panelsListRef.current}
                 </Box>
             </Box>
