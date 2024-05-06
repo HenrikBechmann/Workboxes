@@ -51,11 +51,13 @@ const Workspace = (props) => {
     const 
         { workspaceData } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
+        [panelSelectionNumber, setPanelSelectionNumber] = useState(-3),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelsListRef = useRef([]),
         workboxMapRef = useRef(null),
-        workboxGatewayMapRef = useRef(null)
+        workboxGatewayMapRef = useRef(null),
+        workspaceElementRef = useRef(null)
 
     console.log('workspaceData', workspaceData)
 
@@ -165,6 +167,27 @@ const Workspace = (props) => {
 
     },[])
 
+    const resizeCallback = useCallback((entries)=>{
+
+        const width = entries[0].contentRect.width
+        document.documentElement.style.setProperty('--wb_panel_width',width + 'px')
+
+    },[])
+
+    useEffect(()=>{
+
+        document.documentElement.style.setProperty('--wb_panel_selection',panelSelectionNumber.toString())
+
+    },[panelSelectionNumber])
+
+    useEffect(()=>{
+        const observer = new ResizeObserver(resizeCallback)
+        observer.observe(workspaceElementRef.current)
+        return () => {
+            observer.disconnect()
+        }
+    },[])
+
     useEffect(()=>{
 
         if (workspaceState != 'ready') setWorkspaceState('ready')
@@ -182,7 +205,7 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
             <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                 <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
-                transform = 'translate(-300px, 0px)'>
+                transform = 'translate(var(--wb_panel_offset), 0px)'>
                 {(workspaceState != 'setup') && panelsListRef.current}
                 </Box>
             </Box>
@@ -196,7 +219,11 @@ const Workspace = (props) => {
         </GridItem>
     </Grid>
 
-    return <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
+    // workspace-container to get workspaceElementRef
+
+    return <Box ref = {workspaceElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
+        <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
+    </Box>
 } 
 
 export default Workspace
