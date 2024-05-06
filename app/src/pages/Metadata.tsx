@@ -262,7 +262,7 @@ const Metadata = (props) => {
         gridTemplateColumns={'1fr'}
     >
         <GridItem data-type = 'page-body' area = 'body'>
-            <Box id = 'panelframe' data-type = 'page-frame' height = '100%' position = 'relative'>
+            <Box id = 'wb-panelframe' data-type = 'page-frame' height = '100%' position = 'relative'>
                 <Box 
                     data-type = 'page-liner' 
                     ref = {containerElementRef} 

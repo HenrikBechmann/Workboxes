@@ -188,8 +188,8 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        panelFrameElementRef.current = windowElementRef.current.closest('#panelframe')
-        titlebarElementRef.current = windowElementRef.current.querySelector('#titlebar')
+        panelFrameElementRef.current = windowElementRef.current.closest('#wb-panelframe')
+        titlebarElementRef.current = windowElementRef.current.querySelector('#wb-titlebar')
 
         const element = windowElementRef.current
 

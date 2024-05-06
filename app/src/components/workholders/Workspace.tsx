@@ -17,6 +17,8 @@ import {
 
 import Scroller from 'react-infinite-grid-scroller'
 
+import '../../system/panel-variables.css'
+
 import { useUserAuthData } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
@@ -148,7 +150,7 @@ const Workspace = (props) => {
           gridTemplateColumns={'1fr'}
         >
         <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box id = 'panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
+            <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                 <Box data-type = 'panel-scroller' height = '100%'>
                 {(workspaceState != 'setup') && panelsListRef.current}
                 </Box>

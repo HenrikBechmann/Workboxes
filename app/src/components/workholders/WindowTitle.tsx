@@ -82,7 +82,7 @@ const WindowTitle = forwardRef( function WindowTitle (props:any, titleElementRef
         windowCallbacks.normalizeWindow(windowSessionID)
     }
 
-    return <Box ref = {titleElementRef} id = 'titlebar' data-type = 'window-title' style = {windowTitleStyles}>
+    return <Box ref = {titleElementRef} id = 'wb-titlebar' data-type = 'window-title' style = {windowTitleStyles}>
         <Box data-type = 'window-close' onClick = {closeWindow} style = {leftIconBoxStyles} >
             <img draggable = "false" style = {{width:'20px'}} src = {closeLightIcon} />
         </Box>
