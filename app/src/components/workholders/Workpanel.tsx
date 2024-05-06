@@ -602,12 +602,14 @@ const Workpanel = (props:any) => {
     const windowsList = windowsListRef.current
     const windowCount = windowsListRef.current.length
 
-    return <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
-        {panelState != 'setup' && windowsList}
-        {(panelState != 'setup' && windowCount === 0) && 
-            <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
-        }
-        {children}
+    return <Box data-type = 'panel-display' position = 'absolute' width='100%' height =' 100%' overflow = 'auto'>
+        <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
+            {panelState != 'setup' && windowsList}
+            {(panelState != 'setup' && windowCount === 0) && 
+                <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
+            }
+            {children}
+        </Box>
     </Box>
 }
 
