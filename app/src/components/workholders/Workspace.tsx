@@ -131,35 +131,35 @@ const Workspace = (props) => {
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-            offset = '0px'
+            panelNumber = {0}
         />,
         <Workpanel 
             key = {1} 
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-            offset = '700px'
+            panelNumber = {1}
         />,
         <Workpanel 
             key = {2} 
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-            offset = '700px'
+            panelNumber = {2}
         />,
         <Workpanel 
             key = {3} 
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-            offset = '700px'
+            panelNumber = {3}
         />,
         <Workpanel 
             key = {4} 
             startingWindowsSpecsList = {panelWindowsSpecs} 
             workboxMapRef = {workboxMapRef}
             workboxGatewayMapRef = {workboxGatewayMapRef}
-            offset = '700px'
+            panelNumber = {4}
         />,
         ]
 

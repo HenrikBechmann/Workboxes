@@ -37,7 +37,7 @@ const Workpanel = (props:any) => {
 
     const 
         // windows setup
-        { startingWindowsSpecsList:startingList, children, workboxMapRef, workboxGatewayMapRef, offset } = props,
+        { startingWindowsSpecsList:startingList, children, workboxMapRef, workboxGatewayMapRef, panelNumber } = props,
 
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
@@ -604,6 +604,7 @@ const Workpanel = (props:any) => {
 
     return <Box data-type = 'panel-display' width='var(--wb_panel_width)' height =' 100%' overflow = 'auto' minWidth = {0} position = 'relative'>
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
+            <Box fontSize = 'xl'>PANEL NUMBER {panelNumber}</Box>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 
                 <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
