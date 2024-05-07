@@ -248,6 +248,10 @@ const versionData = {
           id: null,
           name: null,
         },
+        controlling_workbox: {
+          id: null,
+          name: null,
+        },
         type: {
           name: "collection",
           alias: "Collection",
@@ -316,6 +320,10 @@ const versionData = {
           name: null,
         },
         domain: {
+          id: null,
+          name: null,
+        },
+        controlling_workbox: {
           id: null,
           name: null,
         },
@@ -390,6 +398,10 @@ const versionData = {
           id: null,
           name: null,
         },
+        controlling_workbox: {
+          id: null,
+          name: null,
+        },
         type: {
           name: "domain",
           alias: "Domain",
@@ -458,6 +470,10 @@ const versionData = {
           name: null,
         },
         domain: {
+          id: null,
+          name: null,
+        },
+        controlling_workbox: {
           id: null,
           name: null,
         },
