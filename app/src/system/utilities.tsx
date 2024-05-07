@@ -123,6 +123,13 @@ const versionMaps = {
       functionmap: new Map(),
     },
   },
+  members: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
   handles: {
     user: {
       latest_version:0,
@@ -626,6 +633,72 @@ const versionData = {
         desktop: {
           name:null,
           id:null,
+        },
+      },
+    }],
+  },
+  members: {
+    standard: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        flags: {
+          is_abandoned: false,
+          first_load: true,
+          fully_registered: false,
+          terms_accepted: false,
+          payment_method: false,
+          standing_code:0,
+          settled: false,
+          sample_workbox_created:false,
+        },
+        user: {
+          id:null,
+          name: null,
+          email_name: null,
+          image: {
+            source: null,
+          },
+          location: null,
+          birthdate: null,
+          description: null,
+          date_joined: null,
+        },
+        member: {
+          id:null,
+          name: null,
+          email_name: null,
+          image: {
+            source: null,
+          },
+          location: null,
+          birthdate: null,
+          description: null,
+          date_joined: null,
+        },
+        handle: {
+          plain: null,
+          lower_case: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+          workboxes:0,
         },
       },
     }],
