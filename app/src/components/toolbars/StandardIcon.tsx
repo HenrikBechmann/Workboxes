@@ -1,27 +1,45 @@
 // StandardIcon.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef} from 'react'
+import React, {useRef, CSSProperties} from 'react'
 
 import {
   Tooltip, Box,
 } from '@chakra-ui/react'
+
+import NumberBadge from './NumberBadge'
 
 const baseIconStyles = {
     height:'20px',
     width:'20px',
 }
 
+const numberBadgeStyles = {
+    height:'11px',
+    padding:'0 2px 0 2px',
+    borderRadius: '5px',
+    position:'absolute',
+    right:0,
+    top: 0,
+    fontSize: '9px',
+    textAlign: 'center',
+    backgroundColor: 'blue',
+    color:'white',
+    lineHeight: '11px',
+    fontWeight: 'bold',
+} as CSSProperties
+
 const iconWrapperStyles = {
     height: '24px',
     // display:'inline-block',
     opacity:0.7,
     padding:'4px',
-}
+    position:'relative',
+} as CSSProperties
 
 const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, response, iconStyles, isDisabledTooltip = false, isDisabled = false } = props
+    const { icon, caption, tooltip, response, iconStyles, numberBadgeCount, isDisabledTooltip = false, isDisabled = false } = props
 
     const iconStylesRef = useRef({...baseIconStyles, ...iconStyles})
 
@@ -31,9 +49,11 @@ const StandardIcon = (props) => {
     const opacity = isDisabled
         ? 0.5
         :1
+    const isNumberBadgeCount = numberBadgeCount ?? false
 
-    return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px' opacity = {opacity}>
+    return <Box data-type = 'standardicon' display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px' opacity = {opacity}>
         <Box style = { iconWrapperStyles } onClick = {!isDisabled?response:null} >
+            {(isNumberBadgeCount !== false) && <NumberBadge number = {numberBadgeCount} />}
             <Tooltip isDisabled = {isDisabledTooltipLocal} hasArrow label = { tooltip } >
                 <img style = { iconStylesRef.current } src = { icon } />
             </Tooltip>

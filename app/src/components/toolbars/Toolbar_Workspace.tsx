@@ -187,8 +187,10 @@ const WorkspaceToolbar = (props) => {
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
+            numberBadgeCount = {panelSelectionNumber}
             response = {previousPanel} isDisabled = {navState.previousDisabled}/>
         <StandardIcon icon = {navNextIcon} caption = 'next' tooltip = 'change to next right panel' 
+            numberBadgeCount = {panelCount - (panelSelectionNumber + 1)}
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
