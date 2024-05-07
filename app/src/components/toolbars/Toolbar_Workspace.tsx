@@ -186,7 +186,6 @@ const WorkspaceToolbar = (props) => {
 
     // render
     return <Box style = {standardToolbarStyles}>
-        <ToolbarVerticalDivider />
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
             response = {previousPanel} isDisabled = {navState.previousDisabled}/>
         <StandardIcon icon = {navNextIcon} caption = 'next' tooltip = 'change to next right panel' 
@@ -208,8 +207,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'member'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'member workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />
