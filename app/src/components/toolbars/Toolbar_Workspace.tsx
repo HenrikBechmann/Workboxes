@@ -209,8 +209,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain workbox'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'start workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'panel domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'starter workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />
