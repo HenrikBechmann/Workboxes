@@ -727,12 +727,13 @@ const DialogForSaveHandle = (props) => {
                 return false
             }
 
-            // continue with integrating updates if handle successfully created
-
             // add handle to user and domain
             // add identity data to user
             // add new name to user domain, user account, base user workbox, and their references 
             //     and to creation and owner references
+
+            // 1. handle
+            transaction.set(doc(db,'handles',editValues.handle.toLowerCase()),data)
 
             // 2. user
             transaction.update(doc(db,'users',userAuthData.authUser.uid),{
