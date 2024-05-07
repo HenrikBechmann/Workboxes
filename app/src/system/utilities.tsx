@@ -3,6 +3,10 @@
 
 import {merge as _merge, cloneDeep as _cloneDeep} from 'lodash'
 
+export const copyVersionDataToFirestore = () => {
+
+}
+
 export const updateDocumentSchema = (collection, type, document, initialvalues = {}) => {
 
     // console.log('updateDocumentSchema: collection, type, document, initialvalues', 

@@ -12,7 +12,7 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
-import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore'
+import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, writeBatch } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
 import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl } from '../system/WorkboxesProvider'
@@ -132,7 +132,8 @@ export const Main = (props) => {
             workspaceSelectionRecord = workspaceRecord
 
             try {
-                await setDoc(workspaceDocRef,workspaceRecord)
+                const batch = writeBatch(db)
+                batch.set(workspaceDocRef,workspaceRecord)
 
                 const userUpdateData = 
                     isMobile
@@ -141,7 +142,9 @@ export const Main = (props) => {
 
                     userUpdateData['profile.counts.workspaces'] = increment(1)
 
-                await updateDoc(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
+                batch.update(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
+                
+                await batch.commit()
 
             } catch (error) {
 

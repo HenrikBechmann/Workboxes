@@ -609,7 +609,7 @@ const Workpanel = (props:any) => {
             <Box fontSize = 'xl'>PANEL NUMBER {panelNumber}</Box>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 
-                <Box style = {panelMessageStyles} >Tap here to load the base workbox for this panel</Box>
+                <Box style = {panelMessageStyles} >Tap here to load the domain workbox for this panel</Box>
             }
             {children}
         </Box>

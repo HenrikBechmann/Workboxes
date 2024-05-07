@@ -3,7 +3,13 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { doc, setDoc, collection, query, where, getDoc, getDocs, orderBy, updateDoc, deleteDoc, increment, serverTimestamp } from 'firebase/firestore'
+import { 
+    doc, collection, 
+    query, where, getDocs, orderBy, 
+    getDoc, setDoc, updateDoc, deleteDoc, 
+    increment, serverTimestamp,
+    writeBatch,
+} from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
@@ -437,24 +443,25 @@ const WorkspaceWriteDialog = (props) => {
             updateBlock['workspace.desktop.name'] = writeValues.name
             fieldsToUpdateCount++
         }
-        if (fieldsToUpdateCount) {
-            try {
-                await updateDoc(userDocRef,updateBlock)
-            } catch (error) {
-                console.log('error updating user workspace name from standard toolbar', error)
-                errorControl.push({description:'error updating user workspace name from standard toolbar', error})
-                navigate('/error')            
-            }
-        }
         try {
-            await updateDoc(workspaceDocRef, {
+            const batch = writeBatch(db)
+
+            if (fieldsToUpdateCount) {
+                batch.update(userDocRef,updateBlock)
+            }
+
+            batch.update(workspaceDocRef, {
                 'profile.workspace.name':writeValues.name
             })
+
+            await batch.commit()
+
         } catch (error) {
             console.log('error updating workspace name from standard toolbar', error)
             errorControl.push({description:'error updating workspace name from standard toolbar', error})
             navigate('/error')            
         }
+
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
@@ -506,8 +513,10 @@ const WorkspaceWriteDialog = (props) => {
                     }
                 })
         try {
-            await setDoc(newWorkspaceDocRef, newWorkspaceRecord)
-            await updateDoc(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
+            const batch = writeBatch(db)
+            batch.set(newWorkspaceDocRef, newWorkspaceRecord)
+            batch.update(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
+            await batch.commit()
         } catch (error) {
             console.log('error creating new workspace record (or updating count) from standard toolbar', error)
             errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
@@ -645,8 +654,16 @@ const WorkspaceDeleteDialog = (props) => {
         // get default workspace
         const 
             dbWorkspaceCollection = collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),
-            dbQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true)),
+            dbQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true))
+
+        let dbDefaultWorkspace
+        try {
             dbDefaultWorkspace = await getDocs(dbQuery)
+        } catch (error) {
+            console.log('error fetching user workspace collection')
+            errorControl.push({description:'error fetching user workspace collection from standard toolbar', error:'N/A'})
+            navigate('/error')            
+        }
 
         let dbdoc, defaultWorkspace
         if (dbDefaultWorkspace.size == 1) {
@@ -665,8 +682,10 @@ const WorkspaceDeleteDialog = (props) => {
 
         // delete current workspace
         try {
-            await deleteDoc(doc(dbWorkspaceCollection, workspaceSelection.id))
-            await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+            const batch = writeBatch(db)
+            batch.delete(doc(dbWorkspaceCollection, workspaceSelection.id))
+            batch.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+            await batch.commit()
         } catch (error) {
             // TODO should try to recover from this
             console.log('error deleting workspace or incrementing workspace count')

@@ -10,7 +10,9 @@ import React, { useEffect, useRef, useState, createContext, useContext } from 'r
 // firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { 
+    getFirestore, collection, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, serverTimestamp, writeBatch 
+} from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import { getFunctions, httpsCallable } from "firebase/functions"
 import firebaseConfig from '../firebaseConfig'
@@ -356,10 +358,12 @@ export const UserProvider = ({children}) => {
         })
 
         try {
-            await setDoc(doc(db,'users',uid),userRecord)
-            await setDoc(accountDocRef, accountRecord)
-            await setDoc(domainDocRef, domainRecord)
-            await setDoc(workboxDocRef, workboxRecord)
+            const batch = writeBatch(db)
+            batch.set(doc(db,'users',uid),userRecord)
+            batch.set(accountDocRef, accountRecord)
+            batch.set(domainDocRef, domainRecord)
+            batch.set(workboxDocRef, workboxRecord)
+            await batch.commit()
         } catch(error) {
             console.log('error getting setting initial userRecords', error)
             errorControl.push({description:'error getting setting initial userRecords',error})

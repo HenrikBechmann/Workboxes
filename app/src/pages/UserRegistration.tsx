@@ -14,7 +14,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 import { signOut, getAuth, deleteUser, reauthenticateWithPopup, OAuthProvider } from "firebase/auth"
 
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, increment } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, increment, writeBatch, runTransaction } from 'firebase/firestore'
 
 import { 
     Flex, Box, Text, Heading,
@@ -102,16 +102,19 @@ const UserRegistration = (props) => {
     async function proceedToApp() {
 
         try {
-            await updateDoc(doc(db, 'users',userRecords.user.profile.user.id),
+            const batch = writeBatch(db)
+            batch.update(doc(db, 'users',userRecords.user.profile.user.id),
                 {
                     'profile.flags.fully_registered':true
                 }
             )
-            await updateDoc(doc(db, 'system','usage'),
+            batch.update(doc(db, 'system','usage'),
                 {
                     'user_entries':increment(1)
                 }
             )
+
+            await batch.commit()
 
         } catch(error) {
 
@@ -651,55 +654,78 @@ const DialogForSaveHandle = (props) => {
 
         setAlertState('processing')
 
+        let workboxdata
+        try {
+
+            const workbox = await getDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id))
+            workboxdata = workbox.data()
+            workboxdata.document.sections[0].data.name = editValues.name
+            workboxdata.document.sections[0].data.description = editValues.description
+
+        } catch(error) {
+
+            console.log('failure to find workbox data',error)
+            errorControl.push({description:'error finding workbox data', error})
+            navigate('/error')
+
+        }
+
         // 1. handle
-        try { // catch most likely if chosen handle already exists
-            // derive birthdate string to avoid birthday shift with UMT
-            let birthdate, birthdatestring
-            if (editValues.birthdate) {
-                birthdate = new Date(editValues.birthdate)
-                const adjustedbirthdate = new Date(birthdate.getTime() + birthdate.getTimezoneOffset() * 60000)
-                birthdatestring = adjustedbirthdate.toDateString()
-            } else {
-                birthdate = null
-                birthdatestring = ''
-            }
+        // catch most likely if chosen handle already exists
+        // derive birthdate string to avoid birthday shift with UMT
+        let birthdate, birthdatestring
+        if (editValues.birthdate) {
+            birthdate = new Date(editValues.birthdate)
+            const adjustedbirthdate = new Date(birthdate.getTime() + birthdate.getTimezoneOffset() * 60000)
+            birthdatestring = adjustedbirthdate.toDateString()
+        } else {
+            birthdate = null
+            birthdatestring = ''
+        }
 
-            // assemble handle document structure
-            const data = updateDocumentSchema('handles','user',{},{
-                profile: {
-                    user: {
+        // assemble handle document structure
+        const data = updateDocumentSchema('handles','user',{},{
+            profile: {
+                user: {
+                    id: userAuthData.authUser.uid,
+                    name: editValues.name,
+                    location: editValues.location,
+                    birthdate: birthdate,
+                    birthdate_string: birthdatestring,
+                    description: editValues.description,
+                },
+                handle: {
+                    plain: editValues.handle,
+                    lower_case: editValues.handle.toLowerCase()
+                },
+                owner: {
+                    id: userAuthData.authUser.uid,
+                    name: editValues.name,
+                },
+                commits: {
+                    created_by: {
                         id: userAuthData.authUser.uid,
-                        name: editValues.name,
-                        location: editValues.location,
-                        birthdate: birthdate,
-                        birthdate_string: birthdatestring,
-                        description: editValues.description,
+                        name: editValues.name
                     },
-                    handle: {
-                        plain: editValues.handle,
-                        lower_case: editValues.handle.toLowerCase()
-                    },
-                    owner: {
+                    created_timestamp: serverTimestamp(),
+                    updated_by: {
                         id: userAuthData.authUser.uid,
-                        name: editValues.name,
+                        name: editValues.name
                     },
-                    commits: {
-                        created_by: {
-                            id: userAuthData.authUser.uid,
-                            name: editValues.name
-                        },
-                        created_timestamp: serverTimestamp(),
-                        updated_by: {
-                            id: userAuthData.authUser.uid,
-                            name: editValues.name
-                        },
-                        updated_timestamp: serverTimestamp(),
-                    }
+                    updated_timestamp: serverTimestamp(),
                 }
-            })
+            }
+        })
 
-            // create handles doc. will fail and get caught below if duplicate
-            await setDoc(doc(db,'handles',editValues.handle.toLowerCase()), data)
+        // create handles doc. will fail and get caught below if duplicate
+
+        try {
+            const transactionresult = await runTransaction(db, async (transaction) => {
+
+            const dbDoc = await transaction.get(doc(db,'handles',editValues.handle.toLowerCase()))
+            if (dbDoc.exists()) {
+                return false
+            }
 
             // continue with integrating updates if handle successfully created
 
@@ -709,7 +735,7 @@ const DialogForSaveHandle = (props) => {
             //     and to creation and owner references
 
             // 2. user
-            await updateDoc(doc(db,'users',userAuthData.authUser.uid),{
+            transaction.update(doc(db,'users',userAuthData.authUser.uid),{
                 // user handle
                 'profile.handle.plain':editValues.handle,
                 'profile.handle.lower_case':editValues.handle.toLowerCase(),
@@ -733,7 +759,7 @@ const DialogForSaveHandle = (props) => {
             })
 
             // 3. domain
-            await updateDoc(doc(db,'domains',userRecords.domain.profile.domain.id),{
+            transaction.update(doc(db,'domains',userRecords.domain.profile.domain.id),{
                 'profile.handle.plain':editValues.handle,
                 'profile.handle.lower_case':editValues.handle.toLowerCase(),
 
@@ -747,7 +773,7 @@ const DialogForSaveHandle = (props) => {
             })
 
             // 4. account
-            await updateDoc(doc(db,'accounts',userRecords.account.profile.account.id),{
+            transaction.update(doc(db,'accounts',userRecords.account.profile.account.id),{
                 // account name
                 'profile.account.name':editValues.name,
 
@@ -758,13 +784,9 @@ const DialogForSaveHandle = (props) => {
 
             // 5. workbox
             // update standard section name in base domain workbox
-            const workbox = await getDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id))
-            const workboxdata = workbox.data()
-            workboxdata.document.sections[0].data.name = editValues.name
-            workboxdata.document.sections[0].data.description = editValues.description
             // console.log('workboxdata',workboxdata)
 
-            await updateDoc(doc(db,'workboxes',userRecords.domain.profile.workbox.id),{
+            transaction.update(doc(db,'workboxes',userRecords.domain.profile.workbox.id),{
                 // return the sections data
                 'document.sections':workboxdata.document.sections,
 
@@ -776,14 +798,19 @@ const DialogForSaveHandle = (props) => {
                 'profile.owner.name':editValues.name,
                 'profile.commits.created_by.name':editValues.name,
             })
-            onClose()
-            setHandleState('output')
-            setAlertState('done')
-            setHandleEditState('output')
+            return true })
+
+            if (transactionresult) {
+                onClose()
+                setHandleState('output')
+                setAlertState('done')
+                setHandleEditState('output')
+            } else {
+                alert('Handle already used. Try another')
+            }
 
         } catch(error) {
 
-            // most likely indicates handle duplicate attempted and rejected
             console.log('failure to post handle data',error)
             errorControl.push({description:'error posting handle data on registration page', error})
             navigate('/error')
@@ -882,19 +909,36 @@ const DialogForCancel = (props) => {
        reauthenticateWithPopup(auth.currentUser, provider).then(async (result) => { // required to delete user login account
 
            snapshotControl.unsubAll()
+           const batch = writeBatch(db)
            if (userRecords.user.profile.handle.lower_case) {
-               await deleteDoc(doc(db, 'handles', userRecords.user.profile.handle.lower_case))
+               batch.delete(doc(db, 'handles', userRecords.user.profile.handle.lower_case))
            }
-           await deleteDoc(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
-           await deleteDoc(doc(db, 'domains', userRecords.domain.profile.domain.id))
-           await deleteDoc(doc(db, 'accounts', userRecords.account.profile.account.id))
-           await deleteDoc(doc(db, 'users',userRecords.user.profile.user.id))
+           batch.delete(doc(db, 'workboxes', userRecords.domain.profile.workbox.id))
+           batch.delete(doc(db, 'domains', userRecords.domain.profile.domain.id))
+           batch.delete(doc(db, 'accounts', userRecords.account.profile.account.id))
+           batch.delete(doc(db, 'users',userRecords.user.profile.user.id))
+           let batchError = false
+           try {
 
-           if (!userAuthData.sysadminStatus.isSuperUser) {
-               const user = auth.currentUser
-               await deleteUser(user)
+               await batch.commit()
+
+           } catch(error) {
+
+               batchError = true
+               alert('There was an error deleting data. Signing out. Sign in and try again.')
+               await signOut(auth)
+               
            }
-           await signOut(auth)
+
+           if (!batchError) {
+
+               if (!userAuthData.sysadminStatus.isSuperUser) {
+                   const user = auth.currentUser
+                   await deleteUser(user)
+               }
+               await signOut(auth)
+
+           }
            onClose()
 
         }).catch(e => {
