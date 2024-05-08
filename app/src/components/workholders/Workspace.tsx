@@ -10,6 +10,16 @@
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
+import { 
+    doc, collection, 
+    query, where, getDocs, orderBy, 
+    getDoc, setDoc, updateDoc, deleteDoc, 
+    increment, serverTimestamp,
+    writeBatch,
+} from 'firebase/firestore'
+
 import {
     Box,
     Grid, GridItem 
@@ -19,7 +29,9 @@ import Scroller from 'react-infinite-grid-scroller'
 
 import '../../system/panel-variables.css'
 
-import { useUserAuthData } from '../../system/WorkboxesProvider'
+import { updateDocumentSchema } from '../../system/utilities'
+
+import { useUserAuthData, useFirestore, useUserRecords, useErrorControl } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -52,18 +64,110 @@ const Workspace = (props) => {
         { workspaceData } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(3),
+        [panelList, setPanelList] = useState(null),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelsListRef = useRef([]),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
-        workspaceElementRef = useRef(null)
+        workspaceElementRef = useRef(null),
+        db = useFirestore(),
+        userRecords = useUserRecords(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
     workspaceData.profile.counts.panels = 5
 
-    console.log('workspaceData', workspaceData)
+    console.log('workspaceData, panelList', workspaceData, panelList)
 
+    async function getPanels() {
+
+        const workingPanelList = []
+
+        const dbPanelCollection = 
+            collection(
+                db, 
+                'users', userRecords.user.profile.user.id, 
+                'workspaces', workspaceData.profile.workspace.id,
+                'panels'
+            )
+
+        const q = query(
+            dbPanelCollection
+        )
+        let querySnapshot
+        try {
+            querySnapshot = await getDocs(q)
+        } catch (error) {
+            console.log('error getting panel list from workspace setup', error)
+            errorControl.push({description:'error getting panel list from workspace setup', error})
+            navigate('/error')
+            return
+        }
+        querySnapshot.forEach((dbdoc) => {
+            const data = dbdoc.data()
+            workingPanelList.push(data)
+        })
+
+        // update versions
+        for (let index = 0; index < workingPanelList.length; index++) {
+            const data = workingPanelList[index]
+            const updatedData = updateDocumentSchema('panels','standard',data)
+            if (!Object.is(data, updatedData)) {
+                const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
+                await setDoc(dbDocRef, updatedData)
+                workingPanelList[index] = updatedData
+            }
+        }
+
+        if (workingPanelList.length == 0) { // create a panel
+            const dbNewDocRef = doc(dbPanelCollection)
+            const newPanelData = updateDocumentSchema('panels','standard',{},
+                {
+                  profile: {
+                    panel:{
+                      name: 'Default panel',
+                      id: dbNewDocRef.id,
+                    },
+                    owner: {
+                      id: userRecords.user.profile.user.id,
+                      name: userRecords.user.profile.user.name,
+                    },
+                    commits: {
+                      created_by: {
+                          id: userRecords.user.profile.user.id,
+                          name: userRecords.user.profile.user.name,
+                      },
+                      created_timestamp: serverTimestamp(),
+                      updated_by: {
+                          id: userRecords.user.profile.user.id,
+                          name: userRecords.user.profile.user.name,
+                      },
+                      updated_timestamp: serverTimestamp(),
+                    },
+                    flags: {
+                      is_default: true,
+                    }
+                  },
+                }
+            )
+            // console.log('newPanelData', newPanelData)
+            await setDoc(dbNewDocRef,newPanelData)
+            workingPanelList.push(newPanelData)
+            workspaceData.panel = newPanelData.profile.panel
+        }
+
+        // console.log('setting panelList, workspaceData', workingPanelList, workspaceData)
+
+        setPanelList(workingPanelList)
+
+    }
+
+    // set up panels
     useEffect(()=>{
+
+        getPanels()
+
         // TODO placeholder logic
 
         workboxMapRef.current = new Map()

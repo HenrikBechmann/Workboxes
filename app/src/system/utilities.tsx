@@ -905,7 +905,6 @@ const versionData = {
           updated_timestamp: null,
         },
         counts: {
-          panels:0,
         },
         flags: {
           is_default: false,

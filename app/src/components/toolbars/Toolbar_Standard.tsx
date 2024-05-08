@@ -226,7 +226,7 @@ const StandardToolbar = (props) => {
             querySnapshot = await getDocs(q)
         } catch (error) {
             console.log('error getting workspace list on standard toolbar', error)
-            errorControl.push({description:'signout error from standard toolbar', error})
+            errorControl.push({description:'error getting workspace list on standard toolbar', error})
             navigate('/error')
             return
         }
