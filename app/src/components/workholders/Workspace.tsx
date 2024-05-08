@@ -63,11 +63,12 @@ const Workspace = (props) => {
     const 
         { workspaceData } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
-        [panelSelectionNumber, setPanelSelectionNumber] = useState(3),
-        [panelList, setPanelList] = useState(null),
+        [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
+        // [panelList, setPanelList] = useState(null),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
-        panelsListRef = useRef([]),
+        panelComponentsRef = useRef([]),
+        panelRecordsMapRef = useRef(null),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
         workspaceElementRef = useRef(null),
@@ -76,13 +77,15 @@ const Workspace = (props) => {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    workspaceData.profile.counts.panels = 5
+    // workspaceData.profile.counts.panels = 5
 
-    console.log('workspaceData, panelList', workspaceData, panelList)
+    console.log('workspaceData', workspaceData)
 
     async function getPanels() {
 
-        const workingPanelList = []
+        console.log('running getPanels')
+
+        const panelRecordsMap = panelRecordsMapRef.current = new Map()
 
         const dbPanelCollection = 
             collection(
@@ -106,21 +109,41 @@ const Workspace = (props) => {
         }
         querySnapshot.forEach((dbdoc) => {
             const data = dbdoc.data()
-            workingPanelList.push(data)
+            panelRecordsMap.set(data.profile.panel.id, data)
         })
 
-        // update versions
-        for (let index = 0; index < workingPanelList.length; index++) {
-            const data = workingPanelList[index]
-            const updatedData = updateDocumentSchema('panels','standard',data)
-            if (!Object.is(data, updatedData)) {
-                const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
-                await setDoc(dbDocRef, updatedData)
-                workingPanelList[index] = updatedData
+        if (panelRecordsMap.size) {
+            const batch = writeBatch(db)
+            // temporary, to allow for use of await
+            let panelRecordsList = Array.from(panelRecordsMap).map(([id, data]) => {return {id, data}}) 
+
+            // update versions
+            for (let index = 0; index < panelRecordsList.length; index++) {
+                const dataObject = panelRecordsList[index]
+                const updatedData = updateDocumentSchema('panels','standard',dataObject.data)
+                if (!Object.is(dataObject.data, updatedData)) {
+                    const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
+                    batch.set(dbDocRef, updatedData)
+                    panelRecordsMap.set(dataObject.id, dataObject.data)
+                }
             }
+
+            try {
+                await batch.commit()
+            } catch (error) {
+
+                console.log('error updating panels list in workspace setup', error)
+                errorControl.push({description:'error updating panels list in workspace setup', error})
+                navigate('/error')
+                return
+
+            }
+
+            panelRecordsList = undefined
+
         }
 
-        if (workingPanelList.length == 0) { // create a panel
+        if (panelRecordsMap.size === 0) { // create a panel
             const dbNewDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
@@ -152,14 +175,30 @@ const Workspace = (props) => {
                 }
             )
             // console.log('newPanelData', newPanelData)
+            try {
             await setDoc(dbNewDocRef,newPanelData)
-            workingPanelList.push(newPanelData)
+            } catch (error) {
+                console.log('error adding new panel in workspace setup', error)
+                errorControl.push({description:'error adding new panel in workspace setup', error})
+                navigate('/error')
+                return                
+            }
+            panelRecordsMap.set(dbNewDocRef.id, newPanelData)
             workspaceData.panel = newPanelData.profile.panel
         }
 
-        // console.log('setting panelList, workspaceData', workingPanelList, workspaceData)
+        // generate panel components, sorted by display_order, ascending
 
-        setPanelList(workingPanelList)
+        // set current panel
+
+        // match workspace panel id to one of the panels
+
+
+        // otherwise, set the default as the current panel
+
+        console.log('initialized panelRecordsMap, workspaceData',panelRecordsMap, workspaceData)
+
+        setWorkspaceState('initialized')
 
     }
 
@@ -168,108 +207,109 @@ const Workspace = (props) => {
 
         getPanels()
 
-        // TODO placeholder logic
+        // return 
+        // // TODO placeholder logic
 
-        workboxMapRef.current = new Map()
-        workboxGatewayMapRef.current = new Map()
+        // workboxMapRef.current = new Map()
+        // workboxGatewayMapRef.current = new Map()
 
-        const panelWindowsSpecs = [
+        // const panelWindowsSpecs = [
 
-            {
-                window:{
-                    zOrder: 1,
-                    configDefaults: {top:20,left:20, width:610,height:400},
-                    view: 'normalized',
-                },
-                workbox: {
-                    defaultWorkboxState:{...defaultWorkboxState},
-                    defaultDocumentState: {...defaultDocumentState},
-                    defaultDataboxState: {...defaultDataboxState},
-                    itemTitle: "Base Workbox",
-                    itemIcon: homeIcon,
-                    domainTitle: displayName,
-                    domainIcon: photoURL,
-                    typeName: 'Collection',
-                    type:'Collection',
-                    id:null,
-                }
-            },
-            {
-                window:{
-                    zOrder: 2,
-                    configDefaults: {top:40,left:40, width:610,height:400},
-                    view: 'normalized',
-                },
-                workbox: {
-                    defaultWorkboxState:{...defaultWorkboxState},
-                    defaultDocumentState: {...defaultDocumentState},
-                    defaultDataboxState: {...defaultDataboxState},
-                    itemTitle: 'Notebooks',
-                    itemIcon: notebookIcon,
-                    domainTitle: displayName,
-                    domainIcon: photoURL,
-                    typeName: 'Collection',
-                    type:'Collection',
-                    id:null,
-                }
-            },
-            {
-                window:{
-                    zOrder: 3,
-                    configDefaults: {top:60,left:60, width:610,height:400},
-                    view: 'normalized',
-                },
-                workbox: {
-                    defaultWorkboxState:{...defaultWorkboxState},
-                    defaultDocumentState: {...defaultDocumentState},
-                    defaultDataboxState: {...defaultDataboxState},
-                    itemTitle: 'Checklists',
-                    itemIcon: checklistIcon,
-                    domainTitle: displayName,
-                    domainIcon: photoURL,
-                    typeName: 'Collection',
-                    type:'Collection',
-                    id:null,
-                }
-            },
+        //     {
+        //         window:{
+        //             zOrder: 1,
+        //             configDefaults: {top:20,left:20, width:610,height:400},
+        //             view: 'normalized',
+        //         },
+        //         workbox: {
+        //             defaultWorkboxState:{...defaultWorkboxState},
+        //             defaultDocumentState: {...defaultDocumentState},
+        //             defaultDataboxState: {...defaultDataboxState},
+        //             itemTitle: "Base Workbox",
+        //             itemIcon: homeIcon,
+        //             domainTitle: displayName,
+        //             domainIcon: photoURL,
+        //             typeName: 'Collection',
+        //             type:'Collection',
+        //             id:null,
+        //         }
+        //     },
+        //     {
+        //         window:{
+        //             zOrder: 2,
+        //             configDefaults: {top:40,left:40, width:610,height:400},
+        //             view: 'normalized',
+        //         },
+        //         workbox: {
+        //             defaultWorkboxState:{...defaultWorkboxState},
+        //             defaultDocumentState: {...defaultDocumentState},
+        //             defaultDataboxState: {...defaultDataboxState},
+        //             itemTitle: 'Notebooks',
+        //             itemIcon: notebookIcon,
+        //             domainTitle: displayName,
+        //             domainIcon: photoURL,
+        //             typeName: 'Collection',
+        //             type:'Collection',
+        //             id:null,
+        //         }
+        //     },
+        //     {
+        //         window:{
+        //             zOrder: 3,
+        //             configDefaults: {top:60,left:60, width:610,height:400},
+        //             view: 'normalized',
+        //         },
+        //         workbox: {
+        //             defaultWorkboxState:{...defaultWorkboxState},
+        //             defaultDocumentState: {...defaultDocumentState},
+        //             defaultDataboxState: {...defaultDataboxState},
+        //             itemTitle: 'Checklists',
+        //             itemIcon: checklistIcon,
+        //             domainTitle: displayName,
+        //             domainIcon: photoURL,
+        //             typeName: 'Collection',
+        //             type:'Collection',
+        //             id:null,
+        //         }
+        //     },
 
-        ]
-        panelsListRef.current = [<Workpanel 
-            key = {0} 
-            startingWindowsSpecsList = {panelWindowsSpecs} 
-            workboxMapRef = {workboxMapRef}
-            workboxGatewayMapRef = {workboxGatewayMapRef}
-            panelNumber = {0}
-        />,
-        <Workpanel 
-            key = {1} 
-            startingWindowsSpecsList = {panelWindowsSpecs} 
-            workboxMapRef = {workboxMapRef}
-            workboxGatewayMapRef = {workboxGatewayMapRef}
-            panelNumber = {1}
-        />,
-        <Workpanel 
-            key = {2} 
-            startingWindowsSpecsList = {panelWindowsSpecs} 
-            workboxMapRef = {workboxMapRef}
-            workboxGatewayMapRef = {workboxGatewayMapRef}
-            panelNumber = {2}
-        />,
-        <Workpanel 
-            key = {3} 
-            startingWindowsSpecsList = {panelWindowsSpecs} 
-            workboxMapRef = {workboxMapRef}
-            workboxGatewayMapRef = {workboxGatewayMapRef}
-            panelNumber = {3}
-        />,
-        <Workpanel 
-            key = {4} 
-            startingWindowsSpecsList = {panelWindowsSpecs} 
-            workboxMapRef = {workboxMapRef}
-            workboxGatewayMapRef = {workboxGatewayMapRef}
-            panelNumber = {4}
-        />,
-        ]
+        // ]
+        // panelComponentsRef.current = [<Workpanel 
+        //     key = {0} 
+        //     startingWindowsSpecsList = {panelWindowsSpecs} 
+        //     workboxMapRef = {workboxMapRef}
+        //     workboxGatewayMapRef = {workboxGatewayMapRef}
+        //     panelNumber = {0}
+        // />,
+        // <Workpanel 
+        //     key = {1} 
+        //     startingWindowsSpecsList = {panelWindowsSpecs} 
+        //     workboxMapRef = {workboxMapRef}
+        //     workboxGatewayMapRef = {workboxGatewayMapRef}
+        //     panelNumber = {1}
+        // />,
+        // <Workpanel 
+        //     key = {2} 
+        //     startingWindowsSpecsList = {panelWindowsSpecs} 
+        //     workboxMapRef = {workboxMapRef}
+        //     workboxGatewayMapRef = {workboxGatewayMapRef}
+        //     panelNumber = {2}
+        // />,
+        // <Workpanel 
+        //     key = {3} 
+        //     startingWindowsSpecsList = {panelWindowsSpecs} 
+        //     workboxMapRef = {workboxMapRef}
+        //     workboxGatewayMapRef = {workboxGatewayMapRef}
+        //     panelNumber = {3}
+        // />,
+        // <Workpanel 
+        //     key = {4} 
+        //     startingWindowsSpecsList = {panelWindowsSpecs} 
+        //     workboxMapRef = {workboxMapRef}
+        //     workboxGatewayMapRef = {workboxGatewayMapRef}
+        //     panelNumber = {4}
+        // />,
+        // ]
 
     },[])
 
@@ -312,7 +352,7 @@ const Workspace = (props) => {
             <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                 <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
                 transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
-                {(workspaceState != 'setup') && panelsListRef.current}
+                {(workspaceState != 'setup') && panelComponentsRef.current}
                 </Box>
             </Box>
         </GridItem>

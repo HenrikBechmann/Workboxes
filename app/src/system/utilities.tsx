@@ -884,6 +884,7 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
+        display_order: 0,
         panel:{
           name: null,
           id: null,
