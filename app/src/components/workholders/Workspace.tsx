@@ -3,8 +3,9 @@
 
 /*
 
-    Workspace holds a collection of workpanels. Its entire confiuratoin is saved to the device database (and optionally to the 
-    cloud database)
+    Workspace holds a collection of workpanels. Its data is held in memory during the session
+    so as not to interfere with multiple tabs or devices with the same login.
+    But its data is saved when workspace is changed
 
 */
 
@@ -67,7 +68,7 @@ const Workspace = (props) => {
         // [panelList, setPanelList] = useState(null),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
-        panelComponentsRef = useRef([]),
+        panelComponentListRef = useRef(null),
         panelRecordsMapRef = useRef(null),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
@@ -85,7 +86,8 @@ const Workspace = (props) => {
 
         console.log('running getPanels')
 
-        const panelRecordsMap = panelRecordsMapRef.current = new Map()
+        const panelRecordList = []
+        const panelComponentList = []
 
         const dbPanelCollection = 
             collection(
@@ -95,9 +97,7 @@ const Workspace = (props) => {
                 'panels'
             )
 
-        const q = query(
-            dbPanelCollection
-        )
+        const q = query( dbPanelCollection )
         let querySnapshot
         try {
             querySnapshot = await getDocs(q)
@@ -109,22 +109,27 @@ const Workspace = (props) => {
         }
         querySnapshot.forEach((dbdoc) => {
             const data = dbdoc.data()
-            panelRecordsMap.set(data.profile.panel.id, data)
+            panelRecordList.push(data)
         })
 
-        if (panelRecordsMap.size) {
+        if (panelRecordList.length) {
             const batch = writeBatch(db)
             // temporary, to allow for use of await
-            let panelRecordsList = Array.from(panelRecordsMap).map(([id, data]) => {return {id, data}}) 
+            panelRecordList.sort((a, b)=>{
+                return a.profile.display_order - b.profile.display_order // best attempt to sort
+            })
+
+
 
             // update versions
-            for (let index = 0; index < panelRecordsList.length; index++) {
-                const dataObject = panelRecordsList[index]
-                const updatedData = updateDocumentSchema('panels','standard',dataObject.data)
-                if (!Object.is(dataObject.data, updatedData)) {
+            for (let index = 0; index < panelRecordList.length; index++) {
+                const data = panelRecordList[index]
+                data.profile.display_order = index // assert contiguous order
+                const updatedData = updateDocumentSchema('panels','standard',data)
+                if (!Object.is(data, updatedData)) {
                     const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
                     batch.set(dbDocRef, updatedData)
-                    panelRecordsMap.set(dataObject.id, dataObject.data)
+                    panelRecordList[index] = updatedData
                 }
             }
 
@@ -139,11 +144,9 @@ const Workspace = (props) => {
 
             }
 
-            panelRecordsList = undefined
-
         }
 
-        if (panelRecordsMap.size === 0) { // create a panel
+        if (panelRecordList.length === 0) { // create a panel
             const dbNewDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
@@ -152,6 +155,7 @@ const Workspace = (props) => {
                       name: 'Default panel',
                       id: dbNewDocRef.id,
                     },
+                    display_order: 0,
                     owner: {
                       id: userRecords.user.profile.user.id,
                       name: userRecords.user.profile.user.name,
@@ -174,7 +178,6 @@ const Workspace = (props) => {
                   },
                 }
             )
-            // console.log('newPanelData', newPanelData)
             try {
             await setDoc(dbNewDocRef,newPanelData)
             } catch (error) {
@@ -183,22 +186,53 @@ const Workspace = (props) => {
                 navigate('/error')
                 return                
             }
-            panelRecordsMap.set(dbNewDocRef.id, newPanelData)
+            panelRecordList.push(newPanelData)
             workspaceData.panel = newPanelData.profile.panel
         }
-
         // generate panel components, sorted by display_order, ascending
 
-        // set current panel
+        const selectedID = workspaceData.panelID
+        let selectedIndex, defaultIndex
+        for (let index = 0; index < panelRecordList.length; index++) {
 
-        // match workspace panel id to one of the panels
+            const panelData = panelRecordList[index]
 
+            if (selectedID && selectedID == panelData.profile.panel.id) {
+                selectedIndex = index
+            }
+
+            if (panelData.profile.flags.is_default) {
+                defaultIndex = index
+            }
+
+            panelComponentList.push(
+                <Workpanel 
+                    key = {panelData.profile.panel.id} 
+                    panelData = {panelData}
+                    startingWindowsSpecsList = {null} 
+                    workboxMapRef = {workboxMapRef}
+                    workboxGatewayMapRef = {workboxGatewayMapRef}
+                    panelNumber = {index}
+                />
+            )
+
+        }
 
         // otherwise, set the default as the current panel
 
-        console.log('initialized panelRecordsMap, workspaceData',panelRecordsMap, workspaceData)
+        panelComponentListRef.current = panelComponentList
 
-        setWorkspaceState('initialized')
+        // console.log('initialized panelRecordList, workspaceData',panelRecordList, workspaceData)
+
+        if (selectedIndex !== undefined) {
+            setPanelSelectionNumber(selectedIndex)            
+        } else if (defaultIndex !== undefined) {
+            const defaultData = panelRecordList[defaultIndex]
+            workspaceData.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
+            setPanelSelectionNumber(defaultIndex)
+        } else {
+            // TODO error, no default found
+        }
 
     }
 
@@ -273,44 +307,6 @@ const Workspace = (props) => {
         //         }
         //     },
 
-        // ]
-        // panelComponentsRef.current = [<Workpanel 
-        //     key = {0} 
-        //     startingWindowsSpecsList = {panelWindowsSpecs} 
-        //     workboxMapRef = {workboxMapRef}
-        //     workboxGatewayMapRef = {workboxGatewayMapRef}
-        //     panelNumber = {0}
-        // />,
-        // <Workpanel 
-        //     key = {1} 
-        //     startingWindowsSpecsList = {panelWindowsSpecs} 
-        //     workboxMapRef = {workboxMapRef}
-        //     workboxGatewayMapRef = {workboxGatewayMapRef}
-        //     panelNumber = {1}
-        // />,
-        // <Workpanel 
-        //     key = {2} 
-        //     startingWindowsSpecsList = {panelWindowsSpecs} 
-        //     workboxMapRef = {workboxMapRef}
-        //     workboxGatewayMapRef = {workboxGatewayMapRef}
-        //     panelNumber = {2}
-        // />,
-        // <Workpanel 
-        //     key = {3} 
-        //     startingWindowsSpecsList = {panelWindowsSpecs} 
-        //     workboxMapRef = {workboxMapRef}
-        //     workboxGatewayMapRef = {workboxGatewayMapRef}
-        //     panelNumber = {3}
-        // />,
-        // <Workpanel 
-        //     key = {4} 
-        //     startingWindowsSpecsList = {panelWindowsSpecs} 
-        //     workboxMapRef = {workboxMapRef}
-        //     workboxGatewayMapRef = {workboxGatewayMapRef}
-        //     panelNumber = {4}
-        // />,
-        // ]
-
     },[])
 
     const resizeCallback = useCallback((entries)=>{
@@ -352,7 +348,7 @@ const Workspace = (props) => {
             <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                 <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
                 transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
-                {(workspaceState != 'setup') && panelComponentsRef.current}
+                {(workspaceState != 'setup') && panelComponentListRef.current}
                 </Box>
             </Box>
         </GridItem>
