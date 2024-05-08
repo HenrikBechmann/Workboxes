@@ -267,7 +267,7 @@ const StandardToolbar = (props) => {
         const defaultValue = workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList ref = {workspaceMenuRef}>
+        return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem >Reset this workspace</MenuItem>
             <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
@@ -277,7 +277,7 @@ const StandardToolbar = (props) => {
                 key = {workspaceMenuIteration++} 
                 defaultValue = {defaultValue} 
                 onChange = {changeWorkspaceSelection} 
-                fontSize = 'medium' 
+                fontSize = 'small' 
                 fontStyle = 'italic' 
                 title = 'Select a workspace:'
             >

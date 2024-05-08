@@ -135,6 +135,10 @@ const WorkspaceToolbar = (props) => {
 
     }
 
+    const reOrderPanels = () => {
+
+    }
+
     const changePanelSelection = () => {
 
     }
@@ -157,17 +161,18 @@ const WorkspaceToolbar = (props) => {
         const defaultValue = panelSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList ref = {panelMenuRef}>
+        return <MenuList lineHeight = '1em' fontSize = 'small' ref = {panelMenuRef}>
             <MenuItem onClick = {renamePanel} >Rename this panel</MenuItem>
             <MenuItem >Reset this panel</MenuItem>
             <MenuItem onClick = {deletePanel} >Delete this panel</MenuItem>
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
+            <MenuItem onClick = {reOrderPanels} >Re-order panels</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
                 defaultValue = {defaultValue} 
                 onChange = {changePanelSelection} 
-                fontSize = 'medium' 
+                fontSize = 'small' 
                 fontStyle = 'italic' 
                 title = 'Select a panel:'
             >
