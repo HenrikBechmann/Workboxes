@@ -227,7 +227,8 @@ const StandardToolbar = (props) => {
         } catch (error) {
             console.log('error getting workspace list on standard toolbar', error)
             errorControl.push({description:'signout error from standard toolbar', error})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
         querySnapshot.forEach((doc) => {
             const data = doc.data()
@@ -459,7 +460,8 @@ const WorkspaceWriteDialog = (props) => {
         } catch (error) {
             console.log('error updating workspace name from standard toolbar', error)
             errorControl.push({description:'error updating workspace name from standard toolbar', error})
-            navigate('/error')            
+            navigate('/error')   
+            return         
         }
 
         // changename workspaceSelection
@@ -520,7 +522,8 @@ const WorkspaceWriteDialog = (props) => {
         } catch (error) {
             console.log('error creating new workspace record (or updating count) from standard toolbar', error)
             errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
 
         // changename workspaceSelection
@@ -635,7 +638,8 @@ const WorkspaceDeleteDialog = (props) => {
         } catch (error) {
             console.log('error getting workspace record to check for default status from standard toolbar', error)
             errorControl.push({description:'error getting workspace record to check for default status from standard toolbar', error})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
         if (dbWorkspaceRecord.exists()) {
             const workspaceRecord = dbWorkspaceRecord.data()
@@ -645,7 +649,8 @@ const WorkspaceDeleteDialog = (props) => {
             // TODO should try to recover from this
             console.log('error no workspace record found to check for default status from standard toolbar')
             errorControl.push({description:'error no workspace record found to check for default status from standard toolbar', error:'N/A'})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
     }
 
@@ -662,7 +667,8 @@ const WorkspaceDeleteDialog = (props) => {
         } catch (error) {
             console.log('error fetching user workspace collection')
             errorControl.push({description:'error fetching user workspace collection from standard toolbar', error:'N/A'})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
 
         let dbdoc, defaultWorkspace
@@ -673,7 +679,8 @@ const WorkspaceDeleteDialog = (props) => {
             // TODO should try to recover from this
             console.log('error fetching default workspace for delete workspace')
             errorControl.push({description:'error no default workspace record found to deleted workspace from standard toolbar', error:'N/A'})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
 
         const 
@@ -690,7 +697,8 @@ const WorkspaceDeleteDialog = (props) => {
             // TODO should try to recover from this
             console.log('error deleting workspace or incrementing workspace count')
             errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
-            navigate('/error')            
+            navigate('/error')
+            return
         }
 
         // set current workspace to default

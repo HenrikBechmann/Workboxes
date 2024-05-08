@@ -15,7 +15,10 @@ function AdminRouteController() {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    if (errorControl.length) navigate('/error')
+    if (errorControl.length) {
+        navigate('/error')
+        return
+    }
 
     if (userAuthData === undefined) {
 

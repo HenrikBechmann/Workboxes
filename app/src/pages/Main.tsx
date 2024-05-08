@@ -86,9 +86,9 @@ export const Main = (props) => {
                 }
             } catch (error) {
 
-                console.log('error getting starting workspace data', error)
-                errorControl.push({description:'error getting staring workspace data in Main', error})
+                errorControl.push({description:'error getting starting workspace data in Main', error})
                 navigate('/error')
+                return
 
             }
 
@@ -151,7 +151,7 @@ export const Main = (props) => {
                 console.log('error saving new workspace data', error)
                 errorControl.push({description:'error saving new workspace data in Main', error})
                 navigate('/error')
-
+                return
             }
 
             toast({description:`created new workspace`})
@@ -192,7 +192,7 @@ export const Main = (props) => {
             console.log('error getting new workspace data', error)
             errorControl.push({description:'error getting new workspace data in Main', error})
             navigate('/error')
-
+            return
         }
 
         const
@@ -215,6 +215,7 @@ export const Main = (props) => {
             console.log('error in update user doc for workspace', error)
             errorControl.push({description:'in update user doc for workspace in Main', error})
             navigate('/error')
+            return
         }
         
         setWorkspaceRecord(workspaceData)

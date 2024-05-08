@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth"
 
 import { useNavigate } from 'react-router-dom'
 
-import { Box, Button } from '@chakra-ui/react'
+import { Box, Button, Text } from '@chakra-ui/react'
 
 import { useAuth, useErrorControl } from '../system/WorkboxesProvider'
 
@@ -43,14 +43,14 @@ const ErrorPage = (props) => {
             border = '2px solid silver'
             position = 'absolute' 
             width = '300px' 
-            height = '150px' 
-            top = 'calc(50% - 150px)' 
+            top = '50px' 
             left = 'calc(50% - 150px)'
             padding = '5px'
             borderRadius = '8px'
         >
-            Error: something went wrong (error count = {errorControl.length}). Best to log out and try again.
-            For tech support, see notes in the console. <Button onClick = {logOut} colorScheme = 'blue'>Logout</Button>
+            <Text>Error: something went wrong (error count = {errorControl.length}). Best to log out and try again.
+            For tech support, see notes in the console. <Button onClick = {logOut} colorScheme = 'blue'>Logout</Button></Text>
+            <Text>Error description: {errorControl[0]?.description || 'N/A'}</Text>
         </Box>
     </Box>
 

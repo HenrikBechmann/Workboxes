@@ -15,7 +15,10 @@ const UserRouteController = () => {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    if (errorControl.length) navigate('/error')
+    if (errorControl.length) {
+        navigate('/error')
+        return
+    }
 
     if (userdata === undefined) { // registering is underway
 

@@ -866,7 +866,6 @@ const versionData = {
           updated_timestamp: null,
         },
         counts: {
-          panels:0,
         },
         flags: {
           first_time_loaded:true,

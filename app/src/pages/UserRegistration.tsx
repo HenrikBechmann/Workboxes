@@ -85,7 +85,7 @@ const UserRegistration = (props) => {
             console.log('signout error', error)
             errorControl.push({description:'signout error on registration page', error})
             navigate('/error')
-
+            return
         })
     }
 
@@ -121,7 +121,7 @@ const UserRegistration = (props) => {
             console.log('error accepting terms',error)
             errorControl.push({description:'error accepting terms on registration page', error})
             navigate('/error')
-
+            return
         }
 
     }
@@ -572,6 +572,7 @@ const TermsRegistration = (props) => {
             console.log('error accepting terms',error)
             errorControl.push({description:'error accepting terms on registration page', error})
             navigate('/error')
+            return
         }
 
     }
@@ -667,7 +668,7 @@ const DialogForSaveHandle = (props) => {
             console.log('failure to find workbox data',error)
             errorControl.push({description:'error finding workbox data', error})
             navigate('/error')
-
+            return
         }
 
         // 1. handle
@@ -815,7 +816,7 @@ const DialogForSaveHandle = (props) => {
             console.log('failure to post handle data',error)
             errorControl.push({description:'error posting handle data on registration page', error})
             navigate('/error')
-
+            return
         }
     }
 
