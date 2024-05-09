@@ -33,6 +33,7 @@ import likeIcon from '../../../assets/like.png'
 import viewsIcon from '../../../assets/views.png'
 import commentsIcon from '../../../assets/comments.png'
 import hideIcon from '../../../assets/expand_less.png'
+import lastUpdateIcon from '../../../assets/last_update.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -183,6 +184,8 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
         <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
