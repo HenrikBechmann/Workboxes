@@ -36,7 +36,7 @@ import '../../system/panel-variables.css'
 
 import { updateDocumentSchema } from '../../system/utilities'
 
-import { useUserAuthData, useFirestore, useUserRecords, useErrorControl } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useFirestore, useUserRecords, useErrorControl, useUsage } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -80,7 +80,8 @@ const Workspace = (props) => {
         db = useFirestore(),
         userRecords = useUserRecords(),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
@@ -111,6 +112,7 @@ const Workspace = (props) => {
             navigate('/error')
             return
         }
+        usage.read(querySnapshot.size)
         querySnapshot.forEach((dbdoc) => {
             const data = dbdoc.data()
             panelRecordList.push(data)
@@ -126,6 +128,7 @@ const Workspace = (props) => {
 
 
             // update versions
+            let writes = 0
             for (let index = 0; index < panelRecordList.length; index++) {
                 const data = panelRecordList[index]
                 data.profile.display_order = index // assert contiguous order
@@ -134,6 +137,7 @@ const Workspace = (props) => {
                     const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
                     batch.set(dbDocRef, updatedData)
                     panelRecordList[index] = updatedData
+                    writes++
                 }
             }
 
@@ -147,9 +151,8 @@ const Workspace = (props) => {
                 return
 
             }
-
+            usage.write(writes)
         }
-
         if (panelRecordList.length === 0) { // create a panel
             const dbNewDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
@@ -190,6 +193,7 @@ const Workspace = (props) => {
                 navigate('/error')
                 return                
             }
+            usage.create(1)
             panelRecordList.push(newPanelData)
             workspaceData.panel = newPanelData.profile.panel
         }

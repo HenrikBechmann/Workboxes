@@ -28,6 +28,7 @@ import {
     useWorkspaceSelection, 
     useSystemRecords,
     useErrorControl,
+    useUsage,
 } from '../../system/WorkboxesProvider'
 
 import { updateDocumentSchema } from '../../system/utilities'
@@ -162,7 +163,8 @@ const StandardToolbar = (props) => {
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
         [deleteDialogState, setDeleteDialogState] = useState(false),
         workspaceMenuRef = useRef(null),
-        errorControl = useErrorControl()
+        errorControl = useErrorControl(),
+        usage = useUsage()
 
     // --------------------- navigation functions ------------------
     const 
@@ -236,6 +238,7 @@ const StandardToolbar = (props) => {
             const data = doc.data()
             workingWorkspaceList.push(data.profile.workspace)
         })
+        usage.read(querySnapshot.size)
         setWorkspaceList(workingWorkspaceList)
     }
 
@@ -377,7 +380,8 @@ const WorkspaceWriteDialog = (props) => {
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        errorControl = useErrorControl()
+        errorControl = useErrorControl(),
+        usage = useUsage()
 
     dialogStateRef.current = writeDialogState
 
@@ -467,7 +471,7 @@ const WorkspaceWriteDialog = (props) => {
             navigate('/error')   
             return         
         }
-
+        usage.write(fieldsToUpdateCount?2:1)
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
@@ -529,7 +533,8 @@ const WorkspaceWriteDialog = (props) => {
             navigate('/error')
             return
         }
-
+        usage.write(1)
+        usage.create(1)
         // changename workspaceSelection
         const { setWorkspaceSelection } = workspaceSelection
         setWorkspaceSelection((previousState) => {
@@ -621,7 +626,8 @@ const WorkspaceDeleteDialog = (props) => {
         workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     useEffect(()=>{
         checkIsDefaultWorkspace()
@@ -645,6 +651,7 @@ const WorkspaceDeleteDialog = (props) => {
             navigate('/error')
             return
         }
+        usage.read(1)
         if (dbWorkspaceRecord.exists()) {
             const workspaceRecord = dbWorkspaceRecord.data()
             workspaceRecordRef.current = workspaceRecord
@@ -674,7 +681,7 @@ const WorkspaceDeleteDialog = (props) => {
             navigate('/error')
             return
         }
-
+        usage.read(1)
         let dbdoc, defaultWorkspace
         if (dbDefaultWorkspace.size == 1) {
             dbdoc = dbDefaultWorkspace.docs[0]
@@ -704,7 +711,8 @@ const WorkspaceDeleteDialog = (props) => {
             navigate('/error')
             return
         }
-
+        usage.delete(1)
+        usage.write(1)
         // set current workspace to default
         const {setWorkspaceSelection} = workspaceSelection
         setWorkspaceSelection((previousState)=>{

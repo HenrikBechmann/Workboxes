@@ -58,6 +58,7 @@ const WorkboxesProvider = ({children}) => {
     </AuthContext.Provider>
 }
 
+// TODO for save make sure account exists first
 class Usage {
 
     read = (number) => {
@@ -111,7 +112,8 @@ export const UserProvider = ({children}) => {
         isMountedRef = useRef(true),
         baseRecordsAvailableRef = useRef(true),
         errorControl = useErrorControl(),
-        errorControlRef = useRef(null)
+        errorControlRef = useRef(null),
+        usage = useUsage()
 
     userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords
@@ -143,6 +145,7 @@ export const UserProvider = ({children}) => {
             console.log('error incrementing logins', error)
             errorControl.push({description:'error incrementing logins',error})
         }
+        usage.write(1)
     }
 
     async function getSystemRecords() {
@@ -156,6 +159,7 @@ export const UserProvider = ({children}) => {
                 console.log('error getting system settings', error)
                 errorControl.push({description:'error getting system settings',error})
             }
+            usage.read(1)
         }
 
     }
@@ -398,7 +402,7 @@ export const UserProvider = ({children}) => {
             console.log('error getting setting initial userRecords', error)
             errorControl.push({description:'error getting setting initial userRecords',error})
         }
-
+        usage.create(4)
         setUserState('baserecordsavailable')
 
     }

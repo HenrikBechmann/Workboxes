@@ -15,7 +15,7 @@ import { Box, useToast } from '@chakra-ui/react'
 import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, writeBatch } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl } from '../system/WorkboxesProvider'
+import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl, useUsage } from '../system/WorkboxesProvider'
 import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
@@ -32,7 +32,8 @@ export const Main = (props) => {
         db = useFirestore(),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     workspaceRecordRef.current = workspaceRecord
     mainStateRef.current = mainState
@@ -67,7 +68,7 @@ export const Main = (props) => {
                 workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID)
 
             let dbdoc 
-
+            let writes = 0
             try {
                 dbdoc = await getDoc(workspaceDocRef)
 
@@ -84,6 +85,7 @@ export const Main = (props) => {
                 if (!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) {
                     await setDoc(workspaceDocRef, updatedWorkspaceRecord)
                     workspaceSelectionRecord = updatedWorkspaceRecord
+                    writes++
                 }
             } catch (error) {
 
@@ -92,7 +94,8 @@ export const Main = (props) => {
                 return
 
             }
-
+            usage.read(1)
+            usage.write(writes)
             toast({description:`loaded workspace last used on ${workspaceIDtype}`})
 
         } else { // create first workspace record
@@ -154,7 +157,8 @@ export const Main = (props) => {
                 navigate('/error')
                 return
             }
-
+            usage.create(1)
+            usage.write(1)
             toast({description:`created new workspace`})
 
         }
@@ -227,7 +231,7 @@ export const Main = (props) => {
             navigate('/error')
             return
         }
-
+        usage.read(1)
         const
             workspaceData = dbdoc.data(),
             workspaceName = workspaceData.profile.workspace.name
@@ -250,7 +254,7 @@ export const Main = (props) => {
             navigate('/error')
             return
         }
-        
+        usage.write(1)
         setWorkspaceRecord(workspaceData)
 
     }

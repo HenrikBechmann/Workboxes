@@ -29,7 +29,11 @@ import {
 
 import {isDate as _isDate} from 'lodash'
 
-import { useUserAuthData, useUserRecords, useSystemRecords, useAuth, useSnapshotControl, useFirestore, useErrorControl } from '../system/WorkboxesProvider'
+import { 
+    useUserAuthData, useUserRecords, useSystemRecords, 
+    useAuth, useSnapshotControl, useFirestore, useErrorControl,
+    useUsage
+} from '../system/WorkboxesProvider'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -60,7 +64,8 @@ const UserRegistration = (props) => {
         [termsState, setTermsState] = useState('input'),
         registrationComplete = (handleState == 'output') && (termsState == 'output'),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     // sign out option
     useEffect(()=>{
@@ -123,7 +128,7 @@ const UserRegistration = (props) => {
             navigate('/error')
             return
         }
-
+        usage.write(2)
     }
 
     // registration
@@ -542,7 +547,8 @@ const TermsRegistration = (props) => {
         userRecords = useUserRecords(),
         [termsRegistrationState, setTermsRegistrationState] = useState('pending'),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     useEffect(()=>{
 
@@ -574,7 +580,7 @@ const TermsRegistration = (props) => {
             navigate('/error')
             return
         }
-
+        usage.write(1)
     }
 
     return <>
@@ -637,7 +643,8 @@ const DialogForSaveHandle = (props) => {
         cancelRef = React.useRef(),
         [alertState,setAlertState] = useState('ready'),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        usage = useUsage()
 
     const isInvalidFlag = (invalidFlags) => {
         let errorState = false
@@ -670,7 +677,7 @@ const DialogForSaveHandle = (props) => {
             navigate('/error')
             return
         }
-
+        usage.read(1)
         // 1. handle
         // catch most likely if chosen handle already exists
         // derive birthdate string to avoid birthday shift with UMT
@@ -802,7 +809,10 @@ const DialogForSaveHandle = (props) => {
             })
             return true })
 
+            usage.read(1)
             if (transactionresult) {
+                usage.create(1)
+                usage.write(4)
                 onClose()
                 setHandleState('output')
                 setAlertState('done')
@@ -949,6 +959,7 @@ const DialogForCancel = (props) => {
            signOut(auth)
 
        })
+       // usage.delete(4) no account to post to
    }
 
   return (
