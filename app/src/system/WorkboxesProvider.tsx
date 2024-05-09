@@ -73,6 +73,9 @@ class Usage {
     delete = (number) => {
         this.data.delete += number
     }
+    login = (number) => {
+        this.data.login += number
+    }
     save = () => {
         // write to database
     }
@@ -81,6 +84,7 @@ class Usage {
         write:0,
         create:0,
         delete:0,
+        login:0,
     }
 
 }
@@ -128,25 +132,43 @@ export const UserProvider = ({children}) => {
     },[])
 
     useEffect(()=>{
+
+        document.addEventListener('visibilitychange',saveOnVisibilityChange)
+
+        return () => {
+
+            console.log('clearnup of main page')
+
+            if (document.visibilityState != 'hidden') {
+                // save workspace data
+            }
+
+            document.removeEventListener('visibilitychange',saveOnVisibilityChange)
+
+        }
+
+    },[])
+
+    async function saveWorkspaceData() {
+        // save workspace and panels to firestore
+    } 
+
+    const saveOnVisibilityChange = () => {
+
+        console.log('saving on visibility')
+
+        if (document.visibilityState == 'hidden') {
+            // save workspace data
+        }
+
+    }
+
+    useEffect(()=>{
         setWorkspaceSelection((previousState) => {
             previousState.setWorkspaceSelection = setWorkspaceSelection
             return previousState
         })
     },[])
-
-    async function updateLogins() {
-        try {
-            await updateDoc(doc(db, 'system','usage'),
-                {
-                    'logins':increment(1)
-                }
-            )
-        } catch(error) {
-            console.log('error incrementing logins', error)
-            errorControl.push({description:'error incrementing logins',error})
-        }
-        usage.write(1)
-    }
 
     async function getSystemRecords() {
 
@@ -195,7 +217,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                updateLogins()
+                usage.login(1)
                 setUserState('useridentified')
     
             } else { // unsubscribe firestore listeners

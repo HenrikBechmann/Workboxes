@@ -184,8 +184,6 @@ export const Main = (props) => {
 
     useEffect(()=>{
 
-        document.addEventListener('visibilitychange',saveOnVisibilityChange)
-
         return () => {
 
             console.log('clearnup of main page')
@@ -194,25 +192,10 @@ export const Main = (props) => {
                 // save workspace data
             }
 
-            document.removeEventListener('visibilitychange',saveOnVisibilityChange)
-
         }
 
     },[])
 
-    async function saveWorkspaceData() {
-        // save workspace and panels to firestore
-    } 
-
-    const saveOnVisibilityChange = () => {
-
-        console.log('saving on visibility')
-
-        if (document.visibilityState == 'hidden') {
-            // save workspace data
-        }
-
-    }
 
     async function getNewWorkspaceData(workspaceID) {
 
