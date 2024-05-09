@@ -186,9 +186,8 @@ export const Main = (props) => {
 
         return () => {
 
-            console.log('clearnup of main page')
-
             if (document.visibilityState != 'hidden') {
+                console.log('cleanup of main page')
                 // save workspace data
             }
 

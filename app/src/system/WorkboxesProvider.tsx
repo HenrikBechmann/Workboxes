@@ -11,7 +11,8 @@ import React, { useEffect, useRef, useState, createContext, useContext } from 'r
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { 
-    getFirestore, collection, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, serverTimestamp, writeBatch 
+    getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where,
+    updateDoc, increment, onSnapshot, serverTimestamp, writeBatch, runTransaction
 } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import { getFunctions, httpsCallable } from "firebase/functions"
@@ -79,6 +80,15 @@ class Usage {
     save = () => {
         // write to database
     }
+    reset = () => {
+        this.data = {
+            read:0,
+            write:0,
+            create:0,
+            delete:0,
+            login:0,
+        }
+    }
     data = {
         read:0,
         write:0,
@@ -123,6 +133,8 @@ export const UserProvider = ({children}) => {
     userRecordsRef.current = userRecords
     errorControlRef.current = errorControl
 
+    // console.log('userState',userState, userRecordsRef.current)
+
     useEffect(()=>{
         isMountedRef.current = true
         return () => {
@@ -137,12 +149,6 @@ export const UserProvider = ({children}) => {
 
         return () => {
 
-            console.log('clearnup of main page')
-
-            if (document.visibilityState != 'hidden') {
-                // save workspace data
-            }
-
             document.removeEventListener('visibilitychange',saveOnVisibilityChange)
 
         }
@@ -153,12 +159,71 @@ export const UserProvider = ({children}) => {
         // save workspace and panels to firestore
     } 
 
+    async function saveUsageData() {
+
+        const 
+            db = firestore,
+            data = usage.data,
+            account = userRecordsRef.current.account,
+            user = userRecordsRef.current.user,
+            date = new Date(),
+            month = date.getMonth() + 1,
+            year = date.getFullYear(),
+            monthStr = month.toString().padStart(2,'0'),
+            yearStr = year.toString()
+
+        if (!user.profile.flags.fully_registered) return
+
+        // save workspace and panels to firestore
+        // console.log('accountID, account', account?.profile.account.id, {...account})
+        if (account?.profile.account.id) {
+            // console.log('running saveUsageData')
+            const 
+                accountID = account?.profile.account.id,
+                usageID = yearStr + '.' + monthStr,
+                dbUsageCollection = collection(db, 'accounts', accountID, 'usage'),
+                dbUsageDocRef = doc(dbUsageCollection, usageID)
+            try {
+                await runTransaction(db, async (transaction) => {
+
+                    const dbusageDoc = await transaction.get(dbUsageDocRef)
+
+                    if (dbusageDoc.exists()) { // update record
+
+                        transaction.update(dbUsageDocRef,{
+                            'usage.read':increment(data.read + 1),
+                            'usage.write':increment(data.write + 1),
+                            'usage.create':increment(data.create),
+                            'usage.delete':increment(data.delete),
+                            'usage.login':increment(data.login)
+                        })
+
+                    } else { // create new record
+                        // console.log('creating new record')
+                        transaction.set(dbUsageDocRef,{
+                            year,
+                            month,
+                            usage: {
+                                read:data.read + 1, 
+                                write:data.write,
+                                create:data.create + 1,
+                                delete:data.delete,
+                                login:data.login,
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                // nothing
+            }
+            usage.reset()
+        }
+    } 
+
     const saveOnVisibilityChange = () => {
 
-        console.log('saving on visibility')
-
         if (document.visibilityState == 'hidden') {
-            // save workspace data
+            saveUsageData()
         }
 
     }
