@@ -58,6 +58,36 @@ const WorkboxesProvider = ({children}) => {
     </AuthContext.Provider>
 }
 
+class Usage {
+
+    read = (number) => {
+        this.data.read += number
+    }
+    write = (number) => {
+        this.data.write += number
+    }
+    create = (number) => {
+        this.data.create += number
+    }
+    delete = (number) => {
+        this.data.delete += number
+    }
+    save = () => {
+        // write to database
+    }
+    data = {
+        read:0,
+        write:0,
+        create:0,
+        delete:0,
+    }
+
+}
+
+const usage = new Usage()
+
+const UsageContext = createContext(usage)
+
 export default WorkboxesProvider
 
 // special requirements for onAuthStateChanged
@@ -486,6 +516,7 @@ export const UserProvider = ({children}) => {
     },[userState])
 
     return (
+        <UsageContext.Provider value = {usage}>
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
@@ -499,6 +530,7 @@ export const UserProvider = ({children}) => {
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
         </ErrorControlContext.Provider>
+        </UsageContext.Provider>
     )
 
 } // UserProvider
@@ -541,11 +573,16 @@ const useErrorControl = () => {
     return useContext(ErrorControlContext)
 }
 
+const useUsage = () => {
+    return useContext(UsageContext)
+}
+
 export {
     // firebase resources
     useAuth,
     useFirestore,
     useStorage,
+    useUsage,
 
     // workboxes resources
     useSnapshotControl,
