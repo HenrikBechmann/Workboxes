@@ -66,14 +66,14 @@ const defaultDataboxState = {
 const Workspace = (props) => {
 
     const 
-        { workspaceData } = props,
+        { workspaceData, panelDataRef } = props,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
         // [panelList, setPanelList] = useState(null),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelComponentListRef = useRef(null),
-        panelRecordsMapRef = useRef(null),
+        panelRecordListRef = useRef(null),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
         workspaceElementRef = useRef(null),
@@ -82,7 +82,7 @@ const Workspace = (props) => {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    // workspaceData.profile.counts.panels = 5
+    panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
     console.log('workspaceData', workspaceData)
 
@@ -225,6 +225,8 @@ const Workspace = (props) => {
         // otherwise, set the default as the current panel
 
         panelComponentListRef.current = panelComponentList
+
+        panelRecordListRef.current = panelRecordList
 
         // console.log('initialized panelRecordList, workspaceData',panelRecordList, workspaceData)
 

@@ -28,6 +28,7 @@ export const Main = (props) => {
         workspaceSelection = useWorkspaceSelection(), // selection for toolbar, and to get workspaceData
         [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
         workspaceRecordRef = useRef(null),
+        panelDataRef = useRef(null),
         db = useFirestore(),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
@@ -177,6 +178,38 @@ export const Main = (props) => {
 
     },[])
 
+    useEffect(()=>{
+
+        document.addEventListener('visibilitychange',saveOnVisibilityChange)
+
+        return () => {
+
+            console.log('clearnup of main page')
+
+            if (!document.hidden) {
+                // save workspace data
+            }
+
+            document.removeEventListener('visibilitychange',saveOnVisibilityChange)
+
+        }
+
+    },[])
+
+    async function saveWorkspaceData() {
+        // save workspace and panels to firestore
+    } 
+
+    const saveOnVisibilityChange = () => {
+
+        console.log('saving on visibility')
+
+        if (document.hidden) {
+            // save workspace data
+        }
+
+    }
+
     async function getNewWorkspaceData(workspaceID) {
 
         const 
@@ -232,7 +265,7 @@ export const Main = (props) => {
 
     },[workspaceSelection])
 
-    return ((mainState != 'setup') && <Workspace workspaceData = {workspaceRecord}/>)
+    return ((mainState != 'setup') && <Workspace panelDataRef = {panelDataRef} workspaceData = {workspaceRecord}/>)
 }
 
 export default Main
