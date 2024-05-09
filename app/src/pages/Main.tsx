@@ -186,7 +186,7 @@ export const Main = (props) => {
 
             console.log('clearnup of main page')
 
-            if (!document.hidden) {
+            if (document.visibilityState != 'hidden') {
                 // save workspace data
             }
 
@@ -204,7 +204,7 @@ export const Main = (props) => {
 
         console.log('saving on visibility')
 
-        if (document.hidden) {
+        if (document.visibilityState == 'hidden') {
             // save workspace data
         }
 
