@@ -34,6 +34,8 @@ import hideIcon from '../../../assets/expand_more.png'
 import resetIcon from '../../../assets/restart.png'
 import navNextIcon from '../../../assets/nav_next.png'
 import navBeforeIcon from '../../../assets/nav_before.png'
+import downloadCloudIcon from '../../../assets/cloud_download.png'
+import uploadCloudIcon from '../../../assets/cloud_upload.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -206,6 +208,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />
+        <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download user panel settings from another tab or device' />
+        <StandardIcon icon = {uploadCloudIcon} caption = 'upload' tooltip = 'upload user panel settings for another tab or device' />
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'

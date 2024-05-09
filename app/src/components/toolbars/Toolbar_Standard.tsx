@@ -56,6 +56,8 @@ import moreVerticalIcon from '../../../assets/more_vert.png'
 import hideIcon from '../../../assets/expand_less.png'
 import mobileIcon from '../../../assets/smartphone.png'
 import desktopIcon from '../../../assets/laptop.png'
+import downloadCloudIcon from '../../../assets/cloud_download.png'
+import uploadCloudIcon from '../../../assets/cloud_upload.png'
 
 
 // ==============================[ STANDARD TOOLBAR ]==========================
@@ -328,6 +330,8 @@ const StandardToolbar = (props) => {
                     menulist = {workspacemenuList} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download user workspace settings from another tab or device' />
+                <StandardIcon icon = {uploadCloudIcon} caption = 'upload' tooltip = 'upload user workspace settings for another tab or device' />
             </>
         } 
         <ToolbarVerticalDivider />

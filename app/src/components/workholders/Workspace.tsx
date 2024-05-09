@@ -7,6 +7,10 @@
     so as not to interfere with multiple tabs or devices with the same login.
     But its data is saved when workspace is changed
 
+    TODO show upload/download icons only when autoupdate is turned off
+
+    MERGE workspace panels and panel windows when consolidating
+
 */
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
