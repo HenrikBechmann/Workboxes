@@ -6,6 +6,7 @@ import React, {useRef, CSSProperties} from 'react'
 import {
   Tooltip, Box,
 } from '@chakra-ui/react'
+import dialogIcon from '../../../assets/dialog.png'
 
 import NumberBadge from './NumberBadge'
 
@@ -32,14 +33,14 @@ const numberBadgeStyles = {
 const iconWrapperStyles = {
     height: '24px',
     // display:'inline-block',
-    opacity:0.7,
+    // opacity:0.7,
     padding:'4px',
     position:'relative',
 } as CSSProperties
 
 const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, response, iconStyles, numberBadgeCount, isDisabledTooltip = false, isDisabled = false } = props
+    const { icon, caption, tooltip, response, iconStyles, numberBadgeCount, isDisabledTooltip = false, isDisabled = false, isDialog = false } = props
 
     const iconStylesRef = useRef({...baseIconStyles, ...iconStyles})
 
@@ -53,6 +54,7 @@ const StandardIcon = (props) => {
 
     return <Box data-type = 'standardicon' display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px' opacity = {opacity}>
         <Box style = { iconWrapperStyles } onClick = {!isDisabled?response:null} >
+            {isDialog && <img style = {{height:'11px', width:'11px', position:'absolute',right:0, top:0, opacity:0.7}} src = { dialogIcon } />}
             {(isNumberBadgeCount !== false) && <NumberBadge number = {numberBadgeCount} />}
             <Tooltip isDisabled = {isDisabledTooltipLocal} hasArrow label = { tooltip } >
                 <img style = { iconStylesRef.current } src = { icon } />

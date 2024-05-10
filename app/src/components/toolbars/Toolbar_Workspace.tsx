@@ -133,6 +133,10 @@ const WorkspaceToolbar = (props) => {
 
     }
 
+    const saveAsPanel = () => {
+
+    }
+
     const createPanel = () => {
 
     }
@@ -167,6 +171,7 @@ const WorkspaceToolbar = (props) => {
             <MenuItem onClick = {renamePanel} >Rename this panel</MenuItem>
             <MenuItem >Reset this panel</MenuItem>
             <MenuItem onClick = {deletePanel} >Delete this panel</MenuItem>
+            <MenuItem onClick = {saveAsPanel} >Save this panel as... </MenuItem>
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
             <MenuItem onClick = {reOrderPanels} >Re-order panels</MenuItem>
             <MenuDivider />
@@ -217,7 +222,7 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'show panel domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'show domain workbox'/>
         <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'show member workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />

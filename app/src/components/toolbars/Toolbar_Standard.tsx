@@ -275,6 +275,7 @@ const StandardToolbar = (props) => {
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem >Reset this workspace</MenuItem>
+            <MenuItem >Save this workspace as...</MenuItem>
             <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuDivider />
@@ -334,8 +335,8 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
-                <StandardIcon icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes are automatically saved' />
+                <StandardIcon isDisabled = {true} icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon isDialog = {true} icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes are automatically saved' />
             </>
         } 
         <ToolbarVerticalDivider />
