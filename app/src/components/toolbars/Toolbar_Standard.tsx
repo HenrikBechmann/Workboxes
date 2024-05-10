@@ -275,8 +275,8 @@ const StandardToolbar = (props) => {
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}>
             <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
             <MenuItem >Reset this workspace</MenuItem>
-            <MenuItem >Save this workspace as...</MenuItem>
             <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
+            <MenuItem >Save this workspace as...</MenuItem>
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
