@@ -302,6 +302,7 @@ const StandardToolbar = (props) => {
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
 // <StandardIcon icon = {notificationsIcon} caption = 'alerts' tooltip = 'Notifications to this account' response = {gotoNotifications} />
 // <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download user workspace settings from another tab or device' />
+// <StandardIcon icon = {uploadCloudIcon} caption = 'status' tooltip = 'upload user workspace settings for another tab or device' />
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -334,7 +335,6 @@ const StandardToolbar = (props) => {
                     menulist = {workspacemenuList} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
-                <StandardIcon icon = {uploadCloudIcon} caption = 'status' tooltip = 'upload user workspace settings for another tab or device' />
             </>
         } 
         <ToolbarVerticalDivider />

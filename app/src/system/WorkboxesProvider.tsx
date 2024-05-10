@@ -192,7 +192,9 @@ export const UserProvider = ({children}) => {
 
     const saveOnVisibilityChange = () => {
 
-        console.log('document.visibilityState',document.visibilityState)
+        // console.log('document.visibilityState',document.visibilityState)
+
+        // TODO look for a way to determine how many apps are loaded (visibilityState is more about being active)
 
         // if (document.visibilityState == 'visible') {
 
