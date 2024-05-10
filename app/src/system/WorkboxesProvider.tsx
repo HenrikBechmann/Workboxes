@@ -7,6 +7,8 @@
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
 // import { useNavigate } from 'react-router-dom'
 
+import { useToast } from '@chakra-ui/react'
+
 // firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -127,7 +129,8 @@ export const UserProvider = ({children}) => {
         baseRecordsAvailableRef = useRef(true),
         errorControl = useErrorControl(),
         errorControlRef = useRef(null),
-        usage = useUsage()
+        usage = useUsage(),
+        toast = useToast({duration:3000})
 
     userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords
@@ -137,18 +140,15 @@ export const UserProvider = ({children}) => {
 
     useEffect(()=>{
 
-        console.log('updating usage.data',{...usage.data})
-        const localStorageData = localStorage.getItem('visibilitychange')
+        const localStorageData = localStorage.getItem('usagedata')
         if (localStorageData) {
             // alert('updating usage.data: ' + localStorageData)
-            localStorage.removeItem('visibilitychange')
+            localStorage.removeItem('usagedata')
             const data = JSON.parse(localStorageData)
             for (let prop in data) {
                 usage[prop](data[prop])                
             }
         }
-        console.log('updated usage.data', {...usage.data})
-
         isMountedRef.current = true
         return () => {
             isMountedRef.current = false
@@ -194,6 +194,34 @@ export const UserProvider = ({children}) => {
 
         console.log('document.visibilityState',document.visibilityState)
 
+        // if (document.visibilityState == 'visible') {
+
+        //     const visibilityInstances = localStorage.getItem('visibilityinstances')
+        //     if (visibilityInstances) {
+        //         let visibilityNumber = parseInt(visibilityInstances)
+        //         visibilityNumber++
+        //         localStorage.setItem('visibilityinstances', visibilityNumber.toString())
+        //         if (visibilityNumber > 1) {
+        //             toast({description:'more than one tab has an open Workboxes.app'})
+        //         }
+        //     } else {
+        //         localStorage.setItem('visibilityinstances', '1')
+        //     }
+
+        // } else if (document.visibilityState == 'hidden') {
+
+        //     const visibilityInstances = localStorage.getItem('visibilityinstances')
+        //     if (visibilityInstances) {
+        //         let visibilityNumber = parseInt(visibilityInstances)
+        //         visibilityNumber--
+        //         if (visibilityNumber >= 1) {
+        //             localStorage.setItem('visibilityinstances', visibilityNumber.toString())
+        //         } else {
+        //             localStorage.removeItem('visibilityinstances')
+        //         }
+        //     } // else leave it alone
+        // }
+
         if (document.visibilityState == 'hidden') {
             const data = {...usage.data}
             usage.reset()
@@ -201,14 +229,10 @@ export const UserProvider = ({children}) => {
         }
 
     }
-        // alert('db visibilitychange data:' + localStorateData)
-        // alert('usage data' + JSON.stringify(usage.data))
-        // alert('resulting local storage data ' + localStorage.getItem('visibilitychange'))
-
     async function saveUsageData(data) {
 
         // TODO check for existence of previous record. If found, merge that with the incoming
-        localStorage.setItem('visibilitychange',JSON.stringify(data))
+        localStorage.setItem('usagedata',JSON.stringify(data))
         if (!userAuthDataRef.current) return
         const 
             db = firestore,
@@ -267,7 +291,7 @@ export const UserProvider = ({children}) => {
                 return
                 // nothing
             }
-            localStorage.removeItem('visibilitychange') // has been successfully set
+            localStorage.removeItem('usagedata') // has been successfully set
         }
     } 
 

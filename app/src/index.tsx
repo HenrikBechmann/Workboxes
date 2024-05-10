@@ -18,9 +18,9 @@ const router = createBrowserRouter(scaffold)
 const root = createRoot(document.getElementById('root'))
 
 root.render(
-    <WorkboxesProvider>
-        <ChakraProvider>
+    <ChakraProvider>
+        <WorkboxesProvider>
             <RouterProvider router = {router} />
-        </ChakraProvider>
-    </WorkboxesProvider>
+        </WorkboxesProvider>
+    </ChakraProvider>
 )

@@ -190,6 +190,7 @@ const WorkspaceToolbar = (props) => {
     },[panelList, panelSelection])
 
     // TODO hide user identity in user domain panel
+// <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download to synchronize with other tabs or devices' />
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -208,8 +209,7 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />
-        <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download user panel settings from another tab or device' />
-        <StandardIcon icon = {uploadCloudIcon} caption = 'upload' tooltip = 'upload user panel settings for another tab or device' />
+        <StandardIcon icon = {uploadCloudIcon} caption = 'status' tooltip = 'upload to synchronize with other tabs or devices' />
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'
