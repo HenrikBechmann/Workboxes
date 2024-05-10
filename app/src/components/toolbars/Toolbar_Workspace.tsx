@@ -209,7 +209,6 @@ const WorkspaceToolbar = (props) => {
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />
-        <StandardIcon icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes to panel are automatically saved' />
         <ToolbarVerticalDivider />
         <MenuControl 
             tooltip = 'select a window'

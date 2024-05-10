@@ -335,6 +335,7 @@ const StandardToolbar = (props) => {
                     menulist = {workspacemenuList} 
                 />
                 <StandardIcon icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'mobile':'desktop'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes are automatically saved' />
             </>
         } 
         <ToolbarVerticalDivider />
