@@ -136,6 +136,19 @@ export const UserProvider = ({children}) => {
     // console.log('userState',userState, userRecordsRef.current)
 
     useEffect(()=>{
+
+        console.log('updating usage.data',{...usage.data})
+        const localStorageData = localStorage.getItem('visibilitychange')
+        if (localStorageData) {
+            // alert('updating usage.data: ' + localStorageData)
+            localStorage.removeItem('visibilitychange')
+            const data = JSON.parse(localStorageData)
+            for (let prop in data) {
+                usage[prop](data[prop])                
+            }
+        }
+        console.log('updated usage.data', {...usage.data})
+
         isMountedRef.current = true
         return () => {
             isMountedRef.current = false
@@ -145,7 +158,29 @@ export const UserProvider = ({children}) => {
 
     useEffect(()=>{
 
-        document.addEventListener('visibilitychange',saveOnVisibilityChange)
+        let intervalID
+        if (systemRecords.settings) {
+            setTimeout(()=>{
+                const data = {...usage.data}
+                usage.reset()
+                saveUsageData(data)
+            },60000) // 1 minute after load, to catch up
+            intervalID = setInterval(()=>{
+                const data = {...usage.data}
+                usage.reset()
+                saveUsageData(data)
+            },systemRecords.settings.timers.update_usage) // currently set to 6 minutes
+        }
+
+        return () => {
+            clearInterval(intervalID)
+        }
+
+    },[systemRecords])
+
+    useEffect(()=>{
+
+        window.addEventListener('visibilitychange',saveOnVisibilityChange, true)
 
         return () => {
 
@@ -155,15 +190,29 @@ export const UserProvider = ({children}) => {
 
     },[])
 
-    async function saveWorkspaceData() {
-        // save workspace and panels to firestore
-    } 
+    const saveOnVisibilityChange = () => {
 
-    async function saveUsageData() {
+        console.log('document.visibilityState',document.visibilityState)
 
+        if (document.visibilityState == 'hidden') {
+            const data = {...usage.data}
+            usage.reset()
+            saveUsageData(data)
+        }
+
+    }
+        // alert('db visibilitychange data:' + localStorateData)
+        // alert('usage data' + JSON.stringify(usage.data))
+        // alert('resulting local storage data ' + localStorage.getItem('visibilitychange'))
+
+    async function saveUsageData(data) {
+
+        // TODO check for existence of previous record. If found, merge that with the incoming
+        localStorage.setItem('visibilitychange',JSON.stringify(data))
+        if (!userAuthDataRef.current) return
         const 
             db = firestore,
-            data = usage.data,
+            // data = usage.data,
             account = userRecordsRef.current.account,
             user = userRecordsRef.current.user,
             date = new Date(),
@@ -214,19 +263,17 @@ export const UserProvider = ({children}) => {
                     }
                 })
             } catch (error) {
+                console.log('transaction error saving usage data')
+                return
                 // nothing
             }
-            usage.reset()
+            localStorage.removeItem('visibilitychange') // has been successfully set
         }
     } 
 
-    const saveOnVisibilityChange = () => {
-
-        if (document.visibilityState == 'hidden') {
-            saveUsageData()
-        }
-
-    }
+    async function saveWorkspaceData() {
+        // save workspace and panels to firestore
+    } 
 
     useEffect(()=>{
         setWorkspaceSelection((previousState) => {
@@ -289,6 +336,7 @@ export const UserProvider = ({children}) => {
                 snapshotControl.unsubAll()
             }
 
+            userAuthDataRef.current = userAuthData // in case visibilitychange needs it in a hurry
             setUserData(userAuthData)
 
         })
@@ -490,7 +538,7 @@ export const UserProvider = ({children}) => {
             errorControl.push({description:'error getting setting initial userRecords',error})
         }
         usage.create(4)
-        setUserState('baserecordsavailable')
+        setUserState('baserecordscreated')
 
     }
 
@@ -539,7 +587,7 @@ export const UserProvider = ({children}) => {
         }
 
         if ((userState == 'userrecordacquired' && baseRecordsAvailableRef.current) 
-            || userState == 'baserecordsavailable' ) {
+            || userState == 'baserecordscreated' ) {
 
             const 
                 userRecords = userRecordsRef.current,
