@@ -1,18 +1,9 @@
 // Main.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-/*
-    TODO
-        - provide message to user 'loading workspace last used on {mobile/desktop}'
-        - save mobile window positions separately
-        - use dbdoc.exists() to verify doc's existence
-        - search for default workspace if no id is listed in user record
-
-*/
-
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
-import {  collection, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, writeBatch } from 'firebase/firestore'
+import {  collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, writeBatch, query } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
 import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl, useUsage } from '../system/WorkboxesProvider'
@@ -38,11 +29,12 @@ export const Main = (props) => {
     workspaceRecordRef.current = workspaceRecord
     mainStateRef.current = mainState
 
+    // TODO consolidate error handling
     async function getStartingWorkspaceData() {
 
         let workspaceSelectionRecord
 
-        // try to get workspaceSelection from most recent usage
+        // --------------[ 1. try to get workspaceID from most recent usage ]-----------
         let workspaceID, workspaceIDtype, workspaceDoc
         const 
             userWorkspaceData = userRecords.user.workspace,
@@ -66,10 +58,11 @@ export const Main = (props) => {
                     : 'desktop'
 
         // console.log('userRecords, userWorkspaceData', {...userRecords}, {...userWorkspaceData})
-        if (workspaceID) { // verify workspace existence
 
-            const 
-                workspaceDocRef = doc(workspaceCollection,workspaceID)
+        // ----------------[ 2. verify found workspaceID existence, and load if found ]---------------
+        if (workspaceID) { 
+
+            const workspaceDocRef = doc(workspaceCollection,workspaceID)
 
             try {
 
@@ -77,63 +70,118 @@ export const Main = (props) => {
 
                 if (!workspaceDoc.exists()) { // TODO this can be corrected by nulling source and searching for default workspace
                     workspaceID = null
+                } else {
+                    workspaceSelectionRecord = workspaceDoc.data()
+                    toast({description:`loaded workspace last used on ${workspaceIDtype}`})
                 }
 
-             } catch (error) {
+            } catch (error) {
+
+                console.log('error getting starting workspace data in Main', error)
                 errorControl.push({description:'error getting starting workspace data in Main', error})
                 navigate('/error')
                 return
-             }
+            }
+            usage.read(1)
 
         }
 
-        if (!workspaceID) { // look for other existing workspace
-
-        }
-
-        if (!workspaceID) { // look for first workspace
-
-        }
-
-        if (workspaceID) { // get existing workspace
-
-            // TODO save changed starting workspace to user record
-
-            const 
-                workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID)
-
-            let dbdoc 
-            let writes = 0
+        // ---------------------[ 3. but if no previous workspace specified, or not found ]---------------
+        // look for other existing workspace - default, or (as the last resort) first found
+        if (!workspaceID) { 
+            const workspaceDocs = []
+            const q = query(workspaceCollection)
             try {
-                dbdoc = await getDoc(workspaceDocRef)
 
-                if (!dbdoc.exists()) { // TODO this can be corrected by nulling source and searching for default workspace
-                    throw('expected workspaceID not found in database ['+ workspaceID + '] for user record [' + userProfileInfo.id + ']')
+                const dbDocs = await getDocs(q)
+                let found_default = false
+                if (dbDocs.size) { // at least one found
+                    console.log('dbDocs', dbDocs)
+                    usage.read(dbDocs.size)
+                    const docs = dbDocs.docs
+                    // collect data, and look for default
+                    for (let index = 0; index < dbDocs.size; index++) {
+                        const dbdoc = docs[index]
+                        const data = dbdoc.data()
+                        workspaceDocs.push(data)
+                        if (data.profile.flags.is_default) {
+                            found_default = true
+                            workspaceID = data.profile.workspace.id
+                            workspaceSelectionRecord = data
+                        }
+                    }
+                    if (!workspaceID) { // grab the first item, set it to default (edge case)
+    
+                        workspaceSelectionRecord = workspaceDocs[0]
+                        workspaceID = workspaceSelectionRecord.profile.workspace.id
+                        workspaceSelectionRecord.profile.flags.is_default = true
+                        toast({description:'default not found; loaded first found workspace, and set it to default'})
+
+                    } else {
+
+                        toast({description:'loaded default workspace'})
+
+                    }
+                    // update version, or default flag
+                    const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
+
+                    if ((!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) || !found_default) {
+                        try {
+
+                            const workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID)
+                            await setDoc(workspaceDocRef, updatedWorkspaceRecord)
+                            workspaceSelectionRecord = updatedWorkspaceRecord
+
+                        } catch (error) {
+
+                            console.log('error updating workspace version in Main', error)
+                            errorControl.push({description:'error updating workspace versoin in Main', error})
+                            navigate('/error')
+                            return
+
+                        }
+                        usage.write(1)
+                    }
+
+                    // update user record with new workspaceID
+                    const name = workspaceSelectionRecord.profile.workspace.name
+                    const userUpdateData = 
+                        isMobile
+                            ? {'workspace.mobile': {id:workspaceID, name}}
+                            : {'workspace.desktop': {id:workspaceID, name}}
+
+                    try {
+
+                        await updateDoc(doc(collection(db,'users'),userProfileInfo.id),userUpdateData)
+
+                    } catch (error) {
+
+                        console.log('error updating workspace count for user in Main', error)
+                        errorControl.push({description:'error updating workspace count for user in Main', error})
+                        navigate('/error')
+                        return
+
+                    }
+                    usage.write(1)
+
+                } else {
+
+                    usage.read(1) // for fail
+
                 }
 
-                workspaceSelectionRecord = dbdoc.data()
+            } catch(error) {
 
-                // console.log('workspaceID, userProfileInfo.id, workspaceSelectionRecord',workspaceID, userProfileInfo.id, {...workspaceSelectionRecord})
-
-                const updatedWorkspaceRecord = updateDocumentSchema('workspaces','standard',workspaceSelectionRecord)
-
-                if (!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) {
-                    await setDoc(workspaceDocRef, updatedWorkspaceRecord)
-                    workspaceSelectionRecord = updatedWorkspaceRecord
-                    writes++
-                }
-            } catch (error) {
-
-                errorControl.push({description:'error getting starting workspace data in Main', error})
+                console.log('error getting workspace list in Main', error)
+                errorControl.push({description:'error getting workspace list in Main', error})
                 navigate('/error')
                 return
 
             }
-            usage.read(1)
-            usage.write(writes)
-            toast({description:`loaded workspace last used on ${workspaceIDtype}`})
+        }
 
-        } else { // create first workspace record
+        // ---------------------[ 4. if no workspaces, create first workspace record ]---------------
+        if (!workspaceID) { 
 
             const 
                 workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces')),
@@ -198,6 +246,7 @@ export const Main = (props) => {
 
         }
 
+        // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
         setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
 
         const { setWorkspaceSelection } = workspaceSelection // for standard toolbar component
@@ -216,20 +265,6 @@ export const Main = (props) => {
         getStartingWorkspaceData() // setup only
 
     },[])
-
-    useEffect(()=>{
-
-        return () => {
-
-            if (document.visibilityState != 'hidden') {
-                console.log('cleanup of main page')
-                // save workspace data
-            }
-
-        }
-
-    },[])
-
 
     async function getNewWorkspaceData(workspaceID) {
 
