@@ -60,6 +60,8 @@ import moreVerticalIcon from '../../../assets/more_vert.png'
 import hideIcon from '../../../assets/expand_less.png'
 import mobileIcon from '../../../assets/smartphone.png'
 import desktopIcon from '../../../assets/laptop.png'
+import onlineIcon from '../../../assets/online.png'
+import offlineIcon from '../../../assets/offline.png'
 import downloadCloudIcon from '../../../assets/cloud_download.png'
 import uploadCloudIcon from '../../../assets/cloud_upload.png'
 
@@ -342,7 +344,8 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon isDisabled = {true} icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon isInfo = {true} icon = {onlineIcon} caption = 'online' tooltip = 'Workboxes functions best when online' />
                 <StandardIcon response = {uploadConfig} isDialog = {true} icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes are automatically saved' />
             </>
         } 

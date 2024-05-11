@@ -43,27 +43,62 @@ export const Main = (props) => {
         let workspaceSelectionRecord
 
         // try to get workspaceSelection from most recent usage
+        let workspaceID, workspaceIDtype, workspaceDoc
         const 
             userWorkspaceData = userRecords.user.workspace,
             mobileID = userWorkspaceData.mobile.id,
             desktopID = userWorkspaceData.desktop.id,
-            workspaceID = 
-                isMobile
-                    ? mobileID || desktopID
-                    : desktopID || mobileID,
-            workspaceIDtype = 
-                !workspaceID // neither mobile nor desktop workspaceID was found
-                    ? isMobile
-                        ? 'mobile'
-                        : 'desktop'
-                    : mobileID === workspaceID
-                        ? 'mobile'
-                        : 'desktop',
-            userProfileInfo = userRecords.user.profile.user
+            userProfileInfo = userRecords.user.profile.user,
+            workspaceCollection = collection(db,'users',userProfileInfo.id,'workspaces')
+
+        workspaceID = 
+            isMobile
+                ? mobileID || desktopID
+                : desktopID || mobileID
+
+        workspaceIDtype = 
+            !workspaceID // neither mobile nor desktop workspaceID was found
+                ? isMobile
+                    ? 'mobile'
+                    : 'desktop'
+                : mobileID === workspaceID
+                    ? 'mobile'
+                    : 'desktop'
 
         // console.log('userRecords, userWorkspaceData', {...userRecords}, {...userWorkspaceData})
+        if (workspaceID) { // verify workspace existence
+
+            const 
+                workspaceDocRef = doc(workspaceCollection,workspaceID)
+
+            try {
+
+                workspaceDoc = await getDoc(workspaceDocRef)
+
+                if (!workspaceDoc.exists()) { // TODO this can be corrected by nulling source and searching for default workspace
+                    workspaceID = null
+                }
+
+             } catch (error) {
+                errorControl.push({description:'error getting starting workspace data in Main', error})
+                navigate('/error')
+                return
+             }
+
+        }
+
+        if (!workspaceID) { // look for other existing workspace
+
+        }
+
+        if (!workspaceID) { // look for first workspace
+
+        }
 
         if (workspaceID) { // get existing workspace
+
+            // TODO save changed starting workspace to user record
+
             const 
                 workspaceDocRef = doc(collection(db,'users',userProfileInfo.id,'workspaces'),workspaceID)
 
