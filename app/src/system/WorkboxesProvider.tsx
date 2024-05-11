@@ -192,38 +192,6 @@ export const UserProvider = ({children}) => {
 
     const saveOnVisibilityChange = () => {
 
-        // console.log('document.visibilityState',document.visibilityState)
-
-        // TODO look for a way to determine how many apps are loaded (visibilityState is more about being active)
-
-        // if (document.visibilityState == 'visible') {
-
-        //     const visibilityInstances = localStorage.getItem('visibilityinstances')
-        //     if (visibilityInstances) {
-        //         let visibilityNumber = parseInt(visibilityInstances)
-        //         visibilityNumber++
-        //         localStorage.setItem('visibilityinstances', visibilityNumber.toString())
-        //         if (visibilityNumber > 1) {
-        //             toast({description:'more than one tab has an open Workboxes.app'})
-        //         }
-        //     } else {
-        //         localStorage.setItem('visibilityinstances', '1')
-        //     }
-
-        // } else if (document.visibilityState == 'hidden') {
-
-        //     const visibilityInstances = localStorage.getItem('visibilityinstances')
-        //     if (visibilityInstances) {
-        //         let visibilityNumber = parseInt(visibilityInstances)
-        //         visibilityNumber--
-        //         if (visibilityNumber >= 1) {
-        //             localStorage.setItem('visibilityinstances', visibilityNumber.toString())
-        //         } else {
-        //             localStorage.removeItem('visibilityinstances')
-        //         }
-        //     } // else leave it alone
-        // }
-
         if (document.visibilityState == 'hidden') {
             const data = {...usage.data}
             usage.reset()
