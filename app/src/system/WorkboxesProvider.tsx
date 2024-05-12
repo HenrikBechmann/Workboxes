@@ -17,9 +17,9 @@ import { useToast } from '@chakra-ui/react'
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { 
-    getFirestore, collection, doc, 
+    getFirestore, 
+    collection, doc, query, where,
     getDoc, getDocFromServer, getDocs, onSnapshot, setDoc, updateDoc,
-    query, where,
     increment, serverTimestamp, 
     writeBatch, runTransaction
 } from 'firebase/firestore'
