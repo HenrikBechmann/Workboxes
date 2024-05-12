@@ -6,10 +6,7 @@
 
 /*
     TODO
-    Use getDocFromServer() for user record. 
     check unsub with error condition
-    catch permission denied errors for onSnapshot
-    catch failure to collect account and domain records for user
 */
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
 // import { useNavigate } from 'react-router-dom'
