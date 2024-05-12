@@ -154,7 +154,7 @@ export const UserProvider = ({children}) => {
     userRecordsRef.current = userRecords
     errorControlRef.current = errorControl
 
-    console.log('userState',userState, userRecordsRef.current)
+    // console.log('userState',userState, userRecordsRef.current)
 
     // --------------------------------[ initialization effects ]------------------------
 

@@ -15,7 +15,7 @@ const UserRouteController = () => {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    console.log('UserRouteController', errorControl)
+    // console.log('UserRouteController', errorControl)
 
     if (errorControl.length) {
         return <Navigate to = '/error' />
