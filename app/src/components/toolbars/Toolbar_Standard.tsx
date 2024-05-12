@@ -14,10 +14,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
     MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
-    Tooltip, Box,
-    AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
-    FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    useToast,
+    Box,
 } from '@chakra-ui/react'
 
 import { 
@@ -26,7 +23,7 @@ import {
     useAuth, 
     useFirestore, 
     useWorkspaceSelection, 
-    useSystemRecords,
+    // useSystemRecords,
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -81,57 +78,6 @@ const standardToolbarStyles = {
     backgroundColor:'#dfecdf', //'#f2f2f2',
     borderRadius:'8px',
 
-} as CSSProperties
-
-const iconWrapperStyles = {
-    display:'inline-block',
-    marginLeft:'12px',
-    opacity:0.7,
-}
-
-const iconStyles = {
-    height:'20px',
-    width:'20px',
-}
-
-const smallerIconStyles = {
-    height:'18px', 
-    width:'18px'
-}
-
-const downArrowWrapperStyles = {
-    display:'inline-block',
-}
-
-const downArrowStyles = {
-    opacity:0.5, 
-    fontSize:'small',
-}
-
-const fireIconControlStyles = {
-    display:'flex',
-    flexWrap:'nowrap',
-    alignItems:'center',
-    padding:'2px',
-    borderRadius:'6px',
-    marginLeft:'6px',
-} as CSSProperties
-
-const avatarStyles = {
-    width:'24px', 
-    height:'24px', 
-    borderRadius:'12px',
-    // display:'inline-block',
-}
-
-const displayNameStyles = {
-    display:'flex',
-    flexWrap:'nowrap',
-    alignItems:'center',
-    whiteSpace:'nowrap',
-    fontSize:'small', 
-    marginLeft:'4px',
-    marginRight:'3px', 
 } as CSSProperties
 
 let workspaceMenuIteration = 0 // used for key to brute force re-creation to resync MenuOptionItems
