@@ -344,9 +344,12 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
-                <StandardIcon isInfo = {true} icon = {onlineIcon} caption = 'online' tooltip = 'Workboxes functions best when online' />
-                <StandardIcon response = {uploadConfig} isDialog = {true} icon = {uploadCloudIcon} caption = 'automatic' tooltip = 'changes are automatically saved' />
+                <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} 
+                    caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
+                <StandardIcon isInfo = {true} icon = {onlineIcon} 
+                    caption = 'online' tooltip = 'Workboxes functions best when online' />
+                <StandardIcon response = {uploadConfig} isDialog = {true} icon = {uploadCloudIcon} 
+                    caption = 'automatic' tooltip = 'configuration changes are automatically saved' />
             </>
         } 
         <ToolbarVerticalDivider />
@@ -360,7 +363,8 @@ const StandardToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        {writeDialogState.open && <WorkspaceWriteDialog writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
+        {writeDialogState.open && <WorkspaceWriteDialog 
+            writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
     </Box>
 }
