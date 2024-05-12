@@ -231,7 +231,7 @@ export const UserProvider = ({children}) => {
         if (account?.profile.account.id) {
             // console.log('running saveUsageData')
             const 
-                accountID = account?.profile.account.id,
+                accountID = account.profile.account.id,
                 usageID = yearStr + '.' + monthStr,
                 dbUsageCollection = collection(db, 'accounts', accountID, 'usage'),
                 dbUsageDocRef = doc(dbUsageCollection, usageID)
