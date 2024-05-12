@@ -262,6 +262,8 @@ const StandardToolbar = (props) => {
 //     caption = 'online' tooltip = 'Workboxes functions best when online' />
 // <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} 
 //     caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
+// <ToolbarVerticalDivider />
+// <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -313,9 +315,6 @@ const StandardToolbar = (props) => {
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
     </Box>
 }
-
-// <ToolbarVerticalDivider />
-// <StandardIcon icon = {moreVerticalIcon} caption = 'more' tooltip = 'More workspace options' />
 
 export default StandardToolbar
 
