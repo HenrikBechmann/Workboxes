@@ -5,11 +5,10 @@
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 /*
-
-Use getDocFromServer() for user record. 
-Consider default snapshot listener, with ignore 
-snapshots where metadata.fromCache or metadata.hasPendingWrites is true.
-
+    TODO
+    Use getDocFromServer() for user record. 
+    check unsub with error condition
+    check errorControl is reset on logout
 */
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
 // import { useNavigate } from 'react-router-dom'
@@ -71,7 +70,6 @@ const WorkboxesProvider = ({children}) => {
 
 export default WorkboxesProvider
 
-// TODO for save make sure account exists first
 class Usage {
 
     read = (number) => {
@@ -118,10 +116,11 @@ const UsageContext = createContext(usage)
 // special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
+    // --------------------------------[ data definitions ]-----------------------
     const 
         [userState, setUserState] = useState('setup'),
         // for contexts...
-        [userAuthData, setUserData] = useState(undefined), // undefined before call; null after logout
+        [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
         [workspaceSelection, setWorkspaceSelection] = useState({workspace:{id:null, name:null},setWorkspaceSelection:null}),
@@ -146,6 +145,30 @@ export const UserProvider = ({children}) => {
 
     console.log('userState',userState, userRecordsRef.current)
 
+    // --------------------------------[ initialization effects ]------------------------
+
+    useEffect(()=>{
+
+        isMountedRef.current = true
+        return () => {
+            isMountedRef.current = false
+            errorArray.length = 0
+        }
+
+    },[])
+
+    useEffect(()=>{
+
+        window.addEventListener('visibilitychange',saveOnVisibilityChange, true)
+
+        return () => {
+
+            document.removeEventListener('visibilitychange',saveOnVisibilityChange)
+
+        }
+
+    },[])
+
     useEffect(()=>{
 
         const localStorageData = localStorage.getItem('usagedata')
@@ -157,12 +180,76 @@ export const UserProvider = ({children}) => {
                 usage[prop](data[prop])                
             }
         }
+
+    },[])
+
+    useEffect(()=>{
+        setWorkspaceSelection((previousState) => {
+            previousState.setWorkspaceSelection = setWorkspaceSelection
+            return previousState
+        })
+    },[])
+
+    useEffect(()=>{
+
         isMountedRef.current = true
+
+        // console.log('subscribing to onAuthStateChanged')
+        authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
+
+            let userAuthData = null
+
+            if (user) {
+                const 
+                    superUser = {
+                        isSuperUser:false,
+                        errorCondition:false,
+                    },
+                    functions = getFunctions(),
+                    isAdminUser = httpsCallable(functions, 'isAdminUser')
+
+                try {
+
+                    const result:any = await isAdminUser()
+                    // throw('test error on isAdminUser')
+                    superUser.isSuperUser = result.data.status
+
+                } catch (error) {
+
+                    superUser.errorCondition = true
+                    errorControlRef.current.push({description:'error verifying user rights. Check internet',error})
+                    console.log('error verifying user rights. Check internet', error, errorControlRef.current)
+                    setUserAuthData({...userAuthData})
+                    setUserState('error')
+                    return
+
+                }
+
+                userAuthData = {
+                    authUser:user,
+                    sysadminStatus:superUser,
+                }
+                usage.login(1)
+                setUserState('useridentified')
+    
+            } else { // unsubscribe firestore listeners
+                snapshotControl.unsubAll()
+            }
+
+            userAuthDataRef.current = userAuthData // in case visibilitychange needs it in a hurry
+            setUserAuthData(userAuthData)
+
+        })
+
         return () => {
-            isMountedRef.current = false
+            if (!isMountedRef.current) {
+                authStateUnsubscribeRef.current()
+            }
         }
 
     },[])
+   
+    // ---------------------------------[ state change effects ]----------------------------
 
     useEffect(()=>{
 
@@ -186,17 +273,140 @@ export const UserProvider = ({children}) => {
 
     },[systemRecords])
 
+    // open base listeners for user: user, account, and domain records
     useEffect(()=>{
 
-        window.addEventListener('visibilitychange',saveOnVisibilityChange, true)
+        if (userState == 'useridentified') {
 
-        return () => {
+            if (!getSystemRecords()) return
 
-            document.removeEventListener('visibilitychange',saveOnVisibilityChange)
+            const userIndex = "UserProvider.users." + userAuthDataRef.current.authUser.uid
+            if (!snapshotControl.has(userIndex)) {
+                snapshotControl.create(userIndex)
+                const userAuthData = userAuthDataRef.current
+                // console.log('subscribing to user document', userAuthData.authUser.uid)
+                const source = 'server'
+                const unsubscribeuser = 
+                    onSnapshot(doc(collection(db, 'users'), userAuthData.authUser.uid), 
+                        // { source:'cache'},
+                        (returndoc) =>{
+                        snapshotControl.incrementCallCount(userIndex, 1)
+                        const userRecord = returndoc.data()
+
+                        if (!userRecord) { 
+
+                            baseRecordsAvailableRef.current = false
+                            createUserBaseRecords(userAuthData) // this always looks for a connection failure
+
+                        } else {
+
+                            setUserRecords((previousState) => {
+
+                               previousState.user = userRecord
+                               return {...previousState}
+
+                            })
+                            if (!snapshotControl.wasSchemaChecked(userIndex)) {
+
+                                const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
+                                if (!Object.is(userRecord, updatedRecord)) {
+
+                                    setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
+
+                                }
+                                snapshotControl.setSchemaChecked(userIndex)
+                            }
+
+                            setUserState('userrecordacquired')
+                            
+                        }
+                    },(error) => {
+
+                        console.log('onSnapshot error for user record', error)
+                        errorControl.push({description:'onSnapshot error for user record', error})
+
+                    })
+
+                snapshotControl.registerUnsub(userIndex, unsubscribeuser)
+            }
+        }
+
+        if ((userState == 'userrecordacquired' && baseRecordsAvailableRef.current) 
+            || userState == 'baserecordscreated' ) {
+
+            const 
+                userRecords = userRecordsRef.current,
+                userRecord = userRecords.user,
+                accountID = userRecord.profile.account.id,
+                domainID = userRecord.profile.domain.id
+
+            const accountIndex = "UserProvider.accounts." + accountID
+            if (!snapshotControl.has(accountIndex)) {
+                snapshotControl.create(accountIndex)
+
+                const unsubscribeaccount = 
+                    onSnapshot(doc(db, "accounts",accountID), (returndoc) =>{
+                        snapshotControl.incrementCallCount(accountIndex, 1)
+                        const accountRecord = returndoc.data()
+                        // console.log('snapshot of accountRecord',accountRecord)
+                        setUserRecords((previousState) => {
+                           previousState.account = accountRecord
+                           return {...previousState}
+                        })
+                        if (!snapshotControl.wasSchemaChecked(accountIndex)) {
+                            const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
+                            if (!Object.is(accountRecord, updatedRecord)) {
+
+                                setDoc(doc(db,'accounts',accountID),updatedRecord)
+
+                            }
+                            snapshotControl.setSchemaChecked(accountIndex)
+                        }
+                    }, (error) =>{
+                        console.log('onSnapshot error for user account', error)
+                        errorControl.push({description:'onSnapshot error for user account', error})
+
+                    })
+
+                snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
+            }
+
+            const domainIndex = "UserProvider.domains." + domainID
+            if (!snapshotControl.has(domainIndex)) {
+                snapshotControl.create(domainIndex)
+
+                const unsubscribedomain = 
+                    onSnapshot(doc(db, "domains",domainID), (returndoc) =>{
+                        snapshotControl.incrementCallCount(domainIndex, 1)
+                        const domainRecord = returndoc.data()
+                        // console.log('snapshot of domainRecord',domainRecord)
+                        setUserRecords((previousState) => {
+                           previousState.domain = domainRecord
+                           return {...previousState}
+                        })
+                        if (!snapshotControl.wasSchemaChecked(domainIndex)) {
+                            const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
+                            if (!Object.is(domainRecord, updatedRecord)) {
+
+                                setDoc(doc(db,'domains',domainID),updatedRecord)
+
+                            }
+                            snapshotControl.setSchemaChecked(domainIndex)
+                        }
+                    }, (error) => {
+                        console.log('onSnapshot error for user domain',error)
+                        errorControl.push({description:'onSnapshot error for user domain',error})
+                    })
+
+                snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
+            }
+            setUserState('ready')
 
         }
 
-    },[])
+    },[userState])
+
+    // -------------------------------[ actions ]----------------------
 
     const saveOnVisibilityChange = () => {
 
@@ -274,97 +484,69 @@ export const UserProvider = ({children}) => {
         }
     } 
 
-    async function saveWorkspaceData() {
-        // save workspace and panels to firestore
-    } 
-
-    useEffect(()=>{
-        setWorkspaceSelection((previousState) => {
-            previousState.setWorkspaceSelection = setWorkspaceSelection
-            return previousState
-        })
-    },[])
-
     async function getSystemRecords() {
 
         if (!systemRecords.settings) {
             try {
-                const systemSettings = await getDoc(doc(db, 'system','settings'))
-                const systemSettingsData = systemSettings.data()
+
+                const 
+                    systemSettings = await getDoc(doc(db, 'system','settings')),
+                    systemSettingsData = systemSettings.data()
+
                 setSystemRecords({settings:systemSettingsData})
+
             } catch (error) {
+
                 console.log('error getting system settings', error)
                 errorControl.push({description:'error getting system settings',error})
+                setUserAuthData({...userAuthData})
+                setUserState('error')
+                return false
+
             }
+
             usage.read(1)
+            return true
         }
+        return true
 
     }
-
-    useEffect(()=>{
-
-        isMountedRef.current = true
-
-        // console.log('subscribing to onAuthStateChanged')
-        authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
-
-            let userAuthData = null
-
-            if (user) {
-                const 
-                    superUser = {
-                        isSuperUser:false,
-                        errorCondition:false,
-                    },
-                    functions = getFunctions(),
-                    isAdminUser = httpsCallable(functions, 'isAdminUser')
-
-                try {
-                    const result:any = await isAdminUser()
-                    // throw('test error on isAdminUser')
-                    superUser.isSuperUser = result.data.status
-                } catch (error) {
-                    superUser.errorCondition = true
-                    errorControlRef.current.push({description:'error getting isAdmin',error})
-                    // TODO generate an errorState (setUserState)
-                    console.log('error getting isAdmin', error, errorControlRef.current)
-                    setUserData({...userAuthData})
-                    setUserState('error')
-                    return
-                }
-
-                userAuthData = {
-                    authUser:user,
-                    sysadminStatus:superUser,
-                }
-                usage.login(1)
-                setUserState('useridentified')
-    
-            } else { // unsubscribe firestore listeners
-                snapshotControl.unsubAll()
-            }
-
-            userAuthDataRef.current = userAuthData // in case visibilitychange needs it in a hurry
-            setUserData(userAuthData)
-
-        })
-
-        return () => {
-            if (!isMountedRef.current) {
-                authStateUnsubscribeRef.current()
-            }
-        }
-
-    },[])
-    
+ 
+    // first time login only....
     async function createUserBaseRecords(userAuthData) {
 
-        const
+        const 
+            {displayName, photoURL, uid} = userAuthData.authUser,
             accountDocRef = doc(collection(db, 'accounts')),
             domainDocRef = doc(collection(db, 'domains')),
-            workboxDocRef = doc(collection(db, 'workboxes'))
+            workboxDocRef = doc(collection(db, 'workboxes')),
+            userDocRef = doc(collection(db, 'users'),uid)
 
-        const {displayName, photoURL, uid} = userAuthData.authUser
+        // confirm absence of user record
+        let userDoc
+        try {
+
+            userDoc = await getDocFromServer(userDocRef) // must come from server directly
+
+        } catch (error) { // no internet connection
+
+            errorControlRef.current.push({description:'error verifying user record. Check internet',error})
+            console.log('error verifying user record. Check internet', error, errorControlRef.current)
+            setUserAuthData({...userAuthData})
+            setUserState('error')
+            return false
+
+        }
+
+        if (userDoc.exists()) { // problem -- should be empty
+
+            errorControlRef.current.push({description:'inconsistent finding of user record. Check internet',error:null})
+            console.log('inconsistent finding of user record. Check internet', errorControlRef.current)
+            setUserAuthData({...userAuthData})
+            setUserState('error')
+            return false
+
+        }
 
         const userRecord = updateDocumentSchema('users','standard',{},{
             profile: {
@@ -536,154 +718,29 @@ export const UserProvider = ({children}) => {
 
         try {
             const batch = writeBatch(db)
-            // TODO the user record should be a transaction to make sure the user record doesn't already exist
-            batch.set(doc(db,'users',uid),userRecord)
+
+            batch.set(userDocRef, userRecord)
             batch.set(accountDocRef, accountRecord)
             batch.set(domainDocRef, domainRecord)
             batch.set(workboxDocRef, workboxRecord)
             await batch.commit()
+
         } catch(error) {
+
             console.log('error getting setting initial userRecords', error)
             errorControl.push({description:'error getting setting initial userRecords',error})
-            return
+            setUserAuthData({...userAuthData})
+            setUserState('error')
+            return false
+
         }
+
         usage.create(4)
         setUserState('baserecordscreated')
 
+        return true
+
     }
-
-    // open base listeners for user: user, account, and domain records
-    useEffect(()=>{
-
-        if (userState == 'useridentified') {
-
-            getSystemRecords()
-
-            const userIndex = "UserProvider.users." + userAuthDataRef.current.authUser.uid
-            if (!snapshotControl.has(userIndex)) {
-                snapshotControl.create(userIndex)
-                const userAuthData = userAuthDataRef.current
-                // console.log('subscribing to user document', userAuthData.authUser.uid)
-                const source = 'server'
-                const unsubscribeuser = 
-                    onSnapshot(doc(collection(db, 'users'), userAuthData.authUser.uid), 
-                        // { source:'cache'},
-                        (returndoc) =>{
-                        snapshotControl.incrementCallCount(userIndex, 1)
-                        const userRecord = returndoc.data()
-
-                        if (!userRecord) { // TODO but could be connection failure
-
-                            baseRecordsAvailableRef.current = false
-                            createUserBaseRecords(userAuthData)
-
-                        } else {
-
-                            setUserRecords((previousState) => {
-
-                               previousState.user = userRecord
-                               return {...previousState}
-
-                            })
-                            if (!snapshotControl.wasSchemaChecked(userIndex)) {
-
-                                const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
-                                if (!Object.is(userRecord, updatedRecord)) {
-
-                                    setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
-
-                                }
-                                snapshotControl.setSchemaChecked(userIndex)
-                            }
-
-                            setUserState('userrecordacquired')
-                            
-                        }
-                    },(error) => {
-
-                        console.log('onSnapshot error for user record', error)
-                        errorControl.push({description:'onSnapshot error for user record', error})
-
-                    })
-
-                snapshotControl.registerUnsub(userIndex, unsubscribeuser)
-            }
-        }
-
-        if ((userState == 'userrecordacquired' && baseRecordsAvailableRef.current) 
-            || userState == 'baserecordscreated' ) {
-
-            const 
-                userRecords = userRecordsRef.current,
-                userRecord = userRecords.user,
-                accountID = userRecord.profile.account.id,
-                domainID = userRecord.profile.domain.id
-
-            const accountIndex = "UserProvider.accounts." + accountID
-            if (!snapshotControl.has(accountIndex)) {
-                snapshotControl.create(accountIndex)
-
-                const unsubscribeaccount = 
-                    onSnapshot(doc(db, "accounts",accountID), (returndoc) =>{
-                        snapshotControl.incrementCallCount(accountIndex, 1)
-                        const accountRecord = returndoc.data()
-                        // console.log('snapshot of accountRecord',accountRecord)
-                        setUserRecords((previousState) => {
-                           previousState.account = accountRecord
-                           return {...previousState}
-                        })
-                        if (!snapshotControl.wasSchemaChecked(accountIndex)) {
-                            const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
-                            if (!Object.is(accountRecord, updatedRecord)) {
-
-                                setDoc(doc(db,'accounts',accountID),updatedRecord)
-
-                            }
-                            snapshotControl.setSchemaChecked(accountIndex)
-                        }
-                    }, (error) =>{
-                        console.log('onSnapshot error for user account', error)
-                        errorControl.push({description:'onSnapshot error for user account', error})
-
-                    })
-
-                snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
-            }
-
-            const domainIndex = "UserProvider.domains." + domainID
-            if (!snapshotControl.has(domainIndex)) {
-                snapshotControl.create(domainIndex)
-
-                const unsubscribedomain = 
-                    onSnapshot(doc(db, "domains",domainID), (returndoc) =>{
-                        snapshotControl.incrementCallCount(domainIndex, 1)
-                        const domainRecord = returndoc.data()
-                        // console.log('snapshot of domainRecord',domainRecord)
-                        setUserRecords((previousState) => {
-                           previousState.domain = domainRecord
-                           return {...previousState}
-                        })
-                        if (!snapshotControl.wasSchemaChecked(domainIndex)) {
-                            const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
-                            if (!Object.is(domainRecord, updatedRecord)) {
-
-                                setDoc(doc(db,'domains',domainID),updatedRecord)
-
-                            }
-                            snapshotControl.setSchemaChecked(domainIndex)
-                        }
-                    }, (error) => {
-                        console.log('onSnapshot error for user domain',error)
-                        errorControl.push({description:'onSnapshot error for user domain',error})
-                    })
-
-                snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
-            }
-            setUserState('ready')
-
-        }
-
-    },[userState])
 
     return (
         <UsageContext.Provider value = {usage}>
@@ -705,7 +762,7 @@ export const UserProvider = ({children}) => {
 
 } // UserProvider
 
-// context access
+// --------------------[ context access ]----------------
 
 const useAuth = () => {
     return useContext(AuthContext)
