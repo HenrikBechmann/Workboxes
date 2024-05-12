@@ -33,8 +33,9 @@ const GeneralRouteController = (props) => {
         navigate = useNavigate()
 
     if (errorControl.length) {
-        navigate('/error')
-        return
+        return <Navigate to = '/error' />
+        // navigate('/error')
+        // return
     }
 
     if (userAuthData === undefined) {

@@ -144,7 +144,7 @@ export const UserProvider = ({children}) => {
     userRecordsRef.current = userRecords
     errorControlRef.current = errorControl
 
-    // console.log('userState',userState, userRecordsRef.current)
+    console.log('userState',userState, userRecordsRef.current)
 
     useEffect(()=>{
 
@@ -224,7 +224,7 @@ export const UserProvider = ({children}) => {
             monthStr = month.toString().padStart(2,'0'),
             yearStr = year.toString()
 
-        if (!user.profile.flags.fully_registered) return
+        if (!user?.profile.flags.fully_registered) return
 
         // save workspace and panels to firestore
         // console.log('accountID, account', account?.profile.account.id, {...account})
@@ -321,12 +321,15 @@ export const UserProvider = ({children}) => {
 
                 try {
                     const result:any = await isAdminUser()
+                    // throw('test error on isAdminUser')
                     superUser.isSuperUser = result.data.status
                 } catch (error) {
-                    console.log('error getting isAdmin', error)
                     superUser.errorCondition = true
                     errorControlRef.current.push({description:'error getting isAdmin',error})
                     // TODO generate an errorState (setUserState)
+                    console.log('error getting isAdmin', error, errorControlRef.current)
+                    setUserData({...userAuthData})
+                    setUserState('error')
                     return
                 }
 

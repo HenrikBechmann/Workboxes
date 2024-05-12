@@ -57,8 +57,6 @@ export const Main = (props) => {
                     ? 'mobile'
                     : 'desktop'
 
-        // console.log('userRecords, userWorkspaceData', {...userRecords}, {...userWorkspaceData})
-
         // ----------------[ 2. verify found workspaceID existence, and load if found ]---------------
         if (workspaceID) { 
 
@@ -180,7 +178,7 @@ export const Main = (props) => {
             }
         }
 
-        // ---------------------[ 4. if no workspaces, create first workspace record ]---------------
+        // ---------------------[ 4. if no workspaces exist, create first workspace record ]---------------
         if (!workspaceID) { 
 
             const 
