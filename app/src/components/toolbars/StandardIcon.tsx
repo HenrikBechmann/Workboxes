@@ -61,7 +61,10 @@ const StandardIcon = (props) => {
                 <img style = {{borderRadius: '7px', backgroundColor: 'lightyellow', 
                     height:'14px', width:'14px', position:'absolute',right:0, top:0}} src = { infoIcon } />
             }
-            {isDialog && <img style = {{height:'14px', width:'14px', position:'absolute',right:0, top:0, opacity:0.7}} src = { dialogIcon } />}
+            {isDialog && 
+                <img style = {{height:'14px', width:'14px', backgroundColor: 'lightyellow', 
+                    position:'absolute',right:0, top:0, opacity:0.7}} src = { dialogIcon } />
+            }
             {(isNumberBadgeCount !== false) && <NumberBadge number = {numberBadgeCount} />}
             <Tooltip isDisabled = {isDisabledTooltipLocal} hasArrow label = { tooltip } >
                 <img style = { iconStylesRef.current } src = { icon } />

@@ -260,6 +260,8 @@ const StandardToolbar = (props) => {
 // <StandardIcon icon = {uploadCloudIcon} caption = 'status' tooltip = 'upload user workspace settings for another tab or device' />
 // <StandardIcon isInfo = {true} icon = {onlineIcon} 
 //     caption = 'online' tooltip = 'Workboxes functions best when online' />
+// <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} 
+//     caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -291,8 +293,6 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon isInfo = {true} icon = {isMobile?mobileIcon:desktopIcon} 
-                    caption = {isMobile?'(mobile)':'(desktop)'} tooltip = 'some settings may be adapted to device' />
                 <StandardIcon response = {uploadConfig} isDialog = {true} icon = {uploadCloudIcon} 
                     caption = 'automatic' tooltip = 'configuration changes are automatically saved' />
             </>
