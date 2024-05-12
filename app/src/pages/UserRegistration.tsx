@@ -208,7 +208,7 @@ const UserRegistration = (props) => {
         </Box>
     </>
 
-}
+} // UserRegistration
 
 // ==================================[ User Registration Input ]==============================
 
