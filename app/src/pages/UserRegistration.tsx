@@ -4,8 +4,7 @@
 /*
     TODO
 
-    allow blank date - currently an error - use checkmark to include
-    useRef for userRecord line 209
+    take email is primarily personal or business selection
 
 */
 import React, { useState, useEffect, useRef } from 'react'
