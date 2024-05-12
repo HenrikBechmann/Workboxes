@@ -23,7 +23,6 @@ import {
     useAuth, 
     useFirestore, 
     useWorkspaceSelection, 
-    // useSystemRecords,
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -40,7 +39,7 @@ import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
-import { useToggleIcon } from './ToggleIcon'
+// import { useToggleIcon } from './ToggleIcon'
 
 import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'

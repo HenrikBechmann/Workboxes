@@ -5,11 +5,9 @@ import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 
 import {
     Button, Text, Input,
-    MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
-    Tooltip, Box,
+    Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
-    useToast,
 } from '@chakra-ui/react'
 
 import { 
@@ -20,16 +18,16 @@ import {
     writeBatch,
 } from 'firebase/firestore'
 
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { updateDocumentSchema } from '../../system/utilities'
 
 import { isMobile } from '../../index'
 
 import { 
-    useUserAuthData, 
+    // useUserAuthData, 
     useUserRecords, 
-    useAuth, 
+    // useAuth, 
     useFirestore, 
     useWorkspaceSelection, 
     useSystemRecords,
