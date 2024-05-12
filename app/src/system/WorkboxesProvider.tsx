@@ -20,12 +20,15 @@ import { useToast } from '@chakra-ui/react'
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { 
-    getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where,
-    updateDoc, increment, onSnapshot, serverTimestamp, writeBatch, runTransaction,
-    getDocFromServer
+    getFirestore, collection, doc, 
+    getDoc, getDocFromServer, getDocs, onSnapshot, setDoc, updateDoc,
+    query, where,
+    increment, serverTimestamp, 
+    writeBatch, runTransaction
 } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
 import { getFunctions, httpsCallable } from "firebase/functions"
+
 import firebaseConfig from '../firebaseConfig'
 
 // workbox
@@ -303,60 +306,60 @@ export const UserProvider = ({children}) => {
             if (!snapshotControl.has(userIndex)) { // once only
                 snapshotControl.create(userIndex)
                 const userAuthData = userAuthDataRef.current
-                // console.log('subscribing to user document', userAuthData.authUser.uid)
-                const source = 'server'
                 const unsubscribeuser = 
                     onSnapshot(doc(collection(db, 'users'), userAuthData.authUser.uid), 
                         async (returndoc) =>{
-                        snapshotControl.incrementCallCount(userIndex, 1)
-                        usage.read(1)
-                        const userRecord = returndoc.data()
+                            snapshotControl.incrementCallCount(userIndex, 1)
+                            usage.read(1)
+                            const userRecord = returndoc.data()
+                            if (!userRecord) { // new user, needs to be registered
 
-                        if (!userRecord) { // new user, needs to be registered
+                                baseRecordsAvailableRef.current = false // prevent premature listeners for account & domain
+                                createUserBaseRecords(userAuthData) // this always looks for a connection failure
 
-                            baseRecordsAvailableRef.current = false // prevent premature listeners for account & domain
-                            createUserBaseRecords(userAuthData) // this always looks for a connection failure
+                            } else {
 
-                        } else {
+                                setUserRecords((previousState) => {
 
-                            setUserRecords((previousState) => {
+                                   previousState.user = userRecord
+                                   return {...previousState}
 
-                               previousState.user = userRecord
-                               return {...previousState}
+                                })
+                                if (!snapshotControl.wasSchemaChecked(userIndex)) {
 
-                            })
-                            if (!snapshotControl.wasSchemaChecked(userIndex)) {
+                                    const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
+                                    if (!Object.is(userRecord, updatedRecord)) {
+                                        try {
 
-                                const updatedRecord = updateDocumentSchema('users', 'standard',userRecord)
-                                if (!Object.is(userRecord, updatedRecord)) {
-                                    try {
-                                        await setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
-                                    } catch (error) {
+                                            await setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
 
-                                        errorControlRef.current.push({description:'error updating user record version. Check internet',error})
-                                        console.log('error updating user record version. Check internet',error)
-                                        setUserAuthData({...userAuthData})
-                                        setUserState('error')
-                                        return
+                                        } catch (error) {
+
+                                            errorControlRef.current.push({description:'error updating user record version. Check internet',error})
+                                            console.log('error updating user record version. Check internet',error)
+                                            setUserAuthData({...userAuthData})
+                                            setUserState('error')
+                                            return
+
+                                        }
 
                                     }
-
+                                    snapshotControl.setSchemaChecked(userIndex)
                                 }
-                                snapshotControl.setSchemaChecked(userIndex)
+
+                                setUserState('userrecordacquired')
+                                
                             }
+                        },(error) => {
 
-                            setUserState('userrecordacquired')
-                            
+                            console.log('error for user record listener. Check permissions', error)
+                            errorControl.push({description:'error for user record listener. Check permissions', error})
+                            setUserAuthData({...userAuthData})
+                            setUserState('error')
+                            return
+
                         }
-                    },(error) => {
-
-                        console.log('error for user record listener. Check permissions', error)
-                        errorControl.push({description:'error for user record listener. Check permissions', error})
-                        setUserAuthData({...userAuthData})
-                        setUserState('error')
-                        return
-
-                    })
+                    )
 
                 snapshotControl.registerUnsub(userIndex, unsubscribeuser)
             }
@@ -376,49 +379,51 @@ export const UserProvider = ({children}) => {
                 snapshotControl.create(accountIndex)
 
                 const unsubscribeaccount = 
-                    onSnapshot(doc(db, "accounts",accountID), async (returndoc) =>{
-                        snapshotControl.incrementCallCount(accountIndex, 1)
-                        usage.read(1)
-                        const accountRecord = returndoc.data()
-                        if (!accountRecord) { // error
-                            errorControlRef.current.push({description:'error getting user account record.',error:null})
-                            console.log('error getting user account record.')
+                    onSnapshot(doc(db, "accounts",accountID), 
+                        async (returndoc) =>{
+                            snapshotControl.incrementCallCount(accountIndex, 1)
+                            usage.read(1)
+                            const accountRecord = returndoc.data()
+                            if (!accountRecord) { // error
+                                errorControlRef.current.push({description:'error getting user account record.',error:null})
+                                console.log('error getting user account record.')
+                                setUserAuthData({...userAuthData})
+                                setUserState('error')
+                                return
+                            }
+                            setUserRecords((previousState) => {
+                               previousState.account = accountRecord
+                               return {...previousState}
+                            })
+                            if (!snapshotControl.wasSchemaChecked(accountIndex)) {
+                                const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
+                                if (!Object.is(accountRecord, updatedRecord)) {
+
+                                    try {
+                                        await setDoc(doc(db,'accounts',accountID),updatedRecord)
+                                    } catch (error) {
+
+                                        errorControlRef.current.push({description:'error updating user account version. Check internet',error})
+                                        console.log('error updating account record version. Check internet',error)
+                                        setUserAuthData({...userAuthData})
+                                        setUserState('error')
+                                        return
+
+                                    }
+
+                                }
+                                snapshotControl.setSchemaChecked(accountIndex)
+                            }
+                        }, (error) =>{
+
+                            console.log('onSnapshot error for user account', error)
+                            errorControl.push({description:'onSnapshot error for user account', error})
                             setUserAuthData({...userAuthData})
                             setUserState('error')
                             return
+
                         }
-                        setUserRecords((previousState) => {
-                           previousState.account = accountRecord
-                           return {...previousState}
-                        })
-                        if (!snapshotControl.wasSchemaChecked(accountIndex)) {
-                            const updatedRecord = updateDocumentSchema('accounts', 'standard',accountRecord)
-                            if (!Object.is(accountRecord, updatedRecord)) {
-
-                                try {
-                                    await setDoc(doc(db,'accounts',accountID),updatedRecord)
-                                } catch (error) {
-
-                                    errorControlRef.current.push({description:'error updating user account version. Check internet',error})
-                                    console.log('error updating account record version. Check internet',error)
-                                    setUserAuthData({...userAuthData})
-                                    setUserState('error')
-                                    return
-
-                                }
-
-                            }
-                            snapshotControl.setSchemaChecked(accountIndex)
-                        }
-                    }, (error) =>{
-
-                        console.log('onSnapshot error for user account', error)
-                        errorControl.push({description:'onSnapshot error for user account', error})
-                        setUserAuthData({...userAuthData})
-                        setUserState('error')
-                        return
-
-                    })
+                    )
 
                 snapshotControl.registerUnsub(accountIndex, unsubscribeaccount)
             }
@@ -428,48 +433,50 @@ export const UserProvider = ({children}) => {
                 snapshotControl.create(domainIndex)
 
                 const unsubscribedomain = 
-                    onSnapshot(doc(db, "domains",domainID), async (returndoc) =>{
-                        snapshotControl.incrementCallCount(domainIndex, 1)
-                        usage.read(1)
-                        const domainRecord = returndoc.data()
-                        if (!domainRecord) { // error
-                            errorControlRef.current.push({description:'error getting user domain record.',error:null})
-                            console.log('error getting user domain record.')
+                    onSnapshot(doc(db, "domains",domainID), 
+                        async (returndoc) =>{
+                            snapshotControl.incrementCallCount(domainIndex, 1)
+                            usage.read(1)
+                            const domainRecord = returndoc.data()
+                            if (!domainRecord) { // error
+                                errorControlRef.current.push({description:'error getting user domain record.',error:null})
+                                console.log('error getting user domain record.')
+                                setUserAuthData({...userAuthData})
+                                setUserState('error')
+                                return
+                            }
+                            setUserRecords((previousState) => {
+                               previousState.domain = domainRecord
+                               return {...previousState}
+                            })
+                            if (!snapshotControl.wasSchemaChecked(domainIndex)) {
+                                const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
+                                if (!Object.is(domainRecord, updatedRecord)) {
+                                    try {
+                                        await setDoc(doc(db,'domains',domainID),updatedRecord)
+                                    } catch(error) {
+
+                                        errorControlRef.current.push({description:'error updating user domain version. Check internet',error})
+                                        console.log('error updating account domain version. Check internet',error)
+                                        setUserAuthData({...userAuthData})
+                                        setUserState('error')
+                                        return
+
+                                    }
+
+                                }
+                                snapshotControl.setSchemaChecked(domainIndex)
+                            }
+                        }, (error) => {
+
+                            console.log('onSnapshot error for user domain',error)
+                            errorControl.push({description:'onSnapshot error for user domain',error})
                             setUserAuthData({...userAuthData})
                             setUserState('error')
                             return
+
                         }
-                        setUserRecords((previousState) => {
-                           previousState.domain = domainRecord
-                           return {...previousState}
-                        })
-                        if (!snapshotControl.wasSchemaChecked(domainIndex)) {
-                            const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
-                            if (!Object.is(domainRecord, updatedRecord)) {
-                                try {
-                                    await setDoc(doc(db,'domains',domainID),updatedRecord)
-                                } catch(error) {
-
-                                    errorControlRef.current.push({description:'error updating user domain version. Check internet',error})
-                                    console.log('error updating account domain version. Check internet',error)
-                                    setUserAuthData({...userAuthData})
-                                    setUserState('error')
-                                    return
-
-                                }
-
-                            }
-                            snapshotControl.setSchemaChecked(domainIndex)
-                        }
-                    }, (error) => {
-
-                        console.log('onSnapshot error for user domain',error)
-                        errorControl.push({description:'onSnapshot error for user domain',error})
-                        setUserAuthData({...userAuthData})
-                        setUserState('error')
-                        return
-
-                    })
+                    )
 
                 snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
             }
