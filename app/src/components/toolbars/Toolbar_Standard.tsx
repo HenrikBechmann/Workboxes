@@ -13,7 +13,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
-    MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
+    MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
     Box,
 } from '@chakra-ui/react'
 
@@ -222,12 +222,17 @@ const StandardToolbar = (props) => {
         const defaultValue = workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}>
-            <MenuItem onClick = {renameWorkspace} >Rename this workspace</MenuItem>
-            <MenuItem >Reset this workspace</MenuItem>
-            <MenuItem onClick = {deleteWorkspace} >Delete this workspace</MenuItem>
-            <MenuItem >Save this workspace as...</MenuItem>
+        return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
+            maxHeight = '200px' overflowY = 'scroll'
+        >
+            <MenuGroup title = 'Workspace menu'>
+            <MenuItem onClick = {renameWorkspace} >Rename</MenuItem>
+            <MenuItem >Reset</MenuItem>
+            <MenuItem onClick = {deleteWorkspace} >Delete</MenuItem>
+            <MenuItem >Save as...</MenuItem>
+            <MenuDivider />
             <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
+            </MenuGroup>            
             <MenuDivider />
             <MenuOptionGroup 
                 key = {workspaceMenuIteration++} 
@@ -243,7 +248,6 @@ const StandardToolbar = (props) => {
                     })
                 }
             </MenuOptionGroup>
-            <MenuDivider />
         </MenuList>
 
     },[workspaceList, workspaceSelection])

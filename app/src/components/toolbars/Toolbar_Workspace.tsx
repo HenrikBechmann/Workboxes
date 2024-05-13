@@ -8,7 +8,7 @@ import { useUserAuthData } from '../../system/WorkboxesProvider'
 import {
   Box,
   Tooltip,
-  MenuList, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
+  MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
 } from '@chakra-ui/react'
 
 import StandardIcon from './StandardIcon'
@@ -167,11 +167,17 @@ const WorkspaceToolbar = (props) => {
         const defaultValue = panelSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList lineHeight = '1em' fontSize = 'small' ref = {panelMenuRef}>
-            <MenuItem onClick = {renamePanel} >Rename this panel</MenuItem>
-            <MenuItem >Reset this panel</MenuItem>
-            <MenuItem onClick = {deletePanel} >Delete this panel</MenuItem>
-            <MenuItem onClick = {saveAsPanel} >Save this panel as... </MenuItem>
+        return <MenuList 
+                lineHeight = '1em' fontSize = 'small' ref = {panelMenuRef}
+                maxHeight = '200px' overflowY = 'scroll'
+            >
+            <MenuGroup title = 'Panel menu'>
+            <MenuItem onClick = {renamePanel} >Rename</MenuItem>
+            <MenuItem >Reset</MenuItem>
+            <MenuItem onClick = {deletePanel} >Delete</MenuItem>
+            <MenuItem onClick = {saveAsPanel} >Save as... </MenuItem>
+            </MenuGroup>
+            <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
             <MenuItem onClick = {reOrderPanels} >Re-order panels</MenuItem>
             <MenuDivider />
@@ -189,7 +195,6 @@ const WorkspaceToolbar = (props) => {
                     })
                 }
             </MenuOptionGroup>
-            <MenuDivider />
         </MenuList>
 
     },[panelList, panelSelection])

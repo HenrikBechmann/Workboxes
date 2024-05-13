@@ -498,6 +498,17 @@ export const UserProvider = ({children}) => {
     async function saveUsageData(data) {
 
         // TODO check for existence of previous record. If found, merge that with the incoming
+
+        // see if any data needs to be saved
+        let dataToSave = false
+        for (let prop in data) {
+            if (data[prop]) {
+                dataToSave = true
+                break
+            }
+        }
+        if (!dataToSave) return
+        
         localStorage.setItem('usagedata',JSON.stringify(data))
         if (!userAuthDataRef.current) return
         const 
