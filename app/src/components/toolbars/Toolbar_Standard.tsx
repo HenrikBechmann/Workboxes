@@ -223,7 +223,6 @@ const StandardToolbar = (props) => {
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
-            maxHeight = '200px' overflowY = 'scroll'
         >
             <MenuGroup title = 'Workspace menu'>
             <MenuItem onClick = {renameWorkspace} >Rename</MenuItem>
