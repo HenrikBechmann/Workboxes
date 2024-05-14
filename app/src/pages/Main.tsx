@@ -1,6 +1,13 @@
 // Main.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+ TODO
+ - recover from failed update to workspace record if another tab deleted the workspace
+ - disallow workspace delete with manual updates. But allow reset
+
+*/
+
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 import {  collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, writeBatch, query } from 'firebase/firestore'
@@ -300,7 +307,7 @@ export const Main = (props) => {
             await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
         } catch (error) {
             console.log('error in update user doc for workspace', error)
-            errorControl.push({description:'in update user doc for workspace in Main', error})
+            errorControl.push({description:'error in update user doc for workspace in Main', error})
             navigate('/error')
             return
         }
