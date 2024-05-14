@@ -27,6 +27,8 @@ import {
     useUsage,
 } from '../../system/WorkboxesProvider'
 
+import uploadCloudIcon from '../../../assets/cloud_upload.png'
+
 const WorkspaceSaveDialog = (props) => {
 
     const
@@ -56,30 +58,45 @@ const WorkspaceSaveDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Change saving behaviour for the workspace
+                        Change saving behaviour for this workspace
                     </AlertDialogHeader>
 
-                    <AlertDialogBody>
-                        {alertState == 'processing' && <Text>Processing...</Text>}
+                    <AlertDialogBody fontSize = 'sm'>
                         <Text>
-                            Continue?
+                            <span style = {{fontWeight:'bold'}}>Automated saves</span> (the default) saves workspace panel configuration changes 
+                            immediately (or quickly). This includes adding, removing, re-sorting, and renaming panels, 
+                            and adding or removing windows in panels.
                         </Text>
+                        <Text>
+                            <span style = {{fontWeight:'bold'}}>Manual saves</span> don't do any of that. Configuration
+                            changes are only saved when you click the cloud upload icon <img style = 
+                            {{display: 'inline-block', height:'16px', width:'16px', verticalAlign:'middle'}} src = {uploadCloudIcon} />.
+                        </Text>
+                        <Text>Manual saves can be helpful if your login is using more than one tab or device with
+                        the same workspace. Automated saves in that case can clobber each others' configuration settings.</Text>
+                        <Text><span style = {{fontWeight:'bold'}}>Another option</span> is to set save to manual, experiment with configurations, and then
+                        use the <span style = {{fontWeight:'bold'}}>Save as...</span> option to save your work, without clobbering the original workspace.</Text>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
+                        <Button mr = '10px' size = 'xs' isDisabled = {alertState == 'processing'} ref={cancelRef} 
                             onClick = {doClose}
                         >
                           Cancel
                         </Button>
-                        <Button isDisabled = {alertState == 'processing'} colorScheme = 'blue'
+                        <Button size = 'xs' isDisabled = {alertState == 'processing'} colorScheme = 'blue'
                             onClick = {doClose}
                         >
-                          Automated Saves
+                          Automated saves
                         </Button>
-                        <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
+                        <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
                             onClick = {doClose}
                         >
-                          Manual Saves
+                          Manual saves
+                        </Button>
+                        <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
+                            onClick = {doClose}
+                        >
+                          Save as...
                         </Button>
                     </AlertDialogFooter>
 
