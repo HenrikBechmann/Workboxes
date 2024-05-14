@@ -77,9 +77,6 @@ class Usage {
     login = (number) => {
         this.data.login += number
     }
-    save = () => {
-        // write to database
-    }
     reset = () => {
         this.data = {
             read:0,
@@ -103,7 +100,7 @@ const usage = new Usage()
 
 const UsageContext = createContext(usage)
 
-// =============================[ default component ]============================
+// =============================[ master component ]============================
 // collection of providers
 
 const WorkboxesProvider = ({children}) => {
@@ -124,7 +121,6 @@ export default WorkboxesProvider
 // ===========================[ UserProvider component]============================
 // provides much context for app
 
-// special requirements for onAuthStateChanged
 export const UserProvider = ({children}) => {
 
     // --------------------------------[ data definitions ]-----------------------
@@ -296,7 +292,7 @@ export const UserProvider = ({children}) => {
 
         if (userState == 'useridentified') { // collect user record
 
-            if (!getSystemRecords()) return // error happened
+            getSystemRecords() // asynchronous
 
             // open listener for user record
             const userIndex = "UserProvider.users." + userAuthDataRef.current.authUser.uid
@@ -589,14 +585,11 @@ export const UserProvider = ({children}) => {
                 errorControl.push({description:'error getting system settings',error})
                 setUserAuthData({...userAuthData})
                 setUserState('error')
-                return false
-
+                return
             }
 
             usage.read(1)
-            return true
         }
-        return true
 
     }
  
@@ -622,7 +615,7 @@ export const UserProvider = ({children}) => {
             console.log('error verifying user record. Check internet', error, errorControlRef.current)
             setUserAuthData({...userAuthData})
             setUserState('error')
-            return false
+            return
 
         }
 
@@ -632,7 +625,7 @@ export const UserProvider = ({children}) => {
             console.log('inconsistent finding of user record. Check internet', errorControlRef.current)
             setUserAuthData({...userAuthData})
             setUserState('error')
-            return false
+            return
 
         }
 
@@ -819,14 +812,12 @@ export const UserProvider = ({children}) => {
             errorControl.push({description:'error getting setting initial userRecords',error})
             setUserAuthData({...userAuthData})
             setUserState('error')
-            return false
+            return
 
         }
 
         usage.create(4)
         setUserState('baserecordscreated')
-
-        return true
 
     }
 
@@ -864,6 +855,10 @@ const useStorage = () => {
     return useContext(StorageContext)
 }
 
+const useUsage = () => {
+    return useContext(UsageContext)
+}
+
 const useSnapshotControl = () => {
     return useContext(SnapshotControlContext)
 }
@@ -888,10 +883,6 @@ const useErrorControl = () => {
     return useContext(ErrorControlContext)
 }
 
-const useUsage = () => {
-    return useContext(UsageContext)
-}
-
 export {
     // firebase resources
     useAuth,
@@ -901,10 +892,10 @@ export {
 
     // workboxes resources
     useSnapshotControl,
-    useErrorControl,
-    useSystemRecords,
     useUserAuthData,
     useUserRecords,
+    useSystemRecords,
     useWorkspaceSelection,
+    useErrorControl,
 }
 

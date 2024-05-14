@@ -11,9 +11,9 @@ import {
 
 import { 
     doc, collection, 
-    query, where, getDocs, orderBy, 
-    getDoc, setDoc, updateDoc, deleteDoc, 
-    increment, serverTimestamp,
+    query, where, getDocs, // orderBy, 
+    getDoc, // deleteDoc, setDoc, updateDoc
+    increment, // serverTimestamp,
     writeBatch,
 } from 'firebase/firestore'
 
