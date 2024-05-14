@@ -35,7 +35,6 @@ const WorkspaceDeleteDialog = (props) => {
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
-        newInvocationRef = useRef(true),
         workspaceSelection = useWorkspaceSelection(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),

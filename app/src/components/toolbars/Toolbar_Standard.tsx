@@ -31,6 +31,7 @@ import { updateDocumentSchema } from '../../system/utilities'
 
 import WorkspaceWriteDialog from '../dialogs/WorkspaceWriteDialog'
 import WorkspaceDeleteDialog from '../dialogs/WorkspaceDeleteDialog'
+import WorkspaceSaveDialog from '../dialogs/WorkspaceSaveDialog'
 
 import { isMobile } from '../../index'
 
@@ -112,6 +113,7 @@ const StandardToolbar = (props) => {
             : homeIcon,
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
         [deleteDialogState, setDeleteDialogState] = useState(false),
+        [saveDialogState, setSaveDialogState] = useState(false),
         workspaceMenuRef = useRef(null),
         errorControl = useErrorControl(),
         usage = useUsage()
@@ -200,6 +202,10 @@ const StandardToolbar = (props) => {
         setDeleteDialogState(true)
     }
 
+    const saveWorkspace = () => {
+        setSaveDialogState(true)
+    }
+
     const createWorkspace = () => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
@@ -252,7 +258,7 @@ const StandardToolbar = (props) => {
     },[workspaceList, workspaceSelection])
 
     const uploadConfig = () => {
-
+        setSaveDialogState(true)
     }
 
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
@@ -316,6 +322,7 @@ const StandardToolbar = (props) => {
         {writeDialogState.open && <WorkspaceWriteDialog 
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
+        {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} />}
     </Box>
 }
 

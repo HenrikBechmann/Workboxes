@@ -29,8 +29,64 @@ import {
 
 const WorkspaceSaveDialog = (props) => {
 
+    const
+        { setSaveDialogState } = props,
+        dialogStateRef = useRef(null),
+        userRecords = useUserRecords(),
+        db = useFirestore(),
+        cancelRef = useRef(null),
+        workspaceSelection = useWorkspaceSelection(),
+        [alertState, setAlertState] = useState('ready'),
+        workspaceRecordRef = useRef(null),
+        toast = useToast({duration:3000}),
+        errorControl = useErrorControl(),
+        navigate = useNavigate(),
+        usage = useUsage()
 
-    return null
+    const doClose = () => {
+        setSaveDialogState(false)
+    }
+
+    return (<>
+        <AlertDialog
+            isOpen={true}
+            leastDestructiveRef={cancelRef}
+            onClose={doClose}
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Change saving behaviour for the workspace
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        {alertState == 'processing' && <Text>Processing...</Text>}
+                        <Text>
+                            Continue?
+                        </Text>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
+                            onClick = {doClose}
+                        >
+                          Cancel
+                        </Button>
+                        <Button isDisabled = {alertState == 'processing'} colorScheme = 'blue'
+                            onClick = {doClose}
+                        >
+                          Automated Saves
+                        </Button>
+                        <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
+                            onClick = {doClose}
+                        >
+                          Manual Saves
+                        </Button>
+                    </AlertDialogFooter>
+
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
+    </>)
 }
 
 export default WorkspaceSaveDialog
