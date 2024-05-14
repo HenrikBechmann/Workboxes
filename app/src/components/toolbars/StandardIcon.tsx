@@ -41,7 +41,20 @@ const iconWrapperStyles = {
 
 const StandardIcon = (props) => {
 
-    const { icon, caption, tooltip, response, iconStyles, numberBadgeCount, isDisabledTooltip = false, isDisabled = false, isDialog = false, isInfo = false } = props
+    const { 
+        icon, 
+        caption, 
+        tooltip, 
+        response, 
+        iconStyles = {}, 
+        numberBadgeCount, 
+        isDisabledTooltip = false, 
+        isDisabled = false, 
+        isDialog = false, 
+        isInfo = false,
+        emphasis = false,
+        highlight = false,
+    } = props
 
     const iconStylesRef = useRef({...baseIconStyles, ...iconStyles})
 
@@ -55,7 +68,18 @@ const StandardIcon = (props) => {
         :1
     const isNumberBadgeCount = numberBadgeCount ?? false
 
-    return <Box data-type = 'standardicon' display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center' ml = '6px' opacity = {opacity}>
+    return <Box 
+        data-type = 'standardicon' 
+        display = 'flex' 
+        flexDirection = 'column' 
+        alignItems = 'center' 
+        justifyContent = 'center' 
+        ml = '6px' 
+        opacity = {opacity}
+        padding = {highlight?'3px':'0px'}
+        backgroundColor = {highlight?'cyan':'transparent'}
+        borderRadius = {highlight?'8px':'0px'}
+    >
         <Box style = { iconWrapperStyles } onClick = {!(isDisabled || isDisabledType)?response:null} >
             {isInfo && 
                 <img style = {{borderRadius: '7px', backgroundColor: 'lightyellow', 
@@ -70,7 +94,14 @@ const StandardIcon = (props) => {
                 <img style = { iconStylesRef.current } src = { icon } />
             </Tooltip>
         </Box>
-        <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{caption}</span></Box>
+        <Box 
+            fontSize = 'xs' 
+            color = {emphasis?'black':'gray'}
+            fontStyle = 'italic' 
+            fontWeight = {emphasis?'bold':'normal'}
+        >
+            <span>{caption}</span>
+        </Box>
     </Box>
 
 }

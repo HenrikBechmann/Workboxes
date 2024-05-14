@@ -309,8 +309,9 @@ const StandardToolbar = (props) => {
                 />
                 <StandardIcon response = {uploadSetting} isDialog = {true} icon = {uploadCloudIcon} 
                     caption = 'automatic' tooltip = 'set saving behaviour' />
-                <StandardIcon response = {uploadConfig} icon = {uploadCloudIcon} 
-                    caption = 'saved' tooltip = 'save workspace configuration' />
+                <StandardIcon response = {uploadConfig} icon = {uploadCloudIcon}
+                    emphasis = {true} highlight = {true}
+                    caption = 'save*' tooltip = 'save workspace configuration' />
             </>
         } 
         <ToolbarVerticalDivider />
@@ -322,7 +323,8 @@ const StandardToolbar = (props) => {
         }
         <LearnIcon tooltip = 'Explain this toolbar'/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} 
+            caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
         {writeDialogState.open && <WorkspaceWriteDialog 
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
