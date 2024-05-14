@@ -201,7 +201,7 @@ export const UserProvider = ({children}) => {
         })
     },[])
 
-    // set up onAuthStateCahnged event capture
+    // set up onAuthStateChanged event capture
     useEffect(()=>{
 
         isMountedRef.current = true

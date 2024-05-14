@@ -257,10 +257,13 @@ const StandardToolbar = (props) => {
 
     },[workspaceList, workspaceSelection])
 
-    const uploadConfig = () => {
+    const uploadSetting = () => {
         setSaveDialogState(true)
     }
 
+    const uploadConfig = () => {
+
+    }
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
@@ -304,8 +307,10 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon response = {uploadConfig} isDialog = {true} icon = {uploadCloudIcon} 
-                    caption = 'automatic' tooltip = 'configuration changes are automatically saved' />
+                <StandardIcon response = {uploadSetting} isDialog = {true} icon = {uploadCloudIcon} 
+                    caption = 'automatic' tooltip = 'set saving behaviour' />
+                <StandardIcon response = {uploadConfig} icon = {uploadCloudIcon} 
+                    caption = 'saved' tooltip = 'save workspace configuration' />
             </>
         } 
         <ToolbarVerticalDivider />
