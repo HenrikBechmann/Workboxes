@@ -32,7 +32,7 @@ import uploadCloudIcon from '../../../assets/cloud_upload.png'
 const WorkspaceSaveDialog = (props) => {
 
     const
-        { setSaveDialogState } = props,
+        { setSaveDialogState, setWorkspaceConfiguration } = props,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         db = useFirestore(),
@@ -46,6 +46,22 @@ const WorkspaceSaveDialog = (props) => {
 
     const doClose = () => {
         setSaveDialogState(false)
+    }
+
+    const setAutomaticSave = () => {
+        setWorkspaceConfiguration((previousState) => {
+            previousState.settings.mode = 'automatic'
+            return {...previousState}
+        })
+        doClose()
+    }
+
+    const setManualSave = () => {
+        setWorkspaceConfiguration((previousState) => {
+            previousState.settings.mode = 'manual'
+            return {...previousState}
+        })
+        doClose()
     }
 
     return (<>
@@ -88,12 +104,12 @@ const WorkspaceSaveDialog = (props) => {
                           Cancel
                         </Button>
                         <Button size = 'xs' isDisabled = {alertState == 'processing'} colorScheme = 'blue'
-                            onClick = {doClose}
+                            onClick = {setAutomaticSave}
                         >
                           Automatic saves
                         </Button>
                         <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
-                            onClick = {doClose}
+                            onClick = {setManualSave}
                         >
                           Manual saves
                         </Button>

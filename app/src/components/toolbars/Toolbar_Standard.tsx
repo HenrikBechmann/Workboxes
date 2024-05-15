@@ -151,11 +151,11 @@ const StandardToolbar = (props) => {
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
-                <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
-                <MenuDivider />
-                <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
-                <MenuItem onClick = {gotoAbout}>About</MenuItem>
-            </MenuList>
+            <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
+            <MenuDivider />
+            <MenuItem onClick = {gotoNotices}>General notices</MenuItem>
+            <MenuItem onClick = {gotoAbout}>About</MenuItem>
+        </MenuList>
     },[])
 
     const currentusermenulist = useMemo(() => {
@@ -308,10 +308,11 @@ const StandardToolbar = (props) => {
                     menulist = {workspacemenuList} 
                 />
                 <StandardIcon response = {uploadSetting} isDialog = {true} icon = {uploadCloudIcon} 
-                    caption = 'automatic' tooltip = 'set saving behaviour' />
+                    caption = {workspaceConfiguration.settings.mode} tooltip = 'set saving behaviour' />
                 <StandardIcon response = {uploadConfig} icon = {uploadCloudIcon}
-                    emphasis = {true} highlight = {true}
-                    caption = 'save*' tooltip = 'save workspace configuration' />
+                    emphasis = {workspaceConfiguration.settings.changed?'true':false} 
+                    highlight = {workspaceConfiguration.settings.mode == 'automatic'?false:true}
+                    caption = {workspaceConfiguration.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />
             </>
         } 
         <ToolbarVerticalDivider />
@@ -329,7 +330,8 @@ const StandardToolbar = (props) => {
         {writeDialogState.open && <WorkspaceWriteDialog 
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
-        {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} />}
+        {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} 
+            setWorkspaceConfiguration = {workspaceConfiguration.setWorkspaceConfiguration} />}
     </Box>
 }
 
