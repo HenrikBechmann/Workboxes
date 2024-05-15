@@ -324,6 +324,8 @@ export const Main = (props) => {
         setWorkspaceConfiguration((previousState)=>{
             previousState.record = workspaceData
             previousState.settings.changed = false
+            previousState.changedRecords.workspace = null
+            previousState.changedRecords.panels.clear()
             return {...previousState}
         })
 
