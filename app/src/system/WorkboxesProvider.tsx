@@ -130,7 +130,12 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceConfiguration, setWorkspaceConfiguration] = useState({workspace:{id:null, name:null},setWorkspaceConfiguration:null}),
+        [workspaceConfiguration, setWorkspaceConfiguration] = 
+            useState({
+                workspace: {id:null, name:null},
+                settings: {mode:'automatic', changed: false},
+                setWorkspaceConfiguration:null
+            }),
 
         // bootstrap resources
         db = useFirestore(),
@@ -197,7 +202,7 @@ export const UserProvider = ({children}) => {
     useEffect(()=>{
         setWorkspaceConfiguration((previousState) => {
             previousState.setWorkspaceConfiguration = setWorkspaceConfiguration
-            return previousState
+            return {...previousState}
         })
     },[])
 

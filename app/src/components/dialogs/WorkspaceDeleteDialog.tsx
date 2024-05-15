@@ -110,7 +110,7 @@ const WorkspaceDeleteDialog = (props) => {
         }
 
         const 
-            previousWorkspaceName = workspaceConfiguration.name,
+            previousWorkspaceName = workspaceConfiguration.workspace.name,
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace

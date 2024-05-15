@@ -37,7 +37,6 @@ const WorkspaceSaveDialog = (props) => {
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
-        // workspaceConfiguration = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
@@ -64,7 +63,7 @@ const WorkspaceSaveDialog = (props) => {
                     <AlertDialogBody fontSize = 'sm'>
                         <Text>
                             The <span style = {{fontWeight:'bold'}}>Automatic saves</span> setting (the default) saves workspace panel configuration changes 
-                            immediately (or quickly). This includes 
+                            immediately, or quickly. This includes 
                         </Text>
                         <Text>
                             - adding, removing, re-sorting, and renaming panels
