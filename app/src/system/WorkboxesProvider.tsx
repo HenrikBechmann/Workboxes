@@ -77,6 +77,12 @@ class Usage {
     login = (number) => {
         this.data.login += number
     }
+    filesave = (number) => {
+        this.data.filesave += number
+    }
+    filedelete = (number) => {
+        this.data.filedelete += number
+    }
     reset = () => {
         this.data = {
             read:0,
@@ -84,6 +90,8 @@ class Usage {
             create:0,
             delete:0,
             login:0,
+            filesave:0,
+            filedelete:0,
         }
     }
     data = {
@@ -92,6 +100,8 @@ class Usage {
         create:0,
         delete:0,
         login:0,
+        filesave:0,
+        filedelete:0,
     }
 
 }
