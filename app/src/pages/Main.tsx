@@ -320,6 +320,12 @@ export const Main = (props) => {
         }
         usage.write(1)
         setWorkspaceRecord(workspaceData)
+        const { setWorkspaceConfiguration } = workspaceConfiguration
+        setWorkspaceConfiguration((previousState)=>{
+            previousState.record = workspaceData
+            previousState.settings.changed = false
+            return {...previousState}
+        })
 
     }
 

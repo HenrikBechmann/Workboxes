@@ -210,6 +210,8 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
 
+    // TODO save before switch if in automatic mode
+    // ask about save if in manual mode
     const changeWorkspaceSelection = (workspaceID) => {
         const selection = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selection.dataset.name
@@ -218,6 +220,9 @@ const StandardToolbar = (props) => {
         setWorkspaceConfiguration((previousState) => {
             previousState.workspace.id = workspaceID
             previousState.workspace.name = workspaceName
+            previousState.record = null
+            // previousState.settings.mode = 'automatic'
+            // previousState.settings.changed = false
             return {...previousState}
         })
     }
