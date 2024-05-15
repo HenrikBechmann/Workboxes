@@ -109,47 +109,56 @@ const WorkspaceWriteDialog = (props) => {
             return
         }
         setAlertState('processing')
-        // changename user workspace data
-        const 
-            userRecord = userRecords.user,
-            userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-            workspaceID = workspaceConfiguration.workspace.id,
-            workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
-            updateBlock = {}
 
-        let fieldsToUpdateCount = 0
+        if (workspaceConfiguration.settings.mode == 'automatic') {
+            // changename user workspace data
+            const 
+                userRecord = userRecords.user,
+                userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
+                workspaceID = workspaceConfiguration.workspace.id,
+                workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
+                updateBlock = {}
 
-        if (workspaceID == userRecord.workspace.mobile.id) {
-            updateBlock['workspace.mobile.name'] = writeValues.name
-            fieldsToUpdateCount++
-        }
-        if (workspaceID == userRecord.workspace.desktop.id) {
-            updateBlock['workspace.desktop.name'] = writeValues.name
-            fieldsToUpdateCount++
-        }
-        try {
-            const batch = writeBatch(db)
+            let fieldsToUpdateCount = 0
 
-            if (fieldsToUpdateCount) {
-                batch.update(userDocRef,updateBlock)
+            if (workspaceID == userRecord.workspace.mobile.id) {
+                updateBlock['workspace.mobile.name'] = writeValues.name
+                fieldsToUpdateCount++
             }
+            if (workspaceID == userRecord.workspace.desktop.id) {
+                updateBlock['workspace.desktop.name'] = writeValues.name
+                fieldsToUpdateCount++
+            }
+            try {
+                const batch = writeBatch(db)
 
-            batch.update(workspaceDocRef, {
-                'profile.workspace.name':writeValues.name
-            })
+                if (fieldsToUpdateCount) {
+                    batch.update(userDocRef,updateBlock)
+                }
 
-            await batch.commit()
+                batch.update(workspaceDocRef, {
+                    'profile.workspace.name':writeValues.name
+                })
 
-        } catch (error) {
-            console.log('error updating workspace name from standard toolbar', error)
-            errorControl.push({description:'error updating workspace name from standard toolbar', error})
-            navigate('/error')   
-            return         
+                await batch.commit()
+
+            } catch (error) {
+                console.log('error updating workspace name from standard toolbar', error)
+                errorControl.push({description:'error updating workspace name from standard toolbar', error})
+                navigate('/error')   
+                return         
+            }
+            usage.write(fieldsToUpdateCount?2:1)
         }
-        usage.write(fieldsToUpdateCount?2:1)
+
         // changename workspaceConfiguration
         const { setWorkspaceConfiguration } = workspaceConfiguration
         setWorkspaceConfiguration((previousState) => {
+            if (workspaceConfiguration.settings.mode == 'manual') {
+                if (!workspaceConfiguration.settings.changed) {
+                    previousState.settings.changed = true
+                }
+            }
             previousState.workspace.name = writeValues.name
             return {...previousState}
         })
