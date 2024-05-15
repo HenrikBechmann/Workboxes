@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import { 
     useUserRecords, 
     useFirestore, 
-    useWorkspaceSelection, 
+    useWorkspaceConfiguration, 
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -37,7 +37,7 @@ const WorkspaceSaveDialog = (props) => {
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
-        workspaceSelection = useWorkspaceSelection(),
+        // workspaceConfiguration = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),

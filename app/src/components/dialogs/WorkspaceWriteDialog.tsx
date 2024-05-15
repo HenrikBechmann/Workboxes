@@ -29,7 +29,7 @@ import {
     useUserRecords, 
     // useAuth, 
     useFirestore, 
-    useWorkspaceSelection, 
+    useWorkspaceConfiguration, 
     useSystemRecords,
     useErrorControl,
     useUsage,
@@ -51,7 +51,7 @@ const WorkspaceWriteDialog = (props) => {
             name: false,
         }),
         newInvocationRef = useRef(true),
-        workspaceSelection = useWorkspaceSelection(),
+        workspaceConfiguration = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -63,14 +63,14 @@ const WorkspaceWriteDialog = (props) => {
     useEffect(()=>{
         if (newInvocationRef.current) {
             (dialogStateRef.current.action == 'changename')
-                ? setWriteValues({name:workspaceSelection.name})
+                ? setWriteValues({name:workspaceConfiguration.workspace.name})
                 : setWriteValues({name:''})
             if (dialogStateRef.current.action == 'createworkspace') {
                 writeIsInvalidTests.name('')
             }
             newInvocationRef.current = false
         }
-    },[newInvocationRef.current, workspaceSelection])
+    },[newInvocationRef.current, workspaceConfiguration])
 
 
     const writeHelperText = {
@@ -113,7 +113,7 @@ const WorkspaceWriteDialog = (props) => {
         const 
             userRecord = userRecords.user,
             userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-            workspaceID = workspaceSelection.id,
+            workspaceID = workspaceConfiguration.workspace.id,
             workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
             updateBlock = {}
 
@@ -147,10 +147,10 @@ const WorkspaceWriteDialog = (props) => {
             return         
         }
         usage.write(fieldsToUpdateCount?2:1)
-        // changename workspaceSelection
-        const { setWorkspaceSelection } = workspaceSelection
-        setWorkspaceSelection((previousState) => {
-            previousState.name = writeValues.name
+        // changename workspaceConfiguration
+        const { setWorkspaceConfiguration } = workspaceConfiguration
+        setWorkspaceConfiguration((previousState) => {
+            previousState.workspace.name = writeValues.name
             return {...previousState}
         })
 
@@ -210,11 +210,11 @@ const WorkspaceWriteDialog = (props) => {
         }
         usage.write(1)
         usage.create(1)
-        // changename workspaceSelection
-        const { setWorkspaceSelection } = workspaceSelection
-        setWorkspaceSelection((previousState) => {
-            previousState.name = writeValues.name
-            previousState.id = newWorkspaceDocRef.id
+        // changename workspaceConfiguration
+        const { setWorkspaceConfiguration } = workspaceConfiguration
+        setWorkspaceConfiguration((previousState) => {
+            previousState.workspace.name = writeValues.name
+            previousState.workspace.id = newWorkspaceDocRef.id
             return {...previousState}
         })
 

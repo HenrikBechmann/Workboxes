@@ -56,7 +56,7 @@ const
     UserAuthDataContext = createContext(null),
     UserRecordsContext = createContext(null),
     SystemRecordsContext = createContext(null),
-    WorkspaceSelectionContext = createContext(null)
+    WorkspaceConfigurationContext = createContext(null)
 
 // --------------------------------[ usage data collection ]-----------------------
 
@@ -130,7 +130,7 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceSelection, setWorkspaceSelection] = useState({workspace:{id:null, name:null},setWorkspaceSelection:null}),
+        [workspaceConfiguration, setWorkspaceConfiguration] = useState({workspace:{id:null, name:null},setWorkspaceConfiguration:null}),
 
         // bootstrap resources
         db = useFirestore(),
@@ -193,10 +193,10 @@ export const UserProvider = ({children}) => {
 
     },[])
 
-    // initialize workspaceSelection with setWorkspaceSelection function
+    // initialize workspaceConfiguration with setWorkspaceConfiguration function
     useEffect(()=>{
-        setWorkspaceSelection((previousState) => {
-            previousState.setWorkspaceSelection = setWorkspaceSelection
+        setWorkspaceConfiguration((previousState) => {
+            previousState.setWorkspaceConfiguration = setWorkspaceConfiguration
             return previousState
         })
     },[])
@@ -826,13 +826,13 @@ export const UserProvider = ({children}) => {
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
-        <WorkspaceSelectionContext.Provider value = {workspaceSelection} >
+        <WorkspaceConfigurationContext.Provider value = {workspaceConfiguration} >
         <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
         </UserAuthDataContext.Provider>
-        </WorkspaceSelectionContext.Provider>
+        </WorkspaceConfigurationContext.Provider>
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
         </ErrorControlContext.Provider>
@@ -875,8 +875,8 @@ const useSystemRecords = () => { // static
     return useContext(SystemRecordsContext)
 }
 
-const useWorkspaceSelection = () => { // static
-    return useContext(WorkspaceSelectionContext)
+const useWorkspaceConfiguration = () => { // static
+    return useContext(WorkspaceConfigurationContext)
 }
 
 const useErrorControl = () => {
@@ -895,7 +895,7 @@ export {
     useUserAuthData,
     useUserRecords,
     useSystemRecords,
-    useWorkspaceSelection,
+    useWorkspaceConfiguration,
     useErrorControl,
 }
 

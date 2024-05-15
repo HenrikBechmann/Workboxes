@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import { 
     useUserRecords, 
     useFirestore, 
-    useWorkspaceSelection, 
+    useWorkspaceConfiguration, 
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -35,7 +35,7 @@ const WorkspaceDeleteDialog = (props) => {
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
-        workspaceSelection = useWorkspaceSelection(),
+        workspaceConfiguration = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         workspaceRecordRef = useRef(null),
@@ -56,7 +56,7 @@ const WorkspaceDeleteDialog = (props) => {
     }
 
     async function checkIsDefaultWorkspace() {
-        const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceSelection.id)
+        const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceConfiguration.workspace.id)
         let dbWorkspaceRecord 
         try {
             dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
@@ -110,13 +110,13 @@ const WorkspaceDeleteDialog = (props) => {
         }
 
         const 
-            previousWorkspaceName = workspaceSelection.name,
+            previousWorkspaceName = workspaceConfiguration.name,
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
         try {
             const batch = writeBatch(db)
-            batch.delete(doc(dbWorkspaceCollection, workspaceSelection.id))
+            batch.delete(doc(dbWorkspaceCollection, workspaceConfiguration.workspace.id))
             batch.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
             await batch.commit()
         } catch (error) {
@@ -129,10 +129,10 @@ const WorkspaceDeleteDialog = (props) => {
         usage.delete(1)
         usage.write(1)
         // set current workspace to default
-        const {setWorkspaceSelection} = workspaceSelection
-        setWorkspaceSelection((previousState)=>{
-            previousState.id = defaultWorkspace.profile.workspace.id
-            previousState.name = defaultWorkspace.profile.workspace.name
+        const {setWorkspaceConfiguration} = workspaceConfiguration
+        setWorkspaceConfiguration((previousState)=>{
+            previousState.workspace.id = defaultWorkspace.profile.workspace.id
+            previousState.workspace.name = defaultWorkspace.profile.workspace.name
             return {...previousState}
         })
 
@@ -166,10 +166,10 @@ const WorkspaceDeleteDialog = (props) => {
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
                         {!isDefaultState && <Text>
-                            Continue? The current workspace (<span style = {{fontStyle:'italic'}}>{workspaceSelection.name}</span>) will be deleted, 
+                            Continue? The current workspace (<span style = {{fontStyle:'italic'}}>{workspaceConfiguration.workspace.name}</span>) will be deleted, 
                             and replaced by the default workspace.
                         </Text>}
-                        {isDefaultState && <><Text>The workspace <span style = {{fontStyle:'italic'}}>{workspaceSelection.name}</span> cannot
+                        {isDefaultState && <><Text>The workspace <span style = {{fontStyle:'italic'}}>{workspaceConfiguration.workspace.name}</span> cannot
                         be deleted because it is the default workspace. </Text>
                         <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
                         the default panel.</Text></>}

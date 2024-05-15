@@ -22,7 +22,7 @@ import {
     useUserRecords, 
     useAuth, 
     useFirestore, 
-    useWorkspaceSelection, 
+    useWorkspaceConfiguration, 
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -103,7 +103,7 @@ const StandardToolbar = (props) => {
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
         // workspace data
-        workspaceSelection = useWorkspaceSelection(),
+        workspaceConfiguration = useWorkspaceConfiguration(),
         [workspaceList,setWorkspaceList] = useState([]), // empty array to avoid menu processing error
         [workspaceMenuList, setWorkspaceMenuList] = useState(null),
         // toolbar resources
@@ -147,7 +147,7 @@ const StandardToolbar = (props) => {
     // initialize
     useEffect(()=>{
         getWorkspaceList()
-    },[workspaceSelection])
+    },[workspaceConfiguration])
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
@@ -214,10 +214,10 @@ const StandardToolbar = (props) => {
         const selection = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selection.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
-        const { setWorkspaceSelection } = workspaceSelection
-        setWorkspaceSelection((previousState) => {
-            previousState.id = workspaceID
-            previousState.name = workspaceName
+        const { setWorkspaceConfiguration } = workspaceConfiguration
+        setWorkspaceConfiguration((previousState) => {
+            previousState.workspace.id = workspaceID
+            previousState.workspace.name = workspaceName
             return {...previousState}
         })
     }
@@ -225,7 +225,7 @@ const StandardToolbar = (props) => {
     const workspacemenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
-        const defaultValue = workspaceSelection.id
+        const defaultValue = workspaceConfiguration.workspace.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
@@ -255,7 +255,7 @@ const StandardToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    },[workspaceList, workspaceSelection])
+    },[workspaceList, workspaceConfiguration])
 
     const uploadSetting = () => {
         setSaveDialogState(true)
@@ -302,7 +302,7 @@ const StandardToolbar = (props) => {
                 <ToolbarVerticalDivider />
                 <MenuControl 
                     icon = {workspacesIcon} 
-                    displayName = {workspaceSelection.name} 
+                    displayName = {workspaceConfiguration.workspace.name} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
                     menulist = {workspacemenuList} 

@@ -13,7 +13,7 @@ import { Box, useToast } from '@chakra-ui/react'
 import {  collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, writeBatch, query } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUserRecords, useWorkspaceSelection, useErrorControl, useUsage } from '../system/WorkboxesProvider'
+import { useFirestore, useUserRecords, useWorkspaceConfiguration, useErrorControl, useUsage } from '../system/WorkboxesProvider'
 import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
@@ -23,7 +23,7 @@ export const Main = (props) => {
         [mainState, setMainState] = useState('setup'),
         mainStateRef = useRef(null),
         userRecords = useUserRecords(),
-        workspaceSelection = useWorkspaceSelection(), // selection for toolbar, and to get workspaceData
+        workspaceConfiguration = useWorkspaceConfiguration(), // selection for toolbar, and to get workspaceData
         [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
         workspaceRecordRef = useRef(null),
         panelDataRef = useRef(null),
@@ -254,11 +254,11 @@ export const Main = (props) => {
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
         setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
 
-        const { setWorkspaceSelection } = workspaceSelection // for standard toolbar component
-        setWorkspaceSelection({ // distribute workspaceSelection
-            id: workspaceSelectionRecord.profile.workspace.id,
-            name: workspaceSelectionRecord.profile.workspace.name,
-            setWorkspaceSelection,
+        const { setWorkspaceConfiguration } = workspaceConfiguration // for standard toolbar component
+        setWorkspaceConfiguration((previousState) => { // distribute workspaceConfiguration
+            previousState.workspace.id = workspaceSelectionRecord.profile.workspace.id
+            previousState.workspace.name = workspaceSelectionRecord.profile.workspace.name
+            return {...previousState}
         })
 
         setMainState('ready')
@@ -319,12 +319,12 @@ export const Main = (props) => {
     useEffect(()=>{
 
         if (mainStateRef.current == 'setup') return // handled by startup
-            // console.log('workspaceSelection', workspaceSelection)
-        if (workspaceRecordRef.current.profile.workspace.id != workspaceSelection.id) {
-            getNewWorkspaceData(workspaceSelection.id)
+            // console.log('workspaceConfiguration', workspaceConfiguration)
+        if (workspaceRecordRef.current.profile.workspace.id != workspaceConfiguration.workspace.id) {
+            getNewWorkspaceData(workspaceConfiguration.workspace.id)
         }
 
-    },[workspaceSelection])
+    },[workspaceConfiguration])
 
     return ((mainState != 'setup') && <Workspace panelDataRef = {panelDataRef} workspaceData = {workspaceRecord}/>)
 }
