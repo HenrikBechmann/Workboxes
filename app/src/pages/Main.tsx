@@ -10,10 +10,16 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
-import {  collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, writeBatch, query } from 'firebase/firestore'
+import {  
+    collection, doc, getDoc, getDocs, 
+    setDoc, updateDoc, increment, serverTimestamp, 
+    writeBatch, query 
+} from 'firebase/firestore'
+
 import { useNavigate } from 'react-router-dom'
 
 import { useFirestore, useUserRecords, useWorkspaceConfiguration, useErrorControl, useUsage } from '../system/WorkboxesProvider'
+
 import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
@@ -318,10 +324,16 @@ export const Main = (props) => {
 
     useEffect(()=>{
 
+        console.log('update from workspaceConfiguration: workspaceConfiguration, workspaceRecordRef.current',
+            workspaceConfiguration, workspaceRecordRef.current)
+
         if (mainStateRef.current == 'setup') return // handled by startup
             // console.log('workspaceConfiguration', workspaceConfiguration)
         if (workspaceRecordRef.current.profile.workspace.id != workspaceConfiguration.workspace.id) {
             getNewWorkspaceData(workspaceConfiguration.workspace.id)
+        } else if (workspaceRecordRef.current.profile.workspace.name != workspaceConfiguration.workspace.name) {
+            workspaceRecordRef.current.profile.workspace.name = workspaceConfiguration.workspace.name
+            setWorkspaceRecord({...workspaceRecordRef.current})
         }
 
     },[workspaceConfiguration])

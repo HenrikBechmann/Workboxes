@@ -102,7 +102,7 @@ const WorkspaceWriteDialog = (props) => {
         },        
     }
 
-    async function doSaveWrite() {
+    async function doSaveRename() {
         if (writeIsInvalidFieldFlags.name) {
             // TODO use chakra Alert instead
             alert('Please correct errors before saving')
@@ -271,7 +271,7 @@ const WorkspaceWriteDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
-                            onClick = {writeDialogState.action == 'changename'? doSaveWrite:doCreateWorkspace}
+                            onClick = {writeDialogState.action == 'changename'? doSaveRename:doCreateWorkspace}
                         >
                           {writeDialogState.action == 'changename'?'Save':'Create'}
                         </Button>
