@@ -163,6 +163,7 @@ const WorkspaceWriteDialog = (props) => {
                 }
             }
             previousState.workspace.name = writeValues.name
+            previousState.record.profile.workspace.name = writeValues.name
             return {...previousState}
         })
 

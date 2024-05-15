@@ -264,6 +264,7 @@ export const Main = (props) => {
         setWorkspaceConfiguration((previousState) => { // distribute workspaceConfiguration
             previousState.workspace.id = workspaceSelectionRecord.profile.workspace.id
             previousState.workspace.name = workspaceSelectionRecord.profile.workspace.name
+            previousState.record = workspaceSelectionRecord
             return {...previousState}
         })
 
@@ -323,9 +324,6 @@ export const Main = (props) => {
     }
 
     useEffect(()=>{
-
-        console.log('update from workspaceConfiguration: workspaceConfiguration, workspaceRecordRef.current',
-            workspaceConfiguration, workspaceRecordRef.current)
 
         if (mainStateRef.current == 'setup') return // handled by startup
             // console.log('workspaceConfiguration', workspaceConfiguration)

@@ -133,6 +133,7 @@ export const UserProvider = ({children}) => {
         [workspaceConfiguration, setWorkspaceConfiguration] = 
             useState({
                 workspace: {id:null, name:null},
+                record: null,
                 settings: {mode:'automatic', changed: false},
                 setWorkspaceConfiguration:null,
                 changedRecords: {

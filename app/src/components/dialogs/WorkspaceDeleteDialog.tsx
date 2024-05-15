@@ -56,28 +56,31 @@ const WorkspaceDeleteDialog = (props) => {
     }
 
     async function checkIsDefaultWorkspace() {
-        const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceConfiguration.workspace.id)
-        let dbWorkspaceRecord 
-        try {
-            dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
-        } catch (error) {
-            console.log('error getting workspace record to check for default status from standard toolbar', error)
-            errorControl.push({description:'error getting workspace record to check for default status from standard toolbar', error})
-            navigate('/error')
-            return
-        }
-        usage.read(1)
-        if (dbWorkspaceRecord.exists()) {
-            const workspaceRecord = dbWorkspaceRecord.data()
-            workspaceRecordRef.current = workspaceRecord
-            setIsDefaultState(workspaceRecord.profile.flags.is_default)
-        } else {
-            // TODO should try to recover from this
-            console.log('error no workspace record found to check for default status from standard toolbar')
-            errorControl.push({description:'error no workspace record found to check for default status from standard toolbar', error:'N/A'})
-            navigate('/error')
-            return
-        }
+
+        setIsDefaultState(workspaceConfiguration.record.profile.flags.is_default)
+
+        // const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceConfiguration.workspace.id)
+        // let dbWorkspaceRecord 
+        // try {
+        //     dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
+        // } catch (error) {
+        //     console.log('error getting workspace record to check for default status from standard toolbar', error)
+        //     errorControl.push({description:'error getting workspace record to check for default status from standard toolbar', error})
+        //     navigate('/error')
+        //     return
+        // }
+        // usage.read(1)
+        // if (dbWorkspaceRecord.exists()) {
+        //     const workspaceRecord = dbWorkspaceRecord.data()
+        //     workspaceRecordRef.current = workspaceRecord
+        //     setIsDefaultState(workspaceRecord.profile.flags.is_default)
+        // } else {
+        //     // TODO should try to recover from this
+        //     console.log('error no workspace record found to check for default status from standard toolbar')
+        //     errorControl.push({description:'error no workspace record found to check for default status from standard toolbar', error:'N/A'})
+        //     navigate('/error')
+        //     return
+        // }
     }
 
     async function doDeleteWorkspace() {
