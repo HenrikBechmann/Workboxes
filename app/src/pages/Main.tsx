@@ -323,6 +323,7 @@ export const Main = (props) => {
         const { setWorkspaceConfiguration } = workspaceConfiguration
         setWorkspaceConfiguration((previousState)=>{
             previousState.record = workspaceData
+            // the following three are repetative from Toolbar_Standard.changeWorkspaceSelection
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
             previousState.changedRecords.panels.clear()

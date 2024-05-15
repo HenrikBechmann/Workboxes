@@ -194,20 +194,47 @@ const StandardToolbar = (props) => {
         setWorkspaceList(workingWorkspaceList)
     }
 
-    const renameWorkspace = () => {
+    const renameWorkspaceDialog = () => {
         setWriteDialogState({open:true, action:'changename'})
     }
 
-    const deleteWorkspace = () => {
+    const deleteWorkspaceDialog = () => {
         setDeleteDialogState(true)
     }
 
-    const saveWorkspace = () => {
+    const uploadSettingDialog = () => {
         setSaveDialogState(true)
     }
 
-    const createWorkspace = () => {
+    const createWorkspaceDialog = () => {
         setWriteDialogState({open:true, action:'createworkspace'})
+    }
+
+    async function saveWorkspaceConfig() {
+
+        const { settings, changedRecords } = workspaceConfiguration
+        if (!settings.changed && !changedRecords.workspace) return
+
+        const workspaceRecord = workspaceConfiguration.record
+        const dbcollection = collection(db, 'users', userRecords.user.profile.user.id, 'workspaces')
+        const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
+        try {
+            await setDoc(docRef,workspaceRecord)
+        } catch (error) {
+            console.log('signout error from standard toolbar', error)
+            errorControl.push({description:'signout error from standard toolbar', error})
+            navigate('/error')
+            return
+        }
+
+        usage.write(1)
+
+        const { setWorkspaceConfiguration } = workspaceConfiguration
+        setWorkspaceConfiguration((previousState)=>{
+            previousState.settings.changed = false
+            return {...previousState}
+        })
+
     }
 
     // TODO save before switch if in automatic mode
@@ -222,7 +249,9 @@ const StandardToolbar = (props) => {
             previousState.workspace.name = workspaceName
             previousState.record = null
             // previousState.settings.mode = 'automatic'
-            // previousState.settings.changed = false
+            previousState.settings.changed = false
+            previousState.changedRecords.workspace = null
+            previousState.changedRecords.panels.clear()
             return {...previousState}
         })
     }
@@ -236,12 +265,12 @@ const StandardToolbar = (props) => {
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
         >
             <MenuGroup title = 'Workspace menu'>
-            <MenuItem onClick = {renameWorkspace} >Rename</MenuItem>
+            <MenuItem onClick = {renameWorkspaceDialog} >Rename</MenuItem>
             <MenuItem >Reset</MenuItem>
-            <MenuItem onClick = {deleteWorkspace} >Delete</MenuItem>
+            <MenuItem onClick = {deleteWorkspaceDialog} >Delete</MenuItem>
             <MenuItem >Save as...</MenuItem>
             <MenuDivider />
-            <MenuItem onClick = {createWorkspace} >Add a workspace</MenuItem>
+            <MenuItem onClick = {createWorkspaceDialog} >Add a workspace</MenuItem>
             </MenuGroup>            
             <MenuDivider />
             <MenuOptionGroup 
@@ -262,13 +291,6 @@ const StandardToolbar = (props) => {
 
     },[workspaceList, workspaceConfiguration])
 
-    const uploadSetting = () => {
-        setSaveDialogState(true)
-    }
-
-    const uploadConfig = () => {
-
-    }
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
 // <StandardIcon icon  = {subscriptionsIcon} caption = 'newsflows' tooltip = 'Subscribed news flows' response = {gotoNewsflows} />
@@ -312,9 +334,9 @@ const StandardToolbar = (props) => {
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
-                <StandardIcon response = {uploadSetting} isDialog = {true} icon = {uploadCloudIcon} 
+                <StandardIcon response = {uploadSettingDialog} isDialog = {true} icon = {uploadCloudIcon} 
                     caption = {workspaceConfiguration.settings.mode} tooltip = 'set saving behaviour' />
-                <StandardIcon response = {uploadConfig} icon = {uploadCloudIcon}
+                <StandardIcon response = {saveWorkspaceConfig} icon = {uploadCloudIcon}
                     emphasis = {workspaceConfiguration.settings.changed?'true':false} 
                     highlight = {workspaceConfiguration.settings.mode == 'automatic'?false:true}
                     caption = {workspaceConfiguration.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />
