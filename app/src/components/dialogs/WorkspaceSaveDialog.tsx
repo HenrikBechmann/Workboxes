@@ -32,13 +32,14 @@ import uploadCloudIcon from '../../../assets/cloud_upload.png'
 const WorkspaceSaveDialog = (props) => {
 
     const
-        { setSaveDialogState, setWorkspaceConfiguration } = props,
+        { setSaveDialogState, workspaceConfiguration } = props,
+        { setWorkspaceConfiguration } = workspaceConfiguration,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
-        workspaceRecordRef = useRef(null),
+        // workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
         navigate = useNavigate(),
@@ -62,6 +63,10 @@ const WorkspaceSaveDialog = (props) => {
             return {...previousState}
         })
         doClose()
+    }
+
+    async function reloadWorkspace() {
+
     }
 
     return (<>
@@ -96,6 +101,9 @@ const WorkspaceSaveDialog = (props) => {
                             Manual saves can be helpful if your login is concurrently using more than one tab or device with
                             the same workspace. Automatic saves in that case can clobber each others' configuration settings.
                         </Text>
+                        {(workspaceConfiguration.settings.mode == 'manual') && <Text>
+                            <span style = {{fontWeight:'bold'}}>Reload...</span> to discard changes and start over.
+                        </Text>}
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button mr = '10px' size = 'xs' isDisabled = {alertState == 'processing'} ref={cancelRef} 
@@ -113,6 +121,11 @@ const WorkspaceSaveDialog = (props) => {
                         >
                           Manual saves
                         </Button>
+                        {(workspaceConfiguration.settings.mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
+                            onClick = {reloadWorkspace}
+                        >
+                          Reload...
+                        </Button>}
                     </AlertDialogFooter>
 
                 </AlertDialogContent>

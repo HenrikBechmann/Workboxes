@@ -358,7 +358,7 @@ const StandardToolbar = (props) => {
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
         {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} 
-            setWorkspaceConfiguration = {workspaceConfiguration.setWorkspaceConfiguration} />}
+            workspaceConfiguration = {workspaceConfiguration} />}
     </Box>
 }
 
