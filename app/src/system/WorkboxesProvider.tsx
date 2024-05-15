@@ -134,7 +134,11 @@ export const UserProvider = ({children}) => {
             useState({
                 workspace: {id:null, name:null},
                 settings: {mode:'automatic', changed: false},
-                setWorkspaceConfiguration:null
+                setWorkspaceConfiguration:null,
+                changedRecords: {
+                    workspace:null,
+                    panels: new Set()
+                }
             }),
 
         // bootstrap resources

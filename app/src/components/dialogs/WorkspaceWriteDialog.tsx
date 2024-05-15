@@ -158,6 +158,9 @@ const WorkspaceWriteDialog = (props) => {
                 if (!workspaceConfiguration.settings.changed) {
                     previousState.settings.changed = true
                 }
+                if (!workspaceConfiguration.changedRecords.workspace) {
+                    previousState.changedRecords.workspace = workspaceConfiguration.workspace.id
+                }
             }
             previousState.workspace.name = writeValues.name
             return {...previousState}
