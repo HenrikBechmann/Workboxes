@@ -30,8 +30,6 @@ export const Main = (props) => {
         mainStateRef = useRef(null),
         userRecords = useUserRecords(),
         workspaceConfiguration = useWorkspaceConfiguration(), // selection for toolbar, and to get workspaceData
-        // [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
-        // workspaceRecordRef = useRef(null),
         panelDataRef = useRef(null),
         db = useFirestore(),
         toast = useToast({duration:3000}),
@@ -41,7 +39,6 @@ export const Main = (props) => {
 
     // console.log('running MAIN', mainState)
 
-    // workspaceRecordRef.current = workspaceConfiguration.record
     mainStateRef.current = mainState
 
     // TODO consolidate error handling
@@ -260,13 +257,14 @@ export const Main = (props) => {
         }
 
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
-        // setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
-
         const { setWorkspaceConfiguration } = workspaceConfiguration // for standard toolbar component
-        setWorkspaceConfiguration((previousState) => { // distribute first workspace record
+
+        // ---- DISTRIBUTE first workspace record ----
+        setWorkspaceConfiguration((previousState) => { 
             previousState.workspace.id = workspaceSelectionRecord.profile.workspace.id
             previousState.workspace.name = workspaceSelectionRecord.profile.workspace.name
             previousState.record = workspaceSelectionRecord
+            previousState.flags.new_workspace = true
             return {...previousState}
         })
 
@@ -325,41 +323,42 @@ export const Main = (props) => {
             return
         }
         usage.write(1)
-        // setWorkspaceRecord(workspaceData)
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState)=>{ // distribute loaded workspace
+
+        // ---- DISTRIBUTE loaded workspace record ----
+        setWorkspaceConfiguration((previousState)=>{ 
             previousState.record = workspaceData
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
             previousState.changedRecords.panels.clear()
+            previousState.flags.new_workspace = true
             return {...previousState}
         })
 
     }
 
+    // workspaceConfiguration.record always exists
     useEffect(()=>{
 
-        // console.log('running workspaceConfiguration change in MAIN',workspaceConfiguration.record?.profile.workspace.id, workspaceConfiguration.workspace.id, workspaceConfiguration.record?.profile.workspace.id !== workspaceConfiguration.workspace.id, workspaceConfiguration)
-
         if (mainStateRef.current == 'setup') return // handled by startup
-            // console.log('workspaceConfiguration', workspaceConfiguration)
-        if (!workspaceConfiguration.workspace.id) {
-            workspaceConfiguration.flags.new_workspace = true // redundant?
+
+        if (!workspaceConfiguration.workspace.id) { // contingency
+
             getStartingWorkspaceData()
             return
+
         }
-        if (workspaceConfiguration.record?.profile.workspace.id !== workspaceConfiguration.workspace.id) {
-            workspaceConfiguration.flags.new_workspace = true
-            // console.log('loading workspace data')
+
+        if (workspaceConfiguration.record.profile.workspace.id !== workspaceConfiguration.workspace.id) {
+
             loadWorkspaceData(workspaceConfiguration.workspace.id)
-        // } else if (workspaceRecordRef.current.profile.workspace.name != workspaceConfiguration.workspace.name) {
-        //     workspaceRecordRef.current.profile.workspace.name = workspaceConfiguration.workspace.name
-            // setWorkspaceRecord({...workspaceRecordRef.current})
+
         }
 
     },[workspaceConfiguration])
 
-    return ((mainState == 'ready') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
+    // return ((mainState == 'ready') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
+    return ((mainState == 'ready') && <Workspace panelDataRef = {panelDataRef}/>)
 }
 
 export default Main

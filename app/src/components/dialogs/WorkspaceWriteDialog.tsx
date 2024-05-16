@@ -102,6 +102,7 @@ const WorkspaceWriteDialog = (props) => {
         },        
     }
 
+    // TODO make sure record exists before saving
     async function doSaveRename() {
         if (writeIsInvalidFieldFlags.name) {
             // TODO use chakra Alert instead
@@ -153,7 +154,9 @@ const WorkspaceWriteDialog = (props) => {
 
         // changename workspaceConfiguration
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState) => { // update workspace name
+
+        // ---- UPDATE workspace name ----
+        setWorkspaceConfiguration((previousState) => { 
             if (workspaceConfiguration.settings.mode == 'manual') {
                 if (!workspaceConfiguration.settings.changed) {
                     previousState.settings.changed = true
@@ -223,9 +226,11 @@ const WorkspaceWriteDialog = (props) => {
         }
         usage.write(1)
         usage.create(1)
-        // changename workspaceConfiguration
+
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState) => { // new workspace
+
+        // ---- create NEW workspace ----
+        setWorkspaceConfiguration((previousState) => { 
             previousState.workspace.name = writeValues.name
             previousState.workspace.id = newWorkspaceDocRef.id
             return {...previousState} // new workspace data
