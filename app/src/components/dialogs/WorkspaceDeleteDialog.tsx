@@ -95,7 +95,7 @@ const WorkspaceDeleteDialog = (props) => {
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
-        let panelCount
+        let panelCount, transactionResult
         try {
             const
                 workspaceID = workspaceConfiguration.workspace.id,
@@ -107,13 +107,19 @@ const WorkspaceDeleteDialog = (props) => {
 
             panelCount = dbPanelQueryResult.size
 
-            await runTransaction(db, async (transaction) => {
+            transactionResult = await runTransaction(db, async (transaction) => {
+
+                const workspaceDocRef = doc(collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),workspaceID)
+                const dbWorkspaceDoc = await transaction.get(workspaceDocRef)
+                if (!dbWorkspaceDoc.exists()) return false
+
                 for (const dbdoc of dbPanelDocs) {
                     transaction.delete(dbdoc.ref)
                 }
-                const workspaceDocRef = doc(collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),workspaceID)
                 transaction.delete(workspaceDocRef)
+                // update count
                 transaction.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+                return true
             })
 
         } catch (error) {
@@ -123,7 +129,15 @@ const WorkspaceDeleteDialog = (props) => {
             navigate('/error')
             return
         }
-        usage.read(panelCount)
+        if (!transactionResult) {
+            toast({description:'workspace not found, so not deleted'})
+            usage.read(panelCount + 1)
+            setDeleteDialogState(false)
+            return
+        }
+        // TODO check for panel sub-docs in case there was a concurrency issue
+
+        usage.read(panelCount + 1)
         usage.delete(panelCount + 1)
         usage.write(1)
 
