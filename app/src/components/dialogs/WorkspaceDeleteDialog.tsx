@@ -14,7 +14,7 @@ import {
     query, where, getDocs, // orderBy, 
     getDoc, // deleteDoc, setDoc, updateDoc
     increment, // serverTimestamp,
-    writeBatch,
+    runTransaction,
 } from 'firebase/firestore'
 
 import { useNavigate } from 'react-router-dom'
@@ -59,28 +59,6 @@ const WorkspaceDeleteDialog = (props) => {
 
         setIsDefaultState(workspaceConfiguration.record.profile.flags.is_default)
 
-        // const dbWorkspaceRef = doc(collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),workspaceConfiguration.workspace.id)
-        // let dbWorkspaceRecord 
-        // try {
-        //     dbWorkspaceRecord = await getDoc(dbWorkspaceRef)
-        // } catch (error) {
-        //     console.log('error getting workspace record to check for default status from standard toolbar', error)
-        //     errorControl.push({description:'error getting workspace record to check for default status from standard toolbar', error})
-        //     navigate('/error')
-        //     return
-        // }
-        // usage.read(1)
-        // if (dbWorkspaceRecord.exists()) {
-        //     const workspaceRecord = dbWorkspaceRecord.data()
-        //     workspaceRecordRef.current = workspaceRecord
-        //     setIsDefaultState(workspaceRecord.profile.flags.is_default)
-        // } else {
-        //     // TODO should try to recover from this
-        //     console.log('error no workspace record found to check for default status from standard toolbar')
-        //     errorControl.push({description:'error no workspace record found to check for default status from standard toolbar', error:'N/A'})
-        //     navigate('/error')
-        //     return
-        // }
     }
 
     async function doDeleteWorkspace() {
@@ -88,11 +66,11 @@ const WorkspaceDeleteDialog = (props) => {
         // get default workspace
         const 
             dbWorkspaceCollection = collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),
-            dbQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true))
+            dbWorkspaceQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true))
 
         let dbDefaultWorkspace
         try {
-            dbDefaultWorkspace = await getDocs(dbQuery)
+            dbDefaultWorkspace = await getDocs(dbWorkspaceQuery)
         } catch (error) {
             console.log('error fetching user workspace collection')
             errorControl.push({description:'error fetching user workspace collection from standard toolbar', error:'N/A'})
@@ -100,10 +78,10 @@ const WorkspaceDeleteDialog = (props) => {
             return
         }
         usage.read(1)
-        let dbdoc, defaultWorkspace
+        let dbDefaultDoc, defaultWorkspace
         if (dbDefaultWorkspace.size == 1) {
-            dbdoc = dbDefaultWorkspace.docs[0]
-            defaultWorkspace = dbdoc.data()
+            dbDefaultDoc = dbDefaultWorkspace.docs[0]
+            defaultWorkspace = dbDefaultDoc.data()
         } else {
             // TODO should try to recover from this
             console.log('error fetching default workspace for delete workspace')
@@ -117,11 +95,27 @@ const WorkspaceDeleteDialog = (props) => {
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
+        let panelCount
         try {
-            const batch = writeBatch(db)
-            batch.delete(doc(dbWorkspaceCollection, workspaceConfiguration.workspace.id))
-            batch.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
-            await batch.commit()
+            const
+                workspaceID = workspaceConfiguration.workspace.id,
+                dbWorkspacePanelCollection = 
+                    collection(db,'users',userRecords.user.profile.user.id, 'workspaces',workspaceID,'panels'),
+                dbWorkspacePanelsQuery = query(dbWorkspacePanelCollection),
+                dbPanelQueryResult = await getDocs(dbWorkspacePanelsQuery),
+                dbPanelDocs = dbPanelQueryResult.docs
+
+            panelCount = dbPanelQueryResult.size
+
+            await runTransaction(db, async (transaction) => {
+                for (const dbdoc of dbPanelDocs) {
+                    transaction.delete(dbdoc.ref)
+                }
+                const workspaceDocRef = doc(collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),workspaceID)
+                transaction.delete(workspaceDocRef)
+                transaction.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
+            })
+
         } catch (error) {
             // TODO should try to recover from this
             console.log('error deleting workspace or incrementing workspace count')
@@ -129,8 +123,10 @@ const WorkspaceDeleteDialog = (props) => {
             navigate('/error')
             return
         }
-        usage.delete(1)
+        usage.read(panelCount)
+        usage.delete(panelCount + 1)
         usage.write(1)
+
         // set current workspace to default
         const {setWorkspaceConfiguration} = workspaceConfiguration
 
