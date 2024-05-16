@@ -148,6 +148,7 @@ export const UserProvider = ({children}) => {
                 setWorkspaceConfiguration:null,
                 changedRecords: {
                     workspace:null,
+                    setwindowpositions: new Set(),
                     setpanels: new Set(),
                     deletepanels: new Set(),
                 },

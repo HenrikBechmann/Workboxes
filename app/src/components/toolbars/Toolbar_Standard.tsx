@@ -235,6 +235,7 @@ const StandardToolbar = (props) => {
         setWorkspaceConfiguration((previousState)=>{ 
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
+            previousState.changedRecords.setwindowpositions.clear(),
             previousState.changedRecords.setpanels.clear()
             previousState.changedRecords.deletepanels.clear()
             return {...previousState}

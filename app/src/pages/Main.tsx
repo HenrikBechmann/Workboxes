@@ -330,6 +330,7 @@ export const Main = (props) => {
             previousState.record = workspaceData
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
+            previousState.changedRecords.setwindowpositions.clear(),
             previousState.changedRecords.setpanels.clear()
             previousState.changedRecords.deletepanels.clear()
             previousState.flags.new_workspace = true
