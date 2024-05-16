@@ -32,7 +32,8 @@ import '../../system/panel-variables.css'
 
 import { updateDocumentSchema } from '../../system/utilities'
 
-import { useUserAuthData, useFirestore, useUserRecords, useErrorControl, useUsage } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useFirestore, useUserRecords, useErrorControl, useUsage,
+    useWorkspaceConfiguration } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -62,7 +63,8 @@ const defaultDataboxState = {
 const Workspace = (props) => {
 
     const 
-        { workspaceConfiguration, panelDataRef } = props,
+        { panelDataRef } = props,
+        workspaceConfiguration = useWorkspaceConfiguration(),
         workspaceData = workspaceConfiguration.record,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),

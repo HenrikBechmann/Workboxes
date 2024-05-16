@@ -34,7 +34,8 @@ import uploadCloudIcon from '../../../assets/cloud_upload.png'
 const WorkspaceSaveDialog = (props) => {
 
     const
-        { setSaveDialogState, workspaceConfiguration } = props,
+        { setSaveDialogState } = props,
+        workspaceConfiguration = useWorkspaceConfiguration(),
         { setWorkspaceConfiguration } = workspaceConfiguration,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),

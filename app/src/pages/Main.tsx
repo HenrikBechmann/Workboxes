@@ -359,7 +359,7 @@ export const Main = (props) => {
 
     },[workspaceConfiguration])
 
-    return ((mainState != 'setup') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef} workspaceConfiguration = {workspaceConfiguration}/>)
+    return ((mainState != 'setup') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
 }
 
 export default Main
