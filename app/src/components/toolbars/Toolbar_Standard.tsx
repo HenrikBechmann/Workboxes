@@ -240,18 +240,18 @@ const StandardToolbar = (props) => {
     // TODO save before switch if in automatic mode
     // ask about save if in manual mode
     const changeWorkspaceSelection = (workspaceID) => {
-        const selection = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
-        const workspaceName = selection.dataset.name
+        const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
+        const workspaceName = selectionElement.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
         const { setWorkspaceConfiguration } = workspaceConfiguration
         setWorkspaceConfiguration((previousState) => {
             // console.log('setting workspaceConfiguration in toolbar_standard')
             previousState.workspace.id = workspaceID
             previousState.workspace.name = workspaceName
-            previousState.record = null
-            previousState.settings.changed = false
-            previousState.changedRecords.workspace = null
-            previousState.changedRecords.panels.clear()
+            // previousState.record = null
+            // previousState.settings.changed = false
+            // previousState.changedRecords.workspace = null
+            // previousState.changedRecords.panels.clear()
             return {...previousState}
         })
     }

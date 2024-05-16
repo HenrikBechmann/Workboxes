@@ -111,7 +111,7 @@ const WorkspaceSaveDialog = (props) => {
                 previousState.changedRecords.workspace = null
                 previousState.changedRecords.panels.clear()
                 previousState.flags.new_workspace = true
-                return {...previousState}
+                return {...previousState} // new workspace
             })
             doClose()
 

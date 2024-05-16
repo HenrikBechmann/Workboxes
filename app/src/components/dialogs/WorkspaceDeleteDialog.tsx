@@ -136,7 +136,7 @@ const WorkspaceDeleteDialog = (props) => {
         setWorkspaceConfiguration((previousState)=>{
             previousState.workspace.id = defaultWorkspace.profile.workspace.id
             previousState.workspace.name = defaultWorkspace.profile.workspace.name
-            return {...previousState}
+            return {...previousState} // get new workspace
         })
 
         toast({

@@ -345,6 +345,7 @@ export const Main = (props) => {
         if (mainStateRef.current == 'setup') return // handled by startup
             // console.log('workspaceConfiguration', workspaceConfiguration)
         if (!workspaceConfiguration.workspace.id) {
+            workspaceConfiguration.flags.new_workspace = true // redundant?
             getStartingWorkspaceData()
             return
         }
@@ -359,7 +360,7 @@ export const Main = (props) => {
 
     },[workspaceConfiguration])
 
-    return ((mainState != 'setup') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
+    return ((mainState == 'ready') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
 }
 
 export default Main

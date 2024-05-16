@@ -228,7 +228,7 @@ const WorkspaceWriteDialog = (props) => {
         setWorkspaceConfiguration((previousState) => {
             previousState.workspace.name = writeValues.name
             previousState.workspace.id = newWorkspaceDocRef.id
-            return {...previousState}
+            return {...previousState} // new workspace data
         })
 
         doClose()
