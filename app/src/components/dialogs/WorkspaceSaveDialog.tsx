@@ -53,7 +53,7 @@ const WorkspaceSaveDialog = (props) => {
     }
 
     const setAutomaticSave = () => {
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceConfiguration((previousState) => { // set save mode
             previousState.settings.mode = 'automatic'
             return {...previousState}
         })
@@ -61,7 +61,7 @@ const WorkspaceSaveDialog = (props) => {
     }
 
     const setManualSave = () => {
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceConfiguration((previousState) => { // set save mode
             previousState.settings.mode = 'manual'
             return {...previousState}
         })
@@ -103,7 +103,7 @@ const WorkspaceSaveDialog = (props) => {
                 navigate('/error')
                 return
             }
-            setWorkspaceConfiguration((previousState)=>{
+            setWorkspaceConfiguration((previousState)=>{ // set reloaded workspace data
                 previousState.record = workspaceData
                 previousState.workspace.id = workspaceID
                 previousState.workspace.name = workspaceName
@@ -111,7 +111,7 @@ const WorkspaceSaveDialog = (props) => {
                 previousState.changedRecords.workspace = null
                 previousState.changedRecords.panels.clear()
                 previousState.flags.new_workspace = true
-                return {...previousState} // new workspace
+                return {...previousState} // distribute new workspace
             })
             doClose()
 

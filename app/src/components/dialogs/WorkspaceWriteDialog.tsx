@@ -153,7 +153,7 @@ const WorkspaceWriteDialog = (props) => {
 
         // changename workspaceConfiguration
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceConfiguration((previousState) => { // update workspace name
             if (workspaceConfiguration.settings.mode == 'manual') {
                 if (!workspaceConfiguration.settings.changed) {
                     previousState.settings.changed = true
@@ -225,7 +225,7 @@ const WorkspaceWriteDialog = (props) => {
         usage.create(1)
         // changename workspaceConfiguration
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceConfiguration((previousState) => { // new workspace
             previousState.workspace.name = writeValues.name
             previousState.workspace.id = newWorkspaceDocRef.id
             return {...previousState} // new workspace data

@@ -263,7 +263,7 @@ export const Main = (props) => {
         // setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
 
         const { setWorkspaceConfiguration } = workspaceConfiguration // for standard toolbar component
-        setWorkspaceConfiguration((previousState) => { // distribute workspaceConfiguration
+        setWorkspaceConfiguration((previousState) => { // distribute first workspace record
             previousState.workspace.id = workspaceSelectionRecord.profile.workspace.id
             previousState.workspace.name = workspaceSelectionRecord.profile.workspace.name
             previousState.record = workspaceSelectionRecord
@@ -327,9 +327,8 @@ export const Main = (props) => {
         usage.write(1)
         // setWorkspaceRecord(workspaceData)
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState)=>{
+        setWorkspaceConfiguration((previousState)=>{ // distribute loaded workspace
             previousState.record = workspaceData
-            // the following three are repetative from Toolbar_Standard.changeWorkspaceSelection
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
             previousState.changedRecords.panels.clear()

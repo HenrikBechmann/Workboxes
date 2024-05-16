@@ -230,8 +230,10 @@ const StandardToolbar = (props) => {
         usage.write(1)
 
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState)=>{
+        setWorkspaceConfiguration((previousState)=>{ // save workspace config
             previousState.settings.changed = false
+            previousState.changedRecords.workspace = null
+            previousState.changedRecords.panels.clear()
             return {...previousState}
         })
 
@@ -244,7 +246,7 @@ const StandardToolbar = (props) => {
         const workspaceName = selectionElement.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
         const { setWorkspaceConfiguration } = workspaceConfiguration
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceConfiguration((previousState) => { // change workspace selection
             // console.log('setting workspaceConfiguration in toolbar_standard')
             previousState.workspace.id = workspaceID
             previousState.workspace.name = workspaceName
