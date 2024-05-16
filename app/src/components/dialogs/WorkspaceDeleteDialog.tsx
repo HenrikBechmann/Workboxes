@@ -38,7 +38,7 @@ const WorkspaceDeleteDialog = (props) => {
         workspaceConfiguration = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
-        workspaceRecordRef = useRef(null),
+        // workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
         navigate = useNavigate(),

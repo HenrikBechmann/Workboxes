@@ -62,7 +62,8 @@ const defaultDataboxState = {
 const Workspace = (props) => {
 
     const 
-        { workspaceData, panelDataRef } = props,
+        { workspaceConfiguration, panelDataRef } = props,
+        workspaceData = workspaceConfiguration.record,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
         // [panelList, setPanelList] = useState(null),
@@ -81,11 +82,11 @@ const Workspace = (props) => {
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
-    console.log('workspaceData', workspaceData)
+    // console.log('workspaceData, workspaceConfiguration', workspaceData, workspaceConfiguration)
 
     async function getPanels() {
 
-        console.log('running getPanels')
+        // console.log('running getPanels')
 
         const panelRecordList = []
         const panelComponentList = []
@@ -245,7 +246,10 @@ const Workspace = (props) => {
     // set up panels
     useEffect(()=>{
 
-        getPanels()
+        if (workspaceConfiguration.flags.new_workspace) {
+            workspaceConfiguration.flags.new_workspace = false
+            getPanels()  
+        } 
 
         // return 
         // // TODO placeholder logic
@@ -313,7 +317,7 @@ const Workspace = (props) => {
         //         }
         //     },
 
-    },[])
+    },[workspaceConfiguration])
 
     const resizeCallback = useCallback((entries)=>{
 

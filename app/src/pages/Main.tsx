@@ -30,8 +30,8 @@ export const Main = (props) => {
         mainStateRef = useRef(null),
         userRecords = useUserRecords(),
         workspaceConfiguration = useWorkspaceConfiguration(), // selection for toolbar, and to get workspaceData
-        [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
-        workspaceRecordRef = useRef(null),
+        // [workspaceRecord, setWorkspaceRecord] = useState(null), // full data for Workspace component
+        // workspaceRecordRef = useRef(null),
         panelDataRef = useRef(null),
         db = useFirestore(),
         toast = useToast({duration:3000}),
@@ -39,7 +39,9 @@ export const Main = (props) => {
         navigate = useNavigate(),
         usage = useUsage()
 
-    workspaceRecordRef.current = workspaceRecord
+    // console.log('running MAIN', mainState)
+
+    // workspaceRecordRef.current = workspaceConfiguration.record
     mainStateRef.current = mainState
 
     // TODO consolidate error handling
@@ -258,7 +260,7 @@ export const Main = (props) => {
         }
 
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
-        setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
+        // setWorkspaceRecord(workspaceSelectionRecord) // for Workspace component
 
         const { setWorkspaceConfiguration } = workspaceConfiguration // for standard toolbar component
         setWorkspaceConfiguration((previousState) => { // distribute workspaceConfiguration
@@ -278,15 +280,15 @@ export const Main = (props) => {
 
     },[])
 
-    async function getNewWorkspaceData(workspaceID) {
+    async function loadWorkspaceData(workspaceID) {
 
         const 
-            workspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
+            dbWorkspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
 
         let dbdoc 
         try {
 
-            dbdoc = await getDoc(workspaceRecordRef)
+            dbdoc = await getDoc(dbWorkspaceRecordRef)
 
         } catch (error) {
 
@@ -296,10 +298,14 @@ export const Main = (props) => {
             return
         }
         usage.read(1)
+        if (!dbdoc.exists()) {
+            toast({description:'requested workspace record does not exist. Reloading...'})
+            getStartingWorkspaceData()
+            return
+        }
         const
             workspaceData = dbdoc.data(),
             workspaceName = workspaceData.profile.workspace.name
-
 
         const userUpdateData = 
             isMobile
@@ -319,7 +325,7 @@ export const Main = (props) => {
             return
         }
         usage.write(1)
-        setWorkspaceRecord(workspaceData)
+        // setWorkspaceRecord(workspaceData)
         const { setWorkspaceConfiguration } = workspaceConfiguration
         setWorkspaceConfiguration((previousState)=>{
             previousState.record = workspaceData
@@ -334,18 +340,26 @@ export const Main = (props) => {
 
     useEffect(()=>{
 
+        // console.log('running workspaceConfiguration change in MAIN',workspaceConfiguration.record?.profile.workspace.id, workspaceConfiguration.workspace.id, workspaceConfiguration.record?.profile.workspace.id !== workspaceConfiguration.workspace.id, workspaceConfiguration)
+
         if (mainStateRef.current == 'setup') return // handled by startup
             // console.log('workspaceConfiguration', workspaceConfiguration)
-        if (workspaceRecordRef.current.profile.workspace.id != workspaceConfiguration.workspace.id) {
-            getNewWorkspaceData(workspaceConfiguration.workspace.id)
-        } else if (workspaceRecordRef.current.profile.workspace.name != workspaceConfiguration.workspace.name) {
-            workspaceRecordRef.current.profile.workspace.name = workspaceConfiguration.workspace.name
-            setWorkspaceRecord({...workspaceRecordRef.current})
+        if (!workspaceConfiguration.workspace.id) {
+            getStartingWorkspaceData()
+            return
+        }
+        if (workspaceConfiguration.record?.profile.workspace.id !== workspaceConfiguration.workspace.id) {
+            workspaceConfiguration.flags.new_workspace = true
+            // console.log('loading workspace data')
+            loadWorkspaceData(workspaceConfiguration.workspace.id)
+        // } else if (workspaceRecordRef.current.profile.workspace.name != workspaceConfiguration.workspace.name) {
+        //     workspaceRecordRef.current.profile.workspace.name = workspaceConfiguration.workspace.name
+            // setWorkspaceRecord({...workspaceRecordRef.current})
         }
 
     },[workspaceConfiguration])
 
-    return ((mainState != 'setup') && <Workspace panelDataRef = {panelDataRef} workspaceData = {workspaceRecord}/>)
+    return ((mainState != 'setup') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef} workspaceConfiguration = {workspaceConfiguration}/>)
 }
 
 export default Main

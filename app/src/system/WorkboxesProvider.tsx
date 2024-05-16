@@ -149,6 +149,9 @@ export const UserProvider = ({children}) => {
                 changedRecords: {
                     workspace:null,
                     panels: new Set()
+                },
+                flags: {
+                    new_workspace:true,
                 }
             }),
 

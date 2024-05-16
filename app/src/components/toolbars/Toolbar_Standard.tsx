@@ -245,10 +245,10 @@ const StandardToolbar = (props) => {
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
         const { setWorkspaceConfiguration } = workspaceConfiguration
         setWorkspaceConfiguration((previousState) => {
+            // console.log('setting workspaceConfiguration in toolbar_standard')
             previousState.workspace.id = workspaceID
             previousState.workspace.name = workspaceName
             previousState.record = null
-            // previousState.settings.mode = 'automatic'
             previousState.settings.changed = false
             previousState.changedRecords.workspace = null
             previousState.changedRecords.panels.clear()
