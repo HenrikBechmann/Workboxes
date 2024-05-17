@@ -142,12 +142,12 @@ export const UserProvider = ({children}) => {
         [systemRecords, setSystemRecords] = useState({settings:null}),
         [workspaceConfiguration, setWorkspaceConfiguration] = 
             useState({
-                workspace: {id:null, name:null},
-                record: null,
+                workspaceSelection: {id:null, name:null},
+                workspaceRecord: null,
                 settings: {mode:'automatic', changed: false},
                 setWorkspaceConfiguration:null,
                 changedRecords: {
-                    workspace:null,
+                    setworkspace:null,
                     setwindowpositions: new Set(),
                     setpanels: new Set(),
                     deletepanels: new Set(),

@@ -213,9 +213,9 @@ const StandardToolbar = (props) => {
     async function saveWorkspaceConfig() {
 
         const { settings, changedRecords } = workspaceConfiguration
-        if (!settings.changed && !changedRecords.workspace) return
+        if (!settings.changed && !changedRecords.setworkspace) return
 
-        const workspaceRecord = workspaceConfiguration.record
+        const workspaceRecord = workspaceConfiguration.workspaceRecord
         const dbcollection = collection(db, 'users', userRecords.user.profile.user.id, 'workspaces')
         const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
         try {
@@ -234,7 +234,7 @@ const StandardToolbar = (props) => {
         // ---- SAVE workspace config ----
         setWorkspaceConfiguration((previousState)=>{ 
             previousState.settings.changed = false
-            previousState.changedRecords.workspace = null
+            previousState.changedRecords.setworkspace = null
             previousState.changedRecords.setwindowpositions.clear(),
             previousState.changedRecords.setpanels.clear()
             previousState.changedRecords.deletepanels.clear()
@@ -254,8 +254,8 @@ const StandardToolbar = (props) => {
         // ---- SWITCH workspace selection ----
         setWorkspaceConfiguration((previousState) => { 
             // console.log('setting workspaceConfiguration in toolbar_standard')
-            previousState.workspace.id = workspaceID
-            previousState.workspace.name = workspaceName
+            previousState.workspaceSelection.id = workspaceID
+            previousState.workspaceSelection.name = workspaceName
             return {...previousState}
         })
     }
@@ -263,7 +263,7 @@ const StandardToolbar = (props) => {
     const workspacemenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
-        const defaultValue = workspaceConfiguration.workspace.id
+        const defaultValue = workspaceConfiguration.workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
@@ -333,7 +333,7 @@ const StandardToolbar = (props) => {
                 <ToolbarVerticalDivider />
                 <MenuControl 
                     icon = {workspacesIcon} 
-                    displayName = {workspaceConfiguration.workspace.name} 
+                    displayName = {workspaceConfiguration.workspaceSelection.name} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
                     menulist = {workspacemenuList} 

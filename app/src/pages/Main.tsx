@@ -261,9 +261,9 @@ export const Main = (props) => {
 
         // ---- DISTRIBUTE first workspace record ----
         setWorkspaceConfiguration((previousState) => { 
-            previousState.workspace.id = workspaceSelectionRecord.profile.workspace.id
-            previousState.workspace.name = workspaceSelectionRecord.profile.workspace.name
-            previousState.record = workspaceSelectionRecord
+            previousState.workspaceSelection.id = workspaceSelectionRecord.profile.workspace.id
+            previousState.workspaceSelection.name = workspaceSelectionRecord.profile.workspace.name
+            previousState.workspaceRecord = workspaceSelectionRecord
             previousState.flags.new_workspace = true
             return {...previousState}
         })
@@ -327,9 +327,9 @@ export const Main = (props) => {
 
         // ---- DISTRIBUTE loaded workspace record ----
         setWorkspaceConfiguration((previousState)=>{ 
-            previousState.record = workspaceData
+            previousState.workspaceRecord = workspaceData
             previousState.settings.changed = false
-            previousState.changedRecords.workspace = null
+            previousState.changedRecords.setworkspace = null
             previousState.changedRecords.setwindowpositions.clear(),
             previousState.changedRecords.setpanels.clear()
             previousState.changedRecords.deletepanels.clear()
@@ -339,27 +339,27 @@ export const Main = (props) => {
 
     }
 
-    // workspaceConfiguration.record always exists
+    // workspaceConfiguration.workspaceRecord always exists
     useEffect(()=>{
 
         if (mainStateRef.current == 'setup') return // handled by startup
 
-        if (!workspaceConfiguration.workspace.id) { // contingency
+        if (!workspaceConfiguration.workspaceSelection.id) { // contingency
 
             getStartingWorkspaceData()
             return
 
         }
 
-        if (workspaceConfiguration.record.profile.workspace.id !== workspaceConfiguration.workspace.id) {
+        if (workspaceConfiguration.workspaceRecord.profile.workspace.id !== workspaceConfiguration.workspaceSelection.id) {
 
-            loadWorkspaceData(workspaceConfiguration.workspace.id)
+            loadWorkspaceData(workspaceConfiguration.workspaceSelection.id)
 
         }
 
     },[workspaceConfiguration])
 
-    // return ((mainState == 'ready') && (workspaceConfiguration.record) && <Workspace panelDataRef = {panelDataRef}/>)
+    // return ((mainState == 'ready') && (workspaceConfiguration.workspaceRecord) && <Workspace panelDataRef = {panelDataRef}/>)
     return ((mainState == 'ready') && <Workspace panelDataRef = {panelDataRef}/>)
 }
 

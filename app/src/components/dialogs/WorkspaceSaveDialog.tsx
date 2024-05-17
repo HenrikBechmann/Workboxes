@@ -75,7 +75,7 @@ const WorkspaceSaveDialog = (props) => {
     async function reloadWorkspace() {
         const 
             dbcollection = collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),
-            workspaceID = workspaceConfiguration.record.profile.workspace.id,
+            workspaceID = workspaceConfiguration.workspaceRecord.profile.workspace.id,
             dbdocRef = doc(dbcollection,workspaceID),
             { setWorkspaceConfiguration } = workspaceConfiguration
 
@@ -110,11 +110,11 @@ const WorkspaceSaveDialog = (props) => {
 
             // ---- set RELOAD workspace data ----
             setWorkspaceConfiguration((previousState)=>{ 
-                previousState.record = workspaceData
-                previousState.workspace.id = workspaceID
-                previousState.workspace.name = workspaceName
+                previousState.workspaceRecord = workspaceData
+                previousState.workspaceSelection.id = workspaceID
+                previousState.workspaceSelection.name = workspaceName
                 previousState.settings.changed = false
-                previousState.changedRecords.workspace = null
+                previousState.changedRecords.setworkspace = null
                 previousState.changedRecords.panels.clear()
                 previousState.flags.new_workspace = true
                 return {...previousState} // distribute new workspace

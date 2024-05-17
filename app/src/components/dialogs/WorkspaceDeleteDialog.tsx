@@ -57,7 +57,7 @@ const WorkspaceDeleteDialog = (props) => {
 
     function checkIsDefaultWorkspace() {
 
-        setIsDefaultState(workspaceConfiguration.record.profile.flags.is_default)
+        setIsDefaultState(workspaceConfiguration.workspaceRecord.profile.flags.is_default)
 
     }
 
@@ -91,14 +91,14 @@ const WorkspaceDeleteDialog = (props) => {
         }
 
         const 
-            previousWorkspaceName = workspaceConfiguration.workspace.name,
+            previousWorkspaceName = workspaceConfiguration.workspaceSelection.name,
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
         let panelCount, transactionResult
         try {
             const
-                workspaceID = workspaceConfiguration.workspace.id,
+                workspaceID = workspaceConfiguration.workspaceSelection.id,
                 dbWorkspacePanelCollection = 
                     collection(db,'users',userRecords.user.profile.user.id, 'workspaces',workspaceID,'panels'),
                 dbWorkspacePanelsQuery = query(dbWorkspacePanelCollection),
@@ -146,8 +146,8 @@ const WorkspaceDeleteDialog = (props) => {
 
         // ---- set NEW workspace ----
         setWorkspaceConfiguration((previousState)=>{ 
-            previousState.workspace.id = defaultWorkspace.profile.workspace.id
-            previousState.workspace.name = defaultWorkspace.profile.workspace.name
+            previousState.workspaceSelection.id = defaultWorkspace.profile.workspace.id
+            previousState.workspaceSelection.name = defaultWorkspace.profile.workspace.name
             return {...previousState} // get new workspace
         })
 
@@ -184,14 +184,14 @@ const WorkspaceDeleteDialog = (props) => {
                         {(!isDefaultState && (workspaceConfiguration.settings.mode == 'automatic')) && 
                             <Text>
                                 Continue? The current workspace (<span style = {{fontStyle:'italic'}}>
-                                    {workspaceConfiguration.workspace.name}</span>) will be deleted, 
+                                    {workspaceConfiguration.workspaceSelection.name}</span>) will be deleted, 
                                 and replaced by the default workspace.
                             </Text>
                         }
 
                         {(!isDefaultState && (workspaceConfiguration.settings.mode == 'manual')) && <>
                             <Text>The workspace <span style = {{fontStyle:'italic'}}>
-                                {workspaceConfiguration.workspace.name}</span> cannot
+                                {workspaceConfiguration.workspaceSelection.name}</span> cannot
                                 be deleted because it is set for manual saving, protecting other instances of this login. 
                             </Text>
                             <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
@@ -201,7 +201,7 @@ const WorkspaceDeleteDialog = (props) => {
 
                         {isDefaultState && <>
                             <Text>The workspace <span style = {{fontStyle:'italic'}}>
-                                {workspaceConfiguration.workspace.name}</span> cannot
+                                {workspaceConfiguration.workspaceSelection.name}</span> cannot
                                 be deleted because it is the default workspace. 
                                 {(workspaceConfiguration.settings.mode == 'manual')
                                     && '... and because workspace save is set to manual.'

@@ -63,7 +63,7 @@ const WorkspaceWriteDialog = (props) => {
     useEffect(()=>{
         if (newInvocationRef.current) {
             (dialogStateRef.current.action == 'changename')
-                ? setWriteValues({name:workspaceConfiguration.workspace.name})
+                ? setWriteValues({name:workspaceConfiguration.workspaceSelection.name})
                 : setWriteValues({name:''})
             if (dialogStateRef.current.action == 'createworkspace') {
                 writeIsInvalidTests.name('')
@@ -116,7 +116,7 @@ const WorkspaceWriteDialog = (props) => {
             const 
                 userRecord = userRecords.user,
                 userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-                workspaceID = workspaceConfiguration.workspace.id,
+                workspaceID = workspaceConfiguration.workspaceSelection.id,
                 workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
                 updateBlock = {}
 
@@ -161,12 +161,12 @@ const WorkspaceWriteDialog = (props) => {
                 if (!workspaceConfiguration.settings.changed) {
                     previousState.settings.changed = true
                 }
-                if (!workspaceConfiguration.changedRecords.workspace) {
-                    previousState.changedRecords.workspace = workspaceConfiguration.workspace.id
+                if (!workspaceConfiguration.changedRecords.setworkspace) {
+                    previousState.changedRecords.setworkspace = workspaceConfiguration.workspaceSelection.id
                 }
             }
-            previousState.workspace.name = writeValues.name
-            previousState.record.profile.workspace.name = writeValues.name
+            previousState.workspaceSelection.name = writeValues.name
+            previousState.workspaceRecord.profile.workspace.name = writeValues.name
             return {...previousState}
         })
 
@@ -231,8 +231,8 @@ const WorkspaceWriteDialog = (props) => {
 
         // ---- create NEW workspace ----
         setWorkspaceConfiguration((previousState) => { 
-            previousState.workspace.name = writeValues.name
-            previousState.workspace.id = newWorkspaceDocRef.id
+            previousState.workspaceSelection.name = writeValues.name
+            previousState.workspaceSelection.id = newWorkspaceDocRef.id
             return {...previousState} // new workspace data
         })
 

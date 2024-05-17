@@ -65,7 +65,7 @@ const Workspace = (props) => {
     const 
         { panelDataRef } = props,
         workspaceConfiguration = useWorkspaceConfiguration(),
-        workspaceData = workspaceConfiguration.record,
+        workspaceData = workspaceConfiguration.workspaceRecord,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
         // [panelList, setPanelList] = useState(null),
