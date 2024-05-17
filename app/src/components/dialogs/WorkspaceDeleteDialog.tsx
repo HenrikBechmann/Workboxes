@@ -180,20 +180,39 @@ const WorkspaceDeleteDialog = (props) => {
 
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
-                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'automatic')) && <Text>
-                            Continue? The current workspace (<span style = {{fontStyle:'italic'}}>{workspaceConfiguration.workspace.name}</span>) will be deleted, 
-                            and replaced by the default workspace.
-                        </Text>}
-                        {isDefaultState && <><Text>The workspace <span style = {{fontStyle:'italic'}}>{workspaceConfiguration.workspace.name}</span> cannot
-                        be deleted because it is the default workspace. {(workspaceConfiguration.settings.mode == 'manual')
-                        && '... and because workspace save is set to manual.'}</Text>
-                        <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
-                        the default panel.</Text></>}
-                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'manual')) && 
-                        <><Text>The workspace <span style = {{fontStyle:'italic'}}>{workspaceConfiguration.workspace.name}</span> cannot
-                        be deleted because it is set for manual saving, protecting other instances of this login. </Text>
-                        <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
-                        the default panel.</Text></>}
+                        
+                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'automatic')) && 
+                            <Text>
+                                Continue? The current workspace (<span style = {{fontStyle:'italic'}}>
+                                    {workspaceConfiguration.workspace.name}</span>) will be deleted, 
+                                and replaced by the default workspace.
+                            </Text>
+                        }
+
+                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'manual')) && <>
+                            <Text>The workspace <span style = {{fontStyle:'italic'}}>
+                                {workspaceConfiguration.workspace.name}</span> cannot
+                                be deleted because it is set for manual saving, protecting other instances of this login. 
+                            </Text>
+                            <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
+                                the default panel.
+                            </Text>
+                        </>}
+
+                        {isDefaultState && <>
+                            <Text>The workspace <span style = {{fontStyle:'italic'}}>
+                                {workspaceConfiguration.workspace.name}</span> cannot
+                                be deleted because it is the default workspace. 
+                                {(workspaceConfiguration.settings.mode == 'manual')
+                                    && '... and because workspace save is set to manual.'
+                                }
+                            </Text>
+                        
+                            <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
+                                the default panel.
+                            </Text>
+                        </>}
+
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button isDisabled = {alertState == 'processing'} ref={cancelRef} 
