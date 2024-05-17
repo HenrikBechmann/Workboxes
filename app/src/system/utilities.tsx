@@ -875,7 +875,8 @@ const versionData = {
       panel: {
         id: null,
         name: '',
-      }
+      },
+      panels:[],
     }],
   },
   panels: {

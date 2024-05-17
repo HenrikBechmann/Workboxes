@@ -124,8 +124,6 @@ const Workspace = (props) => {
                 return a.profile.display_order - b.profile.display_order // best attempt to sort
             })
 
-
-
             // update versions
             let writes = 0
             for (let index = 0; index < panelRecordList.length; index++) {
@@ -153,13 +151,13 @@ const Workspace = (props) => {
             usage.write(writes)
         }
         if (panelRecordList.length === 0) { // create a panel
-            const dbNewDocRef = doc(dbPanelCollection)
+            const dbNewPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
                   profile: {
                     panel:{
                       name: 'Default panel',
-                      id: dbNewDocRef.id,
+                      id: dbNewPanelDocRef.id,
                     },
                     display_order: 0,
                     owner: {
@@ -185,7 +183,8 @@ const Workspace = (props) => {
                 }
             )
             try {
-            await setDoc(dbNewDocRef,newPanelData)
+                // TODO update workspace list of panels
+                await setDoc(dbNewPanelDocRef,newPanelData)
             } catch (error) {
                 console.log('error adding new panel in workspace setup', error)
                 errorControl.push({description:'error adding new panel in workspace setup', error})
@@ -198,7 +197,7 @@ const Workspace = (props) => {
         }
         // generate panel components, sorted by display_order, ascending
 
-        const selectedID = workspaceData.panelID
+        const selectedID = workspaceData.panel.id
         let selectedIndex, defaultIndex
         for (let index = 0; index < panelRecordList.length; index++) {
 
