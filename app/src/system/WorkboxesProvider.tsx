@@ -128,8 +128,7 @@ const WorkboxesProvider = ({children}) => {
 
 export default WorkboxesProvider
 
-// ===========================[ UserProvider component]============================
-// provides much context for app
+// ===========================[ WorkspaceHandler class ]============================
 
 class WorkspaceHandler {
 
@@ -164,6 +163,9 @@ class WorkspaceHandler {
 }
 
 const workspaceHandlerInstance = new WorkspaceHandler()
+
+// ===========================[ UserProvider component]============================
+// provides much context for app
 
 export const UserProvider = ({children}) => {
 
