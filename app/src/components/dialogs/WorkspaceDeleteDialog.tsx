@@ -143,8 +143,10 @@ const WorkspaceDeleteDialog = (props) => {
 
         // set current workspace to default
         // ---- set NEW workspace ----
-        workspaceHandler.workspaceSelection.id = defaultWorkspace.profile.workspace.id
-        workspaceHandler.workspaceSelection.name = defaultWorkspace.profile.workspace.name
+        workspaceHandler.setSelection(
+            defaultWorkspace.profile.workspace.id,
+            defaultWorkspace.profile.workspace.name
+        )
         dispatchWorkspaceHandler()
 
         toast({

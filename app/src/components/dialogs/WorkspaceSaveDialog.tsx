@@ -106,9 +106,7 @@ const WorkspaceSaveDialog = (props) => {
             workspaceHandler.workspaceRecord = workspaceData
             workspaceHandler.workspaceSelection.id = workspaceID
             workspaceHandler.workspaceSelection.name = workspaceName
-            workspaceHandler.settings.changed = false
-            workspaceHandler.changedRecords.setworkspace = null
-            workspaceHandler.changedRecords.panels.clear()
+            workspaceHandler.resetChanged()
             workspaceHandler.flags.new_workspace = true
             dispatchWorkspaceHandler()
             doClose()

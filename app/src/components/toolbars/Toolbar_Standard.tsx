@@ -230,11 +230,7 @@ const StandardToolbar = (props) => {
         usage.write(1)
 
         // ---- SAVE workspace config ----
-        workspaceHandler.settings.changed = false
-        workspaceHandler.changedRecords.setworkspace = null
-        workspaceHandler.changedRecords.setwindowpositions.clear(),
-        workspaceHandler.changedRecords.setpanels.clear()
-        workspaceHandler.changedRecords.deletepanels.clear()
+        workspaceHandler.resetChanged()
         dispatchWorkspaceHandler()
 
     }
@@ -247,8 +243,7 @@ const StandardToolbar = (props) => {
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
         // ---- SWITCH workspace selection ----
             // console.log('setting workspaceHandler in toolbar_standard')
-        workspaceHandler.workspaceSelection.id = workspaceID
-        workspaceHandler.workspaceSelection.name = workspaceName
+        workspaceHandler.setSelection(workspaceID, workspaceName)
         dispatchWorkspaceHandler()
     }
 

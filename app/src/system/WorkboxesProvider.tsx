@@ -131,6 +131,40 @@ export default WorkboxesProvider
 // ===========================[ UserProvider component]============================
 // provides much context for app
 
+class WorkspaceHandler {
+
+    resetChanged = () => {
+        this.settings.changed = false
+        this.changedRecords.setworkspace = null
+        this.changedRecords.setpanels.clear()
+        this.changedRecords.deletepanels.clear()
+        this.changedRecords.setwindowpositions.clear()
+    }
+    setSelection = (id, name) => {
+        this.workspaceSelection = {
+            id,
+            name,
+        }
+    }
+
+    setWorkspaceHandler = null
+    workspaceSelection = {id:null, name:null}
+    workspaceRecord = null
+    panelRecords = new Map()
+    settings = {mode:'automatic', changed: false}
+    changedRecords = {
+        setworkspace:null,
+        setwindowpositions: new Set(),
+        setpanels: new Set(),
+        deletepanels: new Set()
+    }
+    flags = {
+        new_workspace:true
+    }
+}
+
+const workspaceHandlerInstance = new WorkspaceHandler()
+
 export const UserProvider = ({children}) => {
 
     // --------------------------------[ data definitions ]-----------------------
@@ -140,24 +174,7 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceHandler, setWorkspaceHandler] = 
-            useState({ current: {
-                setWorkspaceHandler:null,
-                workspaceSelection: {id:null, name:null},
-                workspaceRecord: null,
-                panelRecords: new Map(),
-                settings: {mode:'automatic', changed: false},
-                changedRecords: {
-                    setworkspace:null,
-                    setwindowpositions: new Set(),
-                    setpanels: new Set(),
-                    deletepanels: new Set(),
-                },
-                flags: {
-                    new_workspace:true,
-                }
-            }}),
-
+        [workspaceHandler, setWorkspaceHandler] = useState({ current: workspaceHandlerInstance }),
         // bootstrap resources
         db = useFirestore(),
         userAuthDataRef = useRef(null),
@@ -901,14 +918,18 @@ const useSystemRecords = () => { // static
     return useContext(SystemRecordsContext)
 }
 
-const useWorkspaceHandler = () => { // static
-    const workspaceHandlerContext = useContext(WorkspaceHandlerContext)
-    const workspaceHandler = workspaceHandlerContext.current
-    const { setWorkspaceHandler } = workspaceHandler
-    const dispatchWorkspaceHandler = () => {
-        setWorkspaceHandler({...workspaceHandlerContext})
-    }
+const useWorkspaceHandler = () => {
+
+    const 
+        workspaceHandlerContext = useContext(WorkspaceHandlerContext),
+        workspaceHandler = workspaceHandlerContext.current,
+        { setWorkspaceHandler } = workspaceHandler,
+        dispatchWorkspaceHandler = () => {
+            setWorkspaceHandler({...workspaceHandlerContext})
+        }
+
     return [workspaceHandler, dispatchWorkspaceHandler]
+
 }
 
 const useErrorControl = () => {
