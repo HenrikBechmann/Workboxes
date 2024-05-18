@@ -7,22 +7,10 @@ class WorkspaceHandler {
         this.db = db
     }
 
+    // database
     db
 
-    resetChanged = () => {
-        this.settings.changed = false
-        this.changedRecords.setworkspace = null
-        this.changedRecords.setpanels.clear()
-        this.changedRecords.deletepanels.clear()
-        this.changedRecords.setwindowpositions.clear()
-    }
-    setSelection = (id, name) => {
-        this.workspaceSelection = {
-            id,
-            name,
-        }
-    }
-
+    // data
     setWorkspaceHandler = null
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
@@ -37,6 +25,23 @@ class WorkspaceHandler {
     flags = {
         new_workspace:true
     }
+
+    // methods
+    setSelection = (id, name) => {
+        this.workspaceSelection = {
+            id,
+            name,
+        }
+    }
+
+    resetChanged = () => {
+        this.settings.changed = false
+        this.changedRecords.setworkspace = null
+        this.changedRecords.setpanels.clear()
+        this.changedRecords.deletepanels.clear()
+        this.changedRecords.setwindowpositions.clear()
+    }
+
 }
 
 export default WorkspaceHandler
