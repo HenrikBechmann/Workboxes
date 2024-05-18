@@ -30,7 +30,8 @@ import firebaseConfig from '../firebaseConfig'
 
 // workbox
 import { updateDocumentSchema } from './utilities'
-import snapshotControl from './snapshotControlClass'
+import SnapshotControl from '../classes/SnapshotControl'
+import WorkspaceHandler from '../classes/WorkspaceHandler'
 
 // =============================[ global ]============================
 
@@ -48,6 +49,8 @@ const
     StorageContext = createContext(storage),
 
     // make workboxes resources available
+    snapshotControl = new SnapshotControl(),
+    workspaceHandlerInstance = new WorkspaceHandler(firestore),
     SnapshotControlContext = createContext(snapshotControl),
     errorArray = [],
     ErrorControlContext = createContext(errorArray),
@@ -127,42 +130,6 @@ const WorkboxesProvider = ({children}) => {
 }
 
 export default WorkboxesProvider
-
-// ===========================[ WorkspaceHandler class ]============================
-
-class WorkspaceHandler {
-
-    resetChanged = () => {
-        this.settings.changed = false
-        this.changedRecords.setworkspace = null
-        this.changedRecords.setpanels.clear()
-        this.changedRecords.deletepanels.clear()
-        this.changedRecords.setwindowpositions.clear()
-    }
-    setSelection = (id, name) => {
-        this.workspaceSelection = {
-            id,
-            name,
-        }
-    }
-
-    setWorkspaceHandler = null
-    workspaceSelection = {id:null, name:null}
-    workspaceRecord = null
-    panelRecords = new Map()
-    settings = {mode:'automatic', changed: false}
-    changedRecords = {
-        setworkspace:null,
-        setwindowpositions: new Set(),
-        setpanels: new Set(),
-        deletepanels: new Set()
-    }
-    flags = {
-        new_workspace:true
-    }
-}
-
-const workspaceHandlerInstance = new WorkspaceHandler()
 
 // ===========================[ UserProvider component]============================
 // provides much context for app

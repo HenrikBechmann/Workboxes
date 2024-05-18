@@ -1,6 +1,6 @@
-// snapshotControlClass.tsx
+// SnapshotControl.tsx
 
-class snapshotControlClass {
+class SnapshotControl {
 
     snapshotData = new Map()
 
@@ -58,6 +58,6 @@ class snapshotControlClass {
 
 }
 
-const snapshotControl = new snapshotControlClass() // singleton
+// const snapshotControl = new SnapshotControl() // singleton
 
-export default snapshotControl
+export default SnapshotControl
