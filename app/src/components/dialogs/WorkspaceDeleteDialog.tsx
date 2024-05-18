@@ -9,14 +9,6 @@ import {
     useToast,
 } from '@chakra-ui/react'
 
-import { 
-    doc, collection, 
-    query, where, getDocs, // orderBy, 
-    getDoc, // deleteDoc, setDoc, updateDoc
-    increment, // serverTimestamp,
-    runTransaction,
-} from 'firebase/firestore'
-
 import { useNavigate } from 'react-router-dom'
 
 import { 
@@ -33,31 +25,21 @@ const WorkspaceDeleteDialog = (props) => {
         { setDeleteDialogState } = props,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
-        db = useFirestore(),
         cancelRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
-        // workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
-        errorControl = useErrorControl(),
-        navigate = useNavigate(),
-        usage = useUsage()
+        navigate = useNavigate()
 
     useEffect(()=>{
-        checkIsDefaultWorkspace()
+        setIsDefaultState(workspaceHandler.workspaceRecord.profile.flags.is_default)
     },[])
 
     const doClose = () => {
 
         // isOpen = false
         setDeleteDialogState(false)
-
-    }
-
-    const checkIsDefaultWorkspace = () => {
-
-        setIsDefaultState(workspaceHandler.workspaceRecord.profile.flags.is_default)
 
     }
 

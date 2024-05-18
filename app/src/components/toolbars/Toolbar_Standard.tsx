@@ -253,7 +253,6 @@ const StandardToolbar = (props) => {
 
     const workspacemenuList = useMemo(() => {
 
-        // if (workspacesMenu.length === 0) return null
         const defaultValue = workspaceHandler.workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
