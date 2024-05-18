@@ -229,10 +229,10 @@ const StandardToolbar = (props) => {
 
         usage.write(1)
 
-        const { setWorkspaceConfiguration } = workspaceHandlerObject
+        const { setWorkspaceHandlerObject } = workspaceHandlerObject
 
         // ---- SAVE workspace config ----
-        setWorkspaceConfiguration((previousState)=>{ 
+        setWorkspaceHandlerObject((previousState)=>{ 
             previousState.settings.changed = false
             previousState.changedRecords.setworkspace = null
             previousState.changedRecords.setwindowpositions.clear(),
@@ -249,10 +249,10 @@ const StandardToolbar = (props) => {
         const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selectionElement.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
-        const { setWorkspaceConfiguration } = workspaceHandlerObject
+        const { setWorkspaceHandlerObject } = workspaceHandlerObject
         
         // ---- SWITCH workspace selection ----
-        setWorkspaceConfiguration((previousState) => { 
+        setWorkspaceHandlerObject((previousState) => { 
             // console.log('setting workspaceHandlerObject in toolbar_standard')
             previousState.workspaceSelection.id = workspaceID
             previousState.workspaceSelection.name = workspaceName

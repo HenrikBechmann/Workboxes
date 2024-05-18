@@ -36,7 +36,7 @@ const WorkspaceSaveDialog = (props) => {
     const
         { setSaveDialogState } = props,
         workspaceHandlerObject = useWorkspaceConfiguration(),
-        { setWorkspaceConfiguration } = workspaceHandlerObject,
+        { setWorkspaceHandlerObject } = workspaceHandlerObject,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         db = useFirestore(),
@@ -55,7 +55,7 @@ const WorkspaceSaveDialog = (props) => {
     const setAutomaticSave = () => {
 
         // ---- set save MODE ----
-        setWorkspaceConfiguration((previousState) => { 
+        setWorkspaceHandlerObject((previousState) => { 
             previousState.settings.mode = 'automatic'
             return {...previousState}
         })
@@ -65,7 +65,7 @@ const WorkspaceSaveDialog = (props) => {
     const setManualSave = () => {
         
         // ---- set save MODE ----
-        setWorkspaceConfiguration((previousState) => {
+        setWorkspaceHandlerObject((previousState) => {
             previousState.settings.mode = 'manual'
             return {...previousState}
         })
@@ -77,7 +77,7 @@ const WorkspaceSaveDialog = (props) => {
             dbcollection = collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),
             workspaceID = workspaceHandlerObject.workspaceRecord.profile.workspace.id,
             dbdocRef = doc(dbcollection,workspaceID),
-            { setWorkspaceConfiguration } = workspaceHandlerObject
+            { setWorkspaceHandlerObject } = workspaceHandlerObject
 
         let dbdoc
         try {
@@ -109,7 +109,7 @@ const WorkspaceSaveDialog = (props) => {
             }
 
             // ---- set RELOAD workspace data ----
-            setWorkspaceConfiguration((previousState)=>{ 
+            setWorkspaceHandlerObject((previousState)=>{ 
                 previousState.workspaceRecord = workspaceData
                 previousState.workspaceSelection.id = workspaceID
                 previousState.workspaceSelection.name = workspaceName

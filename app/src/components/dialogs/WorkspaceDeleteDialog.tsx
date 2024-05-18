@@ -142,10 +142,10 @@ const WorkspaceDeleteDialog = (props) => {
         usage.write(1)
 
         // set current workspace to default
-        const {setWorkspaceConfiguration} = workspaceHandlerObject
+        const {setWorkspaceHandlerObject} = workspaceHandlerObject
 
         // ---- set NEW workspace ----
-        setWorkspaceConfiguration((previousState)=>{ 
+        setWorkspaceHandlerObject((previousState)=>{ 
             previousState.workspaceSelection.id = defaultWorkspace.profile.workspace.id
             previousState.workspaceSelection.name = defaultWorkspace.profile.workspace.name
             return {...previousState} // get new workspace

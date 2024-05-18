@@ -257,10 +257,10 @@ export const Main = (props) => {
         }
 
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
-        const { setWorkspaceConfiguration } = workspaceHandlerObject // for standard toolbar component
+        const { setWorkspaceHandlerObject } = workspaceHandlerObject // for standard toolbar component
 
         // ---- DISTRIBUTE first workspace record ----
-        setWorkspaceConfiguration((previousState) => { 
+        setWorkspaceHandlerObject((previousState) => { 
             previousState.workspaceSelection.id = workspaceSelectionRecord.profile.workspace.id
             previousState.workspaceSelection.name = workspaceSelectionRecord.profile.workspace.name
             previousState.workspaceRecord = workspaceSelectionRecord
@@ -323,10 +323,10 @@ export const Main = (props) => {
             return
         }
         usage.write(1)
-        const { setWorkspaceConfiguration } = workspaceHandlerObject
+        const { setWorkspaceHandlerObject } = workspaceHandlerObject
 
         // ---- DISTRIBUTE loaded workspace record ----
-        setWorkspaceConfiguration((previousState)=>{ 
+        setWorkspaceHandlerObject((previousState)=>{ 
             previousState.workspaceRecord = workspaceData
             previousState.settings.changed = false
             previousState.changedRecords.setworkspace = null
