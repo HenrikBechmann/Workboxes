@@ -106,7 +106,6 @@ class WorkspaceHandler {
             result.error = true
             console.log('error fetching default workspace for delete workspace')
             this.errorControl.push({description:'error no default workspace record found to deleted workspace from standard toolbar', error:'N/A'})
-            // navigate('/error')
             return result
         }
 
@@ -147,12 +146,10 @@ class WorkspaceHandler {
             result.error = true
             console.log('error deleting workspace or incrementing workspace count')
             this.errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
-            // navigate('/error')
             return result
         }
         result.success = transactionResult
         if (!transactionResult) {
-            // toast({description:'workspace not found, so not deleted'})
             result.description = 'workspace not found, so not deleted'
             this.usage.read(panelCount + 1)
             // setDeleteDialogState(false)
@@ -170,16 +167,8 @@ class WorkspaceHandler {
             defaultWorkspace.profile.workspace.id,
             defaultWorkspace.profile.workspace.name
         )
-        // dispatchWorkspaceHandler()
-
-        // toast({
-        //     description: 
-        //         `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
-        // })
         result.description = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
         return result
-
-        // setDeleteDialogState(false)
 
     }
 
