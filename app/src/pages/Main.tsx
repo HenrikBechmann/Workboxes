@@ -259,10 +259,14 @@ export const Main = (props) => {
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
 
         // ---- DISTRIBUTE first workspace record ----
-        workspaceHandler.setSelection(
+        const success = await workspaceHandler.setSelection(
             workspaceSelectionRecord.profile.workspace.id,
             workspaceSelectionRecord.profile.workspace.name
         )
+        if (!success) {
+            navigate('error')
+            return
+        }
         workspaceHandler.workspaceRecord = workspaceSelectionRecord
         workspaceHandler.flags.new_workspace = true
         dispatchWorkspaceHandler()

@@ -50,10 +50,10 @@ const
 
     // make workboxes resources available
     snapshotControl = new SnapshotControl(),
-    workspaceHandlerInstance = new WorkspaceHandler(firestore),
-    SnapshotControlContext = createContext(snapshotControl),
     errorArray = [],
     ErrorControlContext = createContext(errorArray),
+    workspaceHandlerInstance = new WorkspaceHandler(firestore,errorArray),
+    SnapshotControlContext = createContext(snapshotControl),
 
     // for UserProvider
     UserAuthDataContext = createContext(null),
@@ -209,6 +209,7 @@ export const UserProvider = ({children}) => {
     useEffect(()=>{
         setWorkspaceHandler((previousState) => {
             previousState.current.setWorkspaceHandler = setWorkspaceHandler
+            previousState.current.usage = usage
             return {...previousState}
         })
     },[])
@@ -253,6 +254,7 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
+                workspaceHandler.current.userID = user.uid
                 usage.login(1)
                 setUserState('useridentified')
     

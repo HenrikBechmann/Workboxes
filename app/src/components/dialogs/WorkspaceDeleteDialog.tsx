@@ -55,7 +55,7 @@ const WorkspaceDeleteDialog = (props) => {
 
     }
 
-    function checkIsDefaultWorkspace() {
+    const checkIsDefaultWorkspace = () => {
 
         setIsDefaultState(workspaceHandler.workspaceRecord.profile.flags.is_default)
 
@@ -63,99 +63,17 @@ const WorkspaceDeleteDialog = (props) => {
 
     async function doDeleteWorkspace() {
 
-        // get default workspace
-        const 
-            dbWorkspaceCollection = collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),
-            dbWorkspaceQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true))
+        const result = await workspaceHandler.deleteWorkspace()
 
-        let dbDefaultWorkspace
-        try {
-            dbDefaultWorkspace = await getDocs(dbWorkspaceQuery)
-        } catch (error) {
-            console.log('error fetching user workspace collection')
-            errorControl.push({description:'error fetching user workspace collection from standard toolbar', error:'N/A'})
-            navigate('/error')
-            return
-        }
-        usage.read(1)
-        let dbDefaultDoc, defaultWorkspace
-        if (dbDefaultWorkspace.size == 1) {
-            dbDefaultDoc = dbDefaultWorkspace.docs[0]
-            defaultWorkspace = dbDefaultDoc.data()
-        } else {
-            // TODO should try to recover from this
-            console.log('error fetching default workspace for delete workspace')
-            errorControl.push({description:'error no default workspace record found to deleted workspace from standard toolbar', error:'N/A'})
+        if (result.error) {
             navigate('/error')
             return
         }
 
-        const 
-            previousWorkspaceName = workspaceHandler.workspaceSelection.name,
-            defaultWorkspaceName = defaultWorkspace.profile.workspace.name
-
-        // delete current workspace
-        let panelCount, transactionResult
-        try {
-            const
-                workspaceID = workspaceHandler.workspaceSelection.id,
-                dbWorkspacePanelCollection = 
-                    collection(db,'users',userRecords.user.profile.user.id, 'workspaces',workspaceID,'panels'),
-                dbWorkspacePanelsQuery = query(dbWorkspacePanelCollection),
-                dbPanelQueryResult = await getDocs(dbWorkspacePanelsQuery),
-                dbPanelDocs = dbPanelQueryResult.docs
-
-            panelCount = dbPanelQueryResult.size
-
-            transactionResult = await runTransaction(db, async (transaction) => {
-
-                const workspaceDocRef = doc(collection(db,'users',userRecords.user.profile.user.id, 'workspaces'),workspaceID)
-                const dbWorkspaceDoc = await transaction.get(workspaceDocRef)
-                if (!dbWorkspaceDoc.exists()) return false
-
-                for (const dbdoc of dbPanelDocs) {
-                    transaction.delete(dbdoc.ref)
-                }
-                transaction.delete(workspaceDocRef)
-                // update count
-                transaction.update(doc(collection(db,'users'),userRecords.user.profile.user.id),{'profile.counts.workspaces':increment(-1)})
-                return true
-            })
-
-        } catch (error) {
-            // TODO should try to recover from this
-            console.log('error deleting workspace or incrementing workspace count')
-            errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
-            navigate('/error')
-            return
-        }
-        if (!transactionResult) {
-            toast({description:'workspace not found, so not deleted'})
-            usage.read(panelCount + 1)
-            setDeleteDialogState(false)
-            return
-        }
-        // TODO check for panel sub-docs in case there was a concurrency issue
-
-        usage.read(panelCount + 1)
-        usage.delete(panelCount + 1)
-        usage.write(1)
-
-        // set current workspace to default
-        // ---- set NEW workspace ----
-        workspaceHandler.setSelection(
-            defaultWorkspace.profile.workspace.id,
-            defaultWorkspace.profile.workspace.name
-        )
-        dispatchWorkspaceHandler()
-
-        toast({
-            description: 
-                `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
-        })
-
+        toast({description:result.description})
         setDeleteDialogState(false)
-
+        dispatchWorkspaceHandler()
+        
     }
 
     // TODO to come
