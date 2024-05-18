@@ -103,7 +103,7 @@ const StandardToolbar = (props) => {
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
         // workspace data
-        workspaceConfiguration = useWorkspaceConfiguration(),
+        workspaceHandlerObject = useWorkspaceConfiguration(),
         [workspaceList,setWorkspaceList] = useState([]), // empty array to avoid menu processing error
         [workspaceMenuList, setWorkspaceMenuList] = useState(null),
         // toolbar resources
@@ -147,7 +147,7 @@ const StandardToolbar = (props) => {
     // initialize
     useEffect(()=>{
         getWorkspaceList()
-    },[workspaceConfiguration])
+    },[workspaceHandlerObject])
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
@@ -212,10 +212,10 @@ const StandardToolbar = (props) => {
 
     async function saveWorkspaceConfig() {
 
-        const { settings, changedRecords } = workspaceConfiguration
+        const { settings, changedRecords } = workspaceHandlerObject
         if (!settings.changed && !changedRecords.setworkspace) return
 
-        const workspaceRecord = workspaceConfiguration.workspaceRecord
+        const workspaceRecord = workspaceHandlerObject.workspaceRecord
         const dbcollection = collection(db, 'users', userRecords.user.profile.user.id, 'workspaces')
         const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
         try {
@@ -229,7 +229,7 @@ const StandardToolbar = (props) => {
 
         usage.write(1)
 
-        const { setWorkspaceConfiguration } = workspaceConfiguration
+        const { setWorkspaceConfiguration } = workspaceHandlerObject
 
         // ---- SAVE workspace config ----
         setWorkspaceConfiguration((previousState)=>{ 
@@ -249,11 +249,11 @@ const StandardToolbar = (props) => {
         const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selectionElement.dataset.name
         // console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
-        const { setWorkspaceConfiguration } = workspaceConfiguration
+        const { setWorkspaceConfiguration } = workspaceHandlerObject
         
         // ---- SWITCH workspace selection ----
         setWorkspaceConfiguration((previousState) => { 
-            // console.log('setting workspaceConfiguration in toolbar_standard')
+            // console.log('setting workspaceHandlerObject in toolbar_standard')
             previousState.workspaceSelection.id = workspaceID
             previousState.workspaceSelection.name = workspaceName
             return {...previousState}
@@ -263,7 +263,7 @@ const StandardToolbar = (props) => {
     const workspacemenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
-        const defaultValue = workspaceConfiguration.workspaceSelection.id
+        const defaultValue = workspaceHandlerObject.workspaceSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
@@ -293,7 +293,7 @@ const StandardToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    },[workspaceList, workspaceConfiguration])
+    },[workspaceList, workspaceHandlerObject])
 
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />
@@ -333,17 +333,17 @@ const StandardToolbar = (props) => {
                 <ToolbarVerticalDivider />
                 <MenuControl 
                     icon = {workspacesIcon} 
-                    displayName = {workspaceConfiguration.workspaceSelection.name} 
+                    displayName = {workspaceHandlerObject.workspaceSelection.name} 
                     tooltip = 'select a workspace'
                     caption = 'workspace'
                     menulist = {workspacemenuList} 
                 />
                 <StandardIcon response = {uploadSettingDialog} isDialog = {true} icon = {uploadCloudIcon} 
-                    caption = {workspaceConfiguration.settings.mode} tooltip = 'set saving behaviour' />
+                    caption = {workspaceHandlerObject.settings.mode} tooltip = 'set saving behaviour' />
                 <StandardIcon response = {saveWorkspaceConfig} icon = {uploadCloudIcon}
-                    emphasis = {workspaceConfiguration.settings.changed?'true':false} 
-                    highlight = {workspaceConfiguration.settings.mode == 'automatic'?false:true}
-                    caption = {workspaceConfiguration.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />
+                    emphasis = {workspaceHandlerObject.settings.changed?'true':false} 
+                    highlight = {workspaceHandlerObject.settings.mode == 'automatic'?false:true}
+                    caption = {workspaceHandlerObject.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />
             </>
         } 
         <ToolbarVerticalDivider />
@@ -362,7 +362,7 @@ const StandardToolbar = (props) => {
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
         {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} 
-            workspaceConfiguration = {workspaceConfiguration} />}
+            workspaceHandlerObject = {workspaceHandlerObject} />}
     </Box>
 }
 

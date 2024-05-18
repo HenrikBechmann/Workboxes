@@ -64,8 +64,8 @@ const Workspace = (props) => {
 
     const 
         { panelDataRef } = props,
-        workspaceConfiguration = useWorkspaceConfiguration(),
-        workspaceData = workspaceConfiguration.workspaceRecord,
+        workspaceHandlerObject = useWorkspaceConfiguration(),
+        workspaceData = workspaceHandlerObject.workspaceRecord,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
         // [panelList, setPanelList] = useState(null),
@@ -84,7 +84,7 @@ const Workspace = (props) => {
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
-    // console.log('workspaceData, workspaceConfiguration', workspaceData, workspaceConfiguration)
+    // console.log('workspaceData, workspaceHandlerObject', workspaceData, workspaceHandlerObject)
 
     async function getPanels() {
 
@@ -247,8 +247,8 @@ const Workspace = (props) => {
     // set up panels
     useEffect(()=>{
 
-        if (workspaceConfiguration.flags.new_workspace) {
-            workspaceConfiguration.flags.new_workspace = false
+        if (workspaceHandlerObject.flags.new_workspace) {
+            workspaceHandlerObject.flags.new_workspace = false
             getPanels()  
         } 
 
@@ -318,7 +318,7 @@ const Workspace = (props) => {
         //         }
         //     },
 
-    },[workspaceConfiguration])
+    },[workspaceHandlerObject])
 
     const resizeCallback = useCallback((entries)=>{
 

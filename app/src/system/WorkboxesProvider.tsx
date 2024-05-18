@@ -140,10 +140,11 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceConfiguration, setWorkspaceConfiguration] = 
+        [workspaceHandlerObject, setWorkspaceConfiguration] = 
             useState({
                 workspaceSelection: {id:null, name:null},
                 workspaceRecord: null,
+                panelRecords: new Map(),
                 settings: {mode:'automatic', changed: false},
                 setWorkspaceConfiguration:null,
                 changedRecords: {
@@ -218,7 +219,7 @@ export const UserProvider = ({children}) => {
 
     },[])
 
-    // initialize workspaceConfiguration with setWorkspaceConfiguration function
+    // initialize workspaceHandlerObject with setWorkspaceConfiguration function
     useEffect(()=>{
         setWorkspaceConfiguration((previousState) => {
             previousState.setWorkspaceConfiguration = setWorkspaceConfiguration
@@ -851,7 +852,7 @@ export const UserProvider = ({children}) => {
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
-        <WorkspaceConfigurationContext.Provider value = {workspaceConfiguration} >
+        <WorkspaceConfigurationContext.Provider value = {workspaceHandlerObject} >
         <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}

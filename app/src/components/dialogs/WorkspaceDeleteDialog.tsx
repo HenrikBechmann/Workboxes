@@ -35,7 +35,7 @@ const WorkspaceDeleteDialog = (props) => {
         userRecords = useUserRecords(),
         db = useFirestore(),
         cancelRef = useRef(null),
-        workspaceConfiguration = useWorkspaceConfiguration(),
+        workspaceHandlerObject = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         // workspaceRecordRef = useRef(null),
@@ -57,7 +57,7 @@ const WorkspaceDeleteDialog = (props) => {
 
     function checkIsDefaultWorkspace() {
 
-        setIsDefaultState(workspaceConfiguration.workspaceRecord.profile.flags.is_default)
+        setIsDefaultState(workspaceHandlerObject.workspaceRecord.profile.flags.is_default)
 
     }
 
@@ -91,14 +91,14 @@ const WorkspaceDeleteDialog = (props) => {
         }
 
         const 
-            previousWorkspaceName = workspaceConfiguration.workspaceSelection.name,
+            previousWorkspaceName = workspaceHandlerObject.workspaceSelection.name,
             defaultWorkspaceName = defaultWorkspace.profile.workspace.name
 
         // delete current workspace
         let panelCount, transactionResult
         try {
             const
-                workspaceID = workspaceConfiguration.workspaceSelection.id,
+                workspaceID = workspaceHandlerObject.workspaceSelection.id,
                 dbWorkspacePanelCollection = 
                     collection(db,'users',userRecords.user.profile.user.id, 'workspaces',workspaceID,'panels'),
                 dbWorkspacePanelsQuery = query(dbWorkspacePanelCollection),
@@ -142,7 +142,7 @@ const WorkspaceDeleteDialog = (props) => {
         usage.write(1)
 
         // set current workspace to default
-        const {setWorkspaceConfiguration} = workspaceConfiguration
+        const {setWorkspaceConfiguration} = workspaceHandlerObject
 
         // ---- set NEW workspace ----
         setWorkspaceConfiguration((previousState)=>{ 
@@ -181,17 +181,17 @@ const WorkspaceDeleteDialog = (props) => {
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
                         
-                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'automatic')) && 
+                        {(!isDefaultState && (workspaceHandlerObject.settings.mode == 'automatic')) && 
                             <Text>
                                 Continue? The current workspace (<span style = {{fontStyle:'italic'}}>
-                                    {workspaceConfiguration.workspaceSelection.name}</span>) will be deleted, 
+                                    {workspaceHandlerObject.workspaceSelection.name}</span>) will be deleted, 
                                 and replaced by the default workspace.
                             </Text>
                         }
 
-                        {(!isDefaultState && (workspaceConfiguration.settings.mode == 'manual')) && <>
+                        {(!isDefaultState && (workspaceHandlerObject.settings.mode == 'manual')) && <>
                             <Text>The workspace <span style = {{fontStyle:'italic'}}>
-                                {workspaceConfiguration.workspaceSelection.name}</span> cannot
+                                {workspaceHandlerObject.workspaceSelection.name}</span> cannot
                                 be deleted because it is set for manual saving, protecting other instances of this login. 
                             </Text>
                             <Text mt = '6px'>But it can be reset, which would remove all of its panels other than
@@ -201,9 +201,9 @@ const WorkspaceDeleteDialog = (props) => {
 
                         {isDefaultState && <>
                             <Text>The workspace <span style = {{fontStyle:'italic'}}>
-                                {workspaceConfiguration.workspaceSelection.name}</span> cannot
+                                {workspaceHandlerObject.workspaceSelection.name}</span> cannot
                                 be deleted because it is the default workspace. 
-                                {(workspaceConfiguration.settings.mode == 'manual')
+                                {(workspaceHandlerObject.settings.mode == 'manual')
                                     && '... and because workspace save is set to manual.'
                                 }
                             </Text>
@@ -223,8 +223,8 @@ const WorkspaceDeleteDialog = (props) => {
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
                             onClick = {!isDefaultState? doDeleteWorkspace: doResetWorkspace}
                         >
-                          {(!isDefaultState && (workspaceConfiguration.settings.mode == 'automatic')) && 'Delete'}
-                          {(isDefaultState || (workspaceConfiguration.settings.mode == 'manual')) && 'Reset'}
+                          {(!isDefaultState && (workspaceHandlerObject.settings.mode == 'automatic')) && 'Delete'}
+                          {(isDefaultState || (workspaceHandlerObject.settings.mode == 'manual')) && 'Reset'}
 
                         </Button>
                     </AlertDialogFooter>

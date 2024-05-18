@@ -51,7 +51,7 @@ const WorkspaceWriteDialog = (props) => {
             name: false,
         }),
         newInvocationRef = useRef(true),
-        workspaceConfiguration = useWorkspaceConfiguration(),
+        workspaceHandlerObject = useWorkspaceConfiguration(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -63,14 +63,14 @@ const WorkspaceWriteDialog = (props) => {
     useEffect(()=>{
         if (newInvocationRef.current) {
             (dialogStateRef.current.action == 'changename')
-                ? setWriteValues({name:workspaceConfiguration.workspaceSelection.name})
+                ? setWriteValues({name:workspaceHandlerObject.workspaceSelection.name})
                 : setWriteValues({name:''})
             if (dialogStateRef.current.action == 'createworkspace') {
                 writeIsInvalidTests.name('')
             }
             newInvocationRef.current = false
         }
-    },[newInvocationRef.current, workspaceConfiguration])
+    },[newInvocationRef.current, workspaceHandlerObject])
 
 
     const writeHelperText = {
@@ -111,12 +111,12 @@ const WorkspaceWriteDialog = (props) => {
         }
         setAlertState('processing')
 
-        if (workspaceConfiguration.settings.mode == 'automatic') {
+        if (workspaceHandlerObject.settings.mode == 'automatic') {
             // changename user workspace data
             const 
                 userRecord = userRecords.user,
                 userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-                workspaceID = workspaceConfiguration.workspaceSelection.id,
+                workspaceID = workspaceHandlerObject.workspaceSelection.id,
                 workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
                 updateBlock = {}
 
@@ -152,17 +152,17 @@ const WorkspaceWriteDialog = (props) => {
             usage.write(fieldsToUpdateCount?2:1)
         }
 
-        // changename workspaceConfiguration
-        const { setWorkspaceConfiguration } = workspaceConfiguration
+        // changename workspaceHandlerObject
+        const { setWorkspaceConfiguration } = workspaceHandlerObject
 
         // ---- UPDATE workspace name ----
         setWorkspaceConfiguration((previousState) => { 
-            if (workspaceConfiguration.settings.mode == 'manual') {
-                if (!workspaceConfiguration.settings.changed) {
+            if (workspaceHandlerObject.settings.mode == 'manual') {
+                if (!workspaceHandlerObject.settings.changed) {
                     previousState.settings.changed = true
                 }
-                if (!workspaceConfiguration.changedRecords.setworkspace) {
-                    previousState.changedRecords.setworkspace = workspaceConfiguration.workspaceSelection.id
+                if (!workspaceHandlerObject.changedRecords.setworkspace) {
+                    previousState.changedRecords.setworkspace = workspaceHandlerObject.workspaceSelection.id
                 }
             }
             previousState.workspaceSelection.name = writeValues.name
@@ -227,7 +227,7 @@ const WorkspaceWriteDialog = (props) => {
         usage.write(1)
         usage.create(1)
 
-        const { setWorkspaceConfiguration } = workspaceConfiguration
+        const { setWorkspaceConfiguration } = workspaceHandlerObject
 
         // ---- create NEW workspace ----
         setWorkspaceConfiguration((previousState) => { 
