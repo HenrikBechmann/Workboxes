@@ -29,7 +29,7 @@ import {
     useUserRecords, 
     // useAuth, 
     useFirestore, 
-    useWorkspaceConfiguration, 
+    useWorkspaceHandler, 
     useSystemRecords,
     useErrorControl,
     useUsage,
@@ -51,7 +51,7 @@ const WorkspaceWriteDialog = (props) => {
             name: false,
         }),
         newInvocationRef = useRef(true),
-        workspaceHandlerObject = useWorkspaceConfiguration(),
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -63,14 +63,14 @@ const WorkspaceWriteDialog = (props) => {
     useEffect(()=>{
         if (newInvocationRef.current) {
             (dialogStateRef.current.action == 'changename')
-                ? setWriteValues({name:workspaceHandlerObject.workspaceSelection.name})
+                ? setWriteValues({name:workspaceHandler.workspaceSelection.name})
                 : setWriteValues({name:''})
             if (dialogStateRef.current.action == 'createworkspace') {
                 writeIsInvalidTests.name('')
             }
             newInvocationRef.current = false
         }
-    },[newInvocationRef.current, workspaceHandlerObject])
+    },[newInvocationRef.current, workspaceHandler])
 
 
     const writeHelperText = {
@@ -111,12 +111,12 @@ const WorkspaceWriteDialog = (props) => {
         }
         setAlertState('processing')
 
-        if (workspaceHandlerObject.settings.mode == 'automatic') {
+        if (workspaceHandler.settings.mode == 'automatic') {
             // changename user workspace data
             const 
                 userRecord = userRecords.user,
                 userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-                workspaceID = workspaceHandlerObject.workspaceSelection.id,
+                workspaceID = workspaceHandler.workspaceSelection.id,
                 workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
                 updateBlock = {}
 
@@ -152,23 +152,19 @@ const WorkspaceWriteDialog = (props) => {
             usage.write(fieldsToUpdateCount?2:1)
         }
 
-        // changename workspaceHandlerObject
-        const { setWorkspaceHandlerObject } = workspaceHandlerObject
-
+        // changename workspaceHandler
         // ---- UPDATE workspace name ----
-        setWorkspaceHandlerObject((previousState) => { 
-            if (workspaceHandlerObject.settings.mode == 'manual') {
-                if (!workspaceHandlerObject.settings.changed) {
-                    previousState.settings.changed = true
-                }
-                if (!workspaceHandlerObject.changedRecords.setworkspace) {
-                    previousState.changedRecords.setworkspace = workspaceHandlerObject.workspaceSelection.id
-                }
+        if (workspaceHandler.settings.mode == 'manual') {
+            if (!workspaceHandler.settings.changed) {
+                workspaceHandler.settings.changed = true
             }
-            previousState.workspaceSelection.name = writeValues.name
-            previousState.workspaceRecord.profile.workspace.name = writeValues.name
-            return {...previousState}
-        })
+            if (!workspaceHandler.changedRecords.setworkspace) {
+                workspaceHandler.changedRecords.setworkspace = workspaceHandler.workspaceSelection.id
+            }
+        }
+        workspaceHandler.workspaceSelection.name = writeValues.name
+        workspaceHandler.workspaceRecord.profile.workspace.name = writeValues.name
+        dispatchWorkspaceHandler()
 
         doClose()
 
@@ -227,14 +223,10 @@ const WorkspaceWriteDialog = (props) => {
         usage.write(1)
         usage.create(1)
 
-        const { setWorkspaceHandlerObject } = workspaceHandlerObject
-
         // ---- create NEW workspace ----
-        setWorkspaceHandlerObject((previousState) => { 
-            previousState.workspaceSelection.name = writeValues.name
-            previousState.workspaceSelection.id = newWorkspaceDocRef.id
-            return {...previousState} // new workspace data
-        })
+        workspaceHandler.workspaceSelection.name = writeValues.name
+        workspaceHandler.workspaceSelection.id = newWorkspaceDocRef.id
+        dispatchWorkspaceHandler()
 
         doClose()
 

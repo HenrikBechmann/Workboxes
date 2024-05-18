@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import { 
     useUserRecords, 
     useFirestore, 
-    useWorkspaceConfiguration, 
+    useWorkspaceHandler, 
     useErrorControl,
     useUsage,
 } from '../../system/WorkboxesProvider'
@@ -35,8 +35,7 @@ const WorkspaceSaveDialog = (props) => {
 
     const
         { setSaveDialogState } = props,
-        workspaceHandlerObject = useWorkspaceConfiguration(),
-        { setWorkspaceHandlerObject } = workspaceHandlerObject,
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         db = useFirestore(),
@@ -55,29 +54,24 @@ const WorkspaceSaveDialog = (props) => {
     const setAutomaticSave = () => {
 
         // ---- set save MODE ----
-        setWorkspaceHandlerObject((previousState) => { 
-            previousState.settings.mode = 'automatic'
-            return {...previousState}
-        })
+        workspaceHandler.settings.mode = 'automatic'
+        dispatchWorkspaceHandler()
         doClose()
     }
 
     const setManualSave = () => {
         
         // ---- set save MODE ----
-        setWorkspaceHandlerObject((previousState) => {
-            previousState.settings.mode = 'manual'
-            return {...previousState}
-        })
+        workspaceHandler.settings.mode = 'manual'
+        dispatchWorkspaceHandler()
         doClose()
     }
 
     async function reloadWorkspace() {
         const 
             dbcollection = collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),
-            workspaceID = workspaceHandlerObject.workspaceRecord.profile.workspace.id,
-            dbdocRef = doc(dbcollection,workspaceID),
-            { setWorkspaceHandlerObject } = workspaceHandlerObject
+            workspaceID = workspaceHandler.workspaceRecord.profile.workspace.id,
+            dbdocRef = doc(dbcollection,workspaceID)
 
         let dbdoc
         try {
@@ -109,16 +103,14 @@ const WorkspaceSaveDialog = (props) => {
             }
 
             // ---- set RELOAD workspace data ----
-            setWorkspaceHandlerObject((previousState)=>{ 
-                previousState.workspaceRecord = workspaceData
-                previousState.workspaceSelection.id = workspaceID
-                previousState.workspaceSelection.name = workspaceName
-                previousState.settings.changed = false
-                previousState.changedRecords.setworkspace = null
-                previousState.changedRecords.panels.clear()
-                previousState.flags.new_workspace = true
-                return {...previousState} // distribute new workspace
-            })
+            workspaceHandler.workspaceRecord = workspaceData
+            workspaceHandler.workspaceSelection.id = workspaceID
+            workspaceHandler.workspaceSelection.name = workspaceName
+            workspaceHandler.settings.changed = false
+            workspaceHandler.changedRecords.setworkspace = null
+            workspaceHandler.changedRecords.panels.clear()
+            workspaceHandler.flags.new_workspace = true
+            dispatchWorkspaceHandler()
             doClose()
 
         } else {
@@ -158,7 +150,7 @@ const WorkspaceSaveDialog = (props) => {
                             Manual saves can be helpful if your login is concurrently using more than one tab or device with
                             the same workspace. Automatic saves in that case can clobber each others' configuration settings.
                         </Text>
-                        {(workspaceHandlerObject.settings.mode == 'manual') && <Text>
+                        {(workspaceHandler.settings.mode == 'manual') && <Text>
                             <span style = {{fontWeight:'bold'}}>Reload...</span> to discard changes and start over.
                         </Text>}
                     </AlertDialogBody>
@@ -178,7 +170,7 @@ const WorkspaceSaveDialog = (props) => {
                         >
                           Manual saves
                         </Button>
-                        {(workspaceHandlerObject.settings.mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
+                        {(workspaceHandler.settings.mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
                             onClick = {reloadWorkspace}
                         >
                           Reload...

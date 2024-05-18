@@ -56,7 +56,7 @@ const
     UserAuthDataContext = createContext(null),
     UserRecordsContext = createContext(null),
     SystemRecordsContext = createContext(null),
-    WorkspaceConfigurationContext = createContext(null)
+    WorkspaceHandlerContext = createContext(null)
 
 // --------------------------------[ usage data collection ]-----------------------
 
@@ -140,13 +140,13 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceHandlerObject, setWorkspaceHandlerObject] = 
-            useState({
+        [workspaceHandler, setWorkspaceHandler] = 
+            useState({ current: {
+                setWorkspaceHandler:null,
                 workspaceSelection: {id:null, name:null},
                 workspaceRecord: null,
                 panelRecords: new Map(),
                 settings: {mode:'automatic', changed: false},
-                setWorkspaceHandlerObject:null,
                 changedRecords: {
                     setworkspace:null,
                     setwindowpositions: new Set(),
@@ -156,7 +156,7 @@ export const UserProvider = ({children}) => {
                 flags: {
                     new_workspace:true,
                 }
-            }),
+            }}),
 
         // bootstrap resources
         db = useFirestore(),
@@ -219,10 +219,10 @@ export const UserProvider = ({children}) => {
 
     },[])
 
-    // initialize workspaceHandlerObject with setWorkspaceHandlerObject function
+    // initialize workspaceHandler with dispatchWorkspaceHandler function
     useEffect(()=>{
-        setWorkspaceHandlerObject((previousState) => {
-            previousState.setWorkspaceHandlerObject = setWorkspaceHandlerObject
+        setWorkspaceHandler((previousState) => {
+            previousState.current.setWorkspaceHandler = setWorkspaceHandler
             return {...previousState}
         })
     },[])
@@ -852,13 +852,13 @@ export const UserProvider = ({children}) => {
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
-        <WorkspaceConfigurationContext.Provider value = {workspaceHandlerObject} >
+        <WorkspaceHandlerContext.Provider value = {workspaceHandler} >
         <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
         </UserRecordsContext.Provider>
         </UserAuthDataContext.Provider>
-        </WorkspaceConfigurationContext.Provider>
+        </WorkspaceHandlerContext.Provider>
         </SystemRecordsContext.Provider>
         </SnapshotControlContext.Provider>
         </ErrorControlContext.Provider>
@@ -901,8 +901,14 @@ const useSystemRecords = () => { // static
     return useContext(SystemRecordsContext)
 }
 
-const useWorkspaceConfiguration = () => { // static
-    return useContext(WorkspaceConfigurationContext)
+const useWorkspaceHandler = () => { // static
+    const workspaceHandlerContext = useContext(WorkspaceHandlerContext)
+    const workspaceHandler = workspaceHandlerContext.current
+    const { setWorkspaceHandler } = workspaceHandler
+    const dispatchWorkspaceHandler = () => {
+        setWorkspaceHandler({...workspaceHandlerContext})
+    }
+    return [workspaceHandler, dispatchWorkspaceHandler]
 }
 
 const useErrorControl = () => {
@@ -921,7 +927,7 @@ export {
     useUserAuthData,
     useUserRecords,
     useSystemRecords,
-    useWorkspaceConfiguration,
+    useWorkspaceHandler,
     useErrorControl,
 }
 

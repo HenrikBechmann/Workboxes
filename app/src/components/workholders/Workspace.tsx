@@ -33,7 +33,7 @@ import '../../system/panel-variables.css'
 import { updateDocumentSchema } from '../../system/utilities'
 
 import { useUserAuthData, useFirestore, useUserRecords, useErrorControl, useUsage,
-    useWorkspaceConfiguration } from '../../system/WorkboxesProvider'
+    useWorkspaceHandler } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -64,8 +64,8 @@ const Workspace = (props) => {
 
     const 
         { panelDataRef } = props,
-        workspaceHandlerObject = useWorkspaceConfiguration(),
-        workspaceData = workspaceHandlerObject.workspaceRecord,
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        workspaceData = workspaceHandler.workspaceRecord,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
         // [panelList, setPanelList] = useState(null),
@@ -84,7 +84,7 @@ const Workspace = (props) => {
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
-    // console.log('workspaceData, workspaceHandlerObject', workspaceData, workspaceHandlerObject)
+    // console.log('workspaceData, workspaceHandler', workspaceData, workspaceHandler)
 
     async function getPanels() {
 
@@ -247,8 +247,8 @@ const Workspace = (props) => {
     // set up panels
     useEffect(()=>{
 
-        if (workspaceHandlerObject.flags.new_workspace) {
-            workspaceHandlerObject.flags.new_workspace = false
+        if (workspaceHandler.flags.new_workspace) {
+            workspaceHandler.flags.new_workspace = false
             getPanels()  
         } 
 
@@ -318,7 +318,7 @@ const Workspace = (props) => {
         //         }
         //     },
 
-    },[workspaceHandlerObject])
+    },[workspaceHandler])
 
     const resizeCallback = useCallback((entries)=>{
 
