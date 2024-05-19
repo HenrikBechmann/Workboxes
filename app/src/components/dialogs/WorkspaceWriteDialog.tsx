@@ -111,59 +111,15 @@ const WorkspaceWriteDialog = (props) => {
         }
         setAlertState('processing')
 
-        if (workspaceHandler.settings.mode == 'automatic') {
-            // changename user workspace data
-            const 
-                userRecord = userRecords.user,
-                userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-                workspaceID = workspaceHandler.workspaceSelection.id,
-                workspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces'), workspaceID),
-                updateBlock = {}
+        const 
+            userRecord = userRecords.user,
+            result = await workspaceHandler.renameWorkspace(writeValues.name, userRecord)
 
-            let fieldsToUpdateCount = 0
-
-            if (workspaceID == userRecord.workspace.mobile.id) {
-                updateBlock['workspace.mobile.name'] = writeValues.name
-                fieldsToUpdateCount++
-            }
-            if (workspaceID == userRecord.workspace.desktop.id) {
-                updateBlock['workspace.desktop.name'] = writeValues.name
-                fieldsToUpdateCount++
-            }
-            try {
-                const batch = writeBatch(db)
-
-                if (fieldsToUpdateCount) {
-                    batch.update(userDocRef,updateBlock)
-                }
-
-                batch.update(workspaceDocRef, {
-                    'profile.workspace.name':writeValues.name
-                })
-
-                await batch.commit()
-
-            } catch (error) {
-                console.log('error updating workspace name from standard toolbar', error)
-                errorControl.push({description:'error updating workspace name from standard toolbar', error})
-                navigate('/error')   
-                return         
-            }
-            usage.write(fieldsToUpdateCount?2:1)
+        if (result.error) {
+           navigate('/error')
+           return
         }
 
-        // changename workspaceHandler
-        // ---- UPDATE workspace name ----
-        if (workspaceHandler.settings.mode == 'manual') {
-            if (!workspaceHandler.settings.changed) {
-                workspaceHandler.settings.changed = true
-            }
-            if (!workspaceHandler.changedRecords.setworkspace) {
-                workspaceHandler.changedRecords.setworkspace = workspaceHandler.workspaceSelection.id
-            }
-        }
-        workspaceHandler.workspaceSelection.name = writeValues.name
-        workspaceHandler.workspaceRecord.profile.workspace.name = writeValues.name
         dispatchWorkspaceHandler('rename')
 
         doClose()
@@ -177,7 +133,7 @@ const WorkspaceWriteDialog = (props) => {
             return
         }
         setAlertState('processing')
-        // changename user workspace data
+
         const 
             userRecord = userRecords.user,
             userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),

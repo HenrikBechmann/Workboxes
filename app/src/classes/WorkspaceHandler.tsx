@@ -8,6 +8,7 @@ import {
     updateDoc,
     increment, // serverTimestamp,
     runTransaction,
+    writeBatch,
 } from 'firebase/firestore'
 
 import { isMobile } from '../index'
@@ -24,7 +25,7 @@ class WorkspaceHandler {
     errorControl
     userID
     usage
-
+    trigger
 
     // data
     setWorkspaceHandler = null
@@ -240,6 +241,72 @@ class WorkspaceHandler {
             result.description = 'this workspace record no longer exists'
             return result
         }
+
+    }
+
+    async renameWorkspace(name, userRecord) {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+        }
+
+        if (this.settings.mode == 'automatic') {
+            // changename user workspace data
+            const 
+                userDocRef = doc(collection(this.db, 'users'), this.userID),
+                workspaceID = this.workspaceSelection.id,
+                workspaceDocRef = doc(collection(this.db, 'users',this.userID, 'workspaces'), workspaceID),
+                updateBlock = {}
+
+            let fieldsToUpdateCount = 0
+
+            if (workspaceID == userRecord.workspace.mobile.id) {
+                updateBlock['workspace.mobile.name'] = name
+                fieldsToUpdateCount++
+            }
+            if (workspaceID == userRecord.workspace.desktop.id) {
+                updateBlock['workspace.desktop.name'] = name
+                fieldsToUpdateCount++
+            }
+            try {
+                const batch = writeBatch(this.db)
+
+                if (fieldsToUpdateCount) {
+                    batch.update(userDocRef,updateBlock)
+                }
+
+                batch.update(workspaceDocRef, {
+                    'profile.workspace.name':name
+                })
+
+                await batch.commit()
+
+            } catch (error) {
+                console.log('error updating workspace name from standard toolbar', error)
+                this.errorControl.push({description:'error updating workspace name from standard toolbar', error})
+                result.error = true
+                // navigate('/error')   
+                return result
+            }
+            this.usage.write(fieldsToUpdateCount?2:1)
+        }
+
+        // changename workspaceHandler
+        // ---- UPDATE workspace name ----
+        if (this.settings.mode == 'manual') {
+            if (!this.settings.changed) {
+                this.settings.changed = true
+            }
+            if (!this.changedRecords.setworkspace) {
+                this.changedRecords.setworkspace = this.workspaceSelection.id
+            }
+        }
+        this.workspaceSelection.name = name
+        this.workspaceRecord.profile.workspace.name = name
+
+        return result
 
     }
 
