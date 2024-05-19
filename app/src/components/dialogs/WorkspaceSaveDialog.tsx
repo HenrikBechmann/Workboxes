@@ -1,7 +1,7 @@
 // WorkspaceSaveDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
+import React, {useRef, useState} from 'react'
 
 import {
     Button, Text,
@@ -9,22 +9,10 @@ import {
     useToast,
 } from '@chakra-ui/react'
 
-import { 
-    doc, collection, 
-    query, where, getDocs, // orderBy, 
-    getDoc, updateDoc, // deleteDoc, setDoc, 
-    increment, // serverTimestamp,
-    writeBatch,
-} from 'firebase/firestore'
-
 import { useNavigate } from 'react-router-dom'
 
 import { 
-    useUserRecords, 
-    useFirestore, 
     useWorkspaceHandler, 
-    useErrorControl,
-    useUsage,
 } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
@@ -35,17 +23,12 @@ const WorkspaceSaveDialog = (props) => {
 
     const
         { setSaveDialogState } = props,
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
         dialogStateRef = useRef(null),
-        userRecords = useUserRecords(),
-        db = useFirestore(),
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
-        // workspaceRecordRef = useRef(null),
         toast = useToast({duration:3000}),
-        errorControl = useErrorControl(),
-        navigate = useNavigate(),
-        usage = useUsage()
+        navigate = useNavigate()
 
     const doClose = () => {
         setSaveDialogState(false)
@@ -55,7 +38,8 @@ const WorkspaceSaveDialog = (props) => {
 
         // ---- set save MODE ----
         workspaceHandler.settings.mode = 'automatic'
-        dispatchWorkspaceHandler()
+        // TODO call immediate save on workspaceHandler
+        dispatchWorkspaceHandler('automatic')
         doClose()
     }
 
@@ -63,57 +47,23 @@ const WorkspaceSaveDialog = (props) => {
         
         // ---- set save MODE ----
         workspaceHandler.settings.mode = 'manual'
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('manual')
         doClose()
     }
 
     async function reloadWorkspace() {
-        const 
-            dbcollection = collection(db, 'users', userRecords.user.profile.user.id,'workspaces'),
-            workspaceID = workspaceHandler.workspaceRecord.profile.workspace.id,
-            dbdocRef = doc(dbcollection,workspaceID)
 
-        let dbdoc
-        try {
-            dbdoc = await getDoc(dbdocRef)
-        } catch(error) {
-            console.log('error in reload workspace', error)
-            errorControl.push({description:'error in reload workspace', error})
+        const result = await workspaceHandler.reloadWorkspace()
+        if (result.error) {
             navigate('/error')
             return
         }
-
-        if (dbdoc.exists()) {
-            const 
-                workspaceData = dbdoc.data(),
-                workspaceName = workspaceData.profile.workspace.name,
-                dbuserDocRef = doc(db,'users',userRecords.user.profile.user.id),
-                updateData = 
-                    isMobile
-                        ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
-                        : {'workspace.desktop': {id:workspaceID, name:workspaceName}}
-
-            try {
-                await updateDoc(dbuserDocRef,updateData)
-            } catch(error) {
-                console.log('error in update user workspace after reload', error)
-                errorControl.push({description:'error in update user workspace after reload', error})
-                navigate('/error')
-                return
-            }
-
-            // ---- set RELOAD workspace data ----
-            workspaceHandler.workspaceRecord = workspaceData
-            workspaceHandler.workspaceSelection.id = workspaceID
-            workspaceHandler.workspaceSelection.name = workspaceName
-            workspaceHandler.resetChanged()
-            workspaceHandler.flags.new_workspace = true
-            dispatchWorkspaceHandler()
-            doClose()
-
-        } else {
-            toast({description:'this workspace record no longer exists'})
+        if (result.desription) {
+            toast({description:result.description})
         }
+        dispatchWorkspaceHandler('reload')
+        doClose()
+
     }
 
     return (<>

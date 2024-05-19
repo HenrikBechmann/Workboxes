@@ -103,7 +103,7 @@ const StandardToolbar = (props) => {
         homepath = '/workspace',
         isHome = (pathname === '/' || pathname.substring(0,homepath.length) === homepath),
         // workspace data
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
         [workspaceList,setWorkspaceList] = useState([]), // empty array to avoid menu processing error
         [workspaceMenuList, setWorkspaceMenuList] = useState(null),
         // toolbar resources
@@ -117,6 +117,8 @@ const StandardToolbar = (props) => {
         workspaceMenuRef = useRef(null),
         errorControl = useErrorControl(),
         usage = useUsage()
+
+    console.log('running StandardToolbar')
 
     // --------------------- navigation functions ------------------
     const 
@@ -146,8 +148,9 @@ const StandardToolbar = (props) => {
 
     // initialize
     useEffect(()=>{
+        console.log('getWorkspaceList')
         getWorkspaceList()
-    },[workspaceHandler])
+    },[])
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
@@ -230,8 +233,8 @@ const StandardToolbar = (props) => {
         usage.write(1)
 
         // ---- SAVE workspace config ----
-        workspaceHandler.resetChanged()
-        dispatchWorkspaceHandler()
+        workspaceHandler.clearChanged()
+        dispatchWorkspaceHandler('save')
 
     }
 
@@ -248,12 +251,14 @@ const StandardToolbar = (props) => {
             navigate('/error')
             return
         }
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('selection')
     }
 
     const workspacemenuList = useMemo(() => {
 
         const defaultValue = workspaceHandler.workspaceSelection.id
+
+        console.log('setting workspacemenuList: defaultValue', defaultValue)
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
@@ -283,7 +288,7 @@ const StandardToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    },[workspaceList, workspaceHandler])
+    },[workspaceList]) //, workspacePayload])
 
 // <StandardIcon icon = {messageIcon} caption = 'direct' tooltip = 'Direct messages' response = {gotoMessages} />
 // <StandardIcon icon = {chatIcon} caption = 'chats' tooltip = 'Chatrooms with this account' response = {gotoChatrooms} />

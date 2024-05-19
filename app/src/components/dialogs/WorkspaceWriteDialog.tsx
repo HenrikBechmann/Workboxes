@@ -51,7 +51,7 @@ const WorkspaceWriteDialog = (props) => {
             name: false,
         }),
         newInvocationRef = useRef(true),
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -70,7 +70,7 @@ const WorkspaceWriteDialog = (props) => {
             }
             newInvocationRef.current = false
         }
-    },[newInvocationRef.current, workspaceHandler])
+    },[newInvocationRef.current, workspacePayload])
 
 
     const writeHelperText = {
@@ -164,6 +164,7 @@ const WorkspaceWriteDialog = (props) => {
         }
         workspaceHandler.workspaceSelection.name = writeValues.name
         workspaceHandler.workspaceRecord.profile.workspace.name = writeValues.name
+        console.log('dispatchWorkspaceHandler in doSaveRename')
         dispatchWorkspaceHandler()
 
         doClose()
@@ -226,7 +227,7 @@ const WorkspaceWriteDialog = (props) => {
         // ---- create NEW workspace ----
         workspaceHandler.workspaceSelection.name = writeValues.name
         workspaceHandler.workspaceSelection.id = newWorkspaceDocRef.id
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('create')
 
         doClose()
 

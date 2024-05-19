@@ -26,7 +26,7 @@ const WorkspaceDeleteDialog = (props) => {
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         cancelRef = useRef(null),
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         toast = useToast({duration:3000}),
@@ -54,7 +54,7 @@ const WorkspaceDeleteDialog = (props) => {
 
         toast({description:result.description})
         setDeleteDialogState(false)
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('delete')
         
     }
 

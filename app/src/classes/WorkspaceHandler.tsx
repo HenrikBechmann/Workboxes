@@ -42,12 +42,20 @@ class WorkspaceHandler {
         new_workspace:true
     }
 
+    clearChanged = () => {
+        this.settings.changed = false
+        this.changedRecords.setworkspace = null
+        this.changedRecords.setpanels.clear()
+        this.changedRecords.deletepanels.clear()
+        this.changedRecords.setwindowpositions.clear()
+    }
+
     // methods
     async setSelection (id, name) {
         this.workspaceSelection.id = id,
         this.workspaceSelection.name = name
-        try {
-            await updateDoc(doc(collection(this.db,'users'),this.userID),isMobile
+        const updateData = 
+            isMobile
                 ? {
                     'workspace.mobile.id':id,
                     'workspace.mobile.name':name,
@@ -56,21 +64,19 @@ class WorkspaceHandler {
                     'workspace.desktop.id':id,
                     'workspace.desktop.name':name,                    
                 }
-            )
+        try {
+
+            await updateDoc(doc(collection(this.db,'users'),this.userID),updateData)
+
         } catch (error) {
+
             console.log('signout error from standard toolbar', error)
             this.errorControl.push({description:'signout error from standard toolbar', error})
             return false
-        }
-        return true
-    }
 
-    resetChanged = () => {
-        this.settings.changed = false
-        this.changedRecords.setworkspace = null
-        this.changedRecords.setpanels.clear()
-        this.changedRecords.deletepanels.clear()
-        this.changedRecords.setwindowpositions.clear()
+        }
+        
+        return true
     }
 
     async deleteWorkspace() {
@@ -169,6 +175,71 @@ class WorkspaceHandler {
         )
         result.description = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
         return result
+
+    }
+
+    async reloadWorkspace() {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+        }
+
+        const 
+            dbcollection = collection(this.db, 'users', this.userID,'workspaces'),
+            workspaceID = this.workspaceRecord.profile.workspace.id,
+            dbdocRef = doc(dbcollection,workspaceID)
+
+        let dbdoc
+        try {
+            dbdoc = await getDoc(dbdocRef)
+        } catch(error) {
+            result.error = true
+            console.log('error in reload workspace', error)
+            this.errorControl.push({description:'error in reload workspace', error})
+            return result
+        }
+        this.usage.read(1)
+        if (dbdoc.exists()) {
+            const 
+                workspaceData = dbdoc.data(),
+                workspaceName = workspaceData.profile.workspace.name,
+                dbuserDocRef = doc(this.db,'users',this.userID),
+                updateData = 
+                    isMobile
+                        ? {
+                            'workspace.mobile.id':workspaceID,
+                            'workspace.mobile.name':workspaceName,
+                          }
+                        : {
+                            'workspace.desktop.id':workspaceID,
+                            'workspace.desktop.name':workspaceName,
+                          }
+
+            try {
+                await updateDoc(dbuserDocRef,updateData)
+            } catch(error) {
+                result.error = true
+                console.log('error in update user workspace after reload', error)
+                this.errorControl.push({description:'error in update user workspace after reload', error})
+                return result
+            }
+            this.usage.write(1)
+
+            // ---- set RELOAD workspace data ----
+            this.workspaceRecord = workspaceData
+            this.workspaceSelection.id = workspaceID
+            this.workspaceSelection.name = workspaceName
+            this.clearChanged()
+            this.flags.new_workspace = true
+            return result
+
+        } else {
+            result.success = false
+            result.description = 'this workspace record no longer exists'
+            return result
+        }
 
     }
 

@@ -895,11 +895,14 @@ const useWorkspaceHandler = () => {
         workspaceHandlerContext = useContext(WorkspaceHandlerContext),
         workspaceHandler = workspaceHandlerContext.current,
         { setWorkspaceHandler } = workspaceHandler,
-        dispatchWorkspaceHandler = () => {
-            setWorkspaceHandler({...workspaceHandlerContext})
+        workspacePayload = {...workspaceHandlerContext},
+        dispatchWorkspaceHandler = (trigger) => {
+            console.log('trigger, setWorkspaceHandler({...workspaceHandlerContext}) in dispatchWorkspaceHandler of useWorkspaceHandler', 
+                trigger, workspaceHandlerContext)
+            setWorkspaceHandler(workspacePayload)
         }
 
-    return [workspaceHandler, dispatchWorkspaceHandler]
+    return [workspaceHandler, dispatchWorkspaceHandler, workspacePayload]
 
 }
 

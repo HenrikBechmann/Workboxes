@@ -64,7 +64,7 @@ const Workspace = (props) => {
 
     const 
         { panelDataRef } = props,
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
         workspaceData = workspaceHandler.workspaceRecord,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
@@ -318,7 +318,7 @@ const Workspace = (props) => {
         //         }
         //     },
 
-    },[workspaceHandler])
+    },[workspacePayload])
 
     const resizeCallback = useCallback((entries)=>{
 
