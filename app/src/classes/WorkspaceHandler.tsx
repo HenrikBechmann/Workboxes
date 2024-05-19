@@ -9,7 +9,10 @@ import {
     increment, // serverTimestamp,
     runTransaction,
     writeBatch,
+    serverTimestamp,
 } from 'firebase/firestore'
+
+import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
 
@@ -24,6 +27,7 @@ class WorkspaceHandler {
     db
     errorControl
     userID
+    userName
     usage
     trigger
 
@@ -305,6 +309,66 @@ class WorkspaceHandler {
         }
         this.workspaceSelection.name = name
         this.workspaceRecord.profile.workspace.name = name
+
+        return result
+
+    }
+
+    async createWorkspace(name) {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+        }
+
+        const 
+            userDocRef = doc(collection(this.db, 'users'), this.userID),
+            newWorkspaceDocRef = doc(collection(this.db, 'users',this.userID, 'workspaces')),
+            newWorkspaceRecord = updateDocumentSchema('workspaces','standard',{},{
+                    profile: {
+                        workspace:{
+                            name: name,
+                            id: newWorkspaceDocRef.id,
+                        },
+                        device: {
+                            name:isMobile?'mobile':'desktop',
+                        },
+                        owner: {
+                            id: this.userID,
+                            name: this.userName,
+                        },
+                        commits: {
+                            created_by: {
+                                id: this.userID,
+                                name: this.userName,
+                            },
+                            created_timestamp: serverTimestamp(),
+                            updated_by: {
+                                id: this.userID,
+                                name: this.userName,
+                            },
+                            updated_timestamp: serverTimestamp(),
+                        },
+                    }
+                })
+        try {
+            const batch = writeBatch(this.db)
+            batch.set(newWorkspaceDocRef, newWorkspaceRecord)
+            batch.update(doc(collection(this.db,'users'),this.userID),{'profile.counts.workspaces':increment(1)})
+            await batch.commit()
+        } catch (error) {
+            console.log('error creating new workspace record (or updating count) from standard toolbar', error)
+            this.errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
+            result.error = false
+            return result
+        }
+        this.usage.write(1)
+        this.usage.create(1)
+
+        // ---- create NEW workspace ----
+        this.workspaceSelection.name = name
+        this.workspaceSelection.id = newWorkspaceDocRef.id
 
         return result
 

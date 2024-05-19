@@ -255,6 +255,7 @@ export const UserProvider = ({children}) => {
                     sysadminStatus:superUser,
                 }
                 workspaceHandler.current.userID = user.uid
+                workspaceHandler.current.userName = user.displayName
                 usage.login(1)
                 setUserState('useridentified')
     

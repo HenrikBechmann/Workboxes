@@ -132,56 +132,16 @@ const WorkspaceWriteDialog = (props) => {
             alert('Please correct errors before saving')
             return
         }
+
         setAlertState('processing')
 
-        const 
-            userRecord = userRecords.user,
-            userDocRef = doc(collection(db, 'users'), userRecord.profile.user.id),
-            newWorkspaceDocRef = doc(collection(db, 'users',userRecord.profile.user.id, 'workspaces')),
-            newWorkspaceRecord = updateDocumentSchema('workspaces','standard',{},{
-                    profile: {
-                        workspace:{
-                            name: writeValues.name,
-                            id: newWorkspaceDocRef.id,
-                        },
-                        device: {
-                            name:isMobile?'mobile':'desktop',
-                        },
-                        owner: {
-                            id: userRecord.profile.user.id,
-                            name: userRecord.profile.user.name,
-                        },
-                        commits: {
-                            created_by: {
-                                id: userRecord.profile.user.id,
-                                name: userRecord.profile.user.name,
-                            },
-                            created_timestamp: serverTimestamp(),
-                            udpated_by: {
-                                id: userRecord.profile.user.id,
-                                name: userRecord.profile.user.name,
-                            },
-                            updated_timestamp: serverTimestamp(),
-                        },
-                    }
-                })
-        try {
-            const batch = writeBatch(db)
-            batch.set(newWorkspaceDocRef, newWorkspaceRecord)
-            batch.update(doc(collection(db,'users'),userRecord.profile.user.id),{'profile.counts.workspaces':increment(1)})
-            await batch.commit()
-        } catch (error) {
-            console.log('error creating new workspace record (or updating count) from standard toolbar', error)
-            errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
+        const result = await workspaceHandler.createWorkspace(writeValues.name)
+
+        if (result.error) {
             navigate('/error')
             return
         }
-        usage.write(1)
-        usage.create(1)
 
-        // ---- create NEW workspace ----
-        workspaceHandler.workspaceSelection.name = writeValues.name
-        workspaceHandler.workspaceSelection.id = newWorkspaceDocRef.id
         dispatchWorkspaceHandler('create')
 
         doClose()
