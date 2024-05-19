@@ -40,7 +40,7 @@ const databoxTemplate = {
     changed:false,
 }
 
-class WorkboxGateway {
+class WorkboxHandler {
     constructor(defaults) {
 
         // create skeleton
@@ -114,4 +114,4 @@ class WorkboxGateway {
 
 }
 
-export default WorkboxGateway
+export default WorkboxHandler

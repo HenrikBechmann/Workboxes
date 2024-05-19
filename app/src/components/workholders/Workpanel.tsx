@@ -9,7 +9,7 @@ import {
 
 import Workwindow from './Workwindow'
 import Workbox from './../workbox/Workbox'
-import WorkboxGateway from '../../classes/WorkboxGateway'
+import WorkboxHandler from '../../classes/WorkboxHandler'
 
 const workpanelStyles = {
     height:'100%',
@@ -172,7 +172,7 @@ const Workpanel = (props:any) => {
             // required to position window
             element = panelElementRef.current,
             containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
-            gateway = new WorkboxGateway(specs.workbox),
+            gateway = new WorkboxHandler(specs.workbox),
             workdata = gateway.getData(),
             { profile } = workdata
 
