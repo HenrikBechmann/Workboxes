@@ -222,8 +222,8 @@ const StandardToolbar = (props) => {
         try {
             await setDoc(docRef,workspaceRecord)
         } catch (error) {
-            console.log('signout error from standard toolbar', error)
-            errorControl.push({description:'signout error from standard toolbar', error})
+            console.log('error saving workspace record', error)
+            errorControl.push({description:'error saving workspace record', error})
             navigate('/error')
             return
         }
@@ -232,6 +232,7 @@ const StandardToolbar = (props) => {
 
         // ---- SAVE workspace config ----
         workspaceHandler.clearChanged()
+        
         dispatchWorkspaceHandler('save')
 
     }

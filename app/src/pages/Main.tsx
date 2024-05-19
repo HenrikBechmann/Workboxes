@@ -329,12 +329,9 @@ export const Main = (props) => {
 
         // ---- DISTRIBUTE loaded workspace record ----
         workspaceHandler.workspaceRecord = workspaceData
-        workspaceHandler.settings.changed = false
-        workspaceHandler.changedRecords.setworkspace = null
-        workspaceHandler.changedRecords.setwindowpositions.clear(),
-        workspaceHandler.changedRecords.setpanels.clear()
-        workspaceHandler.changedRecords.deletepanels.clear()
+        workspaceHandler.clearChanged()
         workspaceHandler.flags.new_workspace = true
+
         dispatchWorkspaceHandler('load')
 
     }
