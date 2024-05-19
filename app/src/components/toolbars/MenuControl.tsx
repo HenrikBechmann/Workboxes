@@ -1,7 +1,7 @@
 // SelectionControl.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {CSSProperties} from 'react'
+import React, {CSSProperties, useState, useEffect} from 'react'
 
 import {
     Tooltip, Box,
@@ -43,13 +43,22 @@ const arrowStyles = {
 const MenuControl = (props) => {
 
     const 
-        { displayName, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props,
+        { displayName, onCall, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props,
         iconStylesLocal = {...iconStyles, ...moreStyles},
         moreArrowWrapperStyles = 
             arrowdirection == 'down'
             ? null
             : {transform:'rotate(180deg)'},
-        arrowWrapperStylesLocal = {...arrowWrapperStyles, ...moreArrowWrapperStyles}
+        arrowWrapperStylesLocal = {...arrowWrapperStyles, ...moreArrowWrapperStyles},
+        [menuState, setMenuState] = useState('ready')
+
+    async function runOnCall() {
+        if (onCall) {
+            setMenuState('preparing')
+            await onCall()
+            setMenuState('ready')
+        }
+    }
 
     return <Box style = {{
         display:'flex',
@@ -61,7 +70,7 @@ const MenuControl = (props) => {
         justifyContent: 'center',
         }}
     >
-        <Menu>
+        <Menu onOpen = {runOnCall}>
             <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center'>
                 <Tooltip hasArrow label = {tooltip} >
                     <MenuButton >

@@ -84,8 +84,6 @@ const Workspace = (props) => {
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
-    // console.log('workspaceData, workspaceHandler', workspaceData, workspaceHandler)
-
     async function getPanels() {
 
         // console.log('running getPanels')

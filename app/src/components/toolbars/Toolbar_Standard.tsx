@@ -118,8 +118,6 @@ const StandardToolbar = (props) => {
         errorControl = useErrorControl(),
         usage = useUsage()
 
-    console.log('running StandardToolbar')
-
     // --------------------- navigation functions ------------------
     const 
         goHome = () => { navigate('/workspace') },
@@ -146,11 +144,11 @@ const StandardToolbar = (props) => {
         }
     }
 
-    // initialize
-    useEffect(()=>{
-        console.log('getWorkspaceList')
-        getWorkspaceList()
-    },[])
+    // // initialize
+    // useEffect(()=>{
+    //     console.log('getWorkspaceList')
+    //     getWorkspaceList()
+    // },[])
 
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
@@ -243,7 +241,6 @@ const StandardToolbar = (props) => {
     async function changeWorkspaceSelection (workspaceID) {
         const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selectionElement.dataset.name
-        console.log('newWorspaceSelection: workspaceID, workspaceName', workspaceID, workspaceName)
         // ---- SWITCH workspace selection ----
             // console.log('setting workspaceHandler in toolbar_standard')
         const success = await workspaceHandler.setSelection(workspaceID, workspaceName)
@@ -257,8 +254,6 @@ const StandardToolbar = (props) => {
     const workspacemenuList = useMemo(() => {
 
         const defaultValue = workspaceHandler.workspaceSelection.id
-
-        console.log('setting workspacemenuList: defaultValue', defaultValue)
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList fontSize = 'small' lineHeight = '1em' ref = {workspaceMenuRef}
@@ -327,6 +322,7 @@ const StandardToolbar = (props) => {
             <>
                 <ToolbarVerticalDivider />
                 <MenuControl 
+                    onCall = {getWorkspaceList}
                     icon = {workspacesIcon} 
                     displayName = {workspaceHandler.workspaceSelection.name} 
                     tooltip = 'select a workspace'

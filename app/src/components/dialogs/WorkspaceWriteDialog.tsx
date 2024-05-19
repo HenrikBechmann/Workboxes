@@ -164,8 +164,7 @@ const WorkspaceWriteDialog = (props) => {
         }
         workspaceHandler.workspaceSelection.name = writeValues.name
         workspaceHandler.workspaceRecord.profile.workspace.name = writeValues.name
-        console.log('dispatchWorkspaceHandler in doSaveRename')
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('rename')
 
         doClose()
 

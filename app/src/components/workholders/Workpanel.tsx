@@ -563,10 +563,10 @@ const Workpanel = (props:any) => {
 
     // ----------------------------------[ end of windowCallbacks ]-------------------------------
 
-    const onResize = useCallback(()=>{
+    const onResize = useCallback((entries)=>{
 
         const 
-            element = panelElementRef.current,
+            element = entries[0].target,
             containerDimensionSpecs = {width:element.offsetWidth, height:element.offsetHeight},
             windowsList = windowsListRef.current,
             length = windowsList.length
