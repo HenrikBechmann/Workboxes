@@ -896,7 +896,7 @@ const useWorkspaceHandler = () => {
         workspaceHandlerContext = useContext(WorkspaceHandlerContext),
         workspaceHandler = workspaceHandlerContext.current,
         { setWorkspaceHandler } = workspaceHandler,
-        workspacePayload = {...workspaceHandlerContext},
+        workspacePayload = {...workspaceHandlerContext}, // coerce dispatch
         dispatchWorkspaceHandler = (trigger) => {
             workspaceHandler.trigger = trigger
             setWorkspaceHandler(workspacePayload)

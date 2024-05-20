@@ -212,6 +212,7 @@ const StandardToolbar = (props) => {
     async function setWorkspaceSelection (workspaceID) {
         const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selectionElement.dataset.name
+        
         // ---- SWITCH workspace selection ----
             // console.log('setting workspaceHandler in toolbar_standard')
         const success = await workspaceHandler.setSelection(workspaceID, workspaceName)

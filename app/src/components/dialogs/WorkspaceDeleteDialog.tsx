@@ -38,7 +38,6 @@ const WorkspaceDeleteDialog = (props) => {
 
     const doClose = () => {
 
-        // isOpen = false
         setDeleteDialogState(false)
 
     }
