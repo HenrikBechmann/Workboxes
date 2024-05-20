@@ -5,16 +5,20 @@
 
     methods in this class:
 
+    // utilities
     clearChanged
     setSelection
     getWorkspaceList *
+    resetWorkspace *
 
+    // data operations
     setupWorkpace *
     createWorkspace
     loadWorkspace *
     reloadWorkspace
     renameWorkspace
     saveWorkspace *
+    saveWorkspaceAs *
     deleteWorkspace
 
 */
