@@ -52,7 +52,7 @@ const WorkspaceDeleteDialog = (props) => {
             return
         }
 
-        toast({description:result.description})
+        toast({description:result.toast})
         setDeleteDialogState(false)
         dispatchWorkspaceHandler('delete')
         

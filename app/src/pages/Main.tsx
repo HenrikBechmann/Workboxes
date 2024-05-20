@@ -48,8 +48,8 @@ export const Main = (props) => {
 
         } else {
 
-            if (result.description) {
-                toast({description:result.description})
+            if (result.toast) {
+                toast({description:result.toast})
             }
 
             dispatchWorkspaceHandler('setup')
@@ -74,8 +74,8 @@ export const Main = (props) => {
             navigate('error')
             return
         } else {
-            if (result.description) {
-                toast({description:result.description})
+            if (result.toast) {
+                toast({description:result.toast})
             }
             dispatchWorkspaceHandler('load')
 

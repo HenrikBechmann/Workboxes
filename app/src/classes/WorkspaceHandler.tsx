@@ -124,7 +124,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
             payload: null,
         }
 
@@ -158,7 +158,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         let workspaceSelectionRecord
@@ -199,7 +199,7 @@ class WorkspaceHandler {
                     workspaceID = null
                 } else {
                     workspaceSelectionRecord = workspaceDoc.data()
-                    result.description = `loaded workspace last used on ${workspaceIDtype}`
+                    result.toast = `loaded workspace last used on ${workspaceIDtype}`
                 }
 
             } catch (error) {
@@ -242,11 +242,11 @@ class WorkspaceHandler {
                         workspaceSelectionRecord = workspaceDocs[0]
                         workspaceID = workspaceSelectionRecord.profile.workspace.id
                         workspaceSelectionRecord.profile.flags.is_default = true
-                        result.description = 'default not found; loaded first found workspace, and set it to default'
+                        result.toast = 'default not found; loaded first found workspace, and set it to default'
 
                     } else {
 
-                        result.description = 'loaded default workspace'
+                        result.toast = 'loaded default workspace'
 
                     }
                     // update version, or default flag
@@ -369,7 +369,7 @@ class WorkspaceHandler {
             }
             this.usage.create(1)
             this.usage.write(1)
-            result.description = 'created new workspace'
+            result.toast = 'created new workspace'
 
         }
 
@@ -398,7 +398,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         const 
@@ -458,7 +458,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         const 
@@ -478,7 +478,7 @@ class WorkspaceHandler {
         }
         this.usage.read(1)
         if (!dbdoc.exists()) {
-            result.description = 'requested workspace record does not exist. Reloading...'
+            result.toast = 'requested workspace record does not exist. Reloading...'
             this.setupWorkspace(userRecord)
             return
         }
@@ -519,7 +519,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         const 
@@ -573,7 +573,7 @@ class WorkspaceHandler {
 
         } else {
             result.success = false
-            result.description = 'this workspace record no longer exists'
+            result.toast = 'this workspace record no longer exists'
             return result
         }
 
@@ -586,7 +586,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         if (this.settings.mode == 'automatic') {
@@ -654,7 +654,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         if (!this.settings.changed && !this.changedRecords.setworkspace) return
@@ -687,7 +687,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            description: null,
+            toast: null,
         }
 
         // get default workspace
@@ -759,7 +759,7 @@ class WorkspaceHandler {
         }
         result.success = transactionResult
         if (!transactionResult) {
-            result.description = 'workspace not found, so not deleted'
+            result.toast = 'workspace not found, so not deleted'
             this.usage.read(panelCount + 1)
             // setDeleteDialogState(false)
             return result
@@ -776,7 +776,7 @@ class WorkspaceHandler {
             defaultWorkspace.profile.workspace.id,
             defaultWorkspace.profile.workspace.name
         )
-        result.description = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
+        result.toast = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
         return result
 
     }
