@@ -71,58 +71,20 @@ export const Main = (props) => {
 
     },[])
 
-    async function loadWorkspaceData(workspaceID) {
+    async function loadWorkspace(workspaceID) {
 
-        const 
-            dbWorkspaceRecordRef = doc(collection(db,'users',userRecords.user.profile.user.id,'workspaces'),workspaceID)
+        const result = await workspaceHandler.loadWorkspace(workspaceID, userRecords.user)
 
-        let dbdoc 
-        try {
-
-            dbdoc = await getDoc(dbWorkspaceRecordRef)
-
-        } catch (error) {
-
-            console.log('error getting new workspace data', error)
-            errorControl.push({description:'error getting new workspace data in Main', error})
-            navigate('/error')
+        if (result.error) {
+            navigate('error')
             return
+        } else {
+            if (result.description) {
+                toast({description:result.description})
+            }
+            dispatchWorkspaceHandler('load')
+
         }
-        usage.read(1)
-        if (!dbdoc.exists()) {
-            toast({description:'requested workspace record does not exist. Reloading...'})
-            setupWorkspace()
-            return
-        }
-        const
-            workspaceData = dbdoc.data(),
-            workspaceName = workspaceData.profile.workspace.name
-
-        const userUpdateData = 
-            isMobile
-                ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
-                : {'workspace.desktop': {id:workspaceID, name:workspaceName}}
-
-            // userUpdateData['profile.counts.workspaces'] = increment(1)
-
-        // console.log('userUpdateData', userUpdateData)
-
-        try {
-            await updateDoc(doc(collection(db,'users'),userRecords.user.profile.user.id),userUpdateData)
-        } catch (error) {
-            console.log('error in update user doc for workspace', error)
-            errorControl.push({description:'error in update user doc for workspace in Main', error})
-            navigate('/error')
-            return
-        }
-        usage.write(1)
-
-        // ---- DISTRIBUTE loaded workspace record ----
-        workspaceHandler.workspaceRecord = workspaceData
-        workspaceHandler.clearChanged()
-        workspaceHandler.flags.new_workspace = true
-
-        dispatchWorkspaceHandler('load')
 
     }
 
@@ -140,7 +102,7 @@ export const Main = (props) => {
 
         if (workspaceHandler.workspaceRecord.profile.workspace.id !== workspaceHandler.workspaceSelection.id) {
 
-            loadWorkspaceData(workspaceHandler.workspaceSelection.id)
+            loadWorkspace(workspaceHandler.workspaceSelection.id)
 
         }
 

@@ -11,10 +11,10 @@
     getWorkspaceList
     resetWorkspace *
 
-    // data operations
+    // database operations
     setupWorkpace
     createWorkspace
-    loadWorkspace *
+    loadWorkspace
     reloadWorkspace
     renameWorkspace
     saveWorkspace *
@@ -442,6 +442,65 @@ class WorkspaceHandler {
         // ---- create NEW workspace ----
         this.workspaceSelection.name = name
         this.workspaceSelection.id = newWorkspaceDocRef.id
+
+        return result
+
+    }
+
+    async loadWorkspace(workspaceID, userRecord) {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+        }
+
+        const 
+            dbWorkspaceRecordRef = doc(collection(this.db,'users',this.userID,'workspaces'),workspaceID)
+
+        let dbdoc 
+        try {
+
+            dbdoc = await getDoc(dbWorkspaceRecordRef)
+
+        } catch (error) {
+
+            console.log('error getting new workspace data', error)
+            this.errorControl.push({description:'error getting new workspace data in Main', error})
+            result.error = true
+            return result
+        }
+        this.usage.read(1)
+        if (!dbdoc.exists()) {
+            result.description = 'requested workspace record does not exist. Reloading...'
+            this.setupWorkspace(userRecord)
+            return
+        }
+        const
+            workspaceData = dbdoc.data(),
+            workspaceName = workspaceData.profile.workspace.name
+
+        const userUpdateData = 
+            isMobile
+                ? {'workspace.mobile': {id:workspaceID, name:workspaceName}}
+                : {'workspace.desktop': {id:workspaceID, name:workspaceName}}
+
+            // userUpdateData['profile.counts.workspaces'] = increment(1)
+
+        try {
+            await updateDoc(doc(collection(this.db,'users'),this.userID),userUpdateData)
+        } catch (error) {
+            console.log('error in update user doc for workspace', error)
+            this.errorControl.push({description:'error in update user doc for workspace in Main', error})
+            result.error = true
+            return result
+        }
+        this.usage.write(1)
+
+        // ---- DISTRIBUTE loaded workspace record ----
+        this.workspaceRecord = workspaceData
+        this.clearChanged()
+        this.flags.new_workspace = true
 
         return result
 
