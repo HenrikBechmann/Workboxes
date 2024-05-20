@@ -23,7 +23,7 @@ const WorkspaceSaveDialog = (props) => {
 
     const
         { setSaveDialogState } = props,
-        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         dialogStateRef = useRef(null),
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),

@@ -43,7 +43,7 @@ const WorkspaceWriteDialog = (props) => {
             name: false,
         }),
         newInvocationRef = useRef(true),
-        [workspaceHandler, dispatchWorkspaceHandler, workspacePayload] = useWorkspaceHandler(),
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -62,7 +62,7 @@ const WorkspaceWriteDialog = (props) => {
             }
             newInvocationRef.current = false
         }
-    },[newInvocationRef.current, workspacePayload])
+    },[newInvocationRef.current]) //, workspacePayload]) TODO not needed?
 
 
     const writeHelperText = {

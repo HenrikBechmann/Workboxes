@@ -51,13 +51,14 @@ class WorkspaceHandler {
     // controls
     db
     errorControl
+    // initialized in WorkboxesProvider
     userID
     userName
     usage
     trigger
 
     // data
-    setWorkspaceHandler = null
+    setWorkspaceHandler = null // initialized in WorkboxesProvider
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelRecords = new Map()

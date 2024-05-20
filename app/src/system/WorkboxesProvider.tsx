@@ -902,7 +902,7 @@ const useWorkspaceHandler = () => {
             setWorkspaceHandler(workspacePayload)
         }
 
-    return [workspaceHandler, dispatchWorkspaceHandler, workspacePayload]
+    return [workspaceHandler, dispatchWorkspaceHandler] //, workspacePayload]
 
 }
 
