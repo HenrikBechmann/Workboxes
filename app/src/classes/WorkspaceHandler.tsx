@@ -25,7 +25,7 @@
 
 import { 
     doc, collection, 
-    query, where, getDocs, // orderBy, 
+    query, where, getDocs, orderBy, 
     getDoc, // deleteDoc, setDoc, updateDoc
     updateDoc,
     increment, // serverTimestamp,
@@ -107,6 +107,38 @@ class WorkspaceHandler {
         }
         
         return true
+    }
+
+    // ---------------------[ getWorkspacrList ]--------------------------
+
+    async getWorkspaceList() {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+            payload: null,
+        }
+
+        const workingWorkspaceList = []
+        const q = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
+        let querySnapshot
+        try {
+            querySnapshot = await getDocs(q)
+        } catch (error) {
+            console.log('error getting workspace list on standard toolbar', error)
+            this.errorControl.push({description:'error getting workspace list on standard toolbar', error})
+            result.error = true
+            return result
+        }
+        querySnapshot.forEach((doc) => {
+            const data = doc.data()
+            workingWorkspaceList.push(data.profile.workspace)
+        })
+        this.usage.read(querySnapshot.size)
+        result.payload = workingWorkspaceList
+        return result
+
     }
 
     // ---------------------[ createWorkspace ]--------------------------

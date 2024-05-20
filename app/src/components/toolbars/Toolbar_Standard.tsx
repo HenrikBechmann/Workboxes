@@ -176,23 +176,15 @@ const StandardToolbar = (props) => {
     },[])
 
     async function getWorkspaceList() {
-        const workingWorkspaceList = []
-        const q = query(collection(db, 'users', userRecords.user.profile.user.id, 'workspaces'), orderBy('profile.workspace.name'))
-        let querySnapshot
-        try {
-            querySnapshot = await getDocs(q)
-        } catch (error) {
-            console.log('error getting workspace list on standard toolbar', error)
-            errorControl.push({description:'error getting workspace list on standard toolbar', error})
+
+        const result = await workspaceHandler.getWorkspaceList()
+        if (result.error) {
             navigate('/error')
             return
+        } else {
+            setWorkspaceList(result.payload)
         }
-        querySnapshot.forEach((doc) => {
-            const data = doc.data()
-            workingWorkspaceList.push(data.profile.workspace)
-        })
-        usage.read(querySnapshot.size)
-        setWorkspaceList(workingWorkspaceList)
+
     }
 
     const renameWorkspaceDialog = () => {
