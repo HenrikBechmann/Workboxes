@@ -10,14 +10,6 @@ import {
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
 } from '@chakra-ui/react'
 
-import { 
-    doc, collection, 
-    query, where, getDocs, orderBy, 
-    getDoc, setDoc, updateDoc, deleteDoc, 
-    increment, serverTimestamp,
-    writeBatch,
-} from 'firebase/firestore'
-
 import { useNavigate } from 'react-router-dom'
 
 import { updateDocumentSchema } from '../../system/utilities'

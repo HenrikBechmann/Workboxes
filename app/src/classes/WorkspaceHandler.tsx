@@ -17,9 +17,12 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
-    saveWorkspace *
+    saveWorkspace
     saveWorkspaceAs *
     deleteWorkspace
+
+    // panels facade
+    getPanels *
 
 */
 
@@ -45,7 +48,7 @@ class WorkspaceHandler {
         this.errorControl = errorControl
     }
 
-    // database
+    // controls
     db
     errorControl
     userID
@@ -107,6 +110,8 @@ class WorkspaceHandler {
             return false
 
         }
+
+        this.usage.write(1)
         
         return true
     }
@@ -636,6 +641,39 @@ class WorkspaceHandler {
         }
         this.workspaceSelection.name = name
         this.workspaceRecord.profile.workspace.name = name
+
+        return result
+
+    }
+
+    // ---------------------[ saveWorkspace ]--------------------------
+
+    async saveWorkspace() {
+
+        const result = {
+            error: false,
+            success: true,
+            description: null,
+        }
+
+        if (!this.settings.changed && !this.changedRecords.setworkspace) return
+
+        const workspaceRecord = this.workspaceRecord
+        const dbcollection = collection(this.db, 'users', this.userID, 'workspaces')
+        const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
+        try {
+            await setDoc(docRef,workspaceRecord)
+        } catch (error) {
+            console.log('error saving workspace record', error)
+            this.errorControl.push({description:'error saving workspace record', error})
+            result.error = true
+            return result
+        }
+
+        this.usage.write(1)
+
+        // ---- SAVE workspace config ----
+        this.clearChanged()
 
         return result
 

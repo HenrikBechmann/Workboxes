@@ -3,13 +3,6 @@
 
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 import { signOut } from "firebase/auth"
-import { 
-    doc, collection, 
-    query, where, getDocs, orderBy, 
-    getDoc, setDoc, updateDoc, deleteDoc, 
-    increment, serverTimestamp,
-    writeBatch,
-} from 'firebase/firestore'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
     Button, Text, Input,
@@ -144,12 +137,6 @@ const StandardToolbar = (props) => {
         }
     }
 
-    // // initialize
-    // useEffect(()=>{
-    //     console.log('getWorkspaceList')
-    //     getWorkspaceList()
-    // },[])
-
     const workboxesmenulist = useMemo(() => {
        return <MenuList>
             <MenuItem isDisabled onClick = {gotoClassifieds} >Classifieds&nbsp;<span style = {{fontStyle:'italic'}}>[pending]</span></MenuItem>
@@ -203,35 +190,26 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
 
-    async function saveWorkspaceConfig() {
+    async function saveWorkspace() {
 
-        const { settings, changedRecords } = workspaceHandler
-        if (!settings.changed && !changedRecords.setworkspace) return
+        const result = await workspaceHandler.saveWorkspace()
+        
+        if (result.error) {
 
-        const workspaceRecord = workspaceHandler.workspaceRecord
-        const dbcollection = collection(db, 'users', userRecords.user.profile.user.id, 'workspaces')
-        const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
-        try {
-            await setDoc(docRef,workspaceRecord)
-        } catch (error) {
-            console.log('error saving workspace record', error)
-            errorControl.push({description:'error saving workspace record', error})
             navigate('/error')
             return
+
+        } else {
+
+            dispatchWorkspaceHandler('save')
+
         }
-
-        usage.write(1)
-
-        // ---- SAVE workspace config ----
-        workspaceHandler.clearChanged()
-        
-        dispatchWorkspaceHandler('save')
 
     }
 
     // TODO save before switch if in automatic mode
     // ask about save if in manual mode
-    async function changeWorkspaceSelection (workspaceID) {
+    async function setWorkspaceSelection (workspaceID) {
         const selectionElement = workspaceMenuRef.current.querySelector('[value|="' + workspaceID + '"]')
         const workspaceName = selectionElement.dataset.name
         // ---- SWITCH workspace selection ----
@@ -263,7 +241,7 @@ const StandardToolbar = (props) => {
             <MenuOptionGroup 
                 key = {workspaceMenuIteration++} 
                 defaultValue = {defaultValue} 
-                onChange = {changeWorkspaceSelection} 
+                onChange = {setWorkspaceSelection} 
                 fontSize = 'small' 
                 fontStyle = 'italic' 
                 title = 'Select a workspace:'
@@ -324,7 +302,7 @@ const StandardToolbar = (props) => {
                 />
                 <StandardIcon response = {uploadSettingDialog} isDialog = {true} icon = {uploadCloudIcon} 
                     caption = {workspaceHandler.settings.mode} tooltip = 'set saving behaviour' />
-                <StandardIcon response = {saveWorkspaceConfig} icon = {uploadCloudIcon}
+                <StandardIcon response = {saveWorkspace} icon = {uploadCloudIcon}
                     emphasis = {workspaceHandler.settings.changed?'true':false} 
                     highlight = {workspaceHandler.settings.mode == 'automatic'?false:true}
                     caption = {workspaceHandler.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />

@@ -10,11 +10,6 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
-import {  
-    collection, doc, getDoc, getDocs, 
-    setDoc, updateDoc, increment, serverTimestamp, 
-    writeBatch, query 
-} from 'firebase/firestore'
 
 import { useNavigate } from 'react-router-dom'
 
