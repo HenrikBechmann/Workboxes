@@ -533,25 +533,27 @@ class WorkspaceHandler {
         this.usage.read(1)
         if (!dbdoc.exists()) {
             result.notice = 'requested workspace record does not exist. Reloading...'
-            this.setupWorkspace(userRecord)
-            return
+            const setupResult = await this.setupWorkspace(userRecord)
+            if (setupResult.error) result.error = true // TODO there could be multiple notices here
+            return result
         }
         const
             workspaceData = dbdoc.data(),
             workspaceName = workspaceData.profile.workspace.name
 
-        const userUpdateData = 
+        const prop = 
             isMobile
-                ? {
-                    'workspace.mobile':{id:workspaceID, name:workspaceName},
-                    generation: increment(1),
-                }
-                : {
-                    'workspace.desktop':{id:workspaceID, name:workspaceName},
-                    generation: increment(1),
+                ? 'workspace.mobile'
+                : 'workspace.desktop'
+
+        const userUpdateData = 
+                {
+                    generation:increment(1),
+                    'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                    'profile.commits.updated_timestamp':serverTimestamp(),
                 }
 
-            // userUpdateData['profile.counts.workspaces'] = increment(1)
+            userUpdateData[prop] = {id:workspaceID,name}
 
         try {
             await updateDoc(doc(collection(this.db,'users'),this.userID),userUpdateData)
