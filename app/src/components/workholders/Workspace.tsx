@@ -84,9 +84,9 @@ const Workspace = (props) => {
 
     panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
 
-    async function getPanels() {
+    async function loadPanels() {
 
-        // console.log('running getPanels')
+        // console.log('running loadPanels')
 
         const panelRecordList = []
         const panelComponentList = []
@@ -247,7 +247,7 @@ const Workspace = (props) => {
 
         if (workspaceHandler.flags.new_workspace_load) {
             workspaceHandler.flags.new_workspace_load = false
-            getPanels()  
+            loadPanels()  
         } 
 
         // return 

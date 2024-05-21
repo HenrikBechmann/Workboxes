@@ -33,7 +33,7 @@
     deleteWorkspace
 
     // panels facade
-    getPanels *
+    loadPanels *
 
 */
 
