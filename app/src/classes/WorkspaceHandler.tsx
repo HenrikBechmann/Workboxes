@@ -46,8 +46,6 @@ import {
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
-import { cloneDeep as _cloneDeep } from 'lodash'
-
 import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
@@ -278,14 +276,13 @@ class WorkspaceHandler {
                         try {
 
                             updatedWorkspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
-                            const saveRecord = _cloneDeep(updatedWorkspaceRecord) // avoid assigning functions in memory
 
-                            saveRecord.generation = increment(1)
-                            saveRecord.profile.commits.updted_timestamp = serverTimestamp()
+                            updatedWorkspaceRecord.generation = increment(1)
+                            updatedWorkspaceRecord.profile.commits.updted_timestamp = serverTimestamp()
 
                             const workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces'),workspaceID)
                             
-                            await setDoc(workspaceDocRef, saveRecord)
+                            await setDoc(workspaceDocRef, updatedWorkspaceRecord)
                             const newDoc = await getDoc(workspaceDocRef) // get updated increment and timestamp
 
                             workspaceSelectionRecord = newDoc.data()
@@ -415,6 +412,8 @@ class WorkspaceHandler {
             }
             this.usage.create(1)
             this.usage.write(1)
+            this.usage.read(1)
+            
             result.notice = 'created new workspace'
 
         }
