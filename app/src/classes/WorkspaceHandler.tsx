@@ -12,6 +12,7 @@
     - guarantee database integrity
 
     - save before switch
+    - take userName from most recent user setting (ie userRecord not auth.displayName)
 */
 
 /*
@@ -100,6 +101,8 @@ class WorkspaceHandler {
 
     // ---------------------[ setSelection ]--------------------------
 
+    // TODO save before switch
+    // sets the selection only
     async setSelection (id, name) {
 
         const result = {
@@ -128,8 +131,9 @@ class WorkspaceHandler {
 
         } catch (error) {
 
-            console.log('error updating selection in user record', error)
-            this.errorControl.push({description:'error updating selection in user record', error})
+            const errdesc = 'error updating selection in user record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
 
@@ -152,21 +156,22 @@ class WorkspaceHandler {
         }
 
         const workspaceList = []
-        const q = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
-        let querySnapshot
+        const dbQuerySpec = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
+        let queryDocs
         try {
-            querySnapshot = await getDocs(q)
+            queryDocs = await getDocs(dbQuerySpec)
         } catch (error) {
-            console.log('error getting workspace list on standard toolbar', error)
-            this.errorControl.push({description:'error getting workspace list on standard toolbar', error})
+            const errdesc = 'error getting workspace list on standard toolbar'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
         }
-        querySnapshot.forEach((doc) => {
+        queryDocs.forEach((doc) => {
             const data = doc.data()
-            workspaceList.push(data.profile.workspace)
+            workspaceList.push(data.profile.workspace) // selection, not record
         })
-        this.usage.read(querySnapshot.size)
+        this.usage.read(queryDocs.size)
         result.payload = workspaceList
         return result
 
@@ -176,6 +181,7 @@ class WorkspaceHandler {
 
     // ---------------------[ setupWorkspace ]--------------------------
 
+    // sets both the selection and the workspaceRecord
     async setupWorkspace(userRecord) { // userRecord passed to get current workspace selection
 
         const result = {
@@ -189,9 +195,9 @@ class WorkspaceHandler {
         // --------------[ 1. try to get workspaceID from most recent usage ]-----------
         let workspaceID, workspaceIDtype, workspaceDoc
         const 
-            userWorkspaceData = userRecord.workspace,
-            mobileID = userWorkspaceData.mobile.id,
-            desktopID = userWorkspaceData.desktop.id,
+            userWorkspaceSelections = userRecord.workspace,
+            mobileID = userWorkspaceSelections.mobile.id,
+            desktopID = userWorkspaceSelections.desktop.id,
             workspaceCollection = collection(this.db,'users',this.userID,'workspaces')
 
         workspaceID = 
@@ -226,8 +232,9 @@ class WorkspaceHandler {
 
             } catch (error) {
 
-                console.log('error getting starting workspace data in Main', error)
-                this.errorControl.push({description:'error getting starting workspace data in Main', error})
+                const errdesc = 'error getting starting workspace data in Main'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
             }
@@ -239,23 +246,23 @@ class WorkspaceHandler {
         // look for other existing workspace - default, or (as the last resort) first found
         if (!workspaceID) { 
             const workspaceDocs = []
-            const q = query(workspaceCollection)
+            const querySpec = query(workspaceCollection)
             try {
 
-                const dbDocs = await getDocs(q)
+                const queryPayload = await getDocs(querySpec)
                 let found_default = false
-                if (dbDocs.size) { // at least one found
-                    this.usage.read(dbDocs.size)
-                    const docs = dbDocs.docs
+                if (queryPayload.size) { // at least one found
+                    this.usage.read(queryPayload.size)
+                    const dbDocs = queryPayload.docs
                     // collect data, and look for default
-                    for (let index = 0; index < dbDocs.size; index++) {
-                        const dbdoc = docs[index]
-                        const data = dbdoc.data()
-                        workspaceDocs.push(data)
-                        if (data.profile.flags.is_default) {
+                    for (let index = 0; index < queryPayload.size; index++) {
+                        const dbDoc = dbDocs[index]
+                        const docRecord = dbDoc.data()
+                        workspaceDocs.push(docRecord)
+                        if (docRecord.profile.flags.is_default) {
                             found_default = true
-                            workspaceID = data.profile.workspace.id
-                            workspaceSelectionRecord = data
+                            workspaceID = docRecord.profile.workspace.id
+                            workspaceSelectionRecord = docRecord
                             break
                         }
                     }
@@ -277,9 +284,8 @@ class WorkspaceHandler {
                     if ((!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) || !found_default) {
                         try {
 
-                            updatedWorkspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
-
                             updatedWorkspaceRecord.generation = increment(1)
+                            updatedWorkspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
                             updatedWorkspaceRecord.profile.commits.updted_timestamp = serverTimestamp()
 
                             const workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces'),workspaceID)
@@ -291,8 +297,9 @@ class WorkspaceHandler {
 
                         } catch (error) {
 
-                            console.log('error updating workspace version in Main', error)
-                            this.errorControl.push({description:'error updating workspace versoin in Main', error})
+                            const errdesc = 'error updating workspace version in Main'
+                            console.log(errdesc, error)
+                            this.errorControl.push({description:errdesc, error})
                             result.error = true
                             return result
 
@@ -323,8 +330,9 @@ class WorkspaceHandler {
 
                     } catch (error) {
 
-                        console.log('error updating workspace count for user in Main', error)
-                        this.errorControl.push({description:'error updating workspace count for user in Main', error})
+                        const errdesc = 'error updating workspace selection for user in Main'
+                        console.log(errdesc, error)
+                        this.errorControl.push({description:errdesc, error})
                         result.error = true
                         return result
 
@@ -339,8 +347,9 @@ class WorkspaceHandler {
 
             } catch(error) {
 
-                console.log('error getting workspace list in Main', error)
-                this.errorControl.push({description:'error getting workspace list in Main', error})
+                const errdesc = 'error getting workspace list in Main'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
 
@@ -352,11 +361,12 @@ class WorkspaceHandler {
 
             const 
                 workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces')),
+                workspaceID = workspaceDocRef.id,
                 workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
                     profile: {
                         workspace:{
                             name: 'Main workspace (default)',
-                            id: workspaceDocRef.id,
+                            id: workspaceID,
                         },
                         owner: {
                             id: this.userID,
@@ -407,8 +417,9 @@ class WorkspaceHandler {
 
             } catch (error) {
 
-                console.log('error saving new workspace data', error)
-                this.errorControl.push({description:'error saving new workspace data in Main', error})
+                const errdesc = 'error saving new workspace data'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
             }
@@ -492,8 +503,10 @@ class WorkspaceHandler {
             batch.update(userDocRef,userUpdateData)
             await batch.commit()
         } catch (error) {
-            console.log('error creating new workspace record (or updating count) from standard toolbar', error)
-            this.errorControl.push({description:'error creating new workspace record (or updating count) from standard toolbar', error})
+
+            const errdesc = 'error creating new workspace record (or updating count) from standard toolbar'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = false
             return result
         }
@@ -527,8 +540,9 @@ class WorkspaceHandler {
 
         } catch (error) {
 
-            console.log('error getting new workspace data', error)
-            this.errorControl.push({description:'error getting new workspace data in Main', error})
+            const errdesc = 'error getting new workspace data'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
         }
@@ -560,8 +574,10 @@ class WorkspaceHandler {
         try {
             await updateDoc(doc(collection(this.db,'users'),this.userID),userUpdateData)
         } catch (error) {
-            console.log('error in update user doc for workspace', error)
-            this.errorControl.push({description:'error in update user doc for workspace in Main', error})
+
+            const errdesc = 'error in update user doc for workspace'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
         }
@@ -596,8 +612,9 @@ class WorkspaceHandler {
             dbdoc = await getDoc(dbdocRef)
         } catch(error) {
             result.error = true
-            console.log('error in reload workspace', error)
-            this.errorControl.push({description:'error in reload workspace', error})
+            const errdesc = 'error in reload workspace'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             return result
         }
         this.usage.read(1)
@@ -671,8 +688,9 @@ class WorkspaceHandler {
                 newWorkspaceRecord = newDoc.data()
 
             } catch (error) {
-                console.log('error updating workspace name from standard toolbar', error)
-                this.errorControl.push({description:'error updating workspace name from standard toolbar', error})
+                const errdesc = 'error updating workspace name from standard toolbar'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
             }
@@ -725,8 +743,9 @@ class WorkspaceHandler {
             const newDoc = await getDoc(docRef)
             this.workspaceRecord = newDoc.data()
         } catch (error) {
-            console.log('error saving workspace record', error)
-            this.errorControl.push({description:'error saving workspace record', error})
+            const errdesc = 'error saving workspace record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
         }
@@ -761,8 +780,9 @@ class WorkspaceHandler {
             dbDefaultWorkspaceDoc = await getDocs(dbWorkspaceQuery)
         } catch (error) {
             result.error = true
-            console.log('error fetching default workspace')
-            this.errorControl.push({description:'error fetching default workspace', error})
+            const errdesc = 'error fetching default workspace'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             return result
         }
         this.usage.read(1)
@@ -828,8 +848,9 @@ class WorkspaceHandler {
 
         } catch (error) {
             result.error = true
-            console.log('error deleting workspace or incrementing workspace count')
-            this.errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
+            const errdesc = 'error deleting workspace or incrementing workspace count'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             return result
         }
         result.success = transactionResult
