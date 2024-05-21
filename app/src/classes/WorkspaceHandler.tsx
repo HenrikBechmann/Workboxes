@@ -220,7 +220,7 @@ class WorkspaceHandler {
                     workspaceID = null
                 } else {
                     workspaceSelectionRecord = workspaceDoc.data()
-                    result.toast = `loaded workspace last used on ${workspaceIDtype}`
+                    result.notice = `loaded workspace last used on ${workspaceIDtype}`
                 }
 
             } catch (error) {
@@ -263,11 +263,11 @@ class WorkspaceHandler {
                         workspaceSelectionRecord = workspaceDocs[0]
                         workspaceID = workspaceSelectionRecord.profile.workspace.id
                         workspaceSelectionRecord.profile.flags.is_default = true
-                        result.toast = 'default not found; loaded first found workspace, and set it to default'
+                        result.notice = 'default not found; loaded first found workspace, and set it to default'
 
                     } else {
 
-                        result.toast = 'loaded default workspace'
+                        result.notice = 'loaded default workspace'
 
                     }
                     // update version, or default flag
@@ -403,7 +403,7 @@ class WorkspaceHandler {
             }
             this.usage.create(1)
             this.usage.write(1)
-            result.toast = 'created new workspace'
+            result.notice = 'created new workspace'
 
         }
 
@@ -512,7 +512,7 @@ class WorkspaceHandler {
         }
         this.usage.read(1)
         if (!dbdoc.exists()) {
-            result.toast = 'requested workspace record does not exist. Reloading...'
+            result.notice = 'requested workspace record does not exist. Reloading...'
             this.setupWorkspace(userRecord)
             return
         }
@@ -617,7 +617,7 @@ class WorkspaceHandler {
 
         } else {
             result.success = false
-            result.toast = 'this workspace record no longer exists'
+            result.notice = 'this workspace record no longer exists'
             return result
         }
 
@@ -804,7 +804,7 @@ class WorkspaceHandler {
         }
         result.success = transactionResult
         if (!transactionResult) {
-            result.toast = 'workspace not found, so not deleted'
+            result.notice = 'workspace not found, so not deleted'
             this.usage.read(panelCount + 1)
             // setDeleteDialogState(false)
             return result
@@ -825,7 +825,7 @@ class WorkspaceHandler {
             result.error = true
             return result
         } else {
-            result.toast = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
+            result.notice = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
             return result
         }
     }

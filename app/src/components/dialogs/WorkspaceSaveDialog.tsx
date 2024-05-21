@@ -58,8 +58,8 @@ const WorkspaceSaveDialog = (props) => {
             navigate('/error')
             return
         }
-        if (result.toast) {
-            toast({description:result.toast})
+        if (result.notice) {
+            toast({description:result.notice})
         }
         dispatchWorkspaceHandler('reload')
         doClose()

@@ -33,7 +33,9 @@ const WorkspaceDeleteDialog = (props) => {
         navigate = useNavigate()
 
     useEffect(()=>{
+
         setIsDefaultState(workspaceHandler.workspaceRecord.profile.flags.is_default)
+    
     },[])
 
     const doClose = () => {
@@ -51,7 +53,7 @@ const WorkspaceDeleteDialog = (props) => {
             return
         }
 
-        toast({description:result.toast})
+        toast({description:result.notice})
         setDeleteDialogState(false)
         dispatchWorkspaceHandler('delete')
         
