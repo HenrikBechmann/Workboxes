@@ -42,7 +42,7 @@ import {
     updateDoc,
     arrayUnion,
     arrayRemove,
-    increment, // serverTimestamp,
+    increment,
     runTransaction,
     writeBatch,
     serverTimestamp,
@@ -103,7 +103,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         this.workspaceSelection.id = id,
@@ -111,13 +111,11 @@ class WorkspaceHandler {
         const updateData = 
             isMobile
                 ? {
-                    'workspace.mobile.id':id,
-                    'workspace.mobile.name':name,
+                    'workspace.mobile':{id,name},
                     generation:increment(1),
                 }
                 : {
-                    'workspace.desktop.id':id,
-                    'workspace.desktop.name':name,                    
+                    'workspace.desktop':{id,name},                    
                     generation:increment(1),
                 }
         try {
@@ -145,7 +143,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
             payload: null,
         }
 
@@ -179,7 +177,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         let workspaceSelectionRecord
@@ -296,12 +294,10 @@ class WorkspaceHandler {
                     const userUpdateData = 
                         isMobile
                             ? {
-                                'workspace.mobile.id':workspaceID, 
-                                'workspace.mobile.name':name,
+                                'workspace.mobile':{id:workspaceID,name},
                                 generation:increment(1)
                             }
-                            : {'workspace.desktop.id':workspaceID, 
-                                'workspace.desktop.name':name,
+                            : {'workspace.desktop':{id:workspaceID,name},
                                 generation:increment(1)
                             }
 
@@ -380,12 +376,10 @@ class WorkspaceHandler {
                 const userUpdateData = 
                     isMobile
                         ? {
-                            'workspace.mobile.id':workspaceDocRef.id, 
-                            'workspace.mobile.name':'Main workspace (default)'
+                            'workspace.mobile':{id:workspaceDocRef.id,name:'Main workspace (default)'},
                         }
                         : {
-                            'workspace.desktop.id':workspaceDocRef.id, 
-                            'workspace.desktop.name':'Main workspace (default)'
+                            'workspace.desktop':{id:workspaceDocRef.id,name:'Main workspace (default)'},
                         }
 
                     userUpdateData['profile.counts.workspaces'] = increment(1)
@@ -432,7 +426,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         const 
@@ -492,7 +486,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         const 
@@ -523,13 +517,11 @@ class WorkspaceHandler {
         const userUpdateData = 
             isMobile
                 ? {
-                    'workspace.mobile.id':workspaceID, 
-                    'workspace.mobile.name':workspaceName,
+                    'workspace.mobile':{id:workspaceID, name:workspaceName},
                     generation: increment(1),
                 }
                 : {
-                    'workspace.desktop.id':workspaceID, 
-                    'workspace.desktop.name':workspaceName,
+                    'workspace.desktop':{id:workspaceID, name:workspaceName},
                     generation: increment(1),
                 }
 
@@ -561,7 +553,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         const 
@@ -587,13 +579,11 @@ class WorkspaceHandler {
                 updateData = 
                     isMobile
                         ? {
-                            'workspace.mobile.id':workspaceID,
-                            'workspace.mobile.name':workspaceName,
+                            'workspace.mobile':{id:workspaceID,name:workspaceName},
                             generation: increment(1),
                           }
                         : {
-                            'workspace.desktop.id':workspaceID,
-                            'workspace.desktop.name':workspaceName,
+                            'workspace.desktop':{id:workspaceID,name:workspaceName},
                             generation: increment(1),
                           }
 
@@ -630,7 +620,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         if (this.settings.mode == 'automatic') {
@@ -698,7 +688,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         if (!this.settings.changed && !this.changedRecords.setworkspace) return
@@ -732,7 +722,7 @@ class WorkspaceHandler {
         const result = {
             error: false,
             success: true,
-            toast: null,
+            notice: null,
         }
 
         // get default workspace
@@ -816,11 +806,9 @@ class WorkspaceHandler {
         this.usage.write(1)
 
         // set current workspace to default
+        const { id, name } = defaultWorkspace.profile.workspace
         // ---- set NEW workspace ----
-        const selectionresult = await this.setSelection(
-            defaultWorkspace.profile.workspace.id,
-            defaultWorkspace.profile.workspace.name
-        )
+        const selectionresult = await this.setSelection( id, name )
         if (selectionresult.error) {
             result.error = true
             return result
