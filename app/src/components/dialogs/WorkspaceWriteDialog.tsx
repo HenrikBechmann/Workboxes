@@ -105,7 +105,7 @@ const WorkspaceWriteDialog = (props) => {
 
         const 
             userRecord = userRecords.user,
-            result = await workspaceHandler.renameWorkspace(writeValues.name, userRecord)
+            result = await workspaceHandler.renameWorkspace(writeValues.name)
 
         if (result.error) {
            navigate('/error')

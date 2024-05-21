@@ -602,29 +602,7 @@ class WorkspaceHandler {
         if (dbdoc.exists()) {
             const 
                 workspaceData = dbdoc.data(),
-                workspaceName = workspaceData.profile.workspace.name,
-                dbuserDocRef = doc(collection(this.db,'users'),this.userID),
-                updateData = 
-                    isMobile
-                        ? {
-                            'workspace.mobile':{id:workspaceID,name:workspaceName},
-                            generation: increment(1),
-                          }
-                        : {
-                            'workspace.desktop':{id:workspaceID,name:workspaceName},
-                            generation: increment(1),
-                          }
-
-            try {
-                await updateDoc(dbuserDocRef,updateData)
-            } catch(error) {
-                result.error = true
-                console.log('error in update user workspace after reload', error)
-                this.errorControl.push({description:'error in update user workspace after reload', error})
-                return result
-            }
-            this.usage.write(1)
-
+                workspaceName = workspaceData.profile.workspace.name
             // ---- set RELOAD workspace data ----
             this.workspaceRecord = workspaceData
             this.workspaceSelection.id = workspaceID
@@ -643,7 +621,7 @@ class WorkspaceHandler {
 
     // ---------------------[ renameWorkspace ]--------------------------
 
-    async renameWorkspace(name, userRecord) {
+    async renameWorkspace(name) {
 
         const result = {
             error: false,
@@ -651,45 +629,53 @@ class WorkspaceHandler {
             notice: null,
         }
 
+        let newWorkspaceRecord
+
         if (this.settings.mode == 'automatic') {
             // changename user workspace data
             const 
                 userDocRef = doc(collection(this.db, 'users'), this.userID),
                 workspaceID = this.workspaceSelection.id,
-                workspaceDocRef = doc(collection(this.db, 'users',this.userID, 'workspaces'), workspaceID),
-                updateBlock = {}
+                workspaceDocRef = doc(collection(this.db, 'users',this.userID, 'workspaces'), workspaceID)
 
-            let fieldsToUpdateCount = 0
+            const prop = 
+                isMobile
+                    ? 'workspace.mobile'
+                    : 'workspace.desktop'
 
-            if (workspaceID == userRecord.workspace.mobile.id) {
-                updateBlock['workspace.mobile.name'] = name
-                fieldsToUpdateCount++
-            }
-            if (workspaceID == userRecord.workspace.desktop.id) {
-                updateBlock['workspace.desktop.name'] = name
-                fieldsToUpdateCount++
-            }
+            const userUpdateData = 
+                    {
+                        generation:increment(1),
+                        'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                        'profile.commits.updated_timestamp':serverTimestamp(),
+                    }
+
+            userUpdateData[prop] = {id:workspaceID,name}
+
             try {
                 const batch = writeBatch(this.db)
 
-                if (fieldsToUpdateCount) {
-                    batch.update(userDocRef,updateBlock)
-                }
+                batch.update(userDocRef,userUpdateData)
 
                 batch.update(workspaceDocRef, {
-                    'profile.workspace.name':name
+                    'profile.workspace.name':name,
+                    generation:increment(1),
+                    'profile.commits.updated_by': {id:this.userID, name:this.userName},
+                    'profile.commits.updated_timestamp':serverTimestamp()
                 })
 
                 await batch.commit()
+                const newDoc = await getDoc(workspaceDocRef)
+                newWorkspaceRecord = newDoc.data()
 
             } catch (error) {
                 console.log('error updating workspace name from standard toolbar', error)
                 this.errorControl.push({description:'error updating workspace name from standard toolbar', error})
                 result.error = true
-                // navigate('/error')   
                 return result
             }
-            this.usage.write(fieldsToUpdateCount?2:1)
+            this.usage.write(2)
+            this.usage.read(1)
         }
 
         // changename workspaceHandler
@@ -703,7 +689,12 @@ class WorkspaceHandler {
             }
         }
         this.workspaceSelection.name = name
-        this.workspaceRecord.profile.workspace.name = name
+
+        if (this.settings.mode == 'automatic') {
+            this.workspaceRecord = newWorkspaceRecord
+        } else {
+            this.workspaceRecord.profile.workspace.name = name
+        }
 
         return result
 
@@ -725,8 +716,12 @@ class WorkspaceHandler {
         const dbcollection = collection(this.db, 'users', this.userID, 'workspaces')
         const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
         try {
-            workspaceRecord.generation += 1
+            workspaceRecord.generation = increment(1)
+            workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
+            workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
             await setDoc(docRef,workspaceRecord)
+            const newDoc = await getDoc(docRef)
+            this.workspaceRecord = newDoc.data()
         } catch (error) {
             console.log('error saving workspace record', error)
             this.errorControl.push({description:'error saving workspace record', error})
@@ -735,6 +730,7 @@ class WorkspaceHandler {
         }
 
         this.usage.write(1)
+        this.usage.read(1)
 
         // ---- SAVE workspace config ----
         this.clearChanged()
