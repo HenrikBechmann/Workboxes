@@ -488,7 +488,6 @@ class WorkspaceHandler {
         this.usage.write(1)
         this.usage.create(1)
 
-        // ---- create NEW workspace ----
         this.workspaceSelection.name = name
         this.workspaceSelection.id = newWorkspaceDocRef.id
 
