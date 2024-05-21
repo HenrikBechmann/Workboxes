@@ -10,6 +10,8 @@
     - implement automatic vs manual mode
     - maintain list of panel IDs in workspaces
     - guarantee database integrity
+
+    - save before switch
 */
 
 /*

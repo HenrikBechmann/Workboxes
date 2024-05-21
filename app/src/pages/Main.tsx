@@ -101,7 +101,7 @@ export const Main = (props) => {
 
         }
 
-    },[workspaceHandler.workspaceRecord?.profile.workspace.id]) // workspacePayload])
+    },[workspaceHandler.workspaceSelection.id]) // workspacePayload])
 
     // return ((mainState == 'ready') && (workspaceHandler.workspaceRecord) && <Workspace panelDataRef = {panelDataRef}/>)
     return ((mainState == 'ready') && <Workspace panelDataRef = {panelDataRef}/>)
