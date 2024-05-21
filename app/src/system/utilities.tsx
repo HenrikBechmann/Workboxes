@@ -846,9 +846,6 @@ const versionData = {
           name: null,
           id: null,
         },
-        device: {
-          name:null,
-        },
         owner: {
           id: null,
           name: null,

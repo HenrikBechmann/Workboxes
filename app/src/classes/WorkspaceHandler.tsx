@@ -174,7 +174,7 @@ class WorkspaceHandler {
 
     // ---------------------[ setupWorkspace ]--------------------------
 
-    async setupWorkspace(userRecord) {
+    async setupWorkspace(userRecord) { // userRecord passed to get current workspace selection
 
         const result = {
             error: false,
@@ -190,8 +190,7 @@ class WorkspaceHandler {
             userWorkspaceData = userRecord.workspace,
             mobileID = userWorkspaceData.mobile.id,
             desktopID = userWorkspaceData.desktop.id,
-            userProfileInfo = userRecord.profile.user,
-            workspaceCollection = collection(this.db,'users',userProfileInfo.id,'workspaces')
+            workspaceCollection = collection(this.db,'users',this.userID,'workspaces')
 
         workspaceID = 
             isMobile
@@ -276,7 +275,7 @@ class WorkspaceHandler {
                     if ((!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) || !found_default) {
                         try {
                             updatedWorkspaceRecord.generation += 1
-                            const workspaceDocRef = doc(collection(this.db,'users',userProfileInfo.id,'workspaces'),workspaceID)
+                            const workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces'),workspaceID)
                             await setDoc(workspaceDocRef, updatedWorkspaceRecord)
                             workspaceSelectionRecord = updatedWorkspaceRecord
 
@@ -305,7 +304,7 @@ class WorkspaceHandler {
 
                     try {
 
-                        await updateDoc(doc(collection(this.db,'users'),userProfileInfo.id),userUpdateData)
+                        await updateDoc(doc(collection(this.db,'users'),this.userID),userUpdateData)
 
                     } catch (error) {
 
@@ -337,29 +336,26 @@ class WorkspaceHandler {
         if (!workspaceID) { 
 
             const 
-                workspaceDocRef = doc(collection(this.db,'users',userProfileInfo.id,'workspaces')),
+                workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces')),
                 workspaceRecord = updateDocumentSchema('workspaces','standard',{},{
                     profile: {
                         workspace:{
                             name: 'Main workspace (default)',
                             id: workspaceDocRef.id,
                         },
-                        device: {
-                            name:workspaceIDtype,
-                        },
                         owner: {
-                            id: userProfileInfo.id,
-                            name: userProfileInfo.name,
+                            id: this.userID,
+                            name: this.userName,
                         },
                         commits: {
                             created_by: {
-                                id: userProfileInfo.id, 
-                                name: userProfileInfo.name
+                                id: this.userID, 
+                                name: this.userName
                             },
                             created_timestamp: serverTimestamp(),
                             updated_by: {
-                                id: userProfileInfo.id, 
-                                name: userProfileInfo.name
+                                id: this.userID, 
+                                name: this.userName
                             },
                             updated_timestamp: serverTimestamp(),
                         },
@@ -386,7 +382,7 @@ class WorkspaceHandler {
 
                     userUpdateData['profile.counts.workspaces'] = increment(1)
 
-                batch.update(doc(collection(this.db,'users'),userProfileInfo.id),userUpdateData)
+                batch.update(doc(collection(this.db,'users'),this.userID),userUpdateData)
                 
                 await batch.commit()
 
@@ -439,9 +435,6 @@ class WorkspaceHandler {
                         workspace:{
                             name: name,
                             id: newWorkspaceDocRef.id,
-                        },
-                        device: {
-                            name:isMobile?'mobile':'desktop',
                         },
                         owner: {
                             id: this.userID,
