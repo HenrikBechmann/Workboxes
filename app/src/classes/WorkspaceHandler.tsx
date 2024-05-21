@@ -46,6 +46,8 @@ import {
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
+import { cloneDeep as _cloneDeep } from 'lodash'
+
 import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
@@ -81,7 +83,7 @@ class WorkspaceHandler {
         deletepanels: new Set(),
     }
     flags = {
-        new_workspace:true
+        new_workspace_load:true
     }
 
     // =========================[ UTILITIES ]========================
@@ -215,7 +217,7 @@ class WorkspaceHandler {
 
                 workspaceDoc = await getDoc(workspaceDocRef)
 
-                if (!workspaceDoc.exists()) { // TODO this can be corrected by nulling source and searching for default workspace
+                if (!workspaceDoc.exists()) {
                     workspaceID = null
                 } else {
                     workspaceSelectionRecord = workspaceDoc.data()
@@ -243,7 +245,6 @@ class WorkspaceHandler {
                 const dbDocs = await getDocs(q)
                 let found_default = false
                 if (dbDocs.size) { // at least one found
-                    console.log('dbDocs', dbDocs)
                     this.usage.read(dbDocs.size)
                     const docs = dbDocs.docs
                     // collect data, and look for default
@@ -255,6 +256,7 @@ class WorkspaceHandler {
                             found_default = true
                             workspaceID = data.profile.workspace.id
                             workspaceSelectionRecord = data
+                            break
                         }
                     }
                     if (!workspaceID) { // grab the first item, set it to default (edge case)
@@ -274,10 +276,19 @@ class WorkspaceHandler {
 
                     if ((!Object.is(workspaceSelectionRecord, updatedWorkspaceRecord)) || !found_default) {
                         try {
-                            updatedWorkspaceRecord.generation += 1
+
+                            updatedWorkspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
+                            const saveRecord = _cloneDeep(updatedWorkspaceRecord) // avoid assigning functions in memory
+
+                            saveRecord.generation = increment(1)
+                            saveRecord.profile.commits.updted_timestamp = serverTimestamp()
+
                             const workspaceDocRef = doc(collection(this.db,'users',this.userID,'workspaces'),workspaceID)
-                            await setDoc(workspaceDocRef, updatedWorkspaceRecord)
-                            workspaceSelectionRecord = updatedWorkspaceRecord
+                            
+                            await setDoc(workspaceDocRef, saveRecord)
+                            const newDoc = await getDoc(workspaceDocRef) // get updated increment and timestamp
+
+                            workspaceSelectionRecord = newDoc.data()
 
                         } catch (error) {
 
@@ -288,19 +299,24 @@ class WorkspaceHandler {
 
                         }
                         this.usage.write(1)
+                        this.usage.read(1)
                     }
 
                     // update user record with new workspaceID
                     const name = workspaceSelectionRecord.profile.workspace.name
-                    const userUpdateData = 
+                    const prop = 
                         isMobile
-                            ? {
-                                'workspace.mobile':{id:workspaceID,name},
-                                generation:increment(1)
+                            ? 'workspace.mobile'
+                            : 'workspace.desktop'
+
+                    const userUpdateData = 
+                            {
+                                generation:increment(1),
+                                'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                                'profile.commits.updated_timestamp':serverTimestamp()
                             }
-                            : {'workspace.desktop':{id:workspaceID,name},
-                                generation:increment(1)
-                            }
+
+                    userUpdateData[prop] = {id:workspaceID,name}
 
                     try {
 
@@ -365,26 +381,30 @@ class WorkspaceHandler {
                     }
                 })
 
-            workspaceSelectionRecord = workspaceRecord
-
             try {
                 const batch = writeBatch(this.db)
                 batch.set(workspaceDocRef,workspaceRecord)
 
-                const userUpdateData = 
+                const prop = 
                     isMobile
-                        ? {
-                            'workspace.mobile':{id:workspaceDocRef.id,name:'Main workspace (default)'},
-                        }
-                        : {
-                            'workspace.desktop':{id:workspaceDocRef.id,name:'Main workspace (default)'},
+                        ? 'workspace.mobile'
+                        : 'workspace.desktop'
+
+                const userUpdateData = 
+                        {
+                            generation:increment(1),
+                            'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                            'profile.commits.updated_timestamp':serverTimestamp(),
+                            'profile.counts.workspaces': increment(1)
                         }
 
-                    userUpdateData['profile.counts.workspaces'] = increment(1)
+                userUpdateData[prop] = {id:workspaceID,name:'Main workspace (default)'}
 
                 batch.update(doc(collection(this.db,'users'),this.userID),userUpdateData)
                 
                 await batch.commit()
+                const newDoc = await getDoc(workspaceDocRef)
+                workspaceSelectionRecord = newDoc.data()
 
             } catch (error) {
 
@@ -402,7 +422,7 @@ class WorkspaceHandler {
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
 
         // ---- DISTRIBUTE first workspace record ----
-        const selectionresult = await this.setSelection(
+        const selectionresult = await this.setSelection( // TODDO this may cause an extra userRecord update
             workspaceSelectionRecord.profile.workspace.id,
             workspaceSelectionRecord.profile.workspace.name
         )
@@ -411,7 +431,7 @@ class WorkspaceHandler {
             return result
         }
         this.workspaceRecord = workspaceSelectionRecord
-        this.flags.new_workspace = true
+        this.flags.new_workspace_load = true
  
         return result
 
@@ -537,7 +557,7 @@ class WorkspaceHandler {
         // ---- DISTRIBUTE loaded workspace record ----
         this.workspaceRecord = workspaceData
         this.clearChanged()
-        this.flags.new_workspace = true
+        this.flags.new_workspace_load = true
 
         return result
 
@@ -599,7 +619,7 @@ class WorkspaceHandler {
             this.workspaceSelection.id = workspaceID
             this.workspaceSelection.name = workspaceName
             this.clearChanged()
-            this.flags.new_workspace = true
+            this.flags.new_workspace_load = true
             return result
 
         } else {

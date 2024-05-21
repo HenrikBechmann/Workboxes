@@ -245,8 +245,8 @@ const Workspace = (props) => {
     // set up panels
     useEffect(()=>{
 
-        if (workspaceHandler.flags.new_workspace) {
-            workspaceHandler.flags.new_workspace = false
+        if (workspaceHandler.flags.new_workspace_load) {
+            workspaceHandler.flags.new_workspace_load = false
             getPanels()  
         } 
 
@@ -316,7 +316,7 @@ const Workspace = (props) => {
         //         }
         //     },
 
-    },[workspaceHandler.flags.new_workspace]) // workspacePayload])
+    },[workspaceHandler.flags.new_workspace_load]) // workspacePayload])
 
     const resizeCallback = useCallback((entries)=>{
 
