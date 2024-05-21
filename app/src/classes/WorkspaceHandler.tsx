@@ -470,9 +470,24 @@ class WorkspaceHandler {
                     }
                 })
         try {
+            const prop = 
+                isMobile
+                    ? 'workspace.mobile'
+                    : 'workspace.desktop'
+
+            const userUpdateData = 
+                    {
+                        generation:increment(1),
+                        'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                        'profile.commits.updated_timestamp':serverTimestamp(),
+                        'profile.counts.workspaces': increment(1)
+                    }
+
+            userUpdateData[prop] = {id:newWorkspaceDocRef.id,name}
+
             const batch = writeBatch(this.db)
             batch.set(newWorkspaceDocRef, newWorkspaceRecord)
-            batch.update(doc(collection(this.db,'users'),this.userID),{'profile.counts.workspaces':increment(1)})
+            batch.update(userDocRef,userUpdateData)
             await batch.commit()
         } catch (error) {
             console.log('error creating new workspace record (or updating count) from standard toolbar', error)
@@ -586,7 +601,7 @@ class WorkspaceHandler {
             const 
                 workspaceData = dbdoc.data(),
                 workspaceName = workspaceData.profile.workspace.name,
-                dbuserDocRef = doc(this.db,'users',this.userID),
+                dbuserDocRef = doc(collection(this.db,'users'),this.userID),
                 updateData = 
                     isMobile
                         ? {
