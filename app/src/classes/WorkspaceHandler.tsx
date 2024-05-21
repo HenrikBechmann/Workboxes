@@ -3,11 +3,12 @@
 
 /*
     TODO
-    - update generation
-    - maintain list of panel IDs in workspaces
     - guarantee database integrity
+    - update generation count
+    - maintain list of panel IDs in workspaces
     - track and update counts
     - updated_by
+    - implement automatic vs manual mode
 */
 
 /*
@@ -37,15 +38,11 @@
 
 import { 
     doc, collection, 
-    query, where, getDocs, orderBy, 
-    getDoc, setDoc, // deleteDoc
-    updateDoc,
-    arrayUnion,
-    arrayRemove,
-    increment,
-    runTransaction,
-    writeBatch,
-    serverTimestamp,
+    getDoc, setDoc, updateDoc, // deleteDoc
+    query, where, orderBy, getDocs,
+    arrayUnion, arrayRemove,
+    increment, serverTimestamp,
+    runTransaction, writeBatch,
 } from 'firebase/firestore'
 
 import { updateDocumentSchema } from '../system/utilities'
@@ -59,6 +56,8 @@ class WorkspaceHandler {
         this.errorControl = errorControl
     }
 
+    // =========================[ DATA ]=======================
+
     // controls
     db
     errorControl
@@ -68,7 +67,7 @@ class WorkspaceHandler {
     usage
     trigger
 
-    // data
+    // workspace data
     setWorkspaceHandler = null // initialized in WorkboxesProvider
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
@@ -78,7 +77,7 @@ class WorkspaceHandler {
         setworkspace:null,
         setwindowpositions: new Set(),
         setpanels: new Set(),
-        deletepanels: new Set()
+        deletepanels: new Set(),
     }
     flags = {
         new_workspace:true
@@ -136,7 +135,7 @@ class WorkspaceHandler {
         return result
     }
 
-    // ---------------------[ getWorkspacrList ]--------------------------
+    // ---------------------[ getWorkspaceList ]--------------------------
 
     async getWorkspaceList() {
 
@@ -480,6 +479,8 @@ class WorkspaceHandler {
         return result
 
     }
+
+    // ---------------------[ loadWorkspace ]--------------------------
 
     async loadWorkspace(workspaceID, userRecord) {
 
