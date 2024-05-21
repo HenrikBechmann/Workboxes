@@ -96,7 +96,8 @@ const WorkspaceSaveDialog = (props) => {
                         </Text>
                         <Text>
                             Manual saves can be helpful if your login is concurrently using more than one tab or device with
-                            the same workspace. Automatic saves in that case can clobber each others' configuration settings.
+                            the same workspace. Automatic saves in that case can clobber each others' configuration settings. Best
+                            advice: use different workspaces in different tabs.
                         </Text>
                         {(workspaceHandler.settings.mode == 'manual') && <Text>
                             <span style = {{fontWeight:'bold'}}>Reload...</span> to discard changes and start over.

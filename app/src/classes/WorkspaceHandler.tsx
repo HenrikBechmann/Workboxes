@@ -421,10 +421,11 @@ class WorkspaceHandler {
         // ------------[ 5. by this time a workspaceSelectionRecord is guaranteed ]-------------
 
         // ---- DISTRIBUTE first workspace record ----
-        const selectionresult = await this.setSelection( // TODDO this may cause an extra userRecord update
-            workspaceSelectionRecord.profile.workspace.id,
-            workspaceSelectionRecord.profile.workspace.name
-        )
+        const {id, name} = workspaceSelectionRecord.profile.workspace
+        
+        // TODDO this may cause an extra userRecord update
+        const selectionresult = await this.setSelection( id, name )
+
         if (selectionresult.error) {
             result.error = true
             return result
