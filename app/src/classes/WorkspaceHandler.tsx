@@ -422,14 +422,16 @@ class WorkspaceHandler {
 
         // ---- DISTRIBUTE first workspace record ----
         const {id, name} = workspaceSelectionRecord.profile.workspace
+        this.workspaceSelection.id = id,
+        this.workspaceSelection.name = name
         
-        // TODDO this may cause an extra userRecord update
-        const selectionresult = await this.setSelection( id, name )
+        // // TODDO this may cause an extra userRecord update
+        // const selectionresult = await this.setSelection( id, name )
 
-        if (selectionresult.error) {
-            result.error = true
-            return result
-        }
+        // if (selectionresult.error) {
+        //     result.error = true
+        //     return result
+        // }
         this.workspaceRecord = workspaceSelectionRecord
         this.flags.new_workspace_load = true
  
