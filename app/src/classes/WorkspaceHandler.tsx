@@ -741,7 +741,7 @@ class WorkspaceHandler {
 
     // ---------------------[ deleteWorkspace ]--------------------------
 
-    async deleteWorkspace() {
+    async deleteWorkspace(userRecord) {
 
         const result = {
             error: false,
@@ -754,32 +754,33 @@ class WorkspaceHandler {
             dbWorkspaceCollection = collection(this.db,'users',this.userID, 'workspaces'),
             dbWorkspaceQuery = query(dbWorkspaceCollection, where('profile.flags.is_default','==',true))
 
-        let dbDefaultWorkspace
+        let dbDefaultWorkspaceDoc
         try {
-            dbDefaultWorkspace = await getDocs(dbWorkspaceQuery)
+            dbDefaultWorkspaceDoc = await getDocs(dbWorkspaceQuery)
         } catch (error) {
             result.error = true
-            console.log('error fetching user workspace collection')
-            this.errorControl.push({description:'error fetching user workspace collection from standard toolbar', error:'N/A'})
-            // navigate('/error')
+            console.log('error fetching default workspace')
+            this.errorControl.push({description:'error fetching default workspace', error})
             return result
         }
         this.usage.read(1)
-        let dbDefaultDoc, defaultWorkspace
-        if (dbDefaultWorkspace.size == 1) {
-            dbDefaultDoc = dbDefaultWorkspace.docs[0]
-            defaultWorkspace = dbDefaultDoc.data()
+        let dbDefaultDoc, defaultWorkspaceRecord
+        if (dbDefaultWorkspaceDoc.size == 1) {
+
+            dbDefaultDoc = dbDefaultWorkspaceDoc.docs[0]
+            defaultWorkspaceRecord = dbDefaultDoc.data()
+
         } else {
-            // TODO should try to recover from this
-            result.error = true
-            console.log('error fetching default workspace for delete workspace')
-            this.errorControl.push({description:'error no default workspace record found to deleted workspace from standard toolbar', error:'N/A'})
-            return result
+
+            const setupResult = await this.setupWorkspace(userRecord)
+            return setupResult
+
         }
 
         const 
             previousWorkspaceName = this.workspaceSelection.name,
-            defaultWorkspaceName = defaultWorkspace.profile.workspace.name
+            defaultWorkspaceName = defaultWorkspaceRecord.profile.workspace.name,
+            defaultWorkspaceID = defaultWorkspaceRecord.profile.workspace.id
 
         // delete current workspace
         let panelCount, transactionResult
@@ -805,12 +806,25 @@ class WorkspaceHandler {
                 }
                 transaction.delete(workspaceDocRef)
                 // update count
-                transaction.update(doc(collection(this.db,'users'),this.userID),{'profile.counts.workspaces':increment(-1)})
+                const prop = 
+                    isMobile
+                        ? 'workspace.mobile'
+                        : 'workspace.desktop'
+
+                const userUpdateData = 
+                        {
+                            generation:increment(1),
+                            'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                            'profile.commits.updated_timestamp':serverTimestamp(),
+                            'profile.counts.workspaces':increment(-1),
+                        }
+
+                userUpdateData[prop] = {id:defaultWorkspaceID,name:defaultWorkspaceName}
+                transaction.update(doc(collection(this.db,'users'),this.userID),userUpdateData)
                 return true
             })
 
         } catch (error) {
-            // TODO should try to recover from this
             result.error = true
             console.log('error deleting workspace or incrementing workspace count')
             this.errorControl.push({description:'error deleting workspace or incrementing workspace count from standard toolbar', error})
@@ -820,9 +834,9 @@ class WorkspaceHandler {
         if (!transactionResult) {
             result.notice = 'workspace not found, so not deleted'
             this.usage.read(panelCount + 1)
-            // setDeleteDialogState(false)
             return result
         }
+
         // TODO check for panel sub-docs in case there was a concurrency issue
 
         this.usage.read(panelCount + 1)
@@ -830,7 +844,7 @@ class WorkspaceHandler {
         this.usage.write(1)
 
         // set current workspace to default
-        const { id, name } = defaultWorkspace.profile.workspace
+        const { id, name } = defaultWorkspaceRecord.profile.workspace
         // ---- set NEW workspace ----
         const selectionresult = await this.setSelection( id, name )
         if (selectionresult.error) {
