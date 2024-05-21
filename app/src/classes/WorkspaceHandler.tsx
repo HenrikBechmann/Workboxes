@@ -3,12 +3,13 @@
 
 /*
     TODO
-    - guarantee database integrity
     - update generation count
-    - maintain list of panel IDs in workspaces
-    - track and update counts
     - updated_by
+
+    - track and update counts
     - implement automatic vs manual mode
+    - maintain list of panel IDs in workspaces
+    - guarantee database integrity
 */
 
 /*
@@ -108,23 +109,25 @@ class WorkspaceHandler {
         this.workspaceSelection.id = id,
         this.workspaceSelection.name = name
         const updateData = 
-            isMobile
-                ? {
-                    'workspace.mobile':{id,name},
+                {
                     generation:increment(1),
+                    'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                    'profile.commits.updated_timestamp':serverTimestamp(),
                 }
-                : {
-                    'workspace.desktop':{id,name},                    
-                    generation:increment(1),
-                }
+        const prop = isMobile 
+                ? 'workspace.mobile'
+                :'workspace.desktop'
+
+        updateData[prop] = {id,name}
+
         try {
 
             await updateDoc(doc(collection(this.db,'users'),this.userID),updateData)
 
         } catch (error) {
 
-            console.log('signout error from standard toolbar', error)
-            this.errorControl.push({description:'signout error from standard toolbar', error})
+            console.log('error updating selection in user record', error)
+            this.errorControl.push({description:'error updating selection in user record', error})
             result.error = true
             return result
 
@@ -137,7 +140,7 @@ class WorkspaceHandler {
 
     // ---------------------[ getWorkspaceList ]--------------------------
 
-    async getWorkspaceList() {
+    async getWorkspaceList() { // fetches the basic workspace profile (id, name)
 
         const result = {
             error: false,
@@ -146,7 +149,7 @@ class WorkspaceHandler {
             payload: null,
         }
 
-        const workingWorkspaceList = []
+        const workspaceList = []
         const q = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
         let querySnapshot
         try {
@@ -159,10 +162,10 @@ class WorkspaceHandler {
         }
         querySnapshot.forEach((doc) => {
             const data = doc.data()
-            workingWorkspaceList.push(data.profile.workspace)
+            workspaceList.push(data.profile.workspace)
         })
         this.usage.read(querySnapshot.size)
-        result.payload = workingWorkspaceList
+        result.payload = workspaceList
         return result
 
     }
