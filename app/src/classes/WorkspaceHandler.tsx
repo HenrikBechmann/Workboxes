@@ -105,6 +105,13 @@ class WorkspaceHandler {
     // sets the selection only
     async setSelection (id, name) {
 
+        if (this.settings.mode == 'automatic' && this.settings.changed) {
+            const result = await this.saveWorkspace()
+            if (result.error) {
+                return result
+            }
+        }
+
         const result = {
             error: false,
             success: true,
