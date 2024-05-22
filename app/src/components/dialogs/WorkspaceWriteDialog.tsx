@@ -12,8 +12,6 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 
-import { updateDocumentSchema } from '../../system/utilities'
-
 import { isMobile } from '../../index'
 
 import { 
@@ -34,7 +32,6 @@ const WorkspaceWriteDialog = (props) => {
         dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
         userRecords = useUserRecords(),
-        db = useFirestore(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
         focusRef = useRef(null),
@@ -46,9 +43,7 @@ const WorkspaceWriteDialog = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
-        navigate = useNavigate(),
-        errorControl = useErrorControl(),
-        usage = useUsage()
+        navigate = useNavigate()
 
     dialogStateRef.current = writeDialogState
 

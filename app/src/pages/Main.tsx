@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { useFirestore, useUserRecords, useWorkspaceHandler, useErrorControl, useUsage } from '../system/WorkboxesProvider'
 
-import { updateDocumentSchema } from '../system/utilities'
 import Workspace from '../components/workholders/Workspace'
 import { isMobile } from '../index'
 

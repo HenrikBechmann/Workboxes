@@ -20,11 +20,10 @@ import {
     useUsage,
 } from '../../system/WorkboxesProvider'
 
-import { updateDocumentSchema } from '../../system/utilities'
-
 import WorkspaceWriteDialog from '../dialogs/WorkspaceWriteDialog'
 import WorkspaceDeleteDialog from '../dialogs/WorkspaceDeleteDialog'
 import WorkspaceSaveDialog from '../dialogs/WorkspaceSaveDialog'
+import WorkspaceSaveAsDialog from '../dialogs/WorkspaceSaveAsDialog'
 
 import { isMobile } from '../../index'
 
@@ -107,6 +106,7 @@ const StandardToolbar = (props) => {
         [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
         [deleteDialogState, setDeleteDialogState] = useState(false),
         [saveDialogState, setSaveDialogState] = useState(false),
+        [saveAsDialogState, setSaveAsDialogState] = useState(false),
         workspaceMenuRef = useRef(null),
         errorControl = useErrorControl(),
         usage = useUsage()
@@ -182,6 +182,10 @@ const StandardToolbar = (props) => {
         setDeleteDialogState(true)
     }
 
+    const saveAsWorkspaceDialog = () => {
+        setSaveAsDialogState(true)
+    }
+
     const uploadSettingDialog = () => {
         setSaveDialogState(true)
     }
@@ -234,7 +238,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {renameWorkspaceDialog} >Rename</MenuItem>
             <MenuItem >Reset</MenuItem>
             <MenuItem onClick = {deleteWorkspaceDialog} >Delete</MenuItem>
-            <MenuItem >Save as...</MenuItem>
+            <MenuItem onClick = {saveAsWorkspaceDialog} >Save as...</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {createWorkspaceDialog} >Add a workspace</MenuItem>
             </MenuGroup>            
@@ -324,6 +328,7 @@ const StandardToolbar = (props) => {
         {writeDialogState.open && <WorkspaceWriteDialog 
             writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
         {deleteDialogState && <WorkspaceDeleteDialog setDeleteDialogState = {setDeleteDialogState} />}
+        {saveAsDialogState && <WorkspaceSaveAsDialog setSaveAsDialogState = {setSaveAsDialogState} />}
         {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} 
             workspaceHandler = {workspaceHandler} />}
     </Box>
