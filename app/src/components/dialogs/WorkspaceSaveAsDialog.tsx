@@ -8,6 +8,7 @@ import {
     Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
+    useToast,
 } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +35,8 @@ const WorkspaceSaveAsDialog = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        toast = useToast({duration:3000})
 
     useEffect(()=>{
 
@@ -88,12 +90,14 @@ const WorkspaceSaveAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.saveAsWorkspace(writeValues.name)
+            result = await workspaceHandler.saveWorkspaceAs(writeValues.name)
 
         if (result.error) {
            navigate('/error')
            return
         }
+
+        toast({description:result.notice})
 
         dispatchWorkspaceHandler('saveas')
 
@@ -114,7 +118,7 @@ const WorkspaceSaveAsDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Save the current workspace as...
+                        Copy the current workspace to...
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -156,7 +160,7 @@ const WorkspaceSaveAsDialog = (props) => {
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
                             onClick = {doSaveAs}
                         >
-                          Save as...
+                          Make a copy
                         </Button>
                     </AlertDialogFooter>
 

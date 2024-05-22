@@ -175,7 +175,7 @@ const WorkspaceToolbar = (props) => {
             <MenuItem onClick = {renamePanel} >Rename</MenuItem>
             <MenuItem >Reset</MenuItem>
             <MenuItem onClick = {deletePanel} >Delete</MenuItem>
-            <MenuItem onClick = {saveAsPanel} >Save as... </MenuItem>
+            <MenuItem onClick = {saveAsPanel} >Duplicate</MenuItem>
             </MenuGroup>
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>

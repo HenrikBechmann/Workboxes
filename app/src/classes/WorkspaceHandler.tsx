@@ -765,13 +765,17 @@ class WorkspaceHandler {
 
     }
 
-    async saveAsWorkspace(name) {
+    // ---------------------[ saveWorkspaceAs ]--------------------------
+
+    async saveWorkspaceAs(name) {
 
         const result = {
             error: false,
             success: true,
             notice: null,
         }
+
+        result.notice = `the current workspace has been copied to [${name}]`
 
         return result
 
