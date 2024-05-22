@@ -36,7 +36,7 @@ const WorkspaceSaveAsDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        toast = useToast({duration:3000})
+        toast = useToast({duration:4000})
 
     useEffect(()=>{
 
@@ -99,7 +99,7 @@ const WorkspaceSaveAsDialog = (props) => {
 
         toast({description:result.notice})
 
-        dispatchWorkspaceHandler('saveas')
+        dispatchWorkspaceHandler('copy')
 
         doClose()
 

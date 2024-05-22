@@ -27,7 +27,7 @@ const WorkspaceSaveDialog = (props) => {
         dialogStateRef = useRef(null),
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
-        toast = useToast({duration:3000}),
+        toast = useToast({duration:4000}),
         navigate = useNavigate()
 
     const doClose = () => {

@@ -25,7 +25,7 @@ export const Main = (props) => {
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(), // selection for toolbar, and to get workspaceData
         db = useFirestore(),
-        toast = useToast({duration:3000}),
+        toast = useToast({duration:4000}),
         errorControl = useErrorControl(),
         navigate = useNavigate(),
         usage = useUsage()
