@@ -83,7 +83,7 @@ const Workspace = (props) => {
 
     async function loadPanels() {
 
-        const panelRecordList = []
+        const panelRecordList = workspaceHandler.panelRecordList
         const panelComponentList = []
 
         const dbPanelCollection = 
@@ -222,7 +222,7 @@ const Workspace = (props) => {
         panelComponentListRef.current = panelComponentList
 
         panelRecordListRef.current = panelRecordList
-        workspaceHandler.panelRecordList = panelRecordList
+        // workspaceHandler.panelRecordList = panelRecordList
 
         if (selectedIndex !== undefined) {
             setPanelSelectionNumber(selectedIndex)            

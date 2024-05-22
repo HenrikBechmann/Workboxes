@@ -76,7 +76,7 @@ class WorkspaceHandler {
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelRecordMap = new Map()
-    panelRecordList
+    panelRecordList = []
     settings = {mode:'automatic', changed: false}
     changedRecords = {
         setworkspace:null,
