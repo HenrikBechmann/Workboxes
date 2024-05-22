@@ -24,7 +24,6 @@ export const Main = (props) => {
         mainStateRef = useRef(null),
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(), // selection for toolbar, and to get workspaceData
-        panelDataRef = useRef(null),
         db = useFirestore(),
         toast = useToast({duration:3000}),
         errorControl = useErrorControl(),
@@ -103,7 +102,7 @@ export const Main = (props) => {
     },[workspaceHandler.workspaceSelection.id]) // workspacePayload])
 
     // return ((mainState == 'ready') && (workspaceHandler.workspaceRecord) && <Workspace panelDataRef = {panelDataRef}/>)
-    return ((mainState == 'ready') && <Workspace panelDataRef = {panelDataRef}/>)
+    return ((mainState == 'ready') && <Workspace />)
 }
 
 export default Main

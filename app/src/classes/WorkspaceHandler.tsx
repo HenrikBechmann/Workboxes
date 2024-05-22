@@ -32,7 +32,7 @@
     reloadWorkspace
     renameWorkspace
     saveWorkspace
-    saveWorkspaceAs *
+    saveAsWorkspace *
     deleteWorkspace
 
     // panels facade
@@ -75,7 +75,8 @@ class WorkspaceHandler {
     setWorkspaceHandler = null // initialized in WorkboxesProvider
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
-    panelRecords = new Map()
+    panelRecordMap = new Map()
+    panelRecordList
     settings = {mode:'automatic', changed: false}
     changedRecords = {
         setworkspace:null,
@@ -759,6 +760,18 @@ class WorkspaceHandler {
 
         // ---- SAVE workspace config ----
         this.clearChanged()
+
+        return result
+
+    }
+
+    async saveAsWorkspace(name) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
 
         return result
 

@@ -63,7 +63,6 @@ const defaultDataboxState = {
 const Workspace = (props) => {
 
     const 
-        { panelDataRef } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceData = workspaceHandler.workspaceRecord,
         [workspaceState,setWorkspaceState] = useState('setup'),
@@ -82,11 +81,7 @@ const Workspace = (props) => {
         navigate = useNavigate(),
         usage = useUsage()
 
-    panelDataRef.current = panelRecordListRef.current // available to Main for save on exit
-
     async function loadPanels() {
-
-        // console.log('running loadPanels')
 
         const panelRecordList = []
         const panelComponentList = []
@@ -99,18 +94,18 @@ const Workspace = (props) => {
                 'panels'
             )
 
-        const q = query( dbPanelCollection )
-        let querySnapshot
+        const querySpec = query( dbPanelCollection )
+        let queryDocs
         try {
-            querySnapshot = await getDocs(q)
+            queryDocs = await getDocs(querySpec)
         } catch (error) {
             console.log('error getting panel list from workspace setup', error)
             errorControl.push({description:'error getting panel list from workspace setup', error})
             navigate('/error')
             return
         }
-        usage.read(querySnapshot.size)
-        querySnapshot.forEach((dbdoc) => {
+        usage.read(queryDocs.size)
+        queryDocs.forEach((dbdoc) => {
             const data = dbdoc.data()
             panelRecordList.push(data)
         })
@@ -227,8 +222,7 @@ const Workspace = (props) => {
         panelComponentListRef.current = panelComponentList
 
         panelRecordListRef.current = panelRecordList
-
-        // console.log('initialized panelRecordList, workspaceData',panelRecordList, workspaceData)
+        workspaceHandler.panelRecordList = panelRecordList
 
         if (selectedIndex !== undefined) {
             setPanelSelectionNumber(selectedIndex)            
