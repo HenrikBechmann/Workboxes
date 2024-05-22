@@ -15,23 +15,15 @@ import { useNavigate } from 'react-router-dom'
 import { isMobile } from '../../index'
 
 import { 
-    // useUserAuthData, 
-    useUserRecords, 
-    // useAuth, 
-    useFirestore, 
     useWorkspaceHandler, 
     useSystemRecords,
-    useErrorControl,
-    useUsage,
 } from '../../system/WorkboxesProvider'
 
 const WorkspaceSaveAsDialog = (props) => {
 
     const 
         { saveAsDialogState, setSaveAsDialogState } = props,
-        dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
-        userRecords = useUserRecords(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,
         focusRef = useRef(null),
@@ -43,8 +35,6 @@ const WorkspaceSaveAsDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate()
-
-    dialogStateRef.current = saveAsDialogState
 
     useEffect(()=>{
 
@@ -98,7 +88,6 @@ const WorkspaceSaveAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            userRecord = userRecords.user,
             result = await workspaceHandler.saveAsWorkspace(writeValues.name)
 
         if (result.error) {

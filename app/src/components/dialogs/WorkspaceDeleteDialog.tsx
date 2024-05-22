@@ -13,10 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { 
     useUserRecords, 
-    useFirestore, 
     useWorkspaceHandler, 
-    useErrorControl,
-    useUsage,
 } from '../../system/WorkboxesProvider'
 
 const WorkspaceDeleteDialog = (props) => {
