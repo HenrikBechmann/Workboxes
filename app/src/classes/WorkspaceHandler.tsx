@@ -49,6 +49,8 @@ import {
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
+import { cloneDeep as _cloneDeep } from 'lodash'
+
 import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
