@@ -153,7 +153,7 @@ class WorkspaceHandler {
 
     // ---------------------[ getWorkspaceList ]--------------------------
 
-    async getWorkspaceList() { // fetches the basic workspace profile (id, name)
+    async getWorkspaceList() { // fetches the basic workspace profiles (id, name)
 
         const result = {
             error: false,
@@ -443,8 +443,7 @@ class WorkspaceHandler {
         // ---- DISTRIBUTE first workspace record ----
         const {id, name} = workspaceSelectionRecord.profile.workspace
         
-        this.workspaceSelection.id = id,
-        this.workspaceSelection.name = name        
+        this.workspaceSelection = {id, name}
         this.workspaceRecord = workspaceSelectionRecord
         this.flags.new_workspace_load = true
  
@@ -520,8 +519,7 @@ class WorkspaceHandler {
         this.usage.write(1)
         this.usage.create(1)
 
-        this.workspaceSelection.name = name
-        this.workspaceSelection.id = newWorkspaceDocRef.id
+        this.workspaceSelection = {name,id:newWorkspaceDocRef.id}
 
         return result
 
@@ -631,8 +629,7 @@ class WorkspaceHandler {
                 workspaceName = workspaceData.profile.workspace.name
             // ---- set RELOAD workspace data ----
             this.workspaceRecord = workspaceData
-            this.workspaceSelection.id = workspaceID
-            this.workspaceSelection.name = workspaceName
+            this.workspaceSelection = {id:workspaceID,name:workspaceName}
             this.clearChanged()
             this.flags.new_workspace_load = true
             return result
