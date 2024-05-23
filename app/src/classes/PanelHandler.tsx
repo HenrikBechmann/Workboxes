@@ -37,7 +37,7 @@ class PanelHandler {
         }
 
         const panelRecords = this.workspaceHandler.panelRecords
-        panelRecords.length = 0
+        panelRecords.length = 0 // start over
 
         const dbPanelCollection = 
             collection(
@@ -97,8 +97,8 @@ class PanelHandler {
 
             }
             this.usage.write(writes)
-        }
-        if (panelRecords.length === 0) { // create a panel
+        } else { // create a panel
+        // if (panelRecords.length === 0) { 
             const dbNewPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
@@ -146,6 +146,7 @@ class PanelHandler {
         }
 
         return result
+        
     }
 }
 
