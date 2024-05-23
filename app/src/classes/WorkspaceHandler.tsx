@@ -78,7 +78,7 @@ class WorkspaceHandler {
     panelHandler
 
     // workspace data
-    setWorkspaceHandler = null // initialized in WorkboxesProvider
+    setWorkspaceHandlerState = null // initialized in WorkboxesProvider, used in useWorkspace
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelRecordMap = new Map()
