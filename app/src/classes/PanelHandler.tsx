@@ -141,6 +141,7 @@ class PanelHandler {
             }
             this.usage.create(1)
             panelRecords.push(newPanelData)
+            // TODO save workspaceRecord for panel selection
             this.workspaceHandler.workspaceRecord.panel = newPanelData.profile.panel
         }
 
