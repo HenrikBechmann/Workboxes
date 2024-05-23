@@ -9,17 +9,9 @@
 
 */
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 
 import { useNavigate } from 'react-router-dom'
-
-import { 
-    doc, collection, 
-    query, where, getDocs, orderBy, 
-    getDoc, setDoc, updateDoc, deleteDoc, 
-    increment, serverTimestamp,
-    writeBatch,
-} from 'firebase/firestore'
 
 import {
     Box,
@@ -30,10 +22,8 @@ import Scroller from 'react-infinite-grid-scroller'
 
 import '../../system/panel-variables.css'
 
-import { updateDocumentSchema } from '../../system/utilities'
+import { useUserAuthData, useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
-import { useUserAuthData, useFirestore, useUserRecords, useErrorControl, useUsage,
-    useWorkspaceHandler } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
 import Workpanel from './Workpanel'
@@ -75,11 +65,7 @@ const Workspace = (props) => {
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
         workspaceElementRef = useRef(null),
-        db = useFirestore(),
-        userRecords = useUserRecords(),
-        errorControl = useErrorControl(),
-        navigate = useNavigate(),
-        usage = useUsage()
+        navigate = useNavigate()
 
     async function loadPanels() {
 
