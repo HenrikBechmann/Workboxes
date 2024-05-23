@@ -1,8 +1,6 @@
 // Metadata.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, forwardRef } from 'react'
-// import { getFunctions, httpsCallable } from "firebase/functions"
-// import { doc, getDoc } from "firebase/firestore"
 
 import {
     Text, 

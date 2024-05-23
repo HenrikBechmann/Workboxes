@@ -150,7 +150,6 @@ export const UserProvider = ({children}) => {
 
         const localStorageData = localStorage.getItem('usagedata')
         if (localStorageData) {
-            // alert('updating usage.data: ' + localStorageData)
             localStorage.removeItem('usagedata')
             const data = JSON.parse(localStorageData)
             for (let prop in data) {
@@ -257,7 +256,7 @@ export const UserProvider = ({children}) => {
     // open base listeners for user, in sequence: user, account, and domain records
     useEffect(()=>{
 
-        if (userState == 'useridentified') { // collect user record
+        if (userState == 'useridentified') { // collected user record, now collect application records
 
             getSystemRecords() // asynchronous
 
@@ -311,9 +310,9 @@ export const UserProvider = ({children}) => {
                                 
                             }
                         },(error) => {
-
-                            console.log('error for user record listener. Check permissions', error)
-                            errorControl.push({description:'error for user record listener. Check permissions', error})
+                            const errdesc = 'error for user record listener. Check permissions'
+                            console.log(errdesc, error)
+                            errorControl.push({description:errdesc, error})
                             setUserAuthData({...userAuthData})
                             setUserState('error')
                             return
@@ -375,9 +374,9 @@ export const UserProvider = ({children}) => {
                                 snapshotControl.setSchemaChecked(accountIndex)
                             }
                         }, (error) =>{
-
-                            console.log('onSnapshot error for user account', error)
-                            errorControl.push({description:'onSnapshot error for user account', error})
+                            const errdesc = 'onSnapshot error for user account'
+                            console.log(errdesc, error)
+                            errorControl.push({description:errdesc, error})
                             setUserAuthData({...userAuthData})
                             setUserState('error')
                             return
@@ -428,9 +427,9 @@ export const UserProvider = ({children}) => {
                                 snapshotControl.setSchemaChecked(domainIndex)
                             }
                         }, (error) => {
-
-                            console.log('onSnapshot error for user domain',error)
-                            errorControl.push({description:'onSnapshot error for user domain',error})
+                            const errdesc = 'onSnapshot error for user domain'
+                            console.log(errdesc,error)
+                            errorControl.push({description:errdesc,error})
                             setUserAuthData({...userAuthData})
                             setUserState('error')
                             return
@@ -488,7 +487,6 @@ export const UserProvider = ({children}) => {
         if (!user?.profile.flags.fully_registered) return
 
         // save workspace and panels to firestore
-        // console.log('accountID, account', account?.profile.account.id, {...account})
         if (account?.profile.account.id) {
             // console.log('running saveUsageData')
             const 
@@ -547,9 +545,9 @@ export const UserProvider = ({children}) => {
                 setSystemRecords({settings:systemSettingsData})
 
             } catch (error) {
-
-                console.log('error getting system settings', error)
-                errorControl.push({description:'error getting system settings',error})
+                const errdesc = 'error getting system settings'
+                console.log(errdesc, error)
+                errorControl.push({description:errdesc,error})
                 setUserAuthData({...userAuthData})
                 setUserState('error')
                 return
@@ -577,9 +575,9 @@ export const UserProvider = ({children}) => {
             userDoc = await getDocFromServer(userDocRef) // must come from server directly
 
         } catch (error) { // no internet connection
-
-            errorControlRef.current.push({description:'error verifying user record. Check internet',error})
-            console.log('error verifying user record. Check internet', error, errorControlRef.current)
+            const errdesc = 'error verifying user record. Check internet'
+            errorControlRef.current.push({description:errdesc,error})
+            console.log(errdesc, error, errorControlRef.current)
             setUserAuthData({...userAuthData})
             setUserState('error')
             return
@@ -587,9 +585,9 @@ export const UserProvider = ({children}) => {
         }
 
         if (userDoc.exists()) { // problem -- should be empty
-
-            errorControlRef.current.push({description:'inconsistent finding of user record. Check internet',error:null})
-            console.log('inconsistent finding of user record. Check internet', errorControlRef.current)
+            const errdesc = 'inconsistent finding of user record. Check internet'
+            errorControlRef.current.push({description:errdesc,error:null})
+            console.log(errdesc, errorControlRef.current)
             setUserAuthData({...userAuthData})
             setUserState('error')
             return
@@ -774,9 +772,9 @@ export const UserProvider = ({children}) => {
             await batch.commit()
 
         } catch(error) {
-
-            console.log('error getting setting initial userRecords', error)
-            errorControl.push({description:'error getting setting initial userRecords',error})
+            const errdesc = 'error getting setting initial userRecords'
+            console.log(errdesc, error)
+            errorControl.push({description:errdesc,error})
             setUserAuthData({...userAuthData})
             setUserState('error')
             return
