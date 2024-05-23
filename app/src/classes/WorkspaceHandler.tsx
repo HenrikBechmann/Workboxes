@@ -32,7 +32,7 @@
     reloadWorkspace
     renameWorkspace
     saveWorkspace
-    copyWorkspaceAs *
+    copyWorkspaceAs
     deleteWorkspace
 
     // panels facade
@@ -183,6 +183,21 @@ class WorkspaceHandler {
         })
         this.usage.read(queryDocs.size)
         result.payload = workspaceList
+        return result
+
+    }
+
+    async resetWorkspace() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+
+        result.notice = 'workspacee has been reset'
+
         return result
 
     }
