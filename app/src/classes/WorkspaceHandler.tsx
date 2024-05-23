@@ -51,6 +51,8 @@ import {
 
 import { cloneDeep as _cloneDeep } from 'lodash'
 
+import PanelHandler from './PanelHandler'
+
 import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
@@ -60,6 +62,7 @@ class WorkspaceHandler {
     constructor(db, errorControl) {
         this.db = db
         this.errorControl = errorControl
+        this.panelHandler = new PanelHandler(this, db, errorControl)
     }
 
     // =========================[ DATA ]=======================
@@ -72,6 +75,7 @@ class WorkspaceHandler {
     userName
     usage
     trigger
+    panelHandler
 
     // workspace data
     setWorkspaceHandler = null // initialized in WorkboxesProvider
