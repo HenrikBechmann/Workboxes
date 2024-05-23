@@ -97,7 +97,7 @@ class PanelHandler {
 
             }
             this.usage.write(writes)
-        } else { // create a panel
+        } else { // no panels found - create a panel
         // if (panelRecords.length === 0) { 
             const dbNewPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
@@ -131,7 +131,6 @@ class PanelHandler {
                 }
             )
             try {
-                // TODO update workspace list of panels
                 await setDoc(dbNewPanelDocRef,newPanelData)
             } catch (error) {
                 const errdesc = 'error adding new panel in workspace setup'

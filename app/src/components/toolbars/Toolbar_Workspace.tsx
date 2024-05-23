@@ -3,7 +3,7 @@
 
 import React, {useMemo, useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { useUserAuthData } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
 import {
   Box,
@@ -108,7 +108,9 @@ const WorkspaceToolbar = (props) => {
     const 
         userAuthData = useUserAuthData(),
         { displayName, photoURL, uid } = userAuthData.authUser,
-        { workspaceData, panelSelectionNumber, setPanelSelectionNumber } = props,
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        workspaceData = workspaceHandler.workspaceRecord,
+        { panelSelectionNumber, setPanelSelectionNumber } = props,
         panelSelection = workspaceData.panel,
         panelCount = workspaceData.profile.counts.panels,
         panelMenuRef = useRef(null),

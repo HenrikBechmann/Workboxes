@@ -54,14 +54,12 @@ const Workspace = (props) => {
 
     const 
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        workspaceData = workspaceHandler.workspaceRecord,
+        { workspaceRecord } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
-        // [panelList, setPanelList] = useState(null),
         userAuthData = useUserAuthData(),
         { displayName, photoURL } = userAuthData.authUser,
         panelComponentListRef = useRef(null),
-        panelRecordListRef = useRef(null),
         workboxMapRef = useRef(null),
         workboxGatewayMapRef = useRef(null),
         workspaceElementRef = useRef(null),
@@ -81,7 +79,7 @@ const Workspace = (props) => {
 
         // generate panel components, sorted by display_order, ascending
 
-        const selectedID = workspaceData.panel.id
+        const selectedID = workspaceRecord.panel.id
         let selectedIndex, defaultIndex
         for (let index = 0; index < panelRecords.length; index++) {
 
@@ -112,14 +110,11 @@ const Workspace = (props) => {
 
         panelComponentListRef.current = panelComponentList
 
-        panelRecordListRef.current = panelRecords
-        // workspaceHandler.panelRecords = panelRecords
-
         if (selectedIndex !== undefined) {
             setPanelSelectionNumber(selectedIndex)            
         } else if (defaultIndex !== undefined) {
             const defaultData = panelRecords[defaultIndex]
-            workspaceData.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
+            workspaceRecord.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
             setPanelSelectionNumber(defaultIndex)
         } else {
             // TODO error, no default found
@@ -212,6 +207,8 @@ const Workspace = (props) => {
 
     useEffect(()=>{
 
+        const num = panelSelectionNumber ?? false
+        if (num === false) return
         document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionNumber).toString())
 
     },[panelSelectionNumber])
@@ -249,7 +246,8 @@ const Workspace = (props) => {
         <GridItem data-type = 'workspace-footer' area = 'footer'>
             <Box borderTop = '1px solid lightgray' width = '100%' >
                 <ToolbarFrame>
-                    <WorkspaceToolbar panelSelectionNumber = {panelSelectionNumber} setPanelSelectionNumber = {setPanelSelectionNumber} workspaceData = {workspaceData}/>
+                    <WorkspaceToolbar panelSelectionNumber = {panelSelectionNumber} 
+                        setPanelSelectionNumber = {setPanelSelectionNumber}/>
                 </ToolbarFrame>
             </Box>
         </GridItem>
