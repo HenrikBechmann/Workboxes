@@ -23,6 +23,7 @@ class PanelHandler {
     workspaceHandler
     db
     errorControl
+    // initialized from workboxesProvider
     usage
     userName
     userID
@@ -51,8 +52,9 @@ class PanelHandler {
         try {
             queryDocs = await getDocs(querySpec)
         } catch (error) {
-            console.log('error getting panel list from workspace setup', error)
-            this.errorControl.push({description:'error getting panel list from workspace setup', error})
+            const errdesc = 'error getting panel list from workspace setup'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
         }
@@ -87,8 +89,9 @@ class PanelHandler {
                 await batch.commit()
             } catch (error) {
 
-                console.log('error updating panels list in workspace setup', error)
-                this.errorControl.push({description:'error updating panels list in workspace setup', error})
+                const errdesc = 'error updating panels list in workspace setup'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
 
@@ -131,8 +134,9 @@ class PanelHandler {
                 // TODO update workspace list of panels
                 await setDoc(dbNewPanelDocRef,newPanelData)
             } catch (error) {
-                console.log('error adding new panel in workspace setup', error)
-                this.errorControl.push({description:'error adding new panel in workspace setup', error})
+                const errdesc = 'error adding new panel in workspace setup'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
                 result.error = true
                 return result
             }
