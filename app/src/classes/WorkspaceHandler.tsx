@@ -13,6 +13,7 @@
 
     - save before switch
     - take userName from most recent user setting (ie userRecord not auth.displayName)
+    - try to consilidate some functionality
 */
 
 /*
