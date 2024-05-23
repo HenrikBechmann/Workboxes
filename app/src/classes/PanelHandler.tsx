@@ -37,7 +37,7 @@ class PanelHandler {
         }
 
         const panelRecords = this.workspaceHandler.panelRecords
-        const panelComponentList = []
+        panelRecords.length = 0
 
         const dbPanelCollection = 
             collection(
