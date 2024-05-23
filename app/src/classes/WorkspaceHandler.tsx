@@ -815,7 +815,8 @@ class WorkspaceHandler {
             newPanelRefsMap.set(newPanelID,newPanelRef)
         }
 
-        newWorkspace.profile.counts.panels = newWorkspace.panels.length
+        const panelsCount = newWorkspace.panels.length
+        newWorkspace.profile.counts.panels = panelsCount
 
         try {
 
@@ -825,13 +826,18 @@ class WorkspaceHandler {
                 batch.set(newPanelRefsMap.get(panelData.profile.panel.id),panelData)
             }
             batch.commit()
+
         } catch (error) {
+
             const errdesc = 'error saving workspace copy'
             console.log(errdesc, error)
             this.errorControl.push({description:errdesc, error})
             result.error = true
             return result
+            
         }
+
+        this.usage.write(panelsCount + 1)
 
         result.notice = `the current workspace has been copied to [${name}]`
 
