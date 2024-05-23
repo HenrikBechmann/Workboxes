@@ -83,7 +83,7 @@ const Workspace = (props) => {
 
     async function loadPanels() {
 
-        const panelRecordList = workspaceHandler.panelRecordList
+        const panelRecords = workspaceHandler.panelRecords
         const panelComponentList = []
 
         const dbPanelCollection = 
@@ -107,26 +107,26 @@ const Workspace = (props) => {
         usage.read(queryDocs.size)
         queryDocs.forEach((dbdoc) => {
             const data = dbdoc.data()
-            panelRecordList.push(data)
+            panelRecords.push(data)
         })
 
-        if (panelRecordList.length) {
+        if (panelRecords.length) {
             const batch = writeBatch(db)
             // temporary, to allow for use of await
-            panelRecordList.sort((a, b)=>{
+            panelRecords.sort((a, b)=>{
                 return a.profile.display_order - b.profile.display_order // best attempt to sort
             })
 
             // update versions
             let writes = 0
-            for (let index = 0; index < panelRecordList.length; index++) {
-                const data = panelRecordList[index]
+            for (let index = 0; index < panelRecords.length; index++) {
+                const data = panelRecords[index]
                 data.profile.display_order = index // assert contiguous order
                 const updatedData = updateDocumentSchema('panels','standard',data)
                 if (!Object.is(data, updatedData)) {
                     const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
                     batch.set(dbDocRef, updatedData)
-                    panelRecordList[index] = updatedData
+                    panelRecords[index] = updatedData
                     writes++
                 }
             }
@@ -143,7 +143,7 @@ const Workspace = (props) => {
             }
             usage.write(writes)
         }
-        if (panelRecordList.length === 0) { // create a panel
+        if (panelRecords.length === 0) { // create a panel
             const dbNewPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
@@ -185,16 +185,16 @@ const Workspace = (props) => {
                 return                
             }
             usage.create(1)
-            panelRecordList.push(newPanelData)
+            panelRecords.push(newPanelData)
             workspaceData.panel = newPanelData.profile.panel
         }
         // generate panel components, sorted by display_order, ascending
 
         const selectedID = workspaceData.panel.id
         let selectedIndex, defaultIndex
-        for (let index = 0; index < panelRecordList.length; index++) {
+        for (let index = 0; index < panelRecords.length; index++) {
 
-            const panelData = panelRecordList[index]
+            const panelData = panelRecords[index]
 
             if (selectedID && selectedID == panelData.profile.panel.id) {
                 selectedIndex = index
@@ -221,13 +221,13 @@ const Workspace = (props) => {
 
         panelComponentListRef.current = panelComponentList
 
-        panelRecordListRef.current = panelRecordList
-        // workspaceHandler.panelRecordList = panelRecordList
+        panelRecordListRef.current = panelRecords
+        // workspaceHandler.panelRecords = panelRecords
 
         if (selectedIndex !== undefined) {
             setPanelSelectionNumber(selectedIndex)            
         } else if (defaultIndex !== undefined) {
-            const defaultData = panelRecordList[defaultIndex]
+            const defaultData = panelRecords[defaultIndex]
             workspaceData.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
             setPanelSelectionNumber(defaultIndex)
         } else {

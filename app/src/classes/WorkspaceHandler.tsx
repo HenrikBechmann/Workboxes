@@ -32,7 +32,7 @@
     reloadWorkspace
     renameWorkspace
     saveWorkspace
-    saveAsWorkspace *
+    copyWorkspaceAs *
     deleteWorkspace
 
     // panels facade
@@ -78,7 +78,7 @@ class WorkspaceHandler {
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelRecordMap = new Map()
-    panelRecordList = []
+    panelRecords = []
     settings = {mode:'automatic', changed: false}
     changedRecords = {
         setworkspace:null,
@@ -767,14 +767,70 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ saveWorkspaceAs ]--------------------------
+    // ---------------------[ copyWorkspaceAs ]--------------------------
 
-    async saveWorkspaceAs(name) {
+    async copyWorkspaceAs(name) {
 
         const result = {
             error: false,
             success: true,
             notice: null,
+        }
+
+        const workspaceCollection = collection(this.db,'users',this.userID,'workspaces')
+        const newWorkspaceRef = doc(workspaceCollection)
+        const panelsCollection = collection(this.db,'users',this.userID,'workspaces',newWorkspaceRef.id,'panels')
+
+        const newWorkspace = _cloneDeep(this.workspaceRecord)
+        const newPanels = _cloneDeep(this.panelRecords)
+        const newPanelRefsMap = new Map()
+
+        newWorkspace.profile.workspace = {id: newWorkspaceRef.id, name}
+        newWorkspace.profile.owner = {id:this.userID,name:this.userName}
+        newWorkspace.profile.commits.created_by = {id:this.userID,name:this.userName}
+        newWorkspace.profile.commits.created_timestamp = serverTimestamp()
+        newWorkspace.profile.commits.updated_by = {id:this.userID,name:this.userName}
+        newWorkspace.profile.commits.updated_timestamp = serverTimestamp()
+        newWorkspace.profile.flags.is_default = false
+        newWorkspace.generation = 0
+        newWorkspace.panels = []
+        const oldSelectedPanel = newWorkspace.panel
+        newWorkspace.panel = {id:null, name: null}
+        const oldSelectedPanelID = oldSelectedPanel.id
+
+        for (const panelData of newPanels) {
+            const newPanelRef = doc(panelsCollection)
+            const newPanelID = newPanelRef.id
+            if (panelData.profile.panel.id == oldSelectedPanelID) {
+                newWorkspace.panel = {...panelData.profile.panel}
+            }
+            newWorkspace.panels.push(newPanelID)
+            panelData.profile.panel.id = newPanelID
+            panelData.profile.owner = {id:this.userID,name:this.userName}
+            panelData.profile.commits.created_by = {id:this.userID,name:this.userName}
+            panelData.profile.commits.created_timestamp = serverTimestamp()
+            panelData.profile.commits.updated_by = {id:this.userID,name:this.userName}
+            panelData.profile.commits.updated_timestamp = serverTimestamp()
+            panelData.generation = 0
+            newPanelRefsMap.set(newPanelID,newPanelRef)
+        }
+
+        newWorkspace.profile.counts.panels = newWorkspace.panels.length
+
+        try {
+
+            const batch = writeBatch(this.db)
+            batch.set(newWorkspaceRef,newWorkspace)
+            for (const panelData of newPanels) {
+                batch.set(newPanelRefsMap.get(panelData.profile.panel.id),panelData)
+            }
+            batch.commit()
+        } catch (error) {
+            const errdesc = 'error saving workspace copy'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
         }
 
         result.notice = `the current workspace has been copied to [${name}]`

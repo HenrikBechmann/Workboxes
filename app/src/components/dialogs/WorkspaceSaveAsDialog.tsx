@@ -90,7 +90,7 @@ const WorkspaceSaveAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.saveWorkspaceAs(writeValues.name)
+            result = await workspaceHandler.copyWorkspaceAs(writeValues.name)
 
         if (result.error) {
            navigate('/error')
