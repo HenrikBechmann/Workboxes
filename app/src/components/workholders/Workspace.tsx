@@ -83,111 +83,17 @@ const Workspace = (props) => {
 
     async function loadPanels() {
 
-        const panelRecords = workspaceHandler.panelRecords
-        const panelComponentList = []
+        const result = await workspaceHandler.loadPanels()
 
-        const dbPanelCollection = 
-            collection(
-                db, 
-                'users', userRecords.user.profile.user.id, 
-                'workspaces', workspaceData.profile.workspace.id,
-                'panels'
-            )
-
-        const querySpec = query( dbPanelCollection )
-        let queryDocs
-        try {
-            queryDocs = await getDocs(querySpec)
-        } catch (error) {
-            console.log('error getting panel list from workspace setup', error)
-            errorControl.push({description:'error getting panel list from workspace setup', error})
+        if (result.error) {
             navigate('/error')
             return
         }
-        usage.read(queryDocs.size)
-        queryDocs.forEach((dbdoc) => {
-            const data = dbdoc.data()
-            panelRecords.push(data)
-        })
 
-        if (panelRecords.length) {
-            const batch = writeBatch(db)
-            // temporary, to allow for use of await
-            panelRecords.sort((a, b)=>{
-                return a.profile.display_order - b.profile.display_order // best attempt to sort
-            })
 
-            // update versions
-            let writes = 0
-            for (let index = 0; index < panelRecords.length; index++) {
-                const data = panelRecords[index]
-                data.profile.display_order = index // assert contiguous order
-                const updatedData = updateDocumentSchema('panels','standard',data)
-                if (!Object.is(data, updatedData)) {
-                    const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
-                    batch.set(dbDocRef, updatedData)
-                    panelRecords[index] = updatedData
-                    writes++
-                }
-            }
+        const panelRecords = workspaceHandler.panelRecords
+        const panelComponentList = []
 
-            try {
-                await batch.commit()
-            } catch (error) {
-
-                console.log('error updating panels list in workspace setup', error)
-                errorControl.push({description:'error updating panels list in workspace setup', error})
-                navigate('/error')
-                return
-
-            }
-            usage.write(writes)
-        }
-        if (panelRecords.length === 0) { // create a panel
-            const dbNewPanelDocRef = doc(dbPanelCollection)
-            const newPanelData = updateDocumentSchema('panels','standard',{},
-                {
-                  profile: {
-                    panel:{
-                      name: 'Default panel',
-                      id: dbNewPanelDocRef.id,
-                    },
-                    display_order: 0,
-                    owner: {
-                      id: userRecords.user.profile.user.id,
-                      name: userRecords.user.profile.user.name,
-                    },
-                    commits: {
-                      created_by: {
-                          id: userRecords.user.profile.user.id,
-                          name: userRecords.user.profile.user.name,
-                      },
-                      created_timestamp: serverTimestamp(),
-                      updated_by: {
-                          id: userRecords.user.profile.user.id,
-                          name: userRecords.user.profile.user.name,
-                      },
-                      updated_timestamp: serverTimestamp(),
-                    },
-                    flags: {
-                      is_default: true,
-                    }
-                  },
-                }
-            )
-            try {
-                // TODO update workspace list of panels
-                await setDoc(dbNewPanelDocRef,newPanelData)
-            } catch (error) {
-                console.log('error adding new panel in workspace setup', error)
-                errorControl.push({description:'error adding new panel in workspace setup', error})
-                navigate('/error')
-                return                
-            }
-            usage.create(1)
-            panelRecords.push(newPanelData)
-            workspaceData.panel = newPanelData.profile.panel
-        }
         // generate panel components, sorted by display_order, ascending
 
         const selectedID = workspaceData.panel.id

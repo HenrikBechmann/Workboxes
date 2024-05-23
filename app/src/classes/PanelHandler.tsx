@@ -23,7 +23,126 @@ class PanelHandler {
     workspaceHandler
     db
     errorControl
+    usage
+    userName
+    userID
 
+    async loadPanels() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const panelRecords = this.workspaceHandler.panelRecords
+        const panelComponentList = []
+
+        const dbPanelCollection = 
+            collection(
+                this.db, 
+                'users', this.userID, 
+                'workspaces', this.workspaceHandler.workspaceRecord.profile.workspace.id,
+                'panels'
+            )
+
+        const querySpec = query( dbPanelCollection )
+        let queryDocs
+        try {
+            queryDocs = await getDocs(querySpec)
+        } catch (error) {
+            console.log('error getting panel list from workspace setup', error)
+            this.errorControl.push({description:'error getting panel list from workspace setup', error})
+            result.error = true
+            return result
+        }
+        this.usage.read(queryDocs.size)
+        queryDocs.forEach((dbdoc) => {
+            const data = dbdoc.data()
+            panelRecords.push(data)
+        })
+
+        if (panelRecords.length) {
+            const batch = writeBatch(this.db)
+            // temporary, to allow for use of await
+            panelRecords.sort((a, b)=>{
+                return a.profile.display_order - b.profile.display_order // best attempt to sort
+            })
+
+            // update versions
+            let writes = 0
+            for (let index = 0; index < panelRecords.length; index++) {
+                const data = panelRecords[index]
+                data.profile.display_order = index // assert contiguous order
+                const updatedData = updateDocumentSchema('panels','standard',data)
+                if (!Object.is(data, updatedData)) {
+                    const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
+                    batch.set(dbDocRef, updatedData)
+                    panelRecords[index] = updatedData
+                    writes++
+                }
+            }
+
+            try {
+                await batch.commit()
+            } catch (error) {
+
+                console.log('error updating panels list in workspace setup', error)
+                this.errorControl.push({description:'error updating panels list in workspace setup', error})
+                result.error = true
+                return result
+
+            }
+            this.usage.write(writes)
+        }
+        if (panelRecords.length === 0) { // create a panel
+            const dbNewPanelDocRef = doc(dbPanelCollection)
+            const newPanelData = updateDocumentSchema('panels','standard',{},
+                {
+                  profile: {
+                    panel:{
+                      name: 'Default panel',
+                      id: dbNewPanelDocRef.id,
+                    },
+                    display_order: 0,
+                    owner: {
+                      id: this.userID,
+                      name: this.userName,
+                    },
+                    commits: {
+                      created_by: {
+                          id: this.userID,
+                          name: this.userName,
+                      },
+                      created_timestamp: serverTimestamp(),
+                      updated_by: {
+                          id: this.userID,
+                          name: this.userName,
+                      },
+                      updated_timestamp: serverTimestamp(),
+                    },
+                    flags: {
+                      is_default: true,
+                    }
+                  },
+                }
+            )
+            try {
+                // TODO update workspace list of panels
+                await setDoc(dbNewPanelDocRef,newPanelData)
+            } catch (error) {
+                console.log('error adding new panel in workspace setup', error)
+                this.errorControl.push({description:'error adding new panel in workspace setup', error})
+                result.error = true
+                return result
+            }
+            this.usage.create(1)
+            panelRecords.push(newPanelData)
+            this.workspaceHandler.workspaceRecord.panel = newPanelData.profile.panel
+        }
+
+        return result
+    }
 }
 
 export default PanelHandler

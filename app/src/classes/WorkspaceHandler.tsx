@@ -94,6 +94,21 @@ class WorkspaceHandler {
         new_workspace_load:true
     }
 
+    setUserName = (userName) => {
+        this.userName = userName
+        this.panelHandler.userName = userName
+    }
+
+    setUserID = (userID) => {
+        this.userID = userID
+        this.panelHandler.userID = userID
+    }
+
+    setUsage = (usage) => {
+        this.usage = usage
+        this.panelHandler.usage = usage
+    }
+
     // =========================[ UTILITIES ]========================
 
     // ---------------------[ clearChanged ]--------------------------
@@ -206,7 +221,7 @@ class WorkspaceHandler {
 
     }
 
-    // =============================[ DATABASE OPERATIONS ]===========================
+    // =============================[ WORKSPACE DATABASE OPERATIONS ]===========================
 
     // ---------------------[ setupWorkspace ]--------------------------
 
@@ -981,6 +996,12 @@ class WorkspaceHandler {
             result.notice = `deleted [${previousWorkspaceName}] and replaced it with [${defaultWorkspaceName}]`
             return result
         }
+    }
+
+    // =============================[ PANELS FACADE ]===========================
+
+    async loadPanels() {
+        return this.panelHandler.loadPanels()
     }
 
 }

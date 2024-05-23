@@ -207,11 +207,13 @@ export const UserProvider = ({children}) => {
 
     // initialize workspaceHandler with dispatchWorkspaceHandler function
     useEffect(()=>{
-        setWorkspaceHandler((previousState) => {
-            previousState.current.setWorkspaceHandler = setWorkspaceHandler
-            previousState.current.usage = usage
-            return {...previousState}
-        })
+        workspaceHandler.current.setWorkspaceHandler = setWorkspaceHandler
+        workspaceHandler.current.setUsage(usage)
+        // setWorkspaceHandler((previousState) => {
+        //     previousState.current.setWorkspaceHandler = setWorkspaceHandler
+        //     previousState.current.usage = usage
+        //     return {...previousState}
+        // })
     },[])
 
     // set up onAuthStateChanged event capture
@@ -254,8 +256,8 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                workspaceHandler.current.userID = user.uid
-                workspaceHandler.current.userName = user.displayName
+                workspaceHandler.current.setUserID(user.uid)
+                workspaceHandler.current.setUserName(user.displayName)
                 usage.login(1)
                 setUserState('useridentified')
     
