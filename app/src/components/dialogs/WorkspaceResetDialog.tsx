@@ -71,7 +71,7 @@ const WorkspaceResetDialog = (props) => {
                         <Button isDisabled = {alertState == 'processing'} colorScheme = 'blue'
                             onClick = {doWorkspaceReset}
                         >
-                          Automatic saves
+                          Reset
                         </Button>
                     </AlertDialogFooter>
 
