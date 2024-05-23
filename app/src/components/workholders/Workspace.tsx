@@ -76,7 +76,6 @@ const Workspace = (props) => {
             return
         }
 
-
         const panelRecords = workspaceHandler.panelRecords
         const panelComponentList = []
 

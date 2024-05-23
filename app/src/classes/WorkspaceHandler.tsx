@@ -1001,7 +1001,7 @@ class WorkspaceHandler {
     // =============================[ PANELS FACADE ]===========================
 
     async loadPanels() {
-        return this.panelHandler.loadPanels()
+        return await this.panelHandler.loadPanels()
     }
 
 }
