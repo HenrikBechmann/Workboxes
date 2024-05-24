@@ -52,18 +52,54 @@ const defaultDataboxState = {
 
 const Workspace = (props) => {
 
+    // data
     const 
+        navigate = useNavigate(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelectionIndex, setPanelSelectionIndex] = useState(null),
-        workboxMapRef = useRef(null),
-        workboxHandlerMapRef = useRef(null),
-        workspaceFrameElementRef = useRef(null),
-        navigate = useNavigate(),
-        panelComponentListRef = useRef(null)
 
-    // console.log('Workspace panelSelectionIndex',panelSelectionIndex)
+        workspaceFrameElementRef = useRef(null),
+        panelComponentListRef = useRef(null),
+
+        workboxMapRef = useRef(null),
+        workboxHandlerMapRef = useRef(null)
+
+    // ---------------------------[ state change effects ]------------------------
+    useEffect(()=>{
+        const observer = new ResizeObserver(resizeCallback)
+        observer.observe(workspaceFrameElementRef.current)
+        return () => {
+            observer.disconnect()
+        }
+    },[])
+
+    // initialize panels list
+    useEffect(()=>{
+
+        if (workspaceHandler.flags.new_workspace_load) {
+            workspaceHandler.flags.new_workspace_load = false
+            loadPanels()  
+        } 
+
+    },[workspaceHandler.flags.new_workspace_load])
+
+    useEffect(()=>{
+
+        const num = panelSelectionIndex ?? false
+        if (num === false) return
+        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionIndex).toString())
+
+    },[panelSelectionIndex])
+
+    // --------------------------[ operations ]--------------------------
+    const resizeCallback = useCallback((entries)=>{
+
+        const width = entries[0].contentRect.width
+        document.documentElement.style.setProperty('--wb_panel_width',width + 'px')
+
+    },[])
 
     async function loadPanels() {
 
@@ -78,7 +114,6 @@ const Workspace = (props) => {
         panelComponentListRef.current = []
 
         // generate panel components, sorted by display_order, ascending
-
         const selectedID = workspaceRecord.panel.id
         let selectedIndex, defaultIndex
         for (let index = 0; index < panelRecords.length; index++) {
@@ -106,7 +141,6 @@ const Workspace = (props) => {
         }
 
         // otherwise, set the default as the current panel
-
         if (selectedIndex !== undefined) {
             setPanelSelectionIndex(selectedIndex)            
         } else if (defaultIndex !== undefined) {
@@ -118,43 +152,10 @@ const Workspace = (props) => {
         }
 
         setWorkspaceState('ready')
-        // console.log('selectedIndex, defaultIndex',selectedIndex, defaultIndex)
 
     }
 
-    // set up panels
-    useEffect(()=>{
-
-        if (workspaceHandler.flags.new_workspace_load) {
-            workspaceHandler.flags.new_workspace_load = false
-            loadPanels()  
-        } 
-
-    },[workspaceHandler.flags.new_workspace_load])
-
-    const resizeCallback = useCallback((entries)=>{
-
-        const width = entries[0].contentRect.width
-        document.documentElement.style.setProperty('--wb_panel_width',width + 'px')
-
-    },[])
-
-    useEffect(()=>{
-
-        const num = panelSelectionIndex ?? false
-        if (num === false) return
-        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionIndex).toString())
-
-    },[panelSelectionIndex])
-
-    useEffect(()=>{
-        const observer = new ResizeObserver(resizeCallback)
-        observer.observe(workspaceFrameElementRef.current)
-        return () => {
-            observer.disconnect()
-        }
-    },[])
-
+    // --------------------------[ render ]----------------------------
     const workspaceComponent = useMemo(()=>{
         return <Grid 
           date-type = 'workspace'
@@ -182,8 +183,6 @@ const Workspace = (props) => {
             </GridItem>
         </Grid>
     },[panelComponentListRef.current, panelSelectionIndex, workspaceState])
-
-    // console.log('panelComponentListRef, panelRecords',workspaceState, panelComponentListRef, workspaceHandler.panelRecords)
 
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
         <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
