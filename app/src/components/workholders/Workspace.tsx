@@ -9,7 +9,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -56,14 +56,14 @@ const Workspace = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
-        [panelSelectionNumber, setPanelSelectionNumber] = useState(null),
-        userAuthData = useUserAuthData(),
-        { displayName, photoURL } = userAuthData.authUser,
-        panelComponentListRef = useRef(null),
+        [panelSelectionIndex, setPanelSelectionIndex] = useState(null),
         workboxMapRef = useRef(null),
-        workboxGatewayMapRef = useRef(null),
-        workspaceElementRef = useRef(null),
-        navigate = useNavigate()
+        workboxHandlerMapRef = useRef(null),
+        workspaceFrameElementRef = useRef(null),
+        navigate = useNavigate(),
+        panelComponentList = []
+
+    console.log('Workspace panelSelectionIndex',panelSelectionIndex)
 
     async function loadPanels() {
 
@@ -75,7 +75,7 @@ const Workspace = (props) => {
         }
 
         const panelRecords = workspaceHandler.panelRecords
-        const panelComponentList = []
+        panelComponentList.length = 0
 
         // generate panel components, sorted by display_order, ascending
 
@@ -83,24 +83,23 @@ const Workspace = (props) => {
         let selectedIndex, defaultIndex
         for (let index = 0; index < panelRecords.length; index++) {
 
-            const panelData = panelRecords[index]
+            const panelRecord = panelRecords[index]
 
-            if (selectedID && selectedID == panelData.profile.panel.id) {
+            if (selectedID && selectedID == panelRecord.profile.panel.id) {
                 selectedIndex = index
             }
 
-            if (panelData.profile.flags.is_default) {
+            if (panelRecord.profile.flags.is_default) {
                 defaultIndex = index
             }
 
             panelComponentList.push(
                 <Workpanel 
-                    key = {panelData.profile.panel.id} 
-                    panelData = {panelData}
+                    key = {panelRecord.profile.panel.id} 
                     startingWindowsSpecsList = {null} 
                     workboxMapRef = {workboxMapRef}
-                    workboxGatewayMapRef = {workboxGatewayMapRef}
-                    panelNumber = {index}
+                    workboxHandlerMapRef = {workboxHandlerMapRef}
+                    panelSelectionIndex = {index}
                 />
             )
 
@@ -108,17 +107,18 @@ const Workspace = (props) => {
 
         // otherwise, set the default as the current panel
 
-        panelComponentListRef.current = panelComponentList
-
         if (selectedIndex !== undefined) {
-            setPanelSelectionNumber(selectedIndex)            
+            setPanelSelectionIndex(selectedIndex)            
         } else if (defaultIndex !== undefined) {
             const defaultData = panelRecords[defaultIndex]
             workspaceRecord.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
-            setPanelSelectionNumber(defaultIndex)
+            setPanelSelectionIndex(defaultIndex)
         } else {
-            // TODO error, no default found
+            setPanelSelectionIndex(0)
         }
+
+        setWorkspaceState('ready')
+        console.log('selectedIndex, defaultIndex',selectedIndex, defaultIndex)
 
     }
 
@@ -130,73 +130,7 @@ const Workspace = (props) => {
             loadPanels()  
         } 
 
-        // return 
-        // // TODO placeholder logic
-
-        // workboxMapRef.current = new Map()
-        // workboxGatewayMapRef.current = new Map()
-
-        // const panelWindowsSpecs = [
-
-        //     {
-        //         window:{
-        //             zOrder: 1,
-        //             configDefaults: {top:20,left:20, width:610,height:400},
-        //             view: 'normalized',
-        //         },
-        //         workbox: {
-        //             defaultWorkboxState:{...defaultWorkboxState},
-        //             defaultDocumentState: {...defaultDocumentState},
-        //             defaultDataboxState: {...defaultDataboxState},
-        //             itemTitle: "Base Workbox",
-        //             itemIcon: homeIcon,
-        //             domainTitle: displayName,
-        //             domainIcon: photoURL,
-        //             typeName: 'Collection',
-        //             type:'Collection',
-        //             id:null,
-        //         }
-        //     },
-        //     {
-        //         window:{
-        //             zOrder: 2,
-        //             configDefaults: {top:40,left:40, width:610,height:400},
-        //             view: 'normalized',
-        //         },
-        //         workbox: {
-        //             defaultWorkboxState:{...defaultWorkboxState},
-        //             defaultDocumentState: {...defaultDocumentState},
-        //             defaultDataboxState: {...defaultDataboxState},
-        //             itemTitle: 'Notebooks',
-        //             itemIcon: notebookIcon,
-        //             domainTitle: displayName,
-        //             domainIcon: photoURL,
-        //             typeName: 'Collection',
-        //             type:'Collection',
-        //             id:null,
-        //         }
-        //     },
-        //     {
-        //         window:{
-        //             zOrder: 3,
-        //             configDefaults: {top:60,left:60, width:610,height:400},
-        //             view: 'normalized',
-        //         },
-        //         workbox: {
-        //             defaultWorkboxState:{...defaultWorkboxState},
-        //             defaultDocumentState: {...defaultDocumentState},
-        //             defaultDataboxState: {...defaultDataboxState},
-        //             itemTitle: 'Checklists',
-        //             itemIcon: checklistIcon,
-        //             domainTitle: displayName,
-        //             domainIcon: photoURL,
-        //             typeName: 'Collection',
-        //             type:'Collection',
-        //             id:null,
-        //         }
-        //     },
-
-    },[workspaceHandler.flags.new_workspace_load]) // workspacePayload])
+    },[workspaceHandler.flags.new_workspace_load])
 
     const resizeCallback = useCallback((entries)=>{
 
@@ -207,27 +141,22 @@ const Workspace = (props) => {
 
     useEffect(()=>{
 
-        const num = panelSelectionNumber ?? false
+        const num = panelSelectionIndex ?? false
         if (num === false) return
-        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionNumber).toString())
+        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionIndex).toString())
 
-    },[panelSelectionNumber])
+    },[panelSelectionIndex])
 
     useEffect(()=>{
         const observer = new ResizeObserver(resizeCallback)
-        observer.observe(workspaceElementRef.current)
+        observer.observe(workspaceFrameElementRef.current)
         return () => {
             observer.disconnect()
         }
     },[])
 
-    useEffect(()=>{
-
-        if (workspaceState != 'ready') setWorkspaceState('ready')
-
-    },[workspaceState])
-
-    const workspaceComponent = <Grid 
+    const workspaceComponent = useMemo(()=>{
+        return <Grid 
           date-type = 'workspace'
           height = '100%'
           gridTemplateAreas={`"body"
@@ -235,29 +164,96 @@ const Workspace = (props) => {
           gridTemplateRows={'1fr auto'}
           gridTemplateColumns={'1fr'}
         >
-        <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
-            <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
-                <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
-                transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
-                {(workspaceState != 'setup') && panelComponentListRef.current}
+            <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
+                <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
+                    <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
+                    transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
+                    {(workspaceState != 'setup') && panelComponentList}
+                    </Box>
                 </Box>
-            </Box>
-        </GridItem>
-        <GridItem data-type = 'workspace-footer' area = 'footer'>
-            <Box borderTop = '1px solid lightgray' width = '100%' >
-                <ToolbarFrame>
-                    <WorkspaceToolbar panelSelectionNumber = {panelSelectionNumber} 
-                        setPanelSelectionNumber = {setPanelSelectionNumber}/>
-                </ToolbarFrame>
-            </Box>
-        </GridItem>
-    </Grid>
+            </GridItem>
+            <GridItem data-type = 'workspace-footer' area = 'footer'>
+                <Box borderTop = '1px solid lightgray' width = '100%' >
+                    <ToolbarFrame>
+                        {(workspaceState != 'setup') && <WorkspaceToolbar panelSelectionIndex = {panelSelectionIndex} 
+                            setPanelSelectionIndex = {setPanelSelectionIndex}/>}
+                    </ToolbarFrame>
+                </Box>
+            </GridItem>
+        </Grid>
+    },[panelComponentList, panelSelectionIndex, workspaceState])
 
-    // workspace-container to get workspaceElementRef
-
-    return <Box ref = {workspaceElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
+    return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
         <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
     </Box>
 } 
 
 export default Workspace
+
+// return 
+// // TODO placeholder logic
+
+// workboxMapRef.current = new Map()
+// workboxHandlerMapRef.current = new Map()
+
+// const panelWindowsSpecs = [
+
+//     {
+//         window:{
+//             zOrder: 1,
+//             configDefaults: {top:20,left:20, width:610,height:400},
+//             view: 'normalized',
+//         },
+//         workbox: {
+//             defaultWorkboxState:{...defaultWorkboxState},
+//             defaultDocumentState: {...defaultDocumentState},
+//             defaultDataboxState: {...defaultDataboxState},
+//             itemTitle: "Base Workbox",
+//             itemIcon: homeIcon,
+//             domainTitle: displayName,
+//             domainIcon: photoURL,
+//             typeName: 'Collection',
+//             type:'Collection',
+//             id:null,
+//         }
+//     },
+//     {
+//         window:{
+//             zOrder: 2,
+//             configDefaults: {top:40,left:40, width:610,height:400},
+//             view: 'normalized',
+//         },
+//         workbox: {
+//             defaultWorkboxState:{...defaultWorkboxState},
+//             defaultDocumentState: {...defaultDocumentState},
+//             defaultDataboxState: {...defaultDataboxState},
+//             itemTitle: 'Notebooks',
+//             itemIcon: notebookIcon,
+//             domainTitle: displayName,
+//             domainIcon: photoURL,
+//             typeName: 'Collection',
+//             type:'Collection',
+//             id:null,
+//         }
+//     },
+//     {
+//         window:{
+//             zOrder: 3,
+//             configDefaults: {top:60,left:60, width:610,height:400},
+//             view: 'normalized',
+//         },
+//         workbox: {
+//             defaultWorkboxState:{...defaultWorkboxState},
+//             defaultDocumentState: {...defaultDocumentState},
+//             defaultDataboxState: {...defaultDataboxState},
+//             itemTitle: 'Checklists',
+//             itemIcon: checklistIcon,
+//             domainTitle: displayName,
+//             domainIcon: photoURL,
+//             typeName: 'Collection',
+//             type:'Collection',
+//             id:null,
+//         }
+//     },
+
+

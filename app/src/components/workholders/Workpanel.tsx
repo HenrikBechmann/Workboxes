@@ -10,6 +10,7 @@ import {
 import Workwindow from './Workwindow'
 import Workbox from './../workbox/Workbox'
 import WorkboxHandler from '../../classes/WorkboxHandler'
+import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
 const workpanelStyles = {
     height:'100%',
@@ -39,8 +40,14 @@ const Workpanel = (props:any) => {
 
     const 
         // windows setup
-        { startingWindowsSpecsList:startingList, children, workboxMapRef, workboxGatewayMapRef, panelNumber } = props,
-
+        { startingWindowsSpecsList:startingList, 
+            children, 
+            workboxMapRef, 
+            workboxHandlerMapRef, 
+            panelSelectionIndex,
+        } = props,
+        [workspaceHandler] = useWorkspaceHandler(),
+        panelRecord = workspaceHandler.panelRecords[panelSelectionIndex],
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
         panelElementRef = useRef(null),
@@ -178,7 +185,7 @@ const Workpanel = (props:any) => {
 
         const workboxSessionID = nextWorkboxSessionID++
         
-        workboxGatewayMapRef.current.set(workboxSessionID, gateway)
+        workboxHandlerMapRef.current.set(workboxSessionID, gateway)
 
         specs.window.title = profile.itemName
         specs.window.type = profile.typeName
@@ -606,7 +613,7 @@ const Workpanel = (props:any) => {
 
     return <Box data-type = 'panel-display' width='var(--wb_panel_width)' height =' 100%' overflow = 'auto' minWidth = {0} position = 'relative'>
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
-            <Box fontSize = 'xl'>PANEL NUMBER {panelNumber}</Box>
+            <Box fontSize = 'xl'>PANEL NUMBER {panelSelectionIndex}</Box>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 
                 <Box style = {panelMessageStyles} >Tap here to load the domain workbox for this panel</Box>

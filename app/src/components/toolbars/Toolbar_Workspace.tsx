@@ -109,23 +109,26 @@ const WorkspaceToolbar = (props) => {
         userAuthData = useUserAuthData(),
         { displayName, photoURL, uid } = userAuthData.authUser,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        workspaceData = workspaceHandler.workspaceRecord,
-        { panelSelectionNumber, setPanelSelectionNumber } = props,
-        panelSelection = workspaceData.panel,
-        panelCount = workspaceData.profile.counts.panels,
+        workspaceRecord = workspaceHandler.workspaceRecord,
+        { panelSelectionIndex, setPanelSelectionIndex } = props,
+        panelSelection = workspaceRecord.panel,
+        panelCount = workspaceRecord.profile.counts.panels,
         panelMenuRef = useRef(null),
-        [ panelList, setPanelList] = useState([]),
+        panelRecords = workspaceHandler.panelRecords,
+        panelRecord = panelRecords[panelSelectionIndex],
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
+
+    console.log('panelSelectionIndex',panelSelectionIndex)
 
     useEffect(()=>{
 
         const navState = {
-            previousDisabled: panelSelectionNumber == 0,
-            nextDisabled: panelSelectionNumber == panelCount - 1,
+            previousDisabled: panelSelectionIndex == 0,
+            nextDisabled: panelSelectionIndex == panelCount - 1,
         }
         setNavState(navState)
 
-    },[panelCount, panelSelectionNumber])
+    },[panelCount, panelSelectionIndex])
 
     const renamePanel = () => {
 
@@ -152,14 +155,14 @@ const WorkspaceToolbar = (props) => {
     }
 
     const nextPanel = () => {
-        if (panelSelectionNumber < (panelCount -1)) {
-            setPanelSelectionNumber(panelSelectionNumber + 1)
+        if (panelSelectionIndex < (panelCount -1)) {
+            setPanelSelectionIndex(panelSelectionIndex + 1)
         }
     }
 
     const previousPanel = () => {
-        if (panelSelectionNumber > 0) {
-            setPanelSelectionNumber(panelSelectionNumber - 1)
+        if (panelSelectionIndex > 0) {
+            setPanelSelectionIndex(panelSelectionIndex - 1)
         }
     }
 
@@ -192,14 +195,17 @@ const WorkspaceToolbar = (props) => {
                 title = 'Select a panel:'
             >
                 {
-                    panelList.map((item) => {
-                        return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>
+                    panelRecords.map((record) => {
+                        return <MenuItemOption 
+                            key = {record.profile.panel.id} 
+                            data-name = {record.profile.panel.name} 
+                            value = {record.profile.panel.id}>{record.profile.panel.name}</MenuItemOption>
                     })
                 }
             </MenuOptionGroup>
         </MenuList>
 
-    },[panelList, panelSelection])
+    },[panelRecords, panelSelection])
 
     // TODO hide user identity in user domain panel
 // <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download to synchronize with other tabs or devices' />
@@ -207,14 +213,14 @@ const WorkspaceToolbar = (props) => {
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
-            numberBadgeCount = {panelSelectionNumber || null}
+            numberBadgeCount = {panelSelectionIndex || null}
             response = {previousPanel} isDisabled = {navState.previousDisabled}/>
         <StandardIcon icon = {navNextIcon} caption = 'next' tooltip = 'change to next right panel' 
-            numberBadgeCount = {(panelCount - (panelSelectionNumber + 1)) || null}
+            numberBadgeCount = {(panelCount - (panelSelectionIndex + 1)) || null}
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            displayName = 'Main panel' 
+            displayName = {panelRecord.profile.panel.name}
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}

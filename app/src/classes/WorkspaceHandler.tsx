@@ -216,7 +216,7 @@ class WorkspaceHandler {
         }
 
 
-        result.notice = 'workspacee has been reset'
+        result.notice = 'workspace has been reset'
 
         return result
 

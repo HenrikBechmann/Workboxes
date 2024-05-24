@@ -61,6 +61,7 @@ const WorkspaceDeleteDialog = (props) => {
 
         setDeleteDialogState(false)
         setResetDialogState(true)
+
     }
 
     return (<>

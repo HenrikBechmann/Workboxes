@@ -123,12 +123,12 @@ const Metadata = (props) => {
             activeDrags: 0,
         }),
         workboxMapRef = useRef(null),
-        workboxGatewayMapRef = useRef(null)
+        workboxHandlerMapRef = useRef(null)
 
     useEffect(()=>{
 
         workboxMapRef.current = new Map()
-        workboxGatewayMapRef.current = new Map()
+        workboxHandlerMapRef.current = new Map()
 
     },[])
 
@@ -271,7 +271,7 @@ const Metadata = (props) => {
                 >
                     {pageState != 'setup' && <Workpanel 
                         workboxMapRef = {workboxMapRef}
-                        workboxGatewayMapRef = {workboxGatewayMapRef}
+                        workboxHandlerMapRef = {workboxHandlerMapRef}
                         startingWindowsSpecsList = {startingWindowsSpecsList} 
                     />}
                 </Box>
