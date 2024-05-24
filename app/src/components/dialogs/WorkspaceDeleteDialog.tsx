@@ -19,7 +19,7 @@ import {
 const WorkspaceDeleteDialog = (props) => {
 
     const 
-        { setDeleteDialogState } = props,
+        { setDeleteDialogState, setResetDialogState } = props,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         cancelRef = useRef(null),
@@ -60,6 +60,7 @@ const WorkspaceDeleteDialog = (props) => {
     async function doResetWorkspace() {
 
         setDeleteDialogState(false)
+        setResetDialogState(true)
     }
 
     return (<>
