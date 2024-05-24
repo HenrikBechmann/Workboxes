@@ -55,24 +55,38 @@ const Workspace = (props) => {
     // data
     const 
         navigate = useNavigate(),
+
+        // basics
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
-        [panelSelectionIndex, setPanelSelectionIndex] = useState(null),
+        [panelSelectionIndex, setPanelSelectionIndex] = useState(0),
 
-        workspaceFrameElementRef = useRef(null),
-        panelComponentListRef = useRef(null),
+        // resources
+        workspaceFrameElementRef = useRef(null), // for resizeObserver
+        panelComponentListRef = useRef(null), // workspace children, viewd in workpanel scroller
 
+        // centralized management of workbox resources
         workboxMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null)
 
     // ---------------------------[ state change effects ]------------------------
+
+    // init resizeObserver
     useEffect(()=>{
         const observer = new ResizeObserver(resizeCallback)
         observer.observe(workspaceFrameElementRef.current)
         return () => {
             observer.disconnect()
         }
+    },[])
+
+    // init workbox resource repositiories
+    useEffect(()=>{
+
+        workboxMapRef.current = new Map()
+        workboxHandlerMapRef.current = new Map()
+
     },[])
 
     // initialize panels list
@@ -85,6 +99,7 @@ const Workspace = (props) => {
 
     },[workspaceHandler.flags.new_workspace_load])
 
+    // handle scroller effects for panels
     useEffect(()=>{
 
         const num = panelSelectionIndex ?? false
@@ -141,11 +156,12 @@ const Workspace = (props) => {
         }
 
         // otherwise, set the default as the current panel
+        // TODO set and handle workspace changed
         if (selectedIndex !== undefined) {
             setPanelSelectionIndex(selectedIndex)            
         } else if (defaultIndex !== undefined) {
-            const defaultData = panelRecords[defaultIndex]
-            workspaceRecord.panel = {id:defaultData.profile.panel.id , name: defaultData.profile.panel.name}
+            const defaultRecord = panelRecords[defaultIndex]
+            workspaceRecord.panel = {id:defaultRecord.profile.panel.id , name: defaultRecord.profile.panel.name}
             setPanelSelectionIndex(defaultIndex)
         } else {
             setPanelSelectionIndex(0)
@@ -156,6 +172,7 @@ const Workspace = (props) => {
     }
 
     // --------------------------[ render ]----------------------------
+    // Scroller supports embeded scroll regions
     const workspaceComponent = useMemo(()=>{
         return <Grid 
           date-type = 'workspace'
@@ -193,9 +210,6 @@ export default Workspace
 
 // return 
 // // TODO placeholder logic
-
-// workboxMapRef.current = new Map()
-// workboxHandlerMapRef.current = new Map()
 
 // const panelWindowsSpecs = [
 
