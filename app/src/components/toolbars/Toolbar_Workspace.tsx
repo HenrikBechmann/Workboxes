@@ -106,11 +106,11 @@ let panelMenuIteration = 0
 const WorkspaceToolbar = (props) => {
 
     const 
+        { panelSelectionIndex, setPanelSelectionIndex } = props,
         userAuthData = useUserAuthData(),
         { displayName, photoURL, uid } = userAuthData.authUser,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
-        { panelSelectionIndex, setPanelSelectionIndex } = props,
         panelSelection = workspaceRecord.panel,
         panelCount = workspaceRecord.profile.counts.panels,
         panelMenuRef = useRef(null),
