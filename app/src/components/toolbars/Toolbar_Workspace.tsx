@@ -118,7 +118,7 @@ const WorkspaceToolbar = (props) => {
         panelRecord = panelRecords[panelSelectionIndex],
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
-    console.log('panelSelectionIndex',panelSelectionIndex)
+    // console.log('panelSelectionIndex',panelSelectionIndex)
 
     useEffect(()=>{
 

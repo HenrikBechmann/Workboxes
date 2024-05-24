@@ -61,9 +61,9 @@ const Workspace = (props) => {
         workboxHandlerMapRef = useRef(null),
         workspaceFrameElementRef = useRef(null),
         navigate = useNavigate(),
-        panelComponentList = []
+        panelComponentListRef = useRef(null)
 
-    console.log('Workspace panelSelectionIndex',panelSelectionIndex)
+    // console.log('Workspace panelSelectionIndex',panelSelectionIndex)
 
     async function loadPanels() {
 
@@ -75,7 +75,7 @@ const Workspace = (props) => {
         }
 
         const panelRecords = workspaceHandler.panelRecords
-        panelComponentList.length = 0
+        panelComponentListRef.current = []
 
         // generate panel components, sorted by display_order, ascending
 
@@ -93,7 +93,7 @@ const Workspace = (props) => {
                 defaultIndex = index
             }
 
-            panelComponentList.push(
+            panelComponentListRef.current.push(
                 <Workpanel 
                     key = {panelRecord.profile.panel.id} 
                     startingWindowsSpecsList = {null} 
@@ -118,7 +118,7 @@ const Workspace = (props) => {
         }
 
         setWorkspaceState('ready')
-        console.log('selectedIndex, defaultIndex',selectedIndex, defaultIndex)
+        // console.log('selectedIndex, defaultIndex',selectedIndex, defaultIndex)
 
     }
 
@@ -168,7 +168,7 @@ const Workspace = (props) => {
                 <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                     <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
                     transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
-                    {(workspaceState != 'setup') && panelComponentList}
+                    {(workspaceState != 'setup') && panelComponentListRef.current}
                     </Box>
                 </Box>
             </GridItem>
@@ -181,7 +181,9 @@ const Workspace = (props) => {
                 </Box>
             </GridItem>
         </Grid>
-    },[panelComponentList, panelSelectionIndex, workspaceState])
+    },[panelComponentListRef.current, panelSelectionIndex, workspaceState])
+
+    // console.log('panelComponentListRef, panelRecords',workspaceState, panelComponentListRef, workspaceHandler.panelRecords)
 
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
         <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
