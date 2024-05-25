@@ -118,7 +118,7 @@ const WorkspaceToolbar = (props) => {
         panelRecord = panelRecords[panelSelectionIndex],
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
-    console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
+    // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
 
     useEffect(()=>{
 
@@ -236,7 +236,7 @@ const WorkspaceToolbar = (props) => {
         />
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'user domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain identity'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain persona'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />

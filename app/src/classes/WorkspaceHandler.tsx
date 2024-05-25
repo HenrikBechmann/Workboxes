@@ -151,9 +151,9 @@ class WorkspaceHandler {
                 }
         const prop = isMobile 
                 ? 'workspace.mobile'
-                :'workspace.desktop'
+                : 'workspace.desktop'
 
-        updateData[prop] = {id,name}
+        updateData[prop] = {name:name,id:id}
 
         try {
 
@@ -255,9 +255,13 @@ class WorkspaceHandler {
                 ? isMobile
                     ? 'mobile'
                     : 'desktop'
-                : mobileID === workspaceID
-                    ? 'mobile'
-                    : 'desktop'
+                : isMobile 
+                    ? (mobileID === workspaceID)
+                        ? 'mobile'
+                        : 'desktop'
+                    : (desktopID === workspaceID)
+                        ?'desktop'
+                        :'mobile'
 
         // ----------------[ 2. verify found workspaceID existence, and load if found ]---------------
         if (workspaceID) { 
@@ -597,34 +601,7 @@ class WorkspaceHandler {
             return result
         }
         const
-            workspaceData = dbdoc.data(),
-            workspaceName = workspaceData.profile.workspace.name
-
-        const prop = 
-            isMobile
-                ? 'workspace.mobile'
-                : 'workspace.desktop'
-
-        const userUpdateData = 
-                {
-                    generation:increment(1),
-                    'profile.commits.updated_by':{id:this.userID, name:this.userName},
-                    'profile.commits.updated_timestamp':serverTimestamp(),
-                }
-
-            userUpdateData[prop] = {id:workspaceID,name}
-
-        try {
-            await updateDoc(doc(collection(this.db,'users'),this.userID),userUpdateData)
-        } catch (error) {
-
-            const errdesc = 'error in update user doc for workspace'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
-        }
-        this.usage.write(1)
+            workspaceData = dbdoc.data()
 
         // ---- DISTRIBUTE loaded workspace record ----
         this.workspaceRecord = workspaceData
