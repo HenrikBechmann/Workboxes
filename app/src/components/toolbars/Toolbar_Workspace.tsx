@@ -118,7 +118,7 @@ const WorkspaceToolbar = (props) => {
         panelRecord = panelRecords[panelSelectionIndex],
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
-    // console.log('panelSelectionIndex',panelSelectionIndex)
+    console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
 
     useEffect(()=>{
 
@@ -220,7 +220,7 @@ const WorkspaceToolbar = (props) => {
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            displayName = {panelRecord.profile.panel.name}
+            displayName = {panelRecord?.profile.panel.name}
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}
@@ -235,8 +235,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'show domain workbox'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'show member workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'user domain'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'domain identity'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />

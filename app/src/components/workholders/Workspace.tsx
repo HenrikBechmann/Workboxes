@@ -168,6 +168,7 @@ const Workspace = (props) => {
         }
 
         setWorkspaceState('ready')
+        dispatchWorkspaceHandler()
 
     }
 

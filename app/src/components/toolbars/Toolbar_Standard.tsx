@@ -155,7 +155,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {gotoAccount}>Account settings</MenuItem>
             <MenuItem onClick = {gotoDomains}>Domain settings</MenuItem>
             <MenuDivider />
-            <MenuItem onClick = {gotoMemberships}>Workgroup memberships</MenuItem>
+            <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
             <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
             <MenuItem >Forum memberships</MenuItem>
             <MenuDivider />
