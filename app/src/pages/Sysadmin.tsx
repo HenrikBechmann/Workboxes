@@ -64,6 +64,12 @@ const menuTileData = [
             buttonPrompt:'Administer',
             nav:'/sysadmin/helppanels',
         },
+        {
+            header:'user admin',
+            body:`Random user admin procedures.`,
+            buttonPrompt:'Administer',
+            nav:'/sysadmin/administration',
+        },
     ]
 
 const scrollerContainer = {
