@@ -78,7 +78,7 @@ const WorkspaceSaveDialog = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody fontSize = 'sm'>
-                        <Text>
+                        <Text borderTop = '1px solid silver'>
                             The <span style = {{fontWeight:'bold'}}>Automatic saves</span> setting (the default) saves workspace panel configuration changes 
                             immediately, or quickly. This includes 
                         </Text>
@@ -88,15 +88,17 @@ const WorkspaceSaveDialog = (props) => {
                         <Text>
                             - adding, removing, and moving windows in panels
                         </Text>
-                        <Text>
+                        <Text borderTop = '1px solid silver'>
                             With the <span style = {{fontWeight:'bold'}}>Manual saves</span> setting, configuration
                             changes are only saved when you click the cloud upload icon <img style = 
                             {{display: 'inline-block', height:'16px', width:'16px', verticalAlign:'middle'}} src = {uploadCloudIcon} />.
                         </Text>
                         <Text>
                             Manual saves can be helpful if your login is concurrently using more than one tab or device with
-                            the same workspace. Automatic saves in that case can clobber each others' configuration settings. Best
-                            advice: use different workspaces in different tabs.
+                            the same workspace. Automatic saves in that case can clobber each others' configuration settings. 
+                        </Text>
+                        <Text borderTop = '1px solid silver'  borderBottom = '1px solid silver'>
+                            Best advice: use different workspaces in different tabs.
                         </Text>
                         {(workspaceHandler.settings.mode == 'manual') && <Text>
                             <span style = {{fontWeight:'bold'}}>Reload...</span> to discard changes and start over.
