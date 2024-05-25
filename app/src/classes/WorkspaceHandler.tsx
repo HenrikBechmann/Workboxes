@@ -647,6 +647,7 @@ class WorkspaceHandler {
             this.workspaceSelection = {id:workspaceID,name:workspaceName}
             this.clearChanged()
             this.flags.new_workspace_load = true
+            result.notice = `reloaded workspace [${workspaceName}]`
             return result
 
         } else {

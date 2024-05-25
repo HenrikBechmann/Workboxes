@@ -613,7 +613,6 @@ const Workpanel = (props:any) => {
 
     return <Box data-type = 'panel-display' width='var(--wb_panel_width)' height =' 100%' overflow = 'auto' minWidth = {0} position = 'relative'>
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
-            <Box fontSize = 'xl'>PANEL NUMBER {panelSelectionIndex}</Box>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 
                 <Box style = {panelMessageStyles} >Tap here to load the domain workbox for this panel</Box>
