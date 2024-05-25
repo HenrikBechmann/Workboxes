@@ -160,7 +160,7 @@ const WorkspaceSaveAsDialog = (props) => {
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
                             onClick = {doSaveAs}
                         >
-                          Make a copy
+                          Make the copy
                         </Button>
                     </AlertDialogFooter>
 
