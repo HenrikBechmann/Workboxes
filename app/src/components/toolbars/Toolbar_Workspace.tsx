@@ -236,7 +236,7 @@ const WorkspaceToolbar = (props) => {
         />
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your user domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your domain membership'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your domain identity'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />
