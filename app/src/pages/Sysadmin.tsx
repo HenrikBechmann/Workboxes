@@ -66,7 +66,7 @@ const menuTileData = [
         },
         {
             header:'user admin',
-            body:`Random user admin procedures.`,
+            body:`General user admin procedures.`,
             buttonPrompt:'Administer',
             nav:'/sysadmin/administration',
         },
@@ -110,7 +110,7 @@ const Sysadmin = (props) => {
                     orientation = 'vertical'
                     padding = {[10,20]}
                     gap = {20}
-                    startingListRange = {[0,3]}
+                    startingListRange = {[0,4]}
                     getItemPack = {getMenuTile}
                     usePlaceholder = {false}
                 />

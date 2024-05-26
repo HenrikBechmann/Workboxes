@@ -36,6 +36,9 @@ const WorkspaceSaveDialog = (props) => {
     const setAutomaticSave = () => {
 
         // ---- set save MODE ----
+        if (workspaceHandler.settings.mode == 'manual') {
+            toast({description:'workspace saving set to automatic'})
+        }
         workspaceHandler.settings.mode = 'automatic'
         // TODO call immediate save on workspaceHandler
         dispatchWorkspaceHandler('automatic')
@@ -44,6 +47,9 @@ const WorkspaceSaveDialog = (props) => {
 
     const setManualSave = () => {
         
+        if (workspaceHandler.settings.mode == 'automatic') {
+            toast({description:'workspace saving set to manual'})
+        }
         // ---- set save MODE ----
         workspaceHandler.settings.mode = 'manual'
         dispatchWorkspaceHandler('manual')

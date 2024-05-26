@@ -39,6 +39,7 @@ import SysSettings from '../pages/SysSettings'
 import Metadata from '../pages/Metadata'
 import UserControls from '../pages/UserControls'
 import HelpPanels from '../pages/HelpPanels'
+import Administration from '../pages/Administration'
 
 const routes = [
     
@@ -133,6 +134,10 @@ const routes = [
                     {
                         path:'helppanels',
                         element:<HelpPanels />
+                    },
+                    {
+                        path:'administration',
+                        element:<Administration />
                     },
                 ]
             },
