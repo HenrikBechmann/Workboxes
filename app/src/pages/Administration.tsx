@@ -59,6 +59,7 @@ const Administration = (props) => {
             membersQuery = query(memberCollection)
 
         let queryPayload
+        // ------------------[ database interaction ]-----------------
         try {
             queryPayload = await getDocs(membersQuery)
             if (queryPayload.size) {
@@ -84,6 +85,7 @@ const Administration = (props) => {
             memberWorkbox,
             userDomainWorkbox
 
+        // ------------------[ database interaction ]-----------------
         try {
             const userDomainWorkboxDoc = await getDoc(doc(workboxCollection, userDomainWorkboxID))
             if (userDomainWorkboxDoc.exists()) {
@@ -99,6 +101,8 @@ const Administration = (props) => {
             navigate('/error')
             return
         }
+        
+        console.log('userRecord, userDomainWorkbox',userRecord, userDomainWorkbox)
 
     }
 
