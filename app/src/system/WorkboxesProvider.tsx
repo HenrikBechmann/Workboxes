@@ -701,7 +701,7 @@ export const UserProvider = ({children}) => {
 
         })
 
-        const workboxRecord = updateDocumentSchema('workboxes','collection',{},{
+        const workboxRecord = updateDocumentSchema('workboxes','domain',{},{
             version: 0,
             generation: 0,
             profile: {
@@ -725,8 +725,8 @@ export const UserProvider = ({children}) => {
                 name: displayName,
               },
               type: {
-                name: "appuser",
-                alias: "App User",
+                name: "domain",
+                alias: "Domain",
               },
               commits: {
                 created_by: {

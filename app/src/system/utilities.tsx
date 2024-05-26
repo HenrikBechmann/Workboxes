@@ -86,11 +86,6 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
-    appuser: {
-      latest_version:0,
-      datamap: new Map(),
-      functionmap: new Map(),
-    },
     domain: {
       latest_version:0,
       datamap: new Map(),
@@ -309,81 +304,6 @@ const versionData = {
         },
       },
     }],
-    appuser: [
-    {
-      version: 0,
-      generation: 0,
-      profile: {
-        workbox: {
-          id:null,
-          name: null,
-          image: {
-            source: null,
-          },
-        },
-        roles: {
-          is_domainworkbox: null,
-          read: null,
-          write: null,
-        },
-        owner: {
-          id: null,
-          name: null,
-        },
-        domain: {
-          id: null,
-          name: null,
-        },
-        controlling_workbox: {
-          id: null,
-          name: null,
-        },
-        type: {
-          name: "appuser",
-          alias: "App User",
-          image: {
-            source: null,
-          },
-        },
-        commits: {
-          created_by: {
-            id: null,
-            name: null,
-          },
-          created_timestamp: null,
-          updated_by: {id: null, name: null},
-          updated_timestamp: null,
-        },
-        counts: {
-          connectors: 0,
-          references: 0,
-        },
-      },
-      document: {
-        sections: [
-          {
-            name: "standard",
-            alias: "Standard",
-            position: 0,
-            data: {
-              name: null,
-              image: {
-                source: null,
-              },
-              description: null,
-              summary: null,
-            },
-          },
-        ],
-      },
-      databox: {
-        accepts: [],
-        connectors: {
-          cached: null,
-          cache: [],
-        },
-      },
-    }],
     domain: [
     {
       version: 0,
@@ -470,6 +390,14 @@ const versionData = {
           image: {
             source: null,
           },
+        },
+        user: {
+          id: null,
+          name: null,
+        },
+        member: {
+          id: null,
+          name: null,
         },
         roles: {
           is_domainworkbox: null,
@@ -643,37 +571,14 @@ const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        flags: {
-          is_abandoned: false,
-          first_load: true,
-          fully_registered: false,
-          terms_accepted: false,
-          payment_method: false,
-          standing_code:0,
-          settled: false,
-          sample_workbox_created:false,
-        },
         user: {
           id:null,
           name: null,
-          email_name: null,
-          image: {
-            source: null,
-          },
-          location: null,
-          birthdate: null,
-          description: null,
-          date_joined: null,
         },
         member: {
           id:null,
           name: null,
-          email_name: null,
-          image: {
-            source: null,
-          },
           location: null,
-          birthdate: null,
           description: null,
           date_joined: null,
         },
