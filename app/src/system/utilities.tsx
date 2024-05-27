@@ -792,6 +792,10 @@ const versionData = {
       generation: 0,
       profile: {
         display_order: 0,
+        domain:{
+          name: null,
+          id: null,
+        },
         panel:{
           name: null,
           id: null,

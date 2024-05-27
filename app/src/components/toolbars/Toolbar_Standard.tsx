@@ -31,6 +31,7 @@ import { isMobile } from '../../index'
 import LearnIcon from './LearnIcon'
 import MenuIcon from './MenuIcon'
 import MenuControl from './MenuControl'
+import UserControl from './UserControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 // import { useToggleIcon } from './ToggleIcon'
@@ -295,7 +296,7 @@ const StandardToolbar = (props) => {
             <ToolbarVerticalDivider />
             </>
         }
-        <MenuControl 
+        <UserControl 
             displayName = {userDisplayName} 
             icon = {userPhotoURL} 
             tooltip = 'Options for current user' 

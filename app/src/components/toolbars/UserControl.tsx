@@ -1,4 +1,4 @@
-// MenuControl.tsx
+// UserControl.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {CSSProperties, useState, useEffect} from 'react'
@@ -7,6 +7,8 @@ import {
     Tooltip, Box,
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
+
+import userIcon from '../../../assets/user.png'
 
 const iconWrapperStyles = {
     display:'inline-block',
@@ -24,8 +26,8 @@ const displayNameStyles = {
 } as CSSProperties
 
 const iconStyles = {
-    height:'20px',
-    width:'20px',
+    height:'24px',
+    width:'24px',
     borderRadius:'10px',
 }
 
@@ -39,8 +41,10 @@ const arrowStyles = {
     alignItems:'center',
 }
 
+
+
 // TODO borderRadius for avatar only
-const MenuControl = (props) => {
+const UserControl = (props) => {
 
     const 
         { displayName, onCall, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props,
@@ -75,7 +79,8 @@ const MenuControl = (props) => {
                 <Tooltip hasArrow label = {tooltip} >
                     <MenuButton >
                         <Box display = 'flex' flexDirection = 'row' alignItems = 'center'>
-                            {icon && <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box>}
+                            <Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {userIcon} /></Box>
+                            {icon && <><span>&nbsp;</span><Box style = {iconWrapperStyles}> <img style = {iconStylesLocal} src = {icon} /></Box></>}
                             <Box style = {displayNameStyles} >{displayName}</Box>
                             <Box style = {arrowWrapperStylesLocal} ><span style = {arrowStyles}>▼</span></Box>
                         </Box>
@@ -89,4 +94,4 @@ const MenuControl = (props) => {
 
 }
 
-export default MenuControl
+export default UserControl

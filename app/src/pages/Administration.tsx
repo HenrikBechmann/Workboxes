@@ -148,7 +148,7 @@ const Administration = (props) => {
             }}
         )
 
-        const memberWorkbox = updateDocumentSchema('members','standard',{},{
+        const memberWorkbox = updateDocumentSchema('workboxes','member',{},{
 
             profile: {
                 workbox: {

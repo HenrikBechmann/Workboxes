@@ -1,4 +1,4 @@
-// DomainControl.tsx
+// MemberControl.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {CSSProperties} from 'react'
@@ -8,9 +8,9 @@ import {
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
-import systemDomainIcon from '../../../assets/pallet.png'
+import systemDomainIcon from '../../../assets/member.png'
 
-const DomainControl = (props) => {
+const MemberControl = (props) => {
 
     const { domainTitle, domainIcon, caption } = props
 
@@ -25,15 +25,15 @@ const DomainControl = (props) => {
 
    return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
         <Box display = 'flex' flexWrap = 'nowrap'>
-            <span>&nbsp;&nbsp;</span>
+            <span>&nbsp;</span>
             <img style = {workboxItemIconStyles} src = {systemDomainIcon} />
-            <span>&nbsp;&nbsp;</span>
-            {domainIcon && <><img style = {workboxItemIconStyles} src = {domainIcon} />
-            <span>&nbsp;&nbsp;</span></>}
+            {domainIcon && <><span>&nbsp;</span>
+            <img style = {workboxItemIconStyles} src = {domainIcon} /></>}
+            <span>&nbsp;</span>
             <Text fontSize = 'sm'>{domainTitle}</Text>
         </Box>
         <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{localCaption}</span></Box>
     </Box>
 }
 
-export default DomainControl
+export default MemberControl

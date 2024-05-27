@@ -13,6 +13,7 @@ import {
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
+import MemberControl from './MemberControl'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
@@ -116,7 +117,10 @@ const WorkspaceToolbar = (props) => {
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
+        domainSelection = panelRecord.profile.domain,
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
+
+    // console.log('domainSelection', domainSelection)
 
     // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
 
@@ -235,8 +239,8 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your user domain'/>
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your domain identity'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'the panel domain workbox'/>
+        <MemberControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your membership workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />
