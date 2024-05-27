@@ -120,7 +120,7 @@ const WorkspaceToolbar = (props) => {
         domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
-    // console.log('domainSelection', domainSelection)
+    console.log('panelSelection', {...panelSelection})
 
     // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
 
@@ -224,7 +224,7 @@ const WorkspaceToolbar = (props) => {
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            displayName = {panelRecord?.profile.panel.name}
+            displayName = {panelSelection.name}
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}
