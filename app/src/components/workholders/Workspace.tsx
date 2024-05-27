@@ -157,16 +157,23 @@ const Workspace = (props) => {
 
         // otherwise, set the default as the current panel
         // TODO set and handle workspace changed
+        let panelSelectionIndex
         if (selectedIndex !== undefined) {
+            panelSelectionIndex = selectedIndex
             setPanelSelectionIndex(selectedIndex)            
         } else if (defaultIndex !== undefined) {
+            panelSelectionIndex = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
             workspaceRecord.panel = {id:defaultRecord.profile.panel.id , name: defaultRecord.profile.panel.name}
             setPanelSelectionIndex(defaultIndex)
         } else {
+            const fallbackRecord = panelRecords[0]
+            workspaceRecord.panel = {id:fallbackRecord.profile.panel.id, name:fallbackRecord.profile.panel.name}
+            panelSelectionIndex = 0
             setPanelSelectionIndex(0)
         }
 
+        workspaceHandler.panelSelectionIndex = panelSelectionIndex
         setWorkspaceState('ready')
         dispatchWorkspaceHandler()
 

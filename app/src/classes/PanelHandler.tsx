@@ -28,6 +28,69 @@ class PanelHandler {
     userName
     userID
 
+    async getDomainContext(domainSelection, userRecord) {
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            domainCollection = collection(this.db,'domains'),
+            domainDocRef = doc(domainCollection, domainSelection.id),
+            memberCollection = collection(this.db, 'domains',domainSelection.id, 'members')
+
+        let domainRecord
+        try {
+            const domainDoc = await getDoc(domainDocRef)
+            if (domainDoc.exists()) {
+                domainRecord = domainDoc.data()
+            } else {
+                result.success = false
+                result.notice = 'domain record not found'
+                return result
+            }
+        } catch(error) {
+
+            const errdesc = 'error getting domain record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
+
+        let memberRecord
+        try {
+            const queryPayload = await getDocs(querySpec)
+            if (queryPayload.size !==1 ) {
+                result.success = false
+                result.notice = 'error fetching domain membership for this user'
+                return result
+            }
+            memberRecord = queryPayload.docs[0].data()
+        } catch(error) {
+
+            const errdesc = 'error getting domain member record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        this.workspaceHandler.domainSelection = domainSelection
+        this.workspaceHandler.domainRecord = domainRecord
+
+        const { member } = memberRecord.profile
+        this.workspaceHandler.memberSelection = {id:member.id, name:member.name}
+        this.workspaceHandler.memberRecord = memberRecord
+
+        return result        
+    }
+
     async loadPanels() {
 
         const result = {

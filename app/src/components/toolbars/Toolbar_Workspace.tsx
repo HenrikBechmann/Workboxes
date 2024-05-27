@@ -3,7 +3,9 @@
 
 import React, {useMemo, useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { useUserAuthData, useWorkspaceHandler } from '../../system/WorkboxesProvider'
+import { useUserAuthData, useWorkspaceHandler, useUserRecords } from '../../system/WorkboxesProvider'
+
+import { useNavigate } from 'react-router-dom'
 
 import {
   Box,
@@ -104,11 +106,15 @@ const displayNameStyles = {
 
 let panelMenuIteration = 0
 
+// workspaceToolbar is passive about panel selection - if not present it waits for Workspace to rectify
 const WorkspaceToolbar = (props) => {
 
     const 
         { panelSelectionIndex, setPanelSelectionIndex } = props,
+        [toolbarState,setToolbarState] = useState('ready'),
+        userRecords = useUserRecords(),
         userAuthData = useUserAuthData(),
+        navigate = useNavigate(),
         { displayName, photoURL, uid } = userAuthData.authUser,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
@@ -120,19 +126,46 @@ const WorkspaceToolbar = (props) => {
         domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
-    console.log('panelSelection', {...panelSelection})
+    // console.log('domainSelection, panelSelection, panelRecord',!domainSelection ? null: {...domainSelection}, {...panelSelection}, {...panelRecord})
 
     // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
+
+    console.log('domainRecord, memberRecord', {...workspaceHandler.domainRecord}, {...workspaceHandler.memberRecord})
 
     useEffect(()=>{
 
         const navState = {
-            previousDisabled: panelSelectionIndex == 0,
-            nextDisabled: panelSelectionIndex == panelCount - 1,
+            previousDisabled: (panelSelectionIndex ?? 0) == 0,
+            nextDisabled: panelSelectionIndex == Math.max(panelCount??0,1) - 1,
         }
         setNavState(navState)
 
     },[panelCount, panelSelectionIndex])
+
+    async function getDomainContext(domainSelection) {
+
+        const result = await workspaceHandler.getDomainContext(domainSelection, userRecords.user)
+        if (result.error) {
+            navigate('/error')
+            return
+        }
+        // console.log('workspaceHandler after getDomainContext', workspaceHandler)
+        dispatchWorkspaceHandler()
+        // setToolbarState('domaincontextreceived')
+    }
+
+    useEffect(()=>{
+
+        if (toolbarState != 'ready') setToolbarState('ready') 
+
+    },[toolbarState])    
+
+    useEffect(()=>{
+
+        if (!domainSelection) return
+        getDomainContext(domainSelection)
+
+    },[domainSelection])
 
     const renamePanel = () => {
 

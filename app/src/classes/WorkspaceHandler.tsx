@@ -25,6 +25,7 @@
     setSelection
     getWorkspaceList
     resetWorkspace *
+    getDomainContext
 
     // database operations
     setupWorkpace
@@ -82,8 +83,13 @@ class WorkspaceHandler {
     setWorkspaceHandlerState = null // initialized in WorkboxesProvider, used in useWorkspace
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
+    panelSelectionIndex = null
     panelRecordMap = new Map()
     panelRecords = []
+    domainSelection = null
+    domainRecord = null
+    memberSelection = null
+    memberRecord = null
     settings = {mode:'automatic', changed: false}
     changedRecords = {
         setworkspace:null,
@@ -219,6 +225,12 @@ class WorkspaceHandler {
         result.notice = 'workspace has been reset'
 
         return result
+
+    }
+
+    async getDomainContext(domainSelection, userRecord) {
+
+        return await this.panelHandler.getDomainContext(domainSelection, userRecord)
 
     }
 
