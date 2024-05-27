@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Tooltip,
-  MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup,
+  MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup, useToast,
 } from '@chakra-ui/react'
 
 import StandardIcon from './StandardIcon'
@@ -124,13 +124,14 @@ const WorkspaceToolbar = (props) => {
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
         domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
-        [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
+        [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
+        toast = useToast({duration:4000})        
 
     // console.log('domainSelection, panelSelection, panelRecord',!domainSelection ? null: {...domainSelection}, {...panelSelection}, {...panelRecord})
 
     // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
 
-    console.log('domainRecord, memberRecord', {...workspaceHandler.domainRecord}, {...workspaceHandler.memberRecord})
+    // console.log('domainRecord, memberRecord', {...workspaceHandler.domainRecord}, {...workspaceHandler.memberRecord})
 
     useEffect(()=>{
 
@@ -145,6 +146,9 @@ const WorkspaceToolbar = (props) => {
     async function getDomainContext(domainSelection) {
 
         const result = await workspaceHandler.getDomainContext(domainSelection, userRecords.user)
+        if (!result.success) {
+            toast({description:'unable to collect domain context'})
+        }
         if (result.error) {
             navigate('/error')
             return
@@ -272,7 +276,7 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'the panel domain workbox'/>
+        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = "the panel's domain workbox"/>
         <MemberControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your membership workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
