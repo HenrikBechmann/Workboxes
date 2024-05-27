@@ -590,6 +590,10 @@ const versionData = {
           id: null,
           name: null,
         },
+        workbox: {
+          id: null,
+          name: null,
+        },
         commits: {
           created_by: {
             id: null,

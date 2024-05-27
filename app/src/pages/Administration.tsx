@@ -73,6 +73,7 @@ const Administration = (props) => {
             navigate('/error')
             return
         }
+        // --------------------
 
         const 
             userRecord = userRecords.user,
@@ -81,8 +82,6 @@ const Administration = (props) => {
             memberWorkboxRef = doc(workboxCollection)
 
         let
-            memberRecord,
-            memberWorkbox,
             userDomainWorkbox
 
         // ------------------[ database interaction ]-----------------
@@ -101,9 +100,56 @@ const Administration = (props) => {
             navigate('/error')
             return
         }
+        // --------------------
         
         console.log('userRecord, userDomainWorkbox',userRecord, userDomainWorkbox)
 
+        const memberRecord = updateDocumentSchema('members','standard',{},{
+            profile: {
+                user: {
+                  id:userRecord.profile.user.id,
+                  name: userRecord.profile.user.name,
+                },
+                member: {
+                  id:memberRecordRef.id,
+                  name: userRecord.profile.user.name,
+                  location: userRecord.profile.user.location,
+                  description: userRecord.profile.user.description,
+                  date_joined: serverTimestamp(),
+                },
+                handle: {
+                  plain: userRecord.profile.handle.plain,
+                  lower_case: userRecord.profile.handle.lower_case,
+                },
+                domain: {
+                  id: userRecord.profile.domain.id,
+                  name: userRecord.profile.domain.name,
+                },
+                workbox: {
+                  id: memberWorkboxRef.id,
+                  name: userRecord.profile.user.name,
+                },
+                commits: {
+                  created_by: {
+                      id:userRecord.profile.user.id,
+                      name: userRecord.profile.user.name,
+                  },
+                  created_timestamp: serverTimestamp(),
+                  updated_by: {
+                      id:userRecord.profile.user.id,
+                      name: userRecord.profile.user.name,
+                  },
+                  updated_timestamp: serverTimestamp(),
+                  
+                },
+                counts:{
+                    workboxes: 1
+                }
+
+            }}
+        )
+
+        console.log('updatedMemberRecord',memberRecord)
     }
 
     return <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
