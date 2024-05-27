@@ -117,7 +117,7 @@ const WorkspaceToolbar = (props) => {
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
-        domainSelection = panelRecord.profile.domain,
+        domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false})
 
     // console.log('domainSelection', domainSelection)
