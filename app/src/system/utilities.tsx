@@ -578,6 +578,9 @@ const versionData = {
         member: {
           id:null,
           name: null,
+          image: {
+            source: null,
+          },
           location: null,
           description: null,
           date_joined: null,

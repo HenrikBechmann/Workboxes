@@ -115,7 +115,7 @@ const WorkspaceToolbar = (props) => {
         userRecords = useUserRecords(),
         userAuthData = useUserAuthData(),
         navigate = useNavigate(),
-        { displayName, photoURL, uid } = userAuthData.authUser,
+        // { displayName, photoURL, uid } = userAuthData.authUser,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
         panelSelection = workspaceRecord.panel,
@@ -124,6 +124,9 @@ const WorkspaceToolbar = (props) => {
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
         domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
+        domainRecord = workspaceHandler.domainRecord,
+        memberSelection = workspaceHandler.memberSelection,
+        memberRecord = workspaceHandler.memberRecord,
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
         toast = useToast({duration:4000})        
 
@@ -276,8 +279,12 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {displayName} domainIcon = {photoURL} caption = "the panel's domain workbox"/>
-        <MemberControl domainTitle = {displayName} domainIcon = {photoURL} caption = 'your membership workbox'/>
+        {domainRecord && <DomainControl 
+            domainTitle = {domainRecord.profile.domain.name} 
+            domainIcon = {domainRecord.profile.domain.image.source} caption = "the panel's domain workbox"/>}
+        {memberRecord && <MemberControl
+            memberTitle = {memberRecord.profile.member.name} 
+            memberIcon = {memberRecord.profile.member.image.source} caption = 'your membership workbox'/>}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />

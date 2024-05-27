@@ -113,6 +113,9 @@ const Administration = (props) => {
                 member: {
                   id:memberRecordRef.id,
                   name: userRecord.profile.user.name,
+                  image: {
+                    source: userRecord.profile.user.image.source
+                  },
                   location: userRecord.profile.user.location,
                   description: userRecord.profile.user.description,
                   date_joined: serverTimestamp(),

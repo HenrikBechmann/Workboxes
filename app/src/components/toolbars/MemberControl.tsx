@@ -12,7 +12,7 @@ import systemDomainIcon from '../../../assets/member.png'
 
 const MemberControl = (props) => {
 
-    const { domainTitle, domainIcon, caption } = props
+    const { memberTitle, memberIcon, caption } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -27,10 +27,10 @@ const MemberControl = (props) => {
         <Box display = 'flex' flexWrap = 'nowrap'>
             <span>&nbsp;</span>
             <img style = {workboxItemIconStyles} src = {systemDomainIcon} />
-            {domainIcon && <><span>&nbsp;</span>
-            <img style = {workboxItemIconStyles} src = {domainIcon} /></>}
+            {memberIcon && <><span>&nbsp;</span>
+            <img style = {workboxItemIconStyles} src = {memberIcon} /></>}
             <span>&nbsp;</span>
-            <Text fontSize = 'sm'>{domainTitle}</Text>
+            <Text fontSize = 'sm'>{memberTitle}</Text>
         </Box>
         <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{localCaption}</span></Box>
     </Box>
