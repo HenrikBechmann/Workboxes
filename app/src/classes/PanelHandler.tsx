@@ -43,6 +43,7 @@ class PanelHandler {
         let domainRecord
         try {
             const domainDoc = await getDoc(domainDocRef)
+            this.usage.read(1)
             if (domainDoc.exists()) {
                 domainRecord = domainDoc.data()
             } else {
@@ -65,6 +66,7 @@ class PanelHandler {
         let memberRecord
         try {
             const queryPayload = await getDocs(querySpec)
+            this.usage.read(Math.min(1,queryPayload.size))
             if (queryPayload.size !==1 ) {
                 result.success = false
                 result.notice = 'error fetching domain membership for this user'

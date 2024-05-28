@@ -291,6 +291,7 @@ export const UserProvider = ({children}) => {
                                         try {
 
                                             await setDoc(doc(db,'users',userAuthData.authUser.uid),updatedRecord)
+                                            usage.write(1)
 
                                         } catch (error) {
 
@@ -360,6 +361,7 @@ export const UserProvider = ({children}) => {
 
                                     try {
                                         await setDoc(doc(db,'accounts',accountID),updatedRecord)
+                                        usage.write(1)
                                     } catch (error) {
 
                                         errorControlRef.current.push({description:'error updating user account version. Check internet',error})
@@ -413,6 +415,7 @@ export const UserProvider = ({children}) => {
                                 if (!Object.is(domainRecord, updatedRecord)) {
                                     try {
                                         await setDoc(doc(db,'domains',domainID),updatedRecord)
+                                        usage.write(1)
                                     } catch(error) {
 
                                         errorControlRef.current.push({description:'error updating user domain version. Check internet',error})
@@ -573,6 +576,7 @@ export const UserProvider = ({children}) => {
         try {
 
             userDoc = await getDocFromServer(userDocRef) // must come from server directly
+            usage.read(1)
 
         } catch (error) { // no internet connection
             const errdesc = 'error verifying user record. Check internet'
