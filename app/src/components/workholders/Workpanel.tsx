@@ -50,6 +50,7 @@ const Workpanel = (props:any) => {
         panelRecord = workspaceHandler.panelRecords[panelSelectionIndex],
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
+        panelStateRef = useRef(null),
         panelElementRef = useRef(null),
 
         // track windows and their views
@@ -61,6 +62,8 @@ const Workpanel = (props:any) => {
         // track zOrder scope for assignment
         highestZOrderRef = useRef(0),
         startingWindowsSpecsList = startingList?startingList:[]
+
+        panelStateRef.current = panelState
 
     const startingWindowsSpecsListRef = useRef(startingWindowsSpecsList)
 
@@ -583,6 +586,12 @@ const Workpanel = (props:any) => {
             windowsList[index] = React.cloneElement(component, {containerDimensionSpecs})
         }
         windowsListRef.current = [...windowsList]
+        if (panelStateRef.current == 'setup') { // initialize; ongoing updates at Workspace
+            const panelDisplayElement = element.closest('#panel-display')
+            if (!panelDisplayElement) return
+            document.documentElement.style.setProperty('--wb_panel_display_height',(panelDisplayElement.offsetHeight - 10) + 'px')
+        }
+
         setPanelState('resized')
 
     },[])
@@ -611,7 +620,15 @@ const Workpanel = (props:any) => {
     const windowsList = windowsListRef.current
     const windowCount = windowsListRef.current.length
 
-    return <Box data-type = 'panel-display' width='var(--wb_panel_width)' height =' 100%' overflow = 'auto' minWidth = {0} position = 'relative'>
+    return <Box 
+        id = 'panel-display' 
+        data-type = 'panel-display' 
+        width='var(--wb_panel_width)' 
+        height =' 100%' 
+        overflow = 'auto' 
+        minWidth = {0} 
+        position = 'relative'
+    >
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 

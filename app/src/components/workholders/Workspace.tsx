@@ -94,8 +94,14 @@ const Workspace = (props) => {
     // --------------------------[ operations ]--------------------------
     const resizeCallback = useCallback((entries)=>{
 
+        const element = entries[0].target
         const width = entries[0].contentRect.width
         document.documentElement.style.setProperty('--wb_panel_width',width + 'px')
+
+        const panelDisplayElement = element.querySelector('#panel-display')
+        if (!panelDisplayElement) return
+        document.documentElement.style.setProperty('--wb_panel_display_height',(panelDisplayElement.offsetHeight - 10) + 'px')
+        // console.log('panelDisplayElement', panelDisplayElement)
 
     },[])
 

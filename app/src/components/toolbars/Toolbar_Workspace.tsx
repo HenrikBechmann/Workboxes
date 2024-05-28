@@ -146,7 +146,7 @@ const WorkspaceToolbar = (props) => {
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList 
                 lineHeight = '1em' fontSize = 'small' ref = {panelMenuRef}
-                maxHeight = '200px' overflowY = 'scroll'
+                maxHeight = 'var(--wb_panel_display_height)' overflowY = 'scroll'
             >
             <MenuGroup title = 'Panel menu'>
             <MenuItem onClick = {renamePanel} >Rename</MenuItem>
@@ -194,6 +194,7 @@ const WorkspaceToolbar = (props) => {
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}
+            placement = 'top'
             caption = 'workspace panel'
             menulist = {panelmenuList}
         />

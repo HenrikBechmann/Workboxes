@@ -43,7 +43,8 @@ const arrowStyles = {
 const MenuControl = (props) => {
 
     const 
-        { displayName, onCall, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down'} = props,
+        { displayName, onCall, avatar, icon, moreStyles, tooltip, caption, menulist, arrowdirection = 'down',
+            placement = 'bottom'} = props,
         iconStylesLocal = {...iconStyles, ...moreStyles},
         moreArrowWrapperStyles = 
             arrowdirection == 'down'
@@ -70,7 +71,7 @@ const MenuControl = (props) => {
         justifyContent: 'center',
         }}
     >
-        <Menu onOpen = {runOnCall}>
+        <Menu onOpen = {runOnCall} placement = {placement}>
             <Box display = 'flex' flexDirection = 'column' alignItems = 'center' justifyContent = 'center'>
                 <Tooltip hasArrow label = {tooltip} >
                     <MenuButton >

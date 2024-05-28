@@ -1,5 +1,6 @@
 :root {
     --wb_panel_width: 500px;
     --wb_panel_selection: -2;
+    --wb_panel_display_height: 200px;
     --wb_panel_offset: calc(var(--wb_panel_width) * var(--wb_panel_selection));
 }
