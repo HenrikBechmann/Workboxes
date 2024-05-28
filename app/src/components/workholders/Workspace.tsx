@@ -165,11 +165,22 @@ const Workspace = (props) => {
             panelSelectionIndex = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
             workspaceRecord.panel = {id:defaultRecord.profile.panel.id , name: defaultRecord.profile.panel.name}
+
+            const result = await workspaceHandler.updatePanel()
+            if (result.error) {
+                navigate('/error')
+                return
+            }
             setPanelSelectionIndex(defaultIndex)
         } else {
             const fallbackRecord = panelRecords[0]
-            workspaceRecord.panel = {id:fallbackRecord.profile.panel.id, name:fallbackRecord.profile.panel.name}
+            workspaceRecord.panel = {...fallbackRecord.profile.panel }
             panelSelectionIndex = 0
+            const result = await workspaceHandler.updatePanel()
+            if (result.error) {
+                navigate('/error')
+                return
+            }
             setPanelSelectionIndex(0)
         }
 

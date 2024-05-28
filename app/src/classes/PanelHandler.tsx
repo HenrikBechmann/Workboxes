@@ -101,12 +101,12 @@ class PanelHandler {
 
         const panelRecords = this.workspaceHandler.panelRecords
         panelRecords.length = 0 // start over
-
+        const workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id
         const dbPanelCollection = 
             collection(
                 this.db, 
                 'users', this.userID, 
-                'workspaces', this.workspaceHandler.workspaceRecord.profile.workspace.id,
+                'workspaces', workspaceID,
                 'panels'
             )
 
@@ -162,13 +162,13 @@ class PanelHandler {
             this.usage.write(writes)
         } else { // no panels found - create a panel
         // if (panelRecords.length === 0) { 
-            const dbNewPanelDocRef = doc(dbPanelCollection)
+            const newPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
                   profile: {
                     panel:{
                       name: 'Default panel',
-                      id: dbNewPanelDocRef.id,
+                      id: newPanelDocRef.id,
                     },
                     display_order: 0,
                     owner: {
@@ -193,8 +193,14 @@ class PanelHandler {
                   },
                 }
             )
+            this.workspaceHandler.workspaceRecord.panel = {...newPanelData.profile.panel}
+            const workspaceRef = doc(collection(this.db, 'users',this.userID, 'workspaces'), 
+                    workspaceID)
             try {
-                await setDoc(dbNewPanelDocRef,newPanelData)
+                const batch = writeBatch(this.db)
+                batch.set(newPanelDocRef,newPanelData)
+                batch.set(workspaceRef, this.workspaceHandler.workspaceRecord)
+                await batch.commit()
             } catch (error) {
                 const errdesc = 'error adding new panel in workspace setup'
                 console.log(errdesc, error)
@@ -205,7 +211,6 @@ class PanelHandler {
             this.usage.create(1)
             panelRecords.push(newPanelData)
             // TODO save workspaceRecord for panel selection
-            this.workspaceHandler.workspaceRecord.panel = newPanelData.profile.panel
         }
 
         return result

@@ -8,33 +8,26 @@
 
 */
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUserRecords, useWorkspaceHandler, useErrorControl, useUsage } from '../system/WorkboxesProvider'
+import { useUserRecords, useWorkspaceHandler } from '../system/WorkboxesProvider'
 
 import Workspace from '../components/workholders/Workspace'
-import { isMobile } from '../index'
 
+// Bootstrap: setupWorkspace() is called; after that loadWorkspace below for switches;
+//      switches are triggered by setWorkspaceSelection in Toolbar_Standard
 export const Main = (props) => {
     const
         [mainState, setMainState] = useState('setup'),
-        mainStateRef = useRef(null),
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(), // selection for toolbar, and to get workspaceData
-        db = useFirestore(),
         toast = useToast({duration:4000}),
-        errorControl = useErrorControl(),
-        navigate = useNavigate(),
-        usage = useUsage()
+        navigate = useNavigate()
 
-    // console.log('running MAIN', mainState)
-
-    mainStateRef.current = mainState
-
-    // TODO consolidate error handling
+    // for setup
     async function setupWorkspace() {
 
         const result = await workspaceHandler.setupWorkspace(userRecords.user)
@@ -58,12 +51,7 @@ export const Main = (props) => {
 
     }
 
-    useEffect(()=>{
-
-        setupWorkspace() // setup only
-
-    },[])
-
+    // for switch
     async function loadWorkspace(workspaceID) {
 
         const result = await workspaceHandler.loadWorkspace(workspaceID, userRecords.user)
@@ -81,27 +69,34 @@ export const Main = (props) => {
 
     }
 
-    // workspaceHandler.workspaceRecord always exists
     useEffect(()=>{
 
-        if (mainStateRef.current == 'setup') return // handled by startup
+        setupWorkspace() // setup only
 
-        if (!workspaceHandler.workspaceSelection.id) { // contingency
+    },[])
+
+    // workspaceHandler.workspaceRecord always exists
+    // this is the switch controller
+    useEffect(()=>{
+
+        if (mainState == 'setup') return // setting workspace is underway
+
+        if (!workspaceHandler.workspaceSelection.id) { // defensive; shouldn't happen
 
             setupWorkspace()
             return
 
         }
 
+        // switch has occurred
         if (workspaceHandler.workspaceRecord.profile.workspace.id !== workspaceHandler.workspaceSelection.id) {
 
             loadWorkspace(workspaceHandler.workspaceSelection.id)
 
         }
 
-    },[workspaceHandler.workspaceSelection.id]) // workspacePayload])
+    },[workspaceHandler.workspaceSelection.id, mainState])
 
-    // return ((mainState == 'ready') && (workspaceHandler.workspaceRecord) && <Workspace panelDataRef = {panelDataRef}/>)
     return ((mainState == 'ready') && <Workspace />)
 }
 

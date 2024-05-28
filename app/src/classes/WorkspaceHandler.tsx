@@ -33,6 +33,7 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
+    updatePanel
     saveWorkspace
     copyWorkspaceAs
     deleteWorkspace
@@ -747,6 +748,43 @@ class WorkspaceHandler {
         } else {
             this.workspaceRecord.profile.workspace.name = name
         }
+
+        return result
+
+    }
+
+    // ---------------------[ updatePanel ]--------------------------
+
+    async updatePanel() {
+
+        console.log('updating panel')
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            workspaceID = this.workspaceSelection.id,
+            workspaceDocRef = doc(collection(this.db, 'users',this.userID, 'workspaces'), workspaceID),
+            updateData = {
+                'panel':this.workspaceRecord.panel
+            }
+
+        try {
+
+            await updateDoc(workspaceDocRef,updateData)
+
+        } catch (error) {
+            const errdesc = 'error update panel'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result            
+        }
+
+        this.usage.write(1)
 
         return result
 
