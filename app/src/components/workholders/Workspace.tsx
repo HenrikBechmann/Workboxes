@@ -22,7 +22,7 @@ import Scroller from 'react-infinite-grid-scroller'
 
 import '../../system/panel-variables.css'
 
-import { useUserAuthData, useWorkspaceHandler } from '../../system/WorkboxesProvider'
+import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
@@ -32,23 +32,6 @@ import collectionIcon from '../../../assets/shelves.png'
 import notebookIcon from '../../../assets/notebook.png'
 import checklistIcon from '../../../assets/checklist.png'
 import homeIcon from '../../../assets/home.png'
-
-const defaultWorkboxState = {
-    settingsShow:false,
-    settingsDisabled:false,
-    documentShow:true,
-    documentDisabled:false,
-    databoxShow:true,
-    databoxDisabled:false,
-}
-
-const defaultDocumentState = {
-    mode:'view',
-}
-
-const defaultDataboxState = {
-
-}
 
 const Workspace = (props) => {
 
@@ -116,6 +99,8 @@ const Workspace = (props) => {
 
     },[])
 
+    // fetch data for all panels, then create components for all panels
+    // panel data and components are all kept in memory
     async function loadPanels() {
 
         const result = await workspaceHandler.loadPanels()
@@ -220,12 +205,30 @@ const Workspace = (props) => {
         </Grid>
     },[panelComponentListRef.current, panelSelectionIndex, workspaceState])
 
+    // the scroller enables scrolling components throughout TODO s/b a provider
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
         <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
     </Box>
 } 
 
 export default Workspace
+
+// const defaultWorkboxState = {
+//     settingsShow:false,
+//     settingsDisabled:false,
+//     documentShow:true,
+//     documentDisabled:false,
+//     databoxShow:true,
+//     databoxDisabled:false,
+// }
+
+// const defaultDocumentState = {
+//     mode:'view',
+// }
+
+// const defaultDataboxState = {
+
+// }
 
 // return 
 // // TODO placeholder logic
