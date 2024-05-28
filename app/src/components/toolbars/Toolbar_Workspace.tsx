@@ -3,7 +3,7 @@
 
 import React, {useMemo, useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { useUserAuthData, useWorkspaceHandler, useUserRecords } from '../../system/WorkboxesProvider'
+import { useWorkspaceHandler, useUserRecords } from '../../system/WorkboxesProvider'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -19,26 +19,13 @@ import MemberControl from './MemberControl'
 import MenuControl from './MenuControl'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
-import DomainBase from './DomainBase'
-
-import { useToggleIcon } from './ToggleIcon'
 
 import panelIcon from '../../../assets/panel.png'
-import helpIcon from '../../../assets/help.png'
-import uploadIcon from '../../../assets/upload.png'
-import databaseIcon from '../../../assets/database.png'
-import moreVertIcon from '../../../assets/more_vert.png'
-import expandMoreIcon from '../../../assets/expand_more.png'
-import menuIcon from '../../../assets/menu.png'
 import addIcon from '../../../assets/add.png'
 import windowSelectIcon from '../../../assets/window_select.png'
-import cartIcon from '../../../assets/cart.png'
 import hideIcon from '../../../assets/expand_more.png'
-import resetIcon from '../../../assets/restart.png'
 import navNextIcon from '../../../assets/nav_next.png'
 import navBeforeIcon from '../../../assets/nav_before.png'
-import downloadCloudIcon from '../../../assets/cloud_download.png'
-import uploadCloudIcon from '../../../assets/cloud_upload.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -53,56 +40,7 @@ const standardToolbarStyles = {
     borderRadius:'8px',
 } as CSSProperties
 
-const iconWrapperStyles = {
-    display:'inline-block',
-    // marginLeft:'12px',
-    opacity:0.7,
-}
-
-const iconStyles = {
-    height:'20px',
-    width:'20px',
-}
-
-const panelIconStyles = {
-    height:'20px',
-    width:'20px',
-    transform:'rotate(-90deg)'
-}
-
-const smallerIconStyles = {
-    height:'18px', 
-    width:'18px'
-}
-
-const upArrowWrapperStyles = {
-    display:'flex',
-    transform:'rotate(180deg)'
-
-}
-
-const arrowStyles = {
-    opacity:0.5, 
-    fontSize:'small',
-    alignItems:'center',
-}
-
-const displayNameStyles = {
-    display:'flex',
-    flexWrap:'nowrap',
-    alignItems:'center',
-    whiteSpace:'nowrap',
-    fontSize:'small', 
-    marginLeft:'6px',
-    marginRight:'3px', 
-} as CSSProperties
-
 // --------------------------- component ----------------------------
-
-        // <StandardIcon icon = {menuIcon} caption = 'panels' tooltip = 'select a panel'/>
-        // <StandardIcon icon = {addIcon} caption = 'new panel' tooltip = 'add a panel'/>
-        // <ToolbarVerticalDivider />
-        // <StandardIcon icon = {resetIcon} caption = 'panel reset' tooltip = 'reset panel to base domain workbox'/>
 
 let panelMenuIteration = 0
 
@@ -111,36 +49,30 @@ const WorkspaceToolbar = (props) => {
 
     const 
         { panelSelectionIndex, setPanelSelectionIndex } = props,
-        [toolbarState,setToolbarState] = useState('ready'),
         userRecords = useUserRecords(),
-        userAuthData = useUserAuthData(),
-        navigate = useNavigate(),
-        // { displayName, photoURL, uid } = userAuthData.authUser,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
+
         panelSelection = workspaceRecord.panel,
         panelCount = workspaceRecord.profile.counts.panels,
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
+
         domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
         domainRecord = workspaceHandler.domainRecord,
         memberSelection = workspaceHandler.memberSelection,
         memberRecord = workspaceHandler.memberRecord,
+
+        navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
         toast = useToast({duration:4000})        
-
-    // console.log('domainSelection, panelSelection, panelRecord',!domainSelection ? null: {...domainSelection}, {...panelSelection}, {...panelRecord})
-
-    // console.log('panelSelectionIndex, panelRecord',panelSelectionIndex, panelRecord)
-
-    // console.log('domainRecord, memberRecord', {...workspaceHandler.domainRecord}, {...workspaceHandler.memberRecord})
 
     useEffect(()=>{
 
         const navState = {
             previousDisabled: (panelSelectionIndex ?? 0) == 0,
-            nextDisabled: panelSelectionIndex == Math.max(panelCount??0,1) - 1,
+            nextDisabled: panelSelectionIndex == Math.max(panelCount ?? 0,1) - 1,
         }
         setNavState(navState)
 
@@ -156,16 +88,8 @@ const WorkspaceToolbar = (props) => {
             navigate('/error')
             return
         }
-        // console.log('workspaceHandler after getDomainContext', workspaceHandler)
         dispatchWorkspaceHandler()
-        // setToolbarState('domaincontextreceived')
     }
-
-    useEffect(()=>{
-
-        if (toolbarState != 'ready') setToolbarState('ready') 
-
-    },[toolbarState])    
 
     useEffect(()=>{
 
@@ -182,6 +106,10 @@ const WorkspaceToolbar = (props) => {
 
     }
 
+    const resetPanel = () => {
+
+    }
+
     const saveAsPanel = () => {
 
     }
@@ -190,7 +118,7 @@ const WorkspaceToolbar = (props) => {
 
     }
 
-    const reOrderPanels = () => {
+    const reorderPanels = () => {
 
     }
 
@@ -222,13 +150,13 @@ const WorkspaceToolbar = (props) => {
             >
             <MenuGroup title = 'Panel menu'>
             <MenuItem onClick = {renamePanel} >Rename</MenuItem>
-            <MenuItem >Reset</MenuItem>
+            <MenuItem onClick = {resetPanel}>Reset</MenuItem>
             <MenuItem onClick = {deletePanel} >Delete</MenuItem>
             <MenuItem onClick = {saveAsPanel} >Duplicate as...</MenuItem>
             </MenuGroup>
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
-            <MenuItem onClick = {reOrderPanels} >Re-order panels</MenuItem>
+            <MenuItem onClick = {reorderPanels} >Re-order panels</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
@@ -243,16 +171,14 @@ const WorkspaceToolbar = (props) => {
                         return <MenuItemOption 
                             key = {record.profile.panel.id} 
                             data-name = {record.profile.panel.name} 
-                            value = {record.profile.panel.id}>{record.profile.panel.name}</MenuItemOption>
+                            value = {record.profile.panel.id}>{record.profile.panel.name}
+                        </MenuItemOption>
                     })
                 }
             </MenuOptionGroup>
         </MenuList>
 
     },[panelRecords, panelSelection])
-
-    // TODO hide user identity in user domain panel
-// <StandardIcon icon = {downloadCloudIcon} caption = 'download' tooltip = 'download to synchronize with other tabs or devices' />
 
     // render
     return <Box style = {standardToolbarStyles}>
