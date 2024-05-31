@@ -178,7 +178,7 @@ const WorkspaceToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    },[panelRecords, panelSelection])
+    },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]]) 
 
     // render
     return <Box style = {standardToolbarStyles}>
