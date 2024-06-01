@@ -218,7 +218,7 @@ class PanelHandler {
         return result
         
     }
-    async panelRename() {
+    async panelRename(panelSelectionIndex, name) {
 
         const result = {
             error: false,

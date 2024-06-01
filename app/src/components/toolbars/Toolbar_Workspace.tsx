@@ -187,6 +187,8 @@ const WorkspaceToolbar = (props) => {
     //  panelRecords[panelSelectionIndex] guaranteed to be updated change
     },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]])
 
+    console.log('workspaceHandler', workspaceHandler)
+
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
