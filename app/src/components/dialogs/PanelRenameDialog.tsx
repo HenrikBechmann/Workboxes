@@ -119,7 +119,7 @@ const PanelRenameDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Rename this panel [{panelName}]
+                        Rename this panel ("{panelName}")
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
