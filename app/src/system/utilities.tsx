@@ -296,7 +296,7 @@ const versionData = {
           },
         ],
       },
-      itembox: {
+      itemlist: {
         accepts: [],
         connectors: {
           cached: null,
@@ -371,7 +371,7 @@ const versionData = {
           },
         ],
       },
-      itembox: {
+      itemlist: {
         accepts: [],
         connectors: {
           cached: null,
@@ -454,7 +454,7 @@ const versionData = {
           },
         ],
       },
-      itembox: {
+      itemlist: {
         accepts: [],
         connectors: {
           cached: null,
