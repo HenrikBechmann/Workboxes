@@ -40,6 +40,7 @@
 
     // panels facade
     loadPanels
+    panelRename
 
 */
 
@@ -1033,8 +1034,8 @@ class WorkspaceHandler {
         return await this.panelHandler.loadPanels()
     }
 
-    async panelRename(){
-        return await this.panelHandler.panelRename()
+    async panelRename(panelSelectionIndex, name){
+        return await this.panelHandler.panelRename(panelSelectionIndex, name)
     }
 
 }
