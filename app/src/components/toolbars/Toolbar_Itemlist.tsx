@@ -55,7 +55,7 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-const DataboxToolbar = (props) => {
+const ItemlistToolbar = (props) => {
 
 
     const
@@ -81,7 +81,7 @@ const DataboxToolbar = (props) => {
         })
 
     const databoxmenulist = <MenuList >
-        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itembox</MenuItem>
+        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itemlist</MenuItem>
         <MenuItem icon = {<img src = {settingsIcon} />}>Databox settings</MenuItem>
     </MenuList>
 
@@ -96,12 +96,12 @@ const DataboxToolbar = (props) => {
     // render
     return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'itembox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
+        <MenuIcon icon = {packageIcon} caption = 'itemlist' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
-        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itembox list'/>
+        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itemlist list'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <ToolbarVerticalDivider />
@@ -118,4 +118,4 @@ const DataboxToolbar = (props) => {
         // <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
         // <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>
 
-export default DataboxToolbar
+export default ItemlistToolbar

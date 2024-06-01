@@ -9,7 +9,7 @@ import {
 
 import CentralPanel from './CentralPanel'
 import DocumentPanel from './DocumentPanel'
-import DataboxPanel from './DataboxPanel'
+import DataboxPanel from './ItemlistPanel'
 import SettingsPanel from './SettingsPanel'
 
 // synchronize this with the total left and right padding of workboxContentStyles

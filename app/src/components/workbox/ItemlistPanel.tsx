@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import DataboxToolbar from '../toolbars/Toolbar_Databox'
+import DataboxToolbar from '../toolbars/Toolbar_Itemlist'
 
 const 
     MIN_CONTENTS_FRAME_WIDTH = 250,
@@ -77,7 +77,7 @@ const databoxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
+const ItemlistPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
     const 
         { displayConfigCode, databoxData, profileData, defaultDataboxState } = props,
         databoxPanelElementRef = useRef(null),
@@ -112,18 +112,18 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEle
 
     },[displayConfigCode])
 
-    return <Box data-type = 'itembox-frame' ref = {databoxFrameElementRef} style = {databoxFrameStyles}>
-        <Box data-type = 'itembox-panel' ref = {databoxPanelElementRef} style = {databoxPanelStyles}>
+    return <Box data-type = 'itemlist-frame' ref = {databoxFrameElementRef} style = {databoxFrameStyles}>
+        <Box data-type = 'itemlist-panel' ref = {databoxPanelElementRef} style = {databoxPanelStyles}>
                 <Grid
-                    data-type = 'itembox-grid'
+                    data-type = 'itemlist-grid'
                     style = {databoxGridStyles}
                 >
-                    <GridItem data-type = 'itembox-header' style = {databoxHeaderStyles}>
+                    <GridItem data-type = 'itemlist-header' style = {databoxHeaderStyles}>
                         <ToolbarFrame>
                             <DataboxToolbar databoxState = {databoxState} setDataboxState = {setDataboxState} />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'itembox-body' style = {databoxBodyStyles}>
+                    <GridItem data-type = 'itemlist-body' style = {databoxBodyStyles}>
                         Databox
                     </GridItem>
                 </Grid>
@@ -131,4 +131,4 @@ const DataboxPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEle
     </Box>
 })
 
-export default DataboxPanel
+export default ItemlistPanel
