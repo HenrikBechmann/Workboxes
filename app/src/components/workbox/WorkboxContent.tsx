@@ -40,7 +40,7 @@ const WorkboxContent = (props) => {
             profileData 
         } = props,
         { databoxShow, documentShow } = workboxState, // boolean - show/ noshow
-        // share document and databox elements with children
+        // share document and itembox elements with children
         documentFrameElementRef = useRef( null ),
         databoxFrameElementRef = useRef( null ),
         // create delay to obtain forward references
@@ -55,7 +55,7 @@ const WorkboxContent = (props) => {
         documentDisplayCode = 'out'
         databoxDisplayCode = 'out'
     } else if (databoxShow) {
-        workboxDisplayCode = 'databox'
+        workboxDisplayCode = 'itembox'
         documentDisplayCode = 'under'
         databoxDisplayCode = 'over'
     } else { // documentShow

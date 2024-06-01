@@ -13,7 +13,7 @@ const defaultWorkboxState = {
 const workboxTemplate = {
     profile:null,
     document:null,
-    databox:null,
+    itembox:null,
 }
 
 const profileTemplate = {
@@ -78,7 +78,7 @@ class WorkboxHandler {
                     },
                 },
             ]}
-        this.databox = {...databoxTemplate, 
+        this.itembox = {...databoxTemplate, 
             accepts:[], 
             connectors:{preload:true, list:[], set:new Set()}
         }
@@ -89,7 +89,7 @@ class WorkboxHandler {
 
     profile
     document
-    databox
+    itembox
     defaults
 
     getData = () => {
@@ -103,7 +103,7 @@ class WorkboxHandler {
                 typeName:defaults.typeName,
             },
             document:{...this.document},
-            databox:{...this.databox},
+            itembox:{...this.itembox},
         }
         return data
     }

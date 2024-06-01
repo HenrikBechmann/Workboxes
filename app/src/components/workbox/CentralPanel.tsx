@@ -88,13 +88,13 @@ const CentralPanel = (props) => {
             databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden elements
-            if (previousDisplayConfigCode == 'databox') { // document was hidden
+            if (previousDisplayConfigCode == 'itembox') { // document was hidden
 
                 documentFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
                 documentFrameElement.firstChild.style.left = 0
                 documentFrameElement.firstChild.style.right = 'auto'
 
-            } else { // databox was hidden
+            } else { // itembox was hidden
 
                 databoxFrameElement.firstChild.style.width = 
                     Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
@@ -112,7 +112,7 @@ const CentralPanel = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze databox
+            // freeze itembox
             centralPanelElement.style.minWidth = (MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH) + 'px'
             databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
             databoxFrameElement.style.flex = '0 0 auto'
@@ -130,7 +130,7 @@ const CentralPanel = (props) => {
                 documentFrameElement.style.transition = 'none'
                 databoxFrameElement.style.transition = 'none'
 
-                // restore databox frame defaults
+                // restore itembox frame defaults
                 databoxFrameElement.style.flex = '1 0 auto'
                 databoxFrameElement.style.width = 'auto'
                 databoxFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
@@ -158,7 +158,7 @@ const CentralPanel = (props) => {
             databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'databox') { // document was hidden
+            if (previousDisplayConfigCode == 'itembox') { // document was hidden
 
                 documentFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 documentFrameElement.firstChild.style.right = 0
@@ -175,7 +175,7 @@ const CentralPanel = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze databox frame for hiding
+            // freeze itembox frame for hiding
             databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
             databoxFrameElement.style.flex = '0 0 auto'
             databoxFrameElement.firstChild.style.width = databoxFrameElement.firstChild.offsetWidth + 'px'
@@ -209,7 +209,7 @@ const CentralPanel = (props) => {
 
             },timeout)
 
-        } else { // displayConfigCode == 'databox'
+        } else { // displayConfigCode == 'itembox'
 
             // set tranision delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
@@ -219,7 +219,7 @@ const CentralPanel = (props) => {
             databoxFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'document') { // databox was hidden
+            if (previousDisplayConfigCode == 'document') { // itembox was hidden
 
                 databoxFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 databoxFrameElement.firstChild.style.right = 'auto'
@@ -238,7 +238,7 @@ const CentralPanel = (props) => {
             documentFrameElement.firstChild.style.width = documentFrameElement.firstChild.offsetWidth + 'px'
             documentFrameElement.style.minWidth = 0
 
-            // freeze databox
+            // freeze itembox
             databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
             databoxFrameElement.style.flex = '0 0 auto'
 

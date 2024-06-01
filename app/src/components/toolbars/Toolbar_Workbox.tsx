@@ -143,8 +143,8 @@ const WorkboxToolbar = (props) => {
 
         databoxToggle = useToggleIcon({
             icon:packageIcon, 
-            tooltip:'Toggle workbox databox pane',
-            caption:'databox',
+            tooltip:'Toggle workbox itembox pane',
+            caption:'itembox',
             toggleOnRef:toggleOnDataboxRef,
             disabledRef:disabledDataboxRef, 
         }),

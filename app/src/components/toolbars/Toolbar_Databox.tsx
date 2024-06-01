@@ -81,7 +81,7 @@ const DataboxToolbar = (props) => {
         })
 
     const databoxmenulist = <MenuList >
-        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this databox</MenuItem>
+        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itembox</MenuItem>
         <MenuItem icon = {<img src = {settingsIcon} />}>Databox settings</MenuItem>
     </MenuList>
 
@@ -96,12 +96,12 @@ const DataboxToolbar = (props) => {
     // render
     return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'databox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
+        <MenuIcon icon = {packageIcon} caption = 'itembox' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
-        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main databox list'/>
+        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itembox list'/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         <ToolbarVerticalDivider />

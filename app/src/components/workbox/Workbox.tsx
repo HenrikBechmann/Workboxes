@@ -61,7 +61,7 @@ const Workbox = (props) => {
         [workboxState, setWorkboxState] = useState({...defaultWorkboxState}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
-        { profile:profileData, document:documentData, databox:databoxData } = data,
+        { profile:profileData, document:documentData, itembox:databoxData } = data,
         { itemName, itemIcon, domainName, domainIcon, typeName } = profileData
 
     // console.log('data', '-'+windowSessionID+'-',data)
