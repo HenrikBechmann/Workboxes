@@ -178,7 +178,8 @@ const WorkspaceToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]]) 
+    //  panelRecords[panelSelectionIndex] guaranteed to be updated change
+    },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]])
 
     // render
     return <Box style = {standardToolbarStyles}>
