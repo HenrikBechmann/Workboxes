@@ -1033,6 +1033,10 @@ class WorkspaceHandler {
         return await this.panelHandler.loadPanels()
     }
 
+    async panelRename(){
+        return await this.panelHandler.panelRename()
+    }
+
 }
 
 export default WorkspaceHandler

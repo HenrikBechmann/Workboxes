@@ -13,6 +13,8 @@ import {
   MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup, useToast,
 } from '@chakra-ui/react'
 
+import PanelRenameDialog from '../dialogs/PanelRenameDialog'
+
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
 import MemberControl from './MemberControl'
@@ -64,6 +66,8 @@ const WorkspaceToolbar = (props) => {
         memberSelection = workspaceHandler.memberSelection,
         memberRecord = workspaceHandler.memberRecord,
 
+        [renameDialogState, setRenameDialogState] = useState(false),
+
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
         toast = useToast({duration:4000})        
@@ -99,6 +103,8 @@ const WorkspaceToolbar = (props) => {
     },[domainSelection])
 
     const renamePanel = () => {
+
+        setRenameDialogState(true)
 
     }
 
@@ -218,6 +224,7 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         &nbsp; &nbsp;
+        {renameDialogState && <PanelRenameDialog setRenameDialogState = {setRenameDialogState} />}
     </Box>
 }
 

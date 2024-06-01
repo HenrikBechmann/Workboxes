@@ -23,7 +23,7 @@ import {
 const WorkspaceSaveAsDialog = (props) => {
 
     const 
-        { saveAsDialogState, setSaveAsDialogState } = props,
+        { setSaveAsDialogState } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.workspaceNameLength_min,

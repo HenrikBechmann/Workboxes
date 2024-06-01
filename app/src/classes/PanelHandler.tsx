@@ -218,6 +218,17 @@ class PanelHandler {
         return result
         
     }
+    async panelRename() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        return result
+
+    }
 }
 
 export default PanelHandler
