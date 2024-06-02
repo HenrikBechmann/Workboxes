@@ -75,7 +75,7 @@ class WorkspaceHandler {
     errorControl
     panelHandler
 
-    // initialized in WorkboxesProvider
+    // initialized in WorkboxesProvider through properties below
     private _userID
     private _userName
     private _usage
