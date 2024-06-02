@@ -145,9 +145,9 @@ class WorkspaceHandler {
         this.changedRecords.setwindowpositions.clear()
     }
 
-    // ---------------------[ setWorkspaceSelection ]--------------------------
+    // ---------------------[ setWorkspyaceSelection ]--------------------------
 
-    // sets the selection only
+    // sets the selection only in memor workspaceHandler, and db userRecors
     async setWorkspaceSelection (id, name) {
 
         // save before switch
@@ -810,29 +810,56 @@ class WorkspaceHandler {
             notice: null,
         }
 
-        if (!this.settings.changed && !this.changedRecords.setworkspace) return
+        if (!this.settings.changed) return
 
-        const workspaceRecord = this.workspaceRecord
-        const workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces')
-        const docRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
-        try {
-            workspaceRecord.generation = increment(1)
-            workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
-            workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
-            await setDoc(docRef,workspaceRecord)
-            const newDoc = await getDoc(docRef)
-            this.workspaceRecord = newDoc.data()
-        } catch (error) {
-            const errdesc = 'error saving workspace record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
+        const { changedRecords } = this
+
+        if ( changedRecords.setworkspace ) {
+
+            const 
+                { workspaceRecord } = this,
+                workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces'),
+                docRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
+
+            try {
+
+                workspaceRecord.generation = increment(1)
+                workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
+                workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
+                
+                await setDoc(docRef,workspaceRecord)
+                
+                const newDoc = await getDoc(docRef)
+                
+                this.workspaceRecord = newDoc.data()
+
+            } catch (error) {
+
+                const errdesc = 'error saving workspace record'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
+                result.error = true
+                return result
+
+            }
+
+            this.usage.write(1)
+            this.usage.read(1)
+
         }
 
-        this.usage.write(1)
-        this.usage.read(1)
+        if (changedRecords.setpanels.size) {
 
+        }
+
+        if (changedRecords.deletepanels.size) {
+
+        }
+
+        if (changedRecords.setwindowpositions.size) {
+
+        }
+        
         this.clearChanged()
 
         return result
