@@ -28,7 +28,7 @@ class PanelHandler {
     userName
     userID
 
-    async getDomainContext(domainSelection, userRecord) {
+    async getDomainContext(panelDomainSelection, userRecord) {
         const result = {
             error: false,
             success: true,
@@ -37,15 +37,15 @@ class PanelHandler {
 
         const 
             domainCollection = collection(this.db,'domains'),
-            domainDocRef = doc(domainCollection, domainSelection.id),
-            memberCollection = collection(this.db, 'domains',domainSelection.id, 'members')
+            domainDocRef = doc(domainCollection, panelDomainSelection.id),
+            memberCollection = collection(this.db, 'domains',panelDomainSelection.id, 'members')
 
-        let domainRecord
+        let panelDomainRecord
         try {
             const domainDoc = await getDoc(domainDocRef)
             this.usage.read(1)
             if (domainDoc.exists()) {
-                domainRecord = domainDoc.data()
+                panelDomainRecord = domainDoc.data()
             } else {
                 result.success = false
                 result.notice = 'domain record not found'
@@ -63,7 +63,7 @@ class PanelHandler {
 
         const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
 
-        let memberRecord
+        let panelMemberRecord
         try {
             const queryPayload = await getDocs(querySpec)
             this.usage.read(Math.min(1,queryPayload.size))
@@ -72,7 +72,7 @@ class PanelHandler {
                 result.notice = 'error fetching domain membership for this user'
                 return result
             }
-            memberRecord = queryPayload.docs[0].data()
+            panelMemberRecord = queryPayload.docs[0].data()
         } catch(error) {
 
             const errdesc = 'error getting domain member record'
@@ -83,12 +83,12 @@ class PanelHandler {
 
         }
 
-        this.workspaceHandler.domainSelection = domainSelection
-        this.workspaceHandler.domainRecord = domainRecord
+        this.workspaceHandler.panelDomainSelection = panelDomainSelection
+        this.workspaceHandler.panelDomainRecord = panelDomainRecord
 
-        const { member } = memberRecord.profile
-        this.workspaceHandler.memberSelection = {id:member.id, name:member.name}
-        this.workspaceHandler.memberRecord = memberRecord
+        const { member } = panelMemberRecord.profile
+        this.workspaceHandler.panelMemberSelection = {id:member.id, name:member.name}
+        this.workspaceHandler.panelMemberRecord = panelMemberRecord
 
         return result        
     }
@@ -218,7 +218,7 @@ class PanelHandler {
         return result
         
     }
-    async panelRename(panelSelectionIndex, name) {
+    async panelRename(panelSelectionIndex, newname) {
 
         const result = {
             error: false,

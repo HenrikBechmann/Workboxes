@@ -88,10 +88,10 @@ class WorkspaceHandler {
     panelSelectionIndex = null
     panelRecordMap = new Map()
     panelRecords = []
-    domainSelection = null
-    domainRecord = null
-    memberSelection = null
-    memberRecord = null
+    panelDomainSelection = null
+    panelDomainRecord = null
+    panelMemberSelection = null
+    panelMemberRecord = null
     settings = {mode:'automatic', changed: false}
     changedRecords = {
         setworkspace:null,
@@ -230,9 +230,9 @@ class WorkspaceHandler {
 
     }
 
-    async getDomainContext(domainSelection, userRecord) {
+    async getDomainContext(panelDomainSelection, userRecord) {
 
-        return await this.panelHandler.getDomainContext(domainSelection, userRecord)
+        return await this.panelHandler.getDomainContext(panelDomainSelection, userRecord)
 
     }
 
@@ -1034,8 +1034,8 @@ class WorkspaceHandler {
         return await this.panelHandler.loadPanels()
     }
 
-    async panelRename(panelSelectionIndex, name){
-        return await this.panelHandler.panelRename(panelSelectionIndex, name)
+    async panelRename(panelSelectionIndex, newname){
+        return await this.panelHandler.panelRename(panelSelectionIndex, newname)
     }
 
 }

@@ -61,10 +61,10 @@ const WorkspaceToolbar = (props) => {
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
 
-        domainSelection = panelRecord?.profile.domain, // TODO investigate requirement of ? here
-        domainRecord = workspaceHandler.domainRecord,
-        memberSelection = workspaceHandler.memberSelection,
-        memberRecord = workspaceHandler.memberRecord,
+        panelDomainSelection = workspaceHandler.panelDomainSelection,
+        panelDomainRecord = workspaceHandler.panelDomainRecord,
+        panelMemberSelection = workspaceHandler.panelMemberSelection,
+        panelMemberRecord = workspaceHandler.panelMemberRecord,
 
         [renameDialogState, setRenameDialogState] = useState(false),
 
@@ -82,9 +82,9 @@ const WorkspaceToolbar = (props) => {
 
     },[panelCount, panelSelectionIndex])
 
-    async function getDomainContext(domainSelection) {
+    async function getDomainContext(panelDomainSelection) {
 
-        const result = await workspaceHandler.getDomainContext(domainSelection, userRecords.user)
+        const result = await workspaceHandler.getDomainContext(panelDomainSelection, userRecords.user)
         if (!result.success) {
             toast({description:'unable to collect domain context'})
         }
@@ -97,10 +97,10 @@ const WorkspaceToolbar = (props) => {
 
     useEffect(()=>{
 
-        if (!domainSelection) return
-        getDomainContext(domainSelection)
+        if (!panelDomainSelection) return
+        getDomainContext(panelDomainSelection)
 
-    },[domainSelection])
+    },[panelDomainSelection])
 
     const renamePanel = () => {
 
@@ -215,12 +215,12 @@ const WorkspaceToolbar = (props) => {
             caption = 'windows'
         />
         <ToolbarVerticalDivider />
-        {domainRecord && <DomainControl 
-            domainTitle = {domainRecord.profile.domain.name} 
-            domainIcon = {domainRecord.profile.domain.image.source} caption = "your personal domain workbox"/>}
-        {memberRecord && <MemberControl
-            memberTitle = {memberRecord.profile.member.name} 
-            memberIcon = {memberRecord.profile.member.image.source} caption = 'your personal workbox'/>}
+        {panelDomainRecord && <DomainControl 
+            domainTitle = {panelDomainRecord.profile.domain.name} 
+            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "your personal domain workbox"/>}
+        {panelMemberRecord && <MemberControl
+            memberTitle = {panelMemberRecord.profile.member.name} 
+            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'your personal workbox'/>}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         <ToolbarVerticalDivider />

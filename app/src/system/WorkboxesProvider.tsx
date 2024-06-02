@@ -398,8 +398,8 @@ export const UserProvider = ({children}) => {
                         async (returndoc) =>{
                             snapshotControl.incrementCallCount(domainIndex, 1)
                             usage.read(1)
-                            const domainRecord = returndoc.data()
-                            if (!domainRecord) { // error
+                            const userDomainRecord = returndoc.data()
+                            if (!userDomainRecord) { // error
                                 errorControlRef.current.push({description:'error getting user domain record.',error:null})
                                 console.log('error getting user domain record.')
                                 setUserAuthData({...userAuthData})
@@ -407,12 +407,12 @@ export const UserProvider = ({children}) => {
                                 return
                             }
                             setUserRecords((previousState) => {
-                               previousState.domain = domainRecord
+                               previousState.domain = userDomainRecord
                                return {...previousState}
                             })
                             if (!snapshotControl.wasSchemaChecked(domainIndex)) {
-                                const updatedRecord = updateDocumentSchema('domains', 'standard',domainRecord)
-                                if (!Object.is(domainRecord, updatedRecord)) {
+                                const updatedRecord = updateDocumentSchema('domains', 'standard',userDomainRecord)
+                                if (!Object.is(userDomainRecord, updatedRecord)) {
                                     try {
                                         await setDoc(doc(db,'domains',domainID),updatedRecord)
                                         usage.write(1)
@@ -664,7 +664,7 @@ export const UserProvider = ({children}) => {
             },
         })
 
-        const domainRecord = updateDocumentSchema('domains','standard',{},{
+        const userDomainRecord = updateDocumentSchema('domains','standard',{},{
             profile: {
                 roles: {
                     is_userdomain: true,
@@ -771,7 +771,7 @@ export const UserProvider = ({children}) => {
 
             batch.set(userDocRef, userRecord)
             batch.set(accountDocRef, accountRecord)
-            batch.set(domainDocRef, domainRecord)
+            batch.set(domainDocRef, userDomainRecord)
             batch.set(workboxDocRef, workboxRecord)
             await batch.commit()
 

@@ -104,7 +104,7 @@ const Administration = (props) => {
         
         console.log('userRecord, userDomainWorkbox',userRecord, userDomainWorkbox)
 
-        const memberRecord = updateDocumentSchema('members','standard',{},{
+        const panelMemberRecord = updateDocumentSchema('members','standard',{},{
             profile: {
                 user: {
                   id:userRecord.profile.user.id,
@@ -216,16 +216,16 @@ const Administration = (props) => {
             },
         })
 
-        console.log('memberRecord, memberWorkbox',memberRecord, memberWorkbox)
+        console.log('panelMemberRecord, memberWorkbox',panelMemberRecord, memberWorkbox)
 
         // ------------------[ database interaction ]-----------------
         const batch = writeBatch(db)
         try {
-            batch.set(memberRecordRef,memberRecord)
+            batch.set(memberRecordRef,panelMemberRecord)
             batch.set(memberWorkboxRef,memberWorkbox)
             await batch.commit()
         } catch (error) {
-            const errdesc = 'administration error writing memberRecord and memberWorkbox to database'
+            const errdesc = 'administration error writing panelMemberRecord and memberWorkbox to database'
             console.log(errdesc, error)
             errorControl.push({description:errdesc, error})
             navigate('/error')
