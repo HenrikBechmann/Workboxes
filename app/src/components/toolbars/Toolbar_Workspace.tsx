@@ -55,7 +55,7 @@ const WorkspaceToolbar = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
 
-        panelCount = workspaceRecord.profile.counts.panels,
+        panelCount = workspaceHandler.panelcount,
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
@@ -180,10 +180,10 @@ const WorkspaceToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    //  panelRecords[panelSelectionIndex] guaranteed to be updated change
+    //  panelRecords[panelSelectionIndex] guaranteed to be updated for change
     },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]])
 
-    console.log('workspaceHandler', workspaceHandler)
+    // console.log('workspaceHandler', workspaceHandler)
 
     // render
     return <Box style = {standardToolbarStyles}>

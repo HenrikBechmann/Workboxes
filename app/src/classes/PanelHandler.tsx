@@ -39,7 +39,7 @@ class PanelHandler {
             panelRecord = this.workspaceHandler.panelRecords[panelSelectionIndex],
             panelDomainID = panelRecord.profile.domain.id,
             domainCollection = collection(this.db,'domains'),
-            domainDocRef = doc(domainCollection, ),
+            domainDocRef = doc(domainCollection, panelDomainID),
             memberCollection = collection(this.db, 'domains',panelDomainID, 'members')
 
         let panelDomainRecord
@@ -122,6 +122,7 @@ class PanelHandler {
             return result
         }
         this.usage.read(queryDocs.size)
+        this.workspaceHandler.panelCount = queryDocs.size
         queryDocs.forEach((dbdoc) => {
             const data = dbdoc.data()
             panelRecords.push(data)

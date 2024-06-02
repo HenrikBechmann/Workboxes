@@ -22,7 +22,7 @@
 
     // utilities
     clearChanged
-    setSelection
+    setWorkspaceSelection
     getWorkspaceList
     resetWorkspace *
     // database operations
@@ -85,6 +85,7 @@ class WorkspaceHandler {
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelSelectionIndex = null
+    panelCount = null
     panelRecordMap = new Map()
     panelRecords = []
     panelDomainRecord = null
@@ -127,11 +128,11 @@ class WorkspaceHandler {
         this.changedRecords.setwindowpositions.clear()
     }
 
-    // ---------------------[ setSelection ]--------------------------
+    // ---------------------[ setWorkspaceSelection ]--------------------------
 
     // TODO save before switch
     // sets the selection only
-    async setSelection (id, name) {
+    async setWorkspaceSelection (id, name) {
 
         if (this.settings.mode == 'automatic' && this.settings.changed) {
             const result = await this.saveWorkspace()
@@ -1009,7 +1010,7 @@ class WorkspaceHandler {
         // set current workspace to default
         const { id, name } = defaultWorkspaceRecord.profile.workspace
         // ---- set NEW workspace ----
-        const selectionresult = await this.setSelection( id, name )
+        const selectionresult = await this.setWorkspaceSelection( id, name )
         if (selectionresult.error) {
             result.error = true
             return result
