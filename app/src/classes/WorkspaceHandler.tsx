@@ -147,10 +147,10 @@ class WorkspaceHandler {
 
     // ---------------------[ setWorkspaceSelection ]--------------------------
 
-    // TODO save before switch
     // sets the selection only
     async setWorkspaceSelection (id, name) {
 
+        // save before switch
         if (this.settings.mode == 'automatic' && this.settings.changed) {
             const result = await this.saveWorkspaceData()
             if (result.error) {
