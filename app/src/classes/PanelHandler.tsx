@@ -101,16 +101,12 @@ class PanelHandler {
 
         const panelRecords = this.workspaceHandler.panelRecords
         panelRecords.length = 0 // start over
-        const workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id
-        const dbPanelCollection = 
-            collection(
-                this.db, 
-                'users', this.userID, 
-                'workspaces', workspaceID,
-                'panels'
-            )
+        const 
+            workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
+            dbPanelCollection = 
+                collection( this.db, 'users', this.userID, 'workspaces', workspaceID, 'panels' ),
+            querySpec = query( dbPanelCollection )
 
-        const querySpec = query( dbPanelCollection )
         let queryDocs
         try {
             queryDocs = await getDocs(querySpec)
@@ -150,7 +146,9 @@ class PanelHandler {
             }
 
             try {
+
                 await batch.commit()
+
             } catch (error) {
 
                 const errdesc = 'error updating panels list in workspace setup'
@@ -211,7 +209,6 @@ class PanelHandler {
             }
             this.usage.create(1)
             panelRecords.push(newPanelData)
-            // TODO save workspaceRecord for panel selection
         }
 
         return result
