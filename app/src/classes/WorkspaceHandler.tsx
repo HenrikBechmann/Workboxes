@@ -70,7 +70,7 @@ class WorkspaceHandler {
 
     // =========================[ DATA ]=======================
 
-    // controls
+    // data controls
     db
     errorControl
     panelHandler
@@ -79,29 +79,36 @@ class WorkspaceHandler {
     private _userID
     private _userName
     private _usage
-    trigger // dispatch trigger
+
+    trigger // dispatch trigger set by dispatchWorkspaceHandler
 
     // workspace data
     setWorkspaceHandlerState = null // initialized in WorkboxesProvider, used in useWorkspace
+
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
-    panelSelectionIndex = null
-    panelCount = null
+    panelSelectionIndex = null // attempt to set from workspace.profile.panel; cascading fallbacks
+    // set on load of all panels
+    panelCount = null 
     panelRecordMap = new Map()
     panelRecords = []
+    // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
     panelMemberRecord = null
+    // maintained by toolbarWorkspace
     settings = {mode:'automatic', changed: false}
+    // set by data operations - lists database IDs
     changedRecords = {
         setworkspace:null,
-        setwindowpositions: new Set(),
+        setwindowpositions: new Set(), // list of panelIDs
         setpanels: new Set(),
         deletepanels: new Set(),
     }
     flags = {
-        new_workspace_load:true
+        new_workspace_load:true // triggers load of panels
     }
 
+    // properties to allow for distribution to panelHandler with consistent interface
     set userName(userName) {
         this.userName = userName
         this.panelHandler.userName = userName
