@@ -73,12 +73,13 @@ class WorkspaceHandler {
     // controls
     db
     errorControl
-    // initialized in WorkboxesProvider
-    userID
-    userName
-    usage
-    trigger
     panelHandler
+
+    // initialized in WorkboxesProvider
+    private _userID
+    private _userName
+    private _usage
+    trigger // dispatch trigger
 
     // workspace data
     setWorkspaceHandlerState = null // initialized in WorkboxesProvider, used in useWorkspace
@@ -101,19 +102,28 @@ class WorkspaceHandler {
         new_workspace_load:true
     }
 
-    setUserName = (userName) => {
+    set userName(userName) {
         this.userName = userName
         this.panelHandler.userName = userName
     }
-
-    setUserID = (userID) => {
-        this.userID = userID
-        this.panelHandler.userID = userID
+    get userName() {
+        return this._userName
     }
 
-    setUsage = (usage) => {
-        this.usage = usage
+    set userID(userID) {
+        this._userID = userID
+        this.panelHandler.userID = userID
+    }
+    get userID() {
+        return this._userID        
+    }
+
+    set usage(usage) {
+        this._usage = usage
         this.panelHandler.usage = usage
+    }
+    get usage() {
+        return this._usage
     }
 
     // =========================[ UTILITIES ]========================
