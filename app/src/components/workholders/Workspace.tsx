@@ -120,13 +120,13 @@ const Workspace = (props) => {
         panelComponentListRef.current = []
 
         // generate panel components, sorted by display_order, ascending
-        const selectedID = workspaceRecord.panel.id
+        const selectedPanelID = workspaceRecord.panel.id
         let selectedIndex, defaultIndex
         for (let index = 0; index < panelRecords.length; index++) {
 
             const panelRecord = panelRecords[index]
 
-            if (selectedID && selectedID == panelRecord.profile.panel.id) {
+            if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
             }
 

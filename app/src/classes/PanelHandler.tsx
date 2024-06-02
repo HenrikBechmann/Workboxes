@@ -28,7 +28,7 @@ class PanelHandler {
     userName
     userID
 
-    async getDomainContext(panelDomainSelection, userRecord) {
+    async getPanelDomainContext(panelSelectionIndex, userRecord) {
         const result = {
             error: false,
             success: true,
@@ -36,9 +36,11 @@ class PanelHandler {
         }
 
         const 
+            panelRecord = this.workspaceHandler.panelRecords[panelSelectionIndex],
+            panelDomainID = panelRecord.profile.domain.id,
             domainCollection = collection(this.db,'domains'),
-            domainDocRef = doc(domainCollection, panelDomainSelection.id),
-            memberCollection = collection(this.db, 'domains',panelDomainSelection.id, 'members')
+            domainDocRef = doc(domainCollection, ),
+            memberCollection = collection(this.db, 'domains',panelDomainID, 'members')
 
         let panelDomainRecord
         try {
@@ -83,11 +85,7 @@ class PanelHandler {
 
         }
 
-        this.workspaceHandler.panelDomainSelection = panelDomainSelection
         this.workspaceHandler.panelDomainRecord = panelDomainRecord
-
-        const { member } = panelMemberRecord.profile
-        this.workspaceHandler.panelMemberSelection = {id:member.id, name:member.name}
         this.workspaceHandler.panelMemberRecord = panelMemberRecord
 
         return result        

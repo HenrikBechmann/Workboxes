@@ -55,15 +55,12 @@ const WorkspaceToolbar = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
 
-        panelSelection = workspaceRecord.panel,
         panelCount = workspaceRecord.profile.counts.panels,
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
-
-        panelDomainSelection = workspaceHandler.panelDomainSelection,
+        panelSelection = {id:panelRecord.profile.panel.id, name: panelRecord.profile.panel.name},
         panelDomainRecord = workspaceHandler.panelDomainRecord,
-        panelMemberSelection = workspaceHandler.panelMemberSelection,
         panelMemberRecord = workspaceHandler.panelMemberRecord,
 
         [renameDialogState, setRenameDialogState] = useState(false),
@@ -82,9 +79,9 @@ const WorkspaceToolbar = (props) => {
 
     },[panelCount, panelSelectionIndex])
 
-    async function getDomainContext(panelDomainSelection) {
+    async function getPanelDomainContext(panelSelectionIndex) {
 
-        const result = await workspaceHandler.getDomainContext(panelDomainSelection, userRecords.user)
+        const result = await workspaceHandler.getPanelDomainContext(panelSelectionIndex, userRecords.user)
         if (!result.success) {
             toast({description:'unable to collect domain context'})
         }
@@ -97,10 +94,9 @@ const WorkspaceToolbar = (props) => {
 
     useEffect(()=>{
 
-        if (!panelDomainSelection) return
-        getDomainContext(panelDomainSelection)
+        getPanelDomainContext(panelSelectionIndex)
 
-    },[panelDomainSelection])
+    },[panelSelectionIndex])
 
     const renamePanel = () => {
 

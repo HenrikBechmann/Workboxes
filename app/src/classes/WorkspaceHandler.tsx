@@ -25,8 +25,6 @@
     setSelection
     getWorkspaceList
     resetWorkspace *
-    getDomainContext
-
     // database operations
     setupWorkpace
     createWorkspace
@@ -41,6 +39,7 @@
     // panels facade
     loadPanels
     panelRename
+    getPanelDomainContext
 
 */
 
@@ -88,9 +87,7 @@ class WorkspaceHandler {
     panelSelectionIndex = null
     panelRecordMap = new Map()
     panelRecords = []
-    panelDomainSelection = null
     panelDomainRecord = null
-    panelMemberSelection = null
     panelMemberRecord = null
     settings = {mode:'automatic', changed: false}
     changedRecords = {
@@ -227,12 +224,6 @@ class WorkspaceHandler {
         result.notice = 'workspace has been reset'
 
         return result
-
-    }
-
-    async getDomainContext(panelDomainSelection, userRecord) {
-
-        return await this.panelHandler.getDomainContext(panelDomainSelection, userRecord)
 
     }
 
@@ -1036,6 +1027,10 @@ class WorkspaceHandler {
 
     async panelRename(panelSelectionIndex, newname){
         return await this.panelHandler.panelRename(panelSelectionIndex, newname)
+    }
+
+    async getPanelDomainContext(panelSelectionIndex, userRecord) {
+        return await this.panelHandler.getPanelDomainContext(panelSelectionIndex, userRecord)
     }
 
 }
