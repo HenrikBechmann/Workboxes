@@ -32,7 +32,7 @@
     reloadWorkspace
     renameWorkspace
     updatePanel
-    saveWorkspace
+    saveWorkspaceData
     copyWorkspaceAs
     deleteWorkspace
 
@@ -152,7 +152,7 @@ class WorkspaceHandler {
     async setWorkspaceSelection (id, name) {
 
         if (this.settings.mode == 'automatic' && this.settings.changed) {
-            const result = await this.saveWorkspace()
+            const result = await this.saveWorkspaceData()
             if (result.error) {
                 return result
             }
@@ -800,9 +800,9 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ saveWorkspace ]--------------------------
+    // ---------------------[ saveWorkspaceData ]--------------------------
 
-    async saveWorkspace() {
+    async saveWorkspaceData() {
 
         const result = {
             error: false,
@@ -813,8 +813,8 @@ class WorkspaceHandler {
         if (!this.settings.changed && !this.changedRecords.setworkspace) return
 
         const workspaceRecord = this.workspaceRecord
-        const dbcollection = collection(this.db, 'users', this.userID, 'workspaces')
-        const docRef = doc(dbcollection, workspaceRecord.profile.workspace.id)
+        const workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces')
+        const docRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
         try {
             workspaceRecord.generation = increment(1)
             workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
@@ -833,7 +833,6 @@ class WorkspaceHandler {
         this.usage.write(1)
         this.usage.read(1)
 
-        // ---- SAVE workspace config ----
         this.clearChanged()
 
         return result

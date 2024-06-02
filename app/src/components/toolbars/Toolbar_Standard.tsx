@@ -197,9 +197,9 @@ const StandardToolbar = (props) => {
         setWriteDialogState({open:true, action:'createworkspace'})
     }
 
-    async function saveWorkspace() {
+    async function saveWorkspaceData() {
 
-        const result = await workspaceHandler.saveWorkspace()
+        const result = await workspaceHandler.saveWorkspaceData()
         
         if (result.error) {
 
@@ -317,7 +317,7 @@ const StandardToolbar = (props) => {
                 />
                 <StandardIcon response = {uploadSettingDialog} isDialog = {true} icon = {uploadCloudIcon} 
                     caption = {workspaceHandler.settings.mode} tooltip = 'set saving behaviour' />
-                <StandardIcon response = {saveWorkspace} icon = {uploadCloudIcon}
+                <StandardIcon response = {saveWorkspaceData} icon = {uploadCloudIcon}
                     emphasis = {workspaceHandler.settings.changed?'true':false} 
                     highlight = {workspaceHandler.settings.mode == 'automatic'?false:true}
                     caption = {workspaceHandler.settings.changed?'save*':'saved'} tooltip = 'save workspace configuration' />
