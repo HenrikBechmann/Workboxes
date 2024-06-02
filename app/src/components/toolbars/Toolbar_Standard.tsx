@@ -221,7 +221,6 @@ const StandardToolbar = (props) => {
         const workspaceName = selectionElement.dataset.name
         
         // ---- SWITCH workspace selection ----
-            // console.log('setting workspaceHandler in toolbar_standard')
         const result = await workspaceHandler.setWorkspaceSelection(workspaceID, workspaceName)
         if (result.error) {
             navigate('/error')
