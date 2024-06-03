@@ -31,7 +31,7 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
-    updatePanel
+    updateWorkspacePanel
     saveWorkspaceData
     copyWorkspaceAs
     deleteWorkspace
@@ -167,6 +167,7 @@ class WorkspaceHandler {
 
         this.workspaceSelection.id = id,
         this.workspaceSelection.name = name
+
         if (this.settings.mode == 'manual') {
             this.changedRecords.userworkspace = true
             return result
@@ -524,6 +525,7 @@ class WorkspaceHandler {
 
     // ---------------------[ createWorkspace ]--------------------------
 
+    // TODO in memory only for mode == 'manual'
     async createWorkspace(name) {
 
         const result = {
@@ -769,17 +771,21 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ updatePanel ]--------------------------
+    // ---------------------[ updateWorkspacePanel ]--------------------------
 
-    async updatePanel() {
+    async updateWorkspacePanel(id, name) {
 
-        console.log('updating panel')
+        console.log('updating panel: id, name', id, name)
 
         const result = {
             error: false,
             success: true,
             notice: null,
         }
+
+        this.workspaceRecord.panel = {id, name}
+
+        if (this.settings.mode == 'manual') return result
 
         const 
             workspaceID = this.workspaceSelection.id,
