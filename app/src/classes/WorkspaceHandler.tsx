@@ -802,6 +802,7 @@ class WorkspaceHandler {
 
     // ---------------------[ saveWorkspaceData ]--------------------------
 
+    // TODO change logic so there is only one commit
     async saveWorkspaceData() {
 
         const result = {
@@ -814,12 +815,12 @@ class WorkspaceHandler {
 
         const { changedRecords } = this
 
-        if ( changedRecords.setworkspace ) {
+        const 
+            { workspaceRecord } = this,
+            workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces'),
+            workspaceDocRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
 
-            const 
-                { workspaceRecord } = this,
-                workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces'),
-                docRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
+        if ( changedRecords.setworkspace ) {
 
             try {
 
@@ -827,9 +828,9 @@ class WorkspaceHandler {
                 workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
                 workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
                 
-                await setDoc(docRef,workspaceRecord)
+                await setDoc(workspaceDocRef,workspaceRecord)
                 
-                const newDoc = await getDoc(docRef)
+                const newDoc = await getDoc(workspaceDocRef)
                 
                 this.workspaceRecord = newDoc.data()
 
@@ -848,18 +849,92 @@ class WorkspaceHandler {
 
         }
 
-        if (changedRecords.setpanels.size) {
+        const 
+            { deletepanels, setpanels, setwindowpositions } = changedRecords
+
+        if ((deletepanels.size || setpanels.size || setwindowpositions.size )) {
+
+            if (!changedRecords.setworkspace) { // check for existence of workspace record
+
+                try {
+
+                    const workspaceDoc = await getDoc(workspaceDocRef)
+
+                    if (!workspaceDoc.exists()) {
+
+                        await setDoc(workspaceDocRef, workspaceRecord)
+
+                    } 
+
+                } catch(error) {
+
+                    const errdesc = 'error asserting workspace record for panels'
+                    console.log(errdesc, error)
+                    this.errorControl.push({description:errdesc, error})
+                    result.error = true
+                    return result
+
+                }
+            }
+
+            const panelCollection = 
+                    collection(this.db,'users',this.userID, 'workspaces', this.workspaceRecord.profile.workspace.id,'panels')
+
+            const batch = writeBatch(this.db)
+
+            let deleteCount = 0, writeCount = 0
+
+            if (deletepanels.size) { // set of panel IDs
+
+                deletepanels.forEach((item:string) => {
+
+                    setpanels.delete(item)
+                    setwindowpositions.delete(item)
+                    const docRef = doc(panelCollection, item)
+                    batch.delete(docRef)
+                    deleteCount++
+
+                })
+
+            }
+
+            if (setwindowpositions.size) { // set of panel IDs
+                setwindowpositions.forEach((item) => {
+                    setpanels.add(item)
+                })
+            }
+            
+            if (setpanels.size) { // set of panelIDs
+                const { panelRecords } = this
+
+                for (const record of panelRecords) {
+                    const panelID = record.profile.panel.id
+                    if (setpanels.has(panelID)) {
+                        const docRef = doc(panelCollection, panelID)
+                        batch.set(docRef, record)
+                        writeCount++
+                    }
+                }
+            }
+
+            try {
+
+                batch.commit()
+                this.usage.write(writeCount)
+                this.usage.delete(deleteCount)
+
+            } catch (error) {
+
+                    const errdesc = 'error saveing panel records'
+                    console.log(errdesc, error)
+                    this.errorControl.push({description:errdesc, error})
+                    result.error = true
+                    return result
+
+            }
 
         }
 
-        if (changedRecords.deletepanels.size) {
-
-        }
-
-        if (changedRecords.setwindowpositions.size) {
-
-        }
-        
         this.clearChanged()
 
         return result
