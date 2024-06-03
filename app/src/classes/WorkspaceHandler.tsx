@@ -103,6 +103,7 @@ class WorkspaceHandler {
         setwindowpositions: new Set(), // list of panelIDs
         setpanels: new Set(),
         deletepanels: new Set(),
+        userworkspace:false,
     }
     flags = {
         new_workspace_load:true // triggers load of panels
@@ -802,7 +803,6 @@ class WorkspaceHandler {
 
     // ---------------------[ saveWorkspaceData ]--------------------------
 
-    // TODO change logic so there is only one commit
     async saveWorkspaceData() {
 
         const result = {
@@ -813,76 +813,30 @@ class WorkspaceHandler {
 
         if (!this.settings.changed) return
 
-        const { changedRecords } = this
+        const 
+            batch = writeBatch(this.db),
+            { changedRecords } = this
 
         const 
-            { workspaceRecord } = this,
+            workspaceRecord = _cloneDeep(this.workspaceRecord),
             workspaceCollection = collection(this.db, 'users', this.userID, 'workspaces'),
             workspaceDocRef = doc(workspaceCollection, workspaceRecord.profile.workspace.id)
 
-        if ( changedRecords.setworkspace ) {
+        workspaceRecord.generation = increment(1)
+        workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
+        workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
 
-            try {
-
-                workspaceRecord.generation = increment(1)
-                workspaceRecord.profile.commits.updated_by = {id:this.userID, name:this.userName}
-                workspaceRecord.profile.commits.updated_timestamp = serverTimestamp()
+        batch.set(workspaceDocRef, workspaceRecord)
                 
-                await setDoc(workspaceDocRef,workspaceRecord)
-                
-                const newDoc = await getDoc(workspaceDocRef)
-                
-                this.workspaceRecord = newDoc.data()
-
-            } catch (error) {
-
-                const errdesc = 'error saving workspace record'
-                console.log(errdesc, error)
-                this.errorControl.push({description:errdesc, error})
-                result.error = true
-                return result
-
-            }
-
-            this.usage.write(1)
-            this.usage.read(1)
-
-        }
-
         const 
             { deletepanels, setpanels, setwindowpositions } = changedRecords
 
+        let deleteCount = 0, writeCount = 0
+
         if ((deletepanels.size || setpanels.size || setwindowpositions.size )) {
-
-            if (!changedRecords.setworkspace) { // check for existence of workspace record
-
-                try {
-
-                    const workspaceDoc = await getDoc(workspaceDocRef)
-
-                    if (!workspaceDoc.exists()) {
-
-                        await setDoc(workspaceDocRef, workspaceRecord)
-
-                    } 
-
-                } catch(error) {
-
-                    const errdesc = 'error asserting workspace record for panels'
-                    console.log(errdesc, error)
-                    this.errorControl.push({description:errdesc, error})
-                    result.error = true
-                    return result
-
-                }
-            }
 
             const panelCollection = 
                     collection(this.db,'users',this.userID, 'workspaces', this.workspaceRecord.profile.workspace.id,'panels')
-
-            const batch = writeBatch(this.db)
-
-            let deleteCount = 0, writeCount = 0
 
             if (deletepanels.size) { // set of panel IDs
 
@@ -917,21 +871,23 @@ class WorkspaceHandler {
                 }
             }
 
-            try {
 
-                batch.commit()
-                this.usage.write(writeCount)
-                this.usage.delete(deleteCount)
+        }
 
-            } catch (error) {
+        try {
 
-                    const errdesc = 'error saveing panel records'
-                    console.log(errdesc, error)
-                    this.errorControl.push({description:errdesc, error})
-                    result.error = true
-                    return result
+            batch.commit()
+            // for workspace
+            this.usage.write(writeCount + 1) // +1 for workspace
+            this.usage.delete(deleteCount)
 
-            }
+        } catch (error) {
+
+                const errdesc = 'error saveing workspace data records'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc, error})
+                result.error = true
+                return result
 
         }
 
