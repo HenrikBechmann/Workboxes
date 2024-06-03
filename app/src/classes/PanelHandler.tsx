@@ -222,7 +222,30 @@ class PanelHandler {
             notice: null,
         }
 
-        return result
+        const 
+            { workspaceHandler } = this,
+            panelRecord = workspaceHandler.panelRecords[panelSelectionIndex]
+
+        panelRecord.profile.panel.name = newname
+        workspaceHandler.workspaceRecord.panel.name = newname
+
+        workspaceHandler.changedRecords.setpanels.add(panelRecord.profile.panel.id)
+        workspaceHandler.settings.changed = true
+
+        if (workspaceHandler.settings.mode == 'automatic') {
+
+            const result = await workspaceHandler.saveWorkspaceData()
+
+            result.notice = 'panel name changed to [' + newname + ']'
+
+            return result
+
+        } else {
+
+            result.notice = 'panel name changed to [' + newname + ']'
+            return result
+
+        }
 
     }
 }

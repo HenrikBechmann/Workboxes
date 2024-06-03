@@ -166,7 +166,7 @@ const Workspace = (props) => {
             setPanelSelectionIndex(defaultIndex)
         } else {
             const fallbackRecord = panelRecords[0]
-            workspaceRecord.panel = {...fallbackRecord.profile.panel }
+            // workspaceRecord.panel = {...fallbackRecord.profile.panel }
             panelSelectionIndex = 0
             const result = await workspaceHandler.updateWorkspacePanel(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)

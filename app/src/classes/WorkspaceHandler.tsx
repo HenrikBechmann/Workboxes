@@ -111,7 +111,7 @@ class WorkspaceHandler {
 
     // properties to allow for distribution to panelHandler with consistent interface
     set userName(userName) {
-        this.userName = userName
+        this._userName = userName
         this.panelHandler.userName = userName
     }
     get userName() {
@@ -827,6 +827,8 @@ class WorkspaceHandler {
             success: true,
             notice: null,
         }
+
+        console.log('workspaceHandler.settings', this.settings)
 
         if (!this.settings.changed) return
 
