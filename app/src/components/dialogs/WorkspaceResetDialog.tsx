@@ -18,7 +18,7 @@ import { isMobile } from '../../index'
 const WorkspaceResetDialog = (props) => {
 
     const
-        { setResetDialogState } = props,
+        { setWorkspaceResetDialogState } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
@@ -26,7 +26,7 @@ const WorkspaceResetDialog = (props) => {
         navigate = useNavigate()
 
     const doClose = () => {
-        setResetDialogState(false)
+        setWorkspaceResetDialogState(false)
     }
 
     async function doWorkspaceReset () {

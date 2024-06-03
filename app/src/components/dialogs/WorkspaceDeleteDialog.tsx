@@ -19,7 +19,7 @@ import {
 const WorkspaceDeleteDialog = (props) => {
 
     const 
-        { setDeleteDialogState, setResetDialogState } = props,
+        { setWorkspaceDeleteDialogState, setWorkspaceResetDialogState } = props,
         dialogStateRef = useRef(null),
         userRecords = useUserRecords(),
         cancelRef = useRef(null),
@@ -37,7 +37,7 @@ const WorkspaceDeleteDialog = (props) => {
 
     const doClose = () => {
 
-        setDeleteDialogState(false)
+        setWorkspaceDeleteDialogState(false)
 
     }
 
@@ -51,7 +51,7 @@ const WorkspaceDeleteDialog = (props) => {
         }
 
         toast({description:result.notice})
-        setDeleteDialogState(false)
+        setWorkspaceDeleteDialogState(false)
         dispatchWorkspaceHandler('delete')
         
     }
@@ -59,8 +59,8 @@ const WorkspaceDeleteDialog = (props) => {
     // TODO to come
     async function doResetWorkspace() {
 
-        setDeleteDialogState(false)
-        setResetDialogState(true)
+        setWorkspaceDeleteDialogState(false)
+        setWorkspaceResetDialogState(true)
 
     }
 

@@ -23,7 +23,7 @@ import {
 const PanelRenameDialog = (props) => {
 
     const 
-        { setRenameDialogState } = props,
+        { setPanelRenameDialogState } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -107,7 +107,7 @@ const PanelRenameDialog = (props) => {
     }
 
     const doClose = () => {
-        setRenameDialogState(false)
+        setPanelRenameDialogState(false)
     }
 
     return (<>

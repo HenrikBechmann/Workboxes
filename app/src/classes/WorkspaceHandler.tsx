@@ -1146,6 +1146,10 @@ class WorkspaceHandler {
         return await this.panelHandler.panelRename(panelSelectionIndex, newname)
     }
 
+    async panelReset(panelSelectionIndex){
+        return await this.panelHandler.panelReset(panelSelectionIndex)
+    }
+
     async getPanelDomainContext(panelSelectionIndex, userRecord) {
         return await this.panelHandler.getPanelDomainContext(panelSelectionIndex, userRecord)
     }

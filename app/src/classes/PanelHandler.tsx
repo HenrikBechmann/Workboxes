@@ -248,6 +248,22 @@ class PanelHandler {
         }
 
     }
+
+    // TODO remove all but the default window
+    async panelReset(panelSelectionIndex) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        result.notice = `panel selection ${panelSelectionIndex} has been reset`
+
+        return result
+
+    }
+
 }
 
 export default PanelHandler

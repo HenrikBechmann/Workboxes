@@ -105,11 +105,11 @@ const StandardToolbar = (props) => {
             isHome
             ? homeFillIcon
             : homeIcon,
-        [writeDialogState, setWriteDialogState] = useState({open:false, action:null}),
-        [deleteDialogState, setDeleteDialogState] = useState(false),
+        [workspaceWriteDialogState, setWorkspaceWriteDialogState] = useState({open:false, action:null}),
+        [workspaceDeleteDialogState, setWorkspaceDeleteDialogState] = useState(false),
         [saveDialogState, setSaveDialogState] = useState(false),
-        [resetDialogState, setResetDialogState] = useState(false),
-        [saveAsDialogState, setSaveAsDialogState] = useState(false),
+        [workspaceResetDialogState, setWorkspaceResetDialogState] = useState(false),
+        [workspaceSaveAsDialogState, setWorkspaceSaveAsDialogState] = useState(false),
         workspaceMenuRef = useRef(null),
         errorControl = useErrorControl(),
         usage = useUsage()
@@ -178,15 +178,15 @@ const StandardToolbar = (props) => {
     }
 
     const renameWorkspaceDialog = () => {
-        setWriteDialogState({open:true, action:'changename'})
+        setWorkspaceWriteDialogState({open:true, action:'changename'})
     }
 
     const deleteWorkspaceDialog = () => {
-        setDeleteDialogState(true)
+        setWorkspaceDeleteDialogState(true)
     }
 
     const saveAsWorkspaceDialog = () => {
-        setSaveAsDialogState(true)
+        setWorkspaceSaveAsDialogState(true)
     }
 
     const uploadSettingDialog = () => {
@@ -194,7 +194,7 @@ const StandardToolbar = (props) => {
     }
 
     const createWorkspaceDialog = () => {
-        setWriteDialogState({open:true, action:'createworkspace'})
+        setWorkspaceWriteDialogState({open:true, action:'createworkspace'})
     }
 
     async function saveWorkspaceData() {
@@ -231,7 +231,7 @@ const StandardToolbar = (props) => {
 
     const doResetWorkspace = () => {
 
-        setResetDialogState(true)
+        setWorkspaceResetDialogState(true)
 
     }
 
@@ -334,13 +334,13 @@ const StandardToolbar = (props) => {
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} 
             caption = 'hide' tooltip = 'hide toolbar'/>
         <span>&nbsp;&nbsp;</span>
-        {writeDialogState.open && <WorkspaceWriteDialog 
-            writeDialogState = {writeDialogState} setWriteDialogState = {setWriteDialogState}/>}
-        {deleteDialogState && <WorkspaceDeleteDialog 
-            setDeleteDialogState = {setDeleteDialogState} setResetDialogState = {setResetDialogState}/>}
-        {saveAsDialogState && <WorkspaceSaveAsDialog setSaveAsDialogState = {setSaveAsDialogState} />}
+        {workspaceWriteDialogState.open && <WorkspaceWriteDialog 
+            workspaceWriteDialogState = {workspaceWriteDialogState} setWorkspaceWriteDialogState = {setWorkspaceWriteDialogState}/>}
+        {workspaceDeleteDialogState && <WorkspaceDeleteDialog 
+            setWorkspaceDeleteDialogState = {setWorkspaceDeleteDialogState} setWorkspaceResetDialogState = {setWorkspaceResetDialogState}/>}
+        {workspaceSaveAsDialogState && <WorkspaceSaveAsDialog setWorkspaceSaveAsDialogState = {setWorkspaceSaveAsDialogState} />}
         {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} />}
-        {resetDialogState && <WorkspaceResetDialog setResetDialogState = {setResetDialogState} />}
+        {workspaceResetDialogState && <WorkspaceResetDialog setWorkspaceResetDialogState = {setWorkspaceResetDialogState} />}
     </Box>
 }
 

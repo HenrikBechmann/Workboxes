@@ -22,7 +22,7 @@ import {
 const WorkspaceWriteDialog = (props) => {
 
     const 
-        { writeDialogState, setWriteDialogState } = props,
+        { workspaceWriteDialogState, setWorkspaceWriteDialogState } = props,
         dialogStateRef = useRef(null),
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.workspaceNameLength_max,
@@ -38,7 +38,7 @@ const WorkspaceWriteDialog = (props) => {
         writeIsInvalidFieldFlags = writeIsInvalidFieldFlagsRef.current,
         navigate = useNavigate()
 
-    dialogStateRef.current = writeDialogState
+    dialogStateRef.current = workspaceWriteDialogState
 
     useEffect(()=>{
         if (newInvocationRef.current) {
@@ -129,7 +129,7 @@ const WorkspaceWriteDialog = (props) => {
 
     const doClose = () => {
         newInvocationRef.current = true // TODO not required; dialog is destoroyed after use
-        setWriteDialogState((previousState)=>{
+        setWorkspaceWriteDialogState((previousState)=>{
             previousState.open = false
             return {...previousState}
         })
@@ -137,15 +137,15 @@ const WorkspaceWriteDialog = (props) => {
 
     return (<>
         <AlertDialog
-            isOpen={writeDialogState.open}
+            isOpen={workspaceWriteDialogState.open}
             leastDestructiveRef={focusRef}
             onClose={doClose}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        {writeDialogState.action == 'changename' && 'Change the name of the current workspace.'}
-                        {writeDialogState.action == 'createworkspace' && 'Create a new workspace.'}
+                        {workspaceWriteDialogState.action == 'changename' && 'Change the name of the current workspace.'}
+                        {workspaceWriteDialogState.action == 'createworkspace' && 'Create a new workspace.'}
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -176,9 +176,9 @@ const WorkspaceWriteDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
-                            onClick = {writeDialogState.action == 'changename'? doSaveRename:doCreateWorkspace}
+                            onClick = {workspaceWriteDialogState.action == 'changename'? doSaveRename:doCreateWorkspace}
                         >
-                          {writeDialogState.action == 'changename'?'Save':'Create'}
+                          {workspaceWriteDialogState.action == 'changename'?'Save':'Create'}
                         </Button>
                     </AlertDialogFooter>
 

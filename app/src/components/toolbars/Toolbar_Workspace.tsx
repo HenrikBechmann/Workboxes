@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 
 import PanelRenameDialog from '../dialogs/PanelRenameDialog'
+import PanelResetDialog from '../dialogs/PanelResetDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -63,7 +64,8 @@ const WorkspaceToolbar = (props) => {
         panelDomainRecord = workspaceHandler.panelDomainRecord,
         panelMemberRecord = workspaceHandler.panelMemberRecord,
 
-        [renameDialogState, setRenameDialogState] = useState(false),
+        [panelRenameDialogState, setPanelRenameDialogState] = useState(false),
+        [panelResetDialogState, setPanelResetDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -100,7 +102,7 @@ const WorkspaceToolbar = (props) => {
 
     const renamePanel = () => {
 
-        setRenameDialogState(true)
+        setPanelRenameDialogState(true)
 
     }
 
@@ -109,6 +111,8 @@ const WorkspaceToolbar = (props) => {
     }
 
     const resetPanel = () => {
+
+        setPanelResetDialogState(true)
 
     }
 
@@ -222,7 +226,8 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         &nbsp; &nbsp;
-        {renameDialogState && <PanelRenameDialog setRenameDialogState = {setRenameDialogState} />}
+        {panelRenameDialogState && <PanelRenameDialog setPanelRenameDialogState = {setPanelRenameDialogState} />}
+        {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
     </Box>
 }
 
