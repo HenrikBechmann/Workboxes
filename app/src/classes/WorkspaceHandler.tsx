@@ -170,6 +170,7 @@ class WorkspaceHandler {
 
         if (this.settings.mode == 'manual') {
             this.changedRecords.userworkspace = true
+            this.settings.changed = true
             return result
         }
 
@@ -785,7 +786,11 @@ class WorkspaceHandler {
 
         this.workspaceRecord.panel = {id, name}
 
-        if (this.settings.mode == 'manual') return result
+        if (this.settings.mode == 'manual') {
+            this.changedRecords.setworkspace = this.workspaceSelection.id
+            this.settings.changed = true
+            return result
+        }
 
         const 
             workspaceID = this.workspaceSelection.id,
