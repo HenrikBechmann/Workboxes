@@ -15,6 +15,7 @@ import {
 
 import PanelRenameDialog from '../dialogs/PanelRenameDialog'
 import PanelResetDialog from '../dialogs/PanelResetDialog'
+import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -66,6 +67,7 @@ const WorkspaceToolbar = (props) => {
 
         [panelRenameDialogState, setPanelRenameDialogState] = useState(false),
         [panelResetDialogState, setPanelResetDialogState] = useState(false),
+        [panelDuplicateAsDialogState, setPanelDuplicateAsDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -116,8 +118,8 @@ const WorkspaceToolbar = (props) => {
 
     }
 
-    const saveAsPanel = () => {
-
+    const duplicateAsPanel = () => {
+        setPanelDuplicateAsDialogState(true)
     }
 
     const createPanel = () => {
@@ -158,7 +160,7 @@ const WorkspaceToolbar = (props) => {
             <MenuItem onClick = {renamePanel} >Rename</MenuItem>
             <MenuItem onClick = {resetPanel}>Reset</MenuItem>
             <MenuItem onClick = {deletePanel} >Delete</MenuItem>
-            <MenuItem onClick = {saveAsPanel} >Duplicate as...</MenuItem>
+            <MenuItem onClick = {duplicateAsPanel} >Duplicate as...</MenuItem>
             </MenuGroup>
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
@@ -228,6 +230,7 @@ const WorkspaceToolbar = (props) => {
         &nbsp; &nbsp;
         {panelRenameDialogState && <PanelRenameDialog setPanelRenameDialogState = {setPanelRenameDialogState} />}
         {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
+        {panelDuplicateAsDialogState && <PanelDuplicateAsDialog setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} />}
     </Box>
 }
 
