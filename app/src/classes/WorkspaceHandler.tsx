@@ -167,6 +167,11 @@ class WorkspaceHandler {
 
         this.workspaceSelection.id = id,
         this.workspaceSelection.name = name
+        if (this.settings.mode == 'manual') {
+            this.changedRecords.userworkspace = true
+            return result
+        }
+
         const updateData = 
                 {
                     generation:increment(1),
@@ -803,6 +808,7 @@ class WorkspaceHandler {
 
     // ---------------------[ saveWorkspaceData ]--------------------------
 
+    // TODO update generation, timestamp etc for panel records
     async saveWorkspaceData() {
 
         const result = {
@@ -871,6 +877,29 @@ class WorkspaceHandler {
                 }
             }
 
+
+        }
+
+        if (changedRecords.userworkspace) {
+
+            const 
+                updateData = 
+                    {
+                        generation:increment(1),
+                        'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                        'profile.commits.updated_timestamp':serverTimestamp(),
+                    },
+                workspaceID = workspaceRecord.profile.workspace.id,
+                workspaceName = workspaceRecord.profile.workspace.name
+
+            const prop = isMobile 
+                    ? 'workspace.mobile'
+                    : 'workspace.desktop'
+
+            updateData[prop] = {name:workspaceName,id:workspaceID}
+
+                batch.update(doc(collection(this.db,'users'),this.userID),updateData)
+                writeCount++
 
         }
 
