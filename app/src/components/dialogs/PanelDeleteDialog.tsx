@@ -34,7 +34,7 @@ const PanelDeleteDialog = (props) => {
 
     useEffect(()=>{
 
-        setIsDefaultState(workspaceHandler.workspaceRecord.profile.flags.is_default)
+        setIsDefaultState(panelRecord.profile.flags.is_default)
     
     },[])
 

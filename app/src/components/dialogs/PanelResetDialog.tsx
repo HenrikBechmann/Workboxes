@@ -53,7 +53,7 @@ const PanelResetDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Reset this workspace
+                        Reset this panel
                     </AlertDialogHeader>
 
                     <AlertDialogBody fontSize = 'sm'>
