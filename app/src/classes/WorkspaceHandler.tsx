@@ -776,7 +776,7 @@ class WorkspaceHandler {
 
     async updateWorkspacePanel(id, name) {
 
-        console.log('updating panel: id, name', id, name)
+        // console.log('updating panel: id, name', id, name)
 
         const result = {
             error: false,

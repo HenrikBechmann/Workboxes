@@ -82,11 +82,30 @@ const Workspace = (props) => {
 
     },[workspaceHandler.flags.new_workspace_load])
 
+    async function updateWorkspacePanel(panelSelectionIndex) {
+
+        const panelRecord = workspaceHandler.panelRecords[panelSelectionIndex]
+
+        if (!panelRecord) return
+
+        const result = await workspaceHandler.updateWorkspacePanel(
+            panelRecord.profile.panel.id , panelRecord.profile.panel.name)
+
+        if (result.error) {
+            navigate('/error')
+            return
+        }
+
+    }
+
     // handle scroller effects for panels
     useEffect(()=>{
 
         const num = panelSelectionIndex ?? false
         if (num === false) return
+
+        updateWorkspacePanel(panelSelectionIndex)
+
         document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionIndex).toString())
 
     },[panelSelectionIndex])
