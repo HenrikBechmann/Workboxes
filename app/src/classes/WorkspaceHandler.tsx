@@ -89,7 +89,7 @@ class WorkspaceHandler {
     workspaceRecord = null
     panelSelectionIndex = null // attempt to set from workspace.profile.panel; cascading fallbacks
     // set on load of all panels
-    panelCount = null 
+    panelCount = 0 
     panelRecordMap = new Map()
     panelRecords = []
     // set with getPanelDomainContext of toolbarWorkspace

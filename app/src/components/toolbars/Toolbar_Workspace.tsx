@@ -57,7 +57,7 @@ const WorkspaceToolbar = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
 
-        panelCount = workspaceHandler.panelcount,
+        { panelCount } = workspaceHandler,
         panelMenuRef = useRef(null),
         panelRecords = workspaceHandler.panelRecords,
         panelRecord = panelRecords[panelSelectionIndex],
@@ -130,7 +130,16 @@ const WorkspaceToolbar = (props) => {
 
     }
 
-    const changePanelSelection = () => {
+    const changePanelSelection = (panelID) => {
+
+        let index
+        for (index = 0; index < panelRecords.length; index ++) {
+            if (panelRecords[index].profile.panel.id == panelID) {
+                break
+            }
+        }
+
+        setPanelSelectionIndex(index)        
 
     }
 
@@ -144,6 +153,18 @@ const WorkspaceToolbar = (props) => {
         if (panelSelectionIndex > 0) {
             setPanelSelectionIndex(panelSelectionIndex - 1)
         }
+    }
+
+    const getSortedPanels = () => {
+        const panelRecordsCopy = [...panelRecords]
+        panelRecordsCopy.sort((a,b)=>{
+            return a.profile.panel.name < b.profile.panel.name
+                ?-1
+                :a.profile.panel.name == b.profile.panel.name
+                    ?0
+                    :1
+        })
+        return panelRecordsCopy
     }
 
     const panelmenuList = useMemo(() => {
@@ -175,7 +196,7 @@ const WorkspaceToolbar = (props) => {
                 title = 'Select a panel:'
             >
                 {
-                    panelRecords.map((record) => {
+                    getSortedPanels().map((record) => {
                         return <MenuItemOption 
                             key = {record.profile.panel.id} 
                             data-name = {record.profile.panel.name} 
@@ -230,7 +251,10 @@ const WorkspaceToolbar = (props) => {
         &nbsp; &nbsp;
         {panelRenameDialogState && <PanelRenameDialog setPanelRenameDialogState = {setPanelRenameDialogState} />}
         {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
-        {panelDuplicateAsDialogState && <PanelDuplicateAsDialog setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} />}
+        {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
+            setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
+            setPanelSelectionIndex = {setPanelSelectionIndex}
+        />}
     </Box>
 }
 

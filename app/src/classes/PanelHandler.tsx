@@ -280,11 +280,16 @@ class PanelHandler {
                 collection(this.db, 'users',this.userID, 'workspaces',workspaceHandler.workspaceRecord.profile.workspace.id, 'panels')),
             newPanelID = panelRef.id
 
-        const newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelectionIndex])
-        const { profile } = newPanelRecord
+        const 
+            newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelectionIndex]),
+            oldPanelName = newPanelRecord.profile.panel.name,
+            newPanelOrder = workspaceHandler.panelRecords.length - 1,
+            { profile } = newPanelRecord
+
         profile.display_order = workspaceHandler.panelCount + 1
         profile.panel.id = newPanelID
         profile.panel.name = newname
+        profile.display_order = newPanelOrder
         profile.owner = {id:this.userID, name: this.userName}
         profile.commits = {
           created_by: {
@@ -305,11 +310,15 @@ class PanelHandler {
 
         workspaceHandler.changedRecords.setpanels.add(newPanelID)
         workspaceHandler.settings.changed = true
+
+        const notice = `[${oldPanelName}] has been duplicated as [${newname}]`
         if (workspaceHandler.settings.mode == 'automatic') {
             const result = await workspaceHandler.saveWorkspaceData()
+            result.notice = notice
             return result
         }
 
+        result.notice = notice
         return result
 
     }

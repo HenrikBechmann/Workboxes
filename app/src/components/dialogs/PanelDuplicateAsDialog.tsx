@@ -23,7 +23,7 @@ import {
 const PanelDuplicateAsDialog = (props) => {
 
     const 
-        { setPanelDuplicateAsDialogState } = props,
+        { setPanelDuplicateAsDialogState, setPanelSelectionIndex } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -36,7 +36,8 @@ const PanelDuplicateAsDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        toast = useToast({duration:4000})
+        toast = useToast({duration:4000}),
+        checkboxRef = useRef(null)
 
     useEffect(()=>{
 
@@ -99,6 +100,10 @@ const PanelDuplicateAsDialog = (props) => {
 
         toast({description:result.notice})
 
+        if (checkboxRef.current.checked) {
+            setPanelSelectionIndex(workspaceHandler.panelCount - 1)
+        }
+
         dispatchWorkspaceHandler('copypanel')
 
         doClose()
@@ -155,7 +160,7 @@ const PanelDuplicateAsDialog = (props) => {
                                 mt = '8px' 
                                 borderTop = '1px solid silver'
                             >
-                                <Checkbox>Navigate to the new panel after duplicate is made.</Checkbox>
+                                <Checkbox ref = {checkboxRef} >Navigate to the new panel after duplicate is made.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>
