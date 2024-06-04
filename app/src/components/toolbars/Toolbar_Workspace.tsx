@@ -16,6 +16,7 @@ import {
 import PanelRenameDialog from '../dialogs/PanelRenameDialog'
 import PanelResetDialog from '../dialogs/PanelResetDialog'
 import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
+import PanelDeleteDialog from '../dialogs/PanelDeleteDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -68,6 +69,7 @@ const WorkspaceToolbar = (props) => {
         [panelRenameDialogState, setPanelRenameDialogState] = useState(false),
         [panelResetDialogState, setPanelResetDialogState] = useState(false),
         [panelDuplicateAsDialogState, setPanelDuplicateAsDialogState] = useState(false),
+        [panelDeleteDialogState, setPanelDeleteDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -109,6 +111,8 @@ const WorkspaceToolbar = (props) => {
     }
 
     const deletePanel = () => {
+
+        setPanelDeleteDialogState(true)
 
     }
 
@@ -256,6 +260,10 @@ const WorkspaceToolbar = (props) => {
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
             setPanelSelectionIndex = {setPanelSelectionIndex}
+        />}
+        {panelDeleteDialogState && <PanelDeleteDialog 
+            setPanelDeleteDialogState = {setPanelDeleteDialogState} 
+            setPanelResetDialogState = {setPanelResetDialogState} 
         />}
     </Box>
 }
