@@ -201,7 +201,7 @@ const WorkspaceToolbar = (props) => {
                             key = {record.profile.panel.id} 
                             data-name = {record.profile.panel.name} 
                             value = {record.profile.panel.id}>
-                            {record.profile.panel.name + ' (' + record.profile.display_order + ')' }
+                            {record.profile.panel.name + ' (' + (record.profile.display_order + 1) + ')' }
                         </MenuItemOption>
                     })
                 }
