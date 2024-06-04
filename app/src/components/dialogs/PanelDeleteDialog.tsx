@@ -20,16 +20,13 @@ const PanelDeleteDialog = (props) => {
 
     const 
         { setPanelDeleteDialogState, setPanelResetDialogState } = props,
-        dialogStateRef = useRef(null),
-        userRecords = useUserRecords(),
         cancelRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         toast = useToast({duration:4000}),
         navigate = useNavigate(),
-        { panelSelectionIndex } = workspaceHandler,
-        { panelRecords } = workspaceHandler,
+        { panelSelectionIndex, panelRecords } = workspaceHandler,
         panelRecord = panelRecords[panelSelectionIndex]
 
     useEffect(()=>{
@@ -46,7 +43,7 @@ const PanelDeleteDialog = (props) => {
 
     async function doDeletePanel() {
 
-        const result = await workspaceHandler.deletePanel(userRecords.user)
+        const result = await workspaceHandler.deletePanel()
 
         if (result.error) {
             navigate('/error')
