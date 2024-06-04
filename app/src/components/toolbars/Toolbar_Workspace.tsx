@@ -186,6 +186,7 @@ const WorkspaceToolbar = (props) => {
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
             <MenuItem onClick = {reorderPanels} >Re-order panels</MenuItem>
+            <MenuItem >Set default panel</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
