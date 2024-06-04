@@ -48,7 +48,7 @@ import {
     getDoc, setDoc, updateDoc, // deleteDoc
     query, where, orderBy, getDocs,
     arrayUnion, arrayRemove,
-    increment, serverTimestamp,
+    increment, serverTimestamp, Timestamp,
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
@@ -828,7 +828,7 @@ class WorkspaceHandler {
             notice: null,
         }
 
-        console.log('workspaceHandler.settings', this.settings)
+        // console.log('workspaceHandler.settings', this.settings)
 
         if (!this.settings.changed) return
 
@@ -1152,6 +1152,12 @@ class WorkspaceHandler {
 
     async getPanelDomainContext(panelSelectionIndex, userRecord) {
         return await this.panelHandler.getPanelDomainContext(panelSelectionIndex, userRecord)
+    }
+
+    async duplicatePanelAs(panelSelectionIndex, newname) {
+
+        return await this.panelHandler.duplicatePanelAs(panelSelectionIndex, newname)
+
     }
 
 }

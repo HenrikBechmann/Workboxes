@@ -90,7 +90,7 @@ const PanelDuplicateAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.duplicatePanelAs(writeValues.name)
+            result = await workspaceHandler.duplicatePanelAs(workspaceHandler.panelSelectionIndex, writeValues.name)
 
         if (result.error) {
            navigate('/error')
@@ -99,7 +99,7 @@ const PanelDuplicateAsDialog = (props) => {
 
         toast({description:result.notice})
 
-        dispatchWorkspaceHandler('copy')
+        dispatchWorkspaceHandler('copypanel')
 
         doClose()
 

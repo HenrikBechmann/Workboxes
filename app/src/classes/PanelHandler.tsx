@@ -6,9 +6,11 @@ import {
     getDoc, setDoc, updateDoc, // deleteDoc
     query, where, orderBy, getDocs,
     arrayUnion, arrayRemove,
-    increment, serverTimestamp,
+    increment, serverTimestamp, Timestamp,
     runTransaction, writeBatch,
 } from 'firebase/firestore'
+
+import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -264,6 +266,53 @@ class PanelHandler {
 
     }
 
+    async duplicatePanelAs(panelSelectionIndex, newname) {
+        
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            panelRef = doc(
+                collection(this.db, 'users',this.userID, 'workspaces',workspaceHandler.workspaceRecord.profile.workspace.id, 'panels')),
+            newPanelID = panelRef.id
+
+        const newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelectionIndex])
+        const { profile } = newPanelRecord
+        profile.display_order = workspaceHandler.panelCount + 1
+        profile.panel.id = newPanelID
+        profile.panel.name = newname
+        profile.owner = {id:this.userID, name: this.userName}
+        profile.commits = {
+          created_by: {
+            id: this.userID, 
+            name: this.userName
+          },
+          created_timestamp: Timestamp.now(),
+          updated_by: {
+            id: this.userID, 
+            name: this.userName
+          },
+          updated_timestamp: Timestamp.now(),            
+        }
+        profile.flags.is_default = false
+
+        workspaceHandler.panelRecords.push(newPanelRecord)
+        workspaceHandler.panelCount++
+
+        workspaceHandler.changedRecords.setpanels.add(newPanelID)
+        workspaceHandler.settings.changed = true
+        if (workspaceHandler.settings.mode == 'automatic') {
+            const result = await workspaceHandler.saveWorkspaceData()
+            return result
+        }
+
+        return result
+
+    }
 }
 
 export default PanelHandler
