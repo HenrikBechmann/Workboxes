@@ -60,7 +60,7 @@ const WorkspaceToolbar = (props) => {
 
         { panelCount } = workspaceHandler,
         panelMenuRef = useRef(null),
-        panelRecords = workspaceHandler.panelRecords,
+        { panelRecords } = workspaceHandler,
         panelRecord = panelRecords[panelSelectionIndex],
         panelSelection = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
         panelDomainRecord = workspaceHandler.panelDomainRecord,

@@ -33,6 +33,7 @@ const PanelDuplicateAsDialog = (props) => {
             name: false,
         }),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        { panelSelectionIndex, panelRecords } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -62,8 +63,10 @@ const PanelDuplicateAsDialog = (props) => {
 
     const onChangeFunctions = {
         name:(event) => {
-            const target = event.target as HTMLInputElement
-            const value = target.value
+            const 
+                target = event.target as HTMLInputElement,
+                value = target.value
+
             isInvalidTests.name(value)
             writeValues.name = value
             setWriteValues({...writeValues})
@@ -91,7 +94,7 @@ const PanelDuplicateAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.duplicatePanelAs(workspaceHandler.panelSelectionIndex, writeValues.name)
+            result = await workspaceHandler.duplicatePanelAs(panelSelectionIndex, writeValues.name)
 
         if (result.error) {
            navigate('/error')
@@ -129,8 +132,7 @@ const PanelDuplicateAsDialog = (props) => {
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
                         <Text>This will clone the current panel
-                        <span style = {{fontStyle: 'italic'}}> [{workspaceHandler.panelRecords[
-                            workspaceHandler.panelSelectionIndex].profile.panel.name}]
+                        <span style = {{fontStyle: 'italic'}}> [{panelRecords[panelSelectionIndex].profile.panel.name}]
                         </span> (including its windows)
                         to a new panel.</Text>
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>

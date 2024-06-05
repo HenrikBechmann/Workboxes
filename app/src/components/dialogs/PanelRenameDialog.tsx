@@ -37,7 +37,8 @@ const PanelRenameDialog = (props) => {
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
-        panelName = workspaceHandler.panelRecords[workspaceHandler.panelSelectionIndex].profile.panel.name
+        {panelSelectionIndex, panelRecords } = workspaceHandler,
+        panelName = panelRecords[panelSelectionIndex].profile.panel.name
 
     useEffect(()=>{
 
@@ -91,7 +92,7 @@ const PanelRenameDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.panelRename(workspaceHandler.panelSelectionIndex,writeValues.name)
+            result = await workspaceHandler.panelRename(panelSelectionIndex,writeValues.name)
 
         if (result.error) {
            navigate('/error')
