@@ -136,18 +136,18 @@ const WorkspaceToolbar = (props) => {
 
     const changePanelSelection = (panelID) => {
 
-        let index
+        let index, panelRecord
         for (index = 0; index < panelRecords.length; index ++) {
-            if (panelRecords[index].profile.panel.id == panelID) {
+            panelRecord = panelRecords[index]
+            if (panelRecord.profile.panel.id == panelID) {
                 break
             }
         }
 
-        setPanelSelection((previousState) => {
-            previousState.index = index
-            previousState.id = null
-            previousState.name = null
-            return {...previousState}
+        setPanelSelection({
+            index,
+            id: panelRecord.profile.panel.id,
+            name: panelRecord.profile.panel.name
         })
 
     }
@@ -185,7 +185,8 @@ const WorkspaceToolbar = (props) => {
     const panelmenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
-        const defaultValue = panelSelectionData.id
+        // const defaultValue = panelSelectionData.id
+        const defaultValue = panelSelection.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList 
@@ -225,7 +226,7 @@ const WorkspaceToolbar = (props) => {
         </MenuList>
 
     //  panelRecords[panelSelection] guaranteed to be updated for change
-    },[panelSelection.index, panelSelectionData, panelRecords, panelRecords[panelSelection.index]])
+    },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
 
     // console.log('workspaceHandler', workspaceHandler)
 
