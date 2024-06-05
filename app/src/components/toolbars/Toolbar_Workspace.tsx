@@ -62,7 +62,7 @@ const WorkspaceToolbar = (props) => {
         panelMenuRef = useRef(null),
         { panelRecords } = workspaceHandler,
         panelRecord = panelRecords[panelSelection.index],
-        panelSelectionData = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
+        // panelSelectionData = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
         panelDomainRecord = workspaceHandler.panelDomainRecord,
         panelMemberRecord = workspaceHandler.panelMemberRecord,
 
@@ -240,7 +240,7 @@ const WorkspaceToolbar = (props) => {
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            displayName = {panelSelectionData.name}
+            displayName = {panelSelection.name}
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}
