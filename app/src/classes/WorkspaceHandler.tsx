@@ -39,7 +39,10 @@
     // panels facade
     loadPanels
     panelRename
+    panelReset
     getPanelDomainContext
+    duplicatePanelAs
+    deletePanel
 
 */
 
@@ -1155,9 +1158,11 @@ class WorkspaceHandler {
     }
 
     async duplicatePanelAs(panelSelectionIndex, newname) {
-
         return await this.panelHandler.duplicatePanelAs(panelSelectionIndex, newname)
+    }
 
+    async deletePanel() {
+        return await this.panelHandler.deletePanel()
     }
 
 }

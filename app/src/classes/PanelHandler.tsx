@@ -322,6 +322,20 @@ class PanelHandler {
         return result
 
     }
+
+    async deletePanel() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        return result
+
+    }
+
 }
+
 
 export default PanelHandler
