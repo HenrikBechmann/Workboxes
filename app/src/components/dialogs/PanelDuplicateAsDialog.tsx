@@ -107,8 +107,12 @@ const PanelDuplicateAsDialog = (props) => {
             setPanelSelection((previousState)=>{
                 previousState.index = workspaceHandler.panelCount - 1
                 previousState.name = writeValues.name
-                previousState.id = result.newid
+                previousState.id = result.payload
                 return {...previousState}
+            })
+        } else {
+            setPanelSelection((previousState) => {
+                return {...previousState} // trigger state change for menu
             })
         }
 

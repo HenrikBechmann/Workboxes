@@ -95,7 +95,7 @@ const WorkspaceToolbar = (props) => {
             navigate('/error')
             return
         }
-        dispatchWorkspaceHandler()
+        dispatchWorkspaceHandler('getpanelcontext')
     }
 
     useEffect(()=>{
@@ -154,18 +154,26 @@ const WorkspaceToolbar = (props) => {
 
     const nextPanel = () => {
         if (panelSelection.index < (panelCount -1)) {
-            setPanelSelection((previousState) => {
-                previousState.index = panelSelection.index + 1
-                return {...previousState}
+            const
+                index = panelSelection.index + 1,
+                panelRecord = panelRecords[index]
+            setPanelSelection({
+                index,
+                id: panelRecord.profile.panel.id,
+                name: panelRecord.profile.panel.name
             })
         }
     }
 
     const previousPanel = () => {
         if (panelSelection.index > 0) {
-            setPanelSelection((previousState) => {
-                previousState.index = panelSelection.index - 1
-                return {...previousState}
+            const
+                index = panelSelection.index - 1,
+                panelRecord = panelRecords[index]
+            setPanelSelection({
+                index,
+                id: panelRecord.profile.panel.id,
+                name: panelRecord.profile.panel.name
             })
         }
     }
@@ -187,6 +195,8 @@ const WorkspaceToolbar = (props) => {
         // if (workspacesMenu.length === 0) return null
         // const defaultValue = panelSelectionData.id
         const defaultValue = panelSelection.id
+
+        // console.log('defaultValue in useMemo for panelmenulist', defaultValue)
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList 
@@ -279,6 +289,7 @@ const WorkspaceToolbar = (props) => {
         {panelDeleteDialogState && <PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 
             setPanelResetDialogState = {setPanelResetDialogState} 
+            setPanelSelection = {setPanelSelection}
         />}
     </Box>
 }

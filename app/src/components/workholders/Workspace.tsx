@@ -53,6 +53,10 @@ const Workspace = (props) => {
         workboxMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null)
 
+        // console.log('Workspace panelSelection', {...panelSelection})
+
+        workspaceHandler.panelSelection = panelSelection
+
     // ---------------------------[ state change effects ]------------------------
 
     // init resizeObserver
@@ -84,6 +88,8 @@ const Workspace = (props) => {
 
     async function updateWorkspacePanel(panelSelection) {
 
+        // console.log('updateWorkspacePanel panelSelection', {...panelSelection})
+
         const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
@@ -96,8 +102,7 @@ const Workspace = (props) => {
             return
         }
 
-        panelSelection.name = panelRecord.profile.panel.name
-        panelSelection.id = panelRecord.profile.panel.id
+        dispatchWorkspaceHandler('updatepanel')
 
     }
 
@@ -175,10 +180,6 @@ const Workspace = (props) => {
         const panelSelection = {index:null, id:null, name:null}
         if (selectedIndex !== undefined) {
             panelSelection.index = selectedIndex
-            // setPanelSelection((previousState) => {
-            //     previousState.index = selectedIndex
-            //     return {...previousState}
-            // })
         } else if (defaultIndex !== undefined) {
             panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
@@ -189,10 +190,6 @@ const Workspace = (props) => {
                 navigate('/error')
                 return
             }
-            // setPanelSelection((previousState) => {
-            //     previousState.index = defaultIndex
-            //     return {...previousState}
-            // })
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
@@ -209,7 +206,6 @@ const Workspace = (props) => {
         panelSelection.name = panelSelectionRecord.profile.panel.name
 
         setPanelSelection(panelSelection)
-        workspaceHandler.panelSelection = panelSelection
         setWorkspaceState('ready')
         dispatchWorkspaceHandler()
 

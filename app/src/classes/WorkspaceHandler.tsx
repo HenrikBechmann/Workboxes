@@ -1165,8 +1165,8 @@ class WorkspaceHandler {
         return await this.panelHandler.duplicatePanelAs(panelSelection, newname)
     }
 
-    async deletePanel() {
-        return await this.panelHandler.deletePanel()
+    async deletePanel(panelSelection) {
+        return await this.panelHandler.deletePanel(panelSelection)
     }
 
 }

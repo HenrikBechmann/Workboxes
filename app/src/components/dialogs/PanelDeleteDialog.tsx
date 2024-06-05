@@ -19,7 +19,7 @@ import {
 const PanelDeleteDialog = (props) => {
 
     const 
-        { setPanelDeleteDialogState, setPanelResetDialogState } = props,
+        { setPanelDeleteDialogState, setPanelResetDialogState, setPanelSelection } = props,
         cancelRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
@@ -40,17 +40,20 @@ const PanelDeleteDialog = (props) => {
         setPanelDeleteDialogState(false)
 
     }
-
     async function doDeletePanel() {
 
-        const result = await workspaceHandler.deletePanel()
+        const result = await workspaceHandler.deletePanel(panelSelection)
 
         if (result.error) {
             navigate('/error')
             return
         }
 
-        toast({description:result.notice})
+        const newPanelIndex = result.payload
+        const newPanelRecord = workspaceHandler.panelRecords[newPanelIndex]
+        setPanelSelection({index:newPanelIndex, id:newPanelRecord.profile.panel.id, name:newPanelRecord.profile.panel.name})
+
+        toast({description:result.notice + ` and replaced by [${newPanelRecord.profile.panel.name}]`})
         setPanelDeleteDialogState(false)
         dispatchWorkspaceHandler('deletepanel')
         

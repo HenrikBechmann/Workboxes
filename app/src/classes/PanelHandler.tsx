@@ -273,7 +273,7 @@ class PanelHandler {
             error: false,
             success: true,
             notice: null,
-            newid:null
+            payload:null
         }
 
         const 
@@ -314,24 +314,62 @@ class PanelHandler {
         workspaceHandler.settings.changed = true
 
         const notice = `[${oldPanelName}] has been duplicated as [${newname}]`
-        result.newid = newPanelID
         if (workspaceHandler.settings.mode == 'automatic') {
             const result = await workspaceHandler.saveWorkspaceData()
             result.notice = notice
+            result.payload = newPanelID
             return result
         }
 
+        result.payload = newPanelID
         result.notice = notice
         return result
 
     }
 
-    async deletePanel() {
+    async deletePanel(panelSelection) {
 
         const result = {
             error: false,
             success: true,
             notice: null,
+            payload: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            { panelRecords, changedRecords } = workspaceHandler
+
+        panelRecords.splice(panelSelection.index, 1)
+        workspaceHandler.panelCount--
+
+        for (let index = panelSelection.index + 1; index < panelRecords.length; index ++) {
+            const panelRecord = panelRecords[index]
+            panelRecord.profile.display_order = index
+            changedRecords.setpanels.add(panelRecord.profile.panel.id)
+        }
+
+        let index
+        for (index = 0; index < panelRecords.length; index++) {
+            if (panelRecords[index].profile.flags.is_default) {
+                break
+            }
+        }
+
+        result.payload = index
+        workspaceHandler.settings.changed = true
+        changedRecords.deletepanels.add(panelSelection.id)
+        changedRecords.setworkspace = workspaceHandler.workspaceRecord.profile.workspace.id
+
+        let saveResult
+        if (workspaceHandler.settings.mode == 'automatic') {
+            saveResult = await workspaceHandler.saveWorkspaceData()
+        }
+
+        if (!saveResult.error) {
+            result.notice = `panel ${panelSelection.name} was deleted`
+        } else {
+            return saveResult
         }
 
         return result
