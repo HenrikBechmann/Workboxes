@@ -43,7 +43,7 @@ const Workspace = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
-        [panelSelectionIndex, setPanelSelectionIndex] = useState(0),
+        [panelSelection, setPanelSelection] = useState({index:0,id:null, name:null}),
 
         // resources
         workspaceFrameElementRef = useRef(null), // for resizeObserver
@@ -82,9 +82,9 @@ const Workspace = (props) => {
 
     },[workspaceHandler.flags.new_workspace_load])
 
-    async function updateWorkspacePanel(panelSelectionIndex) {
+    async function updateWorkspacePanel(panelSelection) {
 
-        const panelRecord = workspaceHandler.panelRecords[panelSelectionIndex]
+        const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
 
@@ -101,14 +101,14 @@ const Workspace = (props) => {
     // handle scroller effects for panels
     useEffect(()=>{
 
-        const num = panelSelectionIndex ?? false
+        const num = panelSelection.index ?? false
         if (num === false) return
 
-        updateWorkspacePanel(panelSelectionIndex)
+        updateWorkspacePanel(panelSelection)
 
-        document.documentElement.style.setProperty('--wb_panel_selection',(-panelSelectionIndex).toString())
+        document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
-    },[panelSelectionIndex])
+    },[panelSelection])
 
     // --------------------------[ operations ]--------------------------
     const resizeCallback = useCallback((entries)=>{
@@ -145,6 +145,8 @@ const Workspace = (props) => {
 
             const panelRecord = panelRecords[index]
 
+            const panelSelection = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
+
             if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
             }
@@ -159,7 +161,7 @@ const Workspace = (props) => {
                     startingWindowsSpecsList = {null} 
                     workboxMapRef = {workboxMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
-                    panelSelectionIndex = {index}
+                    panelSelection = {panelSelection}
                 />
             )
 
@@ -167,12 +169,15 @@ const Workspace = (props) => {
 
         // otherwise, set the default as the current panel
         // TODO set and handle workspace changed
-        let panelSelectionIndex
+        let panelSelection = {index:null, id:null, name:null}
         if (selectedIndex !== undefined) {
-            panelSelectionIndex = selectedIndex
-            setPanelSelectionIndex(selectedIndex)            
+            panelSelection.index = selectedIndex
+            setPanelSelection((previousState) => {
+                previousState.index = selectedIndex
+                return {...previousState}
+            })
         } else if (defaultIndex !== undefined) {
-            panelSelectionIndex = defaultIndex
+            panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
             // workspaceRecord.panel = {id:defaultRecord.profile.panel.id , name: defaultRecord.profile.panel.name}
 
@@ -182,21 +187,27 @@ const Workspace = (props) => {
                 navigate('/error')
                 return
             }
-            setPanelSelectionIndex(defaultIndex)
+            setPanelSelection((previousState) => {
+                previousState.index = defaultIndex
+                return {...previousState}
+            })
         } else {
             const fallbackRecord = panelRecords[0]
             // workspaceRecord.panel = {...fallbackRecord.profile.panel }
-            panelSelectionIndex = 0
+            panelSelection.index = 0
             const result = await workspaceHandler.updateWorkspacePanel(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
                 return
             }
-            setPanelSelectionIndex(0)
+            setPanelSelection((previousState) => {
+                previousState.index = 0
+                return {...previousState}
+            })
         }
 
-        workspaceHandler.panelSelectionIndex = panelSelectionIndex
+        workspaceHandler.panelSelection = panelSelection
         setWorkspaceState('ready')
         dispatchWorkspaceHandler()
 
@@ -219,18 +230,18 @@ const Workspace = (props) => {
                     transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
                     {(workspaceState != 'setup') && panelComponentListRef.current}
                     </Box>
-                </Box>
+                 </Box>
             </GridItem>
             <GridItem data-type = 'workspace-footer' area = 'footer'>
                 <Box borderTop = '1px solid lightgray' width = '100%' >
                     <ToolbarFrame>
-                        {(workspaceState != 'setup') && <WorkspaceToolbar panelSelectionIndex = {panelSelectionIndex} 
-                            setPanelSelectionIndex = {setPanelSelectionIndex}/>}
+                        {(workspaceState != 'setup') && <WorkspaceToolbar panelSelection = {panelSelection} 
+                            setPanelSelection = {setPanelSelection}/>}
                     </ToolbarFrame>
                 </Box>
             </GridItem>
         </Grid>
-    },[panelComponentListRef.current, panelSelectionIndex, workspaceState])
+    },[panelComponentListRef.current, panelSelection, workspaceState])
 
     // the scroller enables scrolling components throughout TODO s/b a provider
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>

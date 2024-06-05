@@ -23,7 +23,7 @@ import {
 const PanelDuplicateAsDialog = (props) => {
 
     const 
-        { setPanelDuplicateAsDialogState, setPanelSelectionIndex } = props,
+        { setPanelDuplicateAsDialogState, setPanelSelection } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -33,7 +33,7 @@ const PanelDuplicateAsDialog = (props) => {
             name: false,
         }),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { panelSelectionIndex, panelRecords } = workspaceHandler,
+        { panelSelection, panelRecords } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
@@ -94,7 +94,7 @@ const PanelDuplicateAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.duplicatePanelAs(panelSelectionIndex, writeValues.name)
+            result = await workspaceHandler.duplicatePanelAs(panelSelection, writeValues.name)
 
         if (result.error) {
            navigate('/error')
@@ -104,7 +104,10 @@ const PanelDuplicateAsDialog = (props) => {
         toast({description:result.notice})
 
         if (checkboxRef.current.checked) {
-            setPanelSelectionIndex(workspaceHandler.panelCount - 1)
+            setPanelSelection((previousState)=>{
+                previousState.index = workspaceHandler.panelCount - 1
+                return {...previousState}
+            })
         }
 
         dispatchWorkspaceHandler('copypanel')
@@ -132,7 +135,7 @@ const PanelDuplicateAsDialog = (props) => {
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
                         <Text>This will clone the current panel
-                        <span style = {{fontStyle: 'italic'}}> [{panelRecords[panelSelectionIndex].profile.panel.name}]
+                        <span style = {{fontStyle: 'italic'}}> [{panelRecords[panelSelection.index].profile.panel.name}]
                         </span> (including its windows)
                         to a new panel.</Text>
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>

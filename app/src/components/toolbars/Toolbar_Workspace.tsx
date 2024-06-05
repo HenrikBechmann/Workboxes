@@ -53,7 +53,7 @@ let panelMenuIteration = 0
 const WorkspaceToolbar = (props) => {
 
     const 
-        { panelSelectionIndex, setPanelSelectionIndex } = props,
+        { panelSelection, setPanelSelection } = props,
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         workspaceRecord = workspaceHandler.workspaceRecord,
@@ -61,8 +61,8 @@ const WorkspaceToolbar = (props) => {
         { panelCount } = workspaceHandler,
         panelMenuRef = useRef(null),
         { panelRecords } = workspaceHandler,
-        panelRecord = panelRecords[panelSelectionIndex],
-        panelSelection = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
+        panelRecord = panelRecords[panelSelection.index],
+        panelSelectionData = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
         panelDomainRecord = workspaceHandler.panelDomainRecord,
         panelMemberRecord = workspaceHandler.panelMemberRecord,
 
@@ -78,16 +78,16 @@ const WorkspaceToolbar = (props) => {
     useEffect(()=>{
 
         const navState = {
-            previousDisabled: (panelSelectionIndex ?? 0) == 0,
-            nextDisabled: panelSelectionIndex == Math.max(panelCount ?? 0,1) - 1,
+            previousDisabled: (panelSelection.index ?? 0) == 0,
+            nextDisabled: panelSelection.index == Math.max(panelCount ?? 0,1) - 1,
         }
         setNavState(navState)
 
-    },[panelCount, panelSelectionIndex])
+    },[panelCount, panelSelection])
 
-    async function getPanelDomainContext(panelSelectionIndex) {
+    async function getPanelDomainContext(panelSelection) {
 
-        const result = await workspaceHandler.getPanelDomainContext(panelSelectionIndex, userRecords.user)
+        const result = await workspaceHandler.getPanelDomainContext(panelSelection, userRecords.user)
         if (!result.success) {
             toast({description:'unable to collect domain context'})
         }
@@ -100,9 +100,9 @@ const WorkspaceToolbar = (props) => {
 
     useEffect(()=>{
 
-        getPanelDomainContext(panelSelectionIndex)
+        getPanelDomainContext(panelSelection)
 
-    },[panelSelectionIndex])
+    },[panelSelection])
 
     const renamePanel = () => {
 
@@ -143,19 +143,28 @@ const WorkspaceToolbar = (props) => {
             }
         }
 
-        setPanelSelectionIndex(index)        
+        setPanelSelection((previousState) => {
+            previousState.index = index
+            return {...previousState}
+        })
 
     }
 
     const nextPanel = () => {
-        if (panelSelectionIndex < (panelCount -1)) {
-            setPanelSelectionIndex(panelSelectionIndex + 1)
+        if (panelSelection.index < (panelCount -1)) {
+            setPanelSelection((previousState) => {
+                previousState.index = panelSelection.index + 1
+                return {...previousState}
+            })
         }
     }
 
     const previousPanel = () => {
-        if (panelSelectionIndex > 0) {
-            setPanelSelectionIndex(panelSelectionIndex - 1)
+        if (panelSelection > 0) {
+            setPanelSelection((previousState) => {
+                previousState.index = panelSelection.index - 1
+                return {...previousState}
+            })
         }
     }
 
@@ -174,7 +183,7 @@ const WorkspaceToolbar = (props) => {
     const panelmenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
-        const defaultValue = panelSelection.id
+        const defaultValue = panelSelectionData.id
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList 
@@ -213,22 +222,22 @@ const WorkspaceToolbar = (props) => {
             </MenuOptionGroup>
         </MenuList>
 
-    //  panelRecords[panelSelectionIndex] guaranteed to be updated for change
-    },[panelSelectionIndex, panelSelection, panelRecords, panelRecords[panelSelectionIndex]])
+    //  panelRecords[panelSelection] guaranteed to be updated for change
+    },[panelSelection.index, panelSelectionData, panelRecords, panelRecords[panelSelection.index]])
 
     // console.log('workspaceHandler', workspaceHandler)
 
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
-            numberBadgeCount = {panelSelectionIndex || null}
+            numberBadgeCount = {panelSelection.index || null}
             response = {previousPanel} isDisabled = {navState.previousDisabled}/>
         <StandardIcon icon = {navNextIcon} caption = 'next' tooltip = 'change to next right panel' 
-            numberBadgeCount = {(panelCount - (panelSelectionIndex + 1)) || null}
+            numberBadgeCount = {(panelCount - (panelSelection.index + 1)) || null}
             response = {nextPanel} isDisabled = {navState.nextDisabled}/>
         <ToolbarVerticalDivider />
         <MenuControl 
-            displayName = {panelSelection.name}
+            displayName = {panelSelectionData.name}
             tooltip = 'select a panel'
             arrowdirection = 'up'
             icon = {panelIcon}
@@ -259,7 +268,7 @@ const WorkspaceToolbar = (props) => {
         {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
-            setPanelSelectionIndex = {setPanelSelectionIndex}
+            setPanelSelection = {setPanelSelection}
         />}
         {panelDeleteDialogState && <PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 

@@ -30,7 +30,7 @@ class PanelHandler {
     userName
     userID
 
-    async getPanelDomainContext(panelSelectionIndex, userRecord) {
+    async getPanelDomainContext(panelSelection, userRecord) {
         const result = {
             error: false,
             success: true,
@@ -38,7 +38,7 @@ class PanelHandler {
         }
 
         const 
-            panelRecord = this.workspaceHandler.panelRecords[panelSelectionIndex],
+            panelRecord = this.workspaceHandler.panelRecords[panelSelection.index],
             panelDomainID = panelRecord.profile.domain.id,
             domainCollection = collection(this.db,'domains'),
             domainDocRef = doc(domainCollection, panelDomainID),
@@ -216,7 +216,7 @@ class PanelHandler {
         return result
         
     }
-    async panelRename(panelSelectionIndex, newname) {
+    async panelRename(panelSelection, newname) {
 
         const result = {
             error: false,
@@ -226,7 +226,7 @@ class PanelHandler {
 
         const 
             { workspaceHandler } = this,
-            panelRecord = workspaceHandler.panelRecords[panelSelectionIndex]
+            panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         panelRecord.profile.panel.name = newname
         workspaceHandler.workspaceRecord.panel.name = newname
@@ -252,7 +252,7 @@ class PanelHandler {
     }
 
     // TODO remove all but the default window
-    async panelReset(panelSelectionIndex) {
+    async panelReset(panelSelection) {
 
         const result = {
             error: false,
@@ -260,13 +260,13 @@ class PanelHandler {
             notice: null,
         }
 
-        result.notice = `panel selection ${panelSelectionIndex} has been reset`
+        result.notice = `panel selection ${panelSelection.name} has been reset`
 
         return result
 
     }
 
-    async duplicatePanelAs(panelSelectionIndex, newname) {
+    async duplicatePanelAs(panelSelection, newname) {
         
         const result = {
             error: false,
@@ -281,7 +281,7 @@ class PanelHandler {
             newPanelID = panelRef.id
 
         const 
-            newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelectionIndex]),
+            newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelection.index]),
             oldPanelName = newPanelRecord.profile.panel.name,
             newPanelOrder = workspaceHandler.panelRecords.length - 1,
             { profile } = newPanelRecord

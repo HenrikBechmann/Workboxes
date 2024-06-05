@@ -26,8 +26,8 @@ const PanelDeleteDialog = (props) => {
         [isDefaultState, setIsDefaultState] = useState(false),
         toast = useToast({duration:4000}),
         navigate = useNavigate(),
-        { panelSelectionIndex, panelRecords } = workspaceHandler,
-        panelRecord = panelRecords[panelSelectionIndex]
+        { panelSelection, panelRecords } = workspaceHandler,
+        panelRecord = panelRecords[panelSelection.index]
 
     useEffect(()=>{
 

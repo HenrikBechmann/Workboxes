@@ -90,7 +90,11 @@ class WorkspaceHandler {
 
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
-    panelSelectionIndex = null // attempt to set from workspace.profile.panel; cascading fallbacks
+    panelSelection = {
+        index:null,
+        id:null,
+        name:null,
+    } // attempt to set from workspace.profile.panel; cascading fallbacks
     // set on load of all panels
     panelCount = 0 
     panelRecordMap = new Map()
@@ -1145,20 +1149,20 @@ class WorkspaceHandler {
         return await this.panelHandler.loadPanels()
     }
 
-    async panelRename(panelSelectionIndex, newname){
-        return await this.panelHandler.panelRename(panelSelectionIndex, newname)
+    async panelRename(panelSelection, newname){
+        return await this.panelHandler.panelRename(panelSelection, newname)
     }
 
-    async panelReset(panelSelectionIndex){
-        return await this.panelHandler.panelReset(panelSelectionIndex)
+    async panelReset(panelSelection){
+        return await this.panelHandler.panelReset(panelSelection)
     }
 
-    async getPanelDomainContext(panelSelectionIndex, userRecord) {
-        return await this.panelHandler.getPanelDomainContext(panelSelectionIndex, userRecord)
+    async getPanelDomainContext(panelSelection, userRecord) {
+        return await this.panelHandler.getPanelDomainContext(panelSelection, userRecord)
     }
 
-    async duplicatePanelAs(panelSelectionIndex, newname) {
-        return await this.panelHandler.duplicatePanelAs(panelSelectionIndex, newname)
+    async duplicatePanelAs(panelSelection, newname) {
+        return await this.panelHandler.duplicatePanelAs(panelSelection, newname)
     }
 
     async deletePanel() {

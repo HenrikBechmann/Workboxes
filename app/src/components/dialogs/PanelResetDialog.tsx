@@ -31,7 +31,7 @@ const PanelResetDialog = (props) => {
 
     async function doPanelReset () {
 
-        const result = await workspaceHandler.panelReset(workspaceHandler.panelSelectionIndex)
+        const result = await workspaceHandler.panelReset(workspaceHandler.panelSelection)
 
         if (result.error) {
             navigate('/error')
