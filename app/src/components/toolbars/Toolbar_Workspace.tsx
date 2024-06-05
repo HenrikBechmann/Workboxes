@@ -267,7 +267,10 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
         &nbsp; &nbsp;
-        {panelRenameDialogState && <PanelRenameDialog setPanelRenameDialogState = {setPanelRenameDialogState} />}
+        {panelRenameDialogState && <PanelRenameDialog 
+            setPanelRenameDialogState = {setPanelRenameDialogState} 
+            setPanelSelection = {setPanelSelection}
+        />}
         {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 

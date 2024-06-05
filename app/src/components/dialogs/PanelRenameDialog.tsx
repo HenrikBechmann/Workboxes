@@ -23,7 +23,7 @@ import {
 const PanelRenameDialog = (props) => {
 
     const 
-        { setPanelRenameDialogState } = props,
+        { setPanelRenameDialogState, setPanelSelection } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -100,6 +100,11 @@ const PanelRenameDialog = (props) => {
         }
 
         toast({description:result.notice})
+
+        setPanelSelection((previousState)=>{
+            previousState.name = writeValues.name
+            return {...previousState}
+        })
 
         dispatchWorkspaceHandler('copy')
 

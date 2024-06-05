@@ -230,7 +230,7 @@ class PanelHandler {
 
         panelRecord.profile.panel.name = newname
         workspaceHandler.workspaceRecord.panel.name = newname
-        panelSelection.name = newname
+        // panelSelection.name = newname
 
         workspaceHandler.changedRecords.setpanels.add(panelRecord.profile.panel.id)
         workspaceHandler.settings.changed = true
