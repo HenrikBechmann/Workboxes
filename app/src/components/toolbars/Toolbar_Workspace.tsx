@@ -145,6 +145,8 @@ const WorkspaceToolbar = (props) => {
 
         setPanelSelection((previousState) => {
             previousState.index = index
+            previousState.id = null
+            previousState.name = null
             return {...previousState}
         })
 
@@ -160,7 +162,7 @@ const WorkspaceToolbar = (props) => {
     }
 
     const previousPanel = () => {
-        if (panelSelection > 0) {
+        if (panelSelection.index > 0) {
             setPanelSelection((previousState) => {
                 previousState.index = panelSelection.index - 1
                 return {...previousState}

@@ -96,6 +96,9 @@ const Workspace = (props) => {
             return
         }
 
+        panelSelection.name = panelRecord.profile.panel.name
+        panelSelection.id = panelRecord.profile.panel.id
+
     }
 
     // handle scroller effects for panels
@@ -145,7 +148,7 @@ const Workspace = (props) => {
 
             const panelRecord = panelRecords[index]
 
-            const panelSelection = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
+            const localPanelSelection = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
 
             if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
@@ -161,7 +164,7 @@ const Workspace = (props) => {
                     startingWindowsSpecsList = {null} 
                     workboxMapRef = {workboxMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
-                    panelSelection = {panelSelection}
+                    panelSelection = {localPanelSelection}
                 />
             )
 
@@ -169,17 +172,16 @@ const Workspace = (props) => {
 
         // otherwise, set the default as the current panel
         // TODO set and handle workspace changed
-        let panelSelection = {index:null, id:null, name:null}
+        const panelSelection = {index:null, id:null, name:null}
         if (selectedIndex !== undefined) {
             panelSelection.index = selectedIndex
-            setPanelSelection((previousState) => {
-                previousState.index = selectedIndex
-                return {...previousState}
-            })
+            // setPanelSelection((previousState) => {
+            //     previousState.index = selectedIndex
+            //     return {...previousState}
+            // })
         } else if (defaultIndex !== undefined) {
             panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
-            // workspaceRecord.panel = {id:defaultRecord.profile.panel.id , name: defaultRecord.profile.panel.name}
 
             const result = await workspaceHandler.updateWorkspacePanel(
                 defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
@@ -187,13 +189,12 @@ const Workspace = (props) => {
                 navigate('/error')
                 return
             }
-            setPanelSelection((previousState) => {
-                previousState.index = defaultIndex
-                return {...previousState}
-            })
+            // setPanelSelection((previousState) => {
+            //     previousState.index = defaultIndex
+            //     return {...previousState}
+            // })
         } else {
             const fallbackRecord = panelRecords[0]
-            // workspaceRecord.panel = {...fallbackRecord.profile.panel }
             panelSelection.index = 0
             const result = await workspaceHandler.updateWorkspacePanel(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
@@ -201,12 +202,13 @@ const Workspace = (props) => {
                 navigate('/error')
                 return
             }
-            setPanelSelection((previousState) => {
-                previousState.index = 0
-                return {...previousState}
-            })
         }
 
+        const panelSelectionRecord = panelRecords[panelSelection.index]
+        panelSelection.id = panelSelectionRecord.profile.panel.id
+        panelSelection.name = panelSelectionRecord.profile.panel.name
+
+        setPanelSelection(panelSelection)
         workspaceHandler.panelSelection = panelSelection
         setWorkspaceState('ready')
         dispatchWorkspaceHandler()

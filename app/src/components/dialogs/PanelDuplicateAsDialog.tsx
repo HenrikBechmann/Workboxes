@@ -106,6 +106,8 @@ const PanelDuplicateAsDialog = (props) => {
         if (checkboxRef.current.checked) {
             setPanelSelection((previousState)=>{
                 previousState.index = workspaceHandler.panelCount - 1
+                previousState.name = writeValues.name
+                previousState.id = result.newid
                 return {...previousState}
             })
         }

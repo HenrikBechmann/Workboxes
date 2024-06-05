@@ -230,6 +230,7 @@ class PanelHandler {
 
         panelRecord.profile.panel.name = newname
         workspaceHandler.workspaceRecord.panel.name = newname
+        panelSelection.name = newname
 
         workspaceHandler.changedRecords.setpanels.add(panelRecord.profile.panel.id)
         workspaceHandler.settings.changed = true
@@ -272,6 +273,7 @@ class PanelHandler {
             error: false,
             success: true,
             notice: null,
+            newid:null
         }
 
         const 
@@ -312,6 +314,7 @@ class PanelHandler {
         workspaceHandler.settings.changed = true
 
         const notice = `[${oldPanelName}] has been duplicated as [${newname}]`
+        result.newid = newPanelID
         if (workspaceHandler.settings.mode == 'automatic') {
             const result = await workspaceHandler.saveWorkspaceData()
             result.notice = notice
