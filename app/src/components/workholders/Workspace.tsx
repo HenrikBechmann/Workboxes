@@ -153,7 +153,7 @@ const Workspace = (props) => {
 
             const panelRecord = panelRecords[index]
 
-            const localPanelSelection = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
+            const panelSelector = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
 
             if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
@@ -169,7 +169,7 @@ const Workspace = (props) => {
                     startingWindowsSpecsList = {null} 
                     workboxMapRef = {workboxMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
-                    panelSelection = {localPanelSelection}
+                    panelSelector = {panelSelector}
                 />
             )
 
