@@ -237,6 +237,8 @@ class WorkspaceHandler {
         }
         queryDocs.forEach((doc) => {
             const data = doc.data()
+            const workspaceData = data.profile.workspace
+            workspaceData.is_default = data.profile.flags.is_default
             workspaceList.push(data.profile.workspace) // selection, not record
         })
         this.usage.read(queryDocs.size)

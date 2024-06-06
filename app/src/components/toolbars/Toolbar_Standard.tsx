@@ -263,7 +263,9 @@ const StandardToolbar = (props) => {
             >
                 {
                     workspaceList.map((item) => {
-                        return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>{item.name}</MenuItemOption>
+                        return <MenuItemOption key = {item.id} data-name = {item.name} value = {item.id}>
+                            {item.name + (item.is_default && '*')}
+                        </MenuItemOption>
                     })
                 }
             </MenuOptionGroup>
