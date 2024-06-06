@@ -4,7 +4,7 @@
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 
 import {
-    Button, Text, Input, Select,
+    Button, Text, Input, Select, Checkbox,
     Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -18,6 +18,7 @@ import { isMobile } from '../../index'
 import { 
     useWorkspaceHandler, 
     useSystemRecords,
+    useUserRecords,
 } from '../../system/WorkboxesProvider'
 
 const PanelCreateDialog = (props) => {
@@ -38,7 +39,10 @@ const PanelCreateDialog = (props) => {
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
         {panelSelection, panelRecords } = workspaceHandler,
-        panelName = panelRecords[panelSelection.index].profile.panel.name
+        panelName = panelRecords[panelSelection.index].profile.panel.name,
+        [domainList, setDomainList] = useState([]),
+        [selectedDomain, setSelectedDomain] = useState(''),
+        checkboxRef = useRef(null)
 
     useEffect(()=>{
 
@@ -57,6 +61,20 @@ const PanelCreateDialog = (props) => {
 
     },[alertState])
 
+    const domainOptions = useMemo(()=>{
+
+        const domainOptionsList = []
+
+        domainList.forEach((item) => {
+            domainOptionsList.push(
+                <option key = {item.id} value = {item.id}>{item.name}</option>
+            )
+        })
+
+        return domainOptionsList
+
+    },[domainList])
+
     const helperText = {
         name:`The panel name can be ${minNameLength}-${maxNameLength} characters long.`,
     }
@@ -74,6 +92,9 @@ const PanelCreateDialog = (props) => {
             setWriteValues({...writeValues})
         },
         select:(event) => {
+            const selectedDomain = event.target.selectedOptions[0].value
+
+            setSelectedDomain(selectedDomain)
         },
     }
 
@@ -97,22 +118,39 @@ const PanelCreateDialog = (props) => {
         }
         setAlertState('processing')
 
+        let domainSelection
+        domainList.forEach((item) => {
+            if (item.id == selectedDomain) {
+                domainSelection = item
+            }
+        })
+
         const 
-            result = await workspaceHandler.panelCreate(writeValues.name)
+            result = await workspaceHandler.panelCreate(writeValues.name, domainSelection)
 
         if (result.error) {
            navigate('/error')
            return
         }
 
+        const { payload } = result
+
         toast({description:result.notice})
 
-        setPanelSelection((previousState)=>{
-            previousState.name = writeValues.name
-            return {...previousState}
-        })
+        if (checkboxRef.current.checked) {
 
-        dispatchWorkspaceHandler('copy')
+            setPanelSelection({
+                id: payload.id,
+                name: payload.name,
+                index: workspaceHandler.panelCount,
+            })
+        } else {
+            setPanelSelection((previousState)=>{
+                return {...previousState}
+            })
+        }
+
+        dispatchWorkspaceHandler('createpanel')
 
         doClose()
 
@@ -121,7 +159,28 @@ const PanelCreateDialog = (props) => {
     async function getUserDomainList() {
         const result = await workspaceHandler.getUserDomainList()
 
-        console.log('getUserDomainList', result)
+        if (result.error) {
+            navigate('/error')
+            return
+        }
+
+        if (!result.success) {
+            toast({description:result.notice})
+            return
+        }
+
+        const domainList = result.payload
+
+        domainList.sort((a,b)=>{
+            return a.name < b.name
+                ? -1
+                : a.name > b.name
+                    ? 1
+                    :0
+        })
+
+        setDomainList(domainList)
+
     }
 
     const doClose = () => {
@@ -172,16 +231,24 @@ const PanelCreateDialog = (props) => {
                                 maxWidth = '400px' 
                                 isInvalid = {isInvalidFieldFlags.name}
                             >
-                                <FormLabel paddingTop = '6px' fontSize = 'sm'>Select a base domain for this panel:</FormLabel>
+                                <FormLabel paddingTop = '6px' fontSize = 'sm'>Select a base domain for this panel (required):</FormLabel>
                                 <Select
                                     placeholder = 'Select a base domain' 
                                     onChange = {onChangeFunctions.select}
                                 >
+                                    {domainOptions}
                                 </Select>
                                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
-                                    The domain workbox, and your member workbox for this domain. will be
-                                    your starting points for working in this panel.
+                                    The main workbox of this domain, and your membership workbox for this domain. will be
+                                    your starting points for working in this new panel.
                                 </FormHelperText>
+                            </FormControl>
+                            <FormControl 
+                                isDisabled = {alertState == 'processing'} 
+                                mt = '8px' 
+                                borderTop = '1px solid silver'
+                            >
+                                <Checkbox ref = {checkboxRef} >Navigate to the new panel after it is created.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>
@@ -191,7 +258,7 @@ const PanelCreateDialog = (props) => {
                         >
                           Cancel
                         </Button>
-                        <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
+                        <Button isDisabled = {(alertState == 'processing') || !selectedDomain} ml = '8px' colorScheme = 'blue'
                             onClick = {doCreate}
                         >
                           Create

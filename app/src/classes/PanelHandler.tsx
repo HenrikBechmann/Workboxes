@@ -449,6 +449,19 @@ class PanelHandler {
 
     }
 
+    async panelCreate(newname, domainSelection) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        return result
+
+    }
+
 }
 
 

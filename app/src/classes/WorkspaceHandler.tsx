@@ -1175,6 +1175,10 @@ class WorkspaceHandler {
         return await this.panelHandler.getUserDomainList()
     }
 
+    async panelCreate(newname, domainSelection) {
+        return await this.panelHandler.panelCreate(newname, domainSelection)
+    }
+
 }
 
 export default WorkspaceHandler
