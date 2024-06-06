@@ -178,18 +178,6 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
-    // const getSortedPanels = () => {
-    //     const panelRecordsCopy = [...panelRecords]
-    //     panelRecordsCopy.sort((a,b)=>{
-    //         return a.profile.panel.name < b.profile.panel.name
-    //             ?-1
-    //             :a.profile.panel.name == b.profile.panel.name
-    //                 ?0
-    //                 :1
-    //     })
-    //     return panelRecordsCopy
-    // }
-
     const panelmenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
