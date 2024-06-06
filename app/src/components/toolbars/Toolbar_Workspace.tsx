@@ -210,7 +210,7 @@ const WorkspaceToolbar = (props) => {
             <MenuItem onClick = {duplicateAsPanel} >Duplicate as...</MenuItem>
             </MenuGroup>
             <MenuDivider />
-            <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
+            <MenuItem onClick = {createPanel} >Add a new panel</MenuItem>
             <MenuItem onClick = {reorderPanels} >Re-order panels</MenuItem>
             <MenuItem onClick = {setDefaultPanel}>Set default panel</MenuItem>
             <MenuDivider />

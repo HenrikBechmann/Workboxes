@@ -367,7 +367,7 @@ class PanelHandler {
         }
 
         if (!saveResult.error) {
-            result.notice = `panel ${panelSelection.name} was deleted`
+            result.notice = `panel [${panelSelection.name}] was deleted`
         } else {
             return saveResult
         }
@@ -457,6 +457,73 @@ class PanelHandler {
             notice: null,
             payload: null,
         }
+        const 
+            { workspaceHandler } = this,
+            { panelRecords } = workspaceHandler,
+            panelCollection = collection(
+                this.db, 'users',this.userID, 
+                'workspaces', workspaceHandler.workspaceRecord.profile.workspace.id,
+                'panels'),
+            newPanelDocRef = doc(panelCollection)
+
+        const newPanelData = updateDocumentSchema('panels','standard',{},
+            {
+              profile: {
+                panel:{
+                  name: newname,
+                  id: newPanelDocRef.id,
+                },
+                display_order: workspaceHandler.panelCount,
+                domain: {
+                    id:domainSelection.id,
+                    name:domainSelection.name,
+                },
+                owner: {
+                  id: this.userID,
+                  name: this.userName,
+                },
+                commits: {
+                  created_by: {
+                      id: this.userID,
+                      name: this.userName,
+                  },
+                  created_timestamp: Timestamp.now(),
+                  updated_by: {
+                      id: this.userID,
+                      name: this.userName,
+                  },
+                  updated_timestamp: Timestamp.now(),
+                },
+              },
+            }
+        )
+
+        panelRecords.push(newPanelData)
+        workspaceHandler.panelCount++
+        workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
+        workspaceHandler.settings.changed = true
+
+        if (workspaceHandler.settings.mode == 'automatic') {
+            try {
+                await workspaceHandler.saveWorkspaceData()
+            } catch (error) {
+                const errdesc = 'failure to save workspace with new panel'
+                console.log(errdesc, error)
+                this.errorControl.push({description:errdesc,error})
+                result.error = true
+                return result
+
+            }
+        }
+
+        const newPanelSelection = {
+            index: workspaceHandler.panelCount - 1,
+            id: newPanelDocRef.id,
+            name: newname,
+        }
+
+        result.payload = newPanelSelection
+        result.notice = `new panel [${newname}] has been created`
 
         return result
 

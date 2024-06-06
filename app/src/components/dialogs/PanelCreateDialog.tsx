@@ -142,7 +142,7 @@ const PanelCreateDialog = (props) => {
             setPanelSelection({
                 id: payload.id,
                 name: payload.name,
-                index: workspaceHandler.panelCount,
+                index: workspaceHandler.panelCount - 1,
             })
         } else {
             setPanelSelection((previousState)=>{
