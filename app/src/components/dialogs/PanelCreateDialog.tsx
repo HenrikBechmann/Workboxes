@@ -4,7 +4,7 @@
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 
 import {
-    Button, Text, Input,
+    Button, Text, Input, Select,
     Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -68,6 +68,8 @@ const PanelCreateDialog = (props) => {
             isInvalidTests.name(value)
             writeValues.name = value
             setWriteValues({...writeValues})
+        },
+        select:(event) => {
         },
     }
 
@@ -152,6 +154,25 @@ const PanelCreateDialog = (props) => {
                                     {helperText.name} Current length is {writeValues.name?.length || '0 (blank)'}.
                                 </FormHelperText>
                             </FormControl>
+                            <FormControl 
+                                borderTop = '1px solid silver'
+                                mt = '8px'
+                                isDisabled = {alertState == 'processing'} 
+                                minWidth = '300px' 
+                                maxWidth = '400px' 
+                                isInvalid = {isInvalidFieldFlags.name}
+                            >
+                                <FormLabel paddingTop = '6px' fontSize = 'sm'>Select a base domain for this panel:</FormLabel>
+                                <Select
+                                    placeholder = 'Select a base domain' 
+                                    onChange = {onChangeFunctions.select}
+                                >
+                                </Select>
+                                <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
+                                    The domain workbox, and your member workbox for this domain. will be
+                                    your starting points for working in this panel.
+                                </FormHelperText>
+                            </FormControl>
                         </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>
@@ -163,7 +184,7 @@ const PanelCreateDialog = (props) => {
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
                             onClick = {doCreate}
                         >
-                          Rename
+                          Create
                         </Button>
                     </AlertDialogFooter>
 
