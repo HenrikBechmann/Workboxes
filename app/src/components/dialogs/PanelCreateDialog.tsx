@@ -46,6 +46,10 @@ const PanelCreateDialog = (props) => {
 
     },[])
 
+    useEffect(() => {
+        getUserDomainList()
+    },[])
+
     useEffect(()=>{
         if (alertState == 'setup') {
             setAlertState('ready')
@@ -94,7 +98,7 @@ const PanelCreateDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.panelCreate(panelSelection,writeValues.name)
+            result = await workspaceHandler.panelCreate(writeValues.name)
 
         if (result.error) {
            navigate('/error')
@@ -112,6 +116,12 @@ const PanelCreateDialog = (props) => {
 
         doClose()
 
+    }
+
+    async function getUserDomainList() {
+        const result = await workspaceHandler.getUserDomainList()
+
+        console.log('getUserDomainList', result)
     }
 
     const doClose = () => {

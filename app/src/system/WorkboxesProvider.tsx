@@ -675,7 +675,6 @@ export const UserProvider = ({children}) => {
                   image: {
                     source: photoURL,
                   },
-                  date_joined: serverTimestamp(),
                 },
                 workbox: {
                     id: workboxDocRef.id,

@@ -376,6 +376,79 @@ class PanelHandler {
 
     }
 
+    async getUserDomainList() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const accessCollection = collection(this.db, 'users', this.userID, 'access')
+        const domainsRef = doc(accessCollection, 'domains')
+
+        let domainList
+        try {
+
+            const recordData = await getDoc(domainsRef)
+            this.usage.read(1)
+            if (recordData.exists()) {
+                domainList = recordData.data().domains
+                if (domainList.length === 0) {
+                    result.success = false
+                    result.notice = 'error: no domains found for this user in the domain access record.'
+                    return result
+                }
+            } else {
+                result.success = false
+                result.notice = 'error: no domain access record found for this user.'
+                return result
+            }
+
+        } catch (error) {
+
+            const errdesc = 'error fetching user domain list'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        const domainCollection = collection(this.db, 'domains')
+
+        const querySpec = query(domainCollection, where('profile.domain.id','in',domainList))
+
+        let domainRecordSelections = []
+        try {
+            const queryDocs = await getDocs(querySpec)
+            this.usage.read(queryDocs.size || 1)
+            if (queryDocs.size === 0) {
+                result.success = false
+                result.notice = 'error: no domain records for user domains found.'
+                return result
+            }
+            for (let index = 0; index < queryDocs.size; index++) {
+                const 
+                    record = queryDocs.docs[index].data(),
+                    selection = record.profile.domain
+
+                domainRecordSelections.push(selection)
+            }
+            result.payload = domainRecordSelections
+            return result
+
+        } catch (error) {
+            const errdesc = 'error fetching user domain records'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+        }
+
+    }
+
 }
 
 

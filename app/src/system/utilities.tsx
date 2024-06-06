@@ -630,7 +630,6 @@ const versionData = {
           image: {
             source: null,
           },
-          date_joined: null,
         },
         handle: {
           plain: null,

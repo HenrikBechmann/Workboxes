@@ -1171,6 +1171,10 @@ class WorkspaceHandler {
         return await this.panelHandler.deletePanel(panelSelection)
     }
 
+    async getUserDomainList() {
+        return await this.panelHandler.getUserDomainList()
+    }
+
 }
 
 export default WorkspaceHandler
