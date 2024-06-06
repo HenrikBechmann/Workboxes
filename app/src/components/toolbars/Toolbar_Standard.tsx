@@ -249,7 +249,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {deleteWorkspaceDialog} >Delete</MenuItem>
             <MenuItem onClick = {saveAsWorkspaceDialog} >Make a copy as...</MenuItem>
             <MenuDivider />
-            <MenuItem onClick = {createWorkspaceDialog} >Add a workspace</MenuItem>
+            <MenuItem onClick = {createWorkspaceDialog} >Add a new workspace</MenuItem>
             <MenuItem >Set default workspace</MenuItem>
             </MenuGroup>            
             <MenuDivider />

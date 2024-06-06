@@ -178,17 +178,17 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
-    const getSortedPanels = () => {
-        const panelRecordsCopy = [...panelRecords]
-        panelRecordsCopy.sort((a,b)=>{
-            return a.profile.panel.name < b.profile.panel.name
-                ?-1
-                :a.profile.panel.name == b.profile.panel.name
-                    ?0
-                    :1
-        })
-        return panelRecordsCopy
-    }
+    // const getSortedPanels = () => {
+    //     const panelRecordsCopy = [...panelRecords]
+    //     panelRecordsCopy.sort((a,b)=>{
+    //         return a.profile.panel.name < b.profile.panel.name
+    //             ?-1
+    //             :a.profile.panel.name == b.profile.panel.name
+    //                 ?0
+    //                 :1
+    //     })
+    //     return panelRecordsCopy
+    // }
 
     const panelmenuList = useMemo(() => {
 
@@ -223,12 +223,12 @@ const WorkspaceToolbar = (props) => {
                 title = 'Select a panel:'
             >
                 {
-                    getSortedPanels().map((record) => {
+                    panelRecords.map((record) => {
                         return <MenuItemOption 
                             key = {record.profile.panel.id} 
                             data-name = {record.profile.panel.name} 
                             value = {record.profile.panel.id}>
-                            {record.profile.panel.name + (record.profile.flags.is_default? '*':'') + ' (' + (record.profile.display_order + 1) + ')' }
+                            {record.profile.panel.name + (record.profile.flags.is_default? '*':'')}
                         </MenuItemOption>
                     })
                 }
