@@ -17,6 +17,7 @@ import PanelRenameDialog from '../dialogs/PanelRenameDialog'
 import PanelResetDialog from '../dialogs/PanelResetDialog'
 import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
 import PanelDeleteDialog from '../dialogs/PanelDeleteDialog'
+import PanelCreateDialog from '../dialogs/PanelCreateDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -70,6 +71,7 @@ const WorkspaceToolbar = (props) => {
         [panelResetDialogState, setPanelResetDialogState] = useState(false),
         [panelDuplicateAsDialogState, setPanelDuplicateAsDialogState] = useState(false),
         [panelDeleteDialogState, setPanelDeleteDialogState] = useState(false),
+        [panelCreateDialogState, setPanelCreateDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -105,21 +107,15 @@ const WorkspaceToolbar = (props) => {
     },[panelSelection])
 
     const renamePanel = () => {
-
         setPanelRenameDialogState(true)
-
     }
 
     const deletePanel = () => {
-
         setPanelDeleteDialogState(true)
-
     }
 
     const resetPanel = () => {
-
         setPanelResetDialogState(true)
-
     }
 
     const duplicateAsPanel = () => {
@@ -127,10 +123,14 @@ const WorkspaceToolbar = (props) => {
     }
 
     const createPanel = () => {
-
+        setPanelCreateDialogState(true)
     }
 
     const reorderPanels = () => {
+
+    }
+
+    const setDefaultPanel = () => {
 
     }
 
@@ -212,7 +212,7 @@ const WorkspaceToolbar = (props) => {
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a panel</MenuItem>
             <MenuItem onClick = {reorderPanels} >Re-order panels</MenuItem>
-            <MenuItem >Set default panel</MenuItem>
+            <MenuItem onClick = {setDefaultPanel}>Set default panel</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
@@ -289,6 +289,10 @@ const WorkspaceToolbar = (props) => {
         {panelDeleteDialogState && <PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 
             setPanelResetDialogState = {setPanelResetDialogState} 
+            setPanelSelection = {setPanelSelection}
+        />}
+        {panelCreateDialogState && <PanelCreateDialog 
+            setPanelCreateDialogState = {setPanelCreateDialogState} 
             setPanelSelection = {setPanelSelection}
         />}
     </Box>
