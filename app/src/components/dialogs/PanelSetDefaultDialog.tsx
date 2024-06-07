@@ -141,7 +141,7 @@ const PanelSetDefaultDialog = (props) => {
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
                         <Text>The default panel is displayed as a fallback if another panel is deleted. The default panel itself cannot be deleted
-                        (but it can be reset)</Text>
+                        (but it can be reset).</Text>
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>
                             <FormControl 
                                 mt = '8px'
@@ -157,7 +157,7 @@ const PanelSetDefaultDialog = (props) => {
                                     {panelOptions}
                                 </Select>
                                 {(currentDefaultIndex === selectedIndex) && <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
-                                    The current selection is the current default panel. Choose another.
+                                    The current selection is the current default panel. Choose another for a change.
                                 </FormHelperText>}
                             </FormControl>
                             <FormControl 
@@ -165,7 +165,7 @@ const PanelSetDefaultDialog = (props) => {
                                 mt = '8px' 
                                 borderTop = '1px solid silver'
                             >
-                                <Checkbox ref = {checkboxRef} >Navigate to the new panel after it is created.</Checkbox>
+                                <Checkbox ref = {checkboxRef} >Navigate to the new default panel after the change.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>
