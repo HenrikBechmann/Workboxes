@@ -85,7 +85,7 @@ const WorkspaceSaveDialog = (props) => {
 
                     <AlertDialogBody fontSize = 'sm'>
                         <Text borderTop = '1px solid silver'>
-                            The <span style = {{fontWeight:'bold'}}>Automatic saves</span> setting (the default) saves workspace panel configuration changes 
+                            The <span style = {{fontWeight:'bold'}}>Automatic</span> setting (the default) saves workspace panel configuration changes 
                             immediately, or quickly. This includes 
                         </Text>
                         <Text>
@@ -95,12 +95,12 @@ const WorkspaceSaveDialog = (props) => {
                             - adding, removing, and moving windows in panels
                         </Text>
                         <Text borderTop = '1px solid silver'>
-                            With the <span style = {{fontWeight:'bold'}}>Manual saves</span> setting, configuration
-                            changes are only saved when you click the cloud upload icon <img style = 
+                            With the <span style = {{fontWeight:'bold'}}>Manual</span> setting, configuration
+                            changes are not saved unless you click the cloud upload icon <img style = 
                             {{display: 'inline-block', height:'16px', width:'16px', verticalAlign:'middle'}} src = {uploadCloudIcon} />.
                         </Text>
                         <Text>
-                            Manual saves can be helpful if your login is concurrently using more than one tab or device with
+                            Manual saves lets you avoid saving when your login is concurrently using more than one tab or device with
                             the same workspace. Automatic saves in that case can clobber each others' configuration settings. 
                         </Text>
                         <Text borderTop = '1px solid silver'  borderBottom = '1px solid silver'>
@@ -119,12 +119,12 @@ const WorkspaceSaveDialog = (props) => {
                         <Button size = 'xs' isDisabled = {alertState == 'processing'} colorScheme = 'blue'
                             onClick = {setAutomaticSave}
                         >
-                          Automatic saves
+                          Automatic
                         </Button>
                         <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
                             onClick = {setManualSave}
                         >
-                          Manual saves
+                          Manual
                         </Button>
                         {(workspaceHandler.settings.mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
                             onClick = {reloadWorkspace}
