@@ -18,6 +18,7 @@ import PanelResetDialog from '../dialogs/PanelResetDialog'
 import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
 import PanelDeleteDialog from '../dialogs/PanelDeleteDialog'
 import PanelCreateDialog from '../dialogs/PanelCreateDialog'
+import PanelSetDefaultDialog from '../dialogs/PanelSetDefaultDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -72,6 +73,7 @@ const WorkspaceToolbar = (props) => {
         [panelDuplicateAsDialogState, setPanelDuplicateAsDialogState] = useState(false),
         [panelDeleteDialogState, setPanelDeleteDialogState] = useState(false),
         [panelCreateDialogState, setPanelCreateDialogState] = useState(false),
+        [panelSetDefaultDialogState, setPanelSetDefaultDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -131,7 +133,7 @@ const WorkspaceToolbar = (props) => {
     }
 
     const setDefaultPanel = () => {
-
+        setPanelSetDefaultDialogState(true)
     }
 
     const changePanelSelection = (panelID) => {
@@ -281,6 +283,10 @@ const WorkspaceToolbar = (props) => {
         />}
         {panelCreateDialogState && <PanelCreateDialog 
             setPanelCreateDialogState = {setPanelCreateDialogState} 
+            setPanelSelection = {setPanelSelection}
+        />}
+        {panelSetDefaultDialogState && <PanelSetDefaultDialog 
+            setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 
             setPanelSelection = {setPanelSelection}
         />}
     </Box>
