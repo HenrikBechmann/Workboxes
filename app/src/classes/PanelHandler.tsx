@@ -1,6 +1,13 @@
 // PanelHandler.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+
+TODO:
+    - standardize calls to saveWorkspaceData
+
+*/
+
 import { 
     doc, collection, 
     getDoc, setDoc, updateDoc, // deleteDoc
@@ -239,7 +246,9 @@ class PanelHandler {
 
             const result = await workspaceHandler.saveWorkspaceData()
 
-            result.notice = 'panel name changed to [' + newname + ']'
+            if (!result.error) {
+                result.notice = 'panel name changed to [' + newname + ']'
+            }
 
             return result
 
@@ -504,15 +513,9 @@ class PanelHandler {
         workspaceHandler.settings.changed = true
 
         if (workspaceHandler.settings.mode == 'automatic') {
-            try {
-                await workspaceHandler.saveWorkspaceData()
-            } catch (error) {
-                const errdesc = 'failure to save workspace with new panel'
-                console.log(errdesc, error)
-                this.errorControl.push({description:errdesc,error})
-                result.error = true
+            const result = await workspaceHandler.saveWorkspaceData()
+            if (result.error) {
                 return result
-
             }
         }
 
@@ -529,6 +532,38 @@ class PanelHandler {
 
     }
 
+    async setDefaultPanel(fromIndex, toIndex) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            { panelRecords, changedRecords, settings } = workspaceHandler,
+            fromPanelRecord = panelRecords[fromIndex],
+            toPanelRecord = panelRecords[toIndex]
+
+        fromPanelRecord.profile.flags.is_default = false
+        toPanelRecord.profile.flags.is_default = true
+        settings.changed = true
+        changedRecords.setpanels.add(fromPanelRecord.profile.panel.id)
+        changedRecords.setpanels.add(toPanelRecord.profile.panel.id)
+
+        if (settings.mode == 'automatic') {
+            const result = await workspaceHandler.saveWorkspaceData()
+            if (result.error) {
+                return result
+            }
+        }
+
+        result.notice = `default panel has been changed from [${fromPanelRecord.profile.panel.name}] to [${toPanelRecord.profile.panel.name}]`
+
+        return result
+
+    }
 }
 
 

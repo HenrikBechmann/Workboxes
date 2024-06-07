@@ -31,12 +31,11 @@ const PanelSetDefaultDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
-        {panelSelection, panelRecords } = workspaceHandler,
-        [defaultSelection, setDefaultSelection] = useState(null),
+        { panelRecords } = workspaceHandler,
         checkboxRef = useRef(null),
         selectRef = useRef(null),
         [currentDefaultIndex, setCurrentDefaultIndex] = useState(-1),
-        selectedIndex = selectRef.current?.selectedIndex
+        [selectedIndex, setSelectedIndex] = useState(null)
 
     useEffect(()=>{
         if (alertState == 'setup') {
@@ -48,7 +47,8 @@ const PanelSetDefaultDialog = (props) => {
     useEffect(()=>{
 
         if (!selectRef.current) return
-        selectRef.current.selectionIndex = currentDefaultIndex
+        selectRef.current.selectedIndex = currentDefaultIndex
+        setSelectedIndex(currentDefaultIndex)
 
     },[currentDefaultIndex, selectRef.current])
 
@@ -73,50 +73,44 @@ const PanelSetDefaultDialog = (props) => {
 
     const onSelect = ((event) => {
 
-            const selectedPanel = event.target.selectedOptions[0].value
+            const 
+                { target } = event,
+                selectedPanel = target.selectedOptions[0].value
 
-            setDefaultSelection(selectedPanel)
+            setSelectedIndex(target.selectedIndex)
+
     })
 
     // TODO make sure record exists before saving
     async function doSetDefault() {
 
-        return
-        // setAlertState('processing')
+        setAlertState('processing')
 
-        // let defaultSelection
-        // panelRecords.forEach((item) => {
-        //     if (item.id == defaultSelection) {
-        //         defaultSelection = item
-        //     }
-        // })
+        const 
+            result = await workspaceHandler.setDefaultPanel(currentDefaultIndex, selectedIndex)
 
-        // const 
-        //     result = await workspaceHandler.panelCreate(writeValues.name, domainSelection)
+        if (result.error) {
+           navigate('/error')
+           return
+        }
 
-        // if (result.error) {
-        //    navigate('/error')
-        //    return
-        // }
+        toast({description:result.notice})
 
-        // const { payload } = result
+        if (checkboxRef.current.checked) {
 
-        // toast({description:result.notice})
+            const newDefaultRecord = panelRecords[selectedIndex]
+            setPanelSelection({
+                id: newDefaultRecord.profile.panel.id,
+                name: newDefaultRecord.profile.panel.name,
+                index: selectedIndex,
+            })
+        } else {
+            setPanelSelection((previousState)=>{
+                return {...previousState}
+            })
+        }
 
-        // if (checkboxRef.current.checked) {
-
-        //     setPanelSelection({
-        //         id: payload.id,
-        //         name: payload.name,
-        //         index: workspaceHandler.panelCount - 1,
-        //     })
-        // } else {
-        //     setPanelSelection((previousState)=>{
-        //         return {...previousState}
-        //     })
-        // }
-
-        // dispatchWorkspaceHandler('createpanel')
+        dispatchWorkspaceHandler('createpanel')
 
         doClose()
 
@@ -140,7 +134,7 @@ const PanelSetDefaultDialog = (props) => {
 
                     <AlertDialogBody>
                         {alertState == 'processing' && <Text>Processing...</Text>}
-                        <Text>The default panel is displayed as a fallback if another panel is deleted. The default panel itself cannot be deleted
+                        <Text>The default panel is displayed as a fallback if a currently displayed panel is deleted. The default panel itself cannot be deleted
                         (but it can be reset).</Text>
                         <Box data-type = 'namefield' margin = '3px' padding = '3px'>
                             <FormControl 
@@ -157,7 +151,7 @@ const PanelSetDefaultDialog = (props) => {
                                     {panelOptions}
                                 </Select>
                                 {(currentDefaultIndex === selectedIndex) && <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
-                                    The current selection is the current default panel. Choose another for a change.
+                                    The selection is the current default panel. Choose a different panel for a change of the default panel.
                                 </FormHelperText>}
                             </FormControl>
                             <FormControl 
@@ -165,7 +159,7 @@ const PanelSetDefaultDialog = (props) => {
                                 mt = '8px' 
                                 borderTop = '1px solid silver'
                             >
-                                <Checkbox ref = {checkboxRef} >Navigate to the new default panel after the change.</Checkbox>
+                                <Checkbox ref = {checkboxRef} >Navigate to the new default panel.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>

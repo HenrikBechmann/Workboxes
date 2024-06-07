@@ -1179,6 +1179,10 @@ class WorkspaceHandler {
         return await this.panelHandler.panelCreate(newname, domainSelection)
     }
 
+    async setDefaultPanel(fromIndex, toIndex) {
+        return await this.panelHandler.setDefaultPanel(fromIndex, toIndex)
+    }
+
 }
 
 export default WorkspaceHandler

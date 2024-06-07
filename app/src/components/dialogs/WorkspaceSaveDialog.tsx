@@ -100,7 +100,7 @@ const WorkspaceSaveDialog = (props) => {
                             {{display: 'inline-block', height:'16px', width:'16px', verticalAlign:'middle'}} src = {uploadCloudIcon} />.
                         </Text>
                         <Text>
-                            Manual saves lets you avoid saving when your login is concurrently using more than one tab or device with
+                            The Manual setting lets you avoid saving when your login is concurrently using more than one tab or device with
                             the same workspace. Automatic saves in that case can clobber each others' configuration settings. 
                         </Text>
                         <Text borderTop = '1px solid silver'  borderBottom = '1px solid silver'>
