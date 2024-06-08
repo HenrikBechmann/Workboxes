@@ -149,7 +149,7 @@ const PanelSetDefaultDialog = (props) => {
                                     {panelOptions}
                                 </Select>
                                 {(currentDefaultIndex === selectedIndex) && <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
-                                    The selection is the current default panel. Choose a different panel for a change of the default panel.
+                                    This selection is the current default panel. Choose a different panel for a change of the default panel.
                                 </FormHelperText>}
                             </FormControl>
                             <FormControl 

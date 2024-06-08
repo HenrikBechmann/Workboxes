@@ -24,6 +24,7 @@ const WorkspaceSaveDialog = (props) => {
     const
         { setSaveDialogState } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        { mode } = workspaceHandler.settings,
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
@@ -80,7 +81,7 @@ const WorkspaceSaveDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Change saving behaviour for this workspace
+                        Change saving behaviour for this workspace (currently {mode == 'automatic'?'automatic':'manual'})
                     </AlertDialogHeader>
 
                     <AlertDialogBody fontSize = 'sm'>
@@ -116,17 +117,17 @@ const WorkspaceSaveDialog = (props) => {
                         >
                           Cancel
                         </Button>
-                        <Button size = 'xs' isDisabled = {alertState == 'processing'} colorScheme = 'blue'
+                        <Button size = 'xs' isDisabled = {alertState == 'processing' || mode == 'automatic'} colorScheme = 'blue'
                             onClick = {setAutomaticSave}
                         >
                           Automatic
                         </Button>
-                        <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'red'
+                        <Button size = 'xs' isDisabled = {alertState == 'processing' || mode == 'manual'} ml = '8px' colorScheme = 'red'
                             onClick = {setManualSave}
                         >
                           Manual
                         </Button>
-                        {(workspaceHandler.settings.mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
+                        {(mode == 'manual') && <Button size = 'xs' isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'green'
                             onClick = {reloadWorkspace}
                         >
                           Reload...
