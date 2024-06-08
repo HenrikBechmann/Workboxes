@@ -58,7 +58,7 @@ const WorkspaceToolbar = (props) => {
         { panelSelection, setPanelSelection } = props,
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        workspaceRecord = workspaceHandler.workspaceRecord,
+        { workspaceRecord } = workspaceHandler,
 
         { panelCount } = workspaceHandler,
         panelMenuRef = useRef(null),
@@ -104,7 +104,10 @@ const WorkspaceToolbar = (props) => {
 
     useEffect(()=>{
 
-        getPanelDomainContext(panelSelection)
+        // console.log('calling getPanelDomainContext with', panelSelection)
+        if (panelSelection.id) {
+            getPanelDomainContext(panelSelection)
+        }
 
     },[panelSelection])
 

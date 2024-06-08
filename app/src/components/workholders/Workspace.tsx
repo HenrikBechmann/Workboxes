@@ -35,13 +35,15 @@ import homeIcon from '../../../assets/home.png'
 
 const Workspace = (props) => {
 
+    // console.log('running Workspace')
+
     // data
     const 
         navigate = useNavigate(),
 
         // basics
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { workspaceRecord } = workspaceHandler,
+        { workspaceRecord, workspaceSelection } = workspaceHandler,
         [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelection, setPanelSelection] = useState({index:0,id:null, name:null}),
 
@@ -81,11 +83,14 @@ const Workspace = (props) => {
     useEffect(()=>{
 
         if (workspaceHandler.flags.new_workspace_load) {
+            // console.log('loading panels for ', workspaceSelection)
             workspaceHandler.flags.new_workspace_load = false
-            loadPanels()  
+            loadPanels()
+            setWorkspaceState('loading')
         } 
 
     },[workspaceHandler.flags.new_workspace_load])
+    // },[workspaceSelection])
 
     async function updateWorkspacePanel(panelSelection) {
 
@@ -138,6 +143,8 @@ const Workspace = (props) => {
     async function loadPanels() {
 
         const result = await workspaceHandler.loadPanels()
+
+        // console.log('result from loading panels', result)
 
         if (result.error) {
             navigate('/error')
@@ -205,6 +212,8 @@ const Workspace = (props) => {
         const panelSelectionRecord = panelRecords[panelSelection.index]
         panelSelection.id = panelSelectionRecord.profile.panel.id
         panelSelection.name = panelSelectionRecord.profile.panel.name
+
+        // console.log('setPanelSelection to', panelSelection)
 
         setPanelSelection(panelSelection)
         setWorkspaceState('ready')

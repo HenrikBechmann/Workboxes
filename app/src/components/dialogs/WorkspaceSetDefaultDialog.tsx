@@ -27,6 +27,7 @@ const WorkspaceSetDefaultDialog = (props) => {
         { setWorkspaceSetDefaultDialogState } = props,
         focusRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        { settings } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
@@ -56,7 +57,7 @@ const WorkspaceSetDefaultDialog = (props) => {
     },[])
 
     async function getWorkspaceList() {
-        const result = await.workspaceHandler.getWorkspaceList()
+        const result = await workspaceHandler.getWorkspaceList()
 
         if (result.error) {
             navigate('/error')
@@ -81,14 +82,15 @@ const WorkspaceSetDefaultDialog = (props) => {
 
         const workspaceOptionsList = []
 
+        let workspaceIndex = 0
         workspaceList.forEach((item) => {
-            let workspaceIndex = 0
-            if (item.profile.flags.is_default) {
+            if (item.is_default) {
                 setCurrentDefaultIndex(workspaceIndex)
             }
+            workspaceIndex++
             workspaceOptionsList.push(
-                <option key = {item.profile.worksoace.id} value = {item.profile.workspace.id}>
-                    {item.profile.workspace.name + (item.profile.flags.is_default?'*':'')}
+                <option key = {item.id} value = {item.id}>
+                    {item.name + (item.is_default?'*':'')}
                 </option>
             )
         })
@@ -112,7 +114,9 @@ const WorkspaceSetDefaultDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.setDefaultWorkspace(currentDefaultIndex, selectedIndex)
+            newDefaultSelection = workspaceList[selectedIndex],
+            previousDefaultSelection = workspaceList[currentDefaultIndex],
+            result = await workspaceHandler.setDefaultWorkspace(previousDefaultSelection, newDefaultSelection)
 
         if (result.error) {
            navigate('/error')
@@ -123,11 +127,7 @@ const WorkspaceSetDefaultDialog = (props) => {
 
         if (checkboxRef.current.checked) {
 
-            const newDefaultRecord = panelRecords[selectedIndex]
-            setWorkspaceSelection({
-                id: newDefaultRecord.profile.panel.id,
-                name: newDefaultRecord.profile.panel.name,
-            })
+            workspaceHandler.setWorkspaceSelection(newDefaultSelection.id, newDefaultSelection.name)
         }
 
         dispatchWorkspaceHandler('defaultworkspace')
@@ -149,40 +149,47 @@ const WorkspaceSetDefaultDialog = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Select a new default panel
+                        Select a new default workspace
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        {alertState == 'processing' && <Text>Processing...</Text>}
-                        <Text>The default workspace is displayed as a fallback if a currently displayed workspace is deleted. 
-                        The default workspace itself cannot be deleted
-                        (but it can be reset).</Text>
-                        <Box data-type = 'namefield' margin = '3px' padding = '3px'>
-                            <FormControl 
-                                mt = '8px'
-                                isDisabled = {alertState == 'processing'} 
-                                minWidth = '300px' 
-                                maxWidth = '400px' 
-                            >
-                                <FormLabel paddingTop = '6px' fontSize = 'sm'>Select a new default workspace:</FormLabel>
-                                <Select
-                                    ref = {selectRef}
-                                    onChange = {onSelect}
-                                >
-                                    {workspaceOptions}
-                                </Select>
-                                {(currentDefaultIndex === selectedIndex) && <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
-                                    This selection is the current default workspace. Choose a different workspace for a change of the default workspace.
-                                </FormHelperText>}
-                            </FormControl>
-                            <FormControl 
-                                isDisabled = {alertState == 'processing'} 
-                                mt = '8px' 
-                                borderTop = '1px solid silver'
-                            >
-                                <Checkbox ref = {checkboxRef} >Navigate to the new default workspace.</Checkbox>
-                            </FormControl>
-                        </Box>
+                        {(settings.mode == 'automatic') &&
+                            <>{(alertState == 'processing') && <Text>Processing...</Text>}
+                                <Text>The default workspace is displayed as a fallback if a currently displayed workspace is deleted. 
+                                The default workspace itself cannot be deleted
+                                (but it can be reset).</Text>
+                                <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+                                    <FormControl 
+                                        mt = '8px'
+                                        isDisabled = {alertState == 'processing'} 
+                                        minWidth = '300px' 
+                                        maxWidth = '400px' 
+                                    >
+                                        <FormLabel paddingTop = '6px' fontSize = 'sm'>Select a new default workspace:</FormLabel>
+                                        <Select
+                                            ref = {selectRef}
+                                            onChange = {onSelect}
+                                        >
+                                            {workspaceOptions}
+                                        </Select>
+                                        {(currentDefaultIndex === selectedIndex) && <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
+                                            This selection is the current default workspace. Choose a different workspace for a change of the default workspace.
+                                        </FormHelperText>}
+                                    </FormControl>
+                                    <FormControl 
+                                        isDisabled = {alertState == 'processing'} 
+                                        mt = '8px' 
+                                        borderTop = '1px solid silver'
+                                    >
+                                        <Checkbox ref = {checkboxRef} >Navigate to the new default workspace.</Checkbox>
+                                    </FormControl>
+                                </Box>
+                            </>
+                        }
+                        {(settings.mode == 'manual') &&
+                            <Text>The default workspace cannot be changed when workspace saving is set to manual. 
+                            Change to automatic if you want to change the default.</Text>
+                        }
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button isDisabled = {alertState == 'processing'} 
@@ -190,7 +197,13 @@ const WorkspaceSetDefaultDialog = (props) => {
                         >
                           Cancel
                         </Button>
-                        <Button isDisabled = {(alertState == 'processing') || currentDefaultIndex === selectedIndex} ml = '8px' colorScheme = 'blue'
+                        <Button 
+                            isDisabled = {
+                                (alertState == 'processing') 
+                                || currentDefaultIndex === selectedIndex 
+                                || settings.mode == 'manual'
+                            } 
+                            ml = '8px' colorScheme = 'blue'
                             onClick = {doSetDefault}
                         >
                           Change default

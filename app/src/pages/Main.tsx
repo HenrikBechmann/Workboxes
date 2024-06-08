@@ -89,13 +89,15 @@ export const Main = (props) => {
         }
 
         // switch has occurred
-        if (workspaceHandler.workspaceRecord.profile.workspace.id !== workspaceHandler.workspaceSelection.id) {
+        // if (workspaceHandler.workspaceRecord.profile.workspace.id !== workspaceHandler.workspaceSelection.id) {
+            // console.log('loading workspace',workspaceHandler.workspaceSelection)
 
             loadWorkspace(workspaceHandler.workspaceSelection.id)
 
-        }
+        // }
 
-    },[workspaceHandler.workspaceSelection.id, mainState])
+    // },[workspaceHandler.workspaceSelection.id, mainState])
+    },[workspaceHandler.workspaceSelection, mainState])
 
     return ((mainState == 'ready') && <Workspace />)
 }

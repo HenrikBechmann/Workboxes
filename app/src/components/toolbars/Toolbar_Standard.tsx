@@ -25,6 +25,7 @@ import WorkspaceDeleteDialog from '../dialogs/WorkspaceDeleteDialog'
 import WorkspaceSaveDialog from '../dialogs/WorkspaceSaveDialog'
 import WorkspaceSaveAsDialog from '../dialogs/WorkspaceSaveAsDialog'
 import WorkspaceResetDialog from '../dialogs/WorkspaceResetDialog'
+import WorkspaceSetDefaultDialog from '../dialogs/WorkspaceSetDefaultDialog'
 
 import { isMobile } from '../../index'
 
@@ -110,6 +111,7 @@ const StandardToolbar = (props) => {
         [saveDialogState, setSaveDialogState] = useState(false),
         [workspaceResetDialogState, setWorkspaceResetDialogState] = useState(false),
         [workspaceSaveAsDialogState, setWorkspaceSaveAsDialogState] = useState(false),
+        [workspaceSetDefaultDialogState, setWorkspaceSetDefaultDialogState] = useState(false),
         workspaceMenuRef = useRef(null),
         errorControl = useErrorControl(),
         usage = useUsage()
@@ -235,6 +237,10 @@ const StandardToolbar = (props) => {
 
     }
 
+    const setWorkspaceDefault = () => {
+        setWorkspaceSetDefaultDialogState(true)
+    }
+
     const workspacemenuList = useMemo(() => {
 
         const defaultValue = workspaceHandler.workspaceSelection.id
@@ -250,7 +256,7 @@ const StandardToolbar = (props) => {
             <MenuItem onClick = {saveAsWorkspaceDialog} >Make a copy as...</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {createWorkspaceDialog} >Add a new workspace</MenuItem>
-            <MenuItem >Set default workspace</MenuItem>
+            <MenuItem onClick = {setWorkspaceDefault}>Set default workspace</MenuItem>
             </MenuGroup>            
             <MenuDivider />
             <MenuOptionGroup 
@@ -344,6 +350,7 @@ const StandardToolbar = (props) => {
         {workspaceSaveAsDialogState && <WorkspaceSaveAsDialog setWorkspaceSaveAsDialogState = {setWorkspaceSaveAsDialogState} />}
         {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} />}
         {workspaceResetDialogState && <WorkspaceResetDialog setWorkspaceResetDialogState = {setWorkspaceResetDialogState} />}
+        {workspaceSetDefaultDialogState && <WorkspaceSetDefaultDialog setWorkspaceSetDefaultDialogState = {setWorkspaceSetDefaultDialogState} />}
     </Box>
 }
 

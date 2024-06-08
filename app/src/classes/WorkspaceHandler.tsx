@@ -23,8 +23,9 @@
     // utilities
     clearChanged
     setWorkspaceSelection
+    setDefaultWorkspace
     getWorkspaceList
-    resetWorkspace *
+    resetWorkspace
     // database operations
     setupWorkpace
     createWorkspace
@@ -63,6 +64,10 @@ import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
 
+
+
+
+
 class WorkspaceHandler {
 
     constructor(db, errorControl) {
@@ -71,7 +76,7 @@ class WorkspaceHandler {
         this.panelHandler = new PanelHandler(this, db, errorControl)
     }
 
-    // =========================[ DATA ]=======================
+    // // =========================[ DATA ]=======================
 
     // data controls
     db
@@ -114,7 +119,7 @@ class WorkspaceHandler {
         userworkspace:false,
     }
     flags = {
-        new_workspace_load:true // triggers load of panels
+        new_workspace_load:false // triggers load of panels
     }
 
     // properties to allow for distribution to panelHandler with consistent interface
@@ -152,100 +157,6 @@ class WorkspaceHandler {
         this.changedRecords.setpanels.clear()
         this.changedRecords.deletepanels.clear()
         this.changedRecords.setwindowpositions.clear()
-    }
-
-    // ---------------------[ setWorkspyaceSelection ]--------------------------
-
-    // sets the selection only in memor workspaceHandler, and db userRecors
-    async setWorkspaceSelection (id, name) {
-
-        // save before switch
-        if (this.settings.mode == 'automatic' && this.settings.changed) {
-            const result = await this.saveWorkspaceData()
-            if (result.error) {
-                return result
-            }
-        }
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        this.workspaceSelection.id = id,
-        this.workspaceSelection.name = name
-
-        if (this.settings.mode == 'manual') {
-            this.changedRecords.userworkspace = true
-            this.settings.changed = true
-            return result
-        }
-
-        const updateData = 
-                {
-                    generation:increment(1),
-                    'profile.commits.updated_by':{id:this.userID, name:this.userName},
-                    'profile.commits.updated_timestamp':serverTimestamp(),
-                }
-        const prop = isMobile 
-                ? 'workspace.mobile'
-                : 'workspace.desktop'
-
-        updateData[prop] = {name:name,id:id}
-
-        try {
-
-            await updateDoc(doc(collection(this.db,'users'),this.userID),updateData)
-
-        } catch (error) {
-
-            const errdesc = 'error updating selection in user record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
-
-        }
-
-        this.usage.write(1)
-        
-        return result
-    }
-
-    // ---------------------[ getWorkspaceList ]--------------------------
-
-    async getWorkspaceList() { // fetches the basic workspace profiles (id, name)
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-            payload: null,
-        }
-
-        const workspaceList = []
-        const dbQuerySpec = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
-        let queryDocs
-        try {
-            queryDocs = await getDocs(dbQuerySpec)
-        } catch (error) {
-            const errdesc = 'error getting workspace list on standard toolbar'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
-        }
-        queryDocs.forEach((doc) => {
-            const data = doc.data()
-            const workspaceData = data.profile.workspace
-            workspaceData.is_default = data.profile.flags.is_default
-            workspaceList.push(workspaceData) // selection, not record
-        })
-        this.usage.read(queryDocs.size)
-        result.payload = workspaceList
-        return result
-
     }
 
     async resetWorkspace() {
@@ -298,6 +209,149 @@ class WorkspaceHandler {
         result.payload = defaultSelection
         result.notice = 'workspace has been reset'
 
+        return result
+
+    }
+
+    // ---------------------[ setWorkspyaceSelection ]--------------------------
+
+    // sets the selection only in memory workspaceHandler, and db userRecors
+    async setWorkspaceSelection (id, name) {
+
+        // save before switch
+        if (this.settings.mode == 'automatic' && this.settings.changed) {
+            const result = await this.saveWorkspaceData()
+            if (result.error) {
+                return result
+            }
+        }
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        this.workspaceSelection = {id, name}
+
+        if (this.settings.mode == 'manual') {
+            this.changedRecords.userworkspace = true
+            this.settings.changed = true
+            return result
+        }
+
+        const updateData = 
+                {
+                    generation:increment(1),
+                    'profile.commits.updated_by':{id:this.userID, name:this.userName},
+                    'profile.commits.updated_timestamp':serverTimestamp(),
+                }
+        const prop = isMobile 
+                ? 'workspace.mobile'
+                : 'workspace.desktop'
+
+        updateData[prop] = {name:name,id:id}
+
+        try {
+
+            await updateDoc(doc(collection(this.db,'users'),this.userID),updateData)
+
+        } catch (error) {
+
+            const errdesc = 'error updating selection in user record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        this.usage.write(1)
+        
+        return result
+    }
+
+    async setDefaultWorkspace(fromSelection, toSelection) {
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const workspaceCollection = collection(this.db,'users',this.userID,'workspaces')
+
+        let transactionResult
+
+        try {
+
+            transactionResult = await runTransaction(this.db, async (transaction) => {
+
+                const 
+                    fromDoc = await transaction.get(doc(workspaceCollection, fromSelection.id)),
+                    toDoc = await transaction.get(doc(workspaceCollection, toSelection.id))
+
+                this.usage.read(2)
+                if (!(fromDoc.exists() && toDoc.exists()) ) {
+                    return false
+                }
+
+                const 
+                    fromDocRecord = fromDoc.data(),
+                    toDocRecord = toDoc.data()
+
+                fromDocRecord.profile.flags.is_default = false
+                toDocRecord.profile.flags.is_default = true
+
+                transaction.set(doc(workspaceCollection,fromSelection.id),fromDocRecord)
+                transaction.set(doc(workspaceCollection,toSelection.id),toDocRecord)
+
+                this.usage.write(2)
+
+                return true
+
+            })
+
+        } catch (error) {
+
+        }
+
+        result.notice = `default workspace has been changed from [${fromSelection.name}] to [${toSelection.name}]`
+
+        return result        
+    }
+
+    // ---------------------[ getWorkspaceList ]--------------------------
+
+    async getWorkspaceList() { // fetches the basic workspace profiles (id, name)
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const workspaceList = []
+        const dbQuerySpec = query(collection(this.db, 'users', this.userID, 'workspaces'), orderBy('profile.workspace.name'))
+        let queryDocs
+        try {
+            queryDocs = await getDocs(dbQuerySpec)
+        } catch (error) {
+            const errdesc = 'error getting workspace list on standard toolbar'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+        }
+        queryDocs.forEach((doc) => {
+            const data = doc.data()
+            const workspaceData = data.profile.workspace
+            workspaceData.is_default = data.profile.flags.is_default
+            workspaceList.push(workspaceData) // selection, not record
+        })
+        this.usage.read(queryDocs.size)
+        result.payload = workspaceList
         return result
 
     }
@@ -567,7 +621,8 @@ class WorkspaceHandler {
         
         this.workspaceSelection = {id, name}
         this.workspaceRecord = workspaceSelectionRecord
-        this.flags.new_workspace_load = true
+        // console.log('setting new_workspace_load = true in setupWorkspace')
+        // this.flags.new_workspace_load = true
  
         return result
 
@@ -687,6 +742,7 @@ class WorkspaceHandler {
         // ---- DISTRIBUTE loaded workspace record ----
         this.workspaceRecord = workspaceData
         this.clearChanged()
+        // console.log('setting new_workspace_load = true in loadWorkspace')
         this.flags.new_workspace_load = true
 
         return result
@@ -727,6 +783,7 @@ class WorkspaceHandler {
             this.workspaceRecord = workspaceData
             this.workspaceSelection = {id:workspaceID,name:workspaceName}
             this.clearChanged()
+            // console.log('setting new_workspace_load = true in reloadWorkspace')
             this.flags.new_workspace_load = true
             result.notice = `reloaded workspace [${workspaceName}]`
             return result
@@ -1063,6 +1120,7 @@ class WorkspaceHandler {
         this.usage.write(panelsCount + 1)
 
         result.notice = `the current workspace has been copied to [${name}]`
+
         result.payload = newWorkspace.profile.workspace
 
         return result
