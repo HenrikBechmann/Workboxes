@@ -1,7 +1,7 @@
 // WorkspaceResetDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, useEffect} from 'react'
 
 import {
     Button, Text,
@@ -23,11 +23,19 @@ const WorkspaceResetDialog = (props) => {
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        [defaultSelection, setDefaultSelection] = useState(null)
 
     const doClose = () => {
         setWorkspaceResetDialogState(false)
     }
+
+    useEffect(()=>{
+
+        setDefaultSelection(getDefaultPanelSelection())
+
+    },[])
+
 
     async function doWorkspaceReset () {
 
@@ -44,6 +52,20 @@ const WorkspaceResetDialog = (props) => {
         doClose()
     }
 
+    const getDefaultPanelSelection = () => {
+
+        const { panelRecords } = workspaceHandler
+
+        let defaultSelection
+        panelRecords.forEach((item)=>{
+            if (item.profile.flags.is_default) {
+                defaultSelection = item.profile.panel
+            }
+        })
+
+        return defaultSelection
+    }
+
     return (<>
         <AlertDialog
             isOpen={true}
@@ -58,8 +80,7 @@ const WorkspaceResetDialog = (props) => {
 
                     <AlertDialogBody fontSize = 'sm'>
                         <Text>
-                            Continue? This will remove all but the default panel from this workspace. For the
-                            default panel this will remove all but the default window.
+                            Continue? This will remove all but the default panel (<span style = {{fontStyle: 'italic'}}>{defaultSelection?.name}</span>) from this workspace.
                         </Text>
                     </AlertDialogBody>
                     <AlertDialogFooter>
