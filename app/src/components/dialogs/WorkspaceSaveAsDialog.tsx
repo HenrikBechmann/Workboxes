@@ -165,7 +165,7 @@ const WorkspaceSaveAsDialog = (props) => {
                                 mt = '8px' 
                                 borderTop = '1px solid silver'
                             >
-                                <Checkbox ref = {checkboxRef} >Navigate to the new workspace after the copy is made.</Checkbox>
+                                <Checkbox ref = {checkboxRef} >Navigate to the new workspace.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>

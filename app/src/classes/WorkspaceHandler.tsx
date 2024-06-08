@@ -240,7 +240,7 @@ class WorkspaceHandler {
             const data = doc.data()
             const workspaceData = data.profile.workspace
             workspaceData.is_default = data.profile.flags.is_default
-            workspaceList.push(data.profile.workspace) // selection, not record
+            workspaceList.push(workspaceData) // selection, not record
         })
         this.usage.read(queryDocs.size)
         result.payload = workspaceList
