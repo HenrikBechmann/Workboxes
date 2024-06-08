@@ -264,15 +264,15 @@ export default Workspace
 //     settingsDisabled:false,
 //     documentShow:true,
 //     documentDisabled:false,
-//     databoxShow:true,
-//     databoxDisabled:false,
+//     itemlistShow:true,
+//     itemlistDisabled:false,
 // }
 
 // const defaultDocumentState = {
 //     mode:'view',
 // }
 
-// const defaultDataboxState = {
+// const defaultItemlistState = {
 
 // }
 
@@ -290,7 +290,7 @@ export default Workspace
 //         workbox: {
 //             defaultWorkboxState:{...defaultWorkboxState},
 //             defaultDocumentState: {...defaultDocumentState},
-//             defaultDataboxState: {...defaultDataboxState},
+//             defaultItemlistState: {...defaultItemlistState},
 //             itemTitle: "Base Workbox",
 //             itemIcon: homeIcon,
 //             domainTitle: displayName,
@@ -309,7 +309,7 @@ export default Workspace
 //         workbox: {
 //             defaultWorkboxState:{...defaultWorkboxState},
 //             defaultDocumentState: {...defaultDocumentState},
-//             defaultDataboxState: {...defaultDataboxState},
+//             defaultItemlistState: {...defaultItemlistState},
 //             itemTitle: 'Notebooks',
 //             itemIcon: notebookIcon,
 //             domainTitle: displayName,
@@ -328,7 +328,7 @@ export default Workspace
 //         workbox: {
 //             defaultWorkboxState:{...defaultWorkboxState},
 //             defaultDocumentState: {...defaultDocumentState},
-//             defaultDataboxState: {...defaultDataboxState},
+//             defaultItemlistState: {...defaultItemlistState},
 //             itemTitle: 'Checklists',
 //             itemIcon: checklistIcon,
 //             domainTitle: displayName,

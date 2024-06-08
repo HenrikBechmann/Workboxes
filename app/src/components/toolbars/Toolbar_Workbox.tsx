@@ -79,8 +79,8 @@ const WorkboxToolbar = (props) => {
 
         toggleOnDocumentRef = useRef(workboxState.documentShow),
         disabledDocumentRef = useRef(workboxState.documentDisabled),
-        toggleOnDataboxRef = useRef(workboxState.databoxShow),
-        disabledDataboxRef = useRef(workboxState.databoxDisabled),
+        toggleOnItemlistRef = useRef(workboxState.itemlistShow),
+        disabledItemlistRef = useRef(workboxState.itemlistDisabled),
         toggleOnSettingsRef = useRef(workboxState.settingsShow),
         disabledSettingsRef = useRef(workboxState.settingsDisabled),
         toggleOnCommentsRef = useRef(workboxState.settingsShow),
@@ -93,12 +93,12 @@ const WorkboxToolbar = (props) => {
     const 
         currentIsDocument = toggleOnDocumentRef.current,
         previousIsDocument = toggleHistoryRef.current.documentShow,
-        currentIsDatabox = toggleOnDataboxRef.current
+        currentIsItemlist = toggleOnItemlistRef.current
 
-    if (!currentIsDocument && !currentIsDatabox) {
+    if (!currentIsDocument && !currentIsItemlist) {
         if (previousIsDocument) {
 
-            toggleOnDataboxRef.current = true
+            toggleOnItemlistRef.current = true
 
         } else {
 
@@ -112,8 +112,8 @@ const WorkboxToolbar = (props) => {
 
         workboxState.documentShow = toggleOnDocumentRef.current
         workboxState.documentDisabled = disabledDocumentRef.current
-        workboxState.databoxShow = toggleOnDataboxRef.current
-        workboxState.databoxDisabled = disabledDataboxRef.current
+        workboxState.itemlistShow = toggleOnItemlistRef.current
+        workboxState.itemlistDisabled = disabledItemlistRef.current
         workboxState.settingsShow = toggleOnSettingsRef.current
         workboxState.settingsDisabled = disabledSettingsRef.current
 
@@ -122,8 +122,8 @@ const WorkboxToolbar = (props) => {
     },[
         toggleOnDocumentRef.current,
         disabledDocumentRef.current,
-        toggleOnDataboxRef.current,
-        disabledDataboxRef.current,
+        toggleOnItemlistRef.current,
+        disabledItemlistRef.current,
         toggleOnSettingsRef.current,
         disabledSettingsRef.current,
     ])
@@ -141,12 +141,12 @@ const WorkboxToolbar = (props) => {
             disabledRef:disabledDocumentRef, 
         }),
 
-        databoxToggle = useToggleIcon({
+        itemlistToggle = useToggleIcon({
             icon:packageIcon, 
             tooltip:'Toggle workbox itembox pane',
             caption:'itembox',
-            toggleOnRef:toggleOnDataboxRef,
-            disabledRef:disabledDataboxRef, 
+            toggleOnRef:toggleOnItemlistRef,
+            disabledRef:disabledItemlistRef, 
         }),
 
         settingsToggle = useToggleIcon({
@@ -176,7 +176,7 @@ const WorkboxToolbar = (props) => {
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
         { documentToggle }
-        { databoxToggle }
+        { itemlistToggle }
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />

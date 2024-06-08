@@ -1,4 +1,4 @@
-// Toolbar_Databox.tsx
+// Toolbar_Itemlist.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
@@ -13,7 +13,7 @@ import { useToggleIcon } from './ToggleIcon'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
-const databoxToolbarStyles = {
+const itemlistToolbarStyles = {
     padding:'2px',
     minHeight:0,
     display:'flex',
@@ -80,9 +80,9 @@ const ItemlistToolbar = (props) => {
             disabledRef:disabledMoveRef, 
         })
 
-    const databoxmenulist = <MenuList >
+    const itemlistmenulist = <MenuList >
         <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itemlist</MenuItem>
-        <MenuItem icon = {<img src = {settingsIcon} />}>Databox settings</MenuItem>
+        <MenuItem icon = {<img src = {settingsIcon} />}>Itemlist settings</MenuItem>
     </MenuList>
 
     const layoutmenulist = <MenuList >
@@ -94,9 +94,9 @@ const ItemlistToolbar = (props) => {
     const layoutIcon = listIcon
 
     // render
-    return <Box data-type = 'document-toolbar' style = {databoxToolbarStyles}>
+    return <Box data-type = 'document-toolbar' style = {itemlistToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'itemlist' tooltip = 'Workbox Resources' menulist = {databoxmenulist} />
+        <MenuIcon icon = {packageIcon} caption = 'itemlist' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>

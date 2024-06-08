@@ -53,7 +53,7 @@ const Workbox = (props) => {
             windowSessionID,
             defaultWorkboxState,
             defaultDocumentState,
-            defaultDataboxState,
+            defaultItemlistState,
             data,
 
         } = props,
@@ -61,7 +61,7 @@ const Workbox = (props) => {
         [workboxState, setWorkboxState] = useState({...defaultWorkboxState}),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
-        { profile:profileData, document:documentData, itembox:databoxData } = data,
+        { profile:profileData, document:documentData, itembox:itemlistData } = data,
         { itemName, itemIcon, domainName, domainIcon, typeName } = profileData
 
     // console.log('data', '-'+windowSessionID+'-',data)
@@ -114,9 +114,9 @@ const Workbox = (props) => {
                     workboxState = {workboxState} 
                     profileData = {profileData}
                     documentData = {documentData}
-                    databoxData = {databoxData}
+                    itemlistData = {itemlistData}
                     defaultDocumentState = {defaultDocumentState}
-                    defaultDataboxState = {defaultDataboxState}
+                    defaultItemlistState = {defaultItemlistState}
                 />
             </Box>
         </GridItem>

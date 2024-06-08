@@ -1,4 +1,4 @@
-// DataboxPanel.tsx
+// ItemlistPanel.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -17,13 +17,13 @@ import {
 } from '@chakra-ui/react'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import DataboxToolbar from '../toolbars/Toolbar_Itemlist'
+import ItemlistToolbar from '../toolbars/Toolbar_Itemlist'
 
 const 
     MIN_CONTENTS_FRAME_WIDTH = 250,
     MIN_CONTENT_HEIGHT = 300
 
-const databoxFrameStyles = {
+const itemlistFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
@@ -35,7 +35,7 @@ const databoxFrameStyles = {
     overflow: 'hidden',
 } as CSSProperties
 
-const databoxPanelStyles = {
+const itemlistPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
@@ -52,7 +52,7 @@ const databoxPanelStyles = {
     right: 0,
 } as CSSProperties
 
-const databoxGridStyles = {
+const itemlistGridStyles = {
     height: '100%',
     width: '100%',
     gridTemplateAreas: `"header"
@@ -62,14 +62,14 @@ const databoxGridStyles = {
     borderRadius: "0 0 0 7px",
 }  as CSSProperties
 
-const databoxHeaderStyles = {
+const itemlistHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
     borderBottom:'1px solid silver',
 }
 
-const databoxBodyStyles = {
+const itemlistBodyStyles = {
     area: 'body',
     position: 'relative',
     overflow: 'hidden',
@@ -77,21 +77,21 @@ const databoxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const ItemlistPanel = forwardRef(function FoldersPanel(props:any, databoxFrameElementRef:any) {
+const ItemlistPanel = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
     const 
-        { displayConfigCode, databoxData, profileData, defaultDataboxState } = props,
-        databoxPanelElementRef = useRef(null),
+        { displayConfigCode, itemlistData, profileData, defaultItemlistState } = props,
+        itemlistPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
-        [databoxState, setDataboxState] = useState(defaultDataboxState)
+        [itemlistState, setItemlistState] = useState(defaultItemlistState)
 
-    // console.log('databoxData',databoxData)
+    // console.log('itemlistData',itemlistData)
 
     useEffect(()=>{
 
         clearTimeout(timeoutRef.current)
 
         const 
-            element = databoxPanelElementRef.current,
+            element = itemlistPanelElementRef.current,
             timeout = 500
 
         if (displayConfigCode == 'out') {
@@ -112,19 +112,19 @@ const ItemlistPanel = forwardRef(function FoldersPanel(props:any, databoxFrameEl
 
     },[displayConfigCode])
 
-    return <Box data-type = 'itemlist-frame' ref = {databoxFrameElementRef} style = {databoxFrameStyles}>
-        <Box data-type = 'itemlist-panel' ref = {databoxPanelElementRef} style = {databoxPanelStyles}>
+    return <Box data-type = 'itemlist-frame' ref = {itemlistFrameElementRef} style = {itemlistFrameStyles}>
+        <Box data-type = 'itemlist-panel' ref = {itemlistPanelElementRef} style = {itemlistPanelStyles}>
                 <Grid
                     data-type = 'itemlist-grid'
-                    style = {databoxGridStyles}
+                    style = {itemlistGridStyles}
                 >
-                    <GridItem data-type = 'itemlist-header' style = {databoxHeaderStyles}>
+                    <GridItem data-type = 'itemlist-header' style = {itemlistHeaderStyles}>
                         <ToolbarFrame>
-                            <DataboxToolbar databoxState = {databoxState} setDataboxState = {setDataboxState} />
+                            <ItemlistToolbar itemlistState = {itemlistState} setItemlistState = {setItemlistState} />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'itemlist-body' style = {databoxBodyStyles}>
-                        Databox
+                    <GridItem data-type = 'itemlist-body' style = {itemlistBodyStyles}>
+                        Itemlist
                     </GridItem>
                 </Grid>
         </Box>

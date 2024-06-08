@@ -9,7 +9,7 @@ import {
 
 import CentralPanel from './CentralPanel'
 import DocumentPanel from './DocumentPanel'
-import DataboxPanel from './ItemlistPanel'
+import ItemlistPanel from './ItemlistPanel'
 import SettingsPanel from './SettingsPanel'
 
 // synchronize this with the total left and right padding of workboxContentStyles
@@ -32,36 +32,36 @@ const WorkboxContent = (props) => {
         { 
             workboxState, 
             defaultDocumentState,
-            defaultDataboxState,
+            defaultItemlistState,
             windowSessionID, 
             viewSelector, 
             documentData, 
-            databoxData, 
+            itemlistData, 
             profileData 
         } = props,
-        { databoxShow, documentShow } = workboxState, // boolean - show/ noshow
+        { itemlistShow, documentShow } = workboxState, // boolean - show/ noshow
         // share document and itembox elements with children
         documentFrameElementRef = useRef( null ),
-        databoxFrameElementRef = useRef( null ),
+        itemlistFrameElementRef = useRef( null ),
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
         userDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
-    let workboxDisplayCode, documentDisplayCode, databoxDisplayCode // configuration controls for children
-    if (databoxShow && documentShow) {
+    let workboxDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
+    if (itemlistShow && documentShow) {
         workboxDisplayCode = 'both'
         documentDisplayCode = 'out'
-        databoxDisplayCode = 'out'
-    } else if (databoxShow) {
+        itemlistDisplayCode = 'out'
+    } else if (itemlistShow) {
         workboxDisplayCode = 'itembox'
         documentDisplayCode = 'under'
-        databoxDisplayCode = 'over'
+        itemlistDisplayCode = 'over'
     } else { // documentShow
         workboxDisplayCode = 'document'
         documentDisplayCode = 'over'
-        databoxDisplayCode = 'under'
+        itemlistDisplayCode = 'under'
     }
 
     useEffect(()=>{
@@ -86,7 +86,7 @@ const WorkboxContent = (props) => {
             windowSessionID = {windowSessionID}
             displayConfigCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
-            databoxFrameElementRef = {databoxFrameElementRef} 
+            itemlistFrameElementRef = {itemlistFrameElementRef} 
             userDocumentWidthRef = {userDocumentWidthRef}
             viewSelector = {viewSelector}
         >
@@ -100,11 +100,11 @@ const WorkboxContent = (props) => {
                 documentData = {documentData}
                 profileData = {profileData}
             />
-            <DataboxPanel 
-                ref = {databoxFrameElementRef} 
-                displayConfigCode = {databoxDisplayCode} 
-                defaultDataboxState = {defaultDataboxState}
-                databoxData = { databoxData }
+            <ItemlistPanel 
+                ref = {itemlistFrameElementRef} 
+                displayConfigCode = {itemlistDisplayCode} 
+                defaultItemlistState = {defaultItemlistState}
+                itemlistData = { itemlistData }
                 profileData = { profileData }
             />
         </CentralPanel>

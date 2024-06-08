@@ -42,7 +42,7 @@ const CentralPanel = (props) => {
             windowSessionID,
             displayConfigCode, 
             documentFrameElementRef, 
-            databoxFrameElementRef, 
+            itemlistFrameElementRef, 
             userDocumentWidthRef, // set by user through drag tag
             viewSelector,
         } = props,
@@ -59,7 +59,7 @@ const CentralPanel = (props) => {
         - centralPanelElement: flex, width
         - documentFrameElement: flex, width, minWidth, transition, transitionDelay
         - documentFrameElement.firstChild: width, left, right (panel)
-        - databoxFrameElement: flex, width, minWidth, transition, transitionDelay
+        - itemlistFrameElement: flex, width, minWidth, transition, transitionDelay
         - contantsFrameElement.firstChild: width, left, right (panel)
 
         see useEffect for displayConfigCode
@@ -71,7 +71,7 @@ const CentralPanel = (props) => {
         const 
             centralPanelElement = centralPanelElementRef.current, // flex, width
             documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
-            databoxFrameElement = databoxFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            itemlistFrameElement = itemlistFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             transitionDelay = '0.3s',
             timeout = 800,
             previousDisplayConfigCode = previousDisplayConfigCodeRef.current
@@ -82,10 +82,10 @@ const CentralPanel = (props) => {
 
             // baseline
             documentFrameElement.style.transitionDelay = 'unset'
-            databoxFrameElement.style.transitionDelay = 'unset'
+            itemlistFrameElement.style.transitionDelay = 'unset'
 
             documentFrameElement.style.transition = 'width 0.5s'
-            databoxFrameElement.style.transition = 'width 0.5s'
+            itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itembox') { // document was hidden
@@ -96,11 +96,11 @@ const CentralPanel = (props) => {
 
             } else { // itembox was hidden
 
-                databoxFrameElement.firstChild.style.width = 
+                itemlistFrameElement.firstChild.style.width = 
                     Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                         userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
-                databoxFrameElement.firstChild.style.left = 'auto'
-                databoxFrameElement.firstChild.style.right = 0
+                itemlistFrameElement.firstChild.style.left = 'auto'
+                itemlistFrameElement.firstChild.style.right = 0
 
             }
 
@@ -114,12 +114,12 @@ const CentralPanel = (props) => {
 
             // freeze itembox
             centralPanelElement.style.minWidth = (MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH) + 'px'
-            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
-            databoxFrameElement.style.flex = '0 0 auto'
+            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
+            itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
             documentFrameElement.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
-            databoxFrameElement.style.width = 
+            itemlistFrameElement.style.width = 
                 Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                     userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
 
@@ -128,18 +128,18 @@ const CentralPanel = (props) => {
 
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
-                databoxFrameElement.style.transition = 'none'
+                itemlistFrameElement.style.transition = 'none'
 
                 // restore itembox frame defaults
-                databoxFrameElement.style.flex = '1 0 auto'
-                databoxFrameElement.style.width = 'auto'
-                databoxFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                itemlistFrameElement.style.flex = '1 0 auto'
+                itemlistFrameElement.style.width = 'auto'
+                itemlistFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 // restore document frame defaults
                 documentFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
 
                 // restore panel defaults
-                databoxFrameElement.firstChild.style.width = '100%'
+                itemlistFrameElement.firstChild.style.width = '100%'
                 documentFrameElement.firstChild.style.width = '100%'
 
                 // restore central panel defaults
@@ -152,10 +152,10 @@ const CentralPanel = (props) => {
 
             // set transition delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
-            databoxFrameElement.style.transitionDelay = transitionDelay
+            itemlistFrameElement.style.transitionDelay = transitionDelay
 
             documentFrameElement.style.transition = 'width 0.5s'
-            databoxFrameElement.style.transition = 'width 0.5s'
+            itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
             if (previousDisplayConfigCode == 'itembox') { // document was hidden
@@ -176,13 +176,13 @@ const CentralPanel = (props) => {
             documentFrameElement.style.flex = '0 0 auto'
 
             // freeze itembox frame for hiding
-            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
-            databoxFrameElement.style.flex = '0 0 auto'
-            databoxFrameElement.firstChild.style.width = databoxFrameElement.firstChild.offsetWidth + 'px'
-            databoxFrameElement.style.minWidth = 0
+            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
+            itemlistFrameElement.style.flex = '0 0 auto'
+            itemlistFrameElement.firstChild.style.width = itemlistFrameElement.firstChild.offsetWidth + 'px'
+            itemlistFrameElement.style.minWidth = 0
 
             // set animation targets
-            databoxFrameElement.style.width = 0
+            itemlistFrameElement.style.width = 0
             documentFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
 
             // wait for result; restore defaults
@@ -190,8 +190,8 @@ const CentralPanel = (props) => {
 
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
-                databoxFrameElement.style.transition = 'none'
-                databoxFrameElement.style.transitionDelay = 'unset'
+                itemlistFrameElement.style.transition = 'none'
+                itemlistFrameElement.style.transitionDelay = 'unset'
 
                 // set config for visible frame
                 documentFrameElement.style.flex = '1 0 auto'
@@ -213,17 +213,17 @@ const CentralPanel = (props) => {
 
             // set tranision delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
-            databoxFrameElement.style.transitionDelay = transitionDelay
+            itemlistFrameElement.style.transitionDelay = transitionDelay
 
             documentFrameElement.style.transition = 'width 0.5s'
-            databoxFrameElement.style.transition = 'width 0.5s'
+            itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
             if (previousDisplayConfigCode == 'document') { // itembox was hidden
 
-                databoxFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
-                databoxFrameElement.firstChild.style.right = 'auto'
-                databoxFrameElement.firstChild.style.left = 0
+                itemlistFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
+                itemlistFrameElement.firstChild.style.right = 'auto'
+                itemlistFrameElement.firstChild.style.left = 0
 
             }
 
@@ -239,11 +239,11 @@ const CentralPanel = (props) => {
             documentFrameElement.style.minWidth = 0
 
             // freeze itembox
-            databoxFrameElement.style.width = databoxFrameElement.offsetWidth + 'px'
-            databoxFrameElement.style.flex = '0 0 auto'
+            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
+            itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            databoxFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            itemlistFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
             documentFrameElement.style.width = 0
 
             // wait for result; restore defaults
@@ -252,17 +252,17 @@ const CentralPanel = (props) => {
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
                 documentFrameElement.style.transitionDelay = 'unset'
-                databoxFrameElement.style.transition = 'none'
+                itemlistFrameElement.style.transition = 'none'
 
                 // set visible frame config
-                databoxFrameElement.style.width = 'auto'
-                databoxFrameElement.style.flex = '1 0 auto'
-                databoxFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                itemlistFrameElement.style.width = 'auto'
+                itemlistFrameElement.style.flex = '1 0 auto'
+                itemlistFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
 
                 // restore visible panel config
-                databoxFrameElement.firstChild.style.width = '100%'
-                databoxFrameElement.firstChild.style.right = 0
-                databoxFrameElement.firstChild.style.left = 'auto'
+                itemlistFrameElement.firstChild.style.width = '100%'
+                itemlistFrameElement.firstChild.style.right = 0
+                itemlistFrameElement.firstChild.style.left = 'auto'
 
                 // restore central panel defaults
                 centralPanelElement.style.width = 'auto'

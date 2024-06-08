@@ -6,8 +6,8 @@ const defaultWorkboxState = {
     settingsDisabled:false,
     documentShow:true,
     documentDisabled:false,
-    databoxShow:true,
-    databoxDisabled:false,
+    itemlistShow:true,
+    itemlistDisabled:false,
 }
 
 const workboxTemplate = {
@@ -34,7 +34,7 @@ const documentTemplate = {
     changed:false,
 }
 
-const databoxTemplate = {
+const itemlistTemplate = {
     accepts:null,
     connectors:null,
     changed:false,
@@ -78,7 +78,7 @@ class WorkboxHandler {
                     },
                 },
             ]}
-        this.itembox = {...databoxTemplate, 
+        this.itembox = {...itemlistTemplate, 
             accepts:[], 
             connectors:{preload:true, list:[], set:new Set()}
         }

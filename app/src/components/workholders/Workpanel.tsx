@@ -207,7 +207,7 @@ const Workpanel = (props:any) => {
                 workboxSessionID = {workboxSessionID}
                 defaultWorkboxState = { specs.workbox.defaultWorkboxState }
                 defaultDocumentState = { specs.workbox.defaultDocumentState }
-                defaultDataboxState = { specs.workbox.defaultDataboxState }
+                defaultItemlistState = { specs.workbox.defaultItemlistState }
                 data = { workdata }
                 dataCallbacks = {dataCallbacks}
             />
