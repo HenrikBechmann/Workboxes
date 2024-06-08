@@ -20,6 +20,7 @@ const WorkspaceResetDialog = (props) => {
     const
         { setWorkspaceResetDialogState } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        {setPanelSelection} = workspaceHandler,
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
@@ -46,9 +47,17 @@ const WorkspaceResetDialog = (props) => {
             return
         }
 
-        toast({description:result.notice})
-        
-        dispatchWorkspaceHandler('reset')
+        if (result.success) {
+
+            setPanelSelection(result.payload)
+
+            toast({description:result.notice})
+            
+            dispatchWorkspaceHandler('reset')
+
+        } else {
+            toast({description:'No reset: There was only the default panel'})
+        }
         doClose()
     }
 

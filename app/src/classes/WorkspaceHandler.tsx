@@ -95,6 +95,7 @@ class WorkspaceHandler {
         id:null,
         name:null,
     } // attempt to set from workspace.profile.panel; cascading fallbacks
+    setPanelSelection = null
     // set on load of all panels
     panelCount = 0 
     panelRecordMap = new Map()
@@ -253,9 +254,48 @@ class WorkspaceHandler {
             error: false,
             success: true,
             notice: null,
+            payload: null,
         }
 
+        const { panelRecords, changedRecords, settings } = this
 
+        if (panelRecords.length === 1) {
+            result.success = false
+            return result
+        }
+
+        let defaultSelection
+        let panelIndex = 0
+        let defaultIndex
+        let deletePanels = []
+        panelRecords.forEach((item)=>{
+            if (item.profile.flags.is_default) {
+                defaultSelection = item.profile.panel
+                defaultIndex = panelIndex
+            } else {
+                deletePanels.push(item.profile.panel.id)
+            }
+            panelIndex ++
+        })
+
+        panelRecords.splice(0,defaultIndex)
+        panelRecords.splice(1)
+
+        deletePanels.forEach((item) => {
+            changedRecords.deletepanels.add(item)
+        })
+        // this.panelSelection = defaultSelection
+        this.panelCount = 1
+
+        settings.changed = true
+
+        if (settings.mode == 'automatic') {
+            const result = await this.saveWorkspaceData()
+            if (result.error) return result
+        }
+
+        defaultSelection.index = 0
+        result.payload = defaultSelection
         result.notice = 'workspace has been reset'
 
         return result

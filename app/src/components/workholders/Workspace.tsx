@@ -73,6 +73,7 @@ const Workspace = (props) => {
 
         workboxMapRef.current = new Map()
         workboxHandlerMapRef.current = new Map()
+        workspaceHandler.setPanelSelection = setPanelSelection
 
     },[])
 

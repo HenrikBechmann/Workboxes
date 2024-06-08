@@ -77,7 +77,7 @@ const WorkspaceToolbar = (props) => {
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
-        toast = useToast({duration:4000})        
+        toast = useToast({duration:4000}) 
 
     useEffect(()=>{
 
