@@ -27,7 +27,7 @@ const WorkspaceSetDefaultDialog = (props) => {
         { setWorkspaceSetDefaultDialogState } = props,
         focusRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { settings } = workspaceHandler,
+        { settings, workspaceSelection } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
@@ -128,6 +128,8 @@ const WorkspaceSetDefaultDialog = (props) => {
         if (checkboxRef.current.checked) {
 
             workspaceHandler.setWorkspaceSelection(newDefaultSelection.id, newDefaultSelection.name)
+        } else {
+            workspaceHandler.setWorkspaceSelection(workspaceSelection.id, workspaceSelection.name)
         }
 
         dispatchWorkspaceHandler('defaultworkspace')
