@@ -25,7 +25,6 @@ const PanelSetDefaultDialog = (props) => {
 
     const 
         { setPanelSetDefaultDialogState, setPanelSelection } = props,
-        systemRecords = useSystemRecords(),
         focusRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('setup'),
@@ -81,7 +80,6 @@ const PanelSetDefaultDialog = (props) => {
 
     })
 
-    // TODO make sure record exists before saving
     async function doSetDefault() {
 
         setAlertState('processing')
@@ -110,7 +108,7 @@ const PanelSetDefaultDialog = (props) => {
             })
         }
 
-        dispatchWorkspaceHandler('createpanel')
+        dispatchWorkspaceHandler('defaultpanel')
 
         doClose()
 
@@ -175,8 +173,6 @@ const PanelSetDefaultDialog = (props) => {
                           Change default
                         </Button>
                     </AlertDialogFooter>
-
-
                 </AlertDialogContent>
             </AlertDialogOverlay>
         </AlertDialog>

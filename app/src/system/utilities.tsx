@@ -254,7 +254,7 @@ const versionData = {
           id: null,
           name: null,
         },
-        controlling_workbox: {
+        controller: {
           id: null,
           name: null,
         },
@@ -329,7 +329,7 @@ const versionData = {
           id: null,
           name: null,
         },
-        controlling_workbox: {
+        controller: {
           id: null,
           name: null,
         },
@@ -412,7 +412,7 @@ const versionData = {
           id: null,
           name: null,
         },
-        controlling_workbox: {
+        controller: {
           id: null,
           name: null,
         },
