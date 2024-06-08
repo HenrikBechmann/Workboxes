@@ -996,6 +996,7 @@ class WorkspaceHandler {
             error: false,
             success: true,
             notice: null,
+            payload: null
         }
 
         const workspaceCollection = collection(this.db,'users',this.userID,'workspaces')
@@ -1024,6 +1025,7 @@ class WorkspaceHandler {
             const newPanelID = newPanelRef.id
             if (panelData.profile.panel.id == oldSelectedPanelID) {
                 newWorkspace.panel = {...panelData.profile.panel}
+                newWorkspace.panel.id = newPanelID
             }
             newWorkspace.panels.push(newPanelID)
             panelData.profile.panel.id = newPanelID
@@ -1061,6 +1063,7 @@ class WorkspaceHandler {
         this.usage.write(panelsCount + 1)
 
         result.notice = `the current workspace has been copied to [${name}]`
+        result.payload = newWorkspace.profile.workspace
 
         return result
 

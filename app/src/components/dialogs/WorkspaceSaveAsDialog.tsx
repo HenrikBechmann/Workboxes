@@ -4,7 +4,7 @@
 import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
 
 import {
-    Button, Text, Input,
+    Button, Text, Input, Checkbox,
     Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     FormControl, FormLabel, FormErrorMessage, FormHelperText,
@@ -36,7 +36,8 @@ const WorkspaceSaveAsDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        toast = useToast({duration:4000})
+        toast = useToast({duration:4000}),
+        checkboxRef = useRef(null)
 
     useEffect(()=>{
 
@@ -97,6 +98,16 @@ const WorkspaceSaveAsDialog = (props) => {
            return
         }
 
+        if (checkboxRef.current.checked) {
+
+            const selectionresult = await workspaceHandler.setWorkspaceSelection(result.payload.id, result.payload.name)
+            if (selectionresult.error) {
+                navigate('/error')
+                return
+            }
+
+        }
+
         toast({description:result.notice})
 
         dispatchWorkspaceHandler('copy')
@@ -148,6 +159,13 @@ const WorkspaceSaveAsDialog = (props) => {
                                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' >
                                     {helperText.name} Current length is {writeValues.name?.length || '0 (blank)'}.
                                 </FormHelperText>
+                            </FormControl>
+                            <FormControl 
+                                isDisabled = {alertState == 'processing'} 
+                                mt = '8px' 
+                                borderTop = '1px solid silver'
+                            >
+                                <Checkbox ref = {checkboxRef} >Navigate to the new workspace after the copy is made.</Checkbox>
                             </FormControl>
                         </Box>
                     </AlertDialogBody>
