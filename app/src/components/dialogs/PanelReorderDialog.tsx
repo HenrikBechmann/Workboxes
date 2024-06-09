@@ -54,7 +54,7 @@ const PanelReorderDialog = (props) => {
             component:<div style= {{borderTop:'1px solid goldenrod', height:'100%'}}>
                 {panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
             </div>,
-            profile:{value:'something'}
+            profile:{id:panelProfile.panel.id, name:panelProfile.panel.name}
         }
 
     }
