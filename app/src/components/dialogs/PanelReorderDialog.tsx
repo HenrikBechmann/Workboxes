@@ -54,7 +54,7 @@ const PanelReorderDialog = (props) => {
             onClose={doClose}
         >
             <AlertDialogOverlay>
-                <AlertDialogContent height = 'calc(100vh - 20px)' mt = '10px'>
+                <AlertDialogContent height = 'calc(100vh - 55px)' mt = '45px'>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                         Drag and drop to re-order the panels
                     </AlertDialogHeader>
