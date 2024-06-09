@@ -156,11 +156,11 @@ const StandardToolbar = (props) => {
         return <MenuList>
             <MenuItem >User preferences</MenuItem>
             <MenuItem onClick = {gotoAccount}>Account settings</MenuItem>
-            <MenuItem onClick = {gotoDomains}>Domain settings</MenuItem>
+            <MenuItem onClick = {gotoDomains}>Account domains</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {gotoMemberships}>Domain memberships</MenuItem>
             <MenuItem onClick = {gotoSubscriptions}>Newsflow subscriptions</MenuItem>
-            <MenuItem >Forum memberships</MenuItem>
+            <MenuItem >Discussion forums</MenuItem>
             <MenuDivider />
             <MenuItem onClick = {logOut}>Sign out</MenuItem>
         </MenuList>
