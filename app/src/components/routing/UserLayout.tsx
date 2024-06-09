@@ -27,12 +27,12 @@ const UserLayout = (props) => {
         gridTemplateAreas = {`"header"
                               "body"`}
     >
-        <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw'>
+        <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw' minWidth = '0'>
             <ToolbarFrame>
                 <ToolbarStandard />
             </ToolbarFrame>
         </GridItem>
-        <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>        
+        <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw' minWidth = '0'>        
             <Box data-type = 'members-outlet' style = {bodyStyle}>
                 <RouterOutput />
             </Box>

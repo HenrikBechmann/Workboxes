@@ -225,14 +225,15 @@ const Workspace = (props) => {
     // Scroller supports embeded scroll regions
     const workspaceComponent = useMemo(()=>{
         return <Grid 
-          date-type = 'workspace'
+          data-type = 'workspace'
           height = '100%'
           gridTemplateAreas={`"body"
                           "footer"`}
           gridTemplateRows={'1fr auto'}
           gridTemplateColumns={'1fr'}
+          minWidth = '0'
         >
-            <GridItem data-type = 'workspace-body' area={'body'} position = 'relative'>
+            <GridItem data-type = 'workspace-body' area={'body'} position = 'relative' minWidth = '0'>
                 <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
                     <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
                     transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
@@ -240,7 +241,7 @@ const Workspace = (props) => {
                     </Box>
                  </Box>
             </GridItem>
-            <GridItem data-type = 'workspace-footer' area = 'footer'>
+            <GridItem data-type = 'workspace-footer' area = 'footer' minWidth = '0'>
                 <Box borderTop = '1px solid lightgray' width = '100%' >
                     <ToolbarFrame>
                         {(workspaceState != 'setup') && <WorkspaceToolbar panelSelection = {panelSelection} 

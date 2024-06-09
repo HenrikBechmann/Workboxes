@@ -745,6 +745,8 @@ class WorkspaceHandler {
         // console.log('setting new_workspace_load = true in loadWorkspace')
         this.flags.new_workspace_load = true
 
+        this.clearChanged()
+
         return result
 
     }
@@ -785,6 +787,7 @@ class WorkspaceHandler {
             this.clearChanged()
             // console.log('setting new_workspace_load = true in reloadWorkspace')
             this.flags.new_workspace_load = true
+            this.clearChanged()
             result.notice = `reloaded workspace [${workspaceName}]`
             return result
 
