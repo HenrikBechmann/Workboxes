@@ -4,12 +4,14 @@
 import React, {useRef, useState} from 'react'
 
 import {
-    Button, Text,
+    Button, Text, Box,
     AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter,
     useToast,
 } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
+
+import Scroller from 'react-infinite-grid-scroller'
 
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
@@ -20,6 +22,7 @@ const PanelReorderDialog = (props) => {
     const
         { setPanelReorderDialogState } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
+        { panelCount, panelRecords } = workspaceHandler,
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
@@ -44,6 +47,18 @@ const PanelReorderDialog = (props) => {
         doClose()
     }
 
+    const getItemPack = (index, itemID, context) => {
+
+        const panelProfile = panelRecords[index].profile
+        return {
+            component:<div style= {{borderTop:'1px solid goldenrod', height:'100%'}}>
+                {panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
+            </div>,
+            profile:{value:'something'}
+        }
+
+    }
+
                         // <Text>
                         //     Drag and drop the panels to re-order them.
                         // </Text>
@@ -60,7 +75,17 @@ const PanelReorderDialog = (props) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody fontSize = 'sm' height = '100%'>
-                        <Text>Body</Text>
+                        <Box position = 'relative' height = '100%' border = '1px solid silver'>
+                        <Scroller 
+                            cellHeight = { 26 }
+                            cellWidth = { 250 }
+                            padding = {10}
+                            gap = {10}
+                            startingListRange = { [0,panelCount - 1] }
+                            getItemPack = { getItemPack }
+                            cache = 'preload'
+                        />
+                        </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button mr = '10px' isDisabled = {alertState == 'processing'} ref={cancelRef} 
