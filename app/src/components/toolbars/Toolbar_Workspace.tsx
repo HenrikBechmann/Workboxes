@@ -19,6 +19,7 @@ import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
 import PanelDeleteDialog from '../dialogs/PanelDeleteDialog'
 import PanelCreateDialog from '../dialogs/PanelCreateDialog'
 import PanelSetDefaultDialog from '../dialogs/PanelSetDefaultDialog'
+import PanelReorderDialog from '../dialogs/PanelReorderDialog'
 
 import StandardIcon from './StandardIcon'
 import DomainControl from './DomainControl'
@@ -74,6 +75,7 @@ const WorkspaceToolbar = (props) => {
         [panelDeleteDialogState, setPanelDeleteDialogState] = useState(false),
         [panelCreateDialogState, setPanelCreateDialogState] = useState(false),
         [panelSetDefaultDialogState, setPanelSetDefaultDialogState] = useState(false),
+        [panelReorderDialogState, setPanelReorderDialogState] = useState(false),
 
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -132,7 +134,7 @@ const WorkspaceToolbar = (props) => {
     }
 
     const reorderPanels = () => {
-
+        setPanelReorderDialogState(true)
     }
 
     const setDefaultPanel = () => {
@@ -204,8 +206,8 @@ const WorkspaceToolbar = (props) => {
             </MenuGroup>
             <MenuDivider />
             <MenuItem onClick = {createPanel} >Add a new panel</MenuItem>
-            <MenuItem onClick = {reorderPanels} >Re-order panels</MenuItem>
             <MenuItem onClick = {setDefaultPanel}>Set default panel</MenuItem>
+            <MenuItem onClick = {reorderPanels} >Re-order the panels</MenuItem>
             <MenuDivider />
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
@@ -274,7 +276,9 @@ const WorkspaceToolbar = (props) => {
             setPanelRenameDialogState = {setPanelRenameDialogState} 
             setPanelSelection = {setPanelSelection}
         />}
-        {panelResetDialogState && <PanelResetDialog setPanelResetDialogState = {setPanelResetDialogState} />}
+        {panelResetDialogState && <PanelResetDialog 
+            setPanelResetDialogState = {setPanelResetDialogState} 
+        />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
             setPanelSelection = {setPanelSelection}
@@ -291,6 +295,9 @@ const WorkspaceToolbar = (props) => {
         {panelSetDefaultDialogState && <PanelSetDefaultDialog 
             setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 
             setPanelSelection = {setPanelSelection}
+        />}
+        {panelReorderDialogState && <PanelReorderDialog 
+            setPanelReorderDialogState = {setPanelReorderDialogState} 
         />}
     </Box>
 }
