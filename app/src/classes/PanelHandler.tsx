@@ -564,6 +564,47 @@ class PanelHandler {
         return result
 
     }
+
+    async panelReorder(newOrderList) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const { panelRecords, changedRecords, settings } = this.workspaceHandler
+
+        for (let index = 0; index < newOrderList.length; index++) {
+            const changeData = newOrderList[index]
+            const panelRecord = panelRecords[changeData.index]
+            if (panelRecord.profile.display_order !== index) {
+                panelRecord.profile.display_order = index
+                changedRecords.setpanels.add(panelRecord.profile.panel.id)
+            }
+        }
+        settings.changed = true
+
+        panelRecords.sort((a,b) =>{
+            if (a.profile.display_order < b.profile.display_order) {
+                return -1
+            } else {
+                return 1
+            }
+        })
+
+        if (settings.mode == 'automatic') {
+            const result = await this.workspaceHandler.saveWorkspaceData()
+            if (result.error) {
+                return result
+            }
+        }
+
+        result.notice = 'panels have been re-ordered'
+
+        return result
+
+    }
 }
 
 

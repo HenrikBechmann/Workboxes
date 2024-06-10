@@ -1,7 +1,7 @@
 // PanelReorderDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useMemo} from 'react'
+import React, {useRef, useState, useMemo, useEffect} from 'react'
 
 import {
     Button, Text, Box,
@@ -34,40 +34,79 @@ const PanelListItem = (props) => {
 const PanelReorderDialog = (props) => {
 
     const
-        { setPanelReorderDialogState } = props,
+        { setPanelReorderDialogState, panelComponentListRef, setPanelSelection } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { panelCount, panelRecords } = workspaceHandler,
+        { panelCount, panelRecords, panelSelection } = workspaceHandler,
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
         navigate = useNavigate(),
-        panelOrderChangesRef = useRef(new Map())
+        panelOrderChangesRef = useRef([]),
+        panelOrderChangesCountRef = useRef(0)
+
+    useEffect(()=>{
+        for (let index = 0; index < panelCount; index++) {
+            panelOrderChangesRef.current.push({index,name:panelRecords[index].profile.panel.name})
+        }
+    },[])
 
     const doClose = () => {
         setPanelReorderDialogState(false)
     }
 
-    const dragDropTransferCallback = (fromScrollerID, fromIndexID, toScrollerID, toIndexID, context) => {
-        console.log('fromScrollerID, fromIndexID, toScrollerID, toIndexID, context\n', 
-            fromScrollerID, fromIndexID, toScrollerID, toIndexID, context)
-        panelOrderChangesRef.current.set(context.item.profile.id, {fromScrollerID, fromIndexID, toScrollerID, toIndexID, context})
-        console.log('panelOrderChangesRef.current',panelOrderChangesRef.current)
+    const dragDropTransferCallback = (fromScrollerID, fromIndex, toScrollerID, toIndex, context) => {
+        const movedItems = panelOrderChangesRef.current.splice(fromIndex,1)
+        panelOrderChangesRef.current.splice(toIndex,0,movedItems[0])
+        panelOrderChangesCountRef.current++
     }
 
 
     async function doPanelReorder () {
 
-        // const result = await workspaceHandler.panelReset(workspaceHandler.panelSelection)
+        const newPanelSelection = {...panelSelection}
 
-        // if (result.error) {
-        //     navigate('/error')
-        //     return
-        // }
+        if (panelOrderChangesCountRef.current) {
 
-        // toast({description:result.notice})
-        
-        dispatchWorkspaceHandler('reorderpanel')
+            const result = await workspaceHandler.panelReorder(panelOrderChangesRef.current)
+
+            if (result.error) {
+                navigate('/error')
+                return
+            }
+
+            const newComponentList = []
+
+            // console.log('newPanelSelection before, panelOrderChangesRef.current', panelOrderChangesRef.current, {...newPanelSelection})
+            let newSelectionIndex
+            for (let index = 0; index < panelOrderChangesRef.current.length; index++) {
+                newComponentList.push(
+                    panelComponentListRef.current[panelOrderChangesRef.current[index].index]
+                )
+                if (newPanelSelection.index === panelOrderChangesRef.current[index].index) {
+                    newSelectionIndex = index
+                }
+            }
+
+            newPanelSelection.index = newSelectionIndex
+
+            panelComponentListRef.current = newComponentList
+
+            // console.log('newPanelSelection after', newPanelSelection)
+
+            setPanelSelection(newPanelSelection)
+
+            toast({description:result.notice})
+            
+            dispatchWorkspaceHandler('reorderpanel')
+
+        } else {
+
+            toast({description:'no changes of order were made.'})
+
+        }
+
         doClose()
+
     }
 
     const getItemPack = (index, itemID, context) => {

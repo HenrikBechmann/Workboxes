@@ -1287,6 +1287,10 @@ class WorkspaceHandler {
         return await this.panelHandler.setDefaultPanel(fromIndex, toIndex)
     }
 
+    async panelReorder(newOrderList) {
+        return await this.panelHandler.panelReorder(newOrderList)
+    }
+
 }
 
 export default WorkspaceHandler

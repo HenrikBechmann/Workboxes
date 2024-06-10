@@ -56,7 +56,7 @@ let panelMenuIteration = 0
 const WorkspaceToolbar = (props) => {
 
     const 
-        { panelSelection, setPanelSelection } = props,
+        { panelSelection, setPanelSelection, panelComponentListRef } = props,
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord } = workspaceHandler,
@@ -80,6 +80,8 @@ const WorkspaceToolbar = (props) => {
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
         toast = useToast({duration:4000}) 
+
+    // console.log('running Toolbar_workspace: panelSelection', panelSelection)
 
     useEffect(()=>{
 
@@ -298,6 +300,8 @@ const WorkspaceToolbar = (props) => {
         />}
         {panelReorderDialogState && <PanelReorderDialog 
             setPanelReorderDialogState = {setPanelReorderDialogState} 
+            panelComponentListRef = {panelComponentListRef}
+            setPanelSelection = {setPanelSelection}
         />}
     </Box>
 }

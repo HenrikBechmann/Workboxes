@@ -245,7 +245,7 @@ const Workspace = (props) => {
                 <Box borderTop = '1px solid lightgray' width = '100%' >
                     <ToolbarFrame>
                         {(workspaceState != 'setup') && <WorkspaceToolbar panelSelection = {panelSelection} 
-                            setPanelSelection = {setPanelSelection}/>}
+                            setPanelSelection = {setPanelSelection} panelComponentListRef = {panelComponentListRef}/>}
                     </ToolbarFrame>
                 </Box>
             </GridItem>
