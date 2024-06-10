@@ -18,7 +18,7 @@ import {
     Grid, GridItem 
 } from '@chakra-ui/react'
 
-import Scroller from 'react-infinite-grid-scroller'
+import {RigsDnd as Scroller} from 'react-infinite-grid-scroller'
 
 import '../../system/panel-variables.css'
 
@@ -254,7 +254,10 @@ const Workspace = (props) => {
 
     // the scroller enables scrolling components throughout TODO s/b a provider
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
-        <Scroller layout = 'static' staticComponent = {workspaceComponent}></Scroller>
+        <Scroller 
+            layout = 'static' 
+            staticComponent = {workspaceComponent} 
+            dndOptions = {{accept:['panel']}} />
     </Box>
 } 
 

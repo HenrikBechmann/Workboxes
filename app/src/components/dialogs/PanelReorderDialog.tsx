@@ -1,7 +1,7 @@
 // PanelReorderDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, useMemo} from 'react'
 
 import {
     Button, Text, Box,
@@ -16,6 +16,23 @@ import Scroller from 'react-infinite-grid-scroller'
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
 import { isMobile } from '../../index'
+
+const PanelListItem = (props) => {
+    const { panelProfile, scrollerContext } = props
+
+    const isDnd = scrollerContext?.scroller.current.dndEnabled
+
+    const float = useMemo(() => {
+      return <div 
+        style = {{float:'left', height: '28px', width:'34px'}} 
+        data-type = 'dnd-float'
+      />
+    },[])
+
+    return <>{isDnd && float}<div style= {{borderTop:'1px solid goldenrod', height:'100%'}}>
+                {panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
+            </div></>
+}
 
 const PanelReorderDialog = (props) => {
 
@@ -49,19 +66,17 @@ const PanelReorderDialog = (props) => {
 
     const getItemPack = (index, itemID, context) => {
 
+        console.log('context', context)
+
         const panelProfile = panelRecords[index].profile
         return {
-            component:<div style= {{borderTop:'1px solid goldenrod', height:'100%'}}>
-                {panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
-            </div>,
-            profile:{id:panelProfile.panel.id, name:panelProfile.panel.name}
+            component:<PanelListItem panelProfile = {panelProfile} scrollerContext = {null}/>,
+            profile:{id:panelProfile.panel.id, name:panelProfile.panel.name, index},
+            dndOptions:{type:'panel', dragText:panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
         }
 
     }
 
-                        // <Text>
-                        //     Drag and drop the panels to re-order them.
-                        // </Text>
     return (<>
         <AlertDialog
             isOpen={true}
@@ -77,6 +92,7 @@ const PanelReorderDialog = (props) => {
                     <AlertDialogBody fontSize = 'sm' height = '100%'>
                         <Box position = 'relative' height = '100%' border = '1px solid silver'>
                         <Scroller 
+                            dndOptions = {{accept:['panel']}}
                             cellHeight = { 26 }
                             cellWidth = { 250 }
                             padding = {10}
