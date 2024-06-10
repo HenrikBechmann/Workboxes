@@ -632,7 +632,7 @@ const Workpanel = (props:any) => {
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
             {panelState != 'setup' && windowsList}
             {(panelState != 'setup' && windowCount === 0) && 
-                <Box style = {panelMessageStyles} >Tap here to load the domain workbox for this panel</Box>
+                <Box style = {panelMessageStyles} >Tap here to load the default workbox for this panel</Box>
             }
             {children}
         </Box>

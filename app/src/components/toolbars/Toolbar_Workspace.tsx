@@ -271,8 +271,8 @@ const WorkspaceToolbar = (props) => {
             memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'your personal workbox'/>}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
+        {false && <><ToolbarVerticalDivider />
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/></>}
         &nbsp; &nbsp;
         {panelRenameDialogState && <PanelRenameDialog 
             setPanelRenameDialogState = {setPanelRenameDialogState} 

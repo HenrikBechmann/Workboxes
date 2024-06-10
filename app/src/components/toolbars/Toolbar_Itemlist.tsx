@@ -110,7 +110,7 @@ const ItemlistToolbar = (props) => {
         <ToolbarVerticalDivider />
         <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
         <LearnIcon tooltip = 'Explain this toolbar'/>
-        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
+        {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}
 
     </Box>
 }

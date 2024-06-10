@@ -339,9 +339,9 @@ const StandardToolbar = (props) => {
             </>
         }
         <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
+        {false && <><ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} 
-            caption = 'hide' tooltip = 'hide toolbar'/>
+            caption = 'hide' tooltip = 'hide toolbar'/></>}
         <span>&nbsp;&nbsp;</span>
         {workspaceWriteDialogState.open && <WorkspaceWriteDialog 
             workspaceWriteDialogState = {workspaceWriteDialogState} setWorkspaceWriteDialogState = {setWorkspaceWriteDialogState}/>}

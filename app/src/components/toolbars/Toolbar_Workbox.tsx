@@ -188,8 +188,8 @@ const WorkboxToolbar = (props) => {
         <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>
+        {false && (<><ToolbarVerticalDivider />
+        <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/></>)}
         <span>&nbsp;&nbsp;</span>
     </Box>
 }

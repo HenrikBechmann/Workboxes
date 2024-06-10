@@ -105,7 +105,7 @@ const WorkspaceSaveDialog = (props) => {
                             the same workspace. Automatic saves in that case can clobber each others' configuration settings. 
                         </Text>
                         <Text borderTop = '1px solid silver'  borderBottom = '1px solid silver'>
-                            Best advice: if your're going to use multiple browser tabs, use different workspaces in different tabs.
+                            Best advice: if you're going to use multiple browser tabs, use different workspaces in different tabs.
                         </Text>
                         {(workspaceHandler.settings.mode == 'manual') && <Text>
                             <span style = {{fontWeight:'bold'}}>Reload...</span> to discard changes and start over.
