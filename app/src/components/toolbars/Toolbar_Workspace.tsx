@@ -56,19 +56,14 @@ let panelMenuIteration = 0
 const WorkspaceToolbar = (props) => {
 
     const 
+        // panel context
         { panelSelection, setPanelSelection, panelComponentListRef } = props,
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { workspaceRecord } = workspaceHandler,
-
-        { panelCount } = workspaceHandler,
-        panelMenuRef = useRef(null),
-        { panelRecords } = workspaceHandler,
+        { workspaceRecord, panelRecords, panelCount, panelDomainRecord, panelMemberRecord } = workspaceHandler,
         panelRecord = panelRecords[panelSelection.index],
-        // panelSelectionData = {id:panelRecord?.profile.panel.id, name: panelRecord?.profile.panel.name},
-        panelDomainRecord = workspaceHandler.panelDomainRecord,
-        panelMemberRecord = workspaceHandler.panelMemberRecord,
 
+        // dialog invocations
         [panelRenameDialogState, setPanelRenameDialogState] = useState(false),
         [panelResetDialogState, setPanelResetDialogState] = useState(false),
         [panelDuplicateAsDialogState, setPanelDuplicateAsDialogState] = useState(false),
@@ -77,8 +72,11 @@ const WorkspaceToolbar = (props) => {
         [panelSetDefaultDialogState, setPanelSetDefaultDialogState] = useState(false),
         [panelReorderDialogState, setPanelReorderDialogState] = useState(false),
 
+        // navigation
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
+
+        // messaging
         toast = useToast({duration:4000}) 
 
     // console.log('running Toolbar_workspace: panelSelection', panelSelection)
@@ -197,7 +195,7 @@ const WorkspaceToolbar = (props) => {
 
         // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
         return <MenuList 
-                lineHeight = '1em' fontSize = 'small' ref = {panelMenuRef}
+                lineHeight = '1em' fontSize = 'small'
                 maxHeight = 'var(--wb_panel_display_height)' overflowY = 'scroll'
             >
             <MenuGroup title = 'Panel menu'>

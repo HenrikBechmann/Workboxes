@@ -12,7 +12,7 @@ import systemDomainIcon from '../../../assets/pallet.png'
 
 const DomainControl = (props) => {
 
-    const { domainTitle, domainIcon, caption } = props
+    const { domainTitle, domainIcon, caption, response } = props
 
     const workboxItemIconStyles = {
         width:'24px', 
@@ -23,7 +23,14 @@ const DomainControl = (props) => {
 
     const localCaption = caption || 'domain'
 
-   return <Box display = 'flex' flexDirection = 'column' justifyContent = 'center' alignContent = 'center'>
+   return <Box 
+        cursor = 'pointer' 
+        onClick = {response} 
+        display = 'flex' 
+        flexDirection = 'column' 
+        justifyContent = 'center' 
+        alignContent = 'center'
+    >
         <Box display = 'flex' flexWrap = 'nowrap'>
             <span>&nbsp;&nbsp;</span>
             <img style = {workboxItemIconStyles} src = {systemDomainIcon} />
