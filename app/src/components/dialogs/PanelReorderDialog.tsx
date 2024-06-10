@@ -10,11 +10,8 @@ import {
 } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
-
 import Scroller from 'react-infinite-grid-scroller'
-
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
-
 import { isMobile } from '../../index'
 
 const PanelListItem = (props) => {
@@ -43,7 +40,8 @@ const PanelReorderDialog = (props) => {
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        panelOrderChangesRef = useRef(new Map())
 
     const doClose = () => {
         setPanelReorderDialogState(false)
@@ -52,6 +50,8 @@ const PanelReorderDialog = (props) => {
     const dragDropTransferCallback = (fromScrollerID, fromIndexID, toScrollerID, toIndexID, context) => {
         console.log('fromScrollerID, fromIndexID, toScrollerID, toIndexID, context\n', 
             fromScrollerID, fromIndexID, toScrollerID, toIndexID, context)
+        panelOrderChangesRef.current.set(context.item.profile.id, {fromScrollerID, fromIndexID, toScrollerID, toIndexID, context})
+        console.log('panelOrderChangesRef.current',panelOrderChangesRef.current)
     }
 
 
