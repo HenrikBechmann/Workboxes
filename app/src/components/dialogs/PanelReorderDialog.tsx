@@ -49,6 +49,12 @@ const PanelReorderDialog = (props) => {
         setPanelReorderDialogState(false)
     }
 
+    const dragDropTransferCallback = (fromScrollerID, fromIndexID, toScrollerID, toIndexID, context) => {
+        console.log('fromScrollerID, fromIndexID, toScrollerID, toIndexID, context\n', 
+            fromScrollerID, fromIndexID, toScrollerID, toIndexID, context)
+    }
+
+
     async function doPanelReorder () {
 
         // const result = await workspaceHandler.panelReset(workspaceHandler.panelSelection)
@@ -65,8 +71,6 @@ const PanelReorderDialog = (props) => {
     }
 
     const getItemPack = (index, itemID, context) => {
-
-        console.log('context', context)
 
         const panelProfile = panelRecords[index].profile
         return {
@@ -92,7 +96,9 @@ const PanelReorderDialog = (props) => {
                     <AlertDialogBody fontSize = 'sm' height = '100%'>
                         <Box position = 'relative' height = '100%' border = '1px solid silver'>
                         <Scroller 
+                            callbacks = {{dragDropTransferCallback}}
                             dndOptions = {{accept:['panel']}}
+                            profile = {{description:'re-order panels scroller'}}
                             cellHeight = { 26 }
                             cellWidth = { 250 }
                             padding = {10}
