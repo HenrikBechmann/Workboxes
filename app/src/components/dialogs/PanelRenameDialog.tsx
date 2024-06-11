@@ -23,7 +23,7 @@ import {
 const PanelRenameDialog = (props) => {
 
     const 
-        { setPanelRenameDialogState, setPanelSelection } = props,
+        { setPanelRenameDialogState } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -37,7 +37,7 @@ const PanelRenameDialog = (props) => {
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
-        {panelSelection, panelRecords } = workspaceHandler,
+        {panelSelection, setPanelSelection, panelRecords } = workspaceHandler,
         panelName = panelRecords[panelSelection.index].profile.panel.name
 
     useEffect(()=>{

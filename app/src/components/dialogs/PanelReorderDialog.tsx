@@ -34,9 +34,9 @@ const PanelListItem = (props) => {
 const PanelReorderDialog = (props) => {
 
     const
-        { setPanelReorderDialogState, panelComponentListRef, setPanelSelection } = props,
+        { setPanelReorderDialogState, panelComponentListRef } = props,
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { panelCount, panelRecords, panelSelection } = workspaceHandler,
+        { panelCount, panelRecords, panelSelection, setPanelSelection } = workspaceHandler,
         cancelRef = useRef(null),
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000}),

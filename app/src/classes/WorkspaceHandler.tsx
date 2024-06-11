@@ -195,7 +195,6 @@ class WorkspaceHandler {
         deletePanels.forEach((item) => {
             changedRecords.deletepanels.add(item)
         })
-        // this.panelSelection = defaultSelection
         this.panelCount = 1
 
         settings.changed = true

@@ -23,7 +23,7 @@ import {
 const PanelDuplicateAsDialog = (props) => {
 
     const 
-        { setPanelDuplicateAsDialogState, setPanelSelection } = props,
+        { setPanelDuplicateAsDialogState } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -33,7 +33,7 @@ const PanelDuplicateAsDialog = (props) => {
             name: false,
         }),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { panelSelection, panelRecords } = workspaceHandler,
+        { panelSelection, setPanelSelection, panelRecords } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),

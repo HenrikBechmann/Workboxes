@@ -57,10 +57,14 @@ const WorkspaceToolbar = (props) => {
 
     const 
         // panel context
-        { panelSelection, setPanelSelection, panelComponentListRef } = props,
+        { panelComponentListRef } = props, // used by panelReorderListDialog
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { workspaceRecord, panelRecords, panelCount, panelDomainRecord, panelMemberRecord } = workspaceHandler,
+        { workspaceRecord, 
+            panelRecords, panelCount, 
+            panelDomainRecord, panelMemberRecord,
+            panelSelection, setPanelSelection 
+        } = workspaceHandler,
         panelRecord = panelRecords[panelSelection.index],
 
         // dialog invocations
@@ -79,8 +83,9 @@ const WorkspaceToolbar = (props) => {
         // messaging
         toast = useToast({duration:4000}) 
 
-    // console.log('running Toolbar_workspace: panelSelection', panelSelection)
+   // ----------------------[ state changes ]---------------------
 
+    // update previous/next
     useEffect(()=>{
 
         const navState = {
@@ -91,100 +96,16 @@ const WorkspaceToolbar = (props) => {
 
     },[panelCount, panelSelection])
 
-    async function getPanelDomainContext(panelSelection) {
-
-        const result = await workspaceHandler.getPanelDomainContext(panelSelection, userRecords.user)
-        if (!result.success) {
-            toast({description:'unable to collect domain context'})
-        }
-        if (result.error) {
-            navigate('/error')
-            return
-        }
-        dispatchWorkspaceHandler('getpanelcontext')
-    }
-
+    // update domain context
     useEffect(()=>{
 
-        // console.log('calling getPanelDomainContext with', panelSelection)
         if (panelSelection.id) {
             getPanelDomainContext(panelSelection)
         }
 
     },[panelSelection])
 
-    const renamePanel = () => {
-        setPanelRenameDialogState(true)
-    }
-
-    const deletePanel = () => {
-        setPanelDeleteDialogState(true)
-    }
-
-    const resetPanel = () => {
-        setPanelResetDialogState(true)
-    }
-
-    const duplicateAsPanel = () => {
-        setPanelDuplicateAsDialogState(true)
-    }
-
-    const createPanel = () => {
-        setPanelCreateDialogState(true)
-    }
-
-    const reorderPanels = () => {
-        setPanelReorderDialogState(true)
-    }
-
-    const setDefaultPanel = () => {
-        setPanelSetDefaultDialogState(true)
-    }
-
-    const changePanelSelection = (panelID) => {
-
-        let index, panelRecord
-        for (index = 0; index < panelRecords.length; index ++) {
-            panelRecord = panelRecords[index]
-            if (panelRecord.profile.panel.id == panelID) {
-                break
-            }
-        }
-
-        setPanelSelection({
-            index,
-            id: panelRecord.profile.panel.id,
-            name: panelRecord.profile.panel.name
-        })
-
-    }
-
-    const nextPanel = () => {
-        if (panelSelection.index < (panelCount -1)) {
-            const
-                index = panelSelection.index + 1,
-                panelRecord = panelRecords[index]
-            setPanelSelection({
-                index,
-                id: panelRecord.profile.panel.id,
-                name: panelRecord.profile.panel.name
-            })
-        }
-    }
-
-    const previousPanel = () => {
-        if (panelSelection.index > 0) {
-            const
-                index = panelSelection.index - 1,
-                panelRecord = panelRecords[index]
-            setPanelSelection({
-                index,
-                id: panelRecord.profile.panel.id,
-                name: panelRecord.profile.panel.name
-            })
-        }
-    }
-
+    // update panel selection menu
     const panelmenuList = useMemo(() => {
 
         // if (workspacesMenu.length === 0) return null
@@ -233,7 +154,94 @@ const WorkspaceToolbar = (props) => {
     //  panelRecords[panelSelection] guaranteed to be updated for change
     },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
 
-    // console.log('workspaceHandler', workspaceHandler)
+    // -----------------------[ operations ]------------------------
+
+    const changePanelSelection = (panelID) => {
+
+        let index, panelRecord
+        for (index = 0; index < panelRecords.length; index ++) {
+            panelRecord = panelRecords[index]
+            if (panelRecord.profile.panel.id == panelID) {
+                break
+            }
+        }
+
+        setPanelSelection({
+            index,
+            id: panelRecord.profile.panel.id,
+            name: panelRecord.profile.panel.name
+        })
+
+    }
+
+    const nextPanel = () => {
+        if (panelSelection.index < (panelCount -1)) {
+            const
+                index = panelSelection.index + 1,
+                panelRecord = panelRecords[index]
+            setPanelSelection({
+                index,
+                id: panelRecord.profile.panel.id,
+                name: panelRecord.profile.panel.name
+            })
+        }
+    }
+
+    const previousPanel = () => {
+        if (panelSelection.index > 0) {
+            const
+                index = panelSelection.index - 1,
+                panelRecord = panelRecords[index]
+            setPanelSelection({
+                index,
+                id: panelRecord.profile.panel.id,
+                name: panelRecord.profile.panel.name
+            })
+        }
+    }
+
+    async function getPanelDomainContext(panelSelection) {
+
+        const result = await workspaceHandler.getPanelDomainContext(panelSelection, userRecords.user)
+        if (!result.success) {
+            toast({description:'unable to collect domain context'})
+        }
+        if (result.error) {
+            navigate('/error')
+            return
+        }
+        dispatchWorkspaceHandler('getpanelcontext')
+    }
+
+    // ------------------------[ dialog calls ]-----------------------
+
+    const renamePanel = () => {
+        setPanelRenameDialogState(true)
+    }
+
+    const deletePanel = () => {
+        setPanelDeleteDialogState(true)
+    }
+
+    const resetPanel = () => {
+        setPanelResetDialogState(true)
+    }
+
+    const duplicateAsPanel = () => {
+        setPanelDuplicateAsDialogState(true)
+    }
+
+    const createPanel = () => {
+        setPanelCreateDialogState(true)
+    }
+
+    const reorderPanels = () => {
+        setPanelReorderDialogState(true)
+    }
+
+    const setDefaultPanel = () => {
+        setPanelSetDefaultDialogState(true)
+    }
 
     // render
     return <Box style = {standardToolbarStyles}>
@@ -274,32 +282,26 @@ const WorkspaceToolbar = (props) => {
         &nbsp; &nbsp;
         {panelRenameDialogState && <PanelRenameDialog 
             setPanelRenameDialogState = {setPanelRenameDialogState} 
-            setPanelSelection = {setPanelSelection}
         />}
         {panelResetDialogState && <PanelResetDialog 
             setPanelResetDialogState = {setPanelResetDialogState} 
         />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
-            setPanelSelection = {setPanelSelection}
         />}
         {panelDeleteDialogState && <PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 
             setPanelResetDialogState = {setPanelResetDialogState} 
-            setPanelSelection = {setPanelSelection}
         />}
         {panelCreateDialogState && <PanelCreateDialog 
             setPanelCreateDialogState = {setPanelCreateDialogState} 
-            setPanelSelection = {setPanelSelection}
         />}
         {panelSetDefaultDialogState && <PanelSetDefaultDialog 
             setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 
-            setPanelSelection = {setPanelSelection}
         />}
         {panelReorderDialogState && <PanelReorderDialog 
             setPanelReorderDialogState = {setPanelReorderDialogState} 
             panelComponentListRef = {panelComponentListRef}
-            setPanelSelection = {setPanelSelection}
         />}
     </Box>
 }

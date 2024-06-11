@@ -19,14 +19,14 @@ import {
 const PanelDeleteDialog = (props) => {
 
     const 
-        { setPanelDeleteDialogState, setPanelResetDialogState, setPanelSelection } = props,
+        { setPanelDeleteDialogState, setPanelResetDialogState } = props,
         cancelRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
         toast = useToast({duration:4000}),
         navigate = useNavigate(),
-        { panelSelection, panelRecords } = workspaceHandler,
+        { panelSelection, setPanelSelection, panelRecords } = workspaceHandler,
         panelRecord = panelRecords[panelSelection.index]
 
     useEffect(()=>{

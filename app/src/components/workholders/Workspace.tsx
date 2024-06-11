@@ -57,7 +57,7 @@ const Workspace = (props) => {
 
         // console.log('Workspace panelSelection', {...panelSelection})
 
-        workspaceHandler.panelSelection = panelSelection
+    workspaceHandler.panelSelection = panelSelection
 
     // ---------------------------[ state change effects ]------------------------
 
@@ -244,8 +244,9 @@ const Workspace = (props) => {
             <GridItem data-type = 'workspace-footer' area = 'footer' minWidth = '0'>
                 <Box borderTop = '1px solid lightgray' width = '100%' >
                     <ToolbarFrame>
-                        {(workspaceState != 'setup') && <WorkspaceToolbar panelSelection = {panelSelection} 
-                            setPanelSelection = {setPanelSelection} panelComponentListRef = {panelComponentListRef}/>}
+                        {(workspaceState != 'setup') && <WorkspaceToolbar  
+                            panelComponentListRef = {panelComponentListRef}
+                        />}
                     </ToolbarFrame>
                 </Box>
             </GridItem>

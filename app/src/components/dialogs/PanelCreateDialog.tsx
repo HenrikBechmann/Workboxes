@@ -24,7 +24,7 @@ import {
 const PanelCreateDialog = (props) => {
 
     const 
-        { setPanelCreateDialogState, setPanelSelection } = props,
+        { setPanelCreateDialogState } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
@@ -38,7 +38,7 @@ const PanelCreateDialog = (props) => {
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
         toast = useToast({duration:4000}),
-        {panelSelection, panelRecords } = workspaceHandler,
+        {panelSelection, setPanelSelection, panelRecords } = workspaceHandler,
         panelName = panelRecords[panelSelection.index].profile.panel.name,
         [domainList, setDomainList] = useState([]),
         [selectedDomain, setSelectedDomain] = useState(''),
