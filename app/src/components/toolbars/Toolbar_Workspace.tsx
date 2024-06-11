@@ -105,55 +105,6 @@ const WorkspaceToolbar = (props) => {
 
     },[panelSelection])
 
-    // update panel selection menu
-    const panelmenuList = useMemo(() => {
-
-        // if (workspacesMenu.length === 0) return null
-        // const defaultValue = panelSelectionData.id
-        const defaultValue = panelSelection.id
-
-        // console.log('defaultValue in useMemo for panelmenulist', defaultValue)
-
-        // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
-        return <MenuList 
-                lineHeight = '1em' fontSize = 'small'
-                maxHeight = 'var(--wb_panel_display_height)' overflowY = 'scroll'
-            >
-            <MenuGroup title = 'Panel menu'>
-            <MenuItem onClick = {renamePanel} >Rename</MenuItem>
-            <MenuItem onClick = {resetPanel}>Reset</MenuItem>
-            <MenuItem onClick = {deletePanel} >Delete</MenuItem>
-            <MenuItem onClick = {duplicateAsPanel} >Duplicate as...</MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-            <MenuItem onClick = {createPanel} >Add a new panel</MenuItem>
-            <MenuItem onClick = {setDefaultPanel}>Set default panel</MenuItem>
-            <MenuItem onClick = {reorderPanels} >Re-order the panels</MenuItem>
-            <MenuDivider />
-            <MenuOptionGroup 
-                key = {panelMenuIteration++} 
-                defaultValue = {defaultValue} 
-                onChange = {changePanelSelection} 
-                fontSize = 'small' 
-                fontStyle = 'italic' 
-                title = 'Select a panel:'
-            >
-                {
-                    panelRecords.map((record) => {
-                        return <MenuItemOption 
-                            key = {record.profile.panel.id} 
-                            data-name = {record.profile.panel.name} 
-                            value = {record.profile.panel.id}>
-                            {record.profile.panel.name + (record.profile.flags.is_default? '*':'')}
-                        </MenuItemOption>
-                    })
-                }
-            </MenuOptionGroup>
-        </MenuList>
-
-    //  panelRecords[panelSelection] guaranteed to be updated for change
-    },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
-
     // -----------------------[ operations ]------------------------
 
     const changePanelSelection = (panelID) => {
@@ -242,6 +193,55 @@ const WorkspaceToolbar = (props) => {
     const setDefaultPanel = () => {
         setPanelSetDefaultDialogState(true)
     }
+
+    // update panel selection menu
+    const panelmenuList = useMemo(() => {
+
+        // if (workspacesMenu.length === 0) return null
+        // const defaultValue = panelSelectionData.id
+        const defaultValue = panelSelection.id
+
+        // console.log('defaultValue in useMemo for panelmenulist', defaultValue)
+
+        // key is set for MenuOptionGroup to brute force sync with changed MenuItemOption children set
+        return <MenuList 
+                lineHeight = '1em' fontSize = 'small'
+                maxHeight = 'var(--wb_panel_display_height)' overflowY = 'scroll'
+            >
+            <MenuGroup title = 'Panel menu'>
+            <MenuItem onClick = {renamePanel} >Rename</MenuItem>
+            <MenuItem onClick = {resetPanel}>Reset</MenuItem>
+            <MenuItem onClick = {deletePanel} >Delete</MenuItem>
+            <MenuItem onClick = {duplicateAsPanel} >Duplicate as...</MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuItem onClick = {createPanel} >Add a new panel</MenuItem>
+            <MenuItem onClick = {setDefaultPanel}>Set default panel</MenuItem>
+            <MenuItem onClick = {reorderPanels} >Re-order the panels</MenuItem>
+            <MenuDivider />
+            <MenuOptionGroup 
+                key = {panelMenuIteration++} 
+                defaultValue = {defaultValue} 
+                onChange = {changePanelSelection} 
+                fontSize = 'small' 
+                fontStyle = 'italic' 
+                title = 'Select a panel:'
+            >
+                {
+                    panelRecords.map((record) => {
+                        return <MenuItemOption 
+                            key = {record.profile.panel.id} 
+                            data-name = {record.profile.panel.name} 
+                            value = {record.profile.panel.id}>
+                            {record.profile.panel.name + (record.profile.flags.is_default? '*':'')}
+                        </MenuItemOption>
+                    })
+                }
+            </MenuOptionGroup>
+        </MenuList>
+
+    //  panelRecords[panelSelection] guaranteed to be updated for change
+    },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
 
     // render
     return <Box style = {standardToolbarStyles}>

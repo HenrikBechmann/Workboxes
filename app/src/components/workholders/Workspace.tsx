@@ -174,7 +174,6 @@ const Workspace = (props) => {
             panelComponentListRef.current.push(
                 <Workpanel 
                     key = {panelRecord.profile.panel.id} 
-                    startingWindowsSpecsList = {null} 
                     workboxMapRef = {workboxMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
                     panelSelector = {panelSelector}

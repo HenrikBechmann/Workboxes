@@ -40,14 +40,14 @@ const Workpanel = (props:any) => {
 
     const 
         // windows setup
-        { startingWindowsSpecsList:startingList, 
-            children, 
+        {   children, 
             workboxMapRef, 
             workboxHandlerMapRef, 
             panelSelector,
         } = props,
         [workspaceHandler] = useWorkspaceHandler(),
         panelRecord = workspaceHandler.panelRecords[panelSelector.index],
+        { windows } = panelRecord,
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
         panelStateRef = useRef(null),
@@ -60,12 +60,11 @@ const Workpanel = (props:any) => {
         windowsMinimizedRef = useRef(null),
 
         // track zOrder scope for assignment
-        highestZOrderRef = useRef(0),
-        startingWindowsSpecsList = startingList?startingList:[]
+        highestZOrderRef = useRef(0)
 
-        panelStateRef.current = panelState
+    panelStateRef.current = panelState
 
-    const startingWindowsSpecsListRef = useRef(startingWindowsSpecsList)
+    const startingWindowsSpecsListRef = useRef(windows)
 
     // initialize windows windowRecord map, component list, and minimized list; set maximized window if exists
     useEffect(()=>{
@@ -79,7 +78,7 @@ const Workpanel = (props:any) => {
 
         const startingWindowsSpecs = startingWindowsSpecsListRef.current
 
-        for (const startingspecs of startingWindowsSpecsList) {
+        for (const startingspecs of startingWindowsSpecsListRef.current) {
 
             // TODO: anticipate possible transformation
             const specs = {
@@ -115,7 +114,7 @@ const Workpanel = (props:any) => {
             zOrder, stackOrder
 
         // get zOrder and stackOrder values; if minimized, add to set
-        if (windowRecord.window.view !== 'minimized') { // normalized or maximized
+        if (windowRecord.window.view !== 'minimized') { // minimized, normalized or maximized
 
             zOrder = ++highestZOrderRef.current
 
