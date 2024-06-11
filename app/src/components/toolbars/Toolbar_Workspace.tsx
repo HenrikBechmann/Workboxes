@@ -64,7 +64,8 @@ const WorkspaceToolbar = (props) => {
             workspaceRecord, 
             panelRecords, panelCount, 
             panelDomainRecord, panelMemberRecord,
-            panelSelection, setPanelSelection 
+            panelSelection, setPanelSelection,
+            panelControlMap,
         } = workspaceHandler,
         panelRecord = panelRecords[panelSelection.index],
 
@@ -196,11 +197,11 @@ const WorkspaceToolbar = (props) => {
     }
 
     const showDomainWorkbox = () => {
-
+        panelControlMap.get(panelSelection.id).functions.showDomainWorkbox()
     } 
 
     const showMemberWorkbox = () => {
-        
+        panelControlMap.get(panelSelection.id).functions.showMemberWorkbox()
     } 
 
     // update panel selection menu

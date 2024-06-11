@@ -79,6 +79,12 @@ const Workpanel = (props:any) => {
         windowsMapRef.current = windowsMap
         windowsMinimizedRef.current = windowsMinimized
 
+        const panelControlRecord = panelControlMap.get(panelID)
+        panelControlRecord.functions = {
+            showDomainWorkbox,
+            showMemberWorkbox,
+        }
+
         const startingWindowsSpecs = startingWindowsSpecsListRef.current
 
         for (const startingspecs of startingWindowsSpecsListRef.current) {
@@ -94,6 +100,14 @@ const Workpanel = (props:any) => {
         }
 
     },[])
+
+    const showDomainWorkbox = () => {
+        alert('show domain workbox ' + panelSelector.name)
+    }
+
+    const showMemberWorkbox = () => {
+        alert('show member workbox ' + panelSelector.name)
+    }
 
     // called by initialization and duplicate window (so far)
     const addWindow = (specs) => {
