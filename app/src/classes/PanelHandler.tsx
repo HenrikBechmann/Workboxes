@@ -169,7 +169,6 @@ class PanelHandler {
             }
             this.usage.write(writes)
         } else { // no panels found - create a panel
-        // if (panelRecords.length === 0) { 
             const newPanelDocRef = doc(dbPanelCollection)
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
