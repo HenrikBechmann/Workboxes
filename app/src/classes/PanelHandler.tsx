@@ -108,8 +108,10 @@ class PanelHandler {
             notice: null,
         }
 
-        const panelRecords = this.workspaceHandler.panelRecords
+        const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
+        panelControlMap.clear()
+
         const 
             workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
             dbPanelCollection = 
@@ -144,14 +146,31 @@ class PanelHandler {
             let writes = 0
             for (let index = 0; index < panelRecords.length; index++) {
                 const data = panelRecords[index]
-                data.profile.display_order = index // assert contiguous order
+                let changed = false
+                if (data.profile.display_order !== index) {
+                    changed = true
+                    data.profile.display_order = index // assert contiguous order
+                }
                 const updatedData = updateDocumentSchema('panels','standard',data)
-                if (!Object.is(data, updatedData)) {
+                if (!Object.is(data, updatedData) || changed) {
                     const dbDocRef = doc(dbPanelCollection, updatedData.profile.panel.id)
                     batch.set(dbDocRef, updatedData)
                     panelRecords[index] = updatedData
                     writes++
                 }
+                const panelRecord = panelRecords[index]
+                const panelRecordID = panelRecord.profile.panel.id
+                const panelControlData = {
+                    selector:{
+                        index,
+                        id:panelRecordID,
+                        name:panelRecord.profile.panel.name
+                    },
+                    functions:{
+
+                    }
+                }
+                panelControlMap.set(panelRecordID, panelControlData)
             }
 
             try {
@@ -236,9 +255,10 @@ class PanelHandler {
 
         panelRecord.profile.panel.name = newname
         workspaceHandler.workspaceRecord.panel.name = newname
-        // panelSelection.name = newname
+        const panelID = panelRecord.profile.panel.id
+        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
 
-        workspaceHandler.changedRecords.setpanels.add(panelRecord.profile.panel.id)
+        workspaceHandler.changedRecords.setpanels.add(panelID)
         workspaceHandler.settings.changed = true
 
         if (workspaceHandler.settings.mode == 'automatic') {
@@ -293,13 +313,19 @@ class PanelHandler {
         const 
             newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelection.index]),
             oldPanelName = newPanelRecord.profile.panel.name,
-            newPanelOrder = workspaceHandler.panelRecords.length - 1,
+            oldPanelID = newPanelRecord.profile.panel.id,
+            newPanelControlRecord = _cloneDeep(workspaceHandler.panelControlMap.get(oldPanelID)),
+            newPanelIndex = workspaceHandler.panelRecords.length - 1,
             { profile } = newPanelRecord
 
-        profile.display_order = workspaceHandler.panelCount + 1
+        newPanelControlRecord.selector.index = newPanelIndex
+        newPanelControlRecord.selector.name = newname
+        newPanelControlRecord.functions = {}
+        workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
+
         profile.panel.id = newPanelID
         profile.panel.name = newname
-        profile.display_order = newPanelOrder
+        profile.display_order = newPanelIndex
         profile.owner = {id:this.userID, name: this.userName}
         profile.commits = {
           created_by: {
@@ -346,9 +372,11 @@ class PanelHandler {
 
         const 
             { workspaceHandler } = this,
-            { panelRecords, changedRecords } = workspaceHandler
+            { panelRecords, changedRecords, panelControlMap } = workspaceHandler
 
         panelRecords.splice(panelSelection.index, 1)
+        panelControlMap.delete(panelSelection.id)
+
         workspaceHandler.panelCount--
 
         for (let index = panelSelection.index + 1; index < panelRecords.length; index ++) {
@@ -467,7 +495,7 @@ class PanelHandler {
         }
         const 
             { workspaceHandler } = this,
-            { panelRecords } = workspaceHandler,
+            { panelRecords, panelControlMap } = workspaceHandler,
             panelCollection = collection(
                 this.db, 'users',this.userID, 
                 'workspaces', workspaceHandler.workspaceRecord.profile.workspace.id,
@@ -506,7 +534,16 @@ class PanelHandler {
             }
         )
 
+        const panelControlRecord = {
+            selector:{
+                id: newPanelDocRef.id,
+                name: newname,
+                index: workspaceHandler.panelCount,
+            },
+            functions:{}
+        }
         panelRecords.push(newPanelData)
+        panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
         workspaceHandler.settings.changed = true
@@ -572,11 +609,13 @@ class PanelHandler {
             notice: null,
         }
 
-        const { panelRecords, changedRecords, settings } = this.workspaceHandler
+        const { panelRecords, changedRecords, settings, panelControlMap } = this.workspaceHandler
 
         for (let index = 0; index < newOrderList.length; index++) {
             const changeData = newOrderList[index]
             const panelRecord = panelRecords[changeData.index]
+            const panelID = panelRecord.profile.panel.id
+            panelControlMap.get(panelID).selector.index = index
             if (panelRecord.profile.display_order !== index) {
                 panelRecord.profile.display_order = index
                 changedRecords.setpanels.add(panelRecord.profile.panel.id)

@@ -160,8 +160,9 @@ const Workspace = (props) => {
         for (let index = 0; index < panelRecords.length; index++) {
 
             const panelRecord = panelRecords[index]
+            const panelID = panelRecord.profile.panel.id
 
-            const panelSelector = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
+            // const panelSelector = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
 
             if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
@@ -170,13 +171,12 @@ const Workspace = (props) => {
             if (panelRecord.profile.flags.is_default) {
                 defaultIndex = index
             }
-
             panelComponentListRef.current.push(
                 <Workpanel 
                     key = {panelRecord.profile.panel.id} 
                     workboxMapRef = {workboxMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
-                    panelSelector = {panelSelector}
+                    panelID = {panelID}
                 />
             )
 

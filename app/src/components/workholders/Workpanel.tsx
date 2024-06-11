@@ -43,10 +43,13 @@ const Workpanel = (props:any) => {
         {   children, 
             workboxMapRef, 
             workboxHandlerMapRef, 
-            panelSelector,
+            panelID,
         } = props,
         [workspaceHandler] = useWorkspaceHandler(),
-        panelRecord = workspaceHandler.panelRecords[panelSelector.index],
+        {panelRecords, panelControlMap} = workspaceHandler,
+        panelControl = panelControlMap.get(panelID),
+        panelSelector = panelControl.selector,
+        panelRecord = panelRecords[panelSelector.index],
         { windows } = panelRecord,
         // panel state; panel element
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
