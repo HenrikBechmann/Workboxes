@@ -191,7 +191,7 @@ const Workwindow = (props) => {
         panelFrameElementRef.current = windowElementRef.current.closest('#wb-panelframe')
         titlebarElementRef.current = windowElementRef.current.querySelector('#wb-titlebar')
 
-        const element = windowElementRef.current
+        const windowElement = windowElementRef.current
 
         const onFocus = (event) => {
             titleElementRef.current.style.backgroundColor = 'lightskyblue'
@@ -202,12 +202,12 @@ const Workwindow = (props) => {
             titleElementRef.current && (titleElementRef.current.style.backgroundColor = 'gainsboro')
         }
 
-        element.addEventListener('focus',onFocus)
-        element.addEventListener('blur',onBlur)
+        windowElement.addEventListener('focus',onFocus)
+        windowElement.addEventListener('blur',onBlur)
 
         return () => {
-            element.removeEventListener('focus', onFocus)
-            element.removeEventListener('blur', onBlur)
+            windowElement.removeEventListener('focus', onFocus)
+            windowElement.removeEventListener('blur', onBlur)
         }
 
     },[])
@@ -247,7 +247,7 @@ const Workwindow = (props) => {
 
         clearTimeout(transitionTimeoutRef.current)
 
-        const element = windowElementRef.current
+        const windowElement = windowElementRef.current
         const normalizedConfig = normalizedWindowConfigRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
@@ -256,10 +256,10 @@ const Workwindow = (props) => {
 
             if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted; maybe stackorder change
                 if (viewDeclaration.view == 'minimized') { // adjust top position
-                    element.style.transition = 'top 0.3s'
-                    element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    windowElement.style.transition = 'top 0.3s'
+                    windowElement.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
                     setTimeout(()=>{
-                        element.style.transition = null
+                        windowElement.style.transition = null
                     },300)
                 }
                 return // config changes aleady made
@@ -279,35 +279,35 @@ const Workwindow = (props) => {
             if (viewDeclaration.view == 'maximized') {
 
                 // set base for animation
-                element.style.transform = 'none'
+                windowElement.style.transform = 'none'
                 if (previousViewStateRef.current == 'normalized') {
 
-                    element.style.top = normalizedConfig.top + 'px'
-                    element.style.left = normalizedConfig.left + 'px'
+                    windowElement.style.top = normalizedConfig.top + 'px'
+                    windowElement.style.left = normalizedConfig.left + 'px'
 
                 }
 
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
-                    const panelElement = panelFrameElementRef.current
-                    element.style.transition = WINDOW_TRANSITION
-                    element.style.top = 0
-                    element.style.left = 0
-                    element.style.width = panelElement.offsetWidth + 'px'
-                    element.style.height = panelElement.offsetHeight + 'px'
+                    const panelFrameElement = panelFrameElementRef.current
+                    windowElement.style.transition = WINDOW_TRANSITION
+                    windowElement.style.top = 0
+                    windowElement.style.left = 0
+                    windowElement.style.width = panelFrameElement.offsetWidth + 'px'
+                    windowElement.style.height = panelFrameElement.offsetHeight + 'px'
 
                 },1)
 
                 // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
                 transitionTimeoutRef.current = setTimeout(()=>{
 
-                    element.style.transition = null
-                    element.style.top = null
-                    element.style.left = null
-                    element.style.width = null
-                    element.style.height = null
-                    element.style.inset = 0
+                    windowElement.style.transition = null
+                    windowElement.style.top = null
+                    windowElement.style.left = null
+                    windowElement.style.width = null
+                    windowElement.style.height = null
+                    windowElement.style.inset = 0
 
                     reservedWindowConfigRef.current.inprogress = false
 
@@ -324,36 +324,36 @@ const Workwindow = (props) => {
             } else { // 'minimized'
 
                 // set base for animation
-                element.style.transform = 'none'
+                windowElement.style.transform = 'none'
 
                 if (previousViewStateRef.current === 'maximized') {
 
-                    element.style.top = 0
-                    element.style.left = 0
+                    windowElement.style.top = 0
+                    windowElement.style.left = 0
 
                 } else {
 
-                    element.style.top = normalizedConfig.top + 'px'
-                    element.style.left = normalizedConfig.left + 'px'
+                    windowElement.style.top = normalizedConfig.top + 'px'
+                    windowElement.style.left = normalizedConfig.left + 'px'
 
                 }
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
-                    const panelElement = panelFrameElementRef.current
-                    element.style.transition = WINDOW_TRANSITION
-                    element.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
-                    element.style.left = 0
-                    element.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
-                    element.style.height = titlebarElementRef.current.offsetHeight + 'px'
-                    element.style.overflow = 'hidden'
+                    // const panelFrameElement = panelFrameElementRef.current
+                    windowElement.style.transition = WINDOW_TRANSITION
+                    windowElement.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    windowElement.style.left = 0
+                    windowElement.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
+                    windowElement.style.height = titlebarElementRef.current.offsetHeight + 'px'
+                    windowElement.style.overflow = 'hidden'
 
                 },1)
 
                 // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
                 transitionTimeoutRef.current = setTimeout(()=>{
 
-                    element.style.transition = null
+                    windowElement.style.transition = null
 
                     reservedWindowConfigRef.current.inprogress = false
 
@@ -373,41 +373,41 @@ const Workwindow = (props) => {
 
             if (!['maximized','minimized'].includes(reservedWindowConfig.view)) return // already normalized
 
-            const element = windowElementRef.current
+            const windowElement = windowElementRef.current
 
             // set base styles
-            const currentWidth = element.offsetWidth, currentHeight = element.offsetHeight
+            const currentWidth = windowElement.offsetWidth, currentHeight = windowElement.offsetHeight
 
             if (previousViewStateRef.current === 'maximized') {
     
-                element.style.inset = null
-                element.style.top = 0
-                element.style.left = 0
+                windowElement.style.inset = null
+                windowElement.style.top = 0
+                windowElement.style.left = 0
             }
 
-            element.style.width = currentWidth + 'px'
-            element.style.height = currentHeight + 'px'
+            windowElement.style.width = currentWidth + 'px'
+            windowElement.style.height = currentHeight + 'px'
 
             reservedWindowConfigRef.current.inprogress = true
 
             // set targets
             setTimeout(()=>{
 
-                element.style.transition = WINDOW_TRANSITION
-                element.style.top = reservedWindowConfig.top + 'px'
-                element.style.left = reservedWindowConfig.left + 'px'
-                element.style.width = reservedWindowConfig.width + 'px'
-                element.style.height = reservedWindowConfig.height + 'px'
+                windowElement.style.transition = WINDOW_TRANSITION
+                windowElement.style.top = reservedWindowConfig.top + 'px'
+                windowElement.style.left = reservedWindowConfig.left + 'px'
+                windowElement.style.width = reservedWindowConfig.width + 'px'
+                windowElement.style.height = reservedWindowConfig.height + 'px'
 
             },1)
 
             // set restored base
             transitionTimeoutRef.current = setTimeout(()=>{
 
-                element.style.transition = null
-                element.style.top = 0
-                element.style.left = 0
-                element.style.transform = `translate(${reservedWindowConfig.left}px,${reservedWindowConfig.top}px)`
+                windowElement.style.transition = null
+                windowElement.style.top = 0
+                windowElement.style.left = 0
+                windowElement.style.transform = `translate(${reservedWindowConfig.left}px,${reservedWindowConfig.top}px)`
                 isDisabledRef.current = false
 
                 const {view, inprogress, ...configData} = reservedWindowConfig

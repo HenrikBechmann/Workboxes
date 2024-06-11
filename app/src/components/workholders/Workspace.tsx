@@ -52,7 +52,7 @@ const Workspace = (props) => {
         panelComponentListRef = useRef(null), // workspace children, viewd in workpanel scroller
 
         // centralized management of workbox resources
-        workboxMapRef = useRef(null),
+        workboxComponentMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null)
 
         // console.log('Workspace panelSelection', {...panelSelection})
@@ -73,7 +73,7 @@ const Workspace = (props) => {
     // init workbox resource repositiories
     useEffect(()=>{
 
-        workboxMapRef.current = new Map()
+        workboxComponentMapRef.current = new Map()
         workboxHandlerMapRef.current = new Map()
         workspaceHandler.setPanelSelection = setPanelSelection
 
@@ -174,7 +174,7 @@ const Workspace = (props) => {
             panelComponentListRef.current.push(
                 <Workpanel 
                     key = {panelRecord.profile.panel.id} 
-                    workboxMapRef = {workboxMapRef}
+                    workboxComponentMapRef = {workboxComponentMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
                     panelID = {panelID}
                 />

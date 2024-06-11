@@ -50,7 +50,6 @@ const workboxBodyStyles = {
 const Workbox = (props) => {
     const 
         {
-            windowSessionID,
             defaultWorkboxState,
             defaultDocumentState,
             defaultItemlistState,
@@ -110,7 +109,6 @@ const Workbox = (props) => {
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
                 <WorkboxContent 
                     viewSelector = {viewSelectorContext} 
-                    windowSessionID = {windowSessionID} 
                     workboxState = {workboxState} 
                     profileData = {profileData}
                     documentData = {documentData}

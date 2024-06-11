@@ -39,7 +39,7 @@ const CentralPanel = (props) => {
     const 
         {
             children, 
-            windowSessionID,
+            // windowSessionID,
             displayConfigCode, 
             documentFrameElementRef, 
             itemlistFrameElementRef, 

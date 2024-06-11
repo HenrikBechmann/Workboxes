@@ -1,4 +1,4 @@
-// workboxGateway.tsx
+// workboxHandler.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 const defaultWorkboxState = {

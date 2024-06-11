@@ -122,12 +122,12 @@ const Metadata = (props) => {
         {
             activeDrags: 0,
         }),
-        workboxMapRef = useRef(null),
+        workboxComponentMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null)
 
     useEffect(()=>{
 
-        workboxMapRef.current = new Map()
+        workboxComponentMapRef.current = new Map()
         workboxHandlerMapRef.current = new Map()
 
     },[])
@@ -270,7 +270,7 @@ const Metadata = (props) => {
                     overflow = 'hidden'
                 >
                     {pageState != 'setup' && <Workpanel 
-                        workboxMapRef = {workboxMapRef}
+                        workboxComponentMapRef = {workboxComponentMapRef}
                         workboxHandlerMapRef = {workboxHandlerMapRef}
                         startingWindowsSpecsList = {startingWindowsSpecsList} 
                     />}
