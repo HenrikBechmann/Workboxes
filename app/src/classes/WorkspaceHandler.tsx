@@ -103,7 +103,7 @@ class WorkspaceHandler {
     setPanelSelection = null
     // set on load of all panels
     panelCount = 0 
-    panelRecordMap = new Map()
+    panelFunctionsMap = new Map()
     panelRecords = []
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null

@@ -60,7 +60,8 @@ const WorkspaceToolbar = (props) => {
         { panelComponentListRef } = props, // used by panelReorderListDialog
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { workspaceRecord, 
+        {     
+            workspaceRecord, 
             panelRecords, panelCount, 
             panelDomainRecord, panelMemberRecord,
             panelSelection, setPanelSelection 
@@ -194,6 +195,14 @@ const WorkspaceToolbar = (props) => {
         setPanelSetDefaultDialogState(true)
     }
 
+    const showDomainWorkbox = () => {
+
+    } 
+
+    const showMemberWorkbox = () => {
+        
+    } 
+
     // update panel selection menu
     const panelmenuList = useMemo(() => {
 
@@ -271,10 +280,14 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         {panelDomainRecord && <DomainControl 
             domainTitle = {panelDomainRecord.profile.domain.name} 
-            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "your personal domain workbox"/>}
+            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "your personal domain workbox"
+            response = {showDomainWorkbox}
+        />}
         {panelMemberRecord && <MemberControl
             memberTitle = {panelMemberRecord.profile.member.name} 
-            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'your personal workbox'/>}
+            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'your personal workbox'
+            response = {showMemberWorkbox}
+        />}
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'explain this toolbar' />
         {false && <><ToolbarVerticalDivider />
