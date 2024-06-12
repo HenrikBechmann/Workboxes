@@ -50,18 +50,23 @@ const workboxBodyStyles = {
 const Workbox = (props) => {
     const 
         {
-            defaultWorkboxState,
-            defaultDocumentState,
-            defaultItemlistState,
-            data,
+            settings,
+            record,
 
         } = props,
         viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
-        [workboxState, setWorkboxState] = useState({...defaultWorkboxState}),
+        [workboxState, setWorkboxState] = useState(null),
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
-        { profile:profileData, document:documentData, itembox:itemlistData } = data,
-        { itemName, itemIcon, domainName, domainIcon, typeName } = profileData
+
+        {workbox:workboxSettings, document:documentSettings, itemlist: itemlistSettings} = settings,
+
+        { profile, document, itemlist } = record,
+        { name:itemName } = profile.workbox,
+        { source:itemIcon } = profile.workbox.image,
+        { name:domainName } = profile.domain,
+        { source:domainIcon } = profile.domain.image,
+        { name:typeName } = profile.type
 
     // console.log('data', '-'+windowSessionID+'-',data)
 
@@ -110,11 +115,11 @@ const Workbox = (props) => {
                 <WorkboxContent 
                     viewSelector = {viewSelectorContext} 
                     workboxState = {workboxState} 
-                    profileData = {profileData}
-                    documentData = {documentData}
-                    itemlistData = {itemlistData}
-                    defaultDocumentState = {defaultDocumentState}
-                    defaultItemlistState = {defaultItemlistState}
+                    profileData = {profile}
+                    documentData = {document}
+                    itemlistData = {itemlist}
+                    defaultDocumentState = {workboxSettings.document}
+                    defaultItemlistState = {workboxSettings.Itemlist}
                 />
             </Box>
         </GridItem>
