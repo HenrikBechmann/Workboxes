@@ -159,6 +159,10 @@ const Workpanel = (props:any) => {
     // called by initialization and duplicate window (so far)
     const addWindow = (windowSpecs, workboxSpecs) => {
 
+        console.log('addWindow: windowSpecs, workboxSpecs',windowSpecs, workboxSpecs)
+
+        return
+
         const windowSessionID = nextWindowSessionID
         nextWindowSessionID++
 
