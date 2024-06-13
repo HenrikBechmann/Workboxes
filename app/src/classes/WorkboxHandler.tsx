@@ -11,10 +11,11 @@ class WorkboxHandler {
 
     workboxID
     workboxSessionID
-    private _workboxRecord
+    workboxRecord
+    private _setWorkboxRecord
 
     set setWorkboxRecord (setRecord) {
-        this._workboxRecord = setRecord
+        this._setWorkboxRecord = setRecord
         this.loadWorkboxSnapshot()
     }
 
