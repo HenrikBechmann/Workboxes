@@ -64,10 +64,6 @@ import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
 
-
-
-
-
 class WorkspaceHandler {
 
     constructor(db, errorControl) {
