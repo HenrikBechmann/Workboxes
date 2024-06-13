@@ -33,7 +33,7 @@ const WorkboxContent = (props) => {
             workboxState, 
             defaultDocumentState,
             defaultItemlistState,
-            viewSelector, 
+            viewSetting, 
             documentData, 
             itemlistData, 
             profileData 
@@ -86,14 +86,14 @@ const WorkboxContent = (props) => {
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
             userDocumentWidthRef = {userDocumentWidthRef}
-            viewSelector = {viewSelector}
+            viewSetting = {viewSetting}
         >
             <DocumentPanel 
                 ref = {documentFrameElementRef} 
                 displayConfigCode = {documentDisplayCode} 
                 defaultDocumentState = {defaultDocumentState}
                 userDocumentWidthRef = {userDocumentWidthRef}
-                viewSelector = {viewSelector}
+                viewSetting = {viewSetting}
                 documentData = {documentData}
                 profileData = {profileData}
             />

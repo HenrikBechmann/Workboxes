@@ -63,7 +63,7 @@ const Workpanel = (props:any) => {
         windowsMinimizedRef = useRef(null),
         highestZOrderRef = useRef(0),// track zOrder scope for assignment
 
-        // panel state; panel element
+        // panel state; panel panelElement
         panelStateRef = useRef(null),
         panelElementRef = useRef(null)
 
@@ -198,11 +198,11 @@ const Workpanel = (props:any) => {
 
         const 
             // required to position window
-            element = panelElementRef.current,
-            containerDimensionSpecs = { width:element.offsetWidth, height:element.offsetHeight },
+            panelElement = panelElementRef.current,
+            containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
             workboxHandler = new WorkboxHandler(specs.workbox),
-            workdata = workboxHandler.getData(),
-            { profile } = workdata
+            workboxRecord = workboxHandler.workboxRecord,
+            { profile } = workboxRecord
 
         const workboxSessionID = nextWorkboxSessionID++
         
@@ -220,14 +220,10 @@ const Workpanel = (props:any) => {
             }
 
         const workboxComponent = <Workbox 
-                workboxSessionID = {workboxSessionID}
-                defaultWorkboxState = { specs.workbox.defaultWorkboxState }
-                defaultDocumentState = { specs.workbox.defaultDocumentState }
-                defaultItemlistState = { specs.workbox.defaultItemlistState }
-                data = { workdata }
-                dataCallbacks = {dataCallbacks}
+                record = {workboxRecord}
+                settings = { workboxSettings }
             />
-        workboxComponentMapRef.current.set(workboxSessionID,workboxComponent)
+        workboxComponentMapRef.current.set(workboxRecord.profile.workbox.id,workboxComponent)
 
         return <Workwindow 
             key = { windowSessionID } 
@@ -592,8 +588,8 @@ const Workpanel = (props:any) => {
     const onResize = useCallback((entries)=>{
 
         const 
-            element = entries[0].target,
-            containerDimensionSpecs = {width:element.offsetWidth, height:element.offsetHeight},
+            panelElement = entries[0].target,
+            containerDimensionSpecs = {width:panelElement.offsetWidth, height:panelElement.offsetHeight},
             windowComponentList = windowComponentListRef.current,
             length = windowComponentList.length
 
@@ -603,7 +599,7 @@ const Workpanel = (props:any) => {
         }
         windowComponentListRef.current = [...windowComponentList]
         if (panelStateRef.current == 'setup') { // initialize; ongoing updates at Workspace
-            const panelDisplayElement = element.closest('#panel-display')
+            const panelDisplayElement = panelElement.closest('#panel-display')
             if (!panelDisplayElement) return
             document.documentElement.style.setProperty('--wb_panel_display_height',(panelDisplayElement.offsetHeight - 10) + 'px')
         }

@@ -44,14 +44,14 @@ const CentralPanel = (props) => {
             documentFrameElementRef, 
             itemlistFrameElementRef, 
             userDocumentWidthRef, // set by user through drag tag
-            viewSelector,
+            viewSetting,
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
         centralPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
-        viewSelectorRef = useRef(null)
+        viewSettingRef = useRef(null)
 
-        viewSelectorRef.current = viewSelector
+        viewSettingRef.current = viewSetting
 
     /*
         Respond to change in displayConfigCode; causes direct DOM manipulation.
@@ -90,7 +90,7 @@ const CentralPanel = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itembox') { // document was hidden
 
-                documentFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
+                documentFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSettingRef.current] + 'px'
                 documentFrameElement.firstChild.style.left = 0
                 documentFrameElement.firstChild.style.right = 'auto'
 
@@ -98,7 +98,7 @@ const CentralPanel = (props) => {
 
                 itemlistFrameElement.firstChild.style.width = 
                     Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                        userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
+                        userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
                 itemlistFrameElement.firstChild.style.left = 'auto'
                 itemlistFrameElement.firstChild.style.right = 0
 
@@ -118,10 +118,10 @@ const CentralPanel = (props) => {
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            documentFrameElement.style.width = userDocumentWidthRef.current[viewSelectorRef.current] + 'px'
+            documentFrameElement.style.width = userDocumentWidthRef.current[viewSettingRef.current] + 'px'
             itemlistFrameElement.style.width = 
                 Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                    userDocumentWidthRef.current[viewSelectorRef.current])) + 'px'
+                    userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{

@@ -35,16 +35,14 @@ import homeIcon from '../../../assets/home.png'
 
 const Workspace = (props) => {
 
-    // console.log('running Workspace')
-
     // data
     const 
         navigate = useNavigate(),
 
         // basics
+        [workspaceState,setWorkspaceState] = useState('setup'),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         { workspaceRecord, workspaceSelection } = workspaceHandler,
-        [workspaceState,setWorkspaceState] = useState('setup'),
         [panelSelection, setPanelSelection] = useState({index:0,id:null, name:null}),
 
         // resources

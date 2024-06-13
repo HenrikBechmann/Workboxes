@@ -15,7 +15,7 @@ import WorkboxContent from './WorkboxContent'
 export const WorkboxInnerFrameWidthContext = createContext(null)
 import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
-import { ViewSelectorContext } from '../workholders/Workwindow'
+import { ViewSettingContext } from '../workholders/Workwindow'
 
 const workboxFrameStyles = {
     position:'absolute',
@@ -54,8 +54,9 @@ const Workbox = (props) => {
             record,
 
         } = props,
-        viewSelectorContext = useContext(ViewSelectorContext), // to pass to content component
+        viewSettingContext = useContext(ViewSettingContext), // to pass to content component
         [workboxState, setWorkboxState] = useState(null),
+        
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
 
@@ -113,7 +114,7 @@ const Workbox = (props) => {
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
                 <WorkboxContent 
-                    viewSelector = {viewSelectorContext} 
+                    viewSetting = {viewSettingContext} 
                     workboxState = {workboxState} 
                     profileData = {profile}
                     documentData = {document}

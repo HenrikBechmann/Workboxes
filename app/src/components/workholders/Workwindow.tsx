@@ -16,7 +16,7 @@ import WindowTitle from './WindowTitle'
 
 import dragCornerIcon from '../../../assets/drag-corner.png'
 
-export const ViewSelectorContext = createContext(null)
+export const ViewSettingContext = createContext(null)
 export const WindowCallbackContext = createContext(null)
 
 const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
@@ -604,7 +604,7 @@ const Workwindow = (props) => {
 
     // render
     return (
-    <ViewSelectorContext.Provider value = {viewDeclaration.view}>
+    <ViewSettingContext.Provider value = {viewDeclaration.view}>
     <WindowCallbackContext.Provider value = {windowCallbackRef.current}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
@@ -655,7 +655,7 @@ const Workwindow = (props) => {
         </Resizable>
     </Draggable>
     </WindowCallbackContext.Provider>
-    </ViewSelectorContext.Provider>)
+    </ViewSettingContext.Provider>)
 }
 
 export default Workwindow

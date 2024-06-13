@@ -136,7 +136,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             displayConfigCode, 
             userDocumentWidthRef, // userDocumentWidthRef informs "friends"
             // windowSessionID, 
-            viewSelector, 
+            viewSetting, 
             profileData,
             documentData, 
             defaultDocumentState,
@@ -158,7 +158,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         }),
         windowCallbackContextRef = useRef(windowCallbackContext),
         // state
-        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSelector]),
+        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSetting]),
         [documentState, setDocumentState] = useState(defaultDocumentState),
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false})
 
@@ -166,11 +166,11 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     const
         workboxInnerFrameWidthFromContextRef = useRef(null),
         displayCodeRef = useRef(null),
-        viewSelectorRef = useRef(null)
+        viewSettingRef = useRef(null)
 
     workboxInnerFrameWidthFromContextRef.current = workboxInnerFrameWidthFromContext
     displayCodeRef.current = displayConfigCode
-    viewSelectorRef.current = viewSelector
+    viewSettingRef.current = viewSetting
 
     // console.log('document profileData, documentData',profileData, documentData)
 
@@ -184,8 +184,8 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     useEffect(()=>{
 
         const 
-            viewWidth = userDocumentWidthRef.current[viewSelector],
-            viewTrigger = viewSelector
+            viewWidth = userDocumentWidthRef.current[viewSetting],
+            viewTrigger = viewSetting
 
         windowCallbackContextRef.current.changeView = ()=>{
 
@@ -212,7 +212,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
         }
 
-    },[viewSelector])
+    },[viewSetting])
 
     useEffect(()=>{
 
@@ -222,7 +222,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         const documentWidth = 
             displayCodeRef.current == 'out'
                 ? documentFrameElementRef.current.offsetWidth
-                : userDocumentWidthRef.current[viewSelectorRef.current]
+                : userDocumentWidthRef.current[viewSettingRef.current]
 
         clearTimeout(observerTimeoutRef.current)
 
@@ -238,7 +238,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
 
-            userDocumentWidthRef.current[viewSelectorRef.current] = newWidth
+            userDocumentWidthRef.current[viewSettingRef.current] = newWidth
 
             if (documentFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
@@ -317,7 +317,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     const onResizeStop = (e,{size, handle}) => {
         documentFrameElementRef.current.style.transition = 'width 0.5s'
 
-        userDocumentWidthRef.current[viewSelectorRef.current] = size.width
+        userDocumentWidthRef.current[viewSettingRef.current] = size.width
         setDocumentResizeWidth(size.width)
 
     }
