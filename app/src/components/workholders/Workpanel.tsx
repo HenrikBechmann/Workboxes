@@ -91,13 +91,7 @@ const Workpanel = (props:any) => {
 
         for (const startingspecs of startingWindowsSpecsListRef.current) {
 
-            // TODO: anticipate possible transformation
-            const specs = {
-                window:startingspecs.window,
-                workbox:startingspecs.workbox
-            }
-
-            addWindow(specs)
+            addWindow(startingspecs.window, startingspecs.workbox)
 
         }
 
@@ -112,7 +106,7 @@ const Workpanel = (props:any) => {
     }
 
     // called by initialization and duplicate window (so far)
-    const addWindow = (specs) => {
+    const addWindow = (windowSpecs, workboxSpecs) => {
 
         const windowSessionID = nextWindowSessionID
         nextWindowSessionID++
@@ -123,8 +117,8 @@ const Workpanel = (props:any) => {
             windowsSet = windowsMinimizedRef.current,
 
             windowRecord = {
-                window:specs.window,
-                workbox:specs.workbox,
+                window:windowSpecs,
+                workbox:workboxSpecs,
                 windowSessionID,
                 index:null,
             }
@@ -199,17 +193,14 @@ const Workpanel = (props:any) => {
         const 
             // required to position window
             panelElement = panelElementRef.current,
-            containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
-            workboxHandler = new WorkboxHandler(specs.workbox),
-            workboxRecord = workboxHandler.workboxRecord,
-            { profile } = workboxRecord
+            containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight }
 
         const workboxSessionID = nextWorkboxSessionID++
         
-        workboxHandlerMapRef.current.set(workboxSessionID, workboxHandler)
+        // workboxHandlerMapRef.current.set(workboxSessionID, workboxHandler)
 
-        specs.window.title = profile.itemName
-        specs.window.type = profile.typeName
+        // specs.window.title = profile.itemName
+        // specs.window.type = profile.typeName
 
         // required to configure window
         const
@@ -219,11 +210,11 @@ const Workpanel = (props:any) => {
                 stackOrder,
             }
 
-        const workboxComponent = <Workbox 
-                record = {workboxRecord}
-                settings = { workboxSettings }
-            />
-        workboxComponentMapRef.current.set(workboxRecord.profile.workbox.id,workboxComponent)
+        // const workboxComponent = <Workbox 
+        //         record = {workboxRecord}
+        //         settings = { workboxSettings }
+        //     />
+        // workboxComponentMapRef.current.set(workboxRecord.profile.workbox.id,workboxComponent)
 
         return <Workwindow 
             key = { windowSessionID } 
@@ -302,7 +293,7 @@ const Workpanel = (props:any) => {
         windowRecord.window = {...windowRecord.window}
         windowRecord.workbox = {...windowRecord.workbox}
 
-        addWindow(windowRecord)
+        addWindow(windowRecord.window, windowRecord.workbox)
 
     }
 

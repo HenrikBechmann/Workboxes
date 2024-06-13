@@ -2,7 +2,7 @@
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 class WorkboxHandler {
-    constructor(workboxID, workboxSessionID) {
+    constructor( workboxSessionID, workboxID ) {
 
         this.workboxSessionID = workboxSessionID
         this.workboxID = workboxID
@@ -17,6 +17,10 @@ class WorkboxHandler {
     set setWorkboxRecord (setRecord) {
         this._setWorkboxRecord = setRecord
         this.loadWorkboxSnapshot()
+    }
+
+    get setWorkboxRecord() {
+        return this._setWorkboxRecord
     }
 
     private async loadWorkboxSnapshot() {
