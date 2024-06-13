@@ -88,8 +88,21 @@ const Workspace = (props) => {
         } 
 
     },[workspaceHandler.flags.new_workspace_load])
-    // },[workspaceSelection])
 
+    // handle scroller effects for panels
+    useEffect(()=>{
+
+        const num = panelSelection.index ?? false
+        if (num === false) return
+
+        updateWorkspacePanel(panelSelection)
+
+        document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
+
+    },[panelSelection])
+
+    // -------------------[ operations ]----------------------
+    
     async function updateWorkspacePanel(panelSelection) {
 
         // console.log('updateWorkspacePanel panelSelection', {...panelSelection})
@@ -109,18 +122,6 @@ const Workspace = (props) => {
         dispatchWorkspaceHandler('updatepanel')
 
     }
-
-    // handle scroller effects for panels
-    useEffect(()=>{
-
-        const num = panelSelection.index ?? false
-        if (num === false) return
-
-        updateWorkspacePanel(panelSelection)
-
-        document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
-
-    },[panelSelection])
 
     // --------------------------[ operations ]--------------------------
     const resizeCallback = useCallback((entries)=>{
@@ -260,85 +261,3 @@ const Workspace = (props) => {
 } 
 
 export default Workspace
-
-// const defaultWorkboxState = {
-//     settingsShow:false,
-//     settingsDisabled:false,
-//     documentShow:true,
-//     documentDisabled:false,
-//     itemlistShow:true,
-//     itemlistDisabled:false,
-// }
-
-// const defaultDocumentState = {
-//     mode:'view',
-// }
-
-// const defaultItemlistState = {
-
-// }
-
-// return 
-// // TODO placeholder logic
-
-// const panelWindowsSpecs = [
-
-//     {
-//         window:{
-//             zOrder: 1,
-//             configDefaults: {top:20,left:20, width:610,height:400},
-//             view: 'normalized',
-//         },
-//         workbox: {
-//             defaultWorkboxState:{...defaultWorkboxState},
-//             defaultDocumentState: {...defaultDocumentState},
-//             defaultItemlistState: {...defaultItemlistState},
-//             itemTitle: "Base Workbox",
-//             itemIcon: homeIcon,
-//             domainTitle: displayName,
-//             domainIcon: photoURL,
-//             typeName: 'Collection',
-//             type:'Collection',
-//             id:null,
-//         }
-//     },
-//     {
-//         window:{
-//             zOrder: 2,
-//             configDefaults: {top:40,left:40, width:610,height:400},
-//             view: 'normalized',
-//         },
-//         workbox: {
-//             defaultWorkboxState:{...defaultWorkboxState},
-//             defaultDocumentState: {...defaultDocumentState},
-//             defaultItemlistState: {...defaultItemlistState},
-//             itemTitle: 'Notebooks',
-//             itemIcon: notebookIcon,
-//             domainTitle: displayName,
-//             domainIcon: photoURL,
-//             typeName: 'Collection',
-//             type:'Collection',
-//             id:null,
-//         }
-//     },
-//     {
-//         window:{
-//             zOrder: 3,
-//             configDefaults: {top:60,left:60, width:610,height:400},
-//             view: 'normalized',
-//         },
-//         workbox: {
-//             defaultWorkboxState:{...defaultWorkboxState},
-//             defaultDocumentState: {...defaultDocumentState},
-//             defaultItemlistState: {...defaultItemlistState},
-//             itemTitle: 'Checklists',
-//             itemIcon: checklistIcon,
-//             domainTitle: displayName,
-//             domainIcon: photoURL,
-//             typeName: 'Collection',
-//             type:'Collection',
-//             id:null,
-//         }
-//     },
-
-

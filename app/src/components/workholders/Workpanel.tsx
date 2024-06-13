@@ -12,6 +12,29 @@ import Workbox from './../workbox/Workbox'
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
+const defaultWorkboxState = {
+    settings: {
+        show:false,
+        disabled:false,
+    },
+    document: {
+        show:true,
+        disabled:false,
+    },
+    itemlist: { 
+        show:true,
+        disabled:false,
+    }
+}
+
+const defaultDocumentState = {
+    mode:'view',
+}
+
+const defaultItemlistState = {
+
+}
+
 const workpanelStyles = {
     height:'100%',
     width:'100%',
@@ -98,11 +121,39 @@ const Workpanel = (props:any) => {
     },[])
 
     const showDomainWorkbox = () => {
-        alert('show domain workbox ' + panelSelector.name)
+
+        const windowSpecs = {
+            zOrder: 1,
+            configuration: {top:20,left:20, width:610,height:400},
+            view: 'normalized',
+        }
+        const workboxSpecs = {
+            workboxState:{...defaultWorkboxState},
+            documentState: {...defaultDocumentState},
+            itemlistState: {...defaultItemlistState},
+            id:workspaceHandler.panelDomainRecord.profile.workbox.id,
+        }
+
+        addWindow(windowSpecs, workboxSpecs)
+
     }
 
     const showMemberWorkbox = () => {
-        alert('show member workbox ' + panelSelector.name)
+
+        const windowSpecs = {
+            zOrder: 1,
+            configuration: {top:20,left:20, width:610,height:400},
+            view: 'normalized',
+        }
+        const workboxSpecs = {
+            workboxState:{...defaultWorkboxState},
+            documentState: {...defaultDocumentState},
+            itemlistState: {...defaultItemlistState},
+            id:workspaceHandler.panelMemberRecord.profile.workbox.id,
+        }
+
+        addWindow(windowSpecs, workboxSpecs)
+
     }
 
     // called by initialization and duplicate window (so far)
