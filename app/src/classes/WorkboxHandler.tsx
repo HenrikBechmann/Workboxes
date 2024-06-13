@@ -31,6 +31,14 @@ class WorkboxHandler {
 
     }
 
+    async getItemList(parms) {
+
+    }
+
+    async saveItems(items) {
+
+    }
+
 }
 
 export default WorkboxHandler
