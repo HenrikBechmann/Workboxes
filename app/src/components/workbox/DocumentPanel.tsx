@@ -23,7 +23,7 @@ import DocumentToolbar from '../toolbars/Toolbar_Document'
 
 import handleIcon from '../../../assets/handle.png'
 
-import { WorkboxInnerFrameWidthContext } from './Workbox'
+import { WorkboxHandlerContext } from './Workbox'
 import { WindowCallbackContext } from '../workholders/Workwindow'
 import DocumentContent from '../documentUI/DocumentContent'
 
@@ -142,7 +142,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             defaultDocumentState,
         } = props, 
         // context
-        workboxInnerFrameWidthFromContext = useContext(WorkboxInnerFrameWidthContext),
+        workboxHandlerContext = useContext(WorkboxHandlerContext),
         windowCallbackContext = useContext(WindowCallbackContext),
         // persistence
         documentPanelElementRef = useRef(null),
@@ -168,7 +168,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    workboxInnerFrameWidthFromContextRef.current = workboxInnerFrameWidthFromContext
+    workboxInnerFrameWidthFromContextRef.current = workboxHandlerContext
     displayCodeRef.current = displayConfigCode
     viewSettingRef.current = viewSetting
 
@@ -216,7 +216,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
     useEffect(()=>{
 
-        if (workboxInnerFrameWidthFromContext === 0) return
+        if (workboxHandlerContext === 0) return
 
         const centralPanelWidth = centralPanelElementRef.current.offsetWidth
         const documentWidth = 
@@ -228,8 +228,8 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
         const calculatedMaxDocumentWidth = 
             Math.min(
-                workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
-                workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH)
+                workboxHandlerContext * MAX_COVER_FRAME_RATIO,
+                workboxHandlerContext - MIN_CONTENTS_FRAME_WIDTH)
 
         if (calculatedMaxDocumentWidth < documentWidth) {
 
@@ -258,7 +258,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         }
         constraintsRef.current = constraints
 
-    },[workboxInnerFrameWidthFromContext])
+    },[workboxHandlerContext])
 
     useEffect(()=>{
 
@@ -299,8 +299,8 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             minX:MIN_COVER_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: Math.min(
-                workboxInnerFrameWidthFromContext * MAX_COVER_FRAME_RATIO,
-                workboxInnerFrameWidthFromContext - MIN_CONTENTS_FRAME_WIDTH),
+                workboxHandlerContext * MAX_COVER_FRAME_RATIO,
+                workboxHandlerContext - MIN_CONTENTS_FRAME_WIDTH),
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints

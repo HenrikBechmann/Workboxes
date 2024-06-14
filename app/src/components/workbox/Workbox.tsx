@@ -12,7 +12,7 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
-export const WorkboxInnerFrameWidthContext = createContext(null)
+export const WorkboxHandlerContext = createContext(null)
 import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
 import { ViewSettingContext } from '../workholders/Workwindow'
@@ -93,7 +93,7 @@ const Workbox = (props) => {
     },[])
 
 
-    return <WorkboxInnerFrameWidthContext.Provider value = {workboxInnerFrameWidth} >
+    return <WorkboxHandlerContext.Provider value = {workboxInnerFrameWidth} >
     <Grid
         data-type = 'workbox-grid'
         style = {workboxGridStyles}
@@ -125,7 +125,7 @@ const Workbox = (props) => {
             </Box>
         </GridItem>
     </Grid>
-    </WorkboxInnerFrameWidthContext.Provider>
+    </WorkboxHandlerContext.Provider>
 }
 
 export default Workbox
