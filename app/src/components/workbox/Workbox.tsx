@@ -24,6 +24,8 @@ const workboxFrameStyles = {
     borderRadius: '0 0 0 7px'
 } as CSSProperties
 
+import WorkboxHandler from '../../classes/WorkboxHandler'
+
 const workboxGridStyles = {
     height: '100%',
     width: '100%',
@@ -47,22 +49,44 @@ const workboxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
+export const useWorkboxHandler = () => {
+
+    const 
+        workboxHandlerContext = useContext(WorkboxHandlerContext),
+        workboxHandler = workboxHandlerContext.current,
+        { setWorkboxHandlerState } = workboxHandler,
+        workspacePayload = {...workboxHandlerContext}, // coerce dispatch
+        dispatchWorkboxHandler = (trigger?) => {
+            workboxHandler.trigger = trigger
+            setWorkboxHandlerState(workspacePayload)
+        }
+
+    return [workboxHandler, dispatchWorkboxHandler]
+
+}
+
 const Workbox = (props) => {
     const 
         {
-            settings,
-            record,
+            workboxSettings,
+            workboxSessionID,
 
         } = props,
         viewSettingContext = useContext(ViewSettingContext), // to pass to content component
         [workboxState, setWorkboxState] = useState(null),
+
+        workboxID = workboxSettings.id,
+
+        workboxHandlerInstanceRef = useRef(null),
+
+        [workboxHandlerState, setWorkboxHandlerState] = useState({ current: workboxHandlerInstanceRef.current }),
         
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
 
-        {workbox:workboxSettings, document:documentSettings, itemlist: itemlistSettings} = settings,
+        {workbox:contentSettings, document:documentSettings, itemlist: itemlistSettings} = workboxSettings,
 
-        { profile, document, itemlist } = record,
+        { profile, document, itemlist } = workboxSettings,
         { name:itemName } = profile.workbox,
         { source:itemIcon } = profile.workbox.image,
         { name:domainName } = profile.domain,
@@ -70,6 +94,12 @@ const Workbox = (props) => {
         { name:typeName } = profile.type
 
     // console.log('data', '-'+windowSessionID+'-',data)
+
+    useEffect(()=>{
+
+        workboxHandlerInstanceRef.current = new WorkboxHandler(workboxSessionID, workboxID)
+
+    },[])
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
@@ -119,8 +149,8 @@ const Workbox = (props) => {
                     profileData = {profile}
                     documentData = {document}
                     itemlistData = {itemlist}
-                    defaultDocumentState = {workboxSettings.document}
-                    defaultItemlistState = {workboxSettings.Itemlist}
+                    defaultDocumentState = {contentSettings.document}
+                    defaultItemlistState = {contentSettings.Itemlist}
                 />
             </Box>
         </GridItem>

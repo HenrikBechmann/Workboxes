@@ -250,8 +250,6 @@ const Workpanel = (props:any) => {
             panelElement = panelElementRef.current,
             containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight }
 
-        const workboxSessionID = nextWorkboxSessionID++
-        
         // workboxHandlerMapRef.current.set(workboxSessionID, workboxHandler)
 
         // specs.window.title = profile.itemName
@@ -265,11 +263,13 @@ const Workpanel = (props:any) => {
                 stackOrder,
             }
 
-        // const workboxComponent = <Workbox 
-        //         record = {workboxRecord}
-        //         settings = { workboxSettings }
-        //     />
-        // workboxComponentMapRef.current.set(workboxRecord.profile.workbox.id,workboxComponent)
+        const workboxSessionID = nextWorkboxSessionID++
+    
+        const workboxComponent = <Workbox 
+                workboxSessionID = { workboxSessionID }
+                workboxSettings = { specs.workbox }
+            />
+        workboxComponentMapRef.current.set(workboxSessionID,workboxComponent)
 
         return <Workwindow 
             key = { windowSessionID } 
