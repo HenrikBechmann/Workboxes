@@ -849,9 +849,9 @@ const useWorkspaceHandler = () => {
         workspaceHandlerContext = useContext(WorkspaceHandlerContext),
         workspaceHandler = workspaceHandlerContext.current,
         { setWorkspaceHandlerContext } = workspaceHandler,
-        newWorkspaceHandlerContext = {...workspaceHandlerContext}, // coerce dispatch
         dispatchWorkspaceHandler = (trigger) => {
-            workspaceHandler.trigger = trigger
+            const newWorkspaceHandlerContext = {...workspaceHandlerContext} // coerce dispatch
+            workspaceHandler.trigger = trigger // latest trigger available to consumers
             setWorkspaceHandlerContext(newWorkspaceHandlerContext)
         }
 

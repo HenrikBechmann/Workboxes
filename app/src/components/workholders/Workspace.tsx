@@ -52,9 +52,11 @@ const Workspace = (props) => {
         // centralized management of workbox resources
         workboxComponentMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null),
-        scrollerAcceptsRef = useRef({accept:[]}) //static
 
-    workspaceHandler.panelSelection = panelSelection
+        // required scroller property
+        scrollerAcceptsRef = useRef({accept:[]}) //static, no anticipated direct child scrollers
+
+    workspaceHandler.panelSelection = panelSelection // always up to date
 
     // ---------------------------[ state change effects ]------------------------
 
