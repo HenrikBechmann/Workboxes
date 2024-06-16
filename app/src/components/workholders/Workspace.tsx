@@ -52,7 +52,7 @@ const Workspace = (props) => {
         // centralized management of workbox resources
         workboxComponentMapRef = useRef(null),
         workboxHandlerMapRef = useRef(null),
-        scrollerAcceptsRef = useRef({accept:['panel']}) //static
+        scrollerAcceptsRef = useRef({accept:[]}) //static
 
     workspaceHandler.panelSelection = panelSelection
 
