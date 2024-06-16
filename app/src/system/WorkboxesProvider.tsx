@@ -98,7 +98,7 @@ export const UserProvider = ({children}) => {
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
-        [workspaceHandlerState, setWorkspaceHandlerState] = useState({ current: workspaceHandlerInstance }),
+        [workspaceHandlerContext, setWorkspaceHandlerContext] = useState({ current: workspaceHandlerInstance }),
         // bootstrap resources
         db = useFirestore(),
         userAuthDataRef = useRef(null),
@@ -161,8 +161,8 @@ export const UserProvider = ({children}) => {
 
     // initialize workspaceHandler with dispatchWorkspaceHandler function
     useEffect(()=>{
-        workspaceHandlerState.current.setWorkspaceHandlerState = setWorkspaceHandlerState
-        workspaceHandlerState.current.usage = usage
+        workspaceHandlerContext.current.setWorkspaceHandlerContext = setWorkspaceHandlerContext
+        workspaceHandlerContext.current.usage = usage
     },[])
 
     // set up onAuthStateChanged event capture
@@ -205,8 +205,8 @@ export const UserProvider = ({children}) => {
                     authUser:user,
                     sysadminStatus:superUser,
                 }
-                workspaceHandlerState.current.userID = user.uid
-                workspaceHandlerState.current.userName = user.displayName
+                workspaceHandlerContext.current.userID = user.uid
+                workspaceHandlerContext.current.userName = user.displayName
                 usage.login(1)
                 setUserState('useridentified')
     
@@ -794,7 +794,7 @@ export const UserProvider = ({children}) => {
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
         <SystemRecordsContext.Provider value = {systemRecords} >
-        <WorkspaceHandlerContext.Provider value = {workspaceHandlerState} >
+        <WorkspaceHandlerContext.Provider value = {workspaceHandlerContext} >
         <UserAuthDataContext.Provider value = {userAuthData} >
         <UserRecordsContext.Provider value = {userRecords}>
             {children}
@@ -848,11 +848,11 @@ const useWorkspaceHandler = () => {
     const 
         workspaceHandlerContext = useContext(WorkspaceHandlerContext),
         workspaceHandler = workspaceHandlerContext.current,
-        { setWorkspaceHandlerState } = workspaceHandler,
-        workspacePayload = {...workspaceHandlerContext}, // coerce dispatch
+        { setWorkspaceHandlerContext } = workspaceHandler,
+        newWorkspaceHandlerContext = {...workspaceHandlerContext}, // coerce dispatch
         dispatchWorkspaceHandler = (trigger) => {
             workspaceHandler.trigger = trigger
-            setWorkspaceHandlerState(workspacePayload)
+            setWorkspaceHandlerContext(newWorkspaceHandlerContext)
         }
 
     return [workspaceHandler, dispatchWorkspaceHandler]

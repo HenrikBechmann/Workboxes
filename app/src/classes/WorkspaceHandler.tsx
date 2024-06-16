@@ -32,7 +32,7 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
-    updateWorkspacePanel
+    updateWorkspacePanelSelection
     saveWorkspaceData
     copyWorkspaceAs
     deleteWorkspace
@@ -87,7 +87,7 @@ class WorkspaceHandler {
     trigger // dispatch trigger set by dispatchWorkspaceHandler
 
     // workspace data
-    setWorkspaceHandlerState = null // initialized in WorkboxesProvider, used in useWorkspace
+    setWorkspaceHandlerContext = null // initialized in WorkboxesProvider, used in useWorkspace
 
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
@@ -876,11 +876,9 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ updateWorkspacePanel ]--------------------------
+    // ---------------------[ updateWorkspacePanelSelection ]--------------------------
 
-    async updateWorkspacePanel(id, name) {
-
-        // console.log('updating panel: id, name', id, name)
+    async updateWorkspacePanelSelection(id, name) {
 
         const result = {
             error: false,

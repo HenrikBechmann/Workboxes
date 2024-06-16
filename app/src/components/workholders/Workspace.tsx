@@ -51,9 +51,8 @@ const Workspace = (props) => {
 
         // centralized management of workbox resources
         workboxComponentMapRef = useRef(null),
-        workboxHandlerMapRef = useRef(null)
-
-        // console.log('Workspace panelSelection', {...panelSelection})
+        workboxHandlerMapRef = useRef(null),
+        scrollerAcceptsRef = useRef({accept:['panel']}) //static
 
     workspaceHandler.panelSelection = panelSelection
 
@@ -81,7 +80,6 @@ const Workspace = (props) => {
     useEffect(()=>{
 
         if (workspaceHandler.flags.new_workspace_load) {
-            // console.log('loading panels for ', workspaceSelection)
             workspaceHandler.flags.new_workspace_load = false
             loadPanels()
             setWorkspaceState('loading')
@@ -92,10 +90,10 @@ const Workspace = (props) => {
     // handle scroller effects for panels
     useEffect(()=>{
 
-        const num = panelSelection.index ?? false
-        if (num === false) return
+        const is_set = panelSelection.index ?? false
+        if (is_set === false) return
 
-        updateWorkspacePanel(panelSelection)
+        updateWorkspacePanelSelection(panelSelection)
 
         document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
@@ -103,15 +101,13 @@ const Workspace = (props) => {
 
     // -------------------[ operations ]----------------------
     
-    async function updateWorkspacePanel(panelSelection) {
-
-        // console.log('updateWorkspacePanel panelSelection', {...panelSelection})
+    async function updateWorkspacePanelSelection(panelSelection) {
 
         const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
 
-        const result = await workspaceHandler.updateWorkspacePanel(
+        const result = await workspaceHandler.updateWorkspacePanelSelection(
             panelRecord.profile.panel.id , panelRecord.profile.panel.name)
 
         if (result.error) {
@@ -142,8 +138,6 @@ const Workspace = (props) => {
     async function loadPanels() {
 
         const result = await workspaceHandler.loadPanels()
-
-        // console.log('result from loading panels', result)
 
         if (result.error) {
             navigate('/error')
@@ -190,7 +184,7 @@ const Workspace = (props) => {
             panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
 
-            const result = await workspaceHandler.updateWorkspacePanel(
+            const result = await workspaceHandler.updateWorkspacePanelSelection(
                 defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
@@ -199,7 +193,7 @@ const Workspace = (props) => {
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
-            const result = await workspaceHandler.updateWorkspacePanel(
+            const result = await workspaceHandler.updateWorkspacePanelSelection(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
@@ -233,18 +227,20 @@ const Workspace = (props) => {
         >
             <GridItem data-type = 'workspace-body' area={'body'} position = 'relative' minWidth = '0'>
                 <Box id = 'wb-panelframe' data-type = 'panel-frame' position = 'absolute' inset = {0}>
-                    <Box data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
-                    transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'>
-                    {(workspaceState != 'setup') && panelComponentListRef.current}
+                    <Box 
+                        data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
+                        transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'
+                    >
+                        {(workspaceState != 'setup') && panelComponentListRef.current}
                     </Box>
                  </Box>
             </GridItem>
             <GridItem data-type = 'workspace-footer' area = 'footer' minWidth = '0'>
                 <Box borderTop = '1px solid lightgray' width = '100%' >
                     <ToolbarFrame>
-                        {(workspaceState != 'setup') && <WorkspaceToolbar  
-                            panelComponentListRef = {panelComponentListRef}
-                        />}
+                        {(workspaceState != 'setup') && 
+                            <WorkspaceToolbar panelComponentListRef = {panelComponentListRef} />
+                        }
                     </ToolbarFrame>
                 </Box>
             </GridItem>
@@ -256,7 +252,7 @@ const Workspace = (props) => {
         <Scroller 
             layout = 'static' 
             staticComponent = {workspaceComponent} 
-            dndOptions = {{accept:['panel']}} />
+            dndOptions = {scrollerAcceptsRef.current} />
     </Box>
 } 
 
