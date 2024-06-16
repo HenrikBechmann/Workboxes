@@ -168,10 +168,10 @@ const Workspace = (props) => {
             }
             panelComponentListRef.current.push(
                 <Workpanel 
-                    key = {panelRecord.profile.panel.id} 
+                    key = {panelID} 
+                    panelID = {panelID}
                     workboxComponentMapRef = {workboxComponentMapRef}
                     workboxHandlerMapRef = {workboxHandlerMapRef}
-                    panelID = {panelID}
                 />
             )
 

@@ -166,8 +166,9 @@ class PanelHandler {
                         id:panelRecordID,
                         name:panelRecord.profile.panel.name
                     },
-                    functions:{
-
+                    functions:{ // repository for direct calls
+                        showDomainWorkbox:null, 
+                        showMemberWorkbox: null,
                     }
                 }
                 panelControlMap.set(panelRecordID, panelControlData)

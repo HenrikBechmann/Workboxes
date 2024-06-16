@@ -58,6 +58,4 @@ class SnapshotControl {
 
 }
 
-// const snapshotControl = new SnapshotControl() // singleton
-
 export default SnapshotControl
