@@ -181,11 +181,11 @@ const StandardDisplay = (props) => {
 const StandardDocumentSection = (props) => {
 
     const 
-        {profileData, documentData, documentState, invalidStandardFieldFlagsRef} = props,
+        {profileData, documentData, documentConfig, invalidStandardFieldFlagsRef} = props,
         editDataRef = useRef(null)
 
     return <Box>
-        {(documentState.mode == 'view')
+        {(documentConfig.mode == 'view')
             ? <StandardDisplay documentData = {documentData} />
             : <StandardEdit 
                 documentData = {documentData} 

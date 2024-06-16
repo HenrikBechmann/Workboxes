@@ -68,7 +68,7 @@ const WorkboxToolbar = (props) => {
 
     const 
         { 
-            workboxState, 
+            workboxConfig, 
             setWorkboxState, 
             itemTitle, 
             itemIcon, 
@@ -77,14 +77,14 @@ const WorkboxToolbar = (props) => {
             typeName 
         } = props,
 
-        toggleOnDocumentRef = useRef(workboxState.documentShow),
-        disabledDocumentRef = useRef(workboxState.documentDisabled),
-        toggleOnItemlistRef = useRef(workboxState.itemlistShow),
-        disabledItemlistRef = useRef(workboxState.itemlistDisabled),
-        toggleOnSettingsRef = useRef(workboxState.settingsShow),
-        disabledSettingsRef = useRef(workboxState.settingsDisabled),
-        toggleOnCommentsRef = useRef(workboxState.settingsShow),
-        disabledCommentsRef = useRef(workboxState.settingsDisabled),
+        toggleOnDocumentRef = useRef(workboxConfig.documentShow),
+        disabledDocumentRef = useRef(workboxConfig.documentDisabled),
+        toggleOnItemlistRef = useRef(workboxConfig.itemlistShow),
+        disabledItemlistRef = useRef(workboxConfig.itemlistDisabled),
+        toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
+        disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
+        toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
+        disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
 
         toggleHistoryRef = useRef({
             documentShow:toggleOnDocumentRef.current,
@@ -110,14 +110,14 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxState.documentShow = toggleOnDocumentRef.current
-        workboxState.documentDisabled = disabledDocumentRef.current
-        workboxState.itemlistShow = toggleOnItemlistRef.current
-        workboxState.itemlistDisabled = disabledItemlistRef.current
-        workboxState.settingsShow = toggleOnSettingsRef.current
-        workboxState.settingsDisabled = disabledSettingsRef.current
+        workboxConfig.documentShow = toggleOnDocumentRef.current
+        workboxConfig.documentDisabled = disabledDocumentRef.current
+        workboxConfig.itemlistShow = toggleOnItemlistRef.current
+        workboxConfig.itemlistDisabled = disabledItemlistRef.current
+        workboxConfig.settingsShow = toggleOnSettingsRef.current
+        workboxConfig.settingsDisabled = disabledSettingsRef.current
 
-        setWorkboxState({...workboxState}) // trigger render
+        setWorkboxState({...workboxConfig}) // trigger render
 
     },[
         toggleOnDocumentRef.current,

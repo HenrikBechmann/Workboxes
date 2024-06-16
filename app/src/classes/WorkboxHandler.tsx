@@ -2,15 +2,15 @@
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 class WorkboxHandler {
-    constructor( workboxSessionID, workboxID ) {
+    constructor( workboxID ) {
 
-        this.workboxSessionID = workboxSessionID
+        // this.workboxSessionID = workboxSessionID
         this.workboxID = workboxID
 
     }
 
     workboxID
-    workboxSessionID
+    // workboxSessionID
     workboxRecord
     private _setWorkboxRecord
 

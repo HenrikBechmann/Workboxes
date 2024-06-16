@@ -159,7 +159,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         windowCallbackContextRef = useRef(windowCallbackContext),
         // state
         [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSetting]),
-        [documentState, setDocumentState] = useState(defaultDocumentState),
+        [documentConfig, setDocumentState] = useState(defaultDocumentState),
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false})
 
     // scope
@@ -356,7 +356,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                     <GridItem data-type = 'document-header' style = {documentHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DocumentToolbar 
-                                documentState = {documentState} 
+                                documentConfig = {documentConfig} 
                                 setDocumentState = {setDocumentState}
                                 invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                             />
@@ -366,7 +366,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
                         <DocumentContent 
                             profileData = {profileData} 
                             documentData = {documentData} 
-                            documentState = {documentState}
+                            documentConfig = {documentConfig}
                             invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                         />
                     </GridItem>

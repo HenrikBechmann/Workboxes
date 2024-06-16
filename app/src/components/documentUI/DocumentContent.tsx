@@ -20,7 +20,7 @@ import documentTypeBundles from './documentTypeBundles'
 const DocumentContent = (props) => {
 
     const 
-        {profileData, documentData, documentState, invalidStandardFieldFlagsRef} = props,
+        {profileData, documentData, documentConfig, invalidStandardFieldFlagsRef} = props,
         standardComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
         contentStateRef = useRef(null)
@@ -42,7 +42,7 @@ const DocumentContent = (props) => {
 
         standardComponentRef.current =
             React.createElement(documentTypeBundles[profileData.typeName].StandardDocumentSection,{
-                profileData, documentData:standardSection, documentState
+                profileData, documentData:standardSection, documentConfig
             })
 
     },[])
@@ -60,13 +60,13 @@ const DocumentContent = (props) => {
         standardComponentRef.current = 
             React.cloneElement(standardComponentRef.current,
                 {
-                    documentState, 
+                    documentConfig, 
                     invalidStandardFieldFlagsRef
                 }
             )
         setContentState('updating')
 
-    },[documentState])
+    },[documentConfig])
 
 
     return <Box>

@@ -49,10 +49,6 @@ const Workspace = (props) => {
         workspaceFrameElementRef = useRef(null), // for resizeObserver
         panelComponentListRef = useRef(null), // workspace children, viewd in workpanel scroller
 
-        // centralized management of workbox resources
-        workboxComponentMapRef = useRef(null),
-        workboxHandlerMapRef = useRef(null),
-
         // required scroller property
         scrollerAcceptsRef = useRef({accept:[]}) //static, no anticipated direct child scrollers
 
@@ -72,8 +68,8 @@ const Workspace = (props) => {
     // init workbox resource repositiories
     useEffect(()=>{
 
-        workboxComponentMapRef.current = new Map()
-        workboxHandlerMapRef.current = new Map()
+        // workboxComponentMapRef.current = new Map()
+        // workboxHandlerMapRef.current = new Map()
         workspaceHandler.setPanelSelection = setPanelSelection
 
     },[])
@@ -89,7 +85,7 @@ const Workspace = (props) => {
 
     },[workspaceHandler.flags.new_workspace_load])
 
-    // handle scroller effects for panels
+    // handle scroller effects for panel selection
     useEffect(()=>{
 
         const is_set = panelSelection.index ?? false
@@ -170,8 +166,6 @@ const Workspace = (props) => {
                 <Workpanel 
                     key = {panelID} 
                     panelID = {panelID}
-                    workboxComponentMapRef = {workboxComponentMapRef}
-                    workboxHandlerMapRef = {workboxHandlerMapRef}
                 />
             )
 

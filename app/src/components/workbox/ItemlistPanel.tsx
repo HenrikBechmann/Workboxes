@@ -82,7 +82,7 @@ const ItemlistPanel = forwardRef(function FoldersPanel(props:any, itemlistFrameE
         { displayConfigCode, itemlistData, profileData, defaultItemlistState } = props,
         itemlistPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
-        [itemlistState, setItemlistState] = useState(defaultItemlistState)
+        [itemlistConfig, setItemlistState] = useState(defaultItemlistState)
 
     // console.log('itemlistData',itemlistData)
 
@@ -120,7 +120,7 @@ const ItemlistPanel = forwardRef(function FoldersPanel(props:any, itemlistFrameE
                 >
                     <GridItem data-type = 'itemlist-header' style = {itemlistHeaderStyles}>
                         <ToolbarFrame>
-                            <ItemlistToolbar itemlistState = {itemlistState} setItemlistState = {setItemlistState} />
+                            <ItemlistToolbar itemlistConfig = {itemlistConfig} setItemlistState = {setItemlistState} />
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'itemlist-body' style = {itemlistBodyStyles}>

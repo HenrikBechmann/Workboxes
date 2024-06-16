@@ -67,13 +67,9 @@ export const useWorkboxHandler = () => {
 
 const Workbox = (props) => {
     const 
-        {
-            workboxSettings,
-            workboxSessionID,
-
-        } = props,
+        { workboxSettings } = props,
         viewSettingContext = useContext(ViewSettingContext), // to pass to content component
-        [workboxState, setWorkboxState] = useState(null),
+        [workboxConfig, setWorkboxState] = useState(null),
 
         workboxID = workboxSettings.id,
 
@@ -97,7 +93,7 @@ const Workbox = (props) => {
 
     useEffect(()=>{
 
-        workboxHandlerInstanceRef.current = new WorkboxHandler(workboxSessionID, workboxID)
+        workboxHandlerInstanceRef.current = new WorkboxHandler(workboxID)
 
     },[])
 
@@ -131,7 +127,7 @@ const Workbox = (props) => {
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
                 <WorkboxToolbar 
-                    workboxState = {workboxState} 
+                    workboxConfig = {workboxConfig} 
                     setWorkboxState = {setWorkboxState} 
                     itemTitle = {itemName}
                     itemIcon = {itemIcon} 
@@ -145,7 +141,7 @@ const Workbox = (props) => {
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
                 <WorkboxContent 
                     viewSetting = {viewSettingContext} 
-                    workboxState = {workboxState} 
+                    workboxConfig = {workboxConfig} 
                     profileData = {profile}
                     documentData = {document}
                     itemlistData = {itemlist}

@@ -30,7 +30,7 @@ const WorkboxContent = (props) => {
 
     const 
         { 
-            workboxState, 
+            workboxConfig, 
             defaultDocumentState,
             defaultItemlistState,
             viewSetting, 
@@ -38,7 +38,7 @@ const WorkboxContent = (props) => {
             itemlistData, 
             profileData 
         } = props,
-        { itemlistShow, documentShow } = workboxState, // boolean - show/ noshow
+        { itemlistShow, documentShow } = workboxConfig, // boolean - show/ noshow
         // share document and itembox elements with children
         documentFrameElementRef = useRef( null ),
         itemlistFrameElementRef = useRef( null ),
@@ -78,7 +78,7 @@ const WorkboxContent = (props) => {
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsPanel showPanel = {workboxState.settingsShow}>
+        <SettingsPanel showPanel = {workboxConfig.settingsShow}>
             Settings
         </SettingsPanel>
         <CentralPanel 

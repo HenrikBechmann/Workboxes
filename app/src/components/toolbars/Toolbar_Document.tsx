@@ -60,7 +60,7 @@ const iconWrapperStyles = {
 const DocumentToolbar = (props) => {
 
     const 
-        { documentState, setDocumentState, invalidStandardFieldFlagsRef } = props,
+        { documentConfig, setDocumentState, invalidStandardFieldFlagsRef } = props,
         [toolbarState, setToolbarState] = useState('ready'),
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
@@ -93,36 +93,36 @@ const DocumentToolbar = (props) => {
     }
 
     const toggleDocumentMode = () => {
-        if (documentState.mode == 'edit') {
+        if (documentConfig.mode == 'edit') {
             if (isInvalidStandardField()) {
                 alert('Please correct errors, or cancel edit, before proceeding.')
                 return
             } else {
-                documentState.mode = 'view'
+                documentConfig.mode = 'view'
             }
         } else {
-            documentState.mode = 'edit'
+            documentConfig.mode = 'edit'
         }
-        setDocumentState({...documentState})
+        setDocumentState({...documentConfig})
     }
 
     const cancelEdit = () => {
-        documentState.mode = 'view'
-        setDocumentState({...documentState})
+        documentConfig.mode = 'view'
+        setDocumentState({...documentConfig})
     }
 
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
-        {(documentState.mode == 'edit') && <>
+        {(documentConfig.mode == 'edit') && <>
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
                 <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
                 {dropToggle}
                 <StandardIcon icon = {cancelEditIcon} response = {cancelEdit} caption = 'cancel' tooltip = 'cancel edit'/>
             </>
         }
-        {(documentState.mode == 'view') && 
+        {(documentConfig.mode == 'view') && 
             <StandardIcon icon = {editIcon} response = {toggleDocumentMode} caption = 'edit' tooltip = 'edit this document'/>
         }        
         <LearnIcon tooltip = 'Explain this toolbar'/>
