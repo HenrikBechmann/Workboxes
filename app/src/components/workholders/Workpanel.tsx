@@ -56,7 +56,7 @@ const panelMessageStyles = {
     fontStyle: 'italic',
 } as CSSProperties
 
-let nextWindowSessionID = 0 // used for non-duplicate window component key; also future reference
+let nextWindowSessionID = 0 // used for non-duplicate window component key
 let nextWorkboxSessionID = 0
 
 const Workpanel = (props:any) => {
@@ -290,6 +290,49 @@ const Workpanel = (props:any) => {
     }
 
     // -----------------------------[ window callbacks ]-----------------------------
+
+    const setFocus = (windowSessionID) => {
+
+        const 
+            windowsMap = windowsMapRef.current,
+            windowComponentList = windowComponentListRef.current,
+            numberOfWindows = windowComponentList.length,
+            windowRecord = windowsMap.get(windowSessionID),
+            zOrder = windowRecord.window.zOrder
+
+        if (zOrder === 0) return
+
+        let isChange = false
+        for (let index = 0; index < numberOfWindows; index++) {
+            const component = windowComponentList[index]
+            const {zOrder: subjectZOrder, windowSessionID: subjectSessionID} = component.props
+
+            if (subjectZOrder === 0) continue
+
+            if (subjectZOrder === zOrder) {
+                if (zOrder !== highestZOrderRef.current) {
+
+                    isChange = true
+                    windowComponentList[index] = React.cloneElement(component, {zOrder:highestZOrderRef.current})
+                    windowsMap.get(subjectSessionID).window.zOrder = highestZOrderRef.current
+
+                }
+
+            } else if (subjectZOrder > zOrder) {
+
+                isChange = true
+                windowComponentList[index] = React.cloneElement(component, {zOrder:subjectZOrder - 1})
+                windowsMap.get(subjectSessionID).window.zOrder = subjectZOrder - 1
+
+            }
+        }
+
+        if (isChange) {
+            windowComponentListRef.current = [...windowComponentList]
+            setPanelState('windowsetfocus')
+        }
+
+    }
 
     // remove window and update higher zOrders to compensate, or shuffle minimized windows
     const closeWindow = (windowSessionID) => {
@@ -575,49 +618,6 @@ const Workpanel = (props:any) => {
 
         windowComponentListRef.current = [...windowComponentList]
         setPanelState('maximizewindow')
-    }
-
-    const setFocus = (windowSessionID) => {
-
-        const 
-            windowsMap = windowsMapRef.current,
-            windowComponentList = windowComponentListRef.current,
-            numberOfWindows = windowComponentList.length,
-            windowRecord = windowsMap.get(windowSessionID),
-            zOrder = windowRecord.window.zOrder
-
-        if (zOrder === 0) return
-
-        let isChange = false
-        for (let index = 0; index < numberOfWindows; index++) {
-            const component = windowComponentList[index]
-            const {zOrder: subjectZOrder, windowSessionID: subjectSessionID} = component.props
-
-            if (subjectZOrder === 0) continue
-
-            if (subjectZOrder === zOrder) {
-                if (zOrder !== highestZOrderRef.current) {
-
-                    isChange = true
-                    windowComponentList[index] = React.cloneElement(component, {zOrder:highestZOrderRef.current})
-                    windowsMap.get(subjectSessionID).window.zOrder = highestZOrderRef.current
-
-                }
-
-            } else if (subjectZOrder > zOrder) {
-
-                isChange = true
-                windowComponentList[index] = React.cloneElement(component, {zOrder:subjectZOrder - 1})
-                windowsMap.get(subjectSessionID).window.zOrder = subjectZOrder - 1
-
-            }
-        }
-
-        if (isChange) {
-            windowComponentListRef.current = [...windowComponentList]
-            setPanelState('windowsetfocus')
-        }
-
     }
 
     const windowCallbacks = {
