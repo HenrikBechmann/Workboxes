@@ -74,24 +74,18 @@ const Workbox = (props) => {
         [workboxConfig, setWorkboxConfig] = useState(null),
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+
         viewSettingContext = useContext(ViewSettingContext), // to pass to content component
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         
         workboxFrameElementRef = useRef(null),
-        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
-
-        {workbox:contentSettings, document:documentSettings, itemlist: itemlistSettings} = workboxSettings,
-
-        { profile, document, itemlist } = workboxSettings,
-        { name:itemName } = profile.workbox,
-        { source:itemIcon } = profile.workbox.image,
-        { name:domainName } = profile.domain,
-        { source:domainIcon } = profile.domain.image,
-        { name:typeName } = profile.type
+        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
 
     useEffect(()=>{
 
-        setWorkboxHandlerContext({current:new WorkboxHandler(workboxID)})
+        const workboxHandler = new WorkboxHandler(workboxID)
+        workboxHandler.settings = workboxSettings
+        setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 
     },[])
@@ -99,9 +93,8 @@ const Workbox = (props) => {
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
-        const workboxInnerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_TOTAL_PADDING_WIDTH
-
-        setWorkboxInnerFrameWidth(workboxInnerFrameWidth)
+        workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_TOTAL_PADDING_WIDTH
+        dispatchWorkboxHandler('framewidth')
 
     },[])
 
@@ -125,28 +118,12 @@ const Workbox = (props) => {
     >
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
-                {(workboxState == 'ready') && <WorkboxToolbar 
-                    workboxConfig = {workboxConfig} 
-                    setWorkboxState = {setWorkboxState} 
-                    itemTitle = {itemName}
-                    itemIcon = {itemIcon} 
-                    domainTitle = {domainName}
-                    domainIcon = {domainIcon}
-                    typeName = {typeName}
-                />}
+                {(workboxState == 'ready') && <WorkboxToolbar />}
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                {(workboxState == 'ready') && <WorkboxContent 
-                    viewSetting = {viewSettingContext} 
-                    workboxConfig = {workboxConfig} 
-                    profileData = {profile}
-                    documentData = {document}
-                    itemlistData = {itemlist}
-                    defaultDocumentState = {contentSettings.document}
-                    defaultItemlistState = {contentSettings.Itemlist}
-                />}
+                {(workboxState == 'ready') && <WorkboxContent />}
             </Box>
         </GridItem>
     </Grid>

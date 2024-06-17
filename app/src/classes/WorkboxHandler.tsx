@@ -10,8 +10,11 @@ class WorkboxHandler {
     }
 
     workboxID
-    // workboxSessionID
     workboxRecord
+    settings
+    innerFrameWidth
+    trigger
+
     private _setWorkboxRecord
 
     set setWorkboxRecord (setRecord) {
