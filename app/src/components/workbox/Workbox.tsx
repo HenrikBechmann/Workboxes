@@ -13,7 +13,6 @@ import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
 export const WorkboxHandlerContext = createContext(null)
-import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
 import WorkboxHandler from '../../classes/WorkboxHandler'
 
@@ -93,7 +92,8 @@ const Workbox = (props) => {
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
-        workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - WORKBOX_CONTENT_TOTAL_PADDING_WIDTH
+        workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
+            workboxHandler.CONTENT_PADDING_WIDTH
         dispatchWorkboxHandler('framewidth')
 
     },[])

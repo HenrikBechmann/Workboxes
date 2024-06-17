@@ -16,7 +16,6 @@ import { useWorkboxHandler } from './Workbox'
 
 // synchronize this with the total left and right padding of workboxContentStyles
 // imported and used by resize observer of Workbox
-export const WORKBOX_CONTENT_TOTAL_PADDING_WIDTH = 10
 
 const workboxContentStyles = {
     display:'flex',
@@ -68,6 +67,7 @@ const WorkboxContent = (props) => {
 
     useEffect(()=>{
 
+        workboxHandler.CONTENT_PADDING_WIDTH = 10
         setTimeout(() => { // yield for forward reference updates
             setContentState('ready')
         },1)
