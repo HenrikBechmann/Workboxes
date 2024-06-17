@@ -187,7 +187,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             viewWidth = userDocumentWidthRef.current[viewSetting],
             viewTrigger = viewSetting
 
-        windowCallbackContextRef.current.changeView = ()=>{
+        windowCallbackContextRef.current.changeView = () => {
 
             const constraints = {
                 minX:MIN_COVER_FRAME_WIDTH,

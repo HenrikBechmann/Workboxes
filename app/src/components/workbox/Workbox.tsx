@@ -15,6 +15,8 @@ import WorkboxContent from './WorkboxContent'
 export const WorkboxHandlerContext = createContext(null)
 import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
+import WorkboxHandler from '../../classes/WorkboxHandler'
+
 import { ViewSettingContext } from '../workholders/Workwindow'
 
 const workboxFrameStyles = {
@@ -23,8 +25,6 @@ const workboxFrameStyles = {
     overflow:'auto',
     borderRadius: '0 0 0 7px'
 } as CSSProperties
-
-import WorkboxHandler from '../../classes/WorkboxHandler'
 
 const workboxGridStyles = {
     height: '100%',
@@ -54,11 +54,11 @@ export const useWorkboxHandler = () => {
     const 
         workboxHandlerContext = useContext(WorkboxHandlerContext),
         workboxHandler = workboxHandlerContext.current,
-        { setWorkboxHandlerState } = workboxHandler,
-        workspacePayload = {...workboxHandlerContext}, // coerce dispatch
+        { setWorkboxHandlerContext } = workboxHandler,
         dispatchWorkboxHandler = (trigger?) => {
             workboxHandler.trigger = trigger
-            setWorkboxHandlerState(workspacePayload)
+            const newWorkboxHandlerContext = {...workboxHandlerContext} // coerce dispatch
+            setWorkboxHandlerContext(newWorkboxHandlerContext)
         }
 
     return [workboxHandler, dispatchWorkboxHandler]
@@ -68,14 +68,14 @@ export const useWorkboxHandler = () => {
 const Workbox = (props) => {
     const 
         { workboxSettings } = props,
-        viewSettingContext = useContext(ViewSettingContext), // to pass to content component
-        [workboxConfig, setWorkboxState] = useState(null),
-
         workboxID = workboxSettings.id,
 
-        workboxHandlerInstanceRef = useRef(null),
+        [workboxState, setWorkboxState] = useState('setup'),
+        [workboxConfig, setWorkboxConfig] = useState(null),
 
-        [workboxHandlerState, setWorkboxHandlerState] = useState({ current: workboxHandlerInstanceRef.current }),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        viewSettingContext = useContext(ViewSettingContext), // to pass to content component
+        [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         
         workboxFrameElementRef = useRef(null),
         [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0),
@@ -89,11 +89,10 @@ const Workbox = (props) => {
         { source:domainIcon } = profile.domain.image,
         { name:typeName } = profile.type
 
-    // console.log('data', '-'+windowSessionID+'-',data)
-
     useEffect(()=>{
 
-        workboxHandlerInstanceRef.current = new WorkboxHandler(workboxID)
+        setWorkboxHandlerContext({current:new WorkboxHandler(workboxID)})
+        setWorkboxState('ready')
 
     },[])
 
@@ -119,14 +118,14 @@ const Workbox = (props) => {
     },[])
 
 
-    return <WorkboxHandlerContext.Provider value = {workboxInnerFrameWidth} >
+    return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
     <Grid
         data-type = 'workbox-grid'
         style = {workboxGridStyles}
     >
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
-                <WorkboxToolbar 
+                {(workboxState == 'ready') && <WorkboxToolbar 
                     workboxConfig = {workboxConfig} 
                     setWorkboxState = {setWorkboxState} 
                     itemTitle = {itemName}
@@ -134,12 +133,12 @@ const Workbox = (props) => {
                     domainTitle = {domainName}
                     domainIcon = {domainIcon}
                     typeName = {typeName}
-                />
+                />}
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                <WorkboxContent 
+                {(workboxState == 'ready') && <WorkboxContent 
                     viewSetting = {viewSettingContext} 
                     workboxConfig = {workboxConfig} 
                     profileData = {profile}
@@ -147,7 +146,7 @@ const Workbox = (props) => {
                     itemlistData = {itemlist}
                     defaultDocumentState = {contentSettings.document}
                     defaultItemlistState = {contentSettings.Itemlist}
-                />
+                />}
             </Box>
         </GridItem>
     </Grid>
