@@ -7,17 +7,22 @@ import {
     Box
 } from '@chakra-ui/react'
 
+import { cloneDeep as _cloneDeep } from 'lodash'
+
 import Workwindow from './Workwindow'
 import Workbox from './../workbox/Workbox'
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
-const defaultWorkboxConfig = {
+const defaultConfig = {
+    content: {
+    },
     settings: {
         show:false,
         disabled:false,
     },
     document: {
+        mode:'view',
         show:true,
         disabled:false,
     },
@@ -25,14 +30,6 @@ const defaultWorkboxConfig = {
         show:true,
         disabled:false,
     }
-}
-
-const defaultDocumentConfig = {
-    mode:'view',
-}
-
-const defaultItemlistConfig = {
-
 }
 
 const workpanelStyles = {
@@ -118,15 +115,17 @@ const Workpanel = (props:any) => {
     const showDomainWorkbox = () => {
 
         const windowSpecs = {
-            zOrder: 1,
             configuration: {top:10,left:10, width:610,height:400},
-            view: 'normalized',
+            profile: {
+                view: 'normalized',
+                zOrder: 1,
+            }
         }
         const workboxSpecs = {
-            workboxConfig: {...defaultWorkboxConfig},
-            documentConfig: {...defaultDocumentConfig},
-            itemlistConfig: {...defaultItemlistConfig},
-            id:workspaceHandler.panelDomainRecord.profile.workbox.id,
+            configuration: _cloneDeep(defaultConfig),
+            profile: {
+                id:workspaceHandler.panelDomainRecord.profile.workbox.id,
+            }
         }
 
         addWindow(windowSpecs, workboxSpecs)
@@ -136,15 +135,17 @@ const Workpanel = (props:any) => {
     const showMemberWorkbox = () => {
 
         const windowSpecs = {
-            zOrder: 1,
             configuration: {top:20,left:20, width:610,height:400},
-            view: 'normalized',
+            profile: {
+                view: 'normalized',
+                zOrder: 1,
+            }
         }
         const workboxSpecs = {
-            workboxConfig:{...defaultWorkboxConfig},
-            documentConfig: {...defaultDocumentConfig},
-            itemlistConfig: {...defaultItemlistConfig},
-            id:workspaceHandler.panelMemberRecord.profile.workbox.id,
+            configuration: _cloneDeep(defaultConfig),
+            profile: {
+                id:workspaceHandler.panelMemberRecord.profile.workbox.id,
+            }
         }
 
         addWindow(windowSpecs, workboxSpecs)
@@ -154,11 +155,12 @@ const Workpanel = (props:any) => {
     // called by initialization and duplicate window (so far)
     const addWindow = (windowSpecs, workboxSpecs) => {
 
-        console.log('addWindow: windowSpecs, workboxSpecs',windowSpecs, workboxSpecs)
-
-        return
-
         const windowSessionID = nextWindowSessionID++
+
+        Object.assign(windowSpecs.profile, {
+            windowSessionID,
+            index:null,
+        })
 
         const 
             windowComponentList = windowComponentListRef.current,
@@ -168,12 +170,15 @@ const Workpanel = (props:any) => {
             windowData = {
                 window:windowSpecs,
                 workbox:workboxSpecs,
-                windowSessionID,
-                index:null,
             }
 
         let 
             zOrder, stackOrder
+
+        console.log('addWindow: windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData\n',
+            windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData )
+
+        return
 
         // get zOrder and stackOrder values; if minimized, add to set
         if (windowData.window.view !== 'minimized') { // minimized, normalized or maximized
@@ -231,7 +236,7 @@ const Workpanel = (props:any) => {
         windowComponentList.push(component)
 
         // set window index and save window record
-        windowData.index = windowComponentList.length - 1
+        windowData.window.index = windowComponentList.length - 1
         windowDataMap.set(windowSessionID, windowData)
 
     }

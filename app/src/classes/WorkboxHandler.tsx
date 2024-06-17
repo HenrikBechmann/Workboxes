@@ -15,20 +15,20 @@ class WorkboxHandler {
     innerFrameWidth
     trigger
     setWorkboxHandlerContext
-    CONTENT_PADDING_WIDTH
+    CONTENT_PADDING_WIDTH = 10
 
     private _setWorkboxRecord
 
     set setWorkboxRecord (setRecord) {
         this._setWorkboxRecord = setRecord
-        this.loadWorkboxSnapshot()
+        this.setWorkboxSnapshot()
     }
 
     get setWorkboxRecord() {
         return this._setWorkboxRecord
     }
 
-    private async loadWorkboxSnapshot() {
+    private async setWorkboxSnapshot() {
 
     }
 
