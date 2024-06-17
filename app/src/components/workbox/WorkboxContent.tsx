@@ -12,6 +12,8 @@ import DocumentPanel from './DocumentPanel'
 import ItemlistPanel from './ItemlistPanel'
 import SettingsPanel from './SettingsPanel'
 
+import { useWorkboxHandler } from './Workbox'
+
 // synchronize this with the total left and right padding of workboxContentStyles
 // imported and used by resize observer of Workbox
 export const WORKBOX_CONTENT_TOTAL_PADDING_WIDTH = 10
@@ -38,6 +40,7 @@ const WorkboxContent = (props) => {
             itemlistData, 
             profileData 
         } = props,
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { itemlistShow, documentShow } = workboxConfig, // boolean - show/ noshow
         // share document and itembox elements with children
         documentFrameElementRef = useRef( null ),

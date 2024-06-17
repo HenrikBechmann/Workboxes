@@ -17,8 +17,6 @@ import { WORKBOX_CONTENT_TOTAL_PADDING_WIDTH } from './WorkboxContent'
 
 import WorkboxHandler from '../../classes/WorkboxHandler'
 
-import { ViewSettingContext } from '../workholders/Workwindow'
-
 const workboxFrameStyles = {
     position:'absolute',
     inset:0,
@@ -61,6 +59,8 @@ export const useWorkboxHandler = () => {
             setWorkboxHandlerContext(newWorkboxHandlerContext)
         }
 
+    console.log('workboxHandler, dispatchWorkboxHandler',workboxHandler, dispatchWorkboxHandler )
+
     return [workboxHandler, dispatchWorkboxHandler]
 
 }
@@ -75,7 +75,6 @@ const Workbox = (props) => {
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
 
-        viewSettingContext = useContext(ViewSettingContext), // to pass to content component
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         
         workboxFrameElementRef = useRef(null),
@@ -85,6 +84,7 @@ const Workbox = (props) => {
 
         const workboxHandler = new WorkboxHandler(workboxID)
         workboxHandler.settings = workboxSettings
+        workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
         setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 

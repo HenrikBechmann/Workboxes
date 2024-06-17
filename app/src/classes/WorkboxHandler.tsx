@@ -14,6 +14,7 @@ class WorkboxHandler {
     settings
     innerFrameWidth
     trigger
+    setWorkboxHandlerContext
 
     private _setWorkboxRecord
 
