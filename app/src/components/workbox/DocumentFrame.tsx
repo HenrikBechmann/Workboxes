@@ -136,7 +136,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         // props
         {
             displayConfigCode, 
-            userDocumentWidthRef, // userDocumentWidthRef informs "friends"
+            UIDocumentWidthRef, // UIDocumentWidthRef informs "friends"
             // windowSessionID, 
             viewSetting, 
             profileData,
@@ -159,7 +159,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         }),
         // windowCallbacksRef = useRef(w),
         // state
-        [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSetting]),
+        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current[viewSetting]),
         [documentConfig, setDocumentState] = useState(defaultDocumentState),
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false})
 
@@ -185,7 +185,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     // useEffect(()=>{
 
     //     const 
-    //         viewWidth = userDocumentWidthRef.current[viewSetting],
+    //         viewWidth = UIDocumentWidthRef.current[viewSetting],
     //         viewTrigger = viewSetting
 
     //     windowCallbackContextRef.current.changeView = () => {
@@ -204,7 +204,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     //         documentFrameElementRef.current.style.transition = 'width 0.3s'
     //         documentFrameElementRef.current.style.width = appliedWidth + 'px'
-    //         userDocumentWidthRef.current[viewTrigger] = appliedWidth
+    //         UIDocumentWidthRef.current[viewTrigger] = appliedWidth
 
     //         setTimeout(()=>{
     //             documentFrameElementRef.current.style.transition = 'none'
@@ -223,7 +223,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         const documentWidth = 
             displayCodeRef.current == 'out'
                 ? documentFrameElementRef.current.offsetWidth
-                : userDocumentWidthRef.current[viewSettingRef.current]
+                : UIDocumentWidthRef.current[viewSettingRef.current]
 
         clearTimeout(observerTimeoutRef.current)
 
@@ -239,7 +239,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
             if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
 
-            userDocumentWidthRef.current[viewSettingRef.current] = newWidth
+            UIDocumentWidthRef.current[viewSettingRef.current] = newWidth
 
             if (documentFrameElementRef.current.style.transition == 'none') {
                 setTimeout(()=>{
@@ -318,7 +318,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const onResizeStop = (e,{size, handle}) => {
         documentFrameElementRef.current.style.transition = 'width 0.5s'
 
-        userDocumentWidthRef.current[viewSettingRef.current] = size.width
+        UIDocumentWidthRef.current[viewSettingRef.current] = size.width
         setDocumentResizeWidth(size.width)
 
     }

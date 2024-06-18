@@ -43,7 +43,7 @@ const PrimaryFrame = (props) => {
             displayConfigCode, 
             documentFrameElementRef, 
             itemlistFrameElementRef, 
-            userDocumentWidthRef, // set by user through drag tag
+            UIDocumentWidthRef, // set by user through drag tag
             viewSetting,
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
@@ -90,7 +90,7 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itembox') { // document was hidden
 
-                documentFrameElement.firstChild.style.width = userDocumentWidthRef.current[viewSettingRef.current] + 'px'
+                documentFrameElement.firstChild.style.width = UIDocumentWidthRef.current[viewSettingRef.current] + 'px'
                 documentFrameElement.firstChild.style.left = 0
                 documentFrameElement.firstChild.style.right = 'auto'
 
@@ -98,7 +98,7 @@ const PrimaryFrame = (props) => {
 
                 itemlistFrameElement.firstChild.style.width = 
                     Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                        userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
+                        UIDocumentWidthRef.current[viewSettingRef.current])) + 'px'
                 itemlistFrameElement.firstChild.style.left = 'auto'
                 itemlistFrameElement.firstChild.style.right = 0
 
@@ -118,10 +118,10 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            documentFrameElement.style.width = userDocumentWidthRef.current[viewSettingRef.current] + 'px'
+            documentFrameElement.style.width = UIDocumentWidthRef.current[viewSettingRef.current] + 'px'
             itemlistFrameElement.style.width = 
                 Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                    userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
+                    UIDocumentWidthRef.current[viewSettingRef.current])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{

@@ -47,7 +47,7 @@ const ContentFrame = (props) => {
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        userDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
+        UIDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
     let workboxDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
@@ -88,14 +88,14 @@ const ContentFrame = (props) => {
             displayConfigCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
-            userDocumentWidthRef = {userDocumentWidthRef}
+            UIDocumentWidthRef = {UIDocumentWidthRef}
             viewSetting = {viewSetting}
         >
             <DocumentFrame 
                 ref = {documentFrameElementRef} 
                 displayConfigCode = {documentDisplayCode} 
                 defaultDocumentState = {defaultDocumentState}
-                userDocumentWidthRef = {userDocumentWidthRef}
+                UIDocumentWidthRef = {UIDocumentWidthRef}
                 viewSetting = {viewSetting}
                 documentData = {documentData}
                 profileData = {profileData}
