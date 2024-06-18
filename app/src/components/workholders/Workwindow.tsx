@@ -102,7 +102,7 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            configDefaults, // for this Workwindow 
+            windowSpecs, // for this Workwindow 
             windowSessionID, // system control
             zOrder, // inherited; modified by setFocus 
             viewDeclaration, // normalized, maximized, minimized
@@ -169,6 +169,8 @@ const Workwindow = (props) => {
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
+
+    console.log('running Workwindow', windowState)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 

@@ -61,7 +61,7 @@ const Workpanel = (props:any) => {
         // windows setup
         { panelID } = props,
 
-        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready
+        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready, reconfigured
 
         // collect panel data
         [workspaceHandler] = useWorkspaceHandler(),
@@ -83,6 +83,8 @@ const Workpanel = (props:any) => {
         panelElementRef = useRef(null)
 
     panelStateRef.current = panelState
+
+    // console.log('running Workpanel', panelState)
 
     const startingWindowsSpecsListRef = useRef(panelWindows)
 
@@ -130,6 +132,8 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
+        setPanelState('reconfigured')
+
     }
 
     const showMemberWorkbox = () => {
@@ -150,6 +154,8 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
+        setPanelState('reconfigured')
+
     }
 
     // called by initialization and duplicate window (so far)
@@ -160,6 +166,8 @@ const Workpanel = (props:any) => {
         Object.assign(windowSpecs.profile, {
             windowSessionID,
             index:null,
+            zOrder:null,
+            stackOrder:null,
         })
 
         const 
@@ -175,26 +183,28 @@ const Workpanel = (props:any) => {
         let 
             zOrder, stackOrder
 
-        console.log('addWindow: windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData\n',
-            windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData )
+        // console.log('addWindow: windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData\n',
+        //     windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData )
 
-        return
+        // return
 
         // get zOrder and stackOrder values; if minimized, add to set
-        if (windowData.window.view !== 'minimized') { // minimized, normalized or maximized
+        if (windowData.window.profile.view !== 'minimized') { // minimized, normalized or maximized
+
+            // console.log('windowData.window.profile.view, windowData.window',windowData.window.profile.view, windowData.window)
 
             zOrder = ++highestZOrderRef.current
 
             stackOrder = null
             // if a maxed component exists, swap zOrders
-            if ((windowData.window.view == 'normalized') && windowMaximizedRef.current) {
+            if ((windowData.window.profile.view == 'normalized') && windowMaximizedRef.current) {
                 const
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
-                    maxedIndex = maxedWindowRecord.index,
+                    maxedIndex = maxedWindowRecord.profile.index,
                     maxedComponent = windowComponentList[maxedIndex]
 
-                maxedWindowRecord.window.zOrder = zOrder
+                maxedWindowRecord.window.profile.zOrder = zOrder
                 windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {zOrder})
                 zOrder--
             }
@@ -208,18 +218,18 @@ const Workpanel = (props:any) => {
         }
 
         // set windowMaximizedRef if 'maximized'; push any existing maxed window out
-        if (windowData.window.view == 'maximized') {
+        if (windowData.window.profile.view == 'maximized') {
             if (windowMaximizedRef.current) {
                 const 
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
-                    maxedIndex = maxedWindowRecord.index,
+                    maxedIndex = maxedWindowRecord.profile.index,
                     maxedComponent = windowComponentList[maxedIndex]
 
-                    maxedWindowRecord.window.view = 'normalized'
+                    maxedWindowRecord.window.profile.view = 'normalized'
                     windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {
                         viewDeclaration:{
-                            view:maxedWindowRecord.window.view,
+                            view:maxedWindowRecord.window.profile.view,
                             stackOrder:null,
                         }
                     })
@@ -228,42 +238,49 @@ const Workpanel = (props:any) => {
         }
 
         // assign zOrder and stackOrder to window record
-        windowData.window.zOrder = zOrder
-        windowData.window.stackOrder = stackOrder
+        windowData.window.profile.zOrder = zOrder
+        windowData.window.profile.stackOrder = stackOrder
 
         // create window component
         const component = _createWindowComponent(windowSessionID, windowData)
         windowComponentList.push(component)
 
+        // console.log('windowComponentList',windowComponentList)
+
         // set window index and save window record
-        windowData.window.index = windowComponentList.length - 1
+        windowData.window.profile.index = windowComponentList.length - 1
         windowDataMap.set(windowSessionID, windowData)
+
+        windowComponentListRef.current = [...windowComponentList]
 
     }
 
     // ** private ** only called by addWindow above
     const _createWindowComponent = (windowSessionID, windowData) => {
 
+        // console.log('_createWindowComponent: windowSessionID, windowData', windowSessionID, windowData)
+
         const 
             // required to position window
             panelElement = panelElementRef.current,
-            containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight }
-
-        // required to configure window
-        const
-            { view, stackOrder, ...remainingWindowProps } = windowData.window,
+            containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
+            // required to configure window
+            { view, stackOrder } = windowData.window.profile,
             viewDeclaration = {
                 view,
                 stackOrder,
-            }
+            },
+            windowSpecs = windowData.window
 
+        console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, {...remainginWindowProps}\n',
+            windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, {...remainingWindowProps})
         return <Workwindow 
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
             containerDimensionSpecs = { containerDimensionSpecs }
             windowCallbacks = { windowCallbacks } 
-            { ...remainingWindowProps }
+            windowSpecs = { windowSpecs }
         >
             <Workbox 
                 workboxSettings = { windowData.workbox }
@@ -657,14 +674,18 @@ const Workpanel = (props:any) => {
 
     useEffect(() => {
 
+        // console.log('panelState reduction', panelState)
         if (panelState != 'ready') {
             setPanelState('ready')
         }
 
     },[panelState])
 
-    const windowComponentList = windowComponentListRef.current
+    const windowComponentList = [...windowComponentListRef.current]
     const windowCount = windowComponentListRef.current.length
+
+    // console.log('RENDER panelState, windowCount, windowComponentList[0], windowComponentList.length, windowComponentList before render\n', 
+    //     panelState, windowCount, windowComponentList[0], windowComponentList.length, [...windowComponentList])
 
     return <Box 
         id = 'panel-display' 
@@ -676,7 +697,7 @@ const Workpanel = (props:any) => {
         position = 'relative'
     >
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
-            {panelState != 'setup' && windowComponentList}
+            {(panelState != 'setup') && windowComponentList}
             {(panelState != 'setup' && windowCount === 0) && 
                 <Box style = {panelMessageStyles} >Tap here to load the default workbox for this panel</Box>
             }

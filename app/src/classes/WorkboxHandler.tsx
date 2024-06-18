@@ -12,7 +12,7 @@ import {
 import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxHandler {
-    constructor( {workboxID, db, usage, snapshotControl, onError, errorControl} ) {
+    constructor( {workboxID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
 
         // this.workboxSessionID = workboxSessionID
         this.workboxID = workboxID
@@ -20,6 +20,7 @@ class WorkboxHandler {
         this.usage = usage
         this.snapshotControl = snapshotControl
         this.onError = onError
+        this.onFail = onFail
         this.errorControl = errorControl
 
     }
@@ -30,6 +31,7 @@ class WorkboxHandler {
     usage
     snapshotControl
     onError
+    onFail
     errorControl
     unsubscribeworkbox
 
@@ -66,7 +68,7 @@ class WorkboxHandler {
                 let workboxRecord = returndoc.data()
 
                 if (!workboxRecord) {
-                    // TODO something
+                    this.onFail()
                 } else {
 
                     if (!this.snapshotControl.wasSchemaChecked(workboxIndex)) {
@@ -112,7 +114,7 @@ class WorkboxHandler {
 
     }
 
-    async saveWorkboxRecord() {
+    async saveWorkboxRecord(workboxRecord) {
 
     }
 
