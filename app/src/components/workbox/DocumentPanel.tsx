@@ -23,19 +23,19 @@ import DocumentToolbar from '../toolbars/Toolbar_Document'
 
 import handleIcon from '../../../assets/handle.png'
 
-import { WorkboxHandlerContext } from './Workbox'
-import { WindowCallbackContext } from '../workholders/Workwindow'
+import { useWorkboxHandler } from './Workbox'
+
 import DocumentContent from '../documentUI/DocumentContent'
 
 const 
-    MIN_COVER_FRAME_WIDTH = 250,
-    MAX_COVER_FRAME_RATIO = 0.75,
-    MIN_CONTENTS_FRAME_WIDTH = 250
+    MIN_DOCUMENT_FRAME_WIDTH = 250,
+    MAX_DOCUMENT_FRAME_RATIO = 0.75,
+    MIN_ITEMLIST_FRAME_WIDTH = 250
 
 const documentFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
-    minWidth: MIN_COVER_FRAME_WIDTH + 'px',
+    minWidth: MIN_DOCUMENT_FRAME_WIDTH + 'px',
     position: 'relative',
     transition: 'none', // set as needed
     transitionDelay:'unset',
@@ -142,8 +142,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
             defaultDocumentState,
         } = props, 
         // context
-        workboxHandlerContext = useContext(WorkboxHandlerContext),
-        windowCallbackContext = useContext(WindowCallbackContext),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         // persistence
         documentPanelElementRef = useRef(null),
         centralPanelElementRef = useRef(null), // for direct config updates
@@ -151,12 +150,12 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         observerTimeoutRef = useRef(null),
         handleRef = useRef(null),
         constraintsRef = useRef({
-            minX:MIN_COVER_FRAME_WIDTH,
+            minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
-        windowCallbackContextRef = useRef(windowCallbackContext),
+        // windowCallbacksRef = useRef(w),
         // state
         [documentResizeWidth, setDocumentResizeWidth] = useState(userDocumentWidthRef.current[viewSetting]),
         [documentConfig, setDocumentState] = useState(defaultDocumentState),
@@ -164,11 +163,11 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
     // scope
     const
-        workboxInnerFrameWidthFromContextRef = useRef(null),
+        workboxInnerFrameWidthRef = useRef(null),
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    workboxInnerFrameWidthFromContextRef.current = workboxHandlerContext
+    workboxInnerFrameWidthRef.current = workboxHandler.innerFrameWidth
     displayCodeRef.current = displayConfigCode
     viewSettingRef.current = viewSetting
 
@@ -181,38 +180,38 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
     },[])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        const 
-            viewWidth = userDocumentWidthRef.current[viewSetting],
-            viewTrigger = viewSetting
+    //     const 
+    //         viewWidth = userDocumentWidthRef.current[viewSetting],
+    //         viewTrigger = viewSetting
 
-        windowCallbackContextRef.current.changeView = () => {
+    //     windowCallbackContextRef.current.changeView = () => {
 
-            const constraints = {
-                minX:MIN_COVER_FRAME_WIDTH,
-                minY:documentFrameElementRef.current?.offsetHeight || 0,
-                maxX: Math.min(
-                    workboxInnerFrameWidthFromContextRef.current * MAX_COVER_FRAME_RATIO,
-                    workboxInnerFrameWidthFromContextRef.current - MIN_CONTENTS_FRAME_WIDTH),
-                maxY:documentFrameElementRef.current?.offsetHeight || 0,
-            }
-            constraintsRef.current = constraints
+    //         const constraints = {
+    //             minX:MIN_DOCUMENT_FRAME_WIDTH,
+    //             minY:documentFrameElementRef.current?.offsetHeight || 0,
+    //             maxX: Math.min(
+    //                 workboxInnerFrameWidthRef.current * MAX_DOCUMENT_FRAME_RATIO,
+    //                 workboxInnerFrameWidthRef.current - MIN_ITEMLIST_FRAME_WIDTH),
+    //             maxY:documentFrameElementRef.current?.offsetHeight || 0,
+    //         }
+    //         constraintsRef.current = constraints
 
-            const appliedWidth = Math.min(constraints.maxX, viewWidth)
+    //         const appliedWidth = Math.min(constraints.maxX, viewWidth)
 
-            documentFrameElementRef.current.style.transition = 'width 0.3s'
-            documentFrameElementRef.current.style.width = appliedWidth + 'px'
-            userDocumentWidthRef.current[viewTrigger] = appliedWidth
+    //         documentFrameElementRef.current.style.transition = 'width 0.3s'
+    //         documentFrameElementRef.current.style.width = appliedWidth + 'px'
+    //         userDocumentWidthRef.current[viewTrigger] = appliedWidth
 
-            setTimeout(()=>{
-                documentFrameElementRef.current.style.transition = 'none'
-                setDocumentResizeWidth(appliedWidth)
-            },300)
+    //         setTimeout(()=>{
+    //             documentFrameElementRef.current.style.transition = 'none'
+    //             setDocumentResizeWidth(appliedWidth)
+    //         },300)
 
-        }
+    //     }
 
-    },[viewSetting])
+    // },[viewSetting])
 
     useEffect(()=>{
 
@@ -228,12 +227,12 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
         const calculatedMaxDocumentWidth = 
             Math.min(
-                workboxHandlerContext * MAX_COVER_FRAME_RATIO,
-                workboxHandlerContext - MIN_CONTENTS_FRAME_WIDTH)
+                workboxHandlerContext * MAX_DOCUMENT_FRAME_RATIO,
+                workboxHandlerContext - MIN_ITEMLIST_FRAME_WIDTH)
 
         if (calculatedMaxDocumentWidth < documentWidth) {
 
-            const newWidth = Math.max(MIN_COVER_FRAME_WIDTH, calculatedMaxDocumentWidth)
+            const newWidth = Math.max(MIN_DOCUMENT_FRAME_WIDTH, calculatedMaxDocumentWidth)
 
             if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
             displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
@@ -251,14 +250,14 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
         }
 
         const constraints = {
-            minX:MIN_COVER_FRAME_WIDTH,
+            minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: calculatedMaxDocumentWidth,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
 
-    },[workboxHandlerContext])
+    },[workboxHandler])
 
     useEffect(()=>{
 
@@ -296,11 +295,11 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     const onResizeStart = () => {
         documentFrameElementRef.current.style.transition = 'none'
         const constraints = {
-            minX:MIN_COVER_FRAME_WIDTH,
+            minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: Math.min(
-                workboxHandlerContext * MAX_COVER_FRAME_RATIO,
-                workboxHandlerContext - MIN_CONTENTS_FRAME_WIDTH),
+                workboxHandlerContext * MAX_DOCUMENT_FRAME_RATIO,
+                workboxHandlerContext - MIN_ITEMLIST_FRAME_WIDTH),
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints

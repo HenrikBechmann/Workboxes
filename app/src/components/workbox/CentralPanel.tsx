@@ -15,10 +15,10 @@ import {
 } from '@chakra-ui/react'
 
 const 
-    MIN_COVER_FRAME_WIDTH = 250,
-    MIN_CONTENTS_FRAME_WIDTH = 250,
-    MIN_CENTRAL_FRAME_WIDTH = MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH,
-    MIN_CONTENT_HEIGHT = 300
+    MIN_DOCUMENT_FRAME_WIDTH = 250,
+    MIN_ITEMLIST_FRAME_WIDTH = 250,
+    MIN_CENTRAL_PANEL_WIDTH = MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH,
+    MIN_CENTRAL_PANEL_HEIGHT = 300
 
 const centralPanelStyles = {
     height:'100%',
@@ -28,8 +28,8 @@ const centralPanelStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     flex: '1 0 auto',
-    minWidth: MIN_CENTRAL_FRAME_WIDTH + 'px',
-    minHeight: MIN_CONTENT_HEIGHT + 'px',
+    minWidth: MIN_CENTRAL_PANEL_WIDTH + 'px',
+    minHeight: MIN_CENTRAL_PANEL_HEIGHT + 'px',
     transition:'none', // set as needed
     boxSizing: 'border-box',
 } as CSSProperties
@@ -97,7 +97,7 @@ const CentralPanel = (props) => {
             } else { // itembox was hidden
 
                 itemlistFrameElement.firstChild.style.width = 
-                    Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
+                    Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                         userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
                 itemlistFrameElement.firstChild.style.left = 'auto'
                 itemlistFrameElement.firstChild.style.right = 0
@@ -113,14 +113,14 @@ const CentralPanel = (props) => {
             documentFrameElement.style.flex = '0 0 auto'
 
             // freeze itembox
-            centralPanelElement.style.minWidth = (MIN_COVER_FRAME_WIDTH + MIN_CONTENTS_FRAME_WIDTH) + 'px'
+            centralPanelElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
             documentFrameElement.style.width = userDocumentWidthRef.current[viewSettingRef.current] + 'px'
             itemlistFrameElement.style.width = 
-                Math.max(MIN_CONTENTS_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
+                Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
                     userDocumentWidthRef.current[viewSettingRef.current])) + 'px'
 
             // wait for result; restore defaults
@@ -133,10 +133,10 @@ const CentralPanel = (props) => {
                 // restore itembox frame defaults
                 itemlistFrameElement.style.flex = '1 0 auto'
                 itemlistFrameElement.style.width = 'auto'
-                itemlistFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
 
                 // restore document frame defaults
-                documentFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
+                documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
                 // restore panel defaults
                 itemlistFrameElement.firstChild.style.width = '100%'
@@ -167,7 +167,7 @@ const CentralPanel = (props) => {
             }
 
             // freeze central frame
-            centralPanelElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
+            centralPanelElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
@@ -196,7 +196,7 @@ const CentralPanel = (props) => {
                 // set config for visible frame
                 documentFrameElement.style.flex = '1 0 auto'
                 documentFrameElement.style.width = 'auto'
-                documentFrameElement.style.minWidth = MIN_COVER_FRAME_WIDTH + 'px'
+                documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
                 // set visible panel config
                 documentFrameElement.firstChild.style.width = '100%'
@@ -228,7 +228,7 @@ const CentralPanel = (props) => {
             }
 
             // freeze central frame
-            centralPanelElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+            centralPanelElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
             centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
             centralPanelElement.style.flex = '0 0 auto'
 
@@ -257,7 +257,7 @@ const CentralPanel = (props) => {
                 // set visible frame config
                 itemlistFrameElement.style.width = 'auto'
                 itemlistFrameElement.style.flex = '1 0 auto'
-                itemlistFrameElement.style.minWidth = MIN_CONTENTS_FRAME_WIDTH + 'px'
+                itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
 
                 // restore visible panel config
                 itemlistFrameElement.firstChild.style.width = '100%'

@@ -112,6 +112,7 @@ const Workwindow = (props) => {
             title,
         } = props,
 
+        windowConfig = windowSpecs.configuration,
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         titlebarElementRef = useRef(null),
@@ -130,10 +131,10 @@ const Workwindow = (props) => {
         // source of truth for normalized window
         [normalizedWindowConfig, setNormalizedWindowConfig] = useState( 
             {
-                top: configDefaults.top, 
-                left: configDefaults.left, 
-                width: configDefaults.width, 
-                height: configDefaults.height
+                top: windowConfig.top, 
+                left: windowConfig.left, 
+                width: windowConfig.width, 
+                height: windowConfig.height
             }
         ),
         normalizedWindowConfigRef = useRef(null),
@@ -170,7 +171,7 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    console.log('running Workwindow', windowState)
+    // console.log('running Workwindow', windowState)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 

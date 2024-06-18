@@ -15,7 +15,7 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
 
-export const WorkboxHandlerContext = createContext(null)
+export const WorkboxHandlerContext = createContext({current:null})
 
 import WorkboxHandler from '../../classes/WorkboxHandler'
 

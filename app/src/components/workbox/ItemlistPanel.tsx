@@ -20,14 +20,14 @@ import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import ItemlistToolbar from '../toolbars/Toolbar_Itemlist'
 
 const 
-    MIN_CONTENTS_FRAME_WIDTH = 250,
-    MIN_CONTENT_HEIGHT = 300
+    MIN_ITEMLIST_FRAME_WIDTH = 250,
+    MIN_CENTRAL_PANEL_HEIGHT = 300
 
 const itemlistFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
-    minWidth: MIN_CONTENTS_FRAME_WIDTH + 'px',
-    minHeight: MIN_CONTENT_HEIGHT + 'px',
+    minWidth: MIN_ITEMLIST_FRAME_WIDTH + 'px',
+    minHeight: MIN_CENTRAL_PANEL_HEIGHT + 'px',
     position: 'relative',
     transition:'none', // set as needed
     transitionDelay:'unset',

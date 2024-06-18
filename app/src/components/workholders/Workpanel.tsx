@@ -272,8 +272,8 @@ const Workpanel = (props:any) => {
             },
             windowSpecs = windowData.window
 
-        console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, {...remainginWindowProps}\n',
-            windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, {...remainingWindowProps})
+        console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs\n',
+            windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs)
         return <Workwindow 
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
