@@ -8,6 +8,8 @@ import {
   Tooltip, Box, Text, VStack,
 } from '@chakra-ui/react'
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
 import { useToggleIcon } from './ToggleIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 import MenuIcon from './MenuIcon'
@@ -67,28 +69,37 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        { 
-            workboxConfig, 
-            setWorkboxState, 
-            itemTitle, 
-            itemIcon, 
-            domainTitle, 
-            domainIcon, 
-            typeName 
-        } = props,
+        // { 
+        //     workboxConfig, 
+        //     setWorkboxState, 
+        //     itemTitle, 
+        //     itemIcon, 
+        //     domainTitle, 
+        //     domainIcon, 
+        //     typeName 
+        // } = props,
 
-        toggleOnDocumentRef = useRef(workboxConfig.documentShow),
-        disabledDocumentRef = useRef(workboxConfig.documentDisabled),
-        toggleOnItemlistRef = useRef(workboxConfig.itemlistShow),
-        disabledItemlistRef = useRef(workboxConfig.itemlistDisabled),
-        toggleOnSettingsRef = useRef(workboxConfig.settingsShow),
-        disabledSettingsRef = useRef(workboxConfig.settingsDisabled),
-        toggleOnCommentsRef = useRef(workboxConfig.settingsShow),
-        disabledCommentsRef = useRef(workboxConfig.settingsDisabled),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { settings, setWorkboxState } = workboxHandler
+
+    console.log('workboxHandler',workboxHandler)
+
+    const
+        toggleOnDocumentRef = useRef(settings.configuration.document.show),
+        disabledDocumentRef = useRef(settings.configuration.document.disabled),
+        toggleOnItemlistRef = useRef(settings.configuration.itemlist.show),
+        disabledItemlistRef = useRef(settings.configuration.itemlist.sisabled),
+        toggleOnSettingsRef = useRef(settings.configuration.settings.show),
+        disabledSettingsRef = useRef(settings.configuration.settings.disabled),
 
         toggleHistoryRef = useRef({
             documentShow:toggleOnDocumentRef.current,
-        })
+        }),
+        domainTitle = '',
+        domainIcon = '',
+        itemIcon = '',
+        itemTitle = '',
+        typeName = ''
 
     const 
         currentIsDocument = toggleOnDocumentRef.current,
@@ -110,14 +121,16 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        workboxConfig.documentShow = toggleOnDocumentRef.current
-        workboxConfig.documentDisabled = disabledDocumentRef.current
-        workboxConfig.itemlistShow = toggleOnItemlistRef.current
-        workboxConfig.itemlistDisabled = disabledItemlistRef.current
-        workboxConfig.settingsShow = toggleOnSettingsRef.current
-        workboxConfig.settingsDisabled = disabledSettingsRef.current
+        console.log('SETTINGS', settings)
 
-        setWorkboxState({...workboxConfig}) // trigger render
+        settings.configuration.document.show = toggleOnDocumentRef.current
+        settings.configuration.document.disabled = disabledDocumentRef.current
+        settings.configuration.itemlist.show = toggleOnItemlistRef.current
+        settings.configuration.itemlist.disabled = disabledItemlistRef.current
+        settings.configuration.settings.show = toggleOnSettingsRef.current
+        settings.configuration.settings.disabled = disabledSettingsRef.current
+
+        setWorkboxState('reconfig') // trigger render
 
     },[
         toggleOnDocumentRef.current,

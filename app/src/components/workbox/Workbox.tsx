@@ -49,16 +49,24 @@ const workboxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-export const useWorkboxHandler = () => {
+export const useWorkboxHandler = (parms?) => {
 
     const 
-        workboxHandlerContext = useContext(WorkboxHandlerContext),
-        workboxHandler = workboxHandlerContext.current,
-        { setWorkboxHandlerContext } = workboxHandler,
+        workboxHandlerContext = useContext(WorkboxHandlerContext)
+
+    let
+        workboxHandler = workboxHandlerContext.current
+        if (!workboxHandler) {
+            workboxHandler = new WorkboxHandler(parms)
+            workboxHandlerContext.current = workboxHandler
+        }
+
+    const
+        setWorkboxHandlerContext = workboxHandler.setWorkboxHandlerContext,
         dispatchWorkboxHandler = (trigger?) => {
             workboxHandler.trigger = trigger
             const newWorkboxHandlerContext = {...workboxHandlerContext} // coerce dispatch
-            setWorkboxHandlerContext(newWorkboxHandlerContext)
+            setWorkboxHandlerContext && setWorkboxHandlerContext(newWorkboxHandlerContext)
         }
 
     console.log('workboxHandler, dispatchWorkboxHandler',workboxHandler, dispatchWorkboxHandler )
@@ -80,9 +88,16 @@ const Workbox = (props) => {
         errorControl = useErrorControl,
 
         [workboxState, setWorkboxState] = useState('setup'),
-        // [workboxConfig, setWorkboxConfig] = useState(null),
 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        onFail = () => {
+            // TODO
+        },
+
+        onError = () => {
+            navigate('/error')
+        },
+
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl}),
         { workboxRecord, unsubscribeworkbox } = workboxHandler,
 
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
@@ -91,11 +106,12 @@ const Workbox = (props) => {
 
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
+        // const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
         workboxHandler.settings = workboxSettings
         workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.setWorkboxState = setWorkboxState
-        setWorkboxHandlerContext({current:workboxHandler})
+        workboxHandlerContext.current = workboxHandler
+        // setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 
     },[])
@@ -119,14 +135,6 @@ const Workbox = (props) => {
         }
 
     },[unsubscribeworkbox])
-
-    const onFail = () => {
-        // TODO
-    }
-
-    const onError = () => {
-        navigate('/error')
-    }
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {

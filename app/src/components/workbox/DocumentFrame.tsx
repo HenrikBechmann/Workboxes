@@ -338,7 +338,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         } 
         axis = 'x'
         height = {documentFrameElementRef.current?.offsetHeight || 0} 
-        width = {documentResizeWidth}
+        width = {300/*documentResizeWidth*/}
         resizeHandles = {['e']}
         minConstraints = {[constraintsRef.current.minX,constraintsRef.current.minY]}
         maxConstraints = {[constraintsRef.current.maxX,constraintsRef.current.maxY]}

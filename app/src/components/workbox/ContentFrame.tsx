@@ -30,17 +30,18 @@ const workboxContentStyles = {
 const ContentFrame = (props) => {
 
     const 
-        { 
-            workboxConfig, 
-            defaultDocumentState,
-            defaultItemlistState,
-            viewSetting, 
-            documentData, 
-            itemlistData, 
-            profileData 
-        } = props,
+        // { 
+        //     workboxConfig, 
+        //     defaultDocumentState,
+        //     defaultItemlistState,
+        //     viewSetting, 
+        //     documentData, 
+        //     itemlistData, 
+        //     profileData 
+        // } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        { itemlistShow, documentShow } = workboxConfig, // boolean - show/ noshow
+        { show:itemlistShow } = workboxHandler.settings.configuration.itemlist, // boolean - show/ noshow
+        { show:documentShow } = workboxHandler.settings.configuration.document, // boolean - show/ noshow
         // share document and itembox elements with children
         documentFrameElementRef = useRef( null ),
         itemlistFrameElementRef = useRef( null ),
@@ -81,7 +82,7 @@ const ContentFrame = (props) => {
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsFrame showPanel = {workboxConfig.settingsShow}>
+        <SettingsFrame showPanel = {workboxHandler.settings.configuration.settings.show}>
             Settings
         </SettingsFrame>
         <PrimaryFrame 
@@ -89,23 +90,23 @@ const ContentFrame = (props) => {
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
             UIDocumentWidthRef = {UIDocumentWidthRef}
-            viewSetting = {viewSetting}
+            viewSetting = {workboxHandler.settings.configuration.document.mode}
         >
             <DocumentFrame 
                 ref = {documentFrameElementRef} 
                 displayConfigCode = {documentDisplayCode} 
-                defaultDocumentState = {defaultDocumentState}
+                defaultDocumentState = {workboxHandler.settings.configuration.document}
                 UIDocumentWidthRef = {UIDocumentWidthRef}
-                viewSetting = {viewSetting}
-                documentData = {documentData}
-                profileData = {profileData}
+                viewSetting = {workboxHandler.settings.configuration.document.mode}
+                documentData = {{}}
+                profileData = {{}}
             />
             <ItemlistFrame 
                 ref = {itemlistFrameElementRef} 
                 displayConfigCode = {itemlistDisplayCode} 
-                defaultItemlistState = {defaultItemlistState}
-                itemlistData = { itemlistData }
-                profileData = { profileData }
+                defaultItemlistState = {workboxHandler.settings.configuration.itemlist}
+                itemlistData = { {} }
+                profileData = { {} }
             />
         </PrimaryFrame>
     </Box>

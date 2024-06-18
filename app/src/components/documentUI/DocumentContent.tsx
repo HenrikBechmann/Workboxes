@@ -31,7 +31,7 @@ const DocumentContent = (props) => {
 
         let standardSection
         const {sections} = documentData
-        const sectionCount = sections.length
+        const sectionCount = sections?.length
         for (let index = 0; index < sectionCount; index++) {
             const section = sections[index]
             if (section.name = 'standard') {
@@ -40,10 +40,10 @@ const DocumentContent = (props) => {
             }
         }
 
-        standardComponentRef.current =
-            React.createElement(documentTypeBundles[profileData.typeName].StandardDocumentSection,{
-                profileData, documentData:standardSection, documentConfig
-            })
+        // standardComponentRef.current =
+        //     React.createElement(documentTypeBundles[profileData.typeName].StandardDocumentSection,{
+        //         profileData, documentData:standardSection, documentConfig
+        //     })
 
     },[])
 
