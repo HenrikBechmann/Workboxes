@@ -42,7 +42,7 @@ class WorkboxHandler {
     innerFrameWidth
     trigger
     setWorkboxHandlerContext
-    CONTENT_PADDING_WIDTH = 10
+    CONTENT_FRAME_PADDING_WIDTH
 
     private _setWorkboxState
 

@@ -132,7 +132,7 @@ const Workbox = (props) => {
     const resizeObserverCallback = useCallback(()=> {
 
         workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
-            workboxHandler.CONTENT_PADDING_WIDTH
+            workboxHandler.CONTENT_FRAME_PADDING_WIDTH
         dispatchWorkboxHandler('framewidth')
 
     },[])
