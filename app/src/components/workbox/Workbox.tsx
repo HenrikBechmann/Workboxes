@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFirestore, useUsage, useSnapshotControl, useErrorControl } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
-import WorkboxContent from './WorkboxContent'
+import ContentFrame from './ContentFrame'
 
 export const WorkboxHandlerContext = createContext({current:null})
 
@@ -162,7 +162,7 @@ const Workbox = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                {(workboxState == 'ready') && <WorkboxContent />}
+                {(workboxState == 'ready') && <ContentFrame />}
             </Box>
         </GridItem>
     </Grid>

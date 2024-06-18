@@ -1,4 +1,4 @@
-// SettingsPanel.tsx
+// SettingsFrame.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -38,7 +38,7 @@ const settingsPanelStyles = {
     boxShadow: '3px 3px 6px 6px inset silver'
 } as CSSProperties
 
-const SettingsPanel = (props) => {
+const SettingsFrame = (props) => {
     const
         { showPanel, children } = props,
         settingsPanelElementRef = useRef(null),
@@ -92,4 +92,4 @@ const SettingsPanel = (props) => {
     </Box>
 }
 
-export default SettingsPanel
+export default SettingsFrame

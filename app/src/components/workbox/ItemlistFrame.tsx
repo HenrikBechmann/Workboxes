@@ -1,4 +1,4 @@
-// ItemlistPanel.tsx
+// ItemlistFrame.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -21,13 +21,13 @@ import ItemlistToolbar from '../toolbars/Toolbar_Itemlist'
 
 const 
     MIN_ITEMLIST_FRAME_WIDTH = 250,
-    MIN_CENTRAL_PANEL_HEIGHT = 300
+    MIN_PRIMARY_FRAME_HEIGHT = 300
 
 const itemlistFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     minWidth: MIN_ITEMLIST_FRAME_WIDTH + 'px',
-    minHeight: MIN_CENTRAL_PANEL_HEIGHT + 'px',
+    minHeight: MIN_PRIMARY_FRAME_HEIGHT + 'px',
     position: 'relative',
     transition:'none', // set as needed
     transitionDelay:'unset',
@@ -77,7 +77,7 @@ const itemlistBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const ItemlistPanel = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
+const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
     const 
         { displayConfigCode, itemlistData, profileData, defaultItemlistState } = props,
         itemlistPanelElementRef = useRef(null),
@@ -131,4 +131,4 @@ const ItemlistPanel = forwardRef(function FoldersPanel(props:any, itemlistFrameE
     </Box>
 })
 
-export default ItemlistPanel
+export default ItemlistFrame

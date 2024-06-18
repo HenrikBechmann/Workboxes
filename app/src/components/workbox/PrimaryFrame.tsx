@@ -1,4 +1,4 @@
-// CentralPanel.tsx
+// PrimaryFrame.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -17,10 +17,10 @@ import {
 const 
     MIN_DOCUMENT_FRAME_WIDTH = 250,
     MIN_ITEMLIST_FRAME_WIDTH = 250,
-    MIN_CENTRAL_PANEL_WIDTH = MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH,
-    MIN_CENTRAL_PANEL_HEIGHT = 300
+    MIN_PRIMARY_FRAME_WIDTH = MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH,
+    MIN_PRIMARY_FRAME_HEIGHT = 300
 
-const centralPanelStyles = {
+const primaryFrameStyles = {
     height:'100%',
     borderRadius:'8px',
     backgroundColor:'transparent', 
@@ -28,13 +28,13 @@ const centralPanelStyles = {
     display:'flex',
     flexWrap: 'nowrap',
     flex: '1 0 auto',
-    minWidth: MIN_CENTRAL_PANEL_WIDTH + 'px',
-    minHeight: MIN_CENTRAL_PANEL_HEIGHT + 'px',
+    minWidth: MIN_PRIMARY_FRAME_WIDTH + 'px',
+    minHeight: MIN_PRIMARY_FRAME_HEIGHT + 'px',
     transition:'none', // set as needed
     boxSizing: 'border-box',
 } as CSSProperties
 
-const CentralPanel = (props) => {
+const PrimaryFrame = (props) => {
 
     const 
         {
@@ -275,15 +275,15 @@ const CentralPanel = (props) => {
 
     },[displayConfigCode])
 
-    // CentralWidthContext informs DocumentPanel
+    // CentralWidthContext informs DocumentFrame
     return <Box 
-        data-type = 'central-panel' 
+        data-type = 'primary-frame' 
         ref = {centralPanelElementRef} 
-        id = 'central-panel' 
-        style = {centralPanelStyles}
+        id = 'primary-frame' 
+        style = {primaryFrameStyles}
     >
         {children}
     </Box>
 }
 
-export default CentralPanel
+export default PrimaryFrame

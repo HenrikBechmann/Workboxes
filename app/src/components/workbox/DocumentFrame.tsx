@@ -30,12 +30,14 @@ import DocumentContent from '../documentUI/DocumentContent'
 const 
     MIN_DOCUMENT_FRAME_WIDTH = 250,
     MAX_DOCUMENT_FRAME_RATIO = 0.75,
-    MIN_ITEMLIST_FRAME_WIDTH = 250
+    MIN_ITEMLIST_FRAME_WIDTH = 250,
+    MIN_PRIMARY_FRAME_HEIGHT = 300
 
 const documentFrameStyles = {
     flex: '0 0 auto',
     width: '300px',
     minWidth: MIN_DOCUMENT_FRAME_WIDTH + 'px',
+    minHeight: MIN_PRIMARY_FRAME_HEIGHT + 'px',
     position: 'relative',
     transition: 'none', // set as needed
     transitionDelay:'unset',
@@ -129,7 +131,7 @@ const DocumentHandle = (props) => {
     )
 }
 
-const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrameElementRef:any) {
+const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrameElementRef:any) {
     const 
         // props
         {
@@ -175,7 +177,7 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
 
     useEffect(()=>{
 
-        centralPanelElementRef.current = documentPanelElementRef.current.closest('#central-panel')
+        centralPanelElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
         handleRef.current = centralPanelElementRef.current.querySelector('#handle')
 
     },[])
@@ -377,4 +379,4 @@ const DocumentPanel = forwardRef(function DocumentPanel(props:any, documentFrame
     </Resizable>)
 })
 
-export default DocumentPanel
+export default DocumentFrame

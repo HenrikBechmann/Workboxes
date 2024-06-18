@@ -1,4 +1,4 @@
-// WorkboxContent.tsx
+// ContentFrame.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, useContext } from 'react'
@@ -7,10 +7,10 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import CentralPanel from './CentralPanel'
-import DocumentPanel from './DocumentPanel'
-import ItemlistPanel from './ItemlistPanel'
-import SettingsPanel from './SettingsPanel'
+import PrimaryFrame from './PrimaryFrame'
+import DocumentFrame from './DocumentFrame'
+import ItemlistFrame from './ItemlistFrame'
+import SettingsFrame from './SettingsFrame'
 
 import { useWorkboxHandler } from './Workbox'
 
@@ -27,7 +27,7 @@ const workboxContentStyles = {
     overflow: 'auto',
 } as CSSProperties
 
-const WorkboxContent = (props) => {
+const ContentFrame = (props) => {
 
     const 
         { 
@@ -81,17 +81,17 @@ const WorkboxContent = (props) => {
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsPanel showPanel = {workboxConfig.settingsShow}>
+        <SettingsFrame showPanel = {workboxConfig.settingsShow}>
             Settings
-        </SettingsPanel>
-        <CentralPanel 
+        </SettingsFrame>
+        <PrimaryFrame 
             displayConfigCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
             userDocumentWidthRef = {userDocumentWidthRef}
             viewSetting = {viewSetting}
         >
-            <DocumentPanel 
+            <DocumentFrame 
                 ref = {documentFrameElementRef} 
                 displayConfigCode = {documentDisplayCode} 
                 defaultDocumentState = {defaultDocumentState}
@@ -100,16 +100,16 @@ const WorkboxContent = (props) => {
                 documentData = {documentData}
                 profileData = {profileData}
             />
-            <ItemlistPanel 
+            <ItemlistFrame 
                 ref = {itemlistFrameElementRef} 
                 displayConfigCode = {itemlistDisplayCode} 
                 defaultItemlistState = {defaultItemlistState}
                 itemlistData = { itemlistData }
                 profileData = { profileData }
             />
-        </CentralPanel>
+        </PrimaryFrame>
     </Box>
     
 } 
 
-export default WorkboxContent
+export default ContentFrame
