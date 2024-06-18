@@ -91,7 +91,7 @@ const Workbox = (props) => {
 
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, errorControl})
+        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
         workboxHandler.settings = workboxSettings
         workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.setWorkboxState = setWorkboxState
@@ -119,6 +119,10 @@ const Workbox = (props) => {
         }
 
     },[unsubscribeworkbox])
+
+    const onFail = () => {
+        // TODO
+    }
 
     const onError = () => {
         navigate('/error')
