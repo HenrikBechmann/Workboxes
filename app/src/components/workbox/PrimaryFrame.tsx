@@ -47,7 +47,7 @@ const PrimaryFrame = (props) => {
             viewSetting,
         } = props,
         previousDisplayConfigCodeRef = useRef(displayConfigCode),
-        centralPanelElementRef = useRef(null),
+        primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null),
         viewSettingRef = useRef(null)
 
@@ -69,7 +69,7 @@ const PrimaryFrame = (props) => {
         if (previousDisplayConfigCodeRef.current == displayConfigCode) return // startup
 
         const 
-            centralPanelElement = centralPanelElementRef.current, // flex, width
+            centralPanelElement = primaryFrameElementRef.current, // flex, width
             documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             itemlistFrameElement = itemlistFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             transitionDelay = '0.3s',
@@ -278,7 +278,7 @@ const PrimaryFrame = (props) => {
     // CentralWidthContext informs DocumentFrame
     return <Box 
         data-type = 'primary-frame' 
-        ref = {centralPanelElementRef} 
+        ref = {primaryFrameElementRef} 
         id = 'primary-frame' 
         style = {primaryFrameStyles}
     >

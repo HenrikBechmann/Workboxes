@@ -28,10 +28,10 @@ import { useWorkboxHandler } from './Workbox'
 import DocumentContent from '../documentUI/DocumentContent'
 
 const 
+    MIN_PRIMARY_FRAME_HEIGHT = 300,
     MIN_DOCUMENT_FRAME_WIDTH = 250,
     MAX_DOCUMENT_FRAME_RATIO = 0.75,
-    MIN_ITEMLIST_FRAME_WIDTH = 250,
-    MIN_PRIMARY_FRAME_HEIGHT = 300
+    MIN_ITEMLIST_FRAME_WIDTH = 250
 
 const documentFrameStyles = {
     flex: '0 0 auto',
@@ -147,7 +147,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         // persistence
         documentPanelElementRef = useRef(null),
-        centralPanelElementRef = useRef(null), // for direct config updates
+        primaryFrameElementRef = useRef(null), // for direct config updates
         targetTimeoutRef = useRef(null),
         observerTimeoutRef = useRef(null),
         handleRef = useRef(null),
@@ -177,8 +177,8 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     useEffect(()=>{
 
-        centralPanelElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
-        handleRef.current = centralPanelElementRef.current.querySelector('#handle')
+        primaryFrameElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
+        handleRef.current = primaryFrameElementRef.current.querySelector('#handle')
 
     },[])
 
@@ -217,9 +217,9 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     useEffect(()=>{
 
-        if (workboxHandlerContext === 0) return
+        const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
+        if (primaryFrameWidth === 0) return
 
-        const centralPanelWidth = centralPanelElementRef.current.offsetWidth
         const documentWidth = 
             displayCodeRef.current == 'out'
                 ? documentFrameElementRef.current.offsetWidth
@@ -229,8 +229,8 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
         const calculatedMaxDocumentWidth = 
             Math.min(
-                workboxHandlerContext * MAX_DOCUMENT_FRAME_RATIO,
-                workboxHandlerContext - MIN_ITEMLIST_FRAME_WIDTH)
+                primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
+                primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH)
 
         if (calculatedMaxDocumentWidth < documentWidth) {
 
@@ -296,12 +296,13 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     // resizable callbacks...
     const onResizeStart = () => {
         documentFrameElementRef.current.style.transition = 'none'
+        const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
         const constraints = {
             minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX: Math.min(
-                workboxHandlerContext * MAX_DOCUMENT_FRAME_RATIO,
-                workboxHandlerContext - MIN_ITEMLIST_FRAME_WIDTH),
+                primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
+                primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH),
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }
         constraintsRef.current = constraints
