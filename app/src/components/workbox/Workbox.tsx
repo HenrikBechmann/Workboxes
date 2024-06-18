@@ -8,6 +8,9 @@ import {
     Grid, GridItem
 } from '@chakra-ui/react'
 
+import { useNavigate } from 'react-router-dom'
+
+import { useFirestore, useUsage, useSnapshotControl, useErrorControl } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import WorkboxContent from './WorkboxContent'
@@ -69,25 +72,57 @@ const Workbox = (props) => {
         { workboxSettings } = props,
         workboxID = workboxSettings.id,
 
+        // parameters for workboxHandler
+        db = useFirestore(),
+        usage = useUsage(),
+        snapshotControl = useSnapshotControl(),
+        navigate = useNavigate(),
+        errorControl = useErrorControl,
+
         [workboxState, setWorkboxState] = useState('setup'),
-        [workboxConfig, setWorkboxConfig] = useState(null),
+        // [workboxConfig, setWorkboxConfig] = useState(null),
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { workboxRecord, unsubscribeworkbox } = workboxHandler,
 
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         
-        workboxFrameElementRef = useRef(null),
-        [workboxInnerFrameWidth, setWorkboxInnerFrameWidth] = useState(0)
+        workboxFrameElementRef = useRef(null)
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler(workboxID)
+        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, errorControl})
         workboxHandler.settings = workboxSettings
         workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
+        workboxHandler.setWorkboxState = setWorkboxState
         setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 
     },[])
+
+    useEffect(()=>{
+        if (workboxState != 'ready') {
+            setWorkboxState('ready')
+        }
+    },[workboxState])
+
+    useEffect(()=>{
+        dispatchWorkboxHandler('workrecord')
+    },[workboxRecord])
+
+    useEffect(()=>{
+
+        if (unsubscribeworkbox) {
+            return () => {
+                snapshotControl.registerUnsub(workboxHandler.workboxIndex, unsubscribeworkbox)
+            }
+        }
+
+    },[unsubscribeworkbox])
+
+    const onError = () => {
+        navigate('/error')
+    }
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
