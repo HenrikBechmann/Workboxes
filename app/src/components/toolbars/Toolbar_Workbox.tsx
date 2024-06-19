@@ -130,7 +130,7 @@ const WorkboxToolbar = (props) => {
         settings.configuration.settings.show = toggleOnSettingsRef.current
         settings.configuration.settings.disabled = disabledSettingsRef.current
 
-        setWorkboxState('reconfig') // trigger render
+        // setWorkboxState('reconfig') // trigger render
 
     },[
         toggleOnDocumentRef.current,

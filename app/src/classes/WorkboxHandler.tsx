@@ -97,7 +97,7 @@ class WorkboxHandler {
                     }
 
                     this.workboxRecord = workboxRecord
-                    this._setWorkboxState('updaterecord')
+                    // this._setWorkboxState('updaterecord')
 
                 }
 

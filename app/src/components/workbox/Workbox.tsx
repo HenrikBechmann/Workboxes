@@ -124,7 +124,7 @@ const Workbox = (props) => {
     },[workboxState])
 
     useEffect(()=>{
-        dispatchWorkboxHandler('workrecord')
+        // dispatchWorkboxHandler('workrecord')
     },[workboxRecord])
 
     useEffect(()=>{
@@ -142,7 +142,7 @@ const Workbox = (props) => {
 
         workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
             workboxHandler.CONTENT_FRAME_PADDING_WIDTH
-        dispatchWorkboxHandler('framewidth')
+        // dispatchWorkboxHandler('framewidth')
 
     },[])
 
