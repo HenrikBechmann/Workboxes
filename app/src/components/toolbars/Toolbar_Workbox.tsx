@@ -82,7 +82,7 @@ const WorkboxToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { settings, setWorkboxState } = workboxHandler
 
-    console.log('workboxHandler',workboxHandler)
+    // console.log('workboxHandler',workboxHandler)
 
     const
         toggleOnDocumentRef = useRef(settings.configuration.document.show),
@@ -121,7 +121,7 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        console.log('SETTINGS', settings)
+        // console.log('SETTINGS', settings)
 
         settings.configuration.document.show = toggleOnDocumentRef.current
         settings.configuration.document.disabled = disabledDocumentRef.current
@@ -130,7 +130,7 @@ const WorkboxToolbar = (props) => {
         settings.configuration.settings.show = toggleOnSettingsRef.current
         settings.configuration.settings.disabled = disabledSettingsRef.current
 
-        // setWorkboxState('reconfig') // trigger render
+        // setWorkboxState('reconfig') // trigger render TODO causes infinite recursion
 
     },[
         toggleOnDocumentRef.current,
@@ -156,8 +156,8 @@ const WorkboxToolbar = (props) => {
 
         itemlistToggle = useToggleIcon({
             icon:packageIcon, 
-            tooltip:'Toggle workbox itembox pane',
-            caption:'itembox',
+            tooltip:'Toggle workbox itemlist pane',
+            caption:'itemlist',
             toggleOnRef:toggleOnItemlistRef,
             disabledRef:disabledItemlistRef, 
         }),

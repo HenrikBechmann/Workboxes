@@ -88,13 +88,13 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden elements
-            if (previousDisplayConfigCode == 'itembox') { // document was hidden
+            if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
                 documentFrameElement.firstChild.style.width = UIDocumentWidthRef.current[viewSettingRef.current] + 'px'
                 documentFrameElement.firstChild.style.left = 0
                 documentFrameElement.firstChild.style.right = 'auto'
 
-            } else { // itembox was hidden
+            } else { // itemlist was hidden
 
                 itemlistFrameElement.firstChild.style.width = 
                     Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
@@ -112,7 +112,7 @@ const PrimaryFrame = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze itembox
+            // freeze itemlist
             centralPanelElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
@@ -130,7 +130,7 @@ const PrimaryFrame = (props) => {
                 documentFrameElement.style.transition = 'none'
                 itemlistFrameElement.style.transition = 'none'
 
-                // restore itembox frame defaults
+                // restore itemlist frame defaults
                 itemlistFrameElement.style.flex = '1 0 auto'
                 itemlistFrameElement.style.width = 'auto'
                 itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
@@ -158,7 +158,7 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'itembox') { // document was hidden
+            if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
                 documentFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 documentFrameElement.firstChild.style.right = 0
@@ -175,7 +175,7 @@ const PrimaryFrame = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze itembox frame for hiding
+            // freeze itemlist frame for hiding
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
             itemlistFrameElement.firstChild.style.width = itemlistFrameElement.firstChild.offsetWidth + 'px'
@@ -209,7 +209,7 @@ const PrimaryFrame = (props) => {
 
             },timeout)
 
-        } else { // displayConfigCode == 'itembox'
+        } else { // displayConfigCode == 'itemlist'
 
             // set tranision delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
@@ -219,7 +219,7 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'document') { // itembox was hidden
+            if (previousDisplayConfigCode == 'document') { // itemlist was hidden
 
                 itemlistFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
                 itemlistFrameElement.firstChild.style.right = 'auto'
@@ -238,7 +238,7 @@ const PrimaryFrame = (props) => {
             documentFrameElement.firstChild.style.width = documentFrameElement.firstChild.offsetWidth + 'px'
             documentFrameElement.style.minWidth = 0
 
-            // freeze itembox
+            // freeze itemlist
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
 

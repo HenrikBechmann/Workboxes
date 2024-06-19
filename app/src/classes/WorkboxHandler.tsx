@@ -33,6 +33,7 @@ class WorkboxHandler {
     onError
     onFail
     errorControl
+    workboxIndex
     unsubscribeworkbox
 
     // ongoing resources
@@ -59,7 +60,10 @@ class WorkboxHandler {
         const 
             workboxCollection = collection(this.db, 'workboxes'),
             workboxIndex = 'Workbox.' + this.workboxID
-    this.unsubscribeworkbox = 
+
+        this.workboxIndex = workboxIndex
+
+        this.unsubscribeworkbox = 
         await onSnapshot(doc(workboxCollection, this.workboxID), 
             async (returndoc) =>{
                 this.snapshotControl.incrementCallCount(workboxIndex, 1)
@@ -112,6 +116,10 @@ class WorkboxHandler {
             }
         )
 
+    }
+
+    async getWorkboxRecord() {
+        
     }
 
     async saveWorkboxRecord(workboxRecord) {

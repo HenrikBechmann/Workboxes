@@ -66,7 +66,7 @@ const DocumentToolbar = (props) => {
         disabledDropRef = useRef(null),
         dropToggle = useToggleIcon({
             icon:dragIcon, 
-            tooltip:'Re-sort, and import items from itembox',
+            tooltip:'Re-sort, and import items from itemlist',
             caption:'import',
             toggleOnRef:toggleOnDropRef,
             disabledRef:disabledDropRef, 

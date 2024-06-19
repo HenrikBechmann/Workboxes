@@ -42,7 +42,7 @@ const ContentFrame = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { show:itemlistShow } = workboxHandler.settings.configuration.itemlist, // boolean - show/ noshow
         { show:documentShow } = workboxHandler.settings.configuration.document, // boolean - show/ noshow
-        // share document and itembox elements with children
+        // share document and itemlist elements with children
         documentFrameElementRef = useRef( null ),
         itemlistFrameElementRef = useRef( null ),
         // create delay to obtain forward references
@@ -57,7 +57,7 @@ const ContentFrame = (props) => {
         documentDisplayCode = 'out'
         itemlistDisplayCode = 'out'
     } else if (itemlistShow) {
-        workboxDisplayCode = 'itembox'
+        workboxDisplayCode = 'itemlist'
         documentDisplayCode = 'under'
         itemlistDisplayCode = 'over'
     } else { // documentShow

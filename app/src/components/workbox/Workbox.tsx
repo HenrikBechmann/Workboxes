@@ -49,93 +49,33 @@ const workboxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
+// provide access to all workbox components of current workbox state
 export const useWorkboxHandler = (parms?) => {
 
     const 
-        workboxHandlerContext = useContext(WorkboxHandlerContext)
-
-    let
-        workboxHandler = workboxHandlerContext.current
-        if (!workboxHandler) {
-            workboxHandler = new WorkboxHandler(parms)
-            workboxHandlerContext.current = workboxHandler
-        }
-
-    const
+        workboxHandlerContext = useContext(WorkboxHandlerContext),
+        workboxHandler = workboxHandlerContext.current,
         setWorkboxHandlerContext = workboxHandler.setWorkboxHandlerContext,
         dispatchWorkboxHandler = (trigger?) => {
             workboxHandler.trigger = trigger
             const newWorkboxHandlerContext = {...workboxHandlerContext} // coerce dispatch
-            setWorkboxHandlerContext && setWorkboxHandlerContext(newWorkboxHandlerContext)
+            setWorkboxHandlerContext(newWorkboxHandlerContext)
         }
-
-    console.log('workboxHandler, dispatchWorkboxHandler',workboxHandler, dispatchWorkboxHandler )
 
     return [workboxHandler, dispatchWorkboxHandler]
 
 }
 
+// show the main toolbar and the workbox content area
 const WorkboxFrame = (props) => {
     const 
-        { workboxSettings } = props,
-        workboxID = workboxSettings.id,
-
-        // parameters for workboxHandler
-        db = useFirestore(),
-        usage = useUsage(),
-        snapshotControl = useSnapshotControl(),
-        navigate = useNavigate(),
-        errorControl = useErrorControl,
-
-        [workboxState, setWorkboxState] = useState('setup'),
-
-        onFail = () => {
-            // TODO
-        },
-
-        onError = () => {
-            navigate('/error')
-        },
-
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl}),
-        { workboxRecord, unsubscribeworkbox } = workboxHandler,
-
-        [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
-        
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { workboxRecord } = workboxHandler,
         workboxFrameElementRef = useRef(null)
-
-    useEffect(() => {
-
-        // const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
-        workboxHandler.settings = workboxSettings
-        workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
-        workboxHandler.setWorkboxState = setWorkboxState
-        workboxHandlerContext.current = workboxHandler
-
-        // setWorkboxHandlerContext({current:workboxHandler})
-        setWorkboxState('ready')
-
-    },[])
-
-    useEffect(()=>{
-        if (workboxState != 'ready') {
-            setWorkboxState('ready')
-        }
-    },[workboxState])
 
     useEffect(()=>{
         // dispatchWorkboxHandler('workrecord')
     },[workboxRecord])
-
-    useEffect(()=>{
-
-        if (unsubscribeworkbox) {
-            return () => {
-                snapshotControl.registerUnsub(workboxHandler.workboxIndex, unsubscribeworkbox)
-            }
-        }
-
-    },[unsubscribeworkbox])
 
     // update the width of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
@@ -159,31 +99,77 @@ const WorkboxFrame = (props) => {
     },[])
 
 
-    return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
-    <Grid
+    return <Grid
         data-type = 'workbox-grid'
         style = {workboxGridStyles}
     >
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
             <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
-                {(workboxState == 'ready') && <WorkboxToolbar />}
+                <WorkboxToolbar />
             </ToolbarFrame>
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                {(workboxState == 'ready') && <ContentFrame />}
+                <ContentFrame />
             </Box>
         </GridItem>
     </Grid>
-    </WorkboxHandlerContext.Provider>
 }
 
+// function wrapper to initialize workboxHandler
 const Workbox = (props) => {
 
     const
-        { workboxSettings } = props
+        { workboxSettings } = props,
 
-    return <WorkboxFrame workboxSettings = {workboxSettings} />
+        workboxID = workboxSettings.id,
+
+        // parameters for workboxHandler
+        db = useFirestore(),
+        usage = useUsage(),
+        snapshotControl = useSnapshotControl(),
+        navigate = useNavigate(),
+        errorControl = useErrorControl,
+
+        [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
+        workboxHandler = workboxHandlerContext.current,
+        unsubscribeworkbox = workboxHandler?.unsubscribeWorkbox,
+        // specialized data connection handling
+        onFail = () => {
+            // TODO
+        },
+        onError = () => {
+            navigate('/error')
+        }
+
+    useEffect(() => {
+
+        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
+        workboxHandler.settings = workboxSettings
+        workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
+        workboxHandler.onError = onError
+        workboxHandler.onFail = onFail
+        workboxHandlerContext.current = workboxHandler
+
+        setWorkboxHandlerContext({current:workboxHandler})
+
+    },[])
+
+    // store onSnapshot unsubscribe function
+    useEffect(()=>{
+
+        if (unsubscribeworkbox) {
+            return () => {
+                snapshotControl.registerUnsub(workboxHandler.workboxIndex, unsubscribeworkbox)
+            }
+        }
+
+    },[unsubscribeworkbox])
+
+
+    return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
+        {workboxHandlerContext.current && <WorkboxFrame />}
+    </WorkboxHandlerContext.Provider>
 
 }
 
