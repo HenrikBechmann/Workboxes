@@ -160,7 +160,7 @@ const Workbox = (props) => {
 
         if (unsubscribeworkbox) {
             return () => {
-                snapshotControl.registerUnsub(workboxHandler.workboxIndex, unsubscribeworkbox)
+                snapshotControl.registerUnsub(workboxHandler.workboxSnapshotIndex, unsubscribeworkbox)
             }
         }
 

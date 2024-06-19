@@ -33,7 +33,9 @@ class WorkboxHandler {
     onError
     onFail
     errorControl
-    workboxIndex
+
+    // onsnapshot control
+    workboxSnapshotIndex
     unsubscribeworkbox
 
     // ongoing resources
@@ -59,14 +61,14 @@ class WorkboxHandler {
     private async setWorkboxSnapshot() {
         const 
             workboxCollection = collection(this.db, 'workboxes'),
-            workboxIndex = 'Workbox.' + this.workboxID
+            workboxSnapshotIndex = 'Workbox.' + this.workboxID
 
-        this.workboxIndex = workboxIndex
+        this.workboxSnapshotIndex = workboxSnapshotIndex
 
         this.unsubscribeworkbox = 
         await onSnapshot(doc(workboxCollection, this.workboxID), 
             async (returndoc) =>{
-                this.snapshotControl.incrementCallCount(workboxIndex, 1)
+                this.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
                 this.usage.read(1)
                 
                 let workboxRecord = returndoc.data()
@@ -75,7 +77,7 @@ class WorkboxHandler {
                     this.onFail()
                 } else {
 
-                    if (!this.snapshotControl.wasSchemaChecked(workboxIndex)) {
+                    if (!this.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
 
                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
                         if (!Object.is(workboxRecord, updatedRecord)) {
@@ -97,7 +99,7 @@ class WorkboxHandler {
                             workboxRecord = updatedRecord
 
                         }
-                        this.snapshotControl.setSchemaChecked(workboxIndex)
+                        this.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
                     }
 
                     this.workboxRecord = workboxRecord
@@ -119,7 +121,7 @@ class WorkboxHandler {
     }
 
     async getWorkboxRecord() {
-        
+
     }
 
     async saveWorkboxRecord(workboxRecord) {
