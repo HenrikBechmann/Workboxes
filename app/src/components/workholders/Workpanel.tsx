@@ -117,7 +117,8 @@ const Workpanel = (props:any) => {
             profile: {
                 view: 'normalized',
                 zOrder: 1,
-            }
+            },
+            identity: workspaceHandler.panelDomainRecord.profile.workbox
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultConfig),
@@ -125,6 +126,8 @@ const Workpanel = (props:any) => {
                 id:workspaceHandler.panelDomainRecord.profile.workbox.id,
             }
         }
+
+        // console.log('domain windowSpecs, panelDomainRecord',windowSpecs, workspaceHandler.panelDomainRecord)
 
         addWindow(windowSpecs, workboxSpecs)
 
@@ -139,7 +142,8 @@ const Workpanel = (props:any) => {
             profile: {
                 view: 'normalized',
                 zOrder: 1,
-            }
+            },
+            identity: workspaceHandler.panelMemberRecord.profile.workbox
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultConfig),
@@ -147,6 +151,8 @@ const Workpanel = (props:any) => {
                 id:workspaceHandler.panelMemberRecord.profile.workbox.id,
             }
         }
+
+        // console.log('member windowSpecs, panelMemberRecord', windowSpecs, workspaceHandler.panelMemberRecord)
 
         addWindow(windowSpecs, workboxSpecs)
 

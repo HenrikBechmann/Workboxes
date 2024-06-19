@@ -109,9 +109,9 @@ const Workwindow = (props) => {
             windowCallbacks, // change zOrder etc.
             containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
             type,
-            title,
         } = props,
 
+        title = windowSpecs.identity.name,
         windowConfig = windowSpecs.configuration,
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
