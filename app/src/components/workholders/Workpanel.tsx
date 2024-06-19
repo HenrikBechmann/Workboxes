@@ -17,10 +17,6 @@ import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 const defaultConfig = {
     content: {
     },
-    // settings: {
-    //     show:false,
-    //     disabled:false,
-    // },
     document: {
         mode:'view',
         show:true,
@@ -61,7 +57,7 @@ const Workpanel = (props:any) => {
         // windows setup
         { panelID } = props,
 
-        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready, reconfigured
+        [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready, windowadded
 
         // collect panel data
         [workspaceHandler] = useWorkspaceHandler(),
@@ -132,7 +128,7 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
-        setPanelState('reconfigured')
+        setPanelState('windowadded')
 
     }
 
@@ -154,7 +150,7 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
-        setPanelState('reconfigured')
+        setPanelState('windowadded')
 
     }
 
