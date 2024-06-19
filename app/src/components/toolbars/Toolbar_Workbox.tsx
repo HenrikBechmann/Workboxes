@@ -71,7 +71,6 @@ const WorkboxToolbar = (props) => {
     const 
         // { 
         //     workboxConfig, 
-        //     setWorkboxState, 
         //     itemTitle, 
         //     itemIcon, 
         //     domainTitle, 
@@ -80,7 +79,7 @@ const WorkboxToolbar = (props) => {
         // } = props,
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        { settings, setWorkboxState } = workboxHandler
+        { settings } = workboxHandler
 
     // console.log('workboxHandler',workboxHandler)
 
@@ -89,8 +88,6 @@ const WorkboxToolbar = (props) => {
         disabledDocumentRef = useRef(settings.configuration.document.disabled),
         toggleOnItemlistRef = useRef(settings.configuration.itemlist.show),
         disabledItemlistRef = useRef(settings.configuration.itemlist.sisabled),
-        toggleOnSettingsRef = useRef(settings.configuration.settings.show),
-        disabledSettingsRef = useRef(settings.configuration.settings.disabled),
 
         toggleHistoryRef = useRef({
             documentShow:toggleOnDocumentRef.current,
@@ -127,18 +124,12 @@ const WorkboxToolbar = (props) => {
         settings.configuration.document.disabled = disabledDocumentRef.current
         settings.configuration.itemlist.show = toggleOnItemlistRef.current
         settings.configuration.itemlist.disabled = disabledItemlistRef.current
-        settings.configuration.settings.show = toggleOnSettingsRef.current
-        settings.configuration.settings.disabled = disabledSettingsRef.current
-
-        // setWorkboxState('reconfig') // trigger render TODO causes infinite recursion
 
     },[
         toggleOnDocumentRef.current,
         disabledDocumentRef.current,
         toggleOnItemlistRef.current,
         disabledItemlistRef.current,
-        toggleOnSettingsRef.current,
-        disabledSettingsRef.current,
     ])
 
     toggleHistoryRef.current = {
@@ -160,23 +151,7 @@ const WorkboxToolbar = (props) => {
             caption:'itemlist',
             toggleOnRef:toggleOnItemlistRef,
             disabledRef:disabledItemlistRef, 
-        }),
-
-        settingsToggle = useToggleIcon({
-            icon:settingsIcon, 
-            tooltip:'Toggle settings pane',
-            caption:'settings',
-            toggleOnRef:toggleOnSettingsRef, 
-            disabledRef:disabledSettingsRef, 
         })
-
-        // commentsToggle = useToggleIcon({
-        //     icon:commentsIcon, 
-        //     tooltip:'Show comments',
-        //     caption:'see comments',
-        //     toggleOnRef:toggleOnCommentsRef, 
-        //     disabledRef:disabledCommentsRef, 
-        // })
 
     const workboxmenulist = <MenuList >
         <MenuItem >Workbox settings</MenuItem>

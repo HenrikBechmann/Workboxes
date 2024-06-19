@@ -38,26 +38,20 @@ class WorkboxHandler {
     workboxSnapshotIndex
     unsubscribeworkbox
 
-    // ongoing resources
+    // data
     workboxRecord
     itemlistRecords = []
+
+    // configuration
     settings
     innerFrameWidth
-    trigger
-    setWorkboxHandlerContext
     CONTENT_FRAME_PADDING_WIDTH
 
-    private _setWorkboxState
+    // process control & tracking
+    trigger // for debugging
+    setWorkboxHandlerContext // for consumers
 
-    set setWorkboxState (setState) {
-        this._setWorkboxState = setState
-        // this.setWorkboxSnapshot()
-    }
-
-    get setWorkboxState() {
-        return this._setWorkboxState
-    }
-
+    // -----------------------------[ operations ]--------------------------
     private async setWorkboxSnapshot() {
         const 
             workboxCollection = collection(this.db, 'workboxes'),
