@@ -104,17 +104,19 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            windowSpecs, // for this Workwindow 
-            windowSessionID, // system control
-            zOrder, // inherited; modified by setFocus 
+            configuration,
+            containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
+            identity,
             viewDeclaration, // normalized, maximized, minimized
             windowCallbacks, // change zOrder etc.
-            containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
+            windowSessionID, // system control
+            zOrder, // inherited; modified by setFocus 
             type,
         } = props,
 
-        title = windowSpecs.identity.name,
-        windowConfig = windowSpecs.configuration,
+        title = identity.name,
+        windowConfig = configuration,
+
         windowElementRef = useRef(null),
         titleElementRef = useRef(null),
         titlebarElementRef = useRef(null),
@@ -432,7 +434,8 @@ const Workwindow = (props) => {
 
                 setWindowState('activatenormalized')
 
-                windowCallbackRef.current.changeView() // revert to previous document width
+                // TODO: fix this
+                // windowCallbackRef.current.changeView() // revert to previous document width
 
             },501)
 

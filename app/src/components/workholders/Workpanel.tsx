@@ -167,11 +167,11 @@ const Workpanel = (props:any) => {
 
         const windowSessionID = nextWindowSessionID++
 
+        // viewDeclaration already added by caller
         Object.assign(windowSpecs, {
             windowSessionID,
             index:null,
             zOrder:null,
-            stackOrder:null,
         })
 
         const 
@@ -269,8 +269,7 @@ const Workpanel = (props:any) => {
             panelElement = panelElementRef.current,
             containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
             // required to configure window
-            { viewDeclaration, zOrder } = windowData.window,
-            windowSpecs = windowData.window
+            { viewDeclaration, zOrder, configuration, identity } = windowData.window
 
         // console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs\n',
         //     windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs)
@@ -281,7 +280,8 @@ const Workpanel = (props:any) => {
             zOrder = {zOrder}
             containerDimensionSpecs = { containerDimensionSpecs }
             windowCallbacks = { windowCallbacks } 
-            windowSpecs = { windowSpecs }
+            configuration = { configuration }
+            identity = { identity }
         >
             <Workbox 
                 workboxSettings = { windowData.workbox }
@@ -409,18 +409,18 @@ const Workpanel = (props:any) => {
             windowComponentList = windowComponentListRef.current,
             numberOfWindows = windowComponentList.length
 
-        if (windowData.window.view == 'minimized') return
+        if (windowData.window.viewDeclaration.view == 'minimized') return
 
         if (windowMaximizedRef.current === windowSessionID) {
             windowMaximizedRef.current = null
         }
 
-        windowData.window.view = 'minimized'
+        windowData.window.viewDeclaration.view = 'minimized'
         const zOrder = windowData.window.zOrder
         windowMinimizedSetRef.current.add(windowSessionID)
 
         const stackOrder = windowMinimizedSetRef.current.size - 1
-        windowData.window.stackOrder = stackOrder
+        windowData.window.viewDeclaration.stackOrder = stackOrder
 
         const viewDeclaration = {view:'minimized', stackOrder}
 
@@ -435,7 +435,8 @@ const Workpanel = (props:any) => {
                 if ((indexZOrder > 0) && (indexZOrder > zOrder)) {
                     const subjectRecord = windowDataMap.get(subjectSessionID)
                     subjectRecord.window.zOrder = indexZOrder - 1
-                    const subjectViewDeclaration = {view:subjectRecord.window.view,stackOrder:subjectRecord.window.stackOrder}
+                    const subjectViewDeclaration = 
+                        {view:subjectRecord.window.viewDeclaration.view,stackOrder:subjectRecord.window.viewDeclaration.stackOrder}
                     windowComponentList[index] = React.cloneElement(component,{subjectViewDeclaration, zOrder:indexZOrder - 1})
                 }
             }
@@ -460,8 +461,8 @@ const Workpanel = (props:any) => {
         windowMinimizedSet.forEach((windowSessionID)=>{
             const windowData = windowDataMap.get(windowSessionID)
 
-            if (windowData.window.stackOrder !== index) {
-                windowData.window.stackOrder = index
+            if (windowData.window.viewDeclaration.stackOrder !== index) {
+                windowData.window.viewDeclaration.stackOrder = index
 
                 const 
                     component = windowComponentList[windowData.index],
@@ -500,10 +501,10 @@ const Workpanel = (props:any) => {
             windowComponentList = windowComponentListRef.current,
             numberOfWindows = windowComponentList.length,
             windowData = windowDataMap.get(windowSessionID),
-            previousView = windowData.window.view,
+            previousView = windowData.window.viewDeclaration.view,
             previousZOrder = windowData.window.zOrder
 
-        if (windowData.window.view == 'normalized') return
+        if (windowData.window.viewDeclaration.view == 'normalized') return
 
         if (windowMaximizedRef.current === windowSessionID) {
 
@@ -511,8 +512,8 @@ const Workpanel = (props:any) => {
 
         }
 
-        windowData.window.view = 'normalized'
-        windowData.window.stackOrder = null
+        windowData.window.viewDeclaration.view = 'normalized'
+        windowData.window.viewDeclaration.stackOrder = null
 
         let zOrder
         if (previousView == 'minimized') {
@@ -545,8 +546,10 @@ const Workpanel = (props:any) => {
 
         const 
             viewDeclaration = {view:'normalized',stackOrder:null},
-            index = windowData.index,
+            index = windowData.window.index,
             component = windowComponentList[index]
+
+        // console.log('index, windowData, windowComponentList',index, windowData, windowComponentList)
 
         windowComponentList[index] = React.cloneElement(component,{viewDeclaration, zOrder})
 
@@ -562,7 +565,7 @@ const Workpanel = (props:any) => {
             numberOfWindows = windowComponentList.length,
             windowData = windowDataMap.get(windowSessionID),
             previousZOrder = windowData.window.zOrder,
-            previousView = windowData.window.view
+            previousView = windowData.window.viewDeclaration.view
 
         if (previousView == 'maximized') return
 
@@ -574,7 +577,7 @@ const Workpanel = (props:any) => {
             windowMaximizedRef.current = null
 
             const maxedWindowRecord = windowDataMap.get(maxedSessionID)
-            maxedWindowRecord.window.view = 'normalized'
+            maxedWindowRecord.window.viewDeclaration.view = 'normalized'
 
             const 
                 maxedIndex = maxedWindowRecord.index,
@@ -610,7 +613,8 @@ const Workpanel = (props:any) => {
             })
         }
 
-        windowData.window.view = 'maximized'
+        windowData.window.viewDeclaration.view = 'maximized'
+        windowData.window.viewDeclaration.stackOrder = null
         windowData.window.zOrder = zOrder
         windowMaximizedRef.current = windowSessionID
         const 
