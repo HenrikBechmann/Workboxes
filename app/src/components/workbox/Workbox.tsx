@@ -75,7 +75,7 @@ export const useWorkboxHandler = (parms?) => {
 
 }
 
-const Workbox = (props) => {
+const WorkboxFrame = (props) => {
     const 
         { workboxSettings } = props,
         workboxID = workboxSettings.id,
@@ -111,7 +111,7 @@ const Workbox = (props) => {
         workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.setWorkboxState = setWorkboxState
         workboxHandlerContext.current = workboxHandler
-        
+
         // setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 
@@ -178,4 +178,14 @@ const Workbox = (props) => {
     </WorkboxHandlerContext.Provider>
 }
 
+const Workbox = (props) => {
+
+    const
+        { workboxSettings } = props
+
+    return <WorkboxFrame workboxSettings = {workboxSettings} />
+
+}
+
 export default Workbox
+
