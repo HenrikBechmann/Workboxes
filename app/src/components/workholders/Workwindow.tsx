@@ -240,7 +240,7 @@ const Workwindow = (props) => {
 
         setTimeout(()=> {
 
-            windowElementRef.current.style.zIndex = zOrder // TODO bug sometimes current is null
+            windowElementRef.current.style.zIndex = zOrder
 
         },timeout) 
 
