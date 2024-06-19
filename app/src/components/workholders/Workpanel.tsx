@@ -269,7 +269,7 @@ const Workpanel = (props:any) => {
             panelElement = panelElementRef.current,
             containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
             // required to configure window
-            viewDeclaration = windowData.window.viewDeclaration,
+            { viewDeclaration, zOrder } = windowData.window,
             windowSpecs = windowData.window
 
         // console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs\n',
@@ -278,6 +278,7 @@ const Workpanel = (props:any) => {
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
+            zOrder = {zOrder}
             containerDimensionSpecs = { containerDimensionSpecs }
             windowCallbacks = { windowCallbacks } 
             windowSpecs = { windowSpecs }

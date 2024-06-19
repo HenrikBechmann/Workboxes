@@ -97,6 +97,8 @@ const WindowHandle = (props) => {
 
 const Workwindow = (props) => {
 
+    // console.log('running Workwindow: props', props)
+
     // --------------------------------[ initialization ]-----------------------------
 
     const 
@@ -170,8 +172,6 @@ const Workwindow = (props) => {
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
-
-    console.log('running Workwindow: props', props)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 
