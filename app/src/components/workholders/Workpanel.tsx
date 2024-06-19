@@ -17,10 +17,10 @@ import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 const defaultConfig = {
     content: {
     },
-    settings: {
-        show:false,
-        disabled:false,
-    },
+    // settings: {
+    //     show:false,
+    //     disabled:false,
+    // },
     document: {
         mode:'view',
         show:true,

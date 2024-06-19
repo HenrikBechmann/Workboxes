@@ -10,7 +10,6 @@ import {
 import PrimaryFrame from './PrimaryFrame'
 import DocumentFrame from './DocumentFrame'
 import ItemlistFrame from './ItemlistFrame'
-import SettingsFrame from './SettingsFrame'
 
 import { useWorkboxHandler } from './Workbox'
 
@@ -82,9 +81,6 @@ const ContentFrame = (props) => {
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
-        <SettingsFrame showPanel = {workboxHandler.settings.configuration.settings.show}>
-            Settings
-        </SettingsFrame>
         <PrimaryFrame 
             displayConfigCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
