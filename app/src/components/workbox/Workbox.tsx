@@ -111,6 +111,7 @@ const Workbox = (props) => {
         workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.setWorkboxState = setWorkboxState
         workboxHandlerContext.current = workboxHandler
+        
         // setWorkboxHandlerContext({current:workboxHandler})
         setWorkboxState('ready')
 

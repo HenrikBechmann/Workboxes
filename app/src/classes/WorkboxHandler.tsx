@@ -48,7 +48,7 @@ class WorkboxHandler {
 
     set setWorkboxState (setState) {
         this._setWorkboxState = setState
-        this.setWorkboxSnapshot()
+        // this.setWorkboxSnapshot()
     }
 
     get setWorkboxState() {
@@ -60,7 +60,7 @@ class WorkboxHandler {
             workboxCollection = collection(this.db, 'workboxes'),
             workboxIndex = 'Workbox.' + this.workboxID
     this.unsubscribeworkbox = 
-        onSnapshot(doc(workboxCollection, this.workboxID), 
+        await onSnapshot(doc(workboxCollection, this.workboxID), 
             async (returndoc) =>{
                 this.snapshotControl.incrementCallCount(workboxIndex, 1)
                 this.usage.read(1)
