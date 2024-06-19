@@ -171,7 +171,7 @@ const Workwindow = (props) => {
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
 
-    // console.log('running Workwindow', windowState)
+    console.log('running Workwindow: props', props)
 
     // ------------------------------------[ setup effects ]-----------------------------------
 

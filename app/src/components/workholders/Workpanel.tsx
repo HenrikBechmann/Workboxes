@@ -14,7 +14,7 @@ import Workbox from './../workbox/Workbox'
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
-const defaultConfig = {
+const defaultWorkboxConfig = {
     content: {
     },
     document: {
@@ -114,14 +114,15 @@ const Workpanel = (props:any) => {
 
         const windowSpecs = {
             configuration: {top:10,left:10, width:610,height:400},
-            profile: {
+            viewDeclaration: {
                 view: 'normalized',
-                zOrder: 1,
+                stackOrder: null,
             },
+            zOrder: highestZOrderRef.current++,
             identity: workspaceHandler.panelDomainRecord.profile.workbox
         }
         const workboxSpecs = {
-            configuration: _cloneDeep(defaultConfig),
+            configuration: _cloneDeep(defaultWorkboxConfig),
             profile: {
                 id:workspaceHandler.panelDomainRecord.profile.workbox.id,
             }
@@ -139,14 +140,15 @@ const Workpanel = (props:any) => {
 
         const windowSpecs = {
             configuration: {top:20,left:20, width:610,height:400},
-            profile: {
+            viewDeclaration: {
                 view: 'normalized',
-                zOrder: 1,
+                stackOrder: null,
             },
+            zOrder: highestZOrderRef.current++,
             identity: workspaceHandler.panelMemberRecord.profile.workbox
         }
         const workboxSpecs = {
-            configuration: _cloneDeep(defaultConfig),
+            configuration: _cloneDeep(defaultWorkboxConfig),
             profile: {
                 id:workspaceHandler.panelMemberRecord.profile.workbox.id,
             }
@@ -165,7 +167,7 @@ const Workpanel = (props:any) => {
 
         const windowSessionID = nextWindowSessionID++
 
-        Object.assign(windowSpecs.profile, {
+        Object.assign(windowSpecs, {
             windowSessionID,
             index:null,
             zOrder:null,
@@ -191,7 +193,7 @@ const Workpanel = (props:any) => {
         // return
 
         // get zOrder and stackOrder values; if minimized, add to set
-        if (windowData.window.profile.view !== 'minimized') { // minimized, normalized or maximized
+        if (windowData.window.viewDeclaration.view !== 'minimized') { // minimized, normalized or maximized
 
             // console.log('windowData.window.profile.view, windowData.window',windowData.window.profile.view, windowData.window)
 
@@ -199,14 +201,14 @@ const Workpanel = (props:any) => {
 
             stackOrder = null
             // if a maxed component exists, swap zOrders
-            if ((windowData.window.profile.view == 'normalized') && windowMaximizedRef.current) {
+            if ((windowData.window.viewDeclaration.view == 'normalized') && windowMaximizedRef.current) {
                 const
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
-                    maxedIndex = maxedWindowRecord.profile.index,
+                    maxedIndex = maxedWindowRecord.index,
                     maxedComponent = windowComponentList[maxedIndex]
 
-                maxedWindowRecord.window.profile.zOrder = zOrder
+                maxedWindowRecord.window.zOrder = zOrder
                 windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {zOrder})
                 zOrder--
             }
@@ -220,18 +222,18 @@ const Workpanel = (props:any) => {
         }
 
         // set windowMaximizedRef if 'maximized'; push any existing maxed window out
-        if (windowData.window.profile.view == 'maximized') {
+        if (windowData.window.viewDeclaration.view == 'maximized') {
             if (windowMaximizedRef.current) {
                 const 
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
-                    maxedIndex = maxedWindowRecord.profile.index,
+                    maxedIndex = maxedWindowRecord.index,
                     maxedComponent = windowComponentList[maxedIndex]
 
-                    maxedWindowRecord.window.profile.view = 'normalized'
+                    maxedWindowRecord.window.viewDeclaration.view = 'normalized'
                     windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {
                         viewDeclaration:{
-                            view:maxedWindowRecord.window.profile.view,
+                            view:maxedWindowRecord.window.viewDeclaration.view,
                             stackOrder:null,
                         }
                     })
@@ -240,8 +242,8 @@ const Workpanel = (props:any) => {
         }
 
         // assign zOrder and stackOrder to window record
-        windowData.window.profile.zOrder = zOrder
-        windowData.window.profile.stackOrder = stackOrder
+        windowData.window.zOrder = zOrder
+        windowData.window.viewDeclaration.stackOrder = stackOrder
 
         // create window component
         const component = _createWindowComponent(windowSessionID, windowData)
@@ -250,7 +252,7 @@ const Workpanel = (props:any) => {
         // console.log('windowComponentList',windowComponentList)
 
         // set window index and save window record
-        windowData.window.profile.index = windowComponentList.length - 1
+        windowData.window.index = windowComponentList.length - 1
         windowDataMap.set(windowSessionID, windowData)
 
         windowComponentListRef.current = [...windowComponentList]
@@ -267,11 +269,7 @@ const Workpanel = (props:any) => {
             panelElement = panelElementRef.current,
             containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
             // required to configure window
-            { view, stackOrder } = windowData.window.profile,
-            viewDeclaration = {
-                view,
-                stackOrder,
-            },
+            viewDeclaration = windowData.window.viewDeclaration,
             windowSpecs = windowData.window
 
         // console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs\n',
