@@ -65,8 +65,7 @@ class WorkboxHandler {
 
         this.workboxSnapshotIndex = workboxSnapshotIndex
 
-        this.unsubscribeworkbox = 
-        await onSnapshot(doc(workboxCollection, this.workboxID), 
+        this.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
             async (returndoc) =>{
                 this.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
                 this.usage.read(1)
@@ -109,7 +108,7 @@ class WorkboxHandler {
 
             },(error) => {
 
-                const errdesc = 'error for workbox record listener. Check permissions'
+                const errdesc = 'error from workbox record listener. Check permissions'
                 this.errorControl.push({description:errdesc,error})
                 console.log(errdesc,error)
                 this.onError()

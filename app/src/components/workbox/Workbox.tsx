@@ -50,7 +50,7 @@ const workboxBodyStyles = {
 } as CSSProperties
 
 // provide access to all workbox components of current workbox state
-export const useWorkboxHandler = (parms?) => {
+export const useWorkboxHandler = () => {
 
     const 
         workboxHandlerContext = useContext(WorkboxHandlerContext),
@@ -70,19 +70,14 @@ export const useWorkboxHandler = (parms?) => {
 const WorkboxFrame = (props) => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        { workboxRecord } = workboxHandler,
-        workboxFrameElementRef = useRef(null)
+        workboxFrameElementRef = useRef(null) // for resizeObserver
 
-    useEffect(()=>{
-        // dispatchWorkboxHandler('workrecord')
-    },[workboxRecord])
-
-    // update the width of this panel on resize
+    // update the width record of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
         workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
             workboxHandler.CONTENT_FRAME_PADDING_WIDTH
-        // dispatchWorkboxHandler('framewidth')
+        dispatchWorkboxHandler('framewidth')
 
     },[])
 
@@ -142,6 +137,7 @@ const Workbox = (props) => {
             navigate('/error')
         }
 
+    // create workboxHandler
     useEffect(() => {
 
         const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
