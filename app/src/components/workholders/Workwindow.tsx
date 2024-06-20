@@ -104,12 +104,12 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            configuration,
+            configuration, // position; size
             containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
-            identity,
-            viewDeclaration, // normalized, maximized, minimized
+            identity, // workbox identity
             windowCallbacks, // change zOrder etc.
             windowSessionID, // system control
+            viewDeclaration, // normalized, maximized, minimized; stackOrder
             zOrder, // inherited; modified by setFocus 
             type,
         } = props,
@@ -124,8 +124,8 @@ const Workwindow = (props) => {
 
         // basic controls
         isMountedRef = useRef(true),
-        isDisabledRef = useRef(false),
-        sessionIDRef = useRef(windowSessionID), // future reference
+        isDraggableDisabledRef = useRef(false),
+        // sessionIDRef = useRef(windowSessionID), // future reference
 
         // state managemement
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
@@ -269,7 +269,7 @@ const Workwindow = (props) => {
                 return // config changes aleady made
             }
 
-            isDisabledRef.current = true
+            isDraggableDisabledRef.current = true
 
             // save normalized config for later restoration; save target view, inprogress flag
             reservedWindowConfigRef.current = {
@@ -412,7 +412,7 @@ const Workwindow = (props) => {
                 windowElement.style.top = 0
                 windowElement.style.left = 0
                 windowElement.style.transform = `translate(${reservedWindowConfig.left}px,${reservedWindowConfig.top}px)`
-                isDisabledRef.current = false
+                isDraggableDisabledRef.current = false
 
                 const {view, inprogress, ...configData} = reservedWindowConfig
 
@@ -550,7 +550,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        if (isDisabledRef.current) return
+        if (isDraggableDisabledRef.current) return
 
         windowElementRef.current.focus()
 
@@ -560,7 +560,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        if (isDisabledRef.current) return
+        if (isDraggableDisabledRef.current) return
 
         setNormalizedWindowConfig((previousState)=>{
             return {...previousState, width:size.width,height:size.height}})
@@ -617,7 +617,7 @@ const Workwindow = (props) => {
         bounds = {bounds}
         onStart = {onDragStart}
         onStop = {onDragStop}
-        disabled = {isDisabledRef.current}
+        disabled = {isDraggableDisabledRef.current}
     >
         <Resizable 
             data-inheritedtype = 'resizable' 
