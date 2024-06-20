@@ -72,6 +72,8 @@ const WorkboxFrame = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxFrameElementRef = useRef(null) // for resizeObserver
 
+    // console.log('running WorkboxFrame workboxRecord', workboxHandler.workboxRecord)
+
     // update the width record of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
@@ -93,6 +95,13 @@ const WorkboxFrame = (props) => {
 
     },[])
 
+    async function setWorkboxSnapshot() {
+        await workboxHandler.setWorkboxSnapshot()
+    }
+
+    useEffect(()=> {
+        setWorkboxSnapshot()
+    },[])
 
     return <Grid
         data-type = 'workbox-grid'
@@ -117,7 +126,7 @@ const Workbox = (props) => {
     const
         { workboxSettings } = props,
 
-        workboxID = workboxSettings.id,
+        workboxID = workboxSettings.profile.id,
 
         // parameters for workboxHandler
         db = useFirestore(),
@@ -131,11 +140,15 @@ const Workbox = (props) => {
         unsubscribeworkbox = workboxHandler?.unsubscribeWorkbox,
         // specialized data connection handling
         onFail = () => {
+            console.log('failure to find workbox record')
+            alert('failure to find workbox record')
             // TODO
         },
         onError = () => {
             navigate('/error')
         }
+
+        // console.log('Workbox: workboxID, workboxSettings', workboxID, workboxSettings)
 
     // create workboxHandler
     useEffect(() => {

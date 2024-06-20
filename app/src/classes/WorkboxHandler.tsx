@@ -30,13 +30,13 @@ class WorkboxHandler {
     db
     usage
     snapshotControl
-    onError
-    onFail
     errorControl
 
     // onsnapshot control
     workboxSnapshotIndex
     unsubscribeworkbox
+    onError
+    onFail
 
     // data
     workboxRecord
@@ -52,65 +52,80 @@ class WorkboxHandler {
     setWorkboxHandlerContext // for consumers
 
     // -----------------------------[ operations ]--------------------------
-    private async setWorkboxSnapshot() {
+    async setWorkboxSnapshot() {
         const 
             workboxCollection = collection(this.db, 'workboxes'),
-            workboxSnapshotIndex = 'Workbox.' + this.workboxID
+            workboxSnapshotIndex = 'Workbox.' + this.workboxID,
+            result = {
+                error:false,
+                success: true,
+                notice: null,
+                payload: null,
+            }
 
         this.workboxSnapshotIndex = workboxSnapshotIndex
 
-        this.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
-            async (returndoc) =>{
-                this.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-                this.usage.read(1)
-                
-                let workboxRecord = returndoc.data()
+        if (!this.snapshotControl.has(workboxSnapshotIndex)) { // once only
+            this.snapshotControl.create(workboxSnapshotIndex)
 
-                if (!workboxRecord) {
-                    this.onFail()
-                } else {
+            this.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+                async (returndoc) =>{
+                    this.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
+                    this.usage.read(1)
+                    
+                    let workboxRecord = returndoc.data()
 
-                    if (!this.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+                    if (!workboxRecord) {
+                        result.success = false
+                        this.onFail()
+                    } else {
 
-                        const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
-                        if (!Object.is(workboxRecord, updatedRecord)) {
-                            try {
+                        if (!this.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
 
-                                await setDoc(doc(this.db,'workboxes',this.workboxID),updatedRecord)
-                                this.usage.write(1)
+                            const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
+                            if (!Object.is(workboxRecord, updatedRecord)) {
+                                try {
 
-                            } catch (error) {
+                                    await setDoc(doc(this.db,'workboxes',this.workboxID),updatedRecord)
+                                    this.usage.write(1)
 
-                                const errdesc = 'error updating workbox record version. Check internet'
-                                this.errorControl.push({description:errdesc,error})
-                                console.log(errdesc,error)
-                                this.onError()
-                                return
+                                } catch (error) {
+
+                                    const errdesc = 'error updating workbox record version. Check internet'
+                                    this.errorControl.push({description:errdesc,error})
+                                    console.log(errdesc,error)
+                                    this.onError()
+                                    return
+
+                                }
+
+                                workboxRecord = updatedRecord
 
                             }
-
-                            workboxRecord = updatedRecord
-
+                            this.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
                         }
-                        this.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
+
+                        this.workboxRecord = workboxRecord
+
+                        // console.log('onSnapshot setWorkbodHandlerContext')
+
+                        this.setWorkboxHandlerContext({current:this})
+
                     }
 
-                    this.workboxRecord = workboxRecord
-                    // this._setWorkboxState('updaterecord')
+                },(error) => {
+
+                    const errdesc = 'error from workbox record listener. Check permissions'
+                    this.errorControl.push({description:errdesc,error})
+                    console.log(errdesc,error)
+                    result.error = true
+                    this.onError()
+                    return
 
                 }
 
-            },(error) => {
-
-                const errdesc = 'error from workbox record listener. Check permissions'
-                this.errorControl.push({description:errdesc,error})
-                console.log(errdesc,error)
-                this.onError()
-                return
-
-            }
-        )
-
+            )
+        }
     }
 
     async getWorkboxRecord() {
