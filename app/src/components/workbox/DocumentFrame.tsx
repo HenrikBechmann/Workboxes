@@ -188,78 +188,78 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     //         viewWidth = UIDocumentWidthRef.current[viewSetting],
     //         viewTrigger = viewSetting
 
-    //     windowCallbackContextRef.current.changeView = () => {
+        // windowCallbackContextRef.current.changeView = () => {
 
-    //         const constraints = {
-    //             minX:MIN_DOCUMENT_FRAME_WIDTH,
-    //             minY:documentFrameElementRef.current?.offsetHeight || 0,
-    //             maxX: Math.min(
-    //                 workboxInnerFrameWidthRef.current * MAX_DOCUMENT_FRAME_RATIO,
-    //                 workboxInnerFrameWidthRef.current - MIN_ITEMLIST_FRAME_WIDTH),
-    //             maxY:documentFrameElementRef.current?.offsetHeight || 0,
-    //         }
-    //         constraintsRef.current = constraints
+        //     const constraints = {
+        //         minX:MIN_DOCUMENT_FRAME_WIDTH,
+        //         minY:documentFrameElementRef.current?.offsetHeight || 0,
+        //         maxX: Math.min(
+        //             workboxInnerFrameWidthRef.current * MAX_DOCUMENT_FRAME_RATIO,
+        //             workboxInnerFrameWidthRef.current - MIN_ITEMLIST_FRAME_WIDTH),
+        //         maxY:documentFrameElementRef.current?.offsetHeight || 0,
+        //     }
+        //     constraintsRef.current = constraints
 
-    //         const appliedWidth = Math.min(constraints.maxX, viewWidth)
+        //     const appliedWidth = Math.min(constraints.maxX, viewWidth)
 
-    //         documentFrameElementRef.current.style.transition = 'width 0.3s'
-    //         documentFrameElementRef.current.style.width = appliedWidth + 'px'
-    //         UIDocumentWidthRef.current[viewTrigger] = appliedWidth
+        //     documentFrameElementRef.current.style.transition = 'width 0.3s'
+        //     documentFrameElementRef.current.style.width = appliedWidth + 'px'
+        //     UIDocumentWidthRef.current[viewTrigger] = appliedWidth
 
-    //         setTimeout(()=>{
-    //             documentFrameElementRef.current.style.transition = 'none'
-    //             setDocumentResizeWidth(appliedWidth)
-    //         },300)
+        //     setTimeout(()=>{
+        //         documentFrameElementRef.current.style.transition = 'none'
+        //         setDocumentResizeWidth(appliedWidth)
+        //     },300)
 
-    //     }
+        // }
 
     // },[viewSetting])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
-        if (primaryFrameWidth === 0) return
+    //     const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
+    //     if (primaryFrameWidth === 0) return
 
-        const documentWidth = 
-            displayCodeRef.current == 'out'
-                ? documentFrameElementRef.current.offsetWidth
-                : UIDocumentWidthRef.current[viewSettingRef.current]
+    //     const documentWidth = 
+    //         displayCodeRef.current == 'out'
+    //             ? documentFrameElementRef.current.offsetWidth
+    //             : UIDocumentWidthRef.current[viewSettingRef.current]
 
-        clearTimeout(observerTimeoutRef.current)
+    //     clearTimeout(observerTimeoutRef.current)
 
-        const calculatedMaxDocumentWidth = 
-            Math.min(
-                primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
-                primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH)
+    //     const calculatedMaxDocumentWidth = 
+    //         Math.min(
+    //             primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
+    //             primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH)
 
-        if (calculatedMaxDocumentWidth < documentWidth) {
+    //     if (calculatedMaxDocumentWidth < documentWidth) {
 
-            const newWidth = Math.max(MIN_DOCUMENT_FRAME_WIDTH, calculatedMaxDocumentWidth)
+    //         const newWidth = Math.max(MIN_DOCUMENT_FRAME_WIDTH, calculatedMaxDocumentWidth)
 
-            if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
-            displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
+    //         if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
+    //         displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
 
-            UIDocumentWidthRef.current[viewSettingRef.current] = newWidth
+    //         UIDocumentWidthRef.current[viewSettingRef.current] = newWidth
 
-            if (documentFrameElementRef.current.style.transition == 'none') {
-                setTimeout(()=>{
-                    documentFrameElementRef.current.style.transition = 'width 0.5s'
-                },1)
-            }
+    //         if (documentFrameElementRef.current.style.transition == 'none') {
+    //             setTimeout(()=>{
+    //                 documentFrameElementRef.current.style.transition = 'width 0.5s'
+    //             },1)
+    //         }
 
-            setDocumentResizeWidth(newWidth) // coerce render
+    //         setDocumentResizeWidth(newWidth) // coerce render
 
-        }
+    //     }
 
-        const constraints = {
-            minX:MIN_DOCUMENT_FRAME_WIDTH,
-            minY:documentFrameElementRef.current?.offsetHeight || 0,
-            maxX: calculatedMaxDocumentWidth,
-            maxY:documentFrameElementRef.current?.offsetHeight || 0,
-        }
-        constraintsRef.current = constraints
+    //     const constraints = {
+    //         minX:MIN_DOCUMENT_FRAME_WIDTH,
+    //         minY:documentFrameElementRef.current?.offsetHeight || 0,
+    //         maxX: calculatedMaxDocumentWidth,
+    //         maxY:documentFrameElementRef.current?.offsetHeight || 0,
+    //     }
+    //     constraintsRef.current = constraints
 
-    },[workboxHandler])
+    // },[workboxHandler])
 
     useEffect(()=>{
 

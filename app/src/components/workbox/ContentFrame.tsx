@@ -41,6 +41,7 @@ const ContentFrame = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { show:itemlistShow } = workboxHandler.settings.configuration.itemlist, // boolean - show/ noshow
         { show:documentShow } = workboxHandler.settings.configuration.document, // boolean - show/ noshow
+        { show:bothShow } = workboxHandler.settings.configuration.both, // boolean - show/ noshow
         // share document and itemlist elements with children
         documentFrameElementRef = useRef( null ),
         itemlistFrameElementRef = useRef( null ),
@@ -50,8 +51,10 @@ const ContentFrame = (props) => {
         UIDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
+    console.log('workboxHandler', workboxHandler)
+
     let workboxDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
-    if (itemlistShow && documentShow) {
+    if (bothShow) {
         workboxDisplayCode = 'both'
         documentDisplayCode = 'out'
         itemlistDisplayCode = 'out'
