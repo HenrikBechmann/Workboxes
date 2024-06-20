@@ -67,7 +67,7 @@ const ContentFrame = (props) => {
 
     useEffect(()=>{
 
-        workboxHandler.CONTENT_FRAME_PADDING_WIDTH = 10
+        workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = 10
         setTimeout(() => { // yield for forward reference updates
             setContentState('ready')
         },1)

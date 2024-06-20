@@ -55,9 +55,9 @@ export const useWorkboxHandler = () => {
     const 
         workboxHandlerContext = useContext(WorkboxHandlerContext),
         workboxHandler = workboxHandlerContext.current,
-        setWorkboxHandlerContext = workboxHandler.setWorkboxHandlerContext,
+        { setWorkboxHandlerContext } = workboxHandler.internal,
         dispatchWorkboxHandler = (trigger?) => {
-            workboxHandler.trigger = trigger
+            workboxHandler.internal.trigger = trigger
             const newWorkboxHandlerContext = {...workboxHandlerContext} // coerce dispatch
             setWorkboxHandlerContext(newWorkboxHandlerContext)
         }
@@ -77,8 +77,8 @@ const WorkboxFrame = (props) => {
     // update the width record of this panel on resize
     const resizeObserverCallback = useCallback(()=> {
 
-        workboxHandler.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
-            workboxHandler.CONTENT_FRAME_PADDING_WIDTH
+        workboxHandler.dimensions.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
+            workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH
         dispatchWorkboxHandler('framewidth')
 
     },[])
@@ -155,9 +155,9 @@ const Workbox = (props) => {
 
         const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
         workboxHandler.settings = workboxSettings
-        workboxHandler.setWorkboxHandlerContext = setWorkboxHandlerContext
-        workboxHandler.onError = onError
-        workboxHandler.onFail = onFail
+        workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
+        workboxHandler.internal.onError = onError
+        workboxHandler.internal.onFail = onFail
         workboxHandlerContext.current = workboxHandler
 
         setWorkboxHandlerContext({current:workboxHandler})
@@ -169,7 +169,7 @@ const Workbox = (props) => {
 
         if (unsubscribeworkbox) {
             return () => {
-                snapshotControl.registerUnsub(workboxHandler.workboxSnapshotIndex, unsubscribeworkbox)
+                snapshotControl.registerUnsub(workboxHandler.internal.workboxSnapshotIndex, unsubscribeworkbox)
             }
         }
 

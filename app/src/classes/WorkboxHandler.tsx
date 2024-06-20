@@ -14,87 +14,85 @@ import { updateDocumentSchema } from '../system/utilities'
 class WorkboxHandler {
     constructor( {workboxID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
 
-        // this.workboxSessionID = workboxSessionID
         this.workboxID = workboxID
-        this.db = db
-        this.usage = usage
-        this.snapshotControl = snapshotControl
-        this.onError = onError
-        this.onFail = onFail
-        this.errorControl = errorControl
+
+        this.internal.db = db
+        this.internal.usage = usage
+        this.internal.snapshotControl = snapshotControl
+        this.internal.onError = onError
+        this.internal.onFail = onFail
+        this.internal.errorControl = errorControl
 
     }
 
-    // constructor parameters
-    workboxID
-    db
-    usage
-    snapshotControl
-    errorControl
+    internal = {
+        // constructor parameters
+        db: null,
+        usage: null,
+        snapshotControl: null,
+        onError: null,
+        onFail: null,
+        errorControl: null,
+        // internal controls
+        workboxSnapshotIndex: null,
+        unsubscribeworkbox: null,
+        setWorkboxHandlerContext: null, // for consumers
+        trigger: null, // for debugging
+    }
 
-    // onsnapshot control
-    workboxSnapshotIndex
-    unsubscribeworkbox
-    onError
-    onFail
+    workboxID
 
     // data
     workboxRecord
     itemlistRecords = []
 
+    // process control & tracking
+
     // configuration
     settings
-    innerFrameWidth
-    CONTENT_FRAME_PADDING_WIDTH
-
-    // process control & tracking
-    trigger // for debugging
-    setWorkboxHandlerContext // for consumers
+    dimensions = {
+        innerFrameWidth:null,
+        CONTENT_FRAME_PADDING_WIDTH:null,
+    }
 
     // -----------------------------[ operations ]--------------------------
     async setWorkboxSnapshot() {
         const 
-            workboxCollection = collection(this.db, 'workboxes'),
-            workboxSnapshotIndex = 'Workbox.' + this.workboxID,
-            result = {
-                error:false,
-                success: true,
-                notice: null,
-                payload: null,
-            }
+            workboxCollection = collection(this.internal.db, 'workboxes'),
+            workboxSnapshotIndex = 'Workbox.' + this.workboxID
 
-        this.workboxSnapshotIndex = workboxSnapshotIndex
+        this.internal.workboxSnapshotIndex = workboxSnapshotIndex
 
-        if (!this.snapshotControl.has(workboxSnapshotIndex)) { // once only
-            this.snapshotControl.create(workboxSnapshotIndex)
+        if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
+            this.internal.snapshotControl.create(workboxSnapshotIndex)
 
-            this.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+            this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
                 async (returndoc) =>{
-                    this.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-                    this.usage.read(1)
+                    this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
+                    this.internal.usage.read(1)
                     
                     let workboxRecord = returndoc.data()
 
                     if (!workboxRecord) {
-                        result.success = false
-                        this.onFail()
+                        this.internal.onFail()
+                        return
                     } else {
 
-                        if (!this.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+                        if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
 
                             const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
                             if (!Object.is(workboxRecord, updatedRecord)) {
                                 try {
 
-                                    await setDoc(doc(this.db,'workboxes',this.workboxID),updatedRecord)
-                                    this.usage.write(1)
+                                    await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
+                                    this.internal.usage.write(1)
 
                                 } catch (error) {
 
                                     const errdesc = 'error updating workbox record version. Check internet'
-                                    this.errorControl.push({description:errdesc,error})
+                                    this.internal.errorControl.push({description:errdesc,error})
                                     console.log(errdesc,error)
-                                    this.onError()
+                                    this.internal.onError()
                                     return
 
                                 }
@@ -102,24 +100,24 @@ class WorkboxHandler {
                                 workboxRecord = updatedRecord
 
                             }
-                            this.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
+                            this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
                         }
 
                         this.workboxRecord = workboxRecord
 
                         // console.log('onSnapshot setWorkbodHandlerContext')
 
-                        this.setWorkboxHandlerContext({current:this})
+                        this.internal.trigger = 'updaterecord'
+                        this.internal.setWorkboxHandlerContext({current:this})
 
                     }
 
                 },(error) => {
 
                     const errdesc = 'error from workbox record listener. Check permissions'
-                    this.errorControl.push({description:errdesc,error})
+                    this.internal.errorControl.push({description:errdesc,error})
                     console.log(errdesc,error)
-                    result.error = true
-                    this.onError()
+                    this.internal.onError()
                     return
 
                 }

@@ -169,7 +169,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    workboxInnerFrameWidthRef.current = workboxHandler.innerFrameWidth
+    workboxInnerFrameWidthRef.current = workboxHandler.dimensions.innerFrameWidth
     displayCodeRef.current = displayConfigCode
     viewSettingRef.current = viewSetting
 

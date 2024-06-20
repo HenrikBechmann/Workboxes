@@ -81,7 +81,7 @@ const WorkboxToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { settings } = workboxHandler
 
-    // console.log('workboxHandler',workboxHandler)
+    console.log('WorkboxToolbar workboxHandler',workboxHandler)
 
     const
         toggleOnDocumentRef = useRef(settings.configuration.document.show),
