@@ -27,7 +27,7 @@ const iconToggleStyles = {
 const ToggleIcon = (props) => {
 
     const 
-        { toggleOn, disabled, callback, icon, tooltip, caption } = props,
+        { toggleOn, disabled, callback, icon, tooltip, caption , is_radio = false} = props,
         toggleValueRef = useRef(toggleOn),
         disabledValueRef = useRef(disabled),
         iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles),
@@ -65,7 +65,7 @@ const ToggleIcon = (props) => {
         event.preventDefault()
         if (disabled) return
 
-        callback && callback(!toggleOn)
+        callback && (is_radio?callback(toggleOn):callback(!toggleOn))
     }
 
     return <Box display = 'flex' flexDirection = 'column' alignItems = 'center' marginLeft = '12px'>
@@ -80,7 +80,7 @@ const ToggleIcon = (props) => {
 }
 
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
-export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption}) => {
+export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption, callback = null, is_radio = false}) => {
 
     const [useToggleState, setUseToggleState] = useState(toggleOnRef?.current)
 
@@ -101,6 +101,7 @@ export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption}
         caption = {caption}
         toggleOn = {toggleOnRef?.current} 
         disabled = {disabledRef?.current} 
-        callback = {userChangeCallback} 
+        callback = {callback?callback:userChangeCallback} 
+        is_radio = {is_radio}
     />
 }

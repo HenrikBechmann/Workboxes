@@ -35,7 +35,6 @@ import MenuControl from './MenuControl'
 import UserControl from './UserControl'
 import StandardIcon from './StandardIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
-// import { useToggleIcon } from './ToggleIcon'
 
 import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'

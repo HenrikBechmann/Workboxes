@@ -23,8 +23,9 @@ import TypeControl from './TypeControl'
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
 // import listIcon from '../../../assets/list.png'
-import packageIcon from '../../../assets/package.png'
-import profileIcon from '../../../assets/profile.png'
+import itemlistIcon from '../../../assets/package.png'
+import documentIcon from '../../../assets/profile.png'
+import bothIcon from '../../../assets/both.png'
 import swapIcon from '../../../assets/swap.png'
 // import linkIcon from '../../../assets/link.png'
 import settingsIcon from '../../../assets/settings.png'
@@ -69,88 +70,109 @@ const iconWrapperStyles = {
 const WorkboxToolbar = (props) => {
 
     const 
-        // { 
-        //     workboxConfig, 
-        //     itemTitle, 
-        //     itemIcon, 
-        //     domainTitle, 
-        //     domainIcon, 
-        //     typeName 
-        // } = props,
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        { settings } = workboxHandler
-
-    console.log('WorkboxToolbar workboxHandler',workboxHandler)
+        { settings } = workboxHandler,
+        [toolbarState, setToolbarState] = useState('ready')
 
     const
         toggleOnDocumentRef = useRef(settings.configuration.document.show),
         disabledDocumentRef = useRef(settings.configuration.document.disabled),
         toggleOnItemlistRef = useRef(settings.configuration.itemlist.show),
-        disabledItemlistRef = useRef(settings.configuration.itemlist.sisabled),
+        disabledItemlistRef = useRef(settings.configuration.itemlist.disabled),
+        toggleOnBothRef = useRef(settings.configuration.both.show),
+        disabledBothRef = useRef(settings.configuration.both.disabled),
 
-        toggleHistoryRef = useRef({
-            documentShow:toggleOnDocumentRef.current,
-        }),
         domainTitle = '',
         domainIcon = '',
         itemIcon = '',
         itemTitle = '',
         typeName = ''
 
-    const 
-        currentIsDocument = toggleOnDocumentRef.current,
-        previousIsDocument = toggleHistoryRef.current.documentShow,
-        currentIsItemlist = toggleOnItemlistRef.current
-
-    if (!currentIsDocument && !currentIsItemlist) {
-        if (previousIsDocument) {
-
-            toggleOnItemlistRef.current = true
-
-        } else {
-
-            toggleOnDocumentRef.current = true
-
-        }
-    }
-
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
-
-        // console.log('SETTINGS', settings)
 
         settings.configuration.document.show = toggleOnDocumentRef.current
         settings.configuration.document.disabled = disabledDocumentRef.current
         settings.configuration.itemlist.show = toggleOnItemlistRef.current
         settings.configuration.itemlist.disabled = disabledItemlistRef.current
+        settings.configuration.both.show = toggleOnBothRef.current
+        settings.configuration.both.disabled = disabledBothRef.current
+
+        setToolbarState('ready')
+        dispatchWorkboxHandler()
 
     },[
         toggleOnDocumentRef.current,
         disabledDocumentRef.current,
         toggleOnItemlistRef.current,
         disabledItemlistRef.current,
+        toggleOnBothRef.current,
+        disabledBothRef.current,
     ])
 
-    toggleHistoryRef.current = {
-        documentShow:toggleOnDocumentRef.current,
+    const callbackDocument = (value) => {
+        event.preventDefault()
+        if (disabledDocumentRef.current || toggleOnDocumentRef.current) return
+
+        toggleOnDocumentRef.current = true
+        toggleOnItemlistRef.current = false
+        toggleOnBothRef.current = false
+
+        setToolbarState('radio')
+    }
+
+    const callbackItemlist = (value) => {
+        event.preventDefault()
+        if (disabledItemlistRef.current || toggleOnItemlistRef.current) return
+
+        toggleOnDocumentRef.current = false
+        toggleOnItemlistRef.current = true
+        toggleOnBothRef.current = false
+
+        setToolbarState('radio')
+    }
+
+    const callbackBoth = (value) => {
+        event.preventDefault()
+        if (disabledBothRef.current || toggleOnBothRef.current) return
+
+        toggleOnDocumentRef.current = false
+        toggleOnItemlistRef.current = false
+        toggleOnBothRef.current = true
+
+        setToolbarState('radio')
     }
 
     const
         documentToggle = useToggleIcon({
-            icon:profileIcon, 
-            tooltip:'Toggle workbox document pane',
+            icon:documentIcon, 
+            tooltip:'Show workbox document pane',
             caption:'document',
             toggleOnRef:toggleOnDocumentRef,
             disabledRef:disabledDocumentRef, 
+            callback:callbackDocument,
+            is_radio:true,
         }),
 
         itemlistToggle = useToggleIcon({
-            icon:packageIcon, 
-            tooltip:'Toggle workbox itemlist pane',
-            caption:'itemlist',
+            icon:itemlistIcon, 
+            tooltip:'Show workbox itemlist pane',
+            caption:'item list',
             toggleOnRef:toggleOnItemlistRef,
             disabledRef:disabledItemlistRef, 
+            callback:callbackItemlist,
+            is_radio:true,
+        }),
+
+        bothToggle = useToggleIcon({
+            icon:bothIcon, 
+            tooltip:'Show both document and itemlist panes',
+            caption:'both',
+            toggleOnRef:toggleOnBothRef,
+            disabledRef:disabledBothRef, 
+            callback:callbackBoth,
+            is_radio:true,
         })
 
     const workboxmenulist = <MenuList >
@@ -165,6 +187,7 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         { documentToggle }
         { itemlistToggle }
+        { bothToggle }
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />

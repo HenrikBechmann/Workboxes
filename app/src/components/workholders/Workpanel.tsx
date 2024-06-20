@@ -19,13 +19,17 @@ const defaultWorkboxConfig = {
     },
     document: {
         mode:'view',
-        show:true,
+        show:false,
         disabled:false,
     },
     itemlist: { 
-        show:true,
+        show:false,
         disabled:false,
-    }
+    },
+    both: {
+        show: true,
+        disabled: false,
+    },
 }
 
 const workpanelStyles = {
