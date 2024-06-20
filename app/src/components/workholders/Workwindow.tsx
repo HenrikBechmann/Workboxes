@@ -319,7 +319,7 @@ const Workwindow = (props) => {
 
                     setWindowState('activatemaximized')
 
-                    windowCallbackRef.current.changeView() // revert to previous document width
+                    // windowCallbackRef.current.changeView() // revert to previous document width
 
                 },501)
 
