@@ -26,13 +26,18 @@ const itemlistToolbarStyles = {
     borderRadius:'8px 8px 0 0',
 } as CSSProperties
 
-import packageIcon from '../../../assets/package.png'
 import listIcon from '../../../assets/list.png'
+import drillIcon from '../../../assets/drill.png'
 import addIcon from '../../../assets/add.png'
+import editIcon from '../../../assets/edit.png'
+import removeIcon from '../../../assets/close.png'
+import selectIcon from '../../../assets/select.png'
+import dragIcon from '../../../assets/drag.png'
+
+import itemlistIcon from '../../../assets/package.png'
 import filterIcon from '../../../assets/filter.png'
 import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
-import dragIcon from '../../../assets/drag.png'
 import moveIcon from '../../../assets/move.png'
 import hideIcon from '../../../assets/expand_less.png'
 import arrowbackIcon from '../../../assets/arrow_back.png'
@@ -59,26 +64,152 @@ const ItemlistToolbar = (props) => {
 
 
     const
-        toggleOnDragRef = useRef(null),
-        disabledDragRef = useRef(null),
-        toggleOnMoveRef = useRef(null),
-        disabledMoveRef = useRef(null),
+        [toolbarState, setToolbarState] = useState('ready'),
+        toggleOnNormalRef = useRef(true),
+        disabledNormalRef = useRef(false),
+        toggleOnDrillRef = useRef(false),
+        disabledDrillRef = useRef(false),
+        toggleOnAddRef = useRef(false),
+        disabledAddRef = useRef(false),
+        toggleOnEditRef = useRef(false),
+        disabledEditRef = useRef(false),
+        toggleOnRemoveRef = useRef(false),
+        disabledRemoveRef = useRef(false),
+        toggleOnDragRef = useRef(false),
+        disabledDragRef = useRef(false),
+        // toggleOnMoveRef = useRef(null),
+        // disabledMoveRef = useRef(null),
+        onNormal = (value) => {
+            toggleOnNormalRef.current = true
+            toggleOnDrillRef.current = false
+            toggleOnAddRef.current = false
+            toggleOnEditRef.current = false
+            toggleOnRemoveRef.current = false
+            toggleOnDragRef.current = false
+            setToolbarState('radio')
+        },
+        onDrill = (value) => {
+            toggleOnNormalRef.current = false
+            toggleOnDrillRef.current = true
+            toggleOnAddRef.current = false
+            toggleOnEditRef.current = false
+            toggleOnRemoveRef.current = false
+            toggleOnDragRef.current = false
+            setToolbarState('radio')
+        },
+        onAdd = (value) => {
+            toggleOnNormalRef.current = false
+            toggleOnDrillRef.current = false
+            toggleOnAddRef.current = true
+            toggleOnEditRef.current = false
+            toggleOnRemoveRef.current = false
+            toggleOnDragRef.current = false
+            setToolbarState('radio')
+        },
+        onEdit = (value) => {
+            toggleOnNormalRef.current = false
+            toggleOnDrillRef.current = false
+            toggleOnAddRef.current = false
+            toggleOnEditRef.current = true
+            toggleOnRemoveRef.current = false
+            toggleOnDragRef.current = false
+            setToolbarState('radio')
+        },
+        onRemove = (value) => {
+            toggleOnNormalRef.current = false
+            toggleOnDrillRef.current = false
+            toggleOnAddRef.current = false
+            toggleOnEditRef.current = false
+            toggleOnRemoveRef.current = true
+            toggleOnDragRef.current = false
+            setToolbarState('radio')
+        },
+        onDrag = (value) => {
+            toggleOnNormalRef.current = false
+            toggleOnDrillRef.current = false
+            toggleOnAddRef.current = false
+            toggleOnEditRef.current = false
+            toggleOnRemoveRef.current = false
+            toggleOnDragRef.current = true
+            setToolbarState('radio')
+        },
 
+        // normal, drill, add, edit, remove, select, drag
+        normalToggle = useToggleIcon({
+            icon:listIcon, 
+            tooltip:'Normal browsing',
+            caption:'normal',
+            toggleOnRef:toggleOnNormalRef,
+            disabledRef:disabledNormalRef,
+            is_radio: true,
+            callback: onNormal
+        }),
+        drillToggle = useToggleIcon({
+            icon:drillIcon, 
+            tooltip:'Drill down',
+            caption:'drill',
+            toggleOnRef:toggleOnDrillRef,
+            disabledRef:disabledDrillRef, 
+            is_radio: true,
+            callback: onDrill
+        }),
+        addToggle = useToggleIcon({
+            icon:addIcon, 
+            tooltip:'Add item',
+            caption:'add',
+            toggleOnRef:toggleOnAddRef,
+            disabledRef:disabledAddRef, 
+            is_radio: true,
+            callback: onAdd
+        }),
+        editToggle = useToggleIcon({
+            icon:editIcon, 
+            tooltip:'Edit item',
+            caption:'edit',
+            toggleOnRef:toggleOnEditRef,
+            disabledRef:disabledEditRef, 
+            is_radio: true,
+            callback: onEdit
+        }),
+        removeToggle = useToggleIcon({
+            icon:removeIcon, 
+            tooltip:'Remove item',
+            caption:'remove',
+            toggleOnRef:toggleOnRemoveRef,
+            disabledRef:disabledRemoveRef, 
+            is_radio: true,
+            callback: onRemove
+        }),
         dragToggle = useToggleIcon({
             icon:dragIcon, 
             tooltip:'Toggle drag and drop',
-            caption:'drag & drop',
+            caption:'drag',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
-        }),
-
-        moveToggle = useToggleIcon({
-            icon:moveIcon, 
-            tooltip:'Toggle drag & drop move (vs copy)',
-            caption:'d&d move',
-            toggleOnRef:toggleOnMoveRef,
-            disabledRef:disabledMoveRef, 
+            is_radio: true,
+            callback: onDrag
         })
+
+    useEffect(()=>{
+
+        if (toolbarState != 'ready') setToolbarState('ready')
+
+    },[toolbarState])
+        // selectToggle = useToggleIcon({
+        //     icon:selectIcon, 
+        //     tooltip:'select items',
+        //     caption:'select',
+        //     toggleOnRef:toggleOnDragRef,
+        //     disabledRef:disabledDragRef, 
+        // }),
+
+        // moveToggle = useToggleIcon({
+        //     icon:moveIcon, 
+        //     tooltip:'Toggle drag & drop move (vs copy)',
+        //     caption:'d&d move',
+        //     toggleOnRef:toggleOnMoveRef,
+        //     disabledRef:disabledMoveRef, 
+        // })
 
     const itemlistmenulist = <MenuList >
         <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itemlist</MenuItem>
@@ -93,22 +224,29 @@ const ItemlistToolbar = (props) => {
 
     const layoutIcon = listIcon
 
+        // <ToolbarVerticalDivider />
+        // <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
+        // <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
+        // <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itemlist list'/>
+        // <ToolbarVerticalDivider />
+        // <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
+        // { moveToggle }
+        // { selectToggle }
     // render
     return <Box data-type = 'document-toolbar' style = {itemlistToolbarStyles}>
     
-        <MenuIcon icon = {packageIcon} caption = 'itemlist' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
+        <MenuIcon icon = {itemlistIcon} caption = 'item list' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
         <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
-        <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
-        <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itemlist list'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
-        <ToolbarVerticalDivider />
+        { normalToggle }
+        { drillToggle }
+        { addToggle }
+        { editToggle }
+        { removeToggle }
         { dragToggle }
-        { moveToggle }
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'splay' tooltip = 'horizontal view'/>
+        <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'spread' tooltip = 'horizontal view'/>
+        <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}
 

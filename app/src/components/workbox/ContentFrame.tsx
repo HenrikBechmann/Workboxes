@@ -51,7 +51,7 @@ const ContentFrame = (props) => {
         UIDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
         workboxContentElementRef = useRef(null)
 
-    console.log('workboxHandler', workboxHandler)
+    // console.log('workboxHandler', workboxHandler)
 
     let workboxDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
     if (bothShow) {
