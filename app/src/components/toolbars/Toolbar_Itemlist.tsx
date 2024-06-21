@@ -236,7 +236,7 @@ const ItemlistToolbar = (props) => {
     return <Box data-type = 'document-toolbar' style = {itemlistToolbarStyles}>
     
         <MenuIcon icon = {itemlistIcon} caption = 'item list' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
-        <MenuIcon icon = {layoutIcon} caption = 'list' tooltip = 'switch formats' menulist = {layoutmenulist}/>
+        <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         { normalToggle }
         { drillToggle }
