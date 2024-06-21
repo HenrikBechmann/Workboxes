@@ -2,32 +2,41 @@
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 /*
+    The Workwindow must stay inside the dynamically sized Workpane.
+    The Eorkwindow can be resized, minimized (to a stack upper left),
+    maimized (takes on size of Workpanel viewport), and normalized
+    (floating).
+    The Workwindow id moveable and stackable (focussed Workwindow on top)
+*/
+
+/*
     TODO:
-        freeze windowContentElement to minWidth and minHeight when minimized
+        freeze windowContentElement to minWidth and minHeight when minimized?
 
 */
 
-import React, { useState, useRef, useEffect, CSSProperties, createContext } from 'react'
+import React, { useState, useRef, useEffect, CSSProperties } from 'react'
 
 import {
     Grid, GridItem,
     Box
 } from '@chakra-ui/react'
 
+// both Draggable and Resizable apply their dynamics to the existing wrapped element
 import Draggable from 'react-draggable'
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
+// contains the titleName elements, and the dynamic controls
 import WindowTitle from './WindowTitle'
 
 import dragCornerIcon from '../../../assets/drag-corner.png'
 
-// export const WindowCallbackContext = createContext(null)
-
 const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
 const WINDOW_MINIMIZED_WIDTH = 250
 
-const windowFrameStyles = {
+// the window's outer element
+const windowFrameStyles = { //width, height merged dynamically in renderWindowFrameStyles
     top:0,
     left:0,
     position: 'absolute',
@@ -36,6 +45,7 @@ const windowFrameStyles = {
     boxShadow: '0 2px 7px 3px gainsboro',
 } as CSSProperties
 
+// just inside the window frame, holding the window header (for toolbar) and body (for content)
 const windowGridStyles = {
     height: '100%',
     gridTemplateColumns: '1fr',
@@ -45,6 +55,7 @@ const windowGridStyles = {
          "body"`,
 } as CSSProperties
 
+// CSS for the header portion of the grid
 const windowHeaderStyles  = {
     gridArea:'header',
     width: '100%',
@@ -52,15 +63,17 @@ const windowHeaderStyles  = {
     minWidth:0,
 }  as CSSProperties
 
+// CSS for the body portion of the grid
 const windowBodyStyles = {
     gridArea: 'body',
     width: '100%',
     position: 'relative',
     borderRadius: '0px 0px 0px 7px',
-    overflow:'hidden',
+    overflow:'hidden', // experimental
     minWidth: 0,
 } as CSSProperties
 
+// the element inside the window body grid element
 const windowContentStyles = {
     position: 'absolute',
     inset: 0, 
@@ -68,6 +81,7 @@ const windowContentStyles = {
     borderRadius: '0 0 0px 7px',
 } as CSSProperties
 
+// the resize handle bottom right
 const resizeHandleStyles = {
     position:'absolute',
     bottom:0,
@@ -81,20 +95,21 @@ const resizeHandleStyles = {
     width: '24px',
 } as CSSProperties
 
+// icon for the resize handle
 const resizeHandleIconStyles = {
     opacity:0.5, 
     height:'12px', 
     width:'12px',
 }
 
-// for Resizable
+// WindowHandle is provided for Resizable
 const WindowHandle = (props) => {
 
     // handleAxis for handle selection - n/a here; remove from rest to avoid warning when passed on to Box
-    const { handleAxis, innerRef, windowSessionID, viewDeclaration, ...rest } = props
+    const { handleAxis, innerRef, windowSessionID, viewDeclaration, ...handleAttributes } = props
 
     return (
-        <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...rest}>
+        <Box ref = {innerRef} data-type = 'resize-handle' style = {resizeHandleStyles} {...handleAttributes}>
             {(viewDeclaration.view != 'minimized') &&
                 <img draggable = "false" src = {dragCornerIcon} style = {resizeHandleIconStyles} />
             }
@@ -102,6 +117,7 @@ const WindowHandle = (props) => {
     )
 }
 
+// workWindow is called by Workpanel, which maintains an array of Workwindow components
 const Workwindow = (props) => {
 
     // console.log('running Workwindow: props', props)
@@ -111,18 +127,18 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            configuration, // position; size
-            containerDimensionSpecs, // height, width; change can cause repositioning and resizing of window
-            identity, // workbox identity
+            configuration, // default position; size
+            containerDimensionSpecs, // height, width of Workpanel; change can cause repositioning and resizing of window
+            identity, // workbox identity, for titleName
             windowCallbacks, // change zOrder etc.
-            windowSessionID, // system control
+            windowSessionID, // system control, repo access
             viewDeclaration, // normalized, maximized, minimized; stackOrder
             zOrder, // inherited; modified by setFocus 
-            type,
+            type, // for type section of window titleName
         } = props,
 
-        title = identity.name,
-        windowConfig = configuration,
+        titleName = identity.name,
+        defaultWindowConfig = configuration,
 
         panelFrameElementRef = useRef(null),
         windowFrameElementRef = useRef(null),
@@ -140,15 +156,15 @@ const Workwindow = (props) => {
         // window config varies for normalized, maximized, and minimizex windows
         // top and left numger are translation values; styles are left at 0
         // source of truth for normalized window
-        [normalizedWindowConfig, setNormalizedWindowConfig] = useState( 
+        [windowConfiguration, setNormalizedWindowConfig] = useState( 
             {
-                top: windowConfig.top, 
-                left: windowConfig.left, 
-                width: windowConfig.width, 
-                height: windowConfig.height
+                top: defaultWindowConfig.top, 
+                left: defaultWindowConfig.left, 
+                width: defaultWindowConfig.width, 
+                height: defaultWindowConfig.height
             }
         ),
-        normalizedWindowConfigRef = useRef(null),
+        windowConfigurationRef = useRef(null),
         reservedNormalizedWindowConfigRef = useRef({
             width:null,
             height:null,
@@ -158,16 +174,16 @@ const Workwindow = (props) => {
             inprogress:false,
         }),
         reservedViewDeclaration = reservedNormalizedWindowConfigRef.current.view,
-        viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
+        is_viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
-            width:(!reservedViewDeclaration || viewTransformationInProgress)
-                ? normalizedWindowConfig.width + 'px'
+            width:(!reservedViewDeclaration || is_viewTransformationInProgress)
+                ? windowConfiguration.width + 'px'
                 : reservedViewDeclaration == 'minimized'
                     ? viewDeclaration.width + 'px'
                     : null, // maximized
-            height:(!reservedViewDeclaration || viewTransformationInProgress)
-                ? normalizedWindowConfig.height + 'px' 
+            height:(!reservedViewDeclaration || is_viewTransformationInProgress)
+                ? windowConfiguration.height + 'px' 
                 : (reservedViewDeclaration == 'minimized')
                     ? viewDeclaration.height + 'px'
                     : null, // maximized
@@ -179,7 +195,7 @@ const Workwindow = (props) => {
         transitionTimeoutRef = useRef(null)
         // windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
 
-    normalizedWindowConfigRef.current = normalizedWindowConfig
+    windowConfigurationRef.current = windowConfiguration
     viewDeclarationRef.current = viewDeclaration
 
     // ------------------------------------[ setup effects ]-----------------------------------
@@ -259,7 +275,7 @@ const Workwindow = (props) => {
         clearTimeout(transitionTimeoutRef.current)
 
         const windowElement = windowFrameElementRef.current
-        const normalizedConfig = normalizedWindowConfigRef.current
+        const normalizedConfig = windowConfigurationRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
 
@@ -380,9 +396,9 @@ const Workwindow = (props) => {
 
         } else { // 'normalized'
 
-            const reservedWindowConfig = reservedNormalizedWindowConfigRef.current
+            const reservedWindowConfiguration = reservedNormalizedWindowConfigRef.current
 
-            if (!['maximized','minimized'].includes(reservedWindowConfig.view)) return // already normalized
+            if (!['maximized','minimized'].includes(reservedWindowConfiguration.view)) return // already normalized
 
             const windowElement = windowFrameElementRef.current
 
@@ -405,10 +421,10 @@ const Workwindow = (props) => {
             setTimeout(()=>{
 
                 windowElement.style.transition = WINDOW_TRANSITION
-                windowElement.style.top = reservedWindowConfig.top + 'px'
-                windowElement.style.left = reservedWindowConfig.left + 'px'
-                windowElement.style.width = reservedWindowConfig.width + 'px'
-                windowElement.style.height = reservedWindowConfig.height + 'px'
+                windowElement.style.top = reservedWindowConfiguration.top + 'px'
+                windowElement.style.left = reservedWindowConfiguration.left + 'px'
+                windowElement.style.width = reservedWindowConfiguration.width + 'px'
+                windowElement.style.height = reservedWindowConfiguration.height + 'px'
 
             },1)
 
@@ -418,10 +434,10 @@ const Workwindow = (props) => {
                 windowElement.style.transition = null
                 windowElement.style.top = 0
                 windowElement.style.left = 0
-                windowElement.style.transform = `translate(${reservedWindowConfig.left}px,${reservedWindowConfig.top}px)`
+                windowElement.style.transform = `translate(${reservedWindowConfiguration.left}px,${reservedWindowConfiguration.top}px)`
                 isDraggableDisabledRef.current = false
 
-                const {view, inprogress, ...configData} = reservedWindowConfig
+                const {view, inprogress, ...configData} = reservedWindowConfiguration
 
                 Object.assign(normalizedConfig, configData)
 
@@ -461,26 +477,26 @@ const Workwindow = (props) => {
         if (!containerDimensionSpecs) return
 
         const 
-            reservedWindowConfig = reservedNormalizedWindowConfigRef.current,
-            normalizedWindowConfig = normalizedWindowConfigRef.current
+            reservedWindowConfiguration = reservedNormalizedWindowConfigRef.current,
+            windowConfiguration = windowConfigurationRef.current
 
         let virtualWindowConfig // this is what is updated by change of containerDimensionSpecs
-        if (reservedWindowConfig.view) {
+        if (reservedWindowConfiguration.view) {
 
             virtualWindowConfig = {
-                width: reservedWindowConfig.width,
-                height: reservedWindowConfig.height,
-                top: reservedWindowConfig.top, // translate value
-                left: reservedWindowConfig.left, // translate value
+                width: reservedWindowConfiguration.width,
+                height: reservedWindowConfiguration.height,
+                top: reservedWindowConfiguration.top, // translate value
+                left: reservedWindowConfiguration.left, // translate value
             }
 
         } else {
 
             virtualWindowConfig = {
-                width: normalizedWindowConfig.width,
-                height: normalizedWindowConfig.height,
-                top: normalizedWindowConfig.top,
-                left: normalizedWindowConfig.left,
+                width: windowConfiguration.width,
+                height: windowConfiguration.height,
+                top: windowConfiguration.top,
+                left: windowConfiguration.left,
             }
 
         }
@@ -529,13 +545,13 @@ const Workwindow = (props) => {
 
             }
 
-            if (!reservedWindowConfig.view) {
+            if (!reservedWindowConfiguration.view) {
 
                 setNormalizedWindowConfig(virtualWindowConfig)
 
             } else {
 
-                Object.assign(reservedWindowConfig, virtualWindowConfig)
+                Object.assign(reservedWindowConfiguration, virtualWindowConfig)
 
             }
 
@@ -587,7 +603,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        // undo deltalY which causes scroll and window movement when drag handle (title) selected
+        // undo deltalY which causes scroll and window movement when drag handle (titleName) selected
         // while window is partially out of view
         if (data.deltaY) {
 
@@ -609,18 +625,16 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = {
         top:0, 
-        right:containerDimensionSpecs.width - normalizedWindowConfig.width, 
-        bottom:containerDimensionSpecs.height - normalizedWindowConfig.height, 
+        right:containerDimensionSpecs.width - windowConfiguration.width, 
+        bottom:containerDimensionSpecs.height - windowConfiguration.height, 
         left:0,
     }
 
-    // <WindowCallbackContext.Provider value = {windowCallbackRef.current}>
-    // </WindowCallbackContext.Provider>)
     // render
     return (
     <Draggable
         defaultPosition = {{x:0,y:0}}
-        position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
+        position = {{x:windowConfiguration.left, y:windowConfiguration.top}}
         handle = '#draghandle'
         bounds = {bounds}
         onStart = {onDragStart}
@@ -638,8 +652,8 @@ const Workwindow = (props) => {
                     viewDeclaration = {viewDeclaration}
                 />
             } 
-            height = {normalizedWindowConfig.height} 
-            width = {normalizedWindowConfig.width} 
+            height = {windowConfiguration.height} 
+            width = {windowConfiguration.width} 
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[300,300]}
@@ -654,7 +668,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {type} title = {title}/>
+                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {type} title = {titleName}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 
