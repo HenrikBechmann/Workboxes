@@ -268,7 +268,7 @@ const WorkspaceToolbar = (props) => {
             arrowdirection = 'up'
             icon = {panelIcon}
             placement = 'top'
-            caption = 'workspace panel'
+            caption = 'panels'
             menulist = {panelmenuList}
         />
         <ToolbarVerticalDivider />
@@ -281,12 +281,12 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         {panelDomainRecord && <DomainControl 
             domainTitle = {panelDomainRecord.profile.domain.name} 
-            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "your personal domain workbox"
+            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "base domain workbox"
             response = {showDomainWorkbox}
         />}
         {panelMemberRecord && <MemberControl
             memberTitle = {panelMemberRecord.profile.member.name} 
-            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'your personal workbox'
+            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'membership workbox'
             response = {showMemberWorkbox}
         />}
         <ToolbarVerticalDivider />

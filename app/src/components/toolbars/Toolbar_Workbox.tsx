@@ -180,6 +180,11 @@ const WorkboxToolbar = (props) => {
         <MenuItem >Workbox profile</MenuItem>
     </MenuList>
 
+        // <ToolbarVerticalDivider />
+        // <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
+        // <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
+        // <ToolbarVerticalDivider />
+        // <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
 
     // render
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>
@@ -192,11 +197,6 @@ const WorkboxToolbar = (props) => {
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
-        <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && (<><ToolbarVerticalDivider />
