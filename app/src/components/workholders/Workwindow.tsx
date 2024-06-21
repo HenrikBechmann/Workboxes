@@ -127,19 +127,24 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            configuration, // default position; size
+            configuration, // default position; size, only used to set defaultwindowConfig
+            // containerDimensionSpecs can
+            // - change dynamicWindowConfiguration (through useEffect for state change)
+            // - change maxSizeConstraints for Resizable through useEffect for state change)
+            // - helps to set bounds for Draggable
             containerDimensionSpecs, // height, width of Workpanel; change can cause repositioning and resizing of window
             identity, // workbox identity, for titleName
             windowCallbacks, // change zOrder etc.
             windowSessionID, // system control, repo access
-            viewDeclaration, // normalized, maximized, minimized; stackOrder
+            viewDeclaration, // object with view = normalized, maximized, minimized; stackOrder for minimized windows
             zOrder, // inherited; modified by setFocus 
             type, // for type section of window titleName
         } = props,
 
         titleName = identity.name,
-        defaultWindowConfig = configuration,
+        defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
 
+        // various elements brought into play
         panelFrameElementRef = useRef(null),
         windowFrameElementRef = useRef(null),
         windowTitlebarElementRef = useRef(null),
@@ -148,15 +153,18 @@ const Workwindow = (props) => {
 
         // basic controls
         isMountedRef = useRef(true),
-        isDraggableDisabledRef = useRef(false),
+        isDraggableDisabledRef = useRef(false), // disabled from maximized and minimized
 
         // state managemement
-        [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
+        // 'setup' cycle to assure proper internal initialization of resizable (unknown reason)
+        [windowState, setWindowState] = useState('setup'), 
 
-        // window config varies for normalized, maximized, and minimizex windows
+        // window configuration (size, position) varies for normalized, maximized, and minimizex windows
         // top and left numger are translation values; styles are left at 0
         // source of truth for normalized window
-        [windowConfiguration, setNormalizedWindowConfig] = useState( 
+        // width and height are set in onResize; top and left set in onDragStop
+        // both can be changed with state change in useEffects for containerdimensions, or viewDeclaration.view
+        [dynamicWindowConfiguration, setDynamicWindowConfiguration] = useState( 
             {
                 top: defaultWindowConfig.top, 
                 left: defaultWindowConfig.left, 
@@ -164,8 +172,9 @@ const Workwindow = (props) => {
                 height: defaultWindowConfig.height
             }
         ),
-        windowConfigurationRef = useRef(null),
-        reservedNormalizedWindowConfigRef = useRef({
+        // inside useEffect access for state changes of containerDimensionSpecs and viewDeclaration
+        dynamicWindowConfigurationRef = useRef(null), 
+        reservedWindowConfigurationRef = useRef({ // memory of config, and spec of state for minimized and maximized
             width:null,
             height:null,
             top: null,
@@ -173,29 +182,30 @@ const Workwindow = (props) => {
             view:null,
             inprogress:false,
         }),
-        reservedViewDeclaration = reservedNormalizedWindowConfigRef.current.view,
-        is_viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
+
+        reservedViewDeclaration = reservedWindowConfigurationRef.current.view,
+        is_viewTransformationInProgress = reservedWindowConfigurationRef.current.inprogress,
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
             width:(!reservedViewDeclaration || is_viewTransformationInProgress)
-                ? windowConfiguration.width + 'px'
+                ? dynamicWindowConfiguration.width + 'px'
                 : reservedViewDeclaration == 'minimized'
-                    ? viewDeclaration.width + 'px'
+                    ?  WINDOW_MINIMIZED_WIDTH + 'px'// viewDeclaration.width + 'px'
                     : null, // maximized
             height:(!reservedViewDeclaration || is_viewTransformationInProgress)
-                ? windowConfiguration.height + 'px' 
+                ? dynamicWindowConfiguration.height + 'px' 
                 : (reservedViewDeclaration == 'minimized')
-                    ? viewDeclaration.height + 'px'
+                    ? windowTitlebarElementRef.current.offsetHeight + 'px' // viewDeclaration.height + 'px'
                     : null, // maximized
         },
         // latestActiveViewRef = useRef(null),
         previousViewStateRef = useRef(viewDeclaration.view),
         viewDeclarationRef = useRef(null),
-        maxConstraintsRef = useRef([700,700]), // default
+        maxSizeConstraintsRef = useRef([700,700]), // default
         transitionTimeoutRef = useRef(null)
         // windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
 
-    windowConfigurationRef.current = windowConfiguration
+    dynamicWindowConfigurationRef.current = dynamicWindowConfiguration
     viewDeclarationRef.current = viewDeclaration
 
     // ------------------------------------[ setup effects ]-----------------------------------
@@ -274,14 +284,15 @@ const Workwindow = (props) => {
 
         clearTimeout(transitionTimeoutRef.current)
 
+        // aliases
         const windowElement = windowFrameElementRef.current
-        const normalizedConfig = windowConfigurationRef.current
+        const windowConfiguration = dynamicWindowConfigurationRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
 
             // ---------------------------[ update minimized stack order ]--------------------------
 
-            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) { // already converted; maybe stackorder change
+            if (viewDeclaration.view == reservedWindowConfigurationRef.current.view) { // already converted; maybe stackorder change
                 if (viewDeclaration.view == 'minimized') { // adjust top position
                     windowElement.style.transition = 'top 0.3s'
                     windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
@@ -295,8 +306,8 @@ const Workwindow = (props) => {
             isDraggableDisabledRef.current = true
 
             // save normalized config for later restoration; save target view, inprogress flag
-            reservedNormalizedWindowConfigRef.current = {
-                ...normalizedConfig,
+            reservedWindowConfigurationRef.current = {
+                ...windowConfiguration,
                 view:viewDeclaration.view,
                 inprogress:true,
             }
@@ -309,8 +320,8 @@ const Workwindow = (props) => {
                 windowElement.style.transform = 'none'
                 if (previousViewStateRef.current == 'normalized') {
 
-                    windowElement.style.top = normalizedConfig.top + 'px'
-                    windowElement.style.left = normalizedConfig.left + 'px'
+                    windowElement.style.top = windowConfiguration.top + 'px'
+                    windowElement.style.left = windowConfiguration.left + 'px'
 
                 }
 
@@ -336,7 +347,7 @@ const Workwindow = (props) => {
                     windowElement.style.height = null
                     windowElement.style.inset = 0
 
-                    reservedNormalizedWindowConfigRef.current.inprogress = false
+                    reservedWindowConfigurationRef.current.inprogress = false
 
                     previousViewStateRef.current = 'maximized'
 
@@ -360,8 +371,8 @@ const Workwindow = (props) => {
 
                 } else {
 
-                    windowElement.style.top = normalizedConfig.top + 'px'
-                    windowElement.style.left = normalizedConfig.left + 'px'
+                    windowElement.style.top = windowConfiguration.top + 'px'
+                    windowElement.style.left = windowConfiguration.left + 'px'
 
                 }
                 // set targets for animation, yielding for base to take effect
@@ -382,7 +393,7 @@ const Workwindow = (props) => {
 
                     windowElement.style.transition = null
 
-                    reservedNormalizedWindowConfigRef.current.inprogress = false
+                    reservedWindowConfigurationRef.current.inprogress = false
 
                     previousViewStateRef.current = 'minimized'
 
@@ -396,7 +407,7 @@ const Workwindow = (props) => {
 
         } else { // 'normalized'
 
-            const reservedWindowConfiguration = reservedNormalizedWindowConfigRef.current
+            const reservedWindowConfiguration = reservedWindowConfigurationRef.current
 
             if (!['maximized','minimized'].includes(reservedWindowConfiguration.view)) return // already normalized
 
@@ -415,7 +426,7 @@ const Workwindow = (props) => {
             windowElement.style.width = currentWidth + 'px'
             windowElement.style.height = currentHeight + 'px'
 
-            reservedNormalizedWindowConfigRef.current.inprogress = true
+            reservedWindowConfigurationRef.current.inprogress = true
 
             // set targets
             setTimeout(()=>{
@@ -439,10 +450,10 @@ const Workwindow = (props) => {
 
                 const {view, inprogress, ...configData} = reservedWindowConfiguration
 
-                Object.assign(normalizedConfig, configData)
+                Object.assign(windowConfiguration, configData)
 
                 // reset reserved
-                reservedNormalizedWindowConfigRef.current = {
+                reservedWindowConfigurationRef.current = {
                     width:null,
                     height:null,
                     top:null,
@@ -453,12 +464,9 @@ const Workwindow = (props) => {
 
                 previousViewStateRef.current = 'normalized'
 
-                setNormalizedWindowConfig(normalizedConfig)
+                setDynamicWindowConfiguration(windowConfiguration)
 
                 setWindowState('activatenormalized')
-
-                // TODO: fix this
-                // windowCallbackRef.current.changeView() // revert to previous document width
 
             },501)
 
@@ -468,7 +476,7 @@ const Workwindow = (props) => {
 
     },[viewDeclaration])
 
-    // adjust window size as necessary in changed container size; 
+    // adjust window size as necessary to adapt to changed container size; 
     // responds to new containerDimensionSpecs object
     useEffect(()=>{
 
@@ -477,8 +485,8 @@ const Workwindow = (props) => {
         if (!containerDimensionSpecs) return
 
         const 
-            reservedWindowConfiguration = reservedNormalizedWindowConfigRef.current,
-            windowConfiguration = windowConfigurationRef.current
+            reservedWindowConfiguration = reservedWindowConfigurationRef.current,
+            windowConfiguration = dynamicWindowConfigurationRef.current
 
         let virtualWindowConfig // this is what is updated by change of containerDimensionSpecs
         if (reservedWindowConfiguration.view) {
@@ -547,7 +555,7 @@ const Workwindow = (props) => {
 
             if (!reservedWindowConfiguration.view) {
 
-                setNormalizedWindowConfig(virtualWindowConfig)
+                setDynamicWindowConfiguration(virtualWindowConfig)
 
             } else {
 
@@ -557,7 +565,7 @@ const Workwindow = (props) => {
 
         }
 
-        maxConstraintsRef.current = [
+        maxSizeConstraintsRef.current = [
             containerDimensionSpecs.width - virtualWindowConfig.left, 
             containerDimensionSpecs.height - virtualWindowConfig.top,
         ]
@@ -585,7 +593,7 @@ const Workwindow = (props) => {
 
         if (isDraggableDisabledRef.current) return
 
-        setNormalizedWindowConfig((previousState)=>{
+        setDynamicWindowConfiguration((previousState)=>{
             return {...previousState, width:size.width,height:size.height}})
 
     }
@@ -611,11 +619,11 @@ const Workwindow = (props) => {
 
         }
 
-        setNormalizedWindowConfig((previousState) => {
+        setDynamicWindowConfiguration((previousState) => {
             return {...previousState, top:data.y - data.deltaY, left: data.x}
         })
 
-        maxConstraintsRef.current = [
+        maxSizeConstraintsRef.current = [
             containerDimensionSpecs.width - data.x, 
             containerDimensionSpecs.height - (data.y - data.deltaY),
         ]
@@ -625,8 +633,8 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = {
         top:0, 
-        right:containerDimensionSpecs.width - windowConfiguration.width, 
-        bottom:containerDimensionSpecs.height - windowConfiguration.height, 
+        right:containerDimensionSpecs.width - dynamicWindowConfiguration.width, 
+        bottom:containerDimensionSpecs.height - dynamicWindowConfiguration.height, 
         left:0,
     }
 
@@ -634,7 +642,7 @@ const Workwindow = (props) => {
     return (
     <Draggable
         defaultPosition = {{x:0,y:0}}
-        position = {{x:windowConfiguration.left, y:windowConfiguration.top}}
+        position = {{x:dynamicWindowConfiguration.left, y:dynamicWindowConfiguration.top}}
         handle = '#draghandle'
         bounds = {bounds}
         onStart = {onDragStart}
@@ -652,12 +660,12 @@ const Workwindow = (props) => {
                     viewDeclaration = {viewDeclaration}
                 />
             } 
-            height = {windowConfiguration.height} 
-            width = {windowConfiguration.width} 
+            height = {dynamicWindowConfiguration.height} 
+            width = {dynamicWindowConfiguration.width} 
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[300,300]}
-            maxConstraints = {maxConstraintsRef.current}
+            maxConstraints = {maxSizeConstraintsRef.current}
             onResizeStart = {onResizeStart}
             onResize = {onResize}
 
