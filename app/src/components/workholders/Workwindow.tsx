@@ -1,6 +1,12 @@
 // WorkWindow.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    TODO:
+        freeze windowContentElement to minWidth and minHeight when minimized
+
+*/
+
 import React, { useState, useRef, useEffect, CSSProperties, createContext } from 'react'
 
 import {
@@ -16,7 +22,7 @@ import WindowTitle from './WindowTitle'
 
 import dragCornerIcon from '../../../assets/drag-corner.png'
 
-export const WindowCallbackContext = createContext(null)
+// export const WindowCallbackContext = createContext(null)
 
 const WINDOW_TRANSITION = 'top .4s, left .4s, width .4s, height .4s'
 const WINDOW_MINIMIZED_WIDTH = 250
@@ -51,6 +57,7 @@ const windowBodyStyles = {
     width: '100%',
     position: 'relative',
     borderRadius: '0px 0px 0px 7px',
+    overflow:'hidden',
     minWidth: 0,
 } as CSSProperties
 
@@ -117,15 +124,15 @@ const Workwindow = (props) => {
         title = identity.name,
         windowConfig = configuration,
 
-        windowElementRef = useRef(null),
-        titleElementRef = useRef(null),
-        titlebarElementRef = useRef(null),
         panelFrameElementRef = useRef(null),
+        windowFrameElementRef = useRef(null),
+        windowTitlebarElementRef = useRef(null),
+        windowTitleElementRef = useRef(null),
+        windowContentElementRef = useRef(null),
 
         // basic controls
         isMountedRef = useRef(true),
         isDraggableDisabledRef = useRef(false),
-        // sessionIDRef = useRef(windowSessionID), // future reference
 
         // state managemement
         [windowState, setWindowState] = useState('setup'), // assure proper internal initialization of resizable (unknown reason)
@@ -142,7 +149,7 @@ const Workwindow = (props) => {
             }
         ),
         normalizedWindowConfigRef = useRef(null),
-        reservedWindowConfigRef = useRef({
+        reservedNormalizedWindowConfigRef = useRef({
             width:null,
             height:null,
             top: null,
@@ -150,8 +157,8 @@ const Workwindow = (props) => {
             view:null,
             inprogress:false,
         }),
-        reservedViewDeclaration = reservedWindowConfigRef.current.view,
-        viewTransformationInProgress = reservedWindowConfigRef.current.inprogress,
+        reservedViewDeclaration = reservedNormalizedWindowConfigRef.current.view,
+        viewTransformationInProgress = reservedNormalizedWindowConfigRef.current.inprogress,
         renderWindowFrameStyles = { // dynamic update of width and height with resizing
             ...windowFrameStyles,
             width:(!reservedViewDeclaration || viewTransformationInProgress)
@@ -169,8 +176,8 @@ const Workwindow = (props) => {
         previousViewStateRef = useRef(viewDeclaration.view),
         viewDeclarationRef = useRef(null),
         maxConstraintsRef = useRef([700,700]), // default
-        transitionTimeoutRef = useRef(null),
-        windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
+        transitionTimeoutRef = useRef(null)
+        // windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
 
     normalizedWindowConfigRef.current = normalizedWindowConfig
     viewDeclarationRef.current = viewDeclaration
@@ -192,18 +199,18 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        panelFrameElementRef.current = windowElementRef.current.closest('#wb-panelframe')
-        titlebarElementRef.current = windowElementRef.current.querySelector('#wb-titlebar')
+        panelFrameElementRef.current = windowFrameElementRef.current.closest('#wb-panelframe')
+        windowTitlebarElementRef.current = windowFrameElementRef.current.querySelector('#wb-titlebar')
 
-        const windowElement = windowElementRef.current
+        const windowElement = windowFrameElementRef.current
 
         const onFocus = (event) => {
-            titleElementRef.current.style.backgroundColor = 'lightskyblue'
+            windowTitleElementRef.current.style.backgroundColor = 'lightskyblue'
             windowCallbacks?.setFocus && windowCallbacks.setFocus(windowSessionID)
         }
 
         const onBlur = (event) => {
-            titleElementRef.current && (titleElementRef.current.style.backgroundColor = 'gainsboro')
+            windowTitleElementRef.current && (windowTitleElementRef.current.style.backgroundColor = 'gainsboro')
         }
 
         windowElement.addEventListener('focus',onFocus)
@@ -240,7 +247,7 @@ const Workwindow = (props) => {
 
         setTimeout(()=> {
 
-            windowElementRef.current.style.zIndex = zOrder
+            windowFrameElementRef.current.style.zIndex = zOrder
 
         },timeout) 
 
@@ -251,17 +258,17 @@ const Workwindow = (props) => {
 
         clearTimeout(transitionTimeoutRef.current)
 
-        const windowElement = windowElementRef.current
+        const windowElement = windowFrameElementRef.current
         const normalizedConfig = normalizedWindowConfigRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
 
             // ---------------------------[ update minimized stack order ]--------------------------
 
-            if (viewDeclaration.view == reservedWindowConfigRef.current.view) { // already converted; maybe stackorder change
+            if (viewDeclaration.view == reservedNormalizedWindowConfigRef.current.view) { // already converted; maybe stackorder change
                 if (viewDeclaration.view == 'minimized') { // adjust top position
                     windowElement.style.transition = 'top 0.3s'
-                    windowElement.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
                     setTimeout(()=>{
                         windowElement.style.transition = null
                     },300)
@@ -272,7 +279,7 @@ const Workwindow = (props) => {
             isDraggableDisabledRef.current = true
 
             // save normalized config for later restoration; save target view, inprogress flag
-            reservedWindowConfigRef.current = {
+            reservedNormalizedWindowConfigRef.current = {
                 ...normalizedConfig,
                 view:viewDeclaration.view,
                 inprogress:true,
@@ -313,7 +320,7 @@ const Workwindow = (props) => {
                     windowElement.style.height = null
                     windowElement.style.inset = 0
 
-                    reservedWindowConfigRef.current.inprogress = false
+                    reservedNormalizedWindowConfigRef.current.inprogress = false
 
                     previousViewStateRef.current = 'maximized'
 
@@ -346,10 +353,10 @@ const Workwindow = (props) => {
 
                     // const panelFrameElement = panelFrameElementRef.current
                     windowElement.style.transition = WINDOW_TRANSITION
-                    windowElement.style.top = (viewDeclaration.stackOrder * titlebarElementRef.current.offsetHeight) + 'px'
+                    windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
                     windowElement.style.left = 0
                     windowElement.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
-                    windowElement.style.height = titlebarElementRef.current.offsetHeight + 'px'
+                    windowElement.style.height = windowTitlebarElementRef.current.offsetHeight + 'px'
                     windowElement.style.overflow = 'hidden'
 
                 },1)
@@ -359,7 +366,7 @@ const Workwindow = (props) => {
 
                     windowElement.style.transition = null
 
-                    reservedWindowConfigRef.current.inprogress = false
+                    reservedNormalizedWindowConfigRef.current.inprogress = false
 
                     previousViewStateRef.current = 'minimized'
 
@@ -373,11 +380,11 @@ const Workwindow = (props) => {
 
         } else { // 'normalized'
 
-            const reservedWindowConfig = reservedWindowConfigRef.current
+            const reservedWindowConfig = reservedNormalizedWindowConfigRef.current
 
             if (!['maximized','minimized'].includes(reservedWindowConfig.view)) return // already normalized
 
-            const windowElement = windowElementRef.current
+            const windowElement = windowFrameElementRef.current
 
             // set base styles
             const currentWidth = windowElement.offsetWidth, currentHeight = windowElement.offsetHeight
@@ -392,7 +399,7 @@ const Workwindow = (props) => {
             windowElement.style.width = currentWidth + 'px'
             windowElement.style.height = currentHeight + 'px'
 
-            reservedWindowConfigRef.current.inprogress = true
+            reservedNormalizedWindowConfigRef.current.inprogress = true
 
             // set targets
             setTimeout(()=>{
@@ -419,7 +426,7 @@ const Workwindow = (props) => {
                 Object.assign(normalizedConfig, configData)
 
                 // reset reserved
-                reservedWindowConfigRef.current = {
+                reservedNormalizedWindowConfigRef.current = {
                     width:null,
                     height:null,
                     top:null,
@@ -454,7 +461,7 @@ const Workwindow = (props) => {
         if (!containerDimensionSpecs) return
 
         const 
-            reservedWindowConfig = reservedWindowConfigRef.current,
+            reservedWindowConfig = reservedNormalizedWindowConfigRef.current,
             normalizedWindowConfig = normalizedWindowConfigRef.current
 
         let virtualWindowConfig // this is what is updated by change of containerDimensionSpecs
@@ -552,7 +559,7 @@ const Workwindow = (props) => {
 
         if (isDraggableDisabledRef.current) return
 
-        windowElementRef.current.focus()
+        windowFrameElementRef.current.focus()
 
     }
 
@@ -572,7 +579,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        windowElementRef.current.focus()
+        windowFrameElementRef.current.focus()
 
     }
 
@@ -607,9 +614,10 @@ const Workwindow = (props) => {
         left:0,
     }
 
+    // <WindowCallbackContext.Provider value = {windowCallbackRef.current}>
+    // </WindowCallbackContext.Provider>)
     // render
     return (
-    <WindowCallbackContext.Provider value = {windowCallbackRef.current}>
     <Draggable
         defaultPosition = {{x:0,y:0}}
         position = {{x:normalizedWindowConfig.left, y:normalizedWindowConfig.top}}
@@ -640,16 +648,17 @@ const Workwindow = (props) => {
             onResize = {onResize}
 
         >
-            <Box tabIndex = {0} ref = {windowElementRef} data-type = 'window-frame' style = {renderWindowFrameStyles}>
+            <Box tabIndex = {0} ref = {windowFrameElementRef} data-type = 'window-frame' style = {renderWindowFrameStyles}>
                 <Grid 
                     data-type = 'window-grid'
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {titleElementRef} type = {type} title = {title}/>
+                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {type} title = {title}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 
+                            ref = {windowContentElementRef}
                             data-type = 'window-content' 
                             style = {windowContentStyles}
                         >{children}</Box>
@@ -657,8 +666,7 @@ const Workwindow = (props) => {
                 </Grid>
             </Box>
         </Resizable>
-    </Draggable>
-    </WindowCallbackContext.Provider>)
+    </Draggable>)
 }
 
 export default Workwindow
