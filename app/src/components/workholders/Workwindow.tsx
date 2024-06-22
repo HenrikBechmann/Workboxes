@@ -159,11 +159,11 @@ const Workwindow = (props) => {
         // 'setup' cycle to assure proper internal initialization of resizable (unknown reason)
         [windowState, setWindowState] = useState('setup'), 
 
-        // window configuration (size, position) varies for normalized, maximized, and minimizex windows
-        // top and left numger are translation values; styles are left at 0
+        // window configuration (size, position) varies for normalized, maximized, and minimized windows
+        // top and left numbers are translation values; styles are left at 0
         // source of truth for normalized window
         // width and height are set in onResize; top and left set in onDragStop
-        // both can be changed with state change in useEffects for containerdimensions, or viewDeclaration.view
+        // both can be changed with state change in useEffects for containerDimensionSpecs, or viewDeclaration.view
         [dynamicWindowConfiguration, setDynamicWindowConfiguration] = useState( 
             {
                 top: defaultWindowConfig.top, 
@@ -174,7 +174,8 @@ const Workwindow = (props) => {
         ),
         // inside useEffect access for state changes of containerDimensionSpecs and viewDeclaration
         dynamicWindowConfigurationRef = useRef(null), 
-        reservedWindowConfigurationRef = useRef({ // memory of config, and spec of state for minimized and maximized
+        // memory of normalized config, and spec of state, for minimized and maximized
+        reservedWindowConfigurationRef = useRef({ 
             width:null,
             height:null,
             top: null,
@@ -185,25 +186,28 @@ const Workwindow = (props) => {
 
         reservedViewDeclaration = reservedWindowConfigurationRef.current.view,
         is_viewTransformationInProgress = reservedWindowConfigurationRef.current.inprogress,
-        renderWindowFrameStyles = { // dynamic update of width and height with resizing
+        // dynamic styles based on windowFrameStyles for render
+        renderWindowFrameStyles = { // dynamic update of width and height, and with change of mode
             ...windowFrameStyles,
             width:(!reservedViewDeclaration || is_viewTransformationInProgress)
                 ? dynamicWindowConfiguration.width + 'px'
                 : reservedViewDeclaration == 'minimized'
-                    ?  WINDOW_MINIMIZED_WIDTH + 'px'// viewDeclaration.width + 'px'
+                    ?  WINDOW_MINIMIZED_WIDTH + 'px'
                     : null, // maximized
             height:(!reservedViewDeclaration || is_viewTransformationInProgress)
                 ? dynamicWindowConfiguration.height + 'px' 
                 : (reservedViewDeclaration == 'minimized')
-                    ? windowTitlebarElementRef.current.offsetHeight + 'px' // viewDeclaration.height + 'px'
+                    ? windowTitlebarElementRef.current.offsetHeight + 'px'
                     : null, // maximized
         },
-        // latestActiveViewRef = useRef(null),
+        // to determine nature of transition
         previousViewStateRef = useRef(viewDeclaration.view),
+        // for inside closures
         viewDeclarationRef = useRef(null),
+        // for Resizable, updated by containerDimensionsSpec state change, Draggable.onDragStop
         maxSizeConstraintsRef = useRef([700,700]), // default
+        // for some setTimeout's in containerDimensionSpec state change
         transitionTimeoutRef = useRef(null)
-        // windowCallbackRef = useRef({changeView:null}) // callback set in documentPanel for call after max/norm view change
 
     dynamicWindowConfigurationRef.current = dynamicWindowConfiguration
     viewDeclarationRef.current = viewDeclaration
@@ -265,11 +269,9 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
-        let timeout = 0
-
-        if (viewDeclarationRef.current.view == 'minimized') {
-            timeout = 500
-        }
+        const timeout = (viewDeclarationRef.current.view == 'minimized')
+            ? 500
+            : 0
 
         setTimeout(()=> {
 
@@ -282,7 +284,7 @@ const Workwindow = (props) => {
     // respond to changed viewDeclaration
     useEffect(()=>{
 
-        clearTimeout(transitionTimeoutRef.current)
+        clearTimeout(transitionTimeoutRef.current) // for interrupts
 
         // aliases
         const windowElement = windowFrameElementRef.current
