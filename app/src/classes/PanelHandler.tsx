@@ -37,6 +37,7 @@ class PanelHandler {
     userName
     userID
 
+    // TODO: check schema for domain record
     async getPanelDomainContext(panelSelection, userRecord) {
         const result = {
             error: false,
