@@ -206,9 +206,10 @@ const Workwindow = (props) => {
         viewDeclarationRef = useRef(null),
         // for Resizable, updated by containerDimensionsSpec state change, Draggable.onDragStop
         maxSizeConstraintsRef = useRef([700,700]), // default
-        // for some setTimeout's in containerDimensionSpec state change
-        transitionTimeoutRef = useRef(null)
+        // for some setTimeout's in viewDeclaration state change
+        viewTransitionTimeoutRef = useRef(null)
 
+    // available for closures
     dynamicWindowConfigurationRef.current = dynamicWindowConfiguration
     viewDeclarationRef.current = viewDeclaration
 
@@ -217,7 +218,7 @@ const Workwindow = (props) => {
     // maintain mounted property in case needed
     useEffect(()=>{
 
-        isMountedRef.current = true
+        isMountedRef.current = true // compensage for double mount in safe mode
         return () => {
             isMountedRef.current = false
         }
@@ -262,7 +263,7 @@ const Workwindow = (props) => {
 
     },[windowState])
 
-    // ----------------------------[ reconfiguration effects ]------------------------
+    // ----------------------------[ reconfiguration (state change) effects ]------------------------
 
     // apply inherited zOrder on change by parent
     useEffect(()=>{
@@ -282,10 +283,11 @@ const Workwindow = (props) => {
 
     },[zOrder])
 
+    // --------------
     // respond to changed viewDeclaration
     useEffect(()=>{
 
-        clearTimeout(transitionTimeoutRef.current) // for interrupts
+        clearTimeout(viewTransitionTimeoutRef.current) // for interrupts
 
         // aliases
         const windowElement = windowFrameElementRef.current
@@ -295,22 +297,23 @@ const Workwindow = (props) => {
 
             // ---------------------------[ update minimized stack order ]--------------------------
 
+            // reservedWindowConfigurationRef must be instantiated if not normalized
             if (viewDeclaration.view == reservedWindowConfigurationRef.current.view) { // already converted; maybe stackorder change
                 if (viewDeclaration.view == 'minimized') { // adjust top position
                     windowElement.style.transition = 'top 0.3s'
                     windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
                     setTimeout(()=>{
-                        windowElement.style.transition = null
+                        isMountedRef.current && (windowElement.style.transition = null)
                     },300)
                 }
-                return // config changes aleady made
+                return // view changes aleady made
             }
 
             isDraggableDisabledRef.current = true
 
             // save normalized config for later restoration; save target view, inprogress flag
             reservedWindowConfigurationRef.current = {
-                ...windowConfiguration,
+                ...windowConfiguration, // might have been changed by configurationSpecs state change
                 view:viewDeclaration.view,
                 inprogress:true,
             }
@@ -341,8 +344,9 @@ const Workwindow = (props) => {
                 },1)
 
                 // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
-                transitionTimeoutRef.current = setTimeout(()=>{
+                viewTransitionTimeoutRef.current = setTimeout(()=>{
 
+                    if (!isMountedRef.current) return
                     windowElement.style.transition = null
                     windowElement.style.top = null
                     windowElement.style.left = null
@@ -355,8 +359,6 @@ const Workwindow = (props) => {
                     previousViewStateRef.current = 'maximized'
 
                     setWindowState('activatemaximized')
-
-                    // windowCallbackRef.current.changeView() // revert to previous document width
 
                 },501)
 
@@ -381,7 +383,6 @@ const Workwindow = (props) => {
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
-                    // const panelFrameElement = panelFrameElementRef.current
                     windowElement.style.transition = WINDOW_TRANSITION
                     windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
                     windowElement.style.left = 0
@@ -392,8 +393,9 @@ const Workwindow = (props) => {
                 },1)
 
                 // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
-                transitionTimeoutRef.current = setTimeout(()=>{
+                viewTransitionTimeoutRef.current = setTimeout(()=>{
 
+                    if (!isMountedRef.current) return
                     windowElement.style.transition = null
 
                     reservedWindowConfigurationRef.current.inprogress = false
@@ -412,7 +414,11 @@ const Workwindow = (props) => {
 
             const reservedWindowConfiguration = reservedWindowConfigurationRef.current
 
-            if (!['maximized','minimized'].includes(reservedWindowConfiguration.view)) return // already normalized
+            // console.log('switch to normalized: reservedWindowConfiguration', reservedWindowConfiguration)
+
+            // reserved view could be null, which requires no action
+            if (reservedWindowConfiguration.view === null) return // already normalized
+            // if (!['maximized','minimized'].includes(reservedWindowConfiguration.view)) return // already normalized
 
             const windowElement = windowFrameElementRef.current
 
@@ -443,8 +449,9 @@ const Workwindow = (props) => {
             },1)
 
             // set restored base
-            transitionTimeoutRef.current = setTimeout(()=>{
+            viewTransitionTimeoutRef.current = setTimeout(()=>{
 
+                if (!isMountedRef.current) return
                 windowElement.style.transition = null
                 windowElement.style.top = 0
                 windowElement.style.left = 0
@@ -465,6 +472,8 @@ const Workwindow = (props) => {
                     inprogress:false,
                 }
 
+                // console.log('FINISHED switch to normalized: reservedWindowConfigurationRef', reservedWindowConfigurationRef.current)
+
                 previousViewStateRef.current = 'normalized'
 
                 setDynamicWindowConfiguration(windowConfiguration)
@@ -479,6 +488,7 @@ const Workwindow = (props) => {
 
     },[viewDeclaration])
 
+    // --------------
     // adjust window size as necessary to adapt to changed container size; 
     // responds to new containerDimensionSpecs object
     useEffect(()=>{
@@ -634,7 +644,7 @@ const Workwindow = (props) => {
 
     // bounds = '#workpanel' <- alternative
     // this makes no difference to the deltaY shift problem...
-    const bounds = {
+    const bounds = { // for Draggable
         top:0, 
         right:containerDimensionSpecs.width - dynamicWindowConfiguration.width, 
         bottom:containerDimensionSpecs.height - dynamicWindowConfiguration.height, 

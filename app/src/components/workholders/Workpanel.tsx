@@ -76,7 +76,7 @@ const Workpanel = (props:any) => {
         windowDataMapRef = useRef(null),
         windowMaximizedRef = useRef(null),
         windowMinimizedSetRef = useRef(null),
-        nextZOrderRef = useRef(1),// track zOrder scope for assignment
+        nextZOrderRef = useRef(1), // track zOrder scope for assignment; leave "0" for minimized
 
         // panel state; panelElement
         panelStateRef = useRef(null),
