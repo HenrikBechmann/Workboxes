@@ -76,7 +76,7 @@ const Workpanel = (props:any) => {
         windowDataMapRef = useRef(null),
         windowMaximizedRef = useRef(null),
         windowMinimizedSetRef = useRef(null),
-        nextZOrderRef = useRef(0),// track zOrder scope for assignment
+        nextZOrderRef = useRef(1),// track zOrder scope for assignment
 
         // panel state; panelElement
         panelStateRef = useRef(null),
@@ -261,6 +261,8 @@ const Workpanel = (props:any) => {
 
         windowComponentListRef.current = [...windowComponentList]
 
+        // console.log('widowDataMap, windowComponentList', windowDataMap, windowComponentList)
+
     }
 
     // ** private ** only called by addWindow above
@@ -311,6 +313,7 @@ const Workpanel = (props:any) => {
             zOrder = windowData.window.zOrder
 
         if (zOrder === (nextZOrderRef.current - 1)) return // already at the top
+        if (windowData.window.viewDeclaration.view == 'minimized') return // stay at bottom
 
         let isChange = false
         for (let index = 0; index < numberOfWindows; index++) {
@@ -350,10 +353,23 @@ const Workpanel = (props:any) => {
             windowComponentList = windowComponentListRef.current,
             windowData = windowDataMap.get(windowSessionID),
             { zOrder } = windowData.window,
-            numberOfWindows = windowComponentList.length
+            indexToRemove = windowData.window.index
 
-        let indexToRemove = windowData.index
+        // console.log('indexToRemove, windowSessionID, windowData, windowDataMap, windowComponentList',
+        //     indexToRemove, windowSessionID, windowData, windowDataMap, windowComponentList)
 
+        windowComponentList.splice(indexToRemove, 1)
+        windowDataMap.delete(windowSessionID)
+        const numberOfWindows = windowComponentList.length
+        updateWindowsListIndexes()
+
+        if (windowMaximizedRef.current === windowSessionID) {
+            windowMaximizedRef.current = null
+        }
+        if (windowMinimizedSetRef.current.has(windowSessionID)) {
+            windowMinimizedSetRef.current.delete(windowSessionID)
+            repositionMinimizedWindows()
+        }
 
         if (zOrder > 0) { // adjust peer zOrders as necessary
             for (let index = 0; index < numberOfWindows; index++) {
@@ -374,19 +390,6 @@ const Workpanel = (props:any) => {
             nextZOrderRef.current--
 
         }
-
-        windowComponentList.splice(indexToRemove, 1)
-        updateWindowsListIndexes()
-
-        if (windowMaximizedRef.current === windowSessionID) {
-            windowMaximizedRef.current = null
-        }
-        if (windowMinimizedSetRef.current.has(windowSessionID)) {
-            windowMinimizedSetRef.current.delete(windowSessionID)
-            repositionMinimizedWindows()
-        }
-
-        windowDataMap.delete(windowSessionID)
 
         windowComponentListRef.current = [...windowComponentList] // trigger render
         setPanelState('windowclosed')
@@ -465,11 +468,11 @@ const Workpanel = (props:any) => {
                 windowData.window.viewDeclaration.stackOrder = index
 
                 const 
-                    component = windowComponentList[windowData.index],
+                    component = windowComponentList[windowData.window.index],
                     viewDeclaration = component.props.viewDeclaration
 
                 viewDeclaration.stackOrder = index
-                windowComponentList[windowData.index] = React.cloneElement(component, {viewDeclaration:{...viewDeclaration}})
+                windowComponentList[windowData.window.index] = React.cloneElement(component, {viewDeclaration:{...viewDeclaration}})
             }
             index++
         })
@@ -483,13 +486,19 @@ const Workpanel = (props:any) => {
             windowDataMap = windowDataMapRef.current,
             numberOfWindows = windowComponentList.length
 
+        // console.log('numberOfWindows, windowDataMap, windowComponentList', 
+        //     numberOfWindows, windowDataMap, windowComponentList)
+
         for (let index = 0; index < numberOfWindows; index++) {
             const 
                 windowSessionID = windowComponentList[index].props.windowSessionID,
                 windowData = windowDataMap.get(windowSessionID)
 
-            if (windowData.index !== index) {
-                windowData.index = index
+            // console.log('index, windowSessionID, windowData',
+            //     index, windowSessionID, windowData)
+
+            if (windowData.window.index !== index) {
+                windowData.window.index = index
             }
         }
     }

@@ -276,7 +276,7 @@ const Workwindow = (props) => {
 
         setTimeout(()=> {
 
-            windowFrameElementRef.current.style.zIndex = zOrder
+            isMountedRef.current && (windowFrameElementRef.current.style.zIndex = zOrder)
 
         },timeout) 
 
