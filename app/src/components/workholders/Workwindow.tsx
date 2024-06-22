@@ -501,8 +501,8 @@ const Workwindow = (props) => {
             reservedWindowConfiguration = reservedWindowConfigurationRef.current,
             windowConfiguration = dynamicWindowConfigurationRef.current
 
-        let virtualWindowConfig // this is what is updated by change of containerDimensionSpecs
-        if (reservedWindowConfiguration.view) {
+        let virtualWindowConfig // updated by change of containerDimensionSpecs
+        if (reservedWindowConfiguration.view) { // can't use dynamic version
 
             virtualWindowConfig = {
                 width: reservedWindowConfiguration.width,
@@ -535,15 +535,15 @@ const Workwindow = (props) => {
                 let widthOversize = widthFitBoundary - containerDimensionSpecs.width
                 const 
                     newLeft = Math.max(0,virtualWindowConfig.left - widthOversize),
-                    widthShiftApplied = virtualWindowConfig.left - newLeft
+                    leftShiftApplied = virtualWindowConfig.left - newLeft
 
-                if (widthShiftApplied) {
+                if (leftShiftApplied) { // save
 
                     virtualWindowConfig.left = newLeft
 
                 }
 
-                widthOversize -= widthShiftApplied
+                widthOversize -= leftShiftApplied // remaining oversize
                 virtualWindowConfig.width -= widthOversize
 
             }
@@ -553,15 +553,15 @@ const Workwindow = (props) => {
                 let heightOverize = heightFitBoundary - containerDimensionSpecs.height
                 const 
                     newTop = Math.max(0,virtualWindowConfig.top - heightOverize),
-                    heightShiftApplied = virtualWindowConfig.top - newTop
+                    topShiftApplied = virtualWindowConfig.top - newTop
 
-                if (heightShiftApplied) {
+                if (topShiftApplied) {
 
                     virtualWindowConfig.top = newTop
 
                 }
 
-                heightOverize -= heightShiftApplied
+                heightOverize -= topShiftApplied // remaining oversize
                 virtualWindowConfig.height -= heightOverize
 
             }
