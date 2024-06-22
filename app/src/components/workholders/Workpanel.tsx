@@ -312,8 +312,8 @@ const Workpanel = (props:any) => {
             windowData = windowDataMap.get(windowSessionID),
             zOrder = windowData.window.zOrder
 
-        if (zOrder === (nextZOrderRef.current - 1)) return // already at the top
         if (windowData.window.viewDeclaration.view == 'minimized') return // stay at bottom
+        if (zOrder === (nextZOrderRef.current - 1)) return // already at the top
 
         let isChange = false
         for (let index = 0; index < numberOfWindows; index++) {
