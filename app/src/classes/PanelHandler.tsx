@@ -83,7 +83,29 @@ class PanelHandler {
                 result.notice = 'error fetching domain membership for this user'
                 return result
             }
-            panelMemberRecord = queryPayload.docs[0].data()
+            let memberRecord = queryPayload.docs[0].data()
+            const updatedRecord = updateDocumentSchema('members', 'standard', memberRecord)
+            if (!Object.is(memberRecord, updatedRecord)) {
+                try {
+
+                    await setDoc(doc(memberCollection,memberRecord.profile.member.id),updatedRecord)
+                    this.usage.write(1)
+
+                } catch (error) {
+
+                    const errdesc = 'error updating member record version'
+                    console.log(errdesc, error)
+                    this.errorControl.push({description:errdesc, error})
+                    result.error = true
+                    return result
+
+                }
+
+                memberRecord = updatedRecord
+
+            }
+
+            panelMemberRecord = memberRecord
         } catch(error) {
 
             const errdesc = 'error getting domain member record'

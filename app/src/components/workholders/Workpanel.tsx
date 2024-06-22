@@ -123,7 +123,7 @@ const Workpanel = (props:any) => {
                 stackOrder: null,
             },
             // zOrder: nextZOrderRef.current++,
-            identity: workspaceHandler.panelDomainRecord.profile.workbox
+            identity: workspaceHandler.panelDomainRecord.profile.workbox,
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultWorkboxConfig),
@@ -131,8 +131,6 @@ const Workpanel = (props:any) => {
                 id:workspaceHandler.panelDomainRecord.profile.workbox.id,
             }
         }
-
-        // console.log('domain windowSpecs, panelDomainRecord',windowSpecs, workspaceHandler.panelDomainRecord)
 
         addWindow(windowSpecs, workboxSpecs)
 
@@ -142,14 +140,15 @@ const Workpanel = (props:any) => {
 
     const showMemberWorkbox = () => {
 
+        // console.log('workspaceHandler.panelMemberRecord.profile',workspaceHandler.panelMemberRecord.profile)
+
         const windowSpecs = {
             configuration: {top:20,left:20, width:610,height:400},
             viewDeclaration: {
                 view: 'normalized',
                 stackOrder: null,
             },
-            // zOrder: nextZOrderRef.current++,
-            identity: workspaceHandler.panelMemberRecord.profile.workbox
+            identity: workspaceHandler.panelMemberRecord.profile.workbox,
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultWorkboxConfig),
@@ -157,8 +156,6 @@ const Workpanel = (props:any) => {
                 id:workspaceHandler.panelMemberRecord.profile.workbox.id,
             }
         }
-
-        // console.log('member windowSpecs, panelMemberRecord', windowSpecs, workspaceHandler.panelMemberRecord)
 
         addWindow(windowSpecs, workboxSpecs)
 
@@ -191,15 +188,8 @@ const Workpanel = (props:any) => {
         let 
             zOrder, stackOrder
 
-        // console.log('addWindow: windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData\n',
-        //     windowSessionID, windowComponentList, windowDataMap, windowMinimizedSet, windowData )
-
-        // return
-
         // get zOrder and stackOrder values; if minimized, add to set
         if (windowData.window.viewDeclaration.view !== 'minimized') { // minimized, normalized or maximized
-
-            // console.log('windowData.window.profile.view, windowData.window',windowData.window.profile.view, windowData.window)
 
             zOrder = nextZOrderRef.current++
 

@@ -87,12 +87,12 @@ const versionMaps = {
       functionmap: new Map(),
     },
     domain: {
-      latest_version:1,
+      latest_version:2,
       datamap: new Map(),
       functionmap: new Map(),
     },
     member: {
-      latest_version:1,
+      latest_version:2,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -106,7 +106,7 @@ const versionMaps = {
   },
   domains: {
     standard: {
-      latest_version:0,
+      latest_version:1,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -120,7 +120,7 @@ const versionMaps = {
   },
   members: {
     standard: {
-      latest_version:0,
+      latest_version:1,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -306,7 +306,7 @@ const versionData = {
     }],
     domain: [
     {
-      version: 1,
+      version: 2,
       generation: 0,
       profile: {
         workbox: {
@@ -381,7 +381,7 @@ const versionData = {
     }],
     member: [
     {
-      version: 1,
+      version: 2,
       generation: 0,
       profile: {
         workbox: {
@@ -568,7 +568,7 @@ const versionData = {
   members: {
     standard: [
     {
-      version: 0,
+      version: 1,
       generation: 0,
       profile: {
         user: {
@@ -596,6 +596,10 @@ const versionData = {
         workbox: {
           id: null,
           name: null,
+          type: {
+            name: null,
+            alias: null,
+          }
         },
         commits: {
           created_by: {
@@ -618,7 +622,7 @@ const versionData = {
   domains: {
     standard: [
     {
-      version: 0,
+      version: 1,
       generation: 0,
       profile: {
         roles: {
@@ -646,6 +650,11 @@ const versionData = {
         workbox: {
           id: null,
           name: null,
+          type: {
+            name: null,
+            alias: null,
+          }
+
         },
         commits: {
           created_by: {

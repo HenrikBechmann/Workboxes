@@ -121,6 +121,7 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     // console.log('running Workwindow: props', props)
+    // console.log('identity', props.identity)
 
     // --------------------------------[ initialization ]-----------------------------
 
@@ -138,10 +139,10 @@ const Workwindow = (props) => {
             windowSessionID, // system control, repo access
             viewDeclaration, // object with view = normalized, maximized, minimized; stackOrder for minimized windows
             zOrder, // inherited; modified by setFocus 
-            type, // for type section of window titleName
         } = props,
 
         titleName = identity.name,
+        typeAlias = identity.type?.alias,
         defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
 
         // various elements brought into play
@@ -689,7 +690,7 @@ const Workwindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {type} title = {titleName}/>
+                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {typeAlias} title = {titleName}/>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 
