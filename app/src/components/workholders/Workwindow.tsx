@@ -149,10 +149,10 @@ const Workwindow = (props) => {
         windowFrameElementRef = useRef(null),
         windowTitlebarElementRef = useRef(null),
         windowTitleElementRef = useRef(null),
-        windowContentElementRef = useRef(null),
+        windowContentElementRef = useRef(null), // TODO: needed?
 
         // basic controls
-        isMountedRef = useRef(true),
+        isMountedRef = useRef(true), // in case of interruption
         isDraggableDisabledRef = useRef(false), // disabled from maximized and minimized
 
         // state managemement
@@ -269,6 +269,7 @@ const Workwindow = (props) => {
 
         if (!isMountedRef.current) return
 
+        // give time for animation
         const timeout = (viewDeclarationRef.current.view == 'minimized')
             ? 500
             : 0
