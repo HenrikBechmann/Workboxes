@@ -44,17 +44,17 @@ const PrimaryFrame = (props) => {
 
         } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        viewSetting = workboxHandler.settings.configuration.document.mode,
+        documentMode = workboxHandler.settings.configuration.document.mode,
         displayCode = workboxHandler.settings.configuration.content.displaycode, // both, itemlist, document
 
         previousDisplayConfigCodeRef = useRef(displayCode),
         primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null),
         UIDocumentWidthRef = useRef(null),
-        viewSettingRef = useRef(null)
+        documentModeRef = useRef(null)
 
     UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
-    viewSettingRef.current = viewSetting
+    documentModeRef.current = documentMode
 
     /*
         Respond to change in displayCode; causes direct DOM manipulation.
@@ -93,7 +93,7 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
-                documentFrameElement.firstChild.style.width = UIDocumentWidthRef.current[viewSettingRef.current] + 'px'
+                documentFrameElement.firstChild.style.width = UIDocumentWidthRef.current[documentModeRef.current] + 'px'
                 documentFrameElement.firstChild.style.left = 0
                 documentFrameElement.firstChild.style.right = 'auto'
 
@@ -101,7 +101,7 @@ const PrimaryFrame = (props) => {
 
                 itemlistFrameElement.firstChild.style.width = 
                     Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                        UIDocumentWidthRef.current[viewSettingRef.current])) + 'px'
+                        UIDocumentWidthRef.current[documentModeRef.current])) + 'px'
                 itemlistFrameElement.firstChild.style.left = 'auto'
                 itemlistFrameElement.firstChild.style.right = 0
 
@@ -121,10 +121,10 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            documentFrameElement.style.width = UIDocumentWidthRef.current[viewSettingRef.current] + 'px'
+            documentFrameElement.style.width = UIDocumentWidthRef.current[documentModeRef.current] + 'px'
             itemlistFrameElement.style.width = 
                 Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                    UIDocumentWidthRef.current[viewSettingRef.current])) + 'px'
+                    UIDocumentWidthRef.current[documentModeRef.current])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
