@@ -13,7 +13,8 @@ import ItemlistFrame from './ItemlistFrame'
 
 import { useWorkboxHandler } from './Workbox'
 
-export const CONTENT_FRAME_PADDING_WIDTH = 10 // used by WorkboxFrame for initialization
+// sets workboxHandler value below
+export const CONTENT_FRAME_PADDING_WIDTH = 10 // import used by WorkboxFrame for initialization (a sequencing anomaly)
 
 const workboxContentStyles = {
     display:'flex',
@@ -39,11 +40,9 @@ const ContentFrame = (props) => { // no props; all in workboxHandler
 
     useEffect(()=>{
 
+        workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = CONTENT_FRAME_PADDING_WIDTH // from workboxContentStyles
         setTimeout(() => { // yield to let forwardRefs get set
 
-            // synchronize this with the total left and right padding of workboxContentStyles
-            // imported and used by resize observer of Workbox
-            workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = CONTENT_FRAME_PADDING_WIDTH // from workboxContentStyles
             setContentState('yielded')
 
         },1)

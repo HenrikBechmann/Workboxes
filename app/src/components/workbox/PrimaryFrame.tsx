@@ -37,9 +37,9 @@ const PrimaryFrame = (props) => {
 
     const 
         {
-            
+
             children, 
-            documentFrameElementRef, 
+            documentFrameElementRef, // TODO test sequencing of availability
             itemlistFrameElementRef,
 
         } = props,
