@@ -45,17 +45,19 @@ const PrimaryFrame = (props) => {
             displayCode, 
             documentFrameElementRef, 
             itemlistFrameElementRef, 
-            UIDocumentWidthRef, // set by user through drag tag
+            // UIDocumentWidthRef, // set by user through drag tag
             // viewSetting,
         } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        UIDocumentWidthRef = useRef(null),
         viewSetting = workboxHandler.settings.configuration.document.mode,
         previousDisplayConfigCodeRef = useRef(displayCode),
         primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null),
         viewSettingRef = useRef(null)
 
-        viewSettingRef.current = viewSetting
+    viewSettingRef.current = viewSetting
+    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
 
     /*
         Respond to change in displayCode; causes direct DOM manipulation.

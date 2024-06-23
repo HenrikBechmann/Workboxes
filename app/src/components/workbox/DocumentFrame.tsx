@@ -21,11 +21,11 @@ import "react-resizable/css/styles.css"
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import DocumentToolbar from '../toolbars/Toolbar_Document'
 
-import handleIcon from '../../../assets/handle.png'
-
 import { useWorkboxHandler } from './Workbox'
 
 import DocumentContent from '../documentUI/DocumentContent'
+
+import handleIcon from '../../../assets/handle.png'
 
 const 
     MIN_PRIMARY_FRAME_HEIGHT = 300,
@@ -136,7 +136,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         // props
         {
             displayCode, 
-            UIDocumentWidthRef, // UIDocumentWidthRef informs "friends"
+            // UIDocumentWidthRef, // UIDocumentWidthRef informs "friends"
             // windowSessionID, 
             viewSetting, 
             profileData,
@@ -144,6 +144,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
             defaultDocumentState,
         } = props, 
         // context
+        UIDocumentWidthRef = useRef(null),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         // persistence
         documentPanelElementRef = useRef(null),
@@ -159,7 +160,6 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         }),
         // windowCallbacksRef = useRef(w),
         // state
-        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current[viewSetting]),
         [documentConfig, setDocumentState] = useState(defaultDocumentState),
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false})
 
@@ -168,6 +168,10 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         workboxInnerFrameWidthRef = useRef(null),
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
+
+    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
+    const
+        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current[viewSetting])
 
     workboxInnerFrameWidthRef.current = workboxHandler.dimensions.innerFrameWidth
     displayCodeRef.current = displayCode

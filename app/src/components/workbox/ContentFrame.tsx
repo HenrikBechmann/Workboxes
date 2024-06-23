@@ -99,13 +99,11 @@ const ContentFrame = (props) => {
             displayCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
-            UIDocumentWidthRef = {UIDocumentWidthRef}
         >
             <DocumentFrame 
                 ref = {documentFrameElementRef} 
                 displayCode = {documentDisplayCode} 
                 defaultDocumentState = {workboxHandler.settings.configuration.document}
-                UIDocumentWidthRef = {UIDocumentWidthRef}
                 viewSetting = {workboxHandler.settings.configuration.document.mode}
                 documentData = {{}}
                 profileData = {{}}

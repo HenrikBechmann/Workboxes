@@ -51,6 +51,11 @@ class WorkboxHandler {
     // configuration
     settings
     dimensions = {
+        UIDocumentWidth: {
+            minimized: 300,
+            maximized: 300,
+            normalized: 300,
+        },
         innerFrameWidth:null,
         CONTENT_FRAME_PADDING_WIDTH:null,
     }
