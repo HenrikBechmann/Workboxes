@@ -4,9 +4,6 @@
 import React, { 
     useRef, 
     useEffect, 
-    // useState, 
-    // useCallback, 
-    // useContext, 
     CSSProperties, 
 } from 'react'
 
@@ -41,23 +38,22 @@ const PrimaryFrame = (props) => {
     const 
         {
             children, 
-            // windowSessionID,
-            displayCode, 
             documentFrameElementRef, 
-            itemlistFrameElementRef, 
-            // UIDocumentWidthRef, // set by user through drag tag
-            // viewSetting,
+            itemlistFrameElementRef,
+            
         } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        UIDocumentWidthRef = useRef(null),
         viewSetting = workboxHandler.settings.configuration.document.mode,
+        displayCode = workboxHandler.settings.configuration.content.displaycode, // both, itemlist, document
+
         previousDisplayConfigCodeRef = useRef(displayCode),
         primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null),
+        UIDocumentWidthRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    viewSettingRef.current = viewSetting
     UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
+    viewSettingRef.current = viewSetting
 
     /*
         Respond to change in displayCode; causes direct DOM manipulation.

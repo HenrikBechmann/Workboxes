@@ -18,6 +18,7 @@ import {
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import ItemlistToolbar from '../toolbars/Toolbar_Itemlist'
+import { useWorkboxHandler } from './Workbox'
 
 const 
     MIN_ITEMLIST_FRAME_WIDTH = 250,
@@ -79,12 +80,12 @@ const itemlistBodyStyles = {
 
 const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
     const 
-        { displayCode, itemlistData, profileData, defaultItemlistState } = props,
+        [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
+        defaultItemlistState = workboxHandler.settings.configuration.itemlist,
+        displayCode = workboxHandler.settings.configuration.itemlist.displaycode, // out, over, under
         itemlistPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
         [itemlistConfig, setItemlistState] = useState(defaultItemlistState)
-
-    // console.log('itemlistData',itemlistData)
 
     useEffect(()=>{
 

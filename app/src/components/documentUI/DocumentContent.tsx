@@ -20,10 +20,12 @@ import documentTypeBundles from './documentTypeBundles'
 const DocumentContent = (props) => {
 
     const 
-        {profileData, documentData, documentConfig, invalidStandardFieldFlagsRef} = props,
+        {documentConfig, invalidStandardFieldFlagsRef} = props,
         standardComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
-        contentStateRef = useRef(null)
+        contentStateRef = useRef(null),
+        profileData = {}, 
+        documentData = {sections:null}
 
     contentStateRef.current = contentState
 

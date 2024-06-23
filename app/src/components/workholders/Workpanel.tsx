@@ -16,13 +16,16 @@ import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
 const defaultWorkboxConfig = {
     content: {
+        displaycode:'both',
     },
     document: {
+        displaycode:'out',
         mode:'view', // view or edit
         show:false,
         disabled:false,
     },
     itemlist: { 
+        displaycode:'out',
         mode: 'normal', // normal, drill, add, edit, remove, drag
         show:false,
         disabled:false,

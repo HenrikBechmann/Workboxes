@@ -92,12 +92,31 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        settings.configuration.document.show = toggleOnDocumentRef.current
+        const documentShow = settings.configuration.document.show = toggleOnDocumentRef.current
         settings.configuration.document.disabled = disabledDocumentRef.current
-        settings.configuration.itemlist.show = toggleOnItemlistRef.current
+        const itemlistShow = settings.configuration.itemlist.show = toggleOnItemlistRef.current
         settings.configuration.itemlist.disabled = disabledItemlistRef.current
-        settings.configuration.both.show = toggleOnBothRef.current
+        const bothShow = settings.configuration.both.show = toggleOnBothRef.current
         settings.configuration.both.disabled = disabledBothRef.current
+
+        let contentDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
+        if (bothShow) {
+            contentDisplayCode = 'both'
+            documentDisplayCode = 'out'
+            itemlistDisplayCode = 'out'
+        } else if (itemlistShow) {
+            contentDisplayCode = 'itemlist'
+            documentDisplayCode = 'under'
+            itemlistDisplayCode = 'over'
+        } else { // documentShow
+            contentDisplayCode = 'document'
+            documentDisplayCode = 'over'
+            itemlistDisplayCode = 'under'
+        }
+
+        settings.configuration.content.displaycode = contentDisplayCode        
+        settings.configuration.document.displaycode = documentDisplayCode
+        settings.configuration.itemlist.displaycode = itemlistDisplayCode
 
         setToolbarState('ready')
         dispatchWorkboxHandler()

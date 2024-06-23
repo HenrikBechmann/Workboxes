@@ -133,19 +133,12 @@ const DocumentHandle = (props) => {
 
 const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrameElementRef:any) {
     const 
-        // props
-        {
-            displayCode, 
-            // UIDocumentWidthRef, // UIDocumentWidthRef informs "friends"
-            // windowSessionID, 
-            viewSetting, 
-            profileData,
-            documentData, 
-            defaultDocumentState,
-        } = props, 
         // context
         UIDocumentWidthRef = useRef(null),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        defaultDocumentState = workboxHandler.settings.configuration.document,
+        viewSetting = workboxHandler.settings.configuration.document.mode,
+        displayCode = workboxHandler.settings.configuration.document.displaycode, // out, over, under
         // persistence
         documentPanelElementRef = useRef(null),
         primaryFrameElementRef = useRef(null), // for direct config updates
@@ -369,10 +362,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentBodyStyles}>
-                        <DocumentContent 
-                            profileData = {profileData} 
-                            documentData = {documentData} 
-                            documentConfig = {documentConfig}
+                        <DocumentContent                             documentConfig = {documentConfig}
                             invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                         />
                     </GridItem>
