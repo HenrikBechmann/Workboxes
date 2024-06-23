@@ -14,6 +14,8 @@ import {
     Box
 } from '@chakra-ui/react'
 
+import { useWorkboxHandler } from './Workbox'
+
 const 
     MIN_DOCUMENT_FRAME_WIDTH = 250,
     MIN_ITEMLIST_FRAME_WIDTH = 250,
@@ -40,13 +42,15 @@ const PrimaryFrame = (props) => {
         {
             children, 
             // windowSessionID,
-            displayConfigCode, 
+            displayCode, 
             documentFrameElementRef, 
             itemlistFrameElementRef, 
             UIDocumentWidthRef, // set by user through drag tag
-            viewSetting,
+            // viewSetting,
         } = props,
-        previousDisplayConfigCodeRef = useRef(displayConfigCode),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        viewSetting = workboxHandler.settings.configuration.document.mode,
+        previousDisplayConfigCodeRef = useRef(displayCode),
         primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null),
         viewSettingRef = useRef(null)
@@ -54,7 +58,7 @@ const PrimaryFrame = (props) => {
         viewSettingRef.current = viewSetting
 
     /*
-        Respond to change in displayConfigCode; causes direct DOM manipulation.
+        Respond to change in displayCode; causes direct DOM manipulation.
         Adjusts the CSS of 
         - centralPanelElement: flex, width
         - documentFrameElement: flex, width, minWidth, transition, transitionDelay
@@ -62,11 +66,11 @@ const PrimaryFrame = (props) => {
         - itemlistFrameElement: flex, width, minWidth, transition, transitionDelay
         - contantsFrameElement.firstChild: width, left, right (panel)
 
-        see useEffect for displayConfigCode
+        see useEffect for displayCode
     */
     useEffect(()=>{
 
-        if (previousDisplayConfigCodeRef.current == displayConfigCode) return // startup
+        if (previousDisplayConfigCodeRef.current == displayCode) return // startup
 
         const 
             centralPanelElement = primaryFrameElementRef.current, // flex, width
@@ -78,7 +82,7 @@ const PrimaryFrame = (props) => {
 
         clearTimeout(timeoutRef.current)
 
-        if (displayConfigCode == 'both') {
+        if (displayCode == 'both') {
 
             // baseline
             documentFrameElement.style.transitionDelay = 'unset'
@@ -148,7 +152,7 @@ const PrimaryFrame = (props) => {
 
             },timeout)
 
-        } else if (displayConfigCode == 'document') {
+        } else if (displayCode == 'document') {
 
             // set transition delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
@@ -209,7 +213,7 @@ const PrimaryFrame = (props) => {
 
             },timeout)
 
-        } else { // displayConfigCode == 'itemlist'
+        } else { // displayCode == 'itemlist'
 
             // set tranision delay for shadow
             documentFrameElement.style.transitionDelay = transitionDelay
@@ -271,9 +275,9 @@ const PrimaryFrame = (props) => {
             },timeout)
         }
 
-        previousDisplayConfigCodeRef.current = displayConfigCode
+        previousDisplayConfigCodeRef.current = displayCode
 
-    },[displayConfigCode])
+    },[displayCode])
 
     // CentralWidthContext informs DocumentFrame
     return <Box 

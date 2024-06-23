@@ -135,7 +135,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const 
         // props
         {
-            displayConfigCode, 
+            displayCode, 
             UIDocumentWidthRef, // UIDocumentWidthRef informs "friends"
             // windowSessionID, 
             viewSetting, 
@@ -170,7 +170,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         viewSettingRef = useRef(null)
 
     workboxInnerFrameWidthRef.current = workboxHandler.dimensions.innerFrameWidth
-    displayCodeRef.current = displayConfigCode
+    displayCodeRef.current = displayCode
     viewSettingRef.current = viewSetting
 
     // console.log('document profileData, documentData',profileData, documentData)
@@ -269,7 +269,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
             element = documentPanelElementRef.current,
             timeout = 500
 
-        if (displayConfigCode == 'out') {
+        if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
@@ -277,7 +277,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                 handleRef.current.style.visibility = 'visible'
             },timeout)
 
-        } else if (displayConfigCode == 'over') {
+        } else if (displayCode == 'over') {
 
             element.style.boxShadow = 'none'
             handleRef.current.style.opacity = 0
@@ -291,7 +291,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
         }
 
-    },[displayConfigCode])
+    },[displayCode])
 
     // resizable callbacks...
     const onResizeStart = () => {

@@ -45,13 +45,15 @@ const ContentFrame = (props) => {
         // share document and itemlist elements with children
         documentFrameElementRef = useRef( null ),
         itemlistFrameElementRef = useRef( null ),
+        workboxContentElementRef = useRef(null),
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
         // set by user through drag tab, and possibly by changing window size
-        UIDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ), // shared with children for configuration
-        workboxContentElementRef = useRef(null)
+        UIDocumentWidthRef = useRef( {minimized:300, maximized:300, normalized:300} ) // shared with children for configuration
 
     // console.log('workboxHandler', workboxHandler)
+    // console.log('running ContentFrame: contentState', contentState)
+    // console.log('workboxHandler.settings.configuration.itemlist.show',workboxHandler.settings.configuration.itemlist.show)
 
     let workboxDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
     if (bothShow) {
@@ -68,32 +70,40 @@ const ContentFrame = (props) => {
         itemlistDisplayCode = 'under'
     }
 
+    // console.log('bothShow, documentShow, itemlistShow',
+    //     bothShow, documentShow, itemlistShow)
+
+    // console.log('workboxDisplayCode, documentDisplayCode, itemlistDisplayCode',
+    //     workboxDisplayCode, documentDisplayCode, itemlistDisplayCode)
+
     useEffect(()=>{
 
         workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = 10
         setTimeout(() => { // yield for forward reference updates
-            setContentState('ready')
+            setContentState('yielded')
         },1)
 
     },[])
 
     useEffect(()=>{
 
-        if (contentState != 'ready') setContentState('ready')
+        if (contentState != 'ready') {
+            // console.log('setting contentState to ready')
+            setContentState('ready')
+        }
 
     },[contentState])
 
     return <Box data-type = 'workbox-content' ref = {workboxContentElementRef} style = {workboxContentStyles}>
         <PrimaryFrame 
-            displayConfigCode = {workboxDisplayCode} 
+            displayCode = {workboxDisplayCode} 
             documentFrameElementRef = {documentFrameElementRef} 
             itemlistFrameElementRef = {itemlistFrameElementRef} 
             UIDocumentWidthRef = {UIDocumentWidthRef}
-            viewSetting = {workboxHandler.settings.configuration.document.mode}
         >
             <DocumentFrame 
                 ref = {documentFrameElementRef} 
-                displayConfigCode = {documentDisplayCode} 
+                displayCode = {documentDisplayCode} 
                 defaultDocumentState = {workboxHandler.settings.configuration.document}
                 UIDocumentWidthRef = {UIDocumentWidthRef}
                 viewSetting = {workboxHandler.settings.configuration.document.mode}
@@ -102,7 +112,7 @@ const ContentFrame = (props) => {
             />
             <ItemlistFrame 
                 ref = {itemlistFrameElementRef} 
-                displayConfigCode = {itemlistDisplayCode} 
+                displayCode = {itemlistDisplayCode} 
                 defaultItemlistState = {workboxHandler.settings.configuration.itemlist}
                 itemlistData = { {} }
                 profileData = { {} }

@@ -79,7 +79,7 @@ const itemlistBodyStyles = {
 
 const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
     const 
-        { displayConfigCode, itemlistData, profileData, defaultItemlistState } = props,
+        { displayCode, itemlistData, profileData, defaultItemlistState } = props,
         itemlistPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
         [itemlistConfig, setItemlistState] = useState(defaultItemlistState)
@@ -94,13 +94,13 @@ const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameE
             element = itemlistPanelElementRef.current,
             timeout = 500
 
-        if (displayConfigCode == 'out') {
+        if (displayCode == 'out') {
 
             timeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
             },timeout)
 
-        } else if (displayConfigCode == 'over') {
+        } else if (displayCode == 'over') {
 
             element.style.boxShadow = 'none'
 
@@ -110,7 +110,7 @@ const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameE
 
         }
 
-    },[displayConfigCode])
+    },[displayCode])
 
     return <Box data-type = 'itemlist-frame' ref = {itemlistFrameElementRef} style = {itemlistFrameStyles}>
         <Box data-type = 'itemlist-panel' ref = {itemlistPanelElementRef} style = {itemlistPanelStyles}>

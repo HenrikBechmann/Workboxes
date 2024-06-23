@@ -18,11 +18,12 @@ const defaultWorkboxConfig = {
     content: {
     },
     document: {
-        mode:'view',
+        mode:'view', // view or edit
         show:false,
         disabled:false,
     },
     itemlist: { 
+        mode: 'normal', // normal, drill, add, edit, remove, drag
         show:false,
         disabled:false,
     },
