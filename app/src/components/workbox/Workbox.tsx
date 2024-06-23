@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFirestore, useUsage, useSnapshotControl, useErrorControl } from '../../system/WorkboxesProvider'
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
-import ContentFrame from './ContentFrame'
+import ContentFrame, {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
 
 export const WorkboxHandlerContext = createContext({current:null})
 
@@ -75,10 +75,12 @@ const WorkboxFrame = (props) => {
     // console.log('running WorkboxFrame workboxRecord', workboxHandler.workboxRecord)
 
     // update the width record of this panel on resize
+    // TODO: use of imported CONTENT_FRAME_PADDING_WIDTH for intialization is a sequencing anomaly
     const resizeObserverCallback = useCallback(()=> {
 
         workboxHandler.dimensions.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
-            workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH
+            (workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH || CONTENT_FRAME_PADDING_WIDTH) 
+
         dispatchWorkboxHandler('framewidth')
 
     },[])

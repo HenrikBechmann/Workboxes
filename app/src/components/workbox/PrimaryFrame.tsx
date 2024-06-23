@@ -37,10 +37,11 @@ const PrimaryFrame = (props) => {
 
     const 
         {
+            
             children, 
             documentFrameElementRef, 
             itemlistFrameElementRef,
-            
+
         } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         viewSetting = workboxHandler.settings.configuration.document.mode,

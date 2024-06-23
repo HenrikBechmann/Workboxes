@@ -13,6 +13,8 @@ import ItemlistFrame from './ItemlistFrame'
 
 import { useWorkboxHandler } from './Workbox'
 
+export const CONTENT_FRAME_PADDING_WIDTH = 10 // used by WorkboxFrame for initialization
+
 const workboxContentStyles = {
     display:'flex',
     flexWrap: 'nowrap',
@@ -41,9 +43,9 @@ const ContentFrame = (props) => { // no props; all in workboxHandler
 
             // synchronize this with the total left and right padding of workboxContentStyles
             // imported and used by resize observer of Workbox
-            workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = 10 // from workboxContentStyles
+            workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH = CONTENT_FRAME_PADDING_WIDTH // from workboxContentStyles
             setContentState('yielded')
-            
+
         },1)
 
     },[])
