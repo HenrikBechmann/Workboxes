@@ -78,7 +78,7 @@ const WorkboxFrame = (props) => {
     // TODO: use of imported CONTENT_FRAME_PADDING_WIDTH for intialization is a sequencing anomaly
     const resizeObserverCallback = useCallback(()=> {
 
-        workboxHandler.dimensions.innerFrameWidth = workboxFrameElementRef.current.offsetWidth - 
+        workboxHandler.dimensions.primaryFrameWidth = workboxFrameElementRef.current.offsetWidth - 
             (workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH || CONTENT_FRAME_PADDING_WIDTH) 
 
         dispatchWorkboxHandler('framewidth')

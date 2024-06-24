@@ -53,7 +53,7 @@ class WorkboxHandler {
     dimensions = {
         UIDocumentWidth:300,
         UIDocumentWidthRatio:null,
-        innerFrameWidth:null,
+        primaryFrameWidth:null,
         CONTENT_FRAME_PADDING_WIDTH:null,
     }
 

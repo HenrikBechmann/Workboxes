@@ -711,7 +711,9 @@ const Workpanel = (props:any) => {
         <Box id = 'workpanel' data-type = 'workpanel' ref = {panelElementRef} style = {workpanelStyles}>
             {(panelState != 'setup') && windowComponentList}
             {(panelState != 'setup' && windowCount === 0) && 
-                <Box style = {panelMessageStyles} >Tap here to load the default workbox for this panel</Box>
+                <Box style = {panelMessageStyles} >
+                    Tap the base domain workbox or the membership workbox in the toolbar below to load a workbox
+                </Box>
             }
         </Box>
     </Box>

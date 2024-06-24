@@ -79,8 +79,8 @@ const PrimaryFrame = (props) => {
             itemlistPanelElement = itemlistFrameElement.firstChild,
 
             // controls
-            transitionDelay = '0.3s',
-            timeout = 800,
+            TRANSITION_DELAY = '0.3s',
+            TIMEOUT = 800,
             previousDisplayConfigCode = previousDisplayConfigCodeRef.current,
 
             // workboxHandler settings
@@ -90,10 +90,10 @@ const PrimaryFrame = (props) => {
 
         if (displayCode == 'both') {
 
-            // baseline
+            // no transition delay for shadows
             documentFrameElement.style.transitionDelay = 'unset'
             itemlistFrameElement.style.transitionDelay = 'unset'
-
+            // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
 
@@ -156,14 +156,14 @@ const PrimaryFrame = (props) => {
                 primaryFrameElement.style.flex = '1 0 auto'
                 primaryFrameElement.style.width = 'auto'
 
-            },timeout)
+            },TIMEOUT)
 
         } else if (displayCode == 'document') {
 
-            // set transition delay for shadow
-            documentFrameElement.style.transitionDelay = transitionDelay
-            itemlistFrameElement.style.transitionDelay = transitionDelay
-
+            // set transition delay for shadows
+            documentFrameElement.style.transitionDelay = TRANSITION_DELAY
+            itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+            // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
 
@@ -217,14 +217,14 @@ const PrimaryFrame = (props) => {
                 primaryFrameElement.style.flex = '1 0 auto'
                 primaryFrameElement.style.width = 'auto'
 
-            },timeout)
+            },TIMEOUT)
 
         } else { // displayCode == 'itemlist'
 
-            // set tranision delay for shadow
-            documentFrameElement.style.transitionDelay = transitionDelay
-            itemlistFrameElement.style.transitionDelay = transitionDelay
-
+            // set transition delay for shadows
+            documentFrameElement.style.transitionDelay = TRANSITION_DELAY
+            itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+            // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
 
@@ -278,7 +278,7 @@ const PrimaryFrame = (props) => {
                 primaryFrameElement.style.width = 'auto'
                 primaryFrameElement.style.flex = '1 0 auto'
 
-            },timeout)
+            },TIMEOUT)
         }
 
         previousDisplayConfigCodeRef.current = displayCode
