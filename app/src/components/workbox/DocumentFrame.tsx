@@ -5,7 +5,6 @@ import React, {
     useRef, 
     useEffect, 
     useState, 
-    useContext, 
     CSSProperties, 
     forwardRef 
 } from 'react'
@@ -61,7 +60,7 @@ const documentPanelStyles = {
     right:'auto',
 } as CSSProperties
 
-const documentTabStyles = {
+const documentHandleStyles = {
     position:'absolute',
     margin: 0,
     backgroundColor:'white',
@@ -79,7 +78,7 @@ const documentTabStyles = {
     transition: 'opacity 0.3s, visibility 0.3s'
 } as CSSProperties
 
-const documentTabIconStyles = {
+const documentHandleIconStyles = {
     opacity: 0.5,
     height: '24px',
     width: '48px',
@@ -121,10 +120,10 @@ const DocumentHandle = (props) => {
             ref = {innerRef}
             id = 'handle'
             data-type = {'document-handle'} 
-            style = {documentTabStyles} {...handleAttributes}>
+            style = {documentHandleStyles} {...handleAttributes}>
             <img 
                 draggable = "false" 
-                style = {documentTabIconStyles} 
+                style = {documentHandleIconStyles} 
                 src = {handleIcon} 
             />
         </Box>
