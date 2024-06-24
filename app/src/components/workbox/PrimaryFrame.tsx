@@ -39,14 +39,17 @@ const PrimaryFrame = (props) => {
         {
 
             children, // DocumentFrame and ItemlistFrame
-            documentFrameElementRef, // TODO test sequencing of availability
+            documentFrameElementRef,
             itemlistFrameElementRef,
 
         } = props,
+
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+
         // triggers state change...
         displayCode = workboxHandler.settings.configuration.content.displaycode, // both, itemlist, document
 
+        // controls
         previousDisplayConfigCodeRef = useRef(displayCode), // determine change being made
         primaryFrameElementRef = useRef(null),
         timeoutRef = useRef(null)
