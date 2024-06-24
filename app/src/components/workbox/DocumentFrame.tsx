@@ -162,9 +162,9 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidths
+    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
     const
-        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current[viewSetting])
+        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current)
 
     workboxInnerFrameWidthRef.current = workboxHandler.dimensions.innerFrameWidth
     displayCodeRef.current = displayCode
@@ -316,7 +316,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const onResizeStop = (e,{size, handle}) => {
         documentFrameElementRef.current.style.transition = 'width 0.5s'
 
-        UIDocumentWidthRef.current[viewSettingRef.current] = size.width
+        workboxHandler.dimensions.UIDocumentWidth = UIDocumentWidthRef.current = size.width
         setDocumentResizeWidth(size.width)
 
     }
@@ -335,7 +335,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         } 
         axis = 'x'
         height = {documentFrameElementRef.current?.offsetHeight || 0} 
-        width = {300/*documentResizeWidth*/}
+        width = {documentResizeWidth}
         resizeHandles = {['e']}
         minConstraints = {[constraintsRef.current.minX,constraintsRef.current.minY]}
         maxConstraints = {[constraintsRef.current.maxX,constraintsRef.current.maxY]}

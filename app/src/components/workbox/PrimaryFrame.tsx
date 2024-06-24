@@ -84,8 +84,8 @@ const PrimaryFrame = (props) => {
             previousDisplayConfigCode = previousDisplayConfigCodeRef.current,
 
             // workboxHandler settings
-            UIDocumentWidths = workboxHandler.dimensions.UIDocumentWidths, // minimized, normalized, maximized
-            documentMode = workboxHandler.settings.configuration.document.mode // serves as index for UIDocumentWidths
+            UIDocumentWidth = workboxHandler.dimensions.UIDocumentWidth, // minimized, normalized, maximized
+            documentMode = workboxHandler.settings.configuration.document.mode // serves as index for UIDocumentWidth
 
         clearTimeout(timeoutRef.current) // allows interrupt
 
@@ -101,7 +101,7 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
-                documentPanelElement.style.width = UIDocumentWidths[documentMode] + 'px'
+                documentPanelElement.style.width = UIDocumentWidth + 'px'
                 documentPanelElement.style.left = 0
                 documentPanelElement.style.right = 'auto'
 
@@ -109,7 +109,7 @@ const PrimaryFrame = (props) => {
 
                 itemlistPanelElement.style.width = 
                     Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
-                        UIDocumentWidths[documentMode])) + 'px'
+                        UIDocumentWidth) + 'px'
                 itemlistPanelElement.style.left = 'auto'
                 itemlistPanelElement.style.right = 0
 
@@ -129,10 +129,10 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            documentFrameElement.style.width = UIDocumentWidths[documentMode] + 'px'
+            documentFrameElement.style.width = UIDocumentWidth + 'px'
             itemlistFrameElement.style.width = 
                 Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
-                    UIDocumentWidths[documentMode])) + 'px'
+                    UIDocumentWidth)) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
