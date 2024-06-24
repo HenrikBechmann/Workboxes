@@ -60,7 +60,7 @@ const iconWrapperStyles = {
 const DocumentToolbar = (props) => {
 
     const 
-        { documentConfig, setDocumentState, invalidStandardFieldFlagsRef } = props,
+        { documentConfig, setDocumentConfig, invalidStandardFieldFlagsRef } = props,
         [toolbarState, setToolbarState] = useState('ready'),
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
@@ -103,12 +103,12 @@ const DocumentToolbar = (props) => {
         } else {
             documentConfig.mode = 'edit'
         }
-        setDocumentState({...documentConfig})
+        setDocumentConfig({...documentConfig})
     }
 
     const cancelEdit = () => {
         documentConfig.mode = 'view'
-        setDocumentState({...documentConfig})
+        setDocumentConfig({...documentConfig})
     }
 
     // render

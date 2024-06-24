@@ -114,14 +114,14 @@ const documentGridBodyStyles = {
 const DocumentHandle = (props) => {
 
     // handleAxis for handle selection - n/a here
-    const { handleAxis, innerRef, ...rest } = props
+    const { handleAxis, innerRef, ...handleAttributes } = props
 
     return (
         <Box 
             ref = {innerRef}
             id = 'handle'
             data-type = {'document-handle'} 
-            style = {documentTabStyles} {...rest}>
+            style = {documentTabStyles} {...handleAttributes}>
             <img 
                 draggable = "false" 
                 style = {documentTabIconStyles} 
@@ -134,44 +134,36 @@ const DocumentHandle = (props) => {
 const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrameElementRef:any) {
     const 
         // context
-        UIDocumentWidthRef = useRef(null),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        defaultDocumentState = workboxHandler.settings.configuration.document,
-        viewSetting = workboxHandler.settings.configuration.document.mode,
         displayCode = workboxHandler.settings.configuration.document.displaycode, // out, over, under
-        // persistence
+
+        // persistence...
+        // elements
         documentPanelElementRef = useRef(null),
         primaryFrameElementRef = useRef(null), // for direct config updates
+        handleElementRef = useRef(null),
+        // timeouts
         targetTimeoutRef = useRef(null),
         observerTimeoutRef = useRef(null),
-        handleRef = useRef(null),
+        // Resizable constraints
         constraintsRef = useRef({
             minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 0,
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
-        // state
-        [documentConfig, setDocumentState] = useState(defaultDocumentState),
+        UIDocumentWidthRef = useRef(null),
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
-        // scope
-        workboxInnerFrameWidthRef = useRef(null),
-        displayCodeRef = useRef(null),
-        viewSettingRef = useRef(null)
+        // state
+        [documentConfig, setDocumentConfig] = useState(workboxHandler.settings.configuration.document),
+        [UIDocumentWidth, setUIDocumentWidth] = useState(workboxHandler.dimensions.UIDocumentWidth)
 
-    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
-
-    const
-        [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current)
-
-    workboxInnerFrameWidthRef.current = workboxHandler.dimensions.primaryFrameWidth
-    displayCodeRef.current = displayCode
-    viewSettingRef.current = viewSetting
+    UIDocumentWidthRef.current = UIDocumentWidth
 
     useEffect(()=>{
 
         primaryFrameElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
-        handleRef.current = primaryFrameElementRef.current.querySelector('#handle')
+        handleElementRef.current = primaryFrameElementRef.current.querySelector('#handle')
 
     },[])
 
@@ -187,21 +179,21 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
             targetTimeoutRef.current = setTimeout(()=>{
                 element.style.boxShadow = 'none'
-                handleRef.current.style.opacity = 0.8
-                handleRef.current.style.visibility = 'visible'
+                handleElementRef.current.style.opacity = 0.8
+                handleElementRef.current.style.visibility = 'visible'
             },timeout)
 
         } else if (displayCode == 'over') {
 
             element.style.boxShadow = 'none'
-            handleRef.current.style.opacity = 0
-            handleRef.current.style.visibility = 'hidden'
+            handleElementRef.current.style.opacity = 0
+            handleElementRef.current.style.visibility = 'hidden'
 
         } else { // 'under'
 
             element.style.boxShadow = '3px 3px 6px 6px inset silver'
-            handleRef.current.style.opacity = 0
-            handleRef.current.style.visibility = 'hidden'
+            handleElementRef.current.style.opacity = 0
+            handleElementRef.current.style.visibility = 'hidden'
 
         }
 
@@ -226,7 +218,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const onResize = (event, {size, handle}) => {
 
         documentFrameElementRef.current.style.width = size.width + 'px'
-        setDocumentResizeWidth(size.width)
+        setUIDocumentWidth(size.width)
 
     }
 
@@ -236,7 +228,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         workboxHandler.dimensions.UIDocumentWidth = UIDocumentWidthRef.current = size.width
         workboxHandler.dimensions.UIDocumentWidthRatio = 
             workboxHandler.dimensions.UIDocumentWidth/workboxHandler.dimensions.primaryFrameWidth
-        setDocumentResizeWidth(size.width)
+        setUIDocumentWidth(size.width)
 
     }
 
@@ -254,7 +246,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         } 
         axis = 'x'
         height = {documentFrameElementRef.current?.offsetHeight || 0} 
-        width = {documentResizeWidth}
+        width = {UIDocumentWidth}
         resizeHandles = {['e']}
         minConstraints = {[constraintsRef.current.minX,constraintsRef.current.minY]}
         maxConstraints = {[constraintsRef.current.maxX,constraintsRef.current.maxY]}
@@ -275,7 +267,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DocumentToolbar 
                                 documentConfig = {documentConfig} 
-                                setDocumentState = {setDocumentState}
+                                setDocumentConfig = {setDocumentConfig}
                                 invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                             />
                         </ToolbarFrame>
