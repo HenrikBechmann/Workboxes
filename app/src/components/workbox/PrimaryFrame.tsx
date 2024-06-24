@@ -81,18 +81,19 @@ const PrimaryFrame = (props) => {
             // controls
             TRANSITION_DELAY = '0.3s',
             TIMEOUT = 800,
-            previousDisplayConfigCode = previousDisplayConfigCodeRef.current,
+            previousDisplayConfigCode = previousDisplayConfigCodeRef.current, // to manage change
 
             // workboxHandler settings
-            UIDocumentWidth = workboxHandler.dimensions.UIDocumentWidth // minimized, normalized, maximized
+            UIDocumentWidth = workboxHandler.dimensions.UIDocumentWidth // user-set width
 
         clearTimeout(timeoutRef.current) // allows interrupt
 
         if (displayCode == 'both') {
 
-            // no transition delay for shadows
+            // no transition delay for shadows with transtion to both
             documentFrameElement.style.transitionDelay = 'unset'
             itemlistFrameElement.style.transitionDelay = 'unset'
+
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
@@ -114,16 +115,18 @@ const PrimaryFrame = (props) => {
 
             }
 
+            // set minWidth for primary Element to accommodate both
+            primaryFrameElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
+
             // freeze primary frame
             primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
-            primaryFrameElement.style.flex = '0 0 auto'
+            primaryFrameElement.style.flex = '0 0 auto' // grow, shrink, basis
 
             // freeze document
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
-            documentFrameElement.style.flex = '0 0 auto'
+            documentFrameElement.style.flex = '0 0 auto' // permanent for this displaycode
 
             // freeze itemlist
-            primaryFrameElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
 
@@ -133,7 +136,7 @@ const PrimaryFrame = (props) => {
                 Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
                     UIDocumentWidth)) + 'px'
 
-            // wait for result; restore defaults
+            // wait for result, then restore defaults
             timeoutRef.current = setTimeout(()=>{
 
                 // restore transition defaults
@@ -148,11 +151,11 @@ const PrimaryFrame = (props) => {
                 // restore document frame defaults
                 documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
-                // restore panel defaults
+                // restore both panel width defaults
                 itemlistPanelElement.style.width = '100%'
                 documentPanelElement.style.width = '100%'
 
-                // restore central panel defaults
+                // restore primary frame defaults
                 primaryFrameElement.style.flex = '1 0 auto'
                 primaryFrameElement.style.width = 'auto'
 
