@@ -108,8 +108,8 @@ const PrimaryFrame = (props) => {
             } else { // itemlist was hidden
 
                 itemlistPanelElement.style.width = 
-                    Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
-                        UIDocumentWidth) + 'px'
+                    Math.max(MIN_ITEMLIST_FRAME_WIDTH,
+                        (primaryFrameElement.offsetWidth - UIDocumentWidth)) + 'px'
                 itemlistPanelElement.style.left = 'auto'
                 itemlistPanelElement.style.right = 0
 
