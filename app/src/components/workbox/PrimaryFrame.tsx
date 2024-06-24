@@ -166,6 +166,7 @@ const PrimaryFrame = (props) => {
             // set transition delay for shadows
             documentFrameElement.style.transitionDelay = TRANSITION_DELAY
             itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
@@ -174,8 +175,8 @@ const PrimaryFrame = (props) => {
             if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
                 documentPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
-                documentPanelElement.style.right = 0
                 documentPanelElement.style.left = 'auto'
+                documentPanelElement.style.right = 0
 
             }
 
@@ -191,9 +192,11 @@ const PrimaryFrame = (props) => {
             // freeze itemlist frame for hiding
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
-            itemlistPanelElement.style.width = itemlistPanelElement.offsetWidth + 'px'
             itemlistFrameElement.style.minWidth = 0
 
+            // freeze itemlist panel for hiding
+            itemlistPanelElement.style.width = itemlistPanelElement.offsetWidth + 'px'
+            
             // set animation targets
             itemlistFrameElement.style.width = 0
             documentFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
@@ -203,6 +206,7 @@ const PrimaryFrame = (props) => {
 
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
+                documentFrameElement.style.transitionDelay = 'unset'
                 itemlistFrameElement.style.transition = 'none'
                 itemlistFrameElement.style.transitionDelay = 'unset'
 
@@ -211,7 +215,7 @@ const PrimaryFrame = (props) => {
                 documentFrameElement.style.width = 'auto'
                 documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
-                // set visible frame config
+                // set config for visible panel
                 documentPanelElement.style.width = '100%'
                 documentPanelElement.style.right = 'auto'
                 documentPanelElement.style.left = 0
@@ -227,6 +231,7 @@ const PrimaryFrame = (props) => {
             // set transition delay for shadows
             documentFrameElement.style.transitionDelay = TRANSITION_DELAY
             itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
             itemlistFrameElement.style.transition = 'width 0.5s'
@@ -245,15 +250,17 @@ const PrimaryFrame = (props) => {
             primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
             primaryFrameElement.style.flex = '0 0 auto'
 
-            // freeze document for hiding
-            documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
-            documentFrameElement.style.flex = '0 0 auto'
-            documentPanelElement.style.width = documentPanelElement.offsetWidth + 'px'
-            documentFrameElement.style.minWidth = 0
-
             // freeze itemlist
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
+
+            // freeze document frame for hiding
+            documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
+            documentFrameElement.style.flex = '0 0 auto'
+            documentFrameElement.style.minWidth = 0
+
+            // freeze document panel for hiding
+            documentPanelElement.style.width = documentPanelElement.offsetWidth + 'px'
 
             // set animation targets
             itemlistFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
@@ -266,6 +273,7 @@ const PrimaryFrame = (props) => {
                 documentFrameElement.style.transition = 'none'
                 documentFrameElement.style.transitionDelay = 'unset'
                 itemlistFrameElement.style.transition = 'none'
+                itemlistFrameElement.style.transitionDelay = 'unset'
 
                 // set visible frame config
                 itemlistFrameElement.style.width = 'auto'
