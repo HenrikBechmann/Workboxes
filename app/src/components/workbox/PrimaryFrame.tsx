@@ -84,8 +84,7 @@ const PrimaryFrame = (props) => {
             previousDisplayConfigCode = previousDisplayConfigCodeRef.current,
 
             // workboxHandler settings
-            UIDocumentWidth = workboxHandler.dimensions.UIDocumentWidth, // minimized, normalized, maximized
-            documentMode = workboxHandler.settings.configuration.document.mode // serves as index for UIDocumentWidth
+            UIDocumentWidth = workboxHandler.dimensions.UIDocumentWidth // minimized, normalized, maximized
 
         clearTimeout(timeoutRef.current) // allows interrupt
 
