@@ -17,10 +17,14 @@ import {
 
 import documentTypeBundles from './documentTypeBundles'
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
 const DocumentContent = (props) => {
 
     const 
-        {documentConfig, invalidStandardFieldFlagsRef} = props,
+        { invalidStandardFieldFlagsRef } = props,
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        documentConfig = workboxHandler.settings.configuration.document,
         standardComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
         contentStateRef = useRef(null),

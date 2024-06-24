@@ -7,11 +7,14 @@ import {
   Box, MenuList, MenuItem, Icon
 } from '@chakra-ui/react'
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
 import { useToggleIcon } from './ToggleIcon'
 
 import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
 import LearnIcon from './LearnIcon'
+
 const documentToolbarStyles = {
     padding:'2px',
     minHeight:0,
@@ -60,7 +63,9 @@ const iconWrapperStyles = {
 const DocumentToolbar = (props) => {
 
     const 
-        { documentConfig, setDocumentConfig, invalidStandardFieldFlagsRef } = props,
+        { invalidStandardFieldFlagsRef } = props,
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        documentConfig = workboxHandler.settings.configuration.document,
         [toolbarState, setToolbarState] = useState('ready'),
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
@@ -103,19 +108,22 @@ const DocumentToolbar = (props) => {
         } else {
             documentConfig.mode = 'edit'
         }
-        setDocumentConfig({...documentConfig})
+        dispatchWorkboxHandler()
+        // setDocumentConfig({...documentConfig})
     }
 
     const cancelEdit = () => {
         documentConfig.mode = 'view'
-        setDocumentConfig({...documentConfig})
+        dispatchWorkboxHandler()
+        // setDocumentConfig({...documentConfig})
     }
 
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
-        {(documentConfig.mode == 'edit') && <>
+        {(documentConfig.mode == 'edit') && 
+            <>
                 <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
                 <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
                 {dropToggle}
@@ -130,7 +138,5 @@ const DocumentToolbar = (props) => {
 
     </Box>
 }
-
-        // <StandardIcon icon = {formIcon} caption = 'forms' tooltip = 'data input'/>
 
 export default DocumentToolbar

@@ -148,16 +148,17 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         // Resizable constraints
         constraintsRef = useRef({
             minX:MIN_DOCUMENT_FRAME_WIDTH,
-            minY:documentFrameElementRef.current?.offsetHeight || 0,
+            minY:documentFrameElementRef.current?.offsetHeight || 250,
             maxX:700,
-            maxY:documentFrameElementRef.current?.offsetHeight || 0,
+            maxY:documentFrameElementRef.current?.offsetHeight || 300,
         }),
         // persistence
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
         // state
-        [documentConfig, setDocumentConfig] = useState(workboxHandler.settings.configuration.document),
+        // [documentConfig, setDocumentConfig] = useState(workboxHandler.settings.configuration.document),
         [UIDocumentWidth, setUIDocumentWidth] = useState(workboxHandler.dimensions.UIDocumentWidth)
 
+    // initialization effect
     useEffect(()=>{
 
         primaryFrameElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
@@ -165,9 +166,10 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     },[])
 
+    // state change effects
     useEffect(()=>{
 
-        clearTimeout(targetTimeoutRef.current)
+        clearTimeout(targetTimeoutRef.current) // for interrupt
 
         const 
             element = documentPanelElementRef.current,
@@ -263,16 +265,12 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                     <GridItem data-type = 'document-header' style = {documentGridHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DocumentToolbar 
-                                documentConfig = {documentConfig} 
-                                setDocumentConfig = {setDocumentConfig}
                                 invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                             />
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentGridBodyStyles}>
-                        <DocumentContent  documentConfig = {documentConfig}
-                            invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
-                        />
+                        <DocumentContent invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef} />
                     </GridItem>
                 </Grid>
 
