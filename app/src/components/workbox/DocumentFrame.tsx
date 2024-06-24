@@ -162,7 +162,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
-    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
+    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidths
     const
         [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current[viewSetting])
 

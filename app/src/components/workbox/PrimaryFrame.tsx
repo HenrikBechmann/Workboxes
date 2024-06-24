@@ -38,48 +38,53 @@ const PrimaryFrame = (props) => {
     const 
         {
 
-            children, 
+            children, // DocumentFrame and ItemlistFrame
             documentFrameElementRef, // TODO test sequencing of availability
             itemlistFrameElementRef,
 
         } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        documentMode = workboxHandler.settings.configuration.document.mode,
+        // triggers state change...
         displayCode = workboxHandler.settings.configuration.content.displaycode, // both, itemlist, document
 
-        previousDisplayConfigCodeRef = useRef(displayCode),
+        previousDisplayConfigCodeRef = useRef(displayCode), // determine change being made
         primaryFrameElementRef = useRef(null),
-        timeoutRef = useRef(null),
-        UIDocumentWidthRef = useRef(null),
-        documentModeRef = useRef(null)
-
-    UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
-    documentModeRef.current = documentMode
+        timeoutRef = useRef(null)
 
     /*
         Respond to change in displayCode; causes direct DOM manipulation.
         Adjusts the CSS of 
-        - centralPanelElement: flex, width
+        - primaryFrameElement: flex, width
         - documentFrameElement: flex, width, minWidth, transition, transitionDelay
-        - documentFrameElement.firstChild: width, left, right (panel)
+        - documentFrameElement.firstChild = documentPanelElement: width, left, right (panel) 
         - itemlistFrameElement: flex, width, minWidth, transition, transitionDelay
-        - contantsFrameElement.firstChild: width, left, right (panel)
-
-        see useEffect for displayCode
+        - itemlistFrameElement.firstChild = itemlistPanelElement: width, left, right (panel)
+        Three cases if displayCode: both, document, itemlist
     */
     useEffect(()=>{
 
         if (previousDisplayConfigCodeRef.current == displayCode) return // startup
 
-        const 
-            centralPanelElement = primaryFrameElementRef.current, // flex, width
+        const
+            // elements being manipulated 
+            primaryFrameElement = primaryFrameElementRef.current, // flex, width
+
             documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            documentPanelElement = documentFrameElement.firstChild,
+
             itemlistFrameElement = itemlistFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            itemlistPanelElement = itemlistFrameElement.firstChild,
+
+            // controls
             transitionDelay = '0.3s',
             timeout = 800,
-            previousDisplayConfigCode = previousDisplayConfigCodeRef.current
+            previousDisplayConfigCode = previousDisplayConfigCodeRef.current,
 
-        clearTimeout(timeoutRef.current)
+            // workboxHandler settings
+            UIDocumentWidths = workboxHandler.dimensions.UIDocumentWidths, // minimized, normalized, maximized
+            documentMode = workboxHandler.settings.configuration.document.mode // serves as index for UIDocumentWidths
+
+        clearTimeout(timeoutRef.current) // allows interrupt
 
         if (displayCode == 'both') {
 
@@ -93,38 +98,38 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden elements
             if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
-                documentFrameElement.firstChild.style.width = UIDocumentWidthRef.current[documentModeRef.current] + 'px'
-                documentFrameElement.firstChild.style.left = 0
-                documentFrameElement.firstChild.style.right = 'auto'
+                documentPanelElement.style.width = UIDocumentWidths[documentMode] + 'px'
+                documentPanelElement.style.left = 0
+                documentPanelElement.style.right = 'auto'
 
             } else { // itemlist was hidden
 
-                itemlistFrameElement.firstChild.style.width = 
-                    Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                        UIDocumentWidthRef.current[documentModeRef.current])) + 'px'
-                itemlistFrameElement.firstChild.style.left = 'auto'
-                itemlistFrameElement.firstChild.style.right = 0
+                itemlistPanelElement.style.width = 
+                    Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
+                        UIDocumentWidths[documentMode])) + 'px'
+                itemlistPanelElement.style.left = 'auto'
+                itemlistPanelElement.style.right = 0
 
             }
 
-            // freeze central frame
-            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
-            centralPanelElement.style.flex = '0 0 auto'
+            // freeze primary frame
+            primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
+            primaryFrameElement.style.flex = '0 0 auto'
 
             // freeze document
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
             // freeze itemlist
-            centralPanelElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
+            primaryFrameElement.style.minWidth = (MIN_DOCUMENT_FRAME_WIDTH + MIN_ITEMLIST_FRAME_WIDTH) + 'px'
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            documentFrameElement.style.width = UIDocumentWidthRef.current[documentModeRef.current] + 'px'
+            documentFrameElement.style.width = UIDocumentWidths[documentMode] + 'px'
             itemlistFrameElement.style.width = 
-                Math.max(MIN_ITEMLIST_FRAME_WIDTH,(centralPanelElement.offsetWidth - 
-                    UIDocumentWidthRef.current[documentModeRef.current])) + 'px'
+                Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
+                    UIDocumentWidths[documentMode])) + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
@@ -142,12 +147,12 @@ const PrimaryFrame = (props) => {
                 documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
                 // restore panel defaults
-                itemlistFrameElement.firstChild.style.width = '100%'
-                documentFrameElement.firstChild.style.width = '100%'
+                itemlistPanelElement.style.width = '100%'
+                documentPanelElement.style.width = '100%'
 
                 // restore central panel defaults
-                centralPanelElement.style.flex = '1 0 auto'
-                centralPanelElement.style.width = 'auto'
+                primaryFrameElement.style.flex = '1 0 auto'
+                primaryFrameElement.style.width = 'auto'
 
             },timeout)
 
@@ -163,16 +168,16 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden element
             if (previousDisplayConfigCode == 'itemlist') { // document was hidden
 
-                documentFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
-                documentFrameElement.firstChild.style.right = 0
-                documentFrameElement.firstChild.style.left = 'auto'
+                documentPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
+                documentPanelElement.style.right = 0
+                documentPanelElement.style.left = 'auto'
 
             }
 
-            // freeze central frame
-            centralPanelElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
-            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
-            centralPanelElement.style.flex = '0 0 auto'
+            // freeze primary frame
+            primaryFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
+            primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
+            primaryFrameElement.style.flex = '0 0 auto'
 
             // freeze document
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
@@ -181,12 +186,12 @@ const PrimaryFrame = (props) => {
             // freeze itemlist frame for hiding
             itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
             itemlistFrameElement.style.flex = '0 0 auto'
-            itemlistFrameElement.firstChild.style.width = itemlistFrameElement.firstChild.offsetWidth + 'px'
+            itemlistPanelElement.style.width = itemlistPanelElement.offsetWidth + 'px'
             itemlistFrameElement.style.minWidth = 0
 
             // set animation targets
             itemlistFrameElement.style.width = 0
-            documentFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            documentFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
 
             // wait for result; restore defaults
             timeoutRef.current = setTimeout(()=>{
@@ -201,14 +206,14 @@ const PrimaryFrame = (props) => {
                 documentFrameElement.style.width = 'auto'
                 documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
-                // set visible panel config
-                documentFrameElement.firstChild.style.width = '100%'
-                documentFrameElement.firstChild.style.right = 'auto'
-                documentFrameElement.firstChild.style.left = 0
+                // set visible frame config
+                documentPanelElement.style.width = '100%'
+                documentPanelElement.style.right = 'auto'
+                documentPanelElement.style.left = 0
 
-                // restore central panel defaults
-                centralPanelElement.style.flex = '1 0 auto'
-                centralPanelElement.style.width = 'auto'
+                // restore primary frame defaults
+                primaryFrameElement.style.flex = '1 0 auto'
+                primaryFrameElement.style.width = 'auto'
 
             },timeout)
 
@@ -224,21 +229,21 @@ const PrimaryFrame = (props) => {
             // anticipate config of hidden element
             if (previousDisplayConfigCode == 'document') { // itemlist was hidden
 
-                itemlistFrameElement.firstChild.style.width = centralPanelElement.offsetWidth + 'px'
-                itemlistFrameElement.firstChild.style.right = 'auto'
-                itemlistFrameElement.firstChild.style.left = 0
+                itemlistPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
+                itemlistPanelElement.style.right = 'auto'
+                itemlistPanelElement.style.left = 0
 
             }
 
-            // freeze central frame
-            centralPanelElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
-            centralPanelElement.style.width = centralPanelElement.offsetWidth + 'px'
-            centralPanelElement.style.flex = '0 0 auto'
+            // freeze primary frame
+            primaryFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
+            primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
+            primaryFrameElement.style.flex = '0 0 auto'
 
             // freeze document for hiding
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
-            documentFrameElement.firstChild.style.width = documentFrameElement.firstChild.offsetWidth + 'px'
+            documentPanelElement.style.width = documentPanelElement.offsetWidth + 'px'
             documentFrameElement.style.minWidth = 0
 
             // freeze itemlist
@@ -246,7 +251,7 @@ const PrimaryFrame = (props) => {
             itemlistFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
-            itemlistFrameElement.style.width = centralPanelElement.offsetWidth + 'px'
+            itemlistFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
             documentFrameElement.style.width = 0
 
             // wait for result; restore defaults
@@ -263,13 +268,13 @@ const PrimaryFrame = (props) => {
                 itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
 
                 // restore visible panel config
-                itemlistFrameElement.firstChild.style.width = '100%'
-                itemlistFrameElement.firstChild.style.right = 0
-                itemlistFrameElement.firstChild.style.left = 'auto'
+                itemlistPanelElement.style.width = '100%'
+                itemlistPanelElement.style.right = 0
+                itemlistPanelElement.style.left = 'auto'
 
-                // restore central panel defaults
-                centralPanelElement.style.width = 'auto'
-                centralPanelElement.style.flex = '1 0 auto'
+                // restore primary frame defaults
+                primaryFrameElement.style.width = 'auto'
+                primaryFrameElement.style.flex = '1 0 auto'
 
             },timeout)
         }
