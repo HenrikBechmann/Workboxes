@@ -96,14 +96,14 @@ const documentGridStyles = {
     borderRadius: "0 0 0 7px",
 }  as CSSProperties
 
-const documentHeaderStyles = {
+const documentGridHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
     borderBottom:'1px solid silver',
 }
 
-const documentBodyStyles = {
+const documentGridBodyStyles = {
     area: 'body',
     position: 'relative',
     overflow: 'auto',
@@ -151,18 +151,16 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
-        // windowCallbacksRef = useRef(w),
         // state
         [documentConfig, setDocumentState] = useState(defaultDocumentState),
-        invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false})
-
-    // scope
-    const
+        invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
+        // scope
         workboxInnerFrameWidthRef = useRef(null),
         displayCodeRef = useRef(null),
         viewSettingRef = useRef(null)
 
     UIDocumentWidthRef.current = workboxHandler.dimensions.UIDocumentWidth
+
     const
         [documentResizeWidth, setDocumentResizeWidth] = useState(UIDocumentWidthRef.current)
 
@@ -170,93 +168,12 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     displayCodeRef.current = displayCode
     viewSettingRef.current = viewSetting
 
-    // console.log('document profileData, documentData',profileData, documentData)
-
     useEffect(()=>{
 
         primaryFrameElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
         handleRef.current = primaryFrameElementRef.current.querySelector('#handle')
 
     },[])
-
-    // useEffect(()=>{
-
-    //     const 
-    //         viewWidth = UIDocumentWidthRef.current[viewSetting],
-    //         viewTrigger = viewSetting
-
-        // windowCallbackContextRef.current.changeView = () => {
-
-        //     const constraints = {
-        //         minX:MIN_DOCUMENT_FRAME_WIDTH,
-        //         minY:documentFrameElementRef.current?.offsetHeight || 0,
-        //         maxX: Math.min(
-        //             workboxInnerFrameWidthRef.current * MAX_DOCUMENT_FRAME_RATIO,
-        //             workboxInnerFrameWidthRef.current - MIN_ITEMLIST_FRAME_WIDTH),
-        //         maxY:documentFrameElementRef.current?.offsetHeight || 0,
-        //     }
-        //     constraintsRef.current = constraints
-
-        //     const appliedWidth = Math.min(constraints.maxX, viewWidth)
-
-        //     documentFrameElementRef.current.style.transition = 'width 0.3s'
-        //     documentFrameElementRef.current.style.width = appliedWidth + 'px'
-        //     UIDocumentWidthRef.current[viewTrigger] = appliedWidth
-
-        //     setTimeout(()=>{
-        //         documentFrameElementRef.current.style.transition = 'none'
-        //         setDocumentResizeWidth(appliedWidth)
-        //     },300)
-
-        // }
-
-    // },[viewSetting])
-
-    // useEffect(()=>{
-
-    //     const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
-    //     if (primaryFrameWidth === 0) return
-
-    //     const documentWidth = 
-    //         displayCodeRef.current == 'out'
-    //             ? documentFrameElementRef.current.offsetWidth
-    //             : UIDocumentWidthRef.current[viewSettingRef.current]
-
-    //     clearTimeout(observerTimeoutRef.current)
-
-    //     const calculatedMaxDocumentWidth = 
-    //         Math.min(
-    //             primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
-    //             primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH)
-
-    //     if (calculatedMaxDocumentWidth < documentWidth) {
-
-    //         const newWidth = Math.max(MIN_DOCUMENT_FRAME_WIDTH, calculatedMaxDocumentWidth)
-
-    //         if (documentFrameElementRef.current.style.transition != 'none') documentFrameElementRef.current.style.transition = 'none'
-    //         displayCodeRef.current == 'out' && (documentFrameElementRef.current.style.width = newWidth + 'px')
-
-    //         UIDocumentWidthRef.current[viewSettingRef.current] = newWidth
-
-    //         if (documentFrameElementRef.current.style.transition == 'none') {
-    //             setTimeout(()=>{
-    //                 documentFrameElementRef.current.style.transition = 'width 0.5s'
-    //             },1)
-    //         }
-
-    //         setDocumentResizeWidth(newWidth) // coerce render
-
-    //     }
-
-    //     const constraints = {
-    //         minX:MIN_DOCUMENT_FRAME_WIDTH,
-    //         minY:documentFrameElementRef.current?.offsetHeight || 0,
-    //         maxX: calculatedMaxDocumentWidth,
-    //         maxY:documentFrameElementRef.current?.offsetHeight || 0,
-    //     }
-    //     constraintsRef.current = constraints
-
-    // },[workboxHandler])
 
     useEffect(()=>{
 
@@ -290,7 +207,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     },[displayCode])
 
-    // resizable callbacks...
+    // Resizable callbacks...
     const onResizeStart = () => {
         documentFrameElementRef.current.style.transition = 'none'
         const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
@@ -354,7 +271,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                     data-type = 'document-grid'
                     style = {documentGridStyles}
                 >
-                    <GridItem data-type = 'document-header' style = {documentHeaderStyles}>
+                    <GridItem data-type = 'document-header' style = {documentGridHeaderStyles}>
                         <ToolbarFrame toolbarWrapperStyles = {{zIndex:500}}>
                             <DocumentToolbar 
                                 documentConfig = {documentConfig} 
@@ -363,7 +280,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                             />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'document-body' style = {documentBodyStyles}>
+                    <GridItem data-type = 'document-body' style = {documentGridBodyStyles}>
                         <DocumentContent                             documentConfig = {documentConfig}
                             invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                         />
