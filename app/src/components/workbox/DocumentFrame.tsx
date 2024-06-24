@@ -173,7 +173,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
         const 
             element = documentPanelElementRef.current,
-            timeout = 500
+            TIMEOUT = 500
 
         if (displayCode == 'out') {
 
@@ -181,7 +181,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                 element.style.boxShadow = 'none'
                 handleElementRef.current.style.opacity = 0.8
                 handleElementRef.current.style.visibility = 'visible'
-            },timeout)
+            },TIMEOUT)
 
         } else if (displayCode == 'over') {
 
@@ -205,11 +205,11 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
         const constraints = {
             minX:MIN_DOCUMENT_FRAME_WIDTH,
-            minY:documentFrameElementRef.current?.offsetHeight || 0,
+            minY:documentFrameElementRef.current.offsetHeight,
             maxX: Math.min(
                 primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
                 primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH),
-            maxY:documentFrameElementRef.current?.offsetHeight || 0,
+            maxY:documentFrameElementRef.current.offsetHeight,
         }
         constraintsRef.current = constraints
 
