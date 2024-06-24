@@ -137,14 +137,15 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         displayCode = workboxHandler.settings.configuration.document.displaycode, // out, over, under
 
-        // persistence...
         // elements
         documentPanelElementRef = useRef(null),
         primaryFrameElementRef = useRef(null), // for direct config updates
         handleElementRef = useRef(null),
+
         // timeouts
         targetTimeoutRef = useRef(null),
         observerTimeoutRef = useRef(null),
+
         // Resizable constraints
         constraintsRef = useRef({
             minX:MIN_DOCUMENT_FRAME_WIDTH,
@@ -152,13 +153,11 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 0,
         }),
-        UIDocumentWidthRef = useRef(null),
+        // persistence
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
         // state
         [documentConfig, setDocumentConfig] = useState(workboxHandler.settings.configuration.document),
         [UIDocumentWidth, setUIDocumentWidth] = useState(workboxHandler.dimensions.UIDocumentWidth)
-
-    UIDocumentWidthRef.current = UIDocumentWidth
 
     useEffect(()=>{
 
@@ -225,7 +224,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const onResizeStop = (e,{size, handle}) => {
         documentFrameElementRef.current.style.transition = 'width 0.5s'
 
-        workboxHandler.dimensions.UIDocumentWidth = UIDocumentWidthRef.current = size.width
+        workboxHandler.dimensions.UIDocumentWidth = size.width
         workboxHandler.dimensions.UIDocumentWidthRatio = 
             workboxHandler.dimensions.UIDocumentWidth/workboxHandler.dimensions.primaryFrameWidth
         setUIDocumentWidth(size.width)
