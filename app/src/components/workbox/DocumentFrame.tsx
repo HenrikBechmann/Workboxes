@@ -252,7 +252,6 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         onResizeStart = {onResizeStart}
         onResize = {onResize}
         onResizeStop = {onResizeStop}
-
     >
         <Box data-type = 'document-frame' ref = {documentFrameElementRef} style = {documentFrameStyles}>
 
@@ -272,7 +271,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'document-body' style = {documentGridBodyStyles}>
-                        <DocumentContent                             documentConfig = {documentConfig}
+                        <DocumentContent  documentConfig = {documentConfig}
                             invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}
                         />
                     </GridItem>
