@@ -17,6 +17,10 @@ import ContentFrame, {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
 
 export const WorkboxHandlerContext = createContext({current:null})
 
+const 
+    MIN_DOCUMENT_FRAME_WIDTH = 250,
+    MAX_DOCUMENT_FRAME_RATIO = 0.75
+
 import WorkboxHandler from '../../classes/WorkboxHandler'
 
 const workboxFrameStyles = {
@@ -79,7 +83,18 @@ const WorkboxFrame = (props) => {
     const resizeObserverCallback = useCallback(()=> {
 
         workboxHandler.dimensions.primaryFrameWidth = workboxFrameElementRef.current.offsetWidth - 
-            (workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH || CONTENT_FRAME_PADDING_WIDTH) 
+            (workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH || CONTENT_FRAME_PADDING_WIDTH)
+        let UIDocumentWidthRatio = 
+            workboxHandler.dimensions.UIDocumentWidth/workboxHandler.dimensions.primaryFrameWidth
+        if (UIDocumentWidthRatio > MAX_DOCUMENT_FRAME_RATIO) {
+            UIDocumentWidthRatio = MAX_DOCUMENT_FRAME_RATIO
+            workboxHandler.dimensions.UIDocumentWidth = 
+                Math.max(MIN_DOCUMENT_FRAME_WIDTH, 
+                    Math.round(workboxHandler.dimensions.primaryFrameWidth * UIDocumentWidthRatio))
+            UIDocumentWidthRatio = 
+                workboxHandler.dimensions.UIDocumentWidth/workboxHandler.dimensions.primaryFrameWidth
+        }
+        workboxHandler.dimensions.UIDocumentWidthRatio = UIDocumentWidthRatio
 
         dispatchWorkboxHandler('framewidth')
 
