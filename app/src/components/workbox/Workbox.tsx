@@ -144,6 +144,7 @@ const Workbox = (props) => {
         { workboxSettings } = props,
 
         workboxID = workboxSettings.profile.id,
+        workboxSessionID = workboxSettings.profile.sessionid,
 
         // parameters for workboxHandler
         db = useFirestore(),
@@ -154,7 +155,7 @@ const Workbox = (props) => {
 
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         workboxHandler = workboxHandlerContext.current,
-        unsubscribeworkbox = workboxHandler?.unsubscribeWorkbox,
+        unsubscribeworkbox = workboxHandler?.internal.unsubscribeworkbox,
         // specialized data connection handling
         onFail = () => {
             console.log('failure to find workbox record')
@@ -165,12 +166,21 @@ const Workbox = (props) => {
             navigate('/error')
         }
 
+        // console.log('3. Workbox:\n', 
+        //     '---------------------\n',
+        //     'a. workboxHandlerContext:', workboxHandlerContext,'\n' ,
+        //     'b. workboxHandlerContext.current:', workboxHandlerContext.current,'\n' ,
+        //     'c. workboxHandler:', workboxHandler, '\n', 
+        //     'd. unsubscribeworkbox:', unsubscribeworkbox, '\n', 
+        //     'e. workboxHandler?.internal:', workboxHandler?.internal, '\n',
+        //     'f. workboxHandler?.internal.unsubscribeworkbox:', workboxHandler?.internal.unsubscribeworkbox, '\n')
+
         // console.log('Workbox: workboxID, workboxSettings', workboxID, workboxSettings)
 
     // create workboxHandler
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({workboxID, db, usage, snapshotControl, onError, onFail, errorControl})
+        const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
         workboxHandler.settings = workboxSettings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
@@ -184,10 +194,11 @@ const Workbox = (props) => {
     // store onSnapshot unsubscribe function
     useEffect(()=>{
 
-        if (unsubscribeworkbox) {
-            return () => {
-                snapshotControl.registerUnsub(workboxHandler.internal.workboxSnapshotIndex, unsubscribeworkbox)
-            }
+        if (!unsubscribeworkbox) return
+
+        snapshotControl.registerUnsub(workboxHandler.internal.workboxSnapshotIndex, unsubscribeworkbox)
+        return () => {
+            snapshotControl.unsub(workboxHandler.internal.workboxSnapshotIndex)
         }
 
     },[unsubscribeworkbox])

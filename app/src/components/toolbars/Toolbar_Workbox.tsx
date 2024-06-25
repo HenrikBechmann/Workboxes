@@ -72,8 +72,11 @@ const WorkboxToolbar = (props) => {
     const 
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { workboxRecord } = workboxHandler,
         { settings } = workboxHandler,
         [toolbarState, setToolbarState] = useState('ready')
+
+    // console.log('toolbarState, workboxRecord', toolbarState, workboxRecord)
 
     const
         toggleOnDocumentRef = useRef(settings.configuration.document.show),
@@ -83,11 +86,11 @@ const WorkboxToolbar = (props) => {
         toggleOnBothRef = useRef(settings.configuration.both.show),
         disabledBothRef = useRef(settings.configuration.both.disabled),
 
-        domainTitle = '',
-        domainIcon = '',
-        itemIcon = '',
-        itemTitle = '',
-        typeName = ''
+        domainTitle = workboxRecord?.profile.domain.name,
+        domainIcon = workboxRecord?.profile.domain.image?.source,
+        itemIcon = workboxRecord?.profile.workbox.image.source,
+        itemTitle = workboxRecord?.profile.workbox.name,
+        typeName = workboxRecord?.profile.type.alias
 
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
@@ -204,6 +207,8 @@ const WorkboxToolbar = (props) => {
         // <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
+
+    // console.log('domainTitle, itemTitle, typeName',domainTitle, itemTitle, typeName)
 
     // render
     return <Box data-type = 'workbox-toolbar' style = {workboxToolbarStyles}>

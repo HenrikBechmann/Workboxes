@@ -58,6 +58,7 @@ const panelMessageStyles = {
 } as CSSProperties
 
 let nextWindowSessionID = 0 // used for non-duplicate window component key
+let nextWorkboxSessionID = 0
 
 const Workpanel = (props:any) => {
 
@@ -138,8 +139,6 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
-        addWindow(windowSpecs, workboxSpecs)
-
         setPanelState('windowadded')
 
     }
@@ -173,6 +172,8 @@ const Workpanel = (props:any) => {
     const addWindow = (windowSpecs, workboxSpecs) => {
 
         const windowSessionID = nextWindowSessionID++
+        const workboxSessionID = nextWorkboxSessionID++
+        workboxSpecs.profile.sessionid = workboxSessionID
 
         // viewDeclaration already added by caller
         Object.assign(windowSpecs, {

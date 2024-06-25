@@ -12,9 +12,10 @@ import {
 import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxHandler {
-    constructor( {workboxID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
+    constructor( {workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
 
         this.workboxID = workboxID
+        this.workboxSessionID = workboxSessionID
 
         this.internal.db = db
         this.internal.usage = usage
@@ -41,6 +42,7 @@ class WorkboxHandler {
     }
 
     workboxID
+    workboxSessionID
 
     // data
     workboxRecord
@@ -61,7 +63,7 @@ class WorkboxHandler {
     async setWorkboxSnapshot() {
         const 
             workboxCollection = collection(this.internal.db, 'workboxes'),
-            workboxSnapshotIndex = 'Workbox.' + this.workboxID
+            workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
 
         this.internal.workboxSnapshotIndex = workboxSnapshotIndex
 
@@ -107,7 +109,7 @@ class WorkboxHandler {
 
                         this.workboxRecord = workboxRecord
 
-                        // console.log('onSnapshot setWorkbodHandlerContext')
+                        // console.log('2. onSnapshot calling setWorkboxHandlerContext')
 
                         this.internal.trigger = 'updaterecord'
                         this.internal.setWorkboxHandlerContext({current:this})
@@ -123,8 +125,10 @@ class WorkboxHandler {
                     return
 
                 }
-
             )
+            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+            this.internal.trigger = 'unsubscribeworkbox'
+            this.internal.setWorkboxHandlerContext({current:this})
         }
     }
 
