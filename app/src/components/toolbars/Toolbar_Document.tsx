@@ -175,7 +175,7 @@ const DocumentToolbar = (props) => {
         dragToggle = useToggleIcon({
             icon:dragIcon, 
             tooltip:'sort sections by drag and drop',
-            caption:'sort',
+            caption:'re-order',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
             is_radio: true,
