@@ -138,6 +138,8 @@ const Workpanel = (props:any) => {
 
         addWindow(windowSpecs, workboxSpecs)
 
+        addWindow(windowSpecs, workboxSpecs)
+
         setPanelState('windowadded')
 
     }
