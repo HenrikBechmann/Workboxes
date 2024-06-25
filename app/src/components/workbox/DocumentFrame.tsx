@@ -158,7 +158,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
         // persistence
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
-        is_resizingRef = useRef(false),
+        is_local_resizingRef = useRef(false),
 
         // state, to inform Resizable of the latest window width
         [UIDocumentWidth, setUIDocumentWidth] = useState(workboxHandler.dimensions.UIDocumentWidth)
@@ -205,7 +205,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     },[displayCode])
 
     useEffect(()=>{
-        if (!is_resizingRef.current && (displayCode == 'out') && (UIDocumentWidth !== workboxHandler.dimensions.UIDocumentWidth)) {
+        if (!is_local_resizingRef.current && (displayCode == 'out') && (UIDocumentWidth !== workboxHandler.dimensions.UIDocumentWidth)) {
             documentFrameElementRef.current.style.width = workboxHandler.dimensions.UIDocumentWidth + 'px'
             setUIDocumentWidth(workboxHandler.dimensions.UIDocumentWidth)
         }
@@ -213,7 +213,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     // Resizable callbacks...
     const onResizeStart = () => {
-        is_resizingRef.current = true
+        is_local_resizingRef.current = true
         documentFrameElementRef.current.style.transition = 'none'
         const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
         const constraints = {
@@ -239,7 +239,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
 
     const onResizeStop = (e,{size, handle}) => {
 
-        is_resizingRef.current = false
+        is_local_resizingRef.current = false
 
         documentFrameElementRef.current.style.transition = 'width 0.5s'
 
