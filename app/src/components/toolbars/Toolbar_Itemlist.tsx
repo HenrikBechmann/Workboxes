@@ -13,19 +13,6 @@ import { useToggleIcon } from './ToggleIcon'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
-const itemlistToolbarStyles = {
-    padding:'2px',
-    minHeight:0,
-    display:'flex',
-    flexDirection:'row',
-    flexWrap:'nowrap',
-    whitespace:'nowrap',
-    alignItems:'center',
-    boxSizing:'border-box',
-    backgroundColor:'#f2f2f2',
-    borderRadius:'8px 8px 0 0',
-} as CSSProperties
-
 import listIcon from '../../../assets/list.png'
 import drillIcon from '../../../assets/drill.png'
 import addIcon from '../../../assets/add.png'
@@ -48,6 +35,19 @@ import cardsIcon from '../../../assets/splitscreen.png'
 import settingsIcon from '../../../assets/settings.png'
 import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
+
+const itemlistToolbarStyles = {
+    padding:'2px',
+    minHeight:0,
+    display:'flex',
+    flexDirection:'row',
+    flexWrap:'nowrap',
+    whitespace:'nowrap',
+    alignItems:'center',
+    boxSizing:'border-box',
+    backgroundColor:'#f2f2f2',
+    borderRadius:'8px 8px 0 0',
+} as CSSProperties
 
 const smallerIconStyles = {
     height:'18px', 
