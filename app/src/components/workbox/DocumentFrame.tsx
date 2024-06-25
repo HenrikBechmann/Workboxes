@@ -209,13 +209,15 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
         const constraints = {
             minX:MIN_DOCUMENT_FRAME_WIDTH,
-            minY:documentFrameElementRef.current.offsetHeight,
             maxX: Math.min(
                 primaryFrameWidth * MAX_DOCUMENT_FRAME_RATIO,
                 primaryFrameWidth - MIN_ITEMLIST_FRAME_WIDTH),
+            minY:documentFrameElementRef.current.offsetHeight,
             maxY:documentFrameElementRef.current.offsetHeight,
         }
         constraintsRef.current = constraints
+
+        // console.log('DocumentFrame.onResizeStart: constraints', constraints)
 
     }
 
