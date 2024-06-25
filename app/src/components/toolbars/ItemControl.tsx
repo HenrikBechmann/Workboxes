@@ -25,7 +25,7 @@ const ItemControl = (props) => {
             <span>&nbsp;&nbsp;</span>
             <Text fontSize = 'sm'>{itemTitle}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>workbox name</span></Box>
     </Box>
 }
 
