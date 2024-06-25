@@ -110,6 +110,7 @@ const documentGridBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
+// for the drag handle made availble to users to resize the document side when shown together with the item list
 const DocumentHandle = (props) => {
 
     // handleAxis for handle selection - n/a here
@@ -134,9 +135,11 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const 
         // context
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        // triggers state change
         displayCode = workboxHandler.settings.configuration.document.displaycode, // out, over, under
 
         // elements
+        // documentFrameElementRef forwarded to caller (PrimaryFrame)
         documentPanelElementRef = useRef(null),
         primaryFrameElementRef = useRef(null), // for direct config updates
         handleElementRef = useRef(null),
@@ -145,17 +148,18 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         targetTimeoutRef = useRef(null),
         observerTimeoutRef = useRef(null),
 
-        // Resizable constraints
+        // constraints for Resizable
         constraintsRef = useRef({
             minX:MIN_DOCUMENT_FRAME_WIDTH,
             minY:documentFrameElementRef.current?.offsetHeight || 250,
             maxX:700,
             maxY:documentFrameElementRef.current?.offsetHeight || 300,
         }),
+
         // persistence
         invalidStandardFieldFlagsRef = useRef({name:false, description:false,image:false,summary:false}),
-        // state
-        // [documentConfig, setDocumentConfig] = useState(workboxHandler.settings.configuration.document),
+
+        // state, to inform Resizable of the latest window width
         [UIDocumentWidth, setUIDocumentWidth] = useState(workboxHandler.dimensions.UIDocumentWidth)
 
     // initialization effect
@@ -172,26 +176,26 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         clearTimeout(targetTimeoutRef.current) // for interrupt
 
         const 
-            element = documentPanelElementRef.current,
+            documentPanelElement = documentPanelElementRef.current,
             TIMEOUT = 500
 
         if (displayCode == 'out') {
 
             targetTimeoutRef.current = setTimeout(()=>{
-                element.style.boxShadow = 'none'
+                documentPanelElement.style.boxShadow = 'none'
                 handleElementRef.current.style.opacity = 0.8
                 handleElementRef.current.style.visibility = 'visible'
             },TIMEOUT)
 
         } else if (displayCode == 'over') {
 
-            element.style.boxShadow = 'none'
+            documentPanelElement.style.boxShadow = 'none'
             handleElementRef.current.style.opacity = 0
             handleElementRef.current.style.visibility = 'hidden'
 
         } else { // 'under'
 
-            element.style.boxShadow = '3px 3px 6px 6px inset silver'
+            documentPanelElement.style.boxShadow = '3px 3px 6px 6px inset silver'
             handleElementRef.current.style.opacity = 0
             handleElementRef.current.style.visibility = 'hidden'
 
