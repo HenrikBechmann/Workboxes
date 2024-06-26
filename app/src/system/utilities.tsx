@@ -242,7 +242,6 @@ const versionData = {
           },
         },
         roles: {
-          is_domainworkbox: null,
           read: null,
           write: null,
         },
@@ -280,20 +279,18 @@ const versionData = {
         },
       },
       document: {
-        sections: [
-          {
-            name: "standard",
-            alias: "Standard",
-            position: 0,
-            data: {
-              name: null,
-              image: {
-                source: null,
-              },
-              description: null,
-              summary: null,
+        data:{
+
+        },
+        base: {
+            name: null,
+            image: {
+              source: null,
             },
-          },
+            description: null,
+            summary: null,
+        },
+        sections: [
         ],
       },
       itemlist: {
@@ -317,7 +314,6 @@ const versionData = {
           },
         },
         roles: {
-          is_domainworkbox: null,
           read: null,
           write: null,
         },
@@ -355,20 +351,18 @@ const versionData = {
         },
       },
       document: {
-        sections: [
-          {
-            name: "standard",
-            alias: "Standard",
-            position: 0,
-            data: {
-              name: null,
-              image: {
-                source: null,
-              },
-              description: null,
-              summary: null,
+        data:{
+
+        },
+        base: {
+            name: null,
+            image: {
+              source: null,
             },
-          },
+            description: null,
+            summary: null,
+        },
+        sections: [
         ],
       },
       itemlist: {
@@ -400,7 +394,6 @@ const versionData = {
           name: null,
         },
         roles: {
-          is_domainworkbox: null,
           read: null,
           write: null,
         },
@@ -438,20 +431,18 @@ const versionData = {
         },
       },
       document: {
-        sections: [
-          {
-            name: "standard",
-            alias: "Standard",
-            position: 0,
-            data: {
-              name: null,
-              image: {
-                source: null,
-              },
-              description: null,
-              summary: null,
+        data:{
+
+        },
+        base: {
+            name: null,
+            image: {
+              source: null,
             },
-          },
+            description: null,
+            summary: null,
+        },
+        sections: [
         ],
       },
       itemlist: {

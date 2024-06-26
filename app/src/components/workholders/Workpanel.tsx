@@ -89,8 +89,6 @@ const Workpanel = (props:any) => {
 
     panelStateRef.current = panelState
 
-    // console.log('running Workpanel', panelState)
-
     const startingWindowsSpecsListRef = useRef(panelWindows)
 
     // initialize windows windowData map, component list, and minimized list; set maximized window if exists

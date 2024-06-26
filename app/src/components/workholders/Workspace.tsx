@@ -78,6 +78,7 @@ const Workspace = (props) => {
     useEffect(()=>{
 
         if (workspaceHandler.flags.new_workspace_load) {
+            panelComponentListRef.current = []
             workspaceHandler.flags.new_workspace_load = false
             loadPanels()
             setWorkspaceState('loading')
@@ -143,7 +144,6 @@ const Workspace = (props) => {
         }
 
         const panelRecords = workspaceHandler.panelRecords
-        panelComponentListRef.current = []
 
         // generate panel components, sorted by display_order, ascending
         const selectedPanelID = workspaceRecord.panel.id

@@ -109,7 +109,7 @@ class WorkboxHandler {
 
                         this.workboxRecord = workboxRecord
 
-                        // console.log('2. onSnapshot calling setWorkboxHandlerContext')
+                        // console.log('onSnapshot workboxRecord', workboxRecord)
 
                         this.internal.trigger = 'updaterecord'
                         this.internal.setWorkboxHandlerContext({current:this})

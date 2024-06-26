@@ -717,7 +717,6 @@ export const UserProvider = ({children}) => {
               },
               roles: {
                   read: "member",
-                  is_domainworkbox: true,
               },
               owner: {
                 id: uid,
