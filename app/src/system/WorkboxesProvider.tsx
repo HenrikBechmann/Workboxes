@@ -111,7 +111,7 @@ export const UserProvider = ({children}) => {
         errorControl = useErrorControl(),
         errorControlRef = useRef(null),
         usage = useUsage(),
-        toast = useToast({duration:4000})
+        toast = useToast({duration:4000, isClosable:true})
 
     userAuthDataRef.current = userAuthData
     userRecordsRef.current = userRecords

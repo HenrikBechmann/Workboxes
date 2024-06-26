@@ -26,7 +26,7 @@ const WorkspaceDeleteDialog = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),
         [isDefaultState, setIsDefaultState] = useState(false),
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         navigate = useNavigate()
 
     useEffect(()=>{

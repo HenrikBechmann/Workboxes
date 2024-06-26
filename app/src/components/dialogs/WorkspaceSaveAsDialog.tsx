@@ -36,7 +36,7 @@ const WorkspaceSaveAsDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         checkboxRef = useRef(null)
 
     useEffect(()=>{

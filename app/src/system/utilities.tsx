@@ -299,6 +299,7 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
+        locked: false,
       },
     }],
     domain: [
@@ -368,6 +369,7 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
+        locked: false,
       },
     }],
     member: [
@@ -445,6 +447,7 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
+        locked: false,
       },
     }],
   },

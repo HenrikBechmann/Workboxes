@@ -83,7 +83,7 @@ const WorkspaceToolbar = (props) => {
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
 
         // messaging
-        toast = useToast({duration:4000}) 
+        toast = useToast({duration:4000, isClosable:true}) 
 
    // ----------------------[ state changes ]---------------------
 

@@ -24,7 +24,7 @@ export const Main = (props) => {
         [mainState, setMainState] = useState('setup'),
         userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(), // selection for toolbar, and to get workspaceData
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         navigate = useNavigate()
 
     // for setup

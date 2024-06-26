@@ -37,7 +37,7 @@ const PanelCreateDialog = (props) => {
         [alertState, setAlertState] = useState('setup'),
         isInvalidFieldFlags = isInvalidFieldFlagsRef.current,
         navigate = useNavigate(),
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         {panelSelection, setPanelSelection, panelRecords } = workspaceHandler,
         panelName = panelRecords[panelSelection.index].profile.panel.name,
         [domainList, setDomainList] = useState([]),

@@ -30,7 +30,7 @@ const WorkspaceSetDefaultDialog = (props) => {
         { settings, workspaceSelection } = workspaceHandler,
         [alertState, setAlertState] = useState('setup'),
         navigate = useNavigate(),
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         checkboxRef = useRef(null),
         selectRef = useRef(null),
         [currentDefaultIndex, setCurrentDefaultIndex] = useState(-1),

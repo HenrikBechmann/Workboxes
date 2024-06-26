@@ -29,7 +29,7 @@ const PanelSetDefaultDialog = (props) => {
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('setup'),
         navigate = useNavigate(),
-        toast = useToast({duration:4000}),
+        toast = useToast({duration:4000, isClosable:true}),
         { panelRecords } = workspaceHandler,
         checkboxRef = useRef(null),
         selectRef = useRef(null),
