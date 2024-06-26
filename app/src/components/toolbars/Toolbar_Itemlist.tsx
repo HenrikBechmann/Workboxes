@@ -13,6 +13,8 @@ import { useToggleIcon } from './ToggleIcon'
 import LearnIcon from './LearnIcon'
 import ToolbarVerticalDivider from './VerticalDivider'
 
+import emptylistIcon from '../../../assets/empty_list.png'
+import labelIcon from '../../../assets/label.png'
 import listIcon from '../../../assets/list.png'
 import drillIcon from '../../../assets/drill.png'
 import addIcon from '../../../assets/add.png'
@@ -21,7 +23,7 @@ import removeIcon from '../../../assets/close.png'
 import selectIcon from '../../../assets/select.png'
 import dragIcon from '../../../assets/drag.png'
 
-import itemlistIcon from '../../../assets/package.png'
+import itemlistIcon from '../../../assets/itemlist.png'
 import filterIcon from '../../../assets/filter.png'
 import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
@@ -211,9 +213,13 @@ const ItemlistToolbar = (props) => {
         //     disabledRef:disabledMoveRef, 
         // })
 
+        // <MenuItem icon = {<img src = {settingsIcon} />}>Itemlist settings</MenuItem>
+    // emptylistIcon is the wrong size for some reason; needs to be coerced
     const itemlistmenulist = <MenuList >
-        <MenuItem icon = {<img src = {lockOpenIcon}/>}>Lock this itemlist</MenuItem>
-        <MenuItem icon = {<img src = {settingsIcon} />}>Itemlist settings</MenuItem>
+
+        <MenuItem icon = {<img src = {labelIcon}/>}>Item types to accept</MenuItem>
+        <MenuItem icon = {<img src = {lockIcon}/>}>Lock this list</MenuItem>
+        <MenuItem icon = {<img style = {{height:'24px', width:'24px'}} src = {emptylistIcon}/>}>Empty this list</MenuItem>
     </MenuList>
 
     const layoutmenulist = <MenuList >

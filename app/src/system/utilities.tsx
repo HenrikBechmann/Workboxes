@@ -270,7 +270,10 @@ const versionData = {
             name: null,
           },
           created_timestamp: null,
-          updated_by: {id: null, name: null},
+          updated_by: {
+            id: null, 
+            name: null
+          },
           updated_timestamp: null,
         },
         counts: {
@@ -285,6 +288,7 @@ const versionData = {
         base: {
             name: null,
             image: {
+              caption: null,
               source: null,
             },
             description: null,
@@ -295,10 +299,6 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
-        connectors: {
-          cached: null,
-          cache: [],
-        },
       },
     }],
     domain: [
@@ -357,6 +357,7 @@ const versionData = {
         base: {
             name: null,
             image: {
+              caption: null,
               source: null,
             },
             description: null,
@@ -367,10 +368,6 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
-        connectors: {
-          cached: null,
-          cache: [],
-        },
       },
     }],
     member: [
@@ -438,6 +435,7 @@ const versionData = {
             name: null,
             image: {
               source: null,
+              caption: null,
             },
             description: null,
             summary: null,
@@ -447,10 +445,6 @@ const versionData = {
       },
       itemlist: {
         accepts: [],
-        connectors: {
-          cached: null,
-          cache: [],
-        },
       },
     }],
   },
