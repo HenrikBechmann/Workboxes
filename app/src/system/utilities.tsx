@@ -82,17 +82,17 @@ export const updateDocumentSchema = (collection, type, document, initialvalues =
 const versionMaps = {
   workboxes: {
     collection: {
-      latest_version:1,
+      latest_version:2,
       datamap: new Map(),
       functionmap: new Map(),
     },
     domain: {
-      latest_version:2,
+      latest_version:3,
       datamap: new Map(),
       functionmap: new Map(),
     },
     member: {
-      latest_version:2,
+      latest_version:3,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -231,7 +231,7 @@ const versionData = {
   workboxes: {
     collection: [
     {
-      version: 1,
+      version: 2,
       generation: 0,
       profile: {
         workbox: {
@@ -283,9 +283,10 @@ const versionData = {
       },
       document: {
         data:{
-
+            display_order: 1,
         },
         base: {
+            display_order: 0,
             name: null,
             image: {
               caption: null,
@@ -304,7 +305,7 @@ const versionData = {
     }],
     domain: [
     {
-      version: 2,
+      version: 3,
       generation: 0,
       profile: {
         workbox: {
@@ -353,9 +354,11 @@ const versionData = {
       },
       document: {
         data:{
+            display_order: 1,
 
         },
         base: {
+            display_order: 0,
             name: null,
             image: {
               caption: null,
@@ -374,7 +377,7 @@ const versionData = {
     }],
     member: [
     {
-      version: 2,
+      version: 3,
       generation: 0,
       profile: {
         workbox: {
@@ -431,9 +434,11 @@ const versionData = {
       },
       document: {
         data:{
+            display_order: 1,
 
         },
         base: {
+            display_order: 1,
             name: null,
             image: {
               source: null,
