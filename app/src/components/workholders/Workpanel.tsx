@@ -119,25 +119,25 @@ const Workpanel = (props:any) => {
 
     const showDomainWorkbox = () => {
 
-        const windowSpecs = {
-            configuration: {top:10,left:10, width:610,height:400},
-            viewDeclaration: {
-                view: 'normalized',
-                stackOrder: null,
+        const 
+            identity = Object.assign({},
+                workspaceHandler.panelDomainRecord.profile.workbox,
+                {type:workspaceHandler.panelDomainRecord.profile.workbox_type}),
+            windowSpecs = {
+                configuration: {top:10,left:10, width:610,height:400},
+                viewDeclaration: {
+                    view: 'normalized',
+                    stackOrder: null,
+                },
+                // zOrder: nextZOrderRef.current++,
+                identity,
             },
-            // zOrder: nextZOrderRef.current++,
-            identity: {
-                name: workspaceHandler.panelDomainRecord.profile.workbox.name,
-                id: workspaceHandler.panelDomainRecord.profile.workbox.id,
-                type: workspaceHandler.panelDomainRecord.profile.workbox_type,
+            workboxSpecs = {
+                configuration: _cloneDeep(defaultWorkboxConfig),
+                profile: {
+                    id:workspaceHandler.panelDomainRecord.profile.workbox.id,
+                }
             }
-        }
-        const workboxSpecs = {
-            configuration: _cloneDeep(defaultWorkboxConfig),
-            profile: {
-                id:workspaceHandler.panelDomainRecord.profile.workbox.id,
-            }
-        }
 
         addWindow(windowSpecs, workboxSpecs)
 
@@ -149,24 +149,24 @@ const Workpanel = (props:any) => {
 
         // console.log('workspaceHandler.panelMemberRecord.profile',workspaceHandler.panelMemberRecord.profile)
 
-        const windowSpecs = {
-            configuration: {top:20,left:20, width:610,height:400},
-            viewDeclaration: {
-                view: 'normalized',
-                stackOrder: null,
+        const 
+            identity = Object.assign({},
+                workspaceHandler.panelMemberRecord.profile.workbox,
+                {type:workspaceHandler.panelMemberRecord.profile.workbox_type}),
+            windowSpecs = {
+                configuration: {top:20,left:20, width:610,height:400},
+                viewDeclaration: {
+                    view: 'normalized',
+                    stackOrder: null,
+                },
+                identity,
             },
-            identity: {
-                name: workspaceHandler.panelMemberRecord.profile.workbox.name,
-                id: workspaceHandler.panelMemberRecord.profile.workbox.id,
-                type: workspaceHandler.panelMemberRecord.profile.workbox_type,
+            workboxSpecs = {
+                configuration: _cloneDeep(defaultWorkboxConfig),
+                profile: {
+                    id:workspaceHandler.panelMemberRecord.profile.workbox.id,
+                }
             }
-        }
-        const workboxSpecs = {
-            configuration: _cloneDeep(defaultWorkboxConfig),
-            profile: {
-                id:workspaceHandler.panelMemberRecord.profile.workbox.id,
-            }
-        }
 
         addWindow(windowSpecs, workboxSpecs)
 
