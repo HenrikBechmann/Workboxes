@@ -13,7 +13,7 @@ import {
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
-const StandardEdit = (props) => {
+const BaseEdit = (props) => {
     
     const 
         {documentData, editDataRef, invalidStandardFieldFlagsRef} = props,
@@ -108,7 +108,7 @@ const StandardEdit = (props) => {
     }
 
     return <Box padding = '3px'>
-        <Heading size = 'sm'>Standard section</Heading>
+        <Heading size = 'sm'>Base section</Heading>
         <details>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -156,7 +156,7 @@ const StandardEdit = (props) => {
     </Box>
 }
 
-const StandardDisplay = (props) => {
+const BaseDisplay = (props) => {
     const {documentData} = props
     const { data } = documentData
 
@@ -178,7 +178,7 @@ const StandardDisplay = (props) => {
     </Box>
 }
 
-const StandardDocumentSection = (props) => {
+const DocumentBase = (props) => {
 
     const 
         {profileData, documentData, documentConfig, invalidStandardFieldFlagsRef} = props,
@@ -186,8 +186,8 @@ const StandardDocumentSection = (props) => {
 
     return <Box>
         {(documentConfig.mode == 'view')
-            ? <StandardDisplay documentData = {documentData} />
-            : <StandardEdit 
+            ? <BaseDisplay documentData = {documentData} />
+            : <BaseEdit 
                 documentData = {documentData} 
                 editDataRef = {editDataRef} 
                 invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}/>
@@ -195,4 +195,4 @@ const StandardDocumentSection = (props) => {
     </Box>
 }
 
-export default StandardDocumentSection
+export default DocumentBase

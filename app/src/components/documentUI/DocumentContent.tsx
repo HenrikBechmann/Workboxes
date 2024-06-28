@@ -15,7 +15,7 @@ import {
     Box
 } from '@chakra-ui/react'
 
-import documentTypeBundles from './documentTypeBundles'
+import documentModules from './documentModules'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
@@ -25,7 +25,7 @@ const DocumentContent = (props) => {
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.configuration.document,
-        standardComponentRef = useRef(null),
+        baseComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
         contentStateRef = useRef(null),
         profileData = {}, 
@@ -63,8 +63,8 @@ const DocumentContent = (props) => {
 
         if (contentStateRef.current != 'ready') return
             
-        standardComponentRef.current = 
-            React.cloneElement(standardComponentRef.current,
+        baseComponentRef.current = 
+            React.cloneElement(baseComponentRef.current,
                 {
                     documentConfig, 
                     invalidStandardFieldFlagsRef
@@ -77,7 +77,7 @@ const DocumentContent = (props) => {
 
     return <Box>
         <Suspense>
-            {standardComponentRef.current}
+            {baseComponentRef.current}
         </Suspense>
     </Box>
 }
