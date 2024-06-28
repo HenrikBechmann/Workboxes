@@ -589,6 +589,8 @@ const versionData = {
         workbox: {
           id: null,
           name: null,
+        },
+        workbox_type: {
           type: {
             name: null,
             alias: null,
@@ -643,11 +645,12 @@ const versionData = {
         workbox: {
           id: null,
           name: null,
+        },
+        workbox_type: {
           type: {
             name: null,
             alias: null,
           }
-
         },
         commits: {
           created_by: {

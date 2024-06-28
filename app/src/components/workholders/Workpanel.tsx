@@ -126,7 +126,11 @@ const Workpanel = (props:any) => {
                 stackOrder: null,
             },
             // zOrder: nextZOrderRef.current++,
-            identity: workspaceHandler.panelDomainRecord.profile.workbox,
+            identity: {
+                name: workspaceHandler.panelDomainRecord.profile.workbox.name,
+                id: workspaceHandler.panelDomainRecord.profile.workbox.id,
+                type: workspaceHandler.panelDomainRecord.profile.workbox_type,
+            }
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultWorkboxConfig),
@@ -151,7 +155,11 @@ const Workpanel = (props:any) => {
                 view: 'normalized',
                 stackOrder: null,
             },
-            identity: workspaceHandler.panelMemberRecord.profile.workbox,
+            identity: {
+                name: workspaceHandler.panelMemberRecord.profile.workbox.name,
+                id: workspaceHandler.panelMemberRecord.profile.workbox.id,
+                type: workspaceHandler.panelMemberRecord.profile.workbox_type,
+            }
         }
         const workboxSpecs = {
             configuration: _cloneDeep(defaultWorkboxConfig),
