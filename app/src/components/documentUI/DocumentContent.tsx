@@ -25,11 +25,10 @@ const DocumentContent = (props) => {
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.configuration.document,
+        documentData = workboxHandler.workboxRecord.document, 
         baseComponentRef = useRef(null),
         [contentState,setContentState] = useState('setup'),
-        contentStateRef = useRef(null),
-        profileData = {}, 
-        documentData = {sections:null}
+        contentStateRef = useRef(null) //closure access
 
     contentStateRef.current = contentState
 
@@ -59,20 +58,20 @@ const DocumentContent = (props) => {
 
     },[contentState])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if (contentStateRef.current != 'ready') return
+    //     if (contentStateRef.current != 'ready') return
             
-        baseComponentRef.current = 
-            React.cloneElement(baseComponentRef.current,
-                {
-                    documentConfig, 
-                    invalidStandardFieldFlagsRef
-                }
-            )
-        setContentState('updating')
+    //     baseComponentRef.current = 
+    //         React.cloneElement(baseComponentRef.current,
+    //             {
+    //                 documentConfig, 
+    //                 invalidStandardFieldFlagsRef
+    //             }
+    //         )
+    //     setContentState('updating')
 
-    },[documentConfig])
+    // },[documentConfig])
 
 
     return <Box>
