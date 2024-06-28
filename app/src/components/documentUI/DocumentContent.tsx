@@ -22,57 +22,31 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const DocumentContent = (props) => {
 
     const 
-        { invalidStandardFieldFlagsRef } = props,
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        documentConfig = workboxHandler.settings.configuration.document,
-        documentData = workboxHandler.workboxRecord.document, 
-        baseComponentRef = useRef(null),
-        [contentState,setContentState] = useState('setup'),
-        contentStateRef = useRef(null) //closure access
+        // { invalidStandardFieldFlagsRef } = props,
+        // [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        // { workboxRecord } = workboxHandler,
+        // documentConfig = workboxHandler.settings.configuration.document,
+        // documentDataRef = useRef(null),
+        baseComponentRef = useRef(null)
+        // [contentState,setContentState] = useState('setup')
+        // contentStateRef = useRef(null) //closure access
 
-    contentStateRef.current = contentState
+    // contentStateRef.current = contentState
 
     useEffect(()=>{
 
-        let standardSection
-        const {sections} = documentData
-        const sectionCount = sections?.length
-        for (let index = 0; index < sectionCount; index++) {
-            const section = sections[index]
-            if (section.name = 'standard') {
-                standardSection = section
-                break
-            }
-        }
+        baseComponentRef.current =
+            React.createElement(documentModules.base)
 
-        // standardComponentRef.current =
-        //     React.createElement(documentTypeBundles[profileData.typeName].StandardDocumentSection,{
-        //         profileData, documentData:standardSection, documentConfig
-        //     })
+        // setContentState('ready')
 
     },[])
 
-    useEffect(()=>{
-
-        if (contentState !== 'ready') setContentState('ready')
-
-    },[contentState])
-
     // useEffect(()=>{
 
-    //     if (contentStateRef.current != 'ready') return
-            
-    //     baseComponentRef.current = 
-    //         React.cloneElement(baseComponentRef.current,
-    //             {
-    //                 documentConfig, 
-    //                 invalidStandardFieldFlagsRef
-    //             }
-    //         )
-    //     setContentState('updating')
+    //     if (contentState != 'ready') setContentState('ready')
 
-    // },[documentConfig])
-
+    // },[contentState])
 
     return <Box>
         <Suspense>

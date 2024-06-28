@@ -16,12 +16,12 @@ import { useSystemRecords } from '../../system/WorkboxesProvider'
 const BaseEdit = (props) => {
     
     const 
-        {documentData, editDataRef, invalidStandardFieldFlagsRef} = props,
+        {documentData, editDataRef } = props,
         { data } = documentData,
         { description, image, summary } = data,
         [editValues, setEditValues] = useState({...documentData.data}),
         [editState,setEditState] = useState('ready'),
-        invalidFieldFlags = invalidStandardFieldFlagsRef.current,
+        // invalidFieldFlags = invalidStandardFieldFlagsRef.current,
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
@@ -84,7 +84,7 @@ const BaseEdit = (props) => {
                     isInvalid = true
                 }
             }
-            invalidFieldFlags.name = isInvalid
+            // invalidFieldFlags.name = isInvalid
             return isInvalid
         },
         description:(value) => {
@@ -92,7 +92,7 @@ const BaseEdit = (props) => {
             if (value.length > maxDescriptionLength) {
                 isInvalid = true
             }
-            invalidFieldFlags.description = isInvalid
+            // invalidFieldFlags.description = isInvalid
             return isInvalid
         },
         image:(value) => {
@@ -112,7 +112,7 @@ const BaseEdit = (props) => {
         <details>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
+                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.name*/}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                     <Input 
                         value = {editValues.name || ''} 
@@ -129,7 +129,7 @@ const BaseEdit = (props) => {
                 </FormControl>
             </Box>
             <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.description*/}>
                     <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
                     <Textarea 
                         value = {editValues.description || ''} 
