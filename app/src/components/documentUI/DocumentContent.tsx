@@ -22,35 +22,42 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const DocumentContent = (props) => {
 
     const 
-        // { invalidStandardFieldFlagsRef } = props,
-        // [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        // { workboxRecord } = workboxHandler,
-        // documentConfig = workboxHandler.settings.configuration.document,
-        // documentDataRef = useRef(null),
-        baseComponentRef = useRef(null)
-        // [contentState,setContentState] = useState('setup')
-        // contentStateRef = useRef(null) //closure access
-
-    // contentStateRef.current = contentState
+        [contentState, setContentState] = useState('setup'),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        workboxRecord = workboxHandler.workboxRecord,
+        documentConfig = workboxHandler.settings.configuration.document,
+        baseComponentRef = useRef(null),
+        is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef
 
     useEffect(()=>{
 
-        baseComponentRef.current =
-            React.createElement(documentModules.base)
+        if (!workboxRecord) return
 
-        // setContentState('ready')
+        is_workboxRecordParameterRef.current = true
 
-    },[])
+        const documentBaseData = workboxRecord.document.base
 
-    // useEffect(()=>{
+        if (baseComponentRef.current) {
+            baseComponentRef.current =
+                React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig})
+        } else {
+            baseComponentRef.current =
+                React.createElement(documentModules.base,{documentBaseData, documentConfig})
+        }
 
-    //     if (contentState != 'ready') setContentState('ready')
+        setContentState('update')
 
-    // },[contentState])
+    },[workboxRecord, documentConfig])
+
+    useEffect(()=>{
+
+        if (contentState != 'ready' ) setContentState('ready')
+
+    },[contentState])
 
     return <Box>
         <Suspense>
-            {baseComponentRef.current}
+            {is_workboxRecordParameterRef.current && baseComponentRef.current}
         </Suspense>
     </Box>
 }

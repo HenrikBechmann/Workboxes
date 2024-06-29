@@ -16,16 +16,16 @@ import { useSystemRecords } from '../../system/WorkboxesProvider'
 const BaseEdit = (props) => {
     
     const 
-        {documentData, editDataRef } = props,
-        { data } = documentData,
-        { description, image, summary } = data,
-        [editValues, setEditValues] = useState({...documentData.data}),
+        { documentBaseData } = props,
+        { description, image, summary } = documentBaseData,
+        [editValues, setEditValues] = useState({...documentBaseData}),
         [editState,setEditState] = useState('ready'),
         // invalidFieldFlags = invalidStandardFieldFlagsRef.current,
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
-        minNameLength = systemRecords.settings.constraints.input.nameLength_min
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        editDataRef = useRef(null)
 
     const errorMessages = {
         name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
@@ -157,23 +157,23 @@ const BaseEdit = (props) => {
 }
 
 const BaseDisplay = (props) => {
-    const {documentData} = props
-    const { data } = documentData
 
-    const { name, description, image, summary } = data
+    const {documentBaseData} = props
+
+    const { name, description, image, summary } = documentBaseData
 
     return <Box>
         <Box>
-            {name}
+            Name: {name}
         </Box>
         <Box>
-            {description}
+           Description: {description}
         </Box>
         <Box>
-            {image}
+           Image:
         </Box>
         <Box>
-            {summary}
+           Summary: {summary}
         </Box>
     </Box>
 }
@@ -181,16 +181,12 @@ const BaseDisplay = (props) => {
 const DocumentBase = (props) => {
 
     const 
-        {profileData, documentData, documentConfig, invalidStandardFieldFlagsRef} = props,
-        editDataRef = useRef(null)
+        {documentBaseData, documentConfig } = props
 
     return <Box>
         {(documentConfig.mode == 'view')
-            ? <BaseDisplay documentData = {documentData} />
-            : <BaseEdit 
-                documentData = {documentData} 
-                editDataRef = {editDataRef} 
-                invalidStandardFieldFlagsRef = {invalidStandardFieldFlagsRef}/>
+            ? <BaseDisplay documentBaseData = {documentBaseData} />
+            : <BaseEdit documentBaseData = {documentBaseData} />
         }
     </Box>
 }
