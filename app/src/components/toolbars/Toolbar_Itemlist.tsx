@@ -166,7 +166,7 @@ const ItemlistToolbar = (props) => {
         }),
         editToggle = useToggleIcon({
             icon:editIcon, 
-            tooltip:'Edit item',
+            tooltip:'Edit an item',
             caption:'edit',
             toggleOnRef:toggleOnEditRef,
             disabledRef:disabledEditRef, 
@@ -175,7 +175,7 @@ const ItemlistToolbar = (props) => {
         }),
         removeToggle = useToggleIcon({
             icon:removeIcon, 
-            tooltip:'Remove item',
+            tooltip:'Remove an item',
             caption:'remove',
             toggleOnRef:toggleOnRemoveRef,
             disabledRef:disabledRemoveRef, 

@@ -156,7 +156,7 @@ const DocumentToolbar = (props) => {
         }),
         editToggle = useToggleIcon({
             icon:editIcon, 
-            tooltip:'Edit item',
+            tooltip:'Edit a section',
             caption:'edit',
             toggleOnRef:toggleOnEditRef,
             disabledRef:disabledEditRef, 
