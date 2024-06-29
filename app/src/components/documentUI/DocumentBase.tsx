@@ -10,6 +10,11 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
+import "@blocknote/core/fonts/inter.css";
+import { useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/mantine/style.css";
+
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
@@ -156,7 +161,7 @@ const BaseEdit = (props) => {
     </Box>
 }
 
-const BaseDisplay = (props) => {
+export const BaseDisplay = (props) => {
 
     const {documentBaseData} = props
 
