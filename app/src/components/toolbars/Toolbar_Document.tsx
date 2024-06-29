@@ -147,8 +147,8 @@ const DocumentToolbar = (props) => {
         }),
         addToggle = useToggleIcon({
             icon:addIcon, 
-            tooltip:'Add item',
-            caption:'add',
+            tooltip:'Insert a section',
+            caption:'insert',
             toggleOnRef:toggleOnAddRef,
             disabledRef:disabledAddRef, 
             is_radio: true,

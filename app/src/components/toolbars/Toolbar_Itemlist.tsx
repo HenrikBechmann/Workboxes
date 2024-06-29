@@ -157,8 +157,8 @@ const ItemlistToolbar = (props) => {
         }),
         addToggle = useToggleIcon({
             icon:addIcon, 
-            tooltip:'Add item',
-            caption:'add',
+            tooltip:'Insert an item',
+            caption:'insert',
             toggleOnRef:toggleOnAddRef,
             disabledRef:disabledAddRef, 
             is_radio: true,
