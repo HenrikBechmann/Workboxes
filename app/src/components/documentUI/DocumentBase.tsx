@@ -14,11 +14,14 @@ import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+
 import {useDropzone} from 'react-dropzone'
+
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
+import { useWorkboxHandler } from '../workbox/Workbox'
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const BaseEdit = (props) => {
@@ -164,7 +167,7 @@ const BaseEdit = (props) => {
     </Box>
 }
 
-export const BaseDisplay = (props) => {
+export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
     const {documentBaseData} = props
 
@@ -194,7 +197,7 @@ const DocumentBase = (props) => {
     return <Box>
         {(documentConfig.mode == 'view')
             ? <BaseDisplay documentBaseData = {documentBaseData} />
-            : <BaseEdit documentBaseData = {documentBaseData} />
+            : <BaseEdit />
         }
     </Box>
 }
