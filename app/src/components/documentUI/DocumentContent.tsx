@@ -30,8 +30,6 @@ const DocumentContent = (props) => {
         baseComponentRef = useRef(null),
         is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef
 
-    console.log('running DocumentContent')
-
     useEffect(()=>{
 
         if (!workboxRecord) return

@@ -72,7 +72,6 @@ const DocumentToolbar = (props) => {
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.configuration.document,
-        [toolbarState, setToolbarState] = useState('ready'),
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
         dropToggle = useToggleIcon({
@@ -186,12 +185,6 @@ const DocumentToolbar = (props) => {
             is_radio: true,
             callback: onDrag
         })
-
-    useEffect(()=>{
-
-        if (toolbarState != 'ready') setToolbarState('ready')
-
-    },[toolbarState])
 
     const documentmenulist = <MenuList >
         <MenuItem icon = {<img src = {downloadIcon} />}>Download document as pdf</MenuItem>

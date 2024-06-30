@@ -27,7 +27,9 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const BaseEdit = (props) => {
     
     const 
-        { documentBaseData } = props,
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { workboxRecord } = workboxHandler,
+        documentBaseData = workboxRecord.document.base,
         { description, image, summary } = documentBaseData,
         [editValues, setEditValues] = useState({...documentBaseData}),
         [editState,setEditState] = useState('ready'),
@@ -119,8 +121,13 @@ const BaseEdit = (props) => {
     }
 
     return <Box padding = '3px'>
-        <Heading size = 'sm'>Base section</Heading>
-        <details>
+        <Heading as = 'h6' 
+            fontSize = 'x-small' 
+            color = 'gray' 
+            borderTop = '1px solid silver'
+            textAlign = 'center'
+            backgroundColor = '#F0F0F0'
+        >--- Base section ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.name*/}>
@@ -157,13 +164,12 @@ const BaseEdit = (props) => {
                 </FormControl>
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
-                Thumbnail image: {image}
+                Thumbnail image:
             </Box>
         </Flex>
         <Box>
             Summary: {summary}
         </Box>
-    </details>
     </Box>
 }
 
@@ -189,12 +195,11 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
     </Box>
 }
 
+// controller directs to appropriate component
 const DocumentBase = (props) => {
 
     const 
         { documentBaseData, documentConfig, mode } = props
-
-    console.log('DocumentBase: mode, documentConfig, documentBaseData',mode, documentConfig, documentBaseData)
 
     return <Box>
         {(documentConfig.mode == 'edit')
