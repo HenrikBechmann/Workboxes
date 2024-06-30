@@ -71,8 +71,8 @@ const ItemlistToolbar = (props) => {
         disabledNormalRef = useRef(false),
         toggleOnDrillRef = useRef(false),
         disabledDrillRef = useRef(false),
-        toggleOnAddRef = useRef(false),
-        disabledAddRef = useRef(false),
+        toggleOnInsertRef = useRef(false),
+        disabledInsertRef = useRef(false),
         toggleOnEditRef = useRef(false),
         disabledEditRef = useRef(false),
         toggleOnRemoveRef = useRef(false),
@@ -84,7 +84,7 @@ const ItemlistToolbar = (props) => {
         onNormal = (value) => {
             toggleOnNormalRef.current = true
             toggleOnDrillRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
@@ -93,7 +93,7 @@ const ItemlistToolbar = (props) => {
         onDrill = (value) => {
             toggleOnNormalRef.current = false
             toggleOnDrillRef.current = true
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
@@ -102,7 +102,7 @@ const ItemlistToolbar = (props) => {
         onAdd = (value) => {
             toggleOnNormalRef.current = false
             toggleOnDrillRef.current = false
-            toggleOnAddRef.current = true
+            toggleOnInsertRef.current = true
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
@@ -111,7 +111,7 @@ const ItemlistToolbar = (props) => {
         onEdit = (value) => {
             toggleOnNormalRef.current = false
             toggleOnDrillRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = true
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
@@ -120,7 +120,7 @@ const ItemlistToolbar = (props) => {
         onRemove = (value) => {
             toggleOnNormalRef.current = false
             toggleOnDrillRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = true
             toggleOnDragRef.current = false
@@ -129,7 +129,7 @@ const ItemlistToolbar = (props) => {
         onDrag = (value) => {
             toggleOnNormalRef.current = false
             toggleOnDrillRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = true
@@ -159,8 +159,8 @@ const ItemlistToolbar = (props) => {
             icon:addIcon, 
             tooltip:'Insert an item',
             caption:'insert',
-            toggleOnRef:toggleOnAddRef,
-            disabledRef:disabledAddRef, 
+            toggleOnRef:toggleOnInsertRef,
+            disabledRef:disabledInsertRef, 
             is_radio: true,
             callback: onAdd
         }),

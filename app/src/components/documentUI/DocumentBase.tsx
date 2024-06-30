@@ -10,10 +10,10 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import "@blocknote/core/fonts/inter.css";
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
+// import "@blocknote/core/fonts/inter.css";
+// import { useCreateBlockNote } from "@blocknote/react";
+// import { BlockNoteView } from "@blocknote/mantine";
+// import "@blocknote/mantine/style.css";
 
 import {useDropzone} from 'react-dropzone'
 
@@ -192,12 +192,14 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 const DocumentBase = (props) => {
 
     const 
-        { documentBaseData, documentConfig } = props
+        { documentBaseData, documentConfig, mode } = props
+
+    console.log('DocumentBase: mode, documentConfig, documentBaseData',mode, documentConfig, documentBaseData)
 
     return <Box>
-        {(documentConfig.mode == 'view')
-            ? <BaseDisplay documentBaseData = {documentBaseData} />
-            : <BaseEdit />
+        {(documentConfig.mode == 'edit')
+            ? <BaseEdit />
+            : <BaseDisplay documentBaseData = {documentBaseData} />
         }
     </Box>
 }

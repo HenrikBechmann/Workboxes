@@ -20,7 +20,7 @@ const defaultWorkboxConfig = {
     },
     document: {
         displaycode:'out',
-        mode:'view', // view or edit
+        mode:'normal', // normal or mode
         show:false,
         disabled:false,
     },

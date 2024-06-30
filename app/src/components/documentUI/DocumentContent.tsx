@@ -26,8 +26,11 @@ const DocumentContent = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxRecord = workboxHandler.workboxRecord,
         documentConfig = workboxHandler.settings.configuration.document,
+        { mode } = documentConfig,
         baseComponentRef = useRef(null),
         is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef
+
+    console.log('running DocumentContent')
 
     useEffect(()=>{
 
@@ -39,15 +42,15 @@ const DocumentContent = (props) => {
 
         if (baseComponentRef.current) {
             baseComponentRef.current =
-                React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig})
+                React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig, mode})
         } else {
             baseComponentRef.current =
-                React.createElement(documentModules.base,{documentBaseData, documentConfig})
+                React.createElement(documentModules.base,{documentBaseData, documentConfig, mode})
         }
 
         setContentState('update')
 
-    },[workboxRecord, documentConfig])
+    },[workboxRecord, documentConfig, mode])
 
     useEffect(()=>{
 

@@ -86,8 +86,8 @@ const DocumentToolbar = (props) => {
     const
         toggleOnNormalRef = useRef(true),
         disabledNormalRef = useRef(false),
-        toggleOnAddRef = useRef(false),
-        disabledAddRef = useRef(false),
+        toggleOnInsertRef = useRef(false),
+        disabledInsertRef = useRef(false),
         toggleOnEditRef = useRef(false),
         disabledEditRef = useRef(false),
         toggleOnRemoveRef = useRef(false),
@@ -95,47 +95,52 @@ const DocumentToolbar = (props) => {
         toggleOnDragRef = useRef(false),
         disabledDragRef = useRef(false),
         onNormal = (value) => {
+            documentConfig.mode = 'normal'
             toggleOnNormalRef.current = true
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
-            setToolbarState('radio')
+            dispatchWorkboxHandler()
         },
         onAdd = (value) => {
+            documentConfig.mode = 'insert'
             toggleOnNormalRef.current = false
-            toggleOnAddRef.current = true
+            toggleOnInsertRef.current = true
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
-            setToolbarState('radio')
+            dispatchWorkboxHandler()
         },
         onEdit = (value) => {
+            documentConfig.mode = 'edit'
             toggleOnNormalRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = true
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = false
-            setToolbarState('radio')
+            dispatchWorkboxHandler()
         },
         onRemove = (value) => {
+            documentConfig.mode = 'remove'
             toggleOnNormalRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = true
             toggleOnDragRef.current = false
-            setToolbarState('radio')
+            dispatchWorkboxHandler()
         },
         onDrag = (value) => {
+            documentConfig.mode = 'drag'
             toggleOnNormalRef.current = false
-            toggleOnAddRef.current = false
+            toggleOnInsertRef.current = false
             toggleOnEditRef.current = false
             toggleOnRemoveRef.current = false
             toggleOnDragRef.current = true
-            setToolbarState('radio')
+            dispatchWorkboxHandler()
         },
 
-        // normal, drill, add, edit, remove, select, drag
+        // normal, drill, insert, edit, remove, select, drag
         normalToggle = useToggleIcon({
             icon:profileIcon, 
             tooltip:'Normal viewing',
@@ -149,8 +154,8 @@ const DocumentToolbar = (props) => {
             icon:addIcon, 
             tooltip:'Insert a section',
             caption:'insert',
-            toggleOnRef:toggleOnAddRef,
-            disabledRef:disabledAddRef, 
+            toggleOnRef:toggleOnInsertRef,
+            disabledRef:disabledInsertRef, 
             is_radio: true,
             callback: onAdd
         }),
@@ -194,52 +199,39 @@ const DocumentToolbar = (props) => {
         <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
     </MenuList>
 
-    const insertmenulist = <MenuList >
-        <MenuItem icon = {<img src = {noteIcon} />}>Blocknote</MenuItem>
-        <MenuItem icon = {<img src = {imageIcon} />}>Image</MenuItem>
-    </MenuList>
+    // const insertmenulist = <MenuList >
+    //     <MenuItem icon = {<img src = {noteIcon} />}>Blocknote</MenuItem>
+    //     <MenuItem icon = {<img src = {imageIcon} />}>Image</MenuItem>
+    // </MenuList>
 
-    const isInvalidStandardField = () => {
-        let isInvalid = false
-        const fieldFlags = invalidStandardFieldFlagsRef.current
-        for (const property in fieldFlags) {
-            if (fieldFlags[property]) isInvalid = true
-        }
-        return isInvalid
-    }
+    // const isInvalidStandardField = () => {
+    //     let isInvalid = false
+    //     const fieldFlags = invalidStandardFieldFlagsRef.current
+    //     for (const property in fieldFlags) {
+    //         if (fieldFlags[property]) isInvalid = true
+    //     }
+    //     return isInvalid
+    // }
 
-    const toggleDocumentMode = () => {
-        if (documentConfig.mode == 'edit') {
-            if (isInvalidStandardField()) {
-                alert('Please correct errors, or cancel edit, before proceeding.')
-                return
-            } else {
-                documentConfig.mode = 'view'
-            }
-        } else {
-            documentConfig.mode = 'edit'
-        }
-        dispatchWorkboxHandler()
-        // setDocumentConfig({...documentConfig})
-    }
+    // const toggleDocumentMode = () => {
+    //     if (documentConfig.mode == 'edit') {
+    //         if (isInvalidStandardField()) {
+    //             alert('Please correct errors, or cancel edit, before proceeding.')
+    //             return
+    //         } else {
+    //             documentConfig.mode = 'view'
+    //         }
+    //     } else {
+    //         documentConfig.mode = 'edit'
+    //     }
+    //     dispatchWorkboxHandler()
+    // }
 
-    const cancelEdit = () => {
-        documentConfig.mode = 'view'
-        dispatchWorkboxHandler()
-        // setDocumentConfig({...documentConfig})
-    }
+    // const cancelEdit = () => {
+    //     documentConfig.mode = 'view'
+    //     dispatchWorkboxHandler()
+    // }
 
-        // {(documentConfig.mode == 'edit') && 
-        //     <>
-        //         <StandardIcon icon = {viewIcon} response = {toggleDocumentMode} caption = 'view' tooltip = 'save, and switch to view mode'/>
-        //         <MenuIcon icon = {insertIcon} caption = 'insert' tooltip = 'insert a section' menulist = {insertmenulist}/>
-        //         {dropToggle}
-        //         <StandardIcon icon = {cancelEditIcon} response = {cancelEdit} caption = 'cancel' tooltip = 'cancel edit'/>
-        //     </>
-        // }
-        // {(documentConfig.mode == 'view') && 
-        //     <StandardIcon icon = {editIcon} response = {toggleDocumentMode} caption = 'edit' tooltip = 'edit this document'/>
-        // }
     // render
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
