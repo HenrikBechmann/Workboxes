@@ -192,7 +192,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 const DocumentBase = (props) => {
 
     const 
-        {documentBaseData, documentConfig } = props
+        { documentBaseData, documentConfig } = props
 
     return <Box>
         {(documentConfig.mode == 'view')
