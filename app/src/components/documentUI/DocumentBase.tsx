@@ -15,13 +15,14 @@ import {
 // import { BlockNoteView } from "@blocknote/mantine";
 // import "@blocknote/mantine/style.css";
 
-import {useDropzone} from 'react-dropzone'
-
-import ReactCrop from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
+// import {useDropzone} from 'react-dropzone'
+// import ReactCrop from 'react-image-crop'
+// import 'react-image-crop/dist/ReactCrop.css'
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
+
+import SideIcon from '../toolbars/SideIcon'
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -226,9 +227,14 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         }
     }
 
+        // <Box style = {actionIconStyles} data-type = 'actionbox'>
+        //     <img src = {actionIcon}/>
+        // </Box>}
+
     return <Box data-type = 'displaybase' padding = '3px'>
-        {(!['normal', 'drag', 'remove'].includes(mode)) && <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <img src = {actionIcon}/>
+        {(!['normal', 'drag', 'remove'].includes(mode)) && 
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {actionIcon} />
         </Box>}
         <Box>
             Name: {name}
