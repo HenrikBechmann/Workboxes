@@ -169,7 +169,7 @@ const WorkboxToolbar = (props) => {
     const
         documentToggle = useToggleIcon({
             icon:documentIcon, 
-            tooltip:'Show workbox document pane',
+            tooltip:'Show workbox document view',
             caption:'document',
             toggleOnRef:toggleOnDocumentRef,
             disabledRef:disabledDocumentRef, 
@@ -179,7 +179,7 @@ const WorkboxToolbar = (props) => {
 
         itemlistToggle = useToggleIcon({
             icon:itemlistIcon, 
-            tooltip:'Show workbox itemlist pane',
+            tooltip:'Show workbox itemlist view',
             caption:'item list',
             toggleOnRef:toggleOnItemlistRef,
             disabledRef:disabledItemlistRef, 
@@ -189,7 +189,7 @@ const WorkboxToolbar = (props) => {
 
         bothToggle = useToggleIcon({
             icon:bothIcon, 
-            tooltip:'Show both document and itemlist panes',
+            tooltip:'Show both document and itemlist views',
             caption:'both',
             toggleOnRef:toggleOnBothRef,
             disabledRef:disabledBothRef, 
