@@ -19,14 +19,16 @@ const defaultWorkboxConfig = {
         displaycode:'both',
     },
     document: {
+        editinstanceid:null,
+        editstatus:null,
         displaycode:'out',
-        mode:'normal', // normal or mode
+        mode:'normal', // normal, insert, edit, remove, reorder
         show:false,
         disabled:false,
     },
     itemlist: { 
         displaycode:'out',
-        mode: 'normal', // normal, drill, add, edit, remove, drag
+        mode: 'normal', // normal, drill, insert, edit, remove, drag
         show:false,
         disabled:false,
     },

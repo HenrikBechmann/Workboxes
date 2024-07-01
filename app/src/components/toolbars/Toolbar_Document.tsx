@@ -31,30 +31,22 @@ const documentToolbarStyles = {
 
 } as CSSProperties
 
+import sortIcon from '../../../assets/sort.png'
 import addIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
 import removeIcon from '../../../assets/close.png'
-import selectIcon from '../../../assets/select.png'
 import dragIcon from '../../../assets/drag.png'
-import printIcon from '../../../assets/print.png'
 import articleIcon from '../../../assets/article.png'
 
 import profileIcon from '../../../assets/profile.png'
-import insertIcon from '../../../assets/input.png'
-import formIcon from '../../../assets/table_rows.png'
 import reorderIcon from '../../../assets/reorder.png'
-import uploadIcon from '../../../assets/upload.png'
-import viewIcon from '../../../assets/view.png'
 import hideIcon from '../../../assets/expand_less.png'
 import imageIcon from '../../../assets/image.png'
 import noteIcon from '../../../assets/note.png'
-import manifestIcon from '../../../assets/clipboard.png'
-import linkIcon from '../../../assets/link.png'
 import settingsIcon from '../../../assets/settings.png'
-import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
-import cancelEditIcon from '../../../assets/edit_off.png'
+import collectionIcon from '../../../assets/collection.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -179,7 +171,7 @@ const DocumentToolbar = (props) => {
         }),
         dragToggle = useToggleIcon({
             icon:dragIcon, 
-            tooltip:'sort sections by drag and drop',
+            tooltip:'sort callout sections by drag and drop',
             caption:'re-order',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
@@ -238,6 +230,8 @@ const DocumentToolbar = (props) => {
         { dragToggle }
         <ToolbarVerticalDivider />
         <StandardIcon icon = {downloadIcon} caption = 'pdf' tooltip = 'download a pdf of the document'/>
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {collectionIcon} caption = 'organize' tooltip = 'organize document sections'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}

@@ -34,6 +34,7 @@ class WorkboxHandler {
         onError: null,
         onFail: null,
         errorControl: null,
+        
         // internal controls
         workboxSnapshotIndex: null,
         unsubscribeworkbox: null,
