@@ -252,11 +252,12 @@ const DocumentBase = (props) => {
         { documentBaseData, documentConfig, mode } = props
 
     return <Box style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
-        {(mode == 'edit')
-            ? <BaseEdit />
-            : <BaseDisplay documentBaseData = {documentBaseData} mode = {mode} />
-        }
+            <BaseDisplay documentBaseData = {documentBaseData} mode = {mode} />
     </Box>
 }
+
+// {(mode == 'edit')
+//     ? <BaseEdit />
+// }
 
 export default DocumentBase
