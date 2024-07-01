@@ -243,6 +243,7 @@ const DocumentToolbar = (props) => {
         <Box style = {selectStyles} width = {selectwidth} >
             <Select size = 'xs' marginLeft = '8px' width = '80px'>
                 <option value="note">Note</option>
+                <option value="image">Image</option>
                 <option value="callout">Callout</option>
             </Select>
         </Box>
