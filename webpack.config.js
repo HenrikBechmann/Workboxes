@@ -44,7 +44,8 @@ module.exports = {
         type: "asset/resource",
         generator : {
           filename : 'images/[name][ext][query]',
-        }      },
+        }      
+      },
       {
           test: /\.css?$/,
           use:['style-loader','css-loader']

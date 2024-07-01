@@ -31,22 +31,24 @@ const documentToolbarStyles = {
 
 } as CSSProperties
 
+import collectionIcon from '../../../assets/collection.png'
+import reorderIcon from '../../../assets/reorder.png'
 import sortIcon from '../../../assets/sort.png'
-import addIcon from '../../../assets/add.png'
+import databaseIcon from '../../../assets/database.png'
+
+import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
 import removeIcon from '../../../assets/close.png'
 import dragIcon from '../../../assets/drag.png'
 import articleIcon from '../../../assets/article.png'
 
 import profileIcon from '../../../assets/profile.png'
-import reorderIcon from '../../../assets/reorder.png'
 import hideIcon from '../../../assets/expand_less.png'
 import imageIcon from '../../../assets/image.png'
 import noteIcon from '../../../assets/note.png'
 import settingsIcon from '../../../assets/settings.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
-import collectionIcon from '../../../assets/collection.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -143,7 +145,7 @@ const DocumentToolbar = (props) => {
             callback: onNormal
         }),
         addToggle = useToggleIcon({
-            icon:addIcon, 
+            icon:insertIcon, 
             tooltip:'Insert a section',
             caption:'insert',
             toggleOnRef:toggleOnInsertRef,
@@ -171,7 +173,7 @@ const DocumentToolbar = (props) => {
         }),
         dragToggle = useToggleIcon({
             icon:dragIcon, 
-            tooltip:'sort callout sections by drag and drop',
+            tooltip:'re-order internal section items',
             caption:'re-order',
             toggleOnRef:toggleOnDragRef,
             disabledRef:disabledDragRef, 
@@ -223,6 +225,8 @@ const DocumentToolbar = (props) => {
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
         <ToolbarVerticalDivider />
+        <StandardIcon icon = {reorderIcon} caption = 'organize' tooltip = 'organize document sections'/>
+        <ToolbarVerticalDivider />
         { normalToggle }
         { addToggle }
         { editToggle }
@@ -230,8 +234,6 @@ const DocumentToolbar = (props) => {
         { dragToggle }
         <ToolbarVerticalDivider />
         <StandardIcon icon = {downloadIcon} caption = 'pdf' tooltip = 'download a pdf of the document'/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {collectionIcon} caption = 'organize' tooltip = 'organize document sections'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}

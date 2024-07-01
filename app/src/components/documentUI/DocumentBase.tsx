@@ -1,7 +1,7 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect} from 'react'
+import React, {useRef, useState, useEffect, CSSProperties} from 'react'
 
 import {
     Box,
@@ -22,6 +22,30 @@ import 'react-image-crop/dist/ReactCrop.css'
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
+
+import insertIcon from '../../../assets/add.png'
+import editIcon from '../../../assets/edit.png'
+import saveIcon from '../../../assets/save.png'
+import removeIcon from '../../../assets/close.png'
+import dragIcon from '../../../assets/drag.png'
+
+const baseStyles = {
+
+    transition: 'margin-left 0.5s',
+    borderLeft: '1px solid silver',
+
+}
+
+const displayStyles = {
+    padding: '3px',
+}
+
+const actionIconStyles = {
+    height: '24px',
+    width: '24px',
+    marginLeft: '-28px',
+    float:'left',
+} as CSSProperties
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const BaseEdit = (props) => {
@@ -121,11 +145,13 @@ const BaseEdit = (props) => {
     }
 
     return <Box padding = '3px'>
+        {<Box style = {actionIconStyles} data-type = 'baseedit'>
+            <img src = {saveIcon}/>
+        </Box>}
         <Heading as = 'h6' 
             fontSize = 'x-small' 
             color = 'gray' 
             borderTop = '1px solid silver'
-            textAlign = 'center'
             backgroundColor = '#F0F0F0'
         >--- Base section ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
@@ -175,11 +201,35 @@ const BaseEdit = (props) => {
 
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
-    const {documentBaseData} = props
+    const {documentBaseData, mode} = props
 
     const { name, description, image, summary } = documentBaseData
 
-    return <Box>
+    let actionIcon
+
+    switch (mode) {
+        case 'insert': {
+            actionIcon = insertIcon
+            break
+        }
+        case 'edit': {
+            actionIcon = editIcon
+            break
+        }
+        case 'remove': {
+            actionIcon = removeIcon
+            break
+        }
+        case 'drag': {
+            actionIcon = dragIcon
+            break
+        }
+    }
+
+    return <Box data-type = 'displaybase' padding = '3px'>
+        {(mode != 'normal') && <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <img src = {actionIcon}/>
+        </Box>}
         <Box>
             Name: {name}
         </Box>
@@ -201,10 +251,10 @@ const DocumentBase = (props) => {
     const 
         { documentBaseData, documentConfig, mode } = props
 
-    return <Box>
-        {(documentConfig.mode == 'edit')
+    return <Box style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
+        {(mode == 'edit')
             ? <BaseEdit />
-            : <BaseDisplay documentBaseData = {documentBaseData} />
+            : <BaseDisplay documentBaseData = {documentBaseData} mode = {mode} />
         }
     </Box>
 }
