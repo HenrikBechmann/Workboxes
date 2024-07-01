@@ -37,6 +37,7 @@ import removeIcon from '../../../assets/close.png'
 import selectIcon from '../../../assets/select.png'
 import dragIcon from '../../../assets/drag.png'
 import printIcon from '../../../assets/print.png'
+import articleIcon from '../../../assets/article.png'
 
 import profileIcon from '../../../assets/profile.png'
 import insertIcon from '../../../assets/input.png'
@@ -141,7 +142,7 @@ const DocumentToolbar = (props) => {
 
         // normal, drill, insert, edit, remove, select, drag
         normalToggle = useToggleIcon({
-            icon:profileIcon, 
+            icon:articleIcon, 
             tooltip:'Normal viewing',
             caption:'normal',
             toggleOnRef:toggleOnNormalRef,
