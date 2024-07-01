@@ -31,6 +31,12 @@ const documentToolbarStyles = {
 
 } as CSSProperties
 
+const selectStyles = {
+    display: 'inline-block',
+    transition: 'width 0.5s',
+    overflow: 'hidden',
+}
+
 import collectionIcon from '../../../assets/collection.png'
 import reorderIcon from '../../../assets/reorder.png'
 import sortIcon from '../../../assets/sort.png'
@@ -224,7 +230,7 @@ const DocumentToolbar = (props) => {
 
     // render
 
-    const selectwidth = documentConfig.mode == 'insert'? '90px':0
+    const selectwidth = (documentConfig.mode == 'insert')?'88px':0
 
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
@@ -234,11 +240,11 @@ const DocumentToolbar = (props) => {
         <ToolbarVerticalDivider />
         { normalToggle }
         { addToggle }
-        <Box display = 'inline-block' transition = 'width 0.5s' overflow = 'hidden' width = {selectwidth} >
-        <Select size = 'xs' lineHeight = '1em'marginLeft = '8px' width = '80px'>
-            <option value="note">Note</option>
-            <option value="callout">Callout</option>
-        </Select>
+        <Box style = {selectStyles} width = {selectwidth} >
+            <Select size = 'xs' marginLeft = '8px' width = '80px'>
+                <option value="note">Note</option>
+                <option value="callout">Callout</option>
+            </Select>
         </Box>
         { editToggle }
         { removeToggle }
