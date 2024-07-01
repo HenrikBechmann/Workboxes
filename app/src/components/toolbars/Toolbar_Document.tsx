@@ -4,7 +4,7 @@
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
 
 import {
-  Box, MenuList, MenuItem, Icon
+  Box, MenuList, MenuItem, Icon, Select
 } from '@chakra-ui/react'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -223,6 +223,9 @@ const DocumentToolbar = (props) => {
     // }
 
     // render
+
+    const selectwidth = documentConfig.mode == 'insert'? '90px':0
+
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
@@ -231,6 +234,12 @@ const DocumentToolbar = (props) => {
         <ToolbarVerticalDivider />
         { normalToggle }
         { addToggle }
+        <Box display = 'inline-block' transition = 'width 0.5s' overflow = 'hidden' width = {selectwidth} >
+        <Select size = 'xs' lineHeight = '1em'marginLeft = '8px' width = '80px'>
+            <option value="note">Note</option>
+            <option value="callout">Callout</option>
+        </Select>
+        </Box>
         { editToggle }
         { removeToggle }
         { dragToggle }
