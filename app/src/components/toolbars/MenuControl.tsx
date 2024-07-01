@@ -83,7 +83,7 @@ const MenuControl = (props) => {
                     </MenuButton >
                 </Tooltip>
                 {menulist}
-            <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{caption}</span></Box>
+            <Box fontSize = 'xx-small' color = 'gray' fontStyle = 'italic'><span>{caption}</span></Box>
         </Box>
         </Menu>
     </Box>

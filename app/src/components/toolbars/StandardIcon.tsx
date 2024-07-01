@@ -95,7 +95,7 @@ const StandardIcon = (props) => {
             </Tooltip>
         </Box>
         <Box 
-            fontSize = 'xs' 
+            fontSize = 'xx-small' 
             color = {emphasis?'black':'gray'}
             fontStyle = 'italic' 
             fontWeight = {emphasis?'bold':'normal'}

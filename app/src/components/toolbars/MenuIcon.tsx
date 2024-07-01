@@ -45,7 +45,7 @@ const MenuIcon = (props) => {
                     </MenuButton>
                 </Tooltip>
                 {menulist}
-                <Box fontSize = 'xs' color = 'gray' fontStyle = 'italic'>
+                <Box fontSize = 'xx-small' color = 'gray' fontStyle = 'italic'>
                     <span>{caption}</span>
                 </Box>
             </Box>

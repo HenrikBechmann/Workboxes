@@ -39,7 +39,7 @@ const MemberControl = (props) => {
             <span>&nbsp;</span>
             <Text fontSize = 'sm'>{memberTitle}</Text>
         </Box>
-        <Box display = 'flex' justifyContent = 'center' fontSize = 'xs' color = 'gray' fontStyle = 'italic'><span>{localCaption}</span></Box>
+        <Box display = 'flex' justifyContent = 'center' fontSize = 'xx-small' color = 'gray' fontStyle = 'italic'><span>{localCaption}</span></Box>
     </Box>
 }
 
