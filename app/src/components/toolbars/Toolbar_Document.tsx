@@ -36,6 +36,7 @@ import reorderIcon from '../../../assets/reorder.png'
 import sortIcon from '../../../assets/sort.png'
 import databaseIcon from '../../../assets/database.png'
 
+import labelIcon from '../../../assets/label.png'
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
 import removeIcon from '../../../assets/close.png'
@@ -181,10 +182,11 @@ const DocumentToolbar = (props) => {
             callback: onDrag
         })
 
+        // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
+
     const documentmenulist = <MenuList >
-        <MenuItem icon = {<img src = {downloadIcon} />}>Download document as pdf</MenuItem>
+        <MenuItem icon = {<img src = {labelIcon} />}>Show section tags</MenuItem>
         <MenuItem icon = {<img src = {lockOpenIcon} />}>Lock this document</MenuItem>
-        <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
     </MenuList>
 
     // const insertmenulist = <MenuList >
