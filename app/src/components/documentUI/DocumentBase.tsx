@@ -227,7 +227,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
     }
 
     return <Box data-type = 'displaybase' padding = '3px'>
-        {(mode != 'normal') && <Box style = {actionIconStyles} data-type = 'actionbox'>
+        {(!['normal', 'drag', 'remove'].includes(mode)) && <Box style = {actionIconStyles} data-type = 'actionbox'>
             <img src = {actionIcon}/>
         </Box>}
         <Box>
