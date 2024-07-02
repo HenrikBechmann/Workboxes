@@ -19,7 +19,7 @@ import documentModules from './documentModules'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-let nextWBDocumentUnitSessionID = 0
+// let nextWBDocumentUnitSessionID = 0
 
 const DocumentContent = (props) => {
 
@@ -30,6 +30,7 @@ const DocumentContent = (props) => {
         documentConfig = workboxHandler.settings.configuration.document,
         { mode } = documentConfig,
         baseComponentRef = useRef(null),
+        nextDocumentUnitSessionIDRef = useRef(0),
         is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef
 
     useEffect(()=>{
@@ -44,7 +45,7 @@ const DocumentContent = (props) => {
             baseComponentRef.current =
                 React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig, mode})
         } else {
-            const sessionID = nextWBDocumentUnitSessionID++
+            const sessionID = nextDocumentUnitSessionIDRef.current++
             baseComponentRef.current = 
                 React.createElement(documentModules.base,{documentBaseData, documentConfig, mode, sessionID})
         }

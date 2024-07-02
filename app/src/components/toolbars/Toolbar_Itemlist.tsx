@@ -47,7 +47,7 @@ const itemlistToolbarStyles = {
     whitespace:'nowrap',
     alignItems:'center',
     boxSizing:'border-box',
-    backgroundColor:'#f2f2f2',
+    backgroundColor:'lavender',
     borderRadius:'8px 8px 0 0',
 } as CSSProperties
 

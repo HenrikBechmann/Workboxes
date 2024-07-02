@@ -25,7 +25,7 @@ const documentToolbarStyles = {
     whitespace:'nowrap',
     alignItems:'center',
     boxSizing:'border-box',
-    backgroundColor:'#f2f2f2',
+    backgroundColor:'cornsilk',
     borderRadius:'8px 8px 0 0',
     // borderBottom:'1px solid silver',
 
