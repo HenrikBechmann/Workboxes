@@ -226,7 +226,8 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 const DocumentBase = (props) => {
 
     const 
-        { documentBaseData, documentConfig, mode, sessionID } = props
+        { documentBaseData, documentConfig, mode, sessionID } = props,
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler()
 
     let actionIcon, response
 
