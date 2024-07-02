@@ -45,6 +45,25 @@ class WorkboxHandler {
     workboxID
     workboxSessionID
 
+    modecontrol = {
+        document:{
+            insertunit: null,
+            insertselection: null,
+            editunit: null,
+            editsessionid: null,
+            removeunit: null,
+            reorderunit: null,
+        },
+        itemlist:{
+            drillitem: null,
+            insertitem: null,
+            insertselection: null,
+            edititem: null,
+            editsessionid: null,
+            removeitem: null,
+        },
+    }
+
     // data
     workboxRecord
     itemlistRecords = []

@@ -166,26 +166,34 @@ const Workbox = (props) => {
             navigate('/error')
         }
 
-        // console.log('3. Workbox:\n', 
-        //     '---------------------\n',
-        //     'a. workboxHandlerContext:', workboxHandlerContext,'\n' ,
-        //     'b. workboxHandlerContext.current:', workboxHandlerContext.current,'\n' ,
-        //     'c. workboxHandler:', workboxHandler, '\n', 
-        //     'd. unsubscribeworkbox:', unsubscribeworkbox, '\n', 
-        //     'e. workboxHandler?.internal:', workboxHandler?.internal, '\n',
-        //     'f. workboxHandler?.internal.unsubscribeworkbox:', workboxHandler?.internal.unsubscribeworkbox, '\n')
-
-        // console.log('Workbox: workboxID, workboxSettings', workboxID, workboxSettings)
-
     // create workboxHandler
     useEffect(() => {
 
         const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
+
         workboxHandler.settings = workboxSettings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
         workboxHandlerContext.current = workboxHandler
+
+        const 
+            doccontrols = workboxHandler.modecontrol.document,
+            listcontrols = workboxHandler.modecontrol.itemlist
+
+        /*
+        doccontrols.insertunit = 
+        doccontrols.editunit = 
+        doccontrols.removeunit =
+        doccontrols.reorderunit =
+
+        listcontrols.drillitem = 
+        listcontrols.insertitem =
+        listcontrols.edititem =
+        listcontrols.removeitem = 
+        listcontrols.dragitem =
+
+        */
 
         setWorkboxHandlerContext({current:workboxHandler})
 
