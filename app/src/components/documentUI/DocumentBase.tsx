@@ -34,7 +34,7 @@ const baseStyles = {
 
     transition: 'margin-left 0.5s',
     borderLeft: '1px solid silver',
-
+    borderBottom: '1px solid silver',
 }
 
 const displayStyles = {
@@ -202,9 +202,31 @@ const BaseEdit = (props) => {
 
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
-    const {documentBaseData, mode} = props
+    const {documentBaseData} = props
 
     const { name, description, image, summary } = documentBaseData
+
+    return <Box data-type = 'displaybase' padding = '3px'>
+        <Box>
+            Name: {name}
+        </Box>
+        <Box>
+           Description: {description}
+        </Box>
+        <Box>
+           Image:
+        </Box>
+        <Box>
+           Summary: {summary}
+        </Box>
+    </Box>
+}
+
+// controller directs to appropriate component
+const DocumentBase = (props) => {
+
+    const 
+        { documentBaseData, documentConfig, mode } = props
 
     let actionIcon
 
@@ -227,38 +249,12 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         }
     }
 
-        // <Box style = {actionIconStyles} data-type = 'actionbox'>
-        //     <img src = {actionIcon}/>
-        // </Box>}
-
-    return <Box data-type = 'displaybase' padding = '3px'>
+    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
         {(!['normal', 'drag', 'remove'].includes(mode)) && 
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {actionIcon} />
         </Box>}
-        <Box>
-            Name: {name}
-        </Box>
-        <Box>
-           Description: {description}
-        </Box>
-        <Box>
-           Image:
-        </Box>
-        <Box>
-           Summary: {summary}
-        </Box>
-    </Box>
-}
-
-// controller directs to appropriate component
-const DocumentBase = (props) => {
-
-    const 
-        { documentBaseData, documentConfig, mode } = props
-
-    return <Box style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
-            <BaseDisplay documentBaseData = {documentBaseData} mode = {mode} />
+        <BaseDisplay documentBaseData = {documentBaseData}/>
     </Box>
 }
 
