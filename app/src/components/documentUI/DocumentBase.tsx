@@ -228,31 +228,45 @@ const DocumentBase = (props) => {
     const 
         { documentBaseData, documentConfig, mode } = props
 
-    let actionIcon
+    let actionIcon, response
+
+    const onInsert = () => {
+
+        alert('insert')
+
+    }
+
+    const onEdit = () => {
+
+        alert('edit')
+
+    }
 
     switch (mode) {
         case 'insert': {
             actionIcon = insertIcon
+            response = onInsert
             break
         }
         case 'edit': {
             actionIcon = editIcon
+            response = onEdit
             break
         }
-        case 'remove': {
-            actionIcon = removeIcon
-            break
-        }
-        case 'drag': {
-            actionIcon = dragIcon
-            break
-        }
+        // case 'remove': {
+        //     actionIcon = removeIcon
+        //     break
+        // }
+        // case 'drag': {
+        //     actionIcon = dragIcon
+        //     break
+        // }
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
         {(!['normal', 'drag', 'remove'].includes(mode)) && 
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {actionIcon} />
+            <SideIcon icon = {actionIcon} response = {response} />
         </Box>}
         <BaseDisplay documentBaseData = {documentBaseData}/>
     </Box>
