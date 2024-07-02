@@ -226,19 +226,19 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 const DocumentBase = (props) => {
 
     const 
-        { documentBaseData, documentConfig, mode } = props
+        { documentBaseData, documentConfig, mode, sessionID } = props
 
     let actionIcon, response
 
     const onInsert = () => {
 
-        alert('insert')
+        alert('insert ' + sessionID)
 
     }
 
     const onEdit = () => {
 
-        alert('edit')
+        alert('edit ' + sessionID)
 
     }
 
@@ -253,14 +253,6 @@ const DocumentBase = (props) => {
             response = onEdit
             break
         }
-        // case 'remove': {
-        //     actionIcon = removeIcon
-        //     break
-        // }
-        // case 'drag': {
-        //     actionIcon = dragIcon
-        //     break
-        // }
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>

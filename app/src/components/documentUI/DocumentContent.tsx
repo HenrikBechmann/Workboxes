@@ -19,6 +19,8 @@ import documentModules from './documentModules'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
+let nextWBDocumentUnitSessionID = 0
+
 const DocumentContent = (props) => {
 
     const 
@@ -42,8 +44,9 @@ const DocumentContent = (props) => {
             baseComponentRef.current =
                 React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig, mode})
         } else {
-            baseComponentRef.current =
-                React.createElement(documentModules.base,{documentBaseData, documentConfig, mode})
+            const sessionID = nextWBDocumentUnitSessionID++
+            baseComponentRef.current = 
+                React.createElement(documentModules.base,{documentBaseData, documentConfig, mode, sessionID})
         }
 
         setContentState('update')
