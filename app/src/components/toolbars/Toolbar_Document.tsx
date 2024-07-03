@@ -42,6 +42,7 @@ import reorderIcon from '../../../assets/reorder.png'
 import sortIcon from '../../../assets/sort.png'
 import databaseIcon from '../../../assets/database.png'
 
+import hideLabelIcon from '../../../assets/label_off.png'
 import labelIcon from '../../../assets/label.png'
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -191,7 +192,7 @@ const DocumentToolbar = (props) => {
         // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
 
     const documentmenulist = <MenuList >
-        <MenuItem icon = {<img src = {labelIcon} />}>Show section tags</MenuItem>
+        <MenuItem icon = {<img style = {{width:'24px', height: '24px'}} src = {hideLabelIcon} />}>Hide section tags</MenuItem>
         <MenuItem icon = {<img src = {lockOpenIcon} />}>Lock this document</MenuItem>
     </MenuList>
 

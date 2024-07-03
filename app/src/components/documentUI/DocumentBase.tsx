@@ -146,9 +146,6 @@ const BaseEdit = (props) => {
     }
 
     return <Box padding = '3px'>
-        {<Box style = {actionIconStyles} data-type = 'baseedit'>
-            <img src = {saveIcon}/>
-        </Box>}
         <Heading as = 'h6' 
             fontSize = 'x-small' 
             color = 'gray' 
@@ -227,46 +224,67 @@ const DocumentBase = (props) => {
 
     const 
         { documentBaseData, documentConfig, mode, sessionID } = props,
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler()
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        sessionIDRef = useRef(sessionID),
+        [baseEditState, setBaseEditState] = useState(false)
 
     let actionIcon, response
 
     const onInsert = () => {
 
-        alert('insert ' + sessionID)
+        alert('insert ' + sessionIDRef.current)
 
     }
 
     const onEdit = () => {
 
-        alert('edit ' + sessionID)
+        setBaseEditState(true)
 
     }
 
-    switch (mode) {
-        case 'insert': {
-            actionIcon = insertIcon
-            response = onInsert
-            break
+    const onSave = () => {
+
+        setBaseEditState(false)
+
+    }
+
+    const onCancel = () => {
+
+        setBaseEditState(false)
+        
+    }
+
+    if (baseEditState) {
+        actionIcon = saveIcon
+        response = onSave
+    } else {
+
+        switch (mode) {
+            case 'insert': {
+                actionIcon = insertIcon
+                response = onInsert
+                break
+            }
+            case 'edit': {
+                actionIcon = editIcon
+                response = onEdit
+                break
+            }
         }
-        case 'edit': {
-            actionIcon = editIcon
-            response = onEdit
-            break
-        }
+
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
         {(!['normal', 'drag', 'remove'].includes(mode)) && 
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {actionIcon} response = {response} />
-        </Box>}
-        <BaseDisplay documentBaseData = {documentBaseData}/>
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {actionIcon} response = {response} />
+            </Box>
+        }
+        {baseEditState
+            ? <BaseEdit />
+            : <BaseDisplay documentBaseData = {documentBaseData}/>
+        }
     </Box>
 }
-
-// {(mode == 'edit')
-//     ? <BaseEdit />
-// }
 
 export default DocumentBase
