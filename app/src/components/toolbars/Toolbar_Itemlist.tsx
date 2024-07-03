@@ -157,7 +157,7 @@ const ItemlistToolbar = (props) => {
         }),
         addToggle = useToggleIcon({
             icon:addIcon, 
-            tooltip:'Insert an item',
+            tooltip:'Insert a resource',
             caption:'insert',
             toggleOnRef:toggleOnInsertRef,
             disabledRef:disabledInsertRef, 
@@ -166,7 +166,7 @@ const ItemlistToolbar = (props) => {
         }),
         editToggle = useToggleIcon({
             icon:editIcon, 
-            tooltip:'Edit an item',
+            tooltip:'Edit a resource',
             caption:'edit',
             toggleOnRef:toggleOnEditRef,
             disabledRef:disabledEditRef, 
@@ -175,7 +175,7 @@ const ItemlistToolbar = (props) => {
         }),
         removeToggle = useToggleIcon({
             icon:removeIcon, 
-            tooltip:'Remove an item',
+            tooltip:'Remove a resource',
             caption:'remove',
             toggleOnRef:toggleOnRemoveRef,
             disabledRef:disabledRemoveRef, 
@@ -213,11 +213,11 @@ const ItemlistToolbar = (props) => {
         //     disabledRef:disabledMoveRef, 
         // })
 
-        // <MenuItem icon = {<img src = {settingsIcon} />}>Itemlist settings</MenuItem>
+        // <MenuItem icon = {<img src = {settingsIcon} />}>Resource list settings</MenuItem>
     // emptylistIcon is the wrong size for some reason; needs to be coerced
     const itemlistmenulist = <MenuList >
 
-        <MenuItem icon = {<img src = {labelIcon}/>}>Item types to accept</MenuItem>
+        <MenuItem icon = {<img src = {labelIcon}/>}>Resource types to accept</MenuItem>
         <MenuItem icon = {<img src = {lockIcon}/>}>Lock this list</MenuItem>
         <MenuItem icon = {<img style = {{height:'24px', width:'24px'}} src = {emptylistIcon}/>}>Empty this list</MenuItem>
     </MenuList>
@@ -241,7 +241,7 @@ const ItemlistToolbar = (props) => {
     // render
     return <Box data-type = 'document-toolbar' style = {itemlistToolbarStyles}>
     
-        <MenuIcon icon = {itemlistIcon} caption = 'item list' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
+        <MenuIcon icon = {itemlistIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
         <ToolbarVerticalDivider />
         <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />

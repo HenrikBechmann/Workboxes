@@ -125,7 +125,7 @@ const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameE
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'itemlist-body' style = {itemlistBodyStyles}>
-                        Itemlist
+                        Resource list
                     </GridItem>
                 </Grid>
         </Box>
