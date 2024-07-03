@@ -179,7 +179,7 @@ const Workbox = (props) => {
 
         const 
             doccontrols = workboxHandler.modecontrol.document,
-            listcontrols = workboxHandler.modecontrol.itemlist
+            listcontrols = workboxHandler.modecontrol.resources
 
         /*
         doccontrols.insertunit = 

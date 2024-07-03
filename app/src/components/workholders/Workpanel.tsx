@@ -26,7 +26,7 @@ const defaultWorkboxConfig = {
         show:false,
         disabled:false,
     },
-    itemlist: { 
+    resources: { 
         displaycode:'out',
         mode: 'normal', // normal, drill, insert, edit, remove, drag
         show:false,

@@ -1,4 +1,4 @@
-// Toolbar_Itemlist.tsx
+// Toolbar_Resources.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {useState, useRef, useEffect, CSSProperties} from 'react'
@@ -23,7 +23,7 @@ import removeIcon from '../../../assets/close.png'
 import selectIcon from '../../../assets/select.png'
 import dragIcon from '../../../assets/drag.png'
 
-import itemlistIcon from '../../../assets/itemlist.png'
+import resourcesIcon from '../../../assets/resources.png'
 import filterIcon from '../../../assets/filter.png'
 import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
@@ -38,7 +38,7 @@ import settingsIcon from '../../../assets/settings.png'
 import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 
-const itemlistToolbarStyles = {
+const resourcesToolbarStyles = {
     padding:'2px',
     minHeight:0,
     display:'flex',
@@ -62,7 +62,7 @@ const iconWrapperStyles = {
     padding:'4px',
 }
 
-const ItemlistToolbar = (props) => {
+const ResourcesToolbar = (props) => {
 
 
     const
@@ -215,7 +215,7 @@ const ItemlistToolbar = (props) => {
 
         // <MenuItem icon = {<img src = {settingsIcon} />}>Resource list settings</MenuItem>
     // emptylistIcon is the wrong size for some reason; needs to be coerced
-    const itemlistmenulist = <MenuList >
+    const resourcesmenulist = <MenuList >
 
         <MenuItem icon = {<img src = {labelIcon}/>}>Resource types to accept</MenuItem>
         <MenuItem icon = {<img src = {lockIcon}/>}>Lock this list</MenuItem>
@@ -233,15 +233,15 @@ const ItemlistToolbar = (props) => {
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         // <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
-        // <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main itemlist list'/>
+        // <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main resources list'/>
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {addIcon} caption = 'add' tooltip = 'add a workbox'/>
         // { moveToggle }
         // { selectToggle }
     // render
-    return <Box data-type = 'document-toolbar' style = {itemlistToolbarStyles}>
+    return <Box data-type = 'document-toolbar' style = {resourcesToolbarStyles}>
     
-        <MenuIcon icon = {itemlistIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {itemlistmenulist} />
+        <MenuIcon icon = {resourcesIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {resourcesmenulist} />
         <ToolbarVerticalDivider />
         <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
@@ -263,4 +263,4 @@ const ItemlistToolbar = (props) => {
         // <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
         // <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>
 
-export default ItemlistToolbar
+export default ResourcesToolbar

@@ -9,7 +9,7 @@ import {
 
 import PrimaryFrame from './PrimaryFrame'
 import DocumentFrame from './DocumentFrame'
-import ItemlistFrame from './ItemlistFrame'
+import ResourcesFrame from './ResourcesFrame'
 
 import { useWorkboxHandler } from './Workbox'
 
@@ -34,9 +34,9 @@ const ContentFrame = (props) => { // no props; all in workboxHandler
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates
 
-        // share document and itemlist elements with PrimaryFrame
+        // share document and resources elements with PrimaryFrame
         documentFrameElementRef = useRef( null ),
-        itemlistFrameElementRef = useRef( null )
+        resourcesFrameElementRef = useRef( null )
 
     useEffect(()=>{
 
@@ -60,13 +60,13 @@ const ContentFrame = (props) => { // no props; all in workboxHandler
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
         <PrimaryFrame 
             documentFrameElementRef = {documentFrameElementRef} 
-            itemlistFrameElementRef = {itemlistFrameElementRef} 
+            resourcesFrameElementRef = {resourcesFrameElementRef} 
         >
             <DocumentFrame 
                 ref = {documentFrameElementRef} 
             />
-            <ItemlistFrame 
-                ref = {itemlistFrameElementRef} 
+            <ResourcesFrame 
+                ref = {resourcesFrameElementRef} 
             />
         </PrimaryFrame>
     </Box>

@@ -54,7 +54,7 @@ class WorkboxHandler {
             removeunit: null,
             reorderunit: null,
         },
-        itemlist:{
+        resources:{
             drillitem: null,
             insertitem: null,
             insertselection: null,
@@ -66,7 +66,7 @@ class WorkboxHandler {
 
     // data
     workboxRecord
-    itemlistRecords = []
+    resourcesRecords = []
 
     // process control & tracking
 

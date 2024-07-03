@@ -23,7 +23,7 @@ import TypeControl from './TypeControl'
 import workboxIcon from '../../../assets/workbox.png'
 import helpIcon from '../../../assets/help.png'
 // import listIcon from '../../../assets/list.png'
-import itemlistIcon from '../../../assets/itemlist.png'
+import resourcesIcon from '../../../assets/resources.png'
 import documentIcon from '../../../assets/profile.png'
 import bothIcon from '../../../assets/both.png'
 import swapIcon from '../../../assets/swap.png'
@@ -81,8 +81,8 @@ const WorkboxToolbar = (props) => {
     const
         toggleOnDocumentRef = useRef(settings.configuration.document.show),
         disabledDocumentRef = useRef(settings.configuration.document.disabled),
-        toggleOnItemlistRef = useRef(settings.configuration.itemlist.show),
-        disabledItemlistRef = useRef(settings.configuration.itemlist.disabled),
+        toggleOnResourcesRef = useRef(settings.configuration.resources.show),
+        disabledResourcesRef = useRef(settings.configuration.resources.disabled),
         toggleOnBothRef = useRef(settings.configuration.both.show),
         disabledBothRef = useRef(settings.configuration.both.disabled),
 
@@ -97,29 +97,29 @@ const WorkboxToolbar = (props) => {
 
         const documentShow = settings.configuration.document.show = toggleOnDocumentRef.current
         settings.configuration.document.disabled = disabledDocumentRef.current
-        const itemlistShow = settings.configuration.itemlist.show = toggleOnItemlistRef.current
-        settings.configuration.itemlist.disabled = disabledItemlistRef.current
+        const resourcesShow = settings.configuration.resources.show = toggleOnResourcesRef.current
+        settings.configuration.resources.disabled = disabledResourcesRef.current
         const bothShow = settings.configuration.both.show = toggleOnBothRef.current
         settings.configuration.both.disabled = disabledBothRef.current
 
-        let contentDisplayCode, documentDisplayCode, itemlistDisplayCode // configuration controls for children
+        let contentDisplayCode, documentDisplayCode, resourcesDisplayCode // configuration controls for children
         if (bothShow) {
             contentDisplayCode = 'both'
             documentDisplayCode = 'out'
-            itemlistDisplayCode = 'out'
-        } else if (itemlistShow) {
-            contentDisplayCode = 'itemlist'
+            resourcesDisplayCode = 'out'
+        } else if (resourcesShow) {
+            contentDisplayCode = 'resources'
             documentDisplayCode = 'under'
-            itemlistDisplayCode = 'over'
+            resourcesDisplayCode = 'over'
         } else { // documentShow
             contentDisplayCode = 'document'
             documentDisplayCode = 'over'
-            itemlistDisplayCode = 'under'
+            resourcesDisplayCode = 'under'
         }
 
         settings.configuration.content.displaycode = contentDisplayCode        
         settings.configuration.document.displaycode = documentDisplayCode
-        settings.configuration.itemlist.displaycode = itemlistDisplayCode
+        settings.configuration.resources.displaycode = resourcesDisplayCode
 
         setToolbarState('ready')
         dispatchWorkboxHandler()
@@ -127,8 +127,8 @@ const WorkboxToolbar = (props) => {
     },[
         toggleOnDocumentRef.current,
         disabledDocumentRef.current,
-        toggleOnItemlistRef.current,
-        disabledItemlistRef.current,
+        toggleOnResourcesRef.current,
+        disabledResourcesRef.current,
         toggleOnBothRef.current,
         disabledBothRef.current,
     ])
@@ -138,18 +138,18 @@ const WorkboxToolbar = (props) => {
         if (disabledDocumentRef.current || toggleOnDocumentRef.current) return
 
         toggleOnDocumentRef.current = true
-        toggleOnItemlistRef.current = false
+        toggleOnResourcesRef.current = false
         toggleOnBothRef.current = false
 
         setToolbarState('radio')
     }
 
-    const callbackItemlist = (value) => {
+    const callbackResources = (value) => {
         event.preventDefault()
-        if (disabledItemlistRef.current || toggleOnItemlistRef.current) return
+        if (disabledResourcesRef.current || toggleOnResourcesRef.current) return
 
         toggleOnDocumentRef.current = false
-        toggleOnItemlistRef.current = true
+        toggleOnResourcesRef.current = true
         toggleOnBothRef.current = false
 
         setToolbarState('radio')
@@ -160,7 +160,7 @@ const WorkboxToolbar = (props) => {
         if (disabledBothRef.current || toggleOnBothRef.current) return
 
         toggleOnDocumentRef.current = false
-        toggleOnItemlistRef.current = false
+        toggleOnResourcesRef.current = false
         toggleOnBothRef.current = true
 
         setToolbarState('radio')
@@ -177,13 +177,13 @@ const WorkboxToolbar = (props) => {
             is_radio:true,
         }),
 
-        itemlistToggle = useToggleIcon({
-            icon:itemlistIcon, 
+        resourcesToggle = useToggleIcon({
+            icon:resourcesIcon, 
             tooltip:'Show workbox resources view',
             caption:'resources',
-            toggleOnRef:toggleOnItemlistRef,
-            disabledRef:disabledItemlistRef, 
-            callback:callbackItemlist,
+            toggleOnRef:toggleOnResourcesRef,
+            disabledRef:disabledResourcesRef, 
+            callback:callbackResources,
             is_radio:true,
         }),
 
@@ -215,7 +215,7 @@ const WorkboxToolbar = (props) => {
         <MenuIcon icon = {workboxIcon} caption = 'workbox' tooltip = 'Workbox' menulist = {workboxmenulist} />
         <ToolbarVerticalDivider />
         { documentToggle }
-        { itemlistToggle }
+        { resourcesToggle }
         { bothToggle }
         <ToolbarVerticalDivider />
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>

@@ -1,4 +1,4 @@
-// ItemlistFrame.tsx
+// ResourcesFrame.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -17,14 +17,14 @@ import {
 } from '@chakra-ui/react'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import ItemlistToolbar from '../toolbars/Toolbar_Itemlist'
+import ResourcesToolbar from '../toolbars/Toolbar_Resources'
 import { useWorkboxHandler } from './Workbox'
 
 const 
     MIN_ITEMLIST_FRAME_WIDTH = 250,
     MIN_PRIMARY_FRAME_HEIGHT = 300
 
-const itemlistFrameStyles = {
+const resourcesFrameStyles = {
     flex: '1 0 auto',
     width: 'auto',
     minWidth: MIN_ITEMLIST_FRAME_WIDTH + 'px',
@@ -36,7 +36,7 @@ const itemlistFrameStyles = {
     overflow: 'hidden',
 } as CSSProperties
 
-const itemlistPanelStyles = {
+const resourcesPanelStyles = {
     height:'100%',
     backgroundColor:'ghostwhite',
     position:'absolute', 
@@ -53,7 +53,7 @@ const itemlistPanelStyles = {
     right: 0,
 } as CSSProperties
 
-const itemlistGridStyles = {
+const resourcesGridStyles = {
     height: '100%',
     width: '100%',
     gridTemplateAreas: `"header"
@@ -63,14 +63,14 @@ const itemlistGridStyles = {
     borderRadius: "0 0 0 7px",
 }  as CSSProperties
 
-const itemlistHeaderStyles = {
+const resourcesHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
     borderBottom:'1px solid silver',
 }
 
-const itemlistBodyStyles = {
+const resourcesBodyStyles = {
     area: 'body',
     position: 'relative',
     overflow: 'hidden',
@@ -78,21 +78,21 @@ const itemlistBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameElementRef:any) {
+const ResourcesFrame = forwardRef(function FoldersPanel(props:any, resourcesFrameElementRef:any) {
     const 
         [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
-        defaultItemlistState = workboxHandler.settings.configuration.itemlist,
-        displayCode = workboxHandler.settings.configuration.itemlist.displaycode, // out, over, under
-        itemlistPanelElementRef = useRef(null),
+        defaultResourcesState = workboxHandler.settings.configuration.resources,
+        displayCode = workboxHandler.settings.configuration.resources.displaycode, // out, over, under
+        resourcesPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
-        [itemlistConfig, setItemlistState] = useState(defaultItemlistState)
+        [resourcesConfig, setResourcesState] = useState(defaultResourcesState)
 
     useEffect(()=>{
 
         clearTimeout(timeoutRef.current)
 
         const 
-            element = itemlistPanelElementRef.current,
+            element = resourcesPanelElementRef.current,
             timeout = 500
 
         if (displayCode == 'out') {
@@ -113,18 +113,18 @@ const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameE
 
     },[displayCode])
 
-    return <Box data-type = 'itemlist-frame' ref = {itemlistFrameElementRef} style = {itemlistFrameStyles}>
-        <Box data-type = 'itemlist-panel' ref = {itemlistPanelElementRef} style = {itemlistPanelStyles}>
+    return <Box data-type = 'resources-frame' ref = {resourcesFrameElementRef} style = {resourcesFrameStyles}>
+        <Box data-type = 'resources-panel' ref = {resourcesPanelElementRef} style = {resourcesPanelStyles}>
                 <Grid
-                    data-type = 'itemlist-grid'
-                    style = {itemlistGridStyles}
+                    data-type = 'resources-grid'
+                    style = {resourcesGridStyles}
                 >
-                    <GridItem data-type = 'itemlist-header' style = {itemlistHeaderStyles}>
+                    <GridItem data-type = 'resources-header' style = {resourcesHeaderStyles}>
                         <ToolbarFrame>
-                            <ItemlistToolbar itemlistConfig = {itemlistConfig} setItemlistState = {setItemlistState} />
+                            <ResourcesToolbar resourcesConfig = {resourcesConfig} setResourcesState = {setResourcesState} />
                         </ToolbarFrame>
                     </GridItem>
-                    <GridItem data-type = 'itemlist-body' style = {itemlistBodyStyles}>
+                    <GridItem data-type = 'resources-body' style = {resourcesBodyStyles}>
                         Resource list
                     </GridItem>
                 </Grid>
@@ -132,4 +132,4 @@ const ItemlistFrame = forwardRef(function FoldersPanel(props:any, itemlistFrameE
     </Box>
 })
 
-export default ItemlistFrame
+export default ResourcesFrame

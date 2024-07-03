@@ -297,8 +297,9 @@ const versionData = {
         },
         sections: [
         ],
+        locked: false,
       },
-      itemlist: {
+      resources: {
         accepts: [],
         locked: false,
       },
@@ -369,8 +370,9 @@ const versionData = {
         },
         sections: [
         ],
+        locked:false,
       },
-      itemlist: {
+      resources: {
         accepts: [],
         locked: false,
       },
@@ -449,8 +451,9 @@ const versionData = {
         },
         sections: [
         ],
+        locked: false,
       },
-      itemlist: {
+      resources: {
         accepts: [],
         locked: false,
       },

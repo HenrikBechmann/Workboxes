@@ -24,7 +24,7 @@ const defaultDocumentState = {
     mode:'normal',
 }
 
-const defaultItemlistState = {
+const defaultResourcesState = {
 
 }
 
@@ -58,8 +58,8 @@ const defaultWorkboxState = {
     settingsDisabled:false,
     documentShow:true,
     documentDisabled:false,
-    itemlistShow:true,
-    itemlistDisabled:false,
+    resourcesShow:true,
+    resourcesDisabled:false,
 }
 
 
@@ -72,7 +72,7 @@ const defaultWorkboxState = {
 //     workbox: {
 //         defaultWorkboxState:{...defaultWorkboxState},
 //         defaultDocumentState: {...defaultDocumentState},
-//         defaultItemlistState: {...defaultItemlistState},
+//         defaultResourcesState: {...defaultResourcesState},
 //         itemTitle: "[Henrik Bechmann]",
 //         itemIcon: homeIcon,
 //         domainTitle: displayName,
@@ -100,7 +100,7 @@ const Metadata = (props) => {
                 workbox: {
                     defaultWorkboxState:{...defaultWorkboxState},
                     defaultDocumentState: {...defaultDocumentState},
-                    defaultItemlistState: {...defaultItemlistState},
+                    defaultResourcesState: {...defaultResourcesState},
                     itemTitle: 'Workbox types',
                     itemIcon: appIcon,
                     domainTitle: 'WorkboxesApp',

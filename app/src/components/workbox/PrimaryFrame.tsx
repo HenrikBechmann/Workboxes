@@ -38,16 +38,16 @@ const PrimaryFrame = (props) => {
     const 
         {
 
-            children, // DocumentFrame and ItemlistFrame
+            children, // DocumentFrame and ResourcesFrame
             documentFrameElementRef,
-            itemlistFrameElementRef,
+            resourcesFrameElementRef,
 
         } = props,
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
 
         // triggers state change...
-        displayCode = workboxHandler.settings.configuration.content.displaycode, // both, itemlist, document
+        displayCode = workboxHandler.settings.configuration.content.displaycode, // both, resources, document
 
         // controls
         previousDisplayConfigCodeRef = useRef(displayCode), // determine change being made
@@ -60,9 +60,9 @@ const PrimaryFrame = (props) => {
         - primaryFrameElement: flex, width
         - documentFrameElement: flex, width, minWidth, transition, transitionDelay
         - documentFrameElement.firstChild = documentPanelElement: width, left, right (panel) 
-        - itemlistFrameElement: flex, width, minWidth, transition, transitionDelay
-        - itemlistFrameElement.firstChild = itemlistPanelElement: width, left, right (panel)
-        Three cases if displayCode: both, document, itemlist
+        - resourcesFrameElement: flex, width, minWidth, transition, transitionDelay
+        - resourcesFrameElement.firstChild = resourcesPanelElement: width, left, right (panel)
+        Three cases if displayCode: both, document, resources
     */
     useEffect(()=>{
 
@@ -75,8 +75,8 @@ const PrimaryFrame = (props) => {
             documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             documentPanelElement = documentFrameElement.firstChild,
 
-            itemlistFrameElement = itemlistFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
-            itemlistPanelElement = itemlistFrameElement.firstChild,
+            resourcesFrameElement = resourcesFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
+            resourcesPanelElement = resourcesFrameElement.firstChild,
 
             // controls
             TRANSITION_DELAY = '0.3s',
@@ -92,26 +92,26 @@ const PrimaryFrame = (props) => {
 
             // no transition delay for shadows with transtion to both
             documentFrameElement.style.transitionDelay = 'unset'
-            itemlistFrameElement.style.transitionDelay = 'unset'
+            resourcesFrameElement.style.transitionDelay = 'unset'
 
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
-            itemlistFrameElement.style.transition = 'width 0.5s'
+            resourcesFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden elements
-            if (previousDisplayConfigCode == 'itemlist') { // document was hidden
+            if (previousDisplayConfigCode == 'resources') { // document was hidden
 
                 documentPanelElement.style.width = UIDocumentWidth + 'px'
                 documentPanelElement.style.left = 0
                 documentPanelElement.style.right = 'auto'
 
-            } else { // itemlist was hidden
+            } else { // resources was hidden
 
-                itemlistPanelElement.style.width = 
+                resourcesPanelElement.style.width = 
                     Math.max(MIN_ITEMLIST_FRAME_WIDTH,
                         (primaryFrameElement.offsetWidth - UIDocumentWidth)) + 'px'
-                itemlistPanelElement.style.left = 'auto'
-                itemlistPanelElement.style.right = 0
+                resourcesPanelElement.style.left = 'auto'
+                resourcesPanelElement.style.right = 0
 
             }
 
@@ -126,13 +126,13 @@ const PrimaryFrame = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto' // permanent for this displaycode
 
-            // freeze itemlist
-            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
-            itemlistFrameElement.style.flex = '0 0 auto'
+            // freeze resources
+            resourcesFrameElement.style.width = resourcesFrameElement.offsetWidth + 'px'
+            resourcesFrameElement.style.flex = '0 0 auto'
 
             // set animation targets
             documentFrameElement.style.width = UIDocumentWidth + 'px'
-            itemlistFrameElement.style.width = 
+            resourcesFrameElement.style.width = 
                 Math.max(MIN_ITEMLIST_FRAME_WIDTH,(primaryFrameElement.offsetWidth - 
                     UIDocumentWidth)) + 'px'
 
@@ -141,18 +141,18 @@ const PrimaryFrame = (props) => {
 
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
-                itemlistFrameElement.style.transition = 'none'
+                resourcesFrameElement.style.transition = 'none'
 
-                // restore itemlist frame defaults
-                itemlistFrameElement.style.flex = '1 0 auto'
-                itemlistFrameElement.style.width = 'auto'
-                itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
+                // restore resources frame defaults
+                resourcesFrameElement.style.flex = '1 0 auto'
+                resourcesFrameElement.style.width = 'auto'
+                resourcesFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
 
                 // restore document frame defaults
                 documentFrameElement.style.minWidth = MIN_DOCUMENT_FRAME_WIDTH + 'px'
 
                 // restore both panel width defaults
-                itemlistPanelElement.style.width = '100%'
+                resourcesPanelElement.style.width = '100%'
                 documentPanelElement.style.width = '100%'
 
                 // restore primary frame defaults
@@ -165,14 +165,14 @@ const PrimaryFrame = (props) => {
 
             // set transition delay for shadows
             documentFrameElement.style.transitionDelay = TRANSITION_DELAY
-            itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+            resourcesFrameElement.style.transitionDelay = TRANSITION_DELAY
 
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
-            itemlistFrameElement.style.transition = 'width 0.5s'
+            resourcesFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'itemlist') { // document was hidden
+            if (previousDisplayConfigCode == 'resources') { // document was hidden
 
                 documentPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
                 documentPanelElement.style.left = 'auto'
@@ -189,16 +189,16 @@ const PrimaryFrame = (props) => {
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
             documentFrameElement.style.flex = '0 0 auto'
 
-            // freeze itemlist frame for hiding
-            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
-            itemlistFrameElement.style.flex = '0 0 auto'
-            itemlistFrameElement.style.minWidth = 0
+            // freeze resources frame for hiding
+            resourcesFrameElement.style.width = resourcesFrameElement.offsetWidth + 'px'
+            resourcesFrameElement.style.flex = '0 0 auto'
+            resourcesFrameElement.style.minWidth = 0
 
-            // freeze itemlist panel for hiding
-            itemlistPanelElement.style.width = itemlistPanelElement.offsetWidth + 'px'
+            // freeze resources panel for hiding
+            resourcesPanelElement.style.width = resourcesPanelElement.offsetWidth + 'px'
             
             // set animation targets
-            itemlistFrameElement.style.width = 0
+            resourcesFrameElement.style.width = 0
             documentFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
 
             // wait for result; restore defaults
@@ -207,8 +207,8 @@ const PrimaryFrame = (props) => {
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
                 documentFrameElement.style.transitionDelay = 'unset'
-                itemlistFrameElement.style.transition = 'none'
-                itemlistFrameElement.style.transitionDelay = 'unset'
+                resourcesFrameElement.style.transition = 'none'
+                resourcesFrameElement.style.transitionDelay = 'unset'
 
                 // set config for visible frame
                 documentFrameElement.style.flex = '1 0 auto'
@@ -226,22 +226,22 @@ const PrimaryFrame = (props) => {
 
             },TIMEOUT)
 
-        } else { // displayCode == 'itemlist'
+        } else { // displayCode == 'resources'
 
             // set transition delay for shadows
             documentFrameElement.style.transitionDelay = TRANSITION_DELAY
-            itemlistFrameElement.style.transitionDelay = TRANSITION_DELAY
+            resourcesFrameElement.style.transitionDelay = TRANSITION_DELAY
 
             // animation
             documentFrameElement.style.transition = 'width 0.5s'
-            itemlistFrameElement.style.transition = 'width 0.5s'
+            resourcesFrameElement.style.transition = 'width 0.5s'
 
             // anticipate config of hidden element
-            if (previousDisplayConfigCode == 'document') { // itemlist was hidden
+            if (previousDisplayConfigCode == 'document') { // resources was hidden
 
-                itemlistPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
-                itemlistPanelElement.style.right = 'auto'
-                itemlistPanelElement.style.left = 0
+                resourcesPanelElement.style.width = primaryFrameElement.offsetWidth + 'px'
+                resourcesPanelElement.style.right = 'auto'
+                resourcesPanelElement.style.left = 0
 
             }
 
@@ -250,9 +250,9 @@ const PrimaryFrame = (props) => {
             primaryFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
             primaryFrameElement.style.flex = '0 0 auto'
 
-            // freeze itemlist
-            itemlistFrameElement.style.width = itemlistFrameElement.offsetWidth + 'px'
-            itemlistFrameElement.style.flex = '0 0 auto'
+            // freeze resources
+            resourcesFrameElement.style.width = resourcesFrameElement.offsetWidth + 'px'
+            resourcesFrameElement.style.flex = '0 0 auto'
 
             // freeze document frame for hiding
             documentFrameElement.style.width = documentFrameElement.offsetWidth + 'px'
@@ -263,7 +263,7 @@ const PrimaryFrame = (props) => {
             documentPanelElement.style.width = documentPanelElement.offsetWidth + 'px'
 
             // set animation targets
-            itemlistFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
+            resourcesFrameElement.style.width = primaryFrameElement.offsetWidth + 'px'
             documentFrameElement.style.width = 0
 
             // wait for result; restore defaults
@@ -272,18 +272,18 @@ const PrimaryFrame = (props) => {
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
                 documentFrameElement.style.transitionDelay = 'unset'
-                itemlistFrameElement.style.transition = 'none'
-                itemlistFrameElement.style.transitionDelay = 'unset'
+                resourcesFrameElement.style.transition = 'none'
+                resourcesFrameElement.style.transitionDelay = 'unset'
 
                 // set visible frame config
-                itemlistFrameElement.style.width = 'auto'
-                itemlistFrameElement.style.flex = '1 0 auto'
-                itemlistFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
+                resourcesFrameElement.style.width = 'auto'
+                resourcesFrameElement.style.flex = '1 0 auto'
+                resourcesFrameElement.style.minWidth = MIN_ITEMLIST_FRAME_WIDTH + 'px'
 
                 // restore visible panel config
-                itemlistPanelElement.style.width = '100%'
-                itemlistPanelElement.style.right = 0
-                itemlistPanelElement.style.left = 'auto'
+                resourcesPanelElement.style.width = '100%'
+                resourcesPanelElement.style.right = 0
+                resourcesPanelElement.style.left = 'auto'
 
                 // restore primary frame defaults
                 primaryFrameElement.style.width = 'auto'
