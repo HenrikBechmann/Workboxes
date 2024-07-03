@@ -172,7 +172,7 @@ const DocumentToolbar = (props) => {
         }),
         removeToggle = useToggleIcon({
             icon:removeIcon, 
-            tooltip:'Remove item',
+            tooltip:'Remove a section',
             caption:'remove',
             toggleOnRef:toggleOnRemoveRef,
             disabledRef:disabledRemoveRef, 
