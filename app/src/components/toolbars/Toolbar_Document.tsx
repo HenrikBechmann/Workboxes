@@ -55,6 +55,7 @@ import hideIcon from '../../../assets/expand_less.png'
 import imageIcon from '../../../assets/image.png'
 import noteIcon from '../../../assets/note.png'
 import settingsIcon from '../../../assets/settings.png'
+import lockClosedIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
 
@@ -193,7 +194,7 @@ const DocumentToolbar = (props) => {
 
     const documentmenulist = <MenuList >
         <MenuItem icon = {<img style = {{width:'24px', height: '24px'}} src = {hideLabelIcon} />}>Hide section tags</MenuItem>
-        <MenuItem icon = {<img src = {lockOpenIcon} />}>Lock this document</MenuItem>
+        <MenuItem icon = {<img src = {lockClosedIcon} />}>Lock this document</MenuItem>
     </MenuList>
 
     // const insertmenulist = <MenuList >

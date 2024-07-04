@@ -50,17 +50,21 @@ class WorkboxHandler {
             insertunit: null,
             insertselection: null,
             editunit: null,
-            editsessionid: null,
+            changesessionid: null,
             removeunit: null,
             reorderunit: null,
+            savechanges: null,
+            cancelchanges: null,
         },
         resources:{
             drillitem: null,
             insertitem: null,
             insertselection: null,
             edititem: null,
-            editsessionid: null,
+            changesessionid: null,
             removeitem: null,
+            savechanges: null,
+            cancelchanges: null,
         },
     }
 

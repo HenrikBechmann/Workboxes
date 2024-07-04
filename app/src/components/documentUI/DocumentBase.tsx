@@ -232,24 +232,27 @@ const DocumentBase = (props) => {
 
     const onInsert = () => {
 
-        alert('insert ' + sessionIDRef.current)
+        workboxHandler.modecontrol.document.insertunit(sessionIDRef.current)
 
     }
 
     const onEdit = () => {
 
+        workboxHandler.modecontrol.document.editunit(sessionIDRef.current)
         setBaseEditState(true)
 
     }
 
     const onSave = () => {
 
+        workboxHandler.modecontrol.document.savechanges(sessionIDRef.current)
         setBaseEditState(false)
 
     }
 
     const onCancel = () => {
 
+        workboxHandler.modecontrol.document.cancelchanges(sessionIDRef.current)
         setBaseEditState(false)
         
     }

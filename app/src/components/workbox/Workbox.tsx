@@ -166,6 +166,30 @@ const Workbox = (props) => {
             navigate('/error')
         }
 
+    const insertUnit = useCallback((sessionID) => {
+        alert('workbox insertUnit ' + sessionID)
+    },[])
+
+    const editUnit = useCallback((sessionID) => {
+        alert('workbox editUnit ' + sessionID)
+    },[])
+
+    const removeUnit = useCallback((sessionID) => {
+        
+    },[])
+
+    const reorderUnit = useCallback((sessionID) => {
+        
+    },[])
+
+    const saveChanges = useCallback((sessionID) => {
+        alert('workbox saveChanges ' + sessionID)
+    },[])
+
+    const cancelChanges = useCallback((sessionID) => {
+        alert('workbox cancelChanges ' + sessionID)
+    },[])
+
     // create workboxHandler
     useEffect(() => {
 
@@ -181,18 +205,20 @@ const Workbox = (props) => {
             doccontrols = workboxHandler.modecontrol.document,
             listcontrols = workboxHandler.modecontrol.resources
 
-        /*
-        doccontrols.insertunit = 
-        doccontrols.editunit = 
-        doccontrols.removeunit =
-        doccontrols.reorderunit =
+        doccontrols.insertunit = insertUnit
+        doccontrols.editunit = editUnit
+        doccontrols.removeunit = removeUnit
+        doccontrols.reorderunit = reorderUnit
+        doccontrols.savechanges = saveChanges
+        doccontrols.cancelchanges = cancelChanges
 
+        /*
         listcontrols.drillitem = 
         listcontrols.insertitem =
         listcontrols.edititem =
         listcontrols.removeitem = 
         listcontrols.dragitem =
-
+        listcontrols.savechanges = 
         */
 
         setWorkboxHandlerContext({current:workboxHandler})
