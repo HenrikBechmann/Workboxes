@@ -143,8 +143,8 @@ const Workbox = (props) => {
     const
         { workboxSettings } = props,
 
-        workboxID = workboxSettings.profile.id,
-        workboxSessionID = workboxSettings.profile.sessionid,
+        workboxID = workboxSettings.workbox.id,
+        workboxSessionID = workboxSettings.workbox.sessionid,
 
         // parameters for workboxHandler
         db = useFirestore(),
@@ -198,7 +198,11 @@ const Workbox = (props) => {
 
         const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
 
-        workboxHandler.settings = workboxSettings
+        console.log('workboxHandler', workboxHandler)
+
+        workboxHandler.settings.configuration = workboxSettings.configuration
+        workboxHandler.session.workbox.id = workboxSettings.workbox.id
+        workboxHandler.session.workbox.sessionid = workboxSettings.workbox.sessionid
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail

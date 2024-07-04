@@ -67,6 +67,10 @@ class WorkboxHandler {
             savechanges: null,
             cancelchanges: null,
         },
+        workbox: {
+            id: null,
+            sessionid:null,
+        }
     }
 
     // data
@@ -107,7 +111,9 @@ class WorkboxHandler {
             // }
         // }
 
-    settings
+    settings = {
+        configuration:null,
+    }
     dimensions = {
         UIDocumentWidth:300,
         UIDocumentWidthRatio:null,

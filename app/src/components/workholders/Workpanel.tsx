@@ -136,7 +136,7 @@ const Workpanel = (props:any) => {
             },
             workboxSpecs = {
                 configuration: _cloneDeep(defaultWorkboxConfig),
-                profile: {
+                workbox: {
                     id:workspaceHandler.panelDomainRecord.profile.workbox.id,
                 }
             }
@@ -165,7 +165,7 @@ const Workpanel = (props:any) => {
             },
             workboxSpecs = {
                 configuration: _cloneDeep(defaultWorkboxConfig),
-                profile: {
+                workbox: {
                     id:workspaceHandler.panelMemberRecord.profile.workbox.id,
                 }
             }
@@ -181,7 +181,7 @@ const Workpanel = (props:any) => {
 
         const windowSessionID = nextWindowSessionID++
         const workboxSessionID = nextWorkboxSessionID++
-        workboxSpecs.profile.sessionid = workboxSessionID
+        workboxSpecs.workbox.sessionid = workboxSessionID
 
         // viewDeclaration already added by caller
         Object.assign(windowSpecs, {
