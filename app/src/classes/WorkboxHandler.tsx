@@ -45,6 +45,7 @@ class WorkboxHandler {
     workboxID
     workboxSessionID
 
+    // for document and resources, transitory mode settings
     modecontrol = {
         document:{
             insertunit: null,
@@ -74,7 +75,7 @@ class WorkboxHandler {
 
     // process control & tracking
 
-    // Workbox settings
+    // persistent Workbox settings
     // settings: {
         // configuration: 
             // {
