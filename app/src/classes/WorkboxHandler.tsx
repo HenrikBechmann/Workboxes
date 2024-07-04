@@ -67,10 +67,6 @@ class WorkboxHandler {
             savechanges: null,
             cancelchanges: null,
         },
-        workbox: {
-            id: null,
-            sessionid:null,
-        }
     }
 
     // data
