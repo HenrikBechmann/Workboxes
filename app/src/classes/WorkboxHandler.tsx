@@ -46,7 +46,7 @@ class WorkboxHandler {
     workboxSessionID
 
     // for document and resources, transitory mode settings
-    modecontrol = {
+    session = {
         document:{
             insertunit: null,
             insertselection: null,

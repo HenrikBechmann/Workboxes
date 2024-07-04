@@ -172,7 +172,7 @@ const Workbox = (props) => {
 
     const editUnit = useCallback((sessionID) => {
         alert('workbox editUnit ' + sessionID)
-        workboxHandler.modecontrol.changesessionid = sessionID
+        workboxHandler.session.changesessionid = sessionID
     },[])
 
     const removeUnit = useCallback((sessionID) => {
@@ -185,12 +185,12 @@ const Workbox = (props) => {
 
     const saveChanges = useCallback((sessionID) => {
         alert('workbox saveChanges ' + sessionID)
-        workboxHandler.modecontrol.changesessionid = null
+        workboxHandler.session.changesessionid = null
     },[])
 
     const cancelChanges = useCallback((sessionID) => {
         alert('workbox cancelChanges ' + sessionID)
-        workboxHandler.modecontrol.changesessionid = null
+        workboxHandler.session.changesessionid = null
     },[])
 
     // create workboxHandler
@@ -205,8 +205,8 @@ const Workbox = (props) => {
         workboxHandlerContext.current = workboxHandler
 
         const 
-            doccontrols = workboxHandler.modecontrol.document,
-            listcontrols = workboxHandler.modecontrol.resources
+            doccontrols = workboxHandler.session.document,
+            listcontrols = workboxHandler.session.resources
 
         doccontrols.insertunit = insertUnit
         doccontrols.editunit = editUnit
