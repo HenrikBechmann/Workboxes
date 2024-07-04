@@ -26,6 +26,8 @@ class WorkboxHandler {
 
     }
 
+    // -----------------------[ data ]--------------------------
+
     internal = {
         // constructor parameters
         db: null,
@@ -44,6 +46,9 @@ class WorkboxHandler {
 
     workboxID
     workboxSessionID
+
+    workboxRecord
+    resourcesRecords = []
 
     // for document and resources, transitory mode settings
     session = {
@@ -71,41 +76,31 @@ class WorkboxHandler {
         },
     }
 
-    // data
-    workboxRecord
-    resourcesRecords = []
-
     // process control & tracking
 
-    // persistent Workbox settings
-    // settings: {
-        // configuration: 
-            // {
-            //     content: {
-            //         displaycode:'both',
-            //     },
-            //     document: {
-            //         displaycode:'out',
-            //         mode:'normal', // normal, insert, edit, remove, reorder
-            //         show:false,
-            //         disabled:false,
-            //     },
-            //     resources: { 
-            //         displaycode:'out',
-            //         mode: 'normal', // normal, drill, insert, edit, remove, drag
-            //         show:false,
-            //         disabled:false,
-            //     },
-            //     both: {
-            //         show: true,
-            //         disabled: false,
-            //     },
-            // },
-        // profile: 
-            // {
-                // id:workspaceHandler.panelMemberRecord.profile.workbox.id,
-            // }
-        // }
+    // persistent Workbox settings, stored with panels
+    // settings: 
+    // {
+    //     content: {
+    //         displaycode:'both', // document, resources, both
+    //     },
+    //     document: {
+    //         displaycode:'out', // over, under, out
+    //         mode:'normal', // normal, insert, edit, remove, reorder
+    //         show:false,
+    //         disabled:false,
+    //     },
+    //     resources: { 
+    //         displaycode:'out', // over, under, out
+    //         mode: 'normal', // normal, drill, insert, edit, remove, drag
+    //         show:false,
+    //         disabled:false,
+    //     },
+    //     both: {
+    //         show: true,
+    //         disabled: false,
+    //     },
+    // },
 
     settings
 
