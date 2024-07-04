@@ -74,7 +74,38 @@ class WorkboxHandler {
 
     // process control & tracking
 
-    // configuration
+    // Workbox settings
+    // settings: {
+        // configuration: 
+            // {
+            //     content: {
+            //         displaycode:'both',
+            //     },
+            //     document: {
+            //         editinstanceid:null,
+            //         editstatus:null,
+            //         displaycode:'out',
+            //         mode:'normal', // normal, insert, edit, remove, reorder
+            //         show:false,
+            //         disabled:false,
+            //     },
+            //     resources: { 
+            //         displaycode:'out',
+            //         mode: 'normal', // normal, drill, insert, edit, remove, drag
+            //         show:false,
+            //         disabled:false,
+            //     },
+            //     both: {
+            //         show: true,
+            //         disabled: false,
+            //     },
+            // },
+        // profile: 
+            // {
+                // id:workspaceHandler.panelMemberRecord.profile.workbox.id,
+            // }
+        // }
+
     settings
     dimensions = {
         UIDocumentWidth:300,
