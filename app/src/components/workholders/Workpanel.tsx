@@ -19,8 +19,6 @@ const defaultWorkboxConfig = {
         displaycode:'both',
     },
     document: {
-        editinstanceid:null,
-        editstatus:null,
         displaycode:'out',
         mode:'normal', // normal, insert, edit, remove, reorder
         show:false,
@@ -135,7 +133,7 @@ const Workpanel = (props:any) => {
                 identity,
             },
             workboxSpecs = {
-                configuration: _cloneDeep(defaultWorkboxConfig),
+                settings: _cloneDeep(defaultWorkboxConfig),
                 workbox: {
                     id:workspaceHandler.panelDomainRecord.profile.workbox.id,
                 }
@@ -164,7 +162,7 @@ const Workpanel = (props:any) => {
                 identity,
             },
             workboxSpecs = {
-                configuration: _cloneDeep(defaultWorkboxConfig),
+                settings: _cloneDeep(defaultWorkboxConfig),
                 workbox: {
                     id:workspaceHandler.panelMemberRecord.profile.workbox.id,
                 }

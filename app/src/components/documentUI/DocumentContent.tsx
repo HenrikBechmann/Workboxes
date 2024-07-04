@@ -27,7 +27,7 @@ const DocumentContent = (props) => {
         [contentState, setContentState] = useState('setup'),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxRecord = workboxHandler.workboxRecord,
-        documentConfig = workboxHandler.settings.configuration.document,
+        documentConfig = workboxHandler.settings.document,
         { mode } = documentConfig,
         baseComponentRef = useRef(null),
         nextDocumentUnitSessionIDRef = useRef(0),

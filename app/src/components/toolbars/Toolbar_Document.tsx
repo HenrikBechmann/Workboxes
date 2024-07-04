@@ -75,7 +75,7 @@ const DocumentToolbar = (props) => {
     const 
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        documentConfig = workboxHandler.settings.configuration.document,
+        documentConfig = workboxHandler.settings.document,
         toggleOnDropRef = useRef(null),
         disabledDropRef = useRef(null),
         dropToggle = useToggleIcon({

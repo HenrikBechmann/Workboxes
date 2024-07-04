@@ -79,12 +79,12 @@ const WorkboxToolbar = (props) => {
     // console.log('toolbarState, workboxRecord', toolbarState, workboxRecord)
 
     const
-        toggleOnDocumentRef = useRef(settings.configuration.document.show),
-        disabledDocumentRef = useRef(settings.configuration.document.disabled),
-        toggleOnResourcesRef = useRef(settings.configuration.resources.show),
-        disabledResourcesRef = useRef(settings.configuration.resources.disabled),
-        toggleOnBothRef = useRef(settings.configuration.both.show),
-        disabledBothRef = useRef(settings.configuration.both.disabled),
+        toggleOnDocumentRef = useRef(settings.document.show),
+        disabledDocumentRef = useRef(settings.document.disabled),
+        toggleOnResourcesRef = useRef(settings.resources.show),
+        disabledResourcesRef = useRef(settings.resources.disabled),
+        toggleOnBothRef = useRef(settings.both.show),
+        disabledBothRef = useRef(settings.both.disabled),
 
         domainTitle = workboxRecord?.profile.domain.name,
         domainIcon = workboxRecord?.profile.domain.image?.source,
@@ -95,12 +95,12 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        const documentShow = settings.configuration.document.show = toggleOnDocumentRef.current
-        settings.configuration.document.disabled = disabledDocumentRef.current
-        const resourcesShow = settings.configuration.resources.show = toggleOnResourcesRef.current
-        settings.configuration.resources.disabled = disabledResourcesRef.current
-        const bothShow = settings.configuration.both.show = toggleOnBothRef.current
-        settings.configuration.both.disabled = disabledBothRef.current
+        const documentShow = settings.document.show = toggleOnDocumentRef.current
+        settings.document.disabled = disabledDocumentRef.current
+        const resourcesShow = settings.resources.show = toggleOnResourcesRef.current
+        settings.resources.disabled = disabledResourcesRef.current
+        const bothShow = settings.both.show = toggleOnBothRef.current
+        settings.both.disabled = disabledBothRef.current
 
         let contentDisplayCode, documentDisplayCode, resourcesDisplayCode // configuration controls for children
         if (bothShow) {
@@ -117,9 +117,9 @@ const WorkboxToolbar = (props) => {
             resourcesDisplayCode = 'under'
         }
 
-        settings.configuration.content.displaycode = contentDisplayCode        
-        settings.configuration.document.displaycode = documentDisplayCode
-        settings.configuration.resources.displaycode = resourcesDisplayCode
+        settings.content.displaycode = contentDisplayCode        
+        settings.document.displaycode = documentDisplayCode
+        settings.resources.displaycode = resourcesDisplayCode
 
         setToolbarState('ready')
         dispatchWorkboxHandler()

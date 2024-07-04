@@ -47,7 +47,7 @@ const PrimaryFrame = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
 
         // triggers state change...
-        displayCode = workboxHandler.settings.configuration.content.displaycode, // both, resources, document
+        displayCode = workboxHandler.settings.content.displaycode, // both, resources, document
 
         // controls
         previousDisplayConfigCodeRef = useRef(displayCode), // determine change being made

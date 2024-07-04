@@ -198,7 +198,7 @@ const Workbox = (props) => {
 
         const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
 
-        workboxHandler.settings.configuration = workboxSettings.configuration
+        workboxHandler.settings = workboxSettings.settings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail

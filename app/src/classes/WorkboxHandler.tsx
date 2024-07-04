@@ -52,6 +52,7 @@ class WorkboxHandler {
             insertselection: null,
             editunit: null,
             changesessionid: null,
+            changestatus:null,
             removeunit: null,
             reorderunit: null,
             savechanges: null,
@@ -63,6 +64,7 @@ class WorkboxHandler {
             insertselection: null,
             edititem: null,
             changesessionid: null,
+            changestatus:null,
             removeitem: null,
             savechanges: null,
             cancelchanges: null,
@@ -83,8 +85,6 @@ class WorkboxHandler {
             //         displaycode:'both',
             //     },
             //     document: {
-            //         editinstanceid:null,
-            //         editstatus:null,
             //         displaycode:'out',
             //         mode:'normal', // normal, insert, edit, remove, reorder
             //         show:false,
@@ -107,9 +107,8 @@ class WorkboxHandler {
             // }
         // }
 
-    settings = {
-        configuration:null,
-    }
+    settings
+
     dimensions = {
         UIDocumentWidth:300,
         UIDocumentWidthRatio:null,
