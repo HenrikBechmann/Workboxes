@@ -95,6 +95,32 @@ class WorkboxHandler {
             removeitem: null,
             savechanges: null,
             cancelchanges: null,
+            modesettings: {
+                normal:{
+                    select:true,
+                    disable:false,
+                },
+                drill:{
+                    select:false,
+                    disable:false,
+                },
+                insert: {
+                    select:false,
+                    disable:false,
+                },
+                edit:{
+                    select:false,
+                    disable:false,
+                }, 
+                remove: {
+                    select:false,
+                    disable:false,
+                },
+                drag: {
+                    select:false,
+                    disable:false,
+                }
+            }
         },
     }
 

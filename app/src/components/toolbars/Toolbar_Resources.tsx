@@ -7,6 +7,8 @@ import {
   Box, MenuList, MenuItem
 } from '@chakra-ui/react'
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
 import MenuIcon from './MenuIcon'
 import StandardIcon from './StandardIcon'
 import { useToggleIcon } from './ToggleIcon'
@@ -64,76 +66,63 @@ const iconWrapperStyles = {
 
 const ResourcesToolbar = (props) => {
 
-
-    const
-        [toolbarState, setToolbarState] = useState('ready'),
-        toggleOnNormalRef = useRef(true),
-        disabledNormalRef = useRef(false),
-        toggleOnDrillRef = useRef(false),
-        disabledDrillRef = useRef(false),
-        toggleOnInsertRef = useRef(false),
-        disabledInsertRef = useRef(false),
-        toggleOnEditRef = useRef(false),
-        disabledEditRef = useRef(false),
-        toggleOnRemoveRef = useRef(false),
-        disabledRemoveRef = useRef(false),
-        toggleOnDragRef = useRef(false),
-        disabledDragRef = useRef(false),
-        // toggleOnMoveRef = useRef(null),
-        // disabledMoveRef = useRef(null),
+    const 
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        resourcesConfig = workboxHandler.settings.resources,
+        modeSettings = workboxHandler.session.resources.modesettings,
         onNormal = (value) => {
-            toggleOnNormalRef.current = true
-            toggleOnDrillRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
-            setToolbarState('radio')
+            modeSettings.normal.select = true
+            modeSettings.drill.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
+            dispatchWorkboxHandler()
         },
         onDrill = (value) => {
-            toggleOnNormalRef.current = false
-            toggleOnDrillRef.current = true
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
-            setToolbarState('radio')
+            modeSettings.normal.select = false
+            modeSettings.drill.select = true
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
+            dispatchWorkboxHandler()
         },
         onAdd = (value) => {
-            toggleOnNormalRef.current = false
-            toggleOnDrillRef.current = false
-            toggleOnInsertRef.current = true
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
-            setToolbarState('radio')
+            modeSettings.normal.select = false
+            modeSettings.drill.select = false
+            modeSettings.insert.select = true
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
+            dispatchWorkboxHandler()
         },
         onEdit = (value) => {
-            toggleOnNormalRef.current = false
-            toggleOnDrillRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = true
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
-            setToolbarState('radio')
+            modeSettings.normal.select = false
+            modeSettings.drill.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = true
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
+            dispatchWorkboxHandler()
         },
         onRemove = (value) => {
-            toggleOnNormalRef.current = false
-            toggleOnDrillRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = true
-            toggleOnDragRef.current = false
-            setToolbarState('radio')
+            modeSettings.normal.select = false
+            modeSettings.drill.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = true
+            modeSettings.drag.select = false
+            dispatchWorkboxHandler()
         },
         onDrag = (value) => {
-            toggleOnNormalRef.current = false
-            toggleOnDrillRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = true
-            setToolbarState('radio')
+            modeSettings.normal.select = false
+            modeSettings.drill.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = true
+            dispatchWorkboxHandler()
         },
 
         // normal, drill, add, edit, remove, select, drag
@@ -141,8 +130,7 @@ const ResourcesToolbar = (props) => {
             icon:listIcon, 
             tooltip:'Normal browsing',
             caption:'normal',
-            toggleOnRef:toggleOnNormalRef,
-            disabledRef:disabledNormalRef,
+            settings:modeSettings.normal,
             is_radio: true,
             callback: onNormal
         }),
@@ -150,8 +138,7 @@ const ResourcesToolbar = (props) => {
             icon:drillIcon, 
             tooltip:'Drill down',
             caption:'drill',
-            toggleOnRef:toggleOnDrillRef,
-            disabledRef:disabledDrillRef, 
+            settings:modeSettings.drill,
             is_radio: true,
             callback: onDrill
         }),
@@ -159,8 +146,7 @@ const ResourcesToolbar = (props) => {
             icon:addIcon, 
             tooltip:'Insert a resource',
             caption:'insert',
-            toggleOnRef:toggleOnInsertRef,
-            disabledRef:disabledInsertRef, 
+            settings:modeSettings.insert,
             is_radio: true,
             callback: onAdd
         }),
@@ -168,8 +154,7 @@ const ResourcesToolbar = (props) => {
             icon:editIcon, 
             tooltip:'Edit a resource',
             caption:'edit',
-            toggleOnRef:toggleOnEditRef,
-            disabledRef:disabledEditRef, 
+            settings:modeSettings.edit,
             is_radio: true,
             callback: onEdit
         }),
@@ -177,8 +162,7 @@ const ResourcesToolbar = (props) => {
             icon:removeIcon, 
             tooltip:'Remove a resource',
             caption:'remove',
-            toggleOnRef:toggleOnRemoveRef,
-            disabledRef:disabledRemoveRef, 
+            settings:modeSettings.remove,
             is_radio: true,
             callback: onRemove
         }),
@@ -186,37 +170,13 @@ const ResourcesToolbar = (props) => {
             icon:dragIcon, 
             tooltip:'Toggle drag and drop',
             caption:'drag',
-            toggleOnRef:toggleOnDragRef,
-            disabledRef:disabledDragRef, 
+            settings:modeSettings.drag,
             is_radio: true,
             callback: onDrag
         })
 
-    useEffect(()=>{
-
-        if (toolbarState != 'ready') setToolbarState('ready')
-
-    },[toolbarState])
-        // selectToggle = useToggleIcon({
-        //     icon:selectIcon, 
-        //     tooltip:'select items',
-        //     caption:'select',
-        //     toggleOnRef:toggleOnDragRef,
-        //     disabledRef:disabledDragRef, 
-        // }),
-
-        // moveToggle = useToggleIcon({
-        //     icon:moveIcon, 
-        //     tooltip:'Toggle drag & drop move (vs copy)',
-        //     caption:'d&d move',
-        //     toggleOnRef:toggleOnMoveRef,
-        //     disabledRef:disabledMoveRef, 
-        // })
-
-        // <MenuItem icon = {<img src = {settingsIcon} />}>Resource list settings</MenuItem>
     // emptylistIcon is the wrong size for some reason; needs to be coerced
     const resourcesmenulist = <MenuList >
-
         <MenuItem icon = {<img src = {labelIcon}/>}>Resource types to accept</MenuItem>
         <MenuItem icon = {<img src = {lockIcon}/>}>Lock this list</MenuItem>
         <MenuItem icon = {<img style = {{height:'24px', width:'24px'}} src = {emptylistIcon}/>}>Empty this list</MenuItem>
