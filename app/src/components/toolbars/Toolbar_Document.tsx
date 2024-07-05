@@ -76,70 +76,61 @@ const DocumentToolbar = (props) => {
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.document,
-        toggleOnDropRef = useRef(null),
-        disabledDropRef = useRef(null),
-        dropToggle = useToggleIcon({
-            icon:dragIcon, 
-            tooltip:'Re-sort, and import items from resources',
-            caption:'import',
-            toggleOnRef:toggleOnDropRef,
-            disabledRef:disabledDropRef, 
-        })
+        modeSettings = workboxHandler.session.document.modesettings
+        // toggleOnDropRef = useRef(null),
+        // disabledDropRef = useRef(null),
+        // dropToggle = useToggleIcon({
+        //     icon:dragIcon, 
+        //     tooltip:'Re-sort, and import items from resources',
+        //     caption:'import',
+        //     toggleOnRef:toggleOnDropRef,
+        //     disabledRef:disabledDropRef, 
+        // })
 
     const
-        toggleOnNormalRef = useRef(true),
-        disabledNormalRef = useRef(false),
-        toggleOnInsertRef = useRef(false),
-        disabledInsertRef = useRef(false),
-        toggleOnEditRef = useRef(false),
-        disabledEditRef = useRef(false),
-        toggleOnRemoveRef = useRef(false),
-        disabledRemoveRef = useRef(false),
-        toggleOnDragRef = useRef(false),
-        disabledDragRef = useRef(false),
         onNormal = (value) => {
             documentConfig.mode = 'normal'
-            toggleOnNormalRef.current = true
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
+            modeSettings.normal.select = true
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
             documentConfig.mode = 'insert'
-            toggleOnNormalRef.current = false
-            toggleOnInsertRef.current = true
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
+            modeSettings.normal.select = false
+            modeSettings.insert.select = true
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
             documentConfig.mode = 'edit'
-            toggleOnNormalRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = true
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = false
+            modeSettings.normal.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = true
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onRemove = (value) => {
             documentConfig.mode = 'remove'
-            toggleOnNormalRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = true
-            toggleOnDragRef.current = false
+            modeSettings.normal.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = true
+            modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onDrag = (value) => {
             documentConfig.mode = 'drag'
-            toggleOnNormalRef.current = false
-            toggleOnInsertRef.current = false
-            toggleOnEditRef.current = false
-            toggleOnRemoveRef.current = false
-            toggleOnDragRef.current = true
+            modeSettings.normal.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = true
             dispatchWorkboxHandler()
         },
 
@@ -148,8 +139,7 @@ const DocumentToolbar = (props) => {
             icon:articleIcon, 
             tooltip:'Normal viewing',
             caption:'normal',
-            toggleOnRef:toggleOnNormalRef,
-            disabledRef:disabledNormalRef,
+            settings:modeSettings.normal,
             is_radio: true,
             callback: onNormal
         }),
@@ -157,8 +147,7 @@ const DocumentToolbar = (props) => {
             icon:insertIcon, 
             tooltip:'Insert a section',
             caption:'insert',
-            toggleOnRef:toggleOnInsertRef,
-            disabledRef:disabledInsertRef, 
+            settings:modeSettings.insert,
             is_radio: true,
             callback: onAdd
         }),
@@ -166,8 +155,7 @@ const DocumentToolbar = (props) => {
             icon:editIcon, 
             tooltip:'Edit a section',
             caption:'edit',
-            toggleOnRef:toggleOnEditRef,
-            disabledRef:disabledEditRef, 
+            settings:modeSettings.edit,
             is_radio: true,
             callback: onEdit
         }),
@@ -175,8 +163,7 @@ const DocumentToolbar = (props) => {
             icon:removeIcon, 
             tooltip:'Remove a section',
             caption:'remove',
-            toggleOnRef:toggleOnRemoveRef,
-            disabledRef:disabledRemoveRef, 
+            settings:modeSettings.remove,
             is_radio: true,
             callback: onRemove
         }),
@@ -184,8 +171,7 @@ const DocumentToolbar = (props) => {
             icon:dragIcon, 
             tooltip:'re-order internal section items',
             caption:'re-order',
-            toggleOnRef:toggleOnDragRef,
-            disabledRef:disabledDragRef, 
+            settings:modeSettings.drag,
             is_radio: true,
             callback: onDrag
         })

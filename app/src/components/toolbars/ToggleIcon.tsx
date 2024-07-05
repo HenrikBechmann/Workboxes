@@ -27,7 +27,7 @@ const iconToggleStyles = {
 const ToggleIcon = (props) => {
 
     const 
-        { toggleOn, disabled, callback, icon, tooltip, caption , is_radio = false} = props,
+        { toggleOn = null, disabled = null, callback, icon, tooltip, caption , settings = null, is_radio = false} = props,
         toggleValueRef = useRef(toggleOn),
         disabledValueRef = useRef(disabled),
         iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles),
@@ -80,17 +80,27 @@ const ToggleIcon = (props) => {
 }
 
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
-export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption, callback = null, is_radio = false}) => {
+export const useToggleIcon = ({toggleOnRef = null, disabledRef = null, settings = null, icon, tooltip, caption, callback = null, is_radio = false}) => {
 
-    const [useToggleState, setUseToggleState] = useState(toggleOnRef?.current)
+    const
+        toggleOn = settings
+            ? settings.select
+            : toggleOnRef?.current, 
+        disabled = settings
+            ? settings.disable
+            : disabledRef?.current,
+        [useToggleState, setUseToggleState] = useState(toggleOn)
 
     useEffect(()=>{
-        setUseToggleState(toggleOnRef?.current) // creates host cycle
-    },[toggleOnRef?.current])
+        setUseToggleState(toggleOn) // creates host cycle
+    },[toggleOn])
 
     const userChangeCallback = useCallback((toggleOn) =>{
-
-        toggleOnRef.current = toggleOn
+        if (settings) {
+            settings.select = toggleOn
+        } else {
+            toggleOnRef.current = toggleOn
+        }
         setUseToggleState(toggleOn) // creates host cycle
 
     },[])
@@ -99,8 +109,8 @@ export const useToggleIcon = ({toggleOnRef, disabledRef, icon, tooltip, caption,
         icon = {icon} 
         tooltip = {tooltip} 
         caption = {caption}
-        toggleOn = {toggleOnRef?.current} 
-        disabled = {disabledRef?.current} 
+        toggleOn = {toggleOn} 
+        disabled = {disabled} 
         callback = {callback?callback:userChangeCallback} 
         is_radio = {is_radio}
     />
