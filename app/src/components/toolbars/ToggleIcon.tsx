@@ -27,7 +27,7 @@ const iconToggleStyles = {
 const ToggleIcon = (props) => {
 
     const 
-        { toggleOn = null, disabled = null, callback, icon, tooltip, caption , settings = null, is_radio = false} = props,
+        { toggleOn, disabled, callback, icon, tooltip, caption , is_radio = false} = props,
         toggleValueRef = useRef(toggleOn),
         disabledValueRef = useRef(disabled),
         iconBoxToggleStylesRef = useRef(baseIconBoxToggleStyles),
@@ -80,28 +80,20 @@ const ToggleIcon = (props) => {
 }
 
 // toggleIcon always takes toggleOn and disabled from useToggleIcon call - controlled by host
-export const useToggleIcon = ({toggleOnRef = null, disabledRef = null, settings = null, icon, tooltip, caption, callback = null, is_radio = false}) => {
+export const useToggleIcon = ({settings, icon, tooltip, caption, callback = null, is_radio = false}) => {
 
     const
-        toggleOn = settings
-            ? settings.select
-            : toggleOnRef?.current, 
-        disabled = settings
-            ? settings.disable
-            : disabledRef?.current,
-        [useToggleState, setUseToggleState] = useState(toggleOn)
+        toggleOn = settings.select,
+        disabled = settings.disable
+        // [useToggleState, setUseToggleState] = useState(toggleOn)
 
-    useEffect(()=>{
-        setUseToggleState(toggleOn) // creates host cycle
-    },[toggleOn])
+    // useEffect(()=>{
+    //     setUseToggleState(toggleOn) // creates host cycle
+    // },[toggleOn])
 
     const userChangeCallback = useCallback((toggleOn) =>{
-        if (settings) {
-            settings.select = toggleOn
-        } else {
-            toggleOnRef.current = toggleOn
-        }
-        setUseToggleState(toggleOn) // creates host cycle
+        settings.select = toggleOn
+        // setUseToggleState(toggleOn) // creates host cycle
 
     },[])
 
