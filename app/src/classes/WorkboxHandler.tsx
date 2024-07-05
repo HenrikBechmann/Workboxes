@@ -52,6 +52,22 @@ class WorkboxHandler {
 
     // for document and resources, transitory mode settings
     session = {
+        workbox: {
+            modesettings: {
+                document: {
+                    select:false,
+                    disable:false
+                },
+                resources: {
+                    select:false,
+                    disable:false
+                },
+                both: {
+                    select:true,
+                    disable:false
+                }
+            }
+        },
         document:{
             insertunit: null,
             insertselection: null,

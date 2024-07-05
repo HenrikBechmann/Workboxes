@@ -170,6 +170,7 @@ const Workbox = (props) => {
     workboxHandlerRef.current = workboxHandler
 
     const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
+        const workboxHandler = workboxHandlerRef.current
         alert('workbox insertUnit ' + sessionID)
     },[])
 
@@ -179,10 +180,12 @@ const Workbox = (props) => {
     },[])
 
     const removeUnit = useCallback((sessionID) => {
+        const workboxHandler = workboxHandlerRef.current
         
     },[])
 
     const reorderUnit = useCallback((sessionID) => {
+        const workboxHandler = workboxHandlerRef.current
         
     },[])
 
@@ -210,7 +213,7 @@ const Workbox = (props) => {
 
         const 
             doccontrols = workboxHandler.session.document,
-            listcontrols = workboxHandler.session.resources
+            resourcecontrols = workboxHandler.session.resources
 
         doccontrols.insertunit = insertUnit
         doccontrols.editunit = editUnit
@@ -220,12 +223,12 @@ const Workbox = (props) => {
         doccontrols.cancelchanges = cancelChanges
 
         /*
-        listcontrols.drillitem = 
-        listcontrols.insertitem =
-        listcontrols.edititem =
-        listcontrols.removeitem = 
-        listcontrols.dragitem =
-        listcontrols.savechanges = 
+        resourcecontrols.drillitem = 
+        resourcecontrols.insertitem =
+        resourcecontrols.edititem =
+        resourcecontrols.removeitem = 
+        resourcecontrols.dragitem =
+        resourcecontrols.savechanges = 
         */
 
         setWorkboxHandlerContext({current:workboxHandler})

@@ -74,17 +74,16 @@ const WorkboxToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         { settings } = workboxHandler,
-        [toolbarState, setToolbarState] = useState('ready')
-
-    // console.log('toolbarState, workboxRecord', toolbarState, workboxRecord)
+        modeSettings = workboxHandler.session.workbox.modesettings
+        // [toolbarState, setToolbarState] = useState('ready')
 
     const
-        toggleOnDocumentRef = useRef(settings.document.show),
-        disabledDocumentRef = useRef(settings.document.disabled),
-        toggleOnResourcesRef = useRef(settings.resources.show),
-        disabledResourcesRef = useRef(settings.resources.disabled),
-        toggleOnBothRef = useRef(settings.both.show),
-        disabledBothRef = useRef(settings.both.disabled),
+        // toggleOnDocumentRef = useRef(settings.document.show),
+        // disabledDocumentRef = useRef(settings.document.disabled),
+        // toggleOnResourcesRef = useRef(settings.resources.show),
+        // disabledResourcesRef = useRef(settings.resources.disabled),
+        // toggleOnBothRef = useRef(settings.both.show),
+        // disabledBothRef = useRef(settings.both.disabled),
 
         domainTitle = workboxRecord?.profile.domain.name,
         domainIcon = workboxRecord?.profile.domain.image?.source,
@@ -95,19 +94,12 @@ const WorkboxToolbar = (props) => {
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 
-        const documentShow = settings.document.show = toggleOnDocumentRef.current
-        settings.document.disabled = disabledDocumentRef.current
-        const resourcesShow = settings.resources.show = toggleOnResourcesRef.current
-        settings.resources.disabled = disabledResourcesRef.current
-        const bothShow = settings.both.show = toggleOnBothRef.current
-        settings.both.disabled = disabledBothRef.current
-
         let contentDisplayCode, documentDisplayCode, resourcesDisplayCode // configuration controls for children
-        if (bothShow) {
+        if (modeSettings.both.select) {
             contentDisplayCode = 'both'
             documentDisplayCode = 'out'
             resourcesDisplayCode = 'out'
-        } else if (resourcesShow) {
+        } else if (modeSettings.resources.select) {
             contentDisplayCode = 'resources'
             documentDisplayCode = 'under'
             resourcesDisplayCode = 'over'
@@ -121,49 +113,39 @@ const WorkboxToolbar = (props) => {
         settings.document.displaycode = documentDisplayCode
         settings.resources.displaycode = resourcesDisplayCode
 
-        setToolbarState('ready')
         dispatchWorkboxHandler()
 
     },[
-        toggleOnDocumentRef.current,
-        disabledDocumentRef.current,
-        toggleOnResourcesRef.current,
-        disabledResourcesRef.current,
-        toggleOnBothRef.current,
-        disabledBothRef.current,
+        modeSettings.document.select,
+        modeSettings.resources.select,
+        modeSettings.both.select,
     ])
 
     const callbackDocument = (value) => {
-        event.preventDefault()
-        if (disabledDocumentRef.current || toggleOnDocumentRef.current) return
 
-        toggleOnDocumentRef.current = true
-        toggleOnResourcesRef.current = false
-        toggleOnBothRef.current = false
+        modeSettings.document.select = true
+        modeSettings.resources.select = false
+        modeSettings.both.select = false
+        dispatchWorkboxHandler()
 
-        setToolbarState('radio')
     }
 
     const callbackResources = (value) => {
-        event.preventDefault()
-        if (disabledResourcesRef.current || toggleOnResourcesRef.current) return
 
-        toggleOnDocumentRef.current = false
-        toggleOnResourcesRef.current = true
-        toggleOnBothRef.current = false
+        modeSettings.document.select = false
+        modeSettings.resources.select = true
+        modeSettings.both.select = false
+        dispatchWorkboxHandler()
 
-        setToolbarState('radio')
     }
 
     const callbackBoth = (value) => {
-        event.preventDefault()
-        if (disabledBothRef.current || toggleOnBothRef.current) return
 
-        toggleOnDocumentRef.current = false
-        toggleOnResourcesRef.current = false
-        toggleOnBothRef.current = true
+        modeSettings.document.select = false
+        modeSettings.resources.select = false
+        modeSettings.both.select = true
+        dispatchWorkboxHandler()
 
-        setToolbarState('radio')
     }
 
     const
@@ -171,8 +153,7 @@ const WorkboxToolbar = (props) => {
             icon:documentIcon, 
             tooltip:'Show workbox document view',
             caption:'document',
-            toggleOnRef:toggleOnDocumentRef,
-            disabledRef:disabledDocumentRef, 
+            settings:modeSettings.document,
             callback:callbackDocument,
             is_radio:true,
         }),
@@ -181,8 +162,7 @@ const WorkboxToolbar = (props) => {
             icon:resourcesIcon, 
             tooltip:'Show workbox resources view',
             caption:'resources',
-            toggleOnRef:toggleOnResourcesRef,
-            disabledRef:disabledResourcesRef, 
+            settings:modeSettings.resources,
             callback:callbackResources,
             is_radio:true,
         }),
@@ -191,8 +171,7 @@ const WorkboxToolbar = (props) => {
             icon:bothIcon, 
             tooltip:'Show both document and resources views',
             caption:'both',
-            toggleOnRef:toggleOnBothRef,
-            disabledRef:disabledBothRef, 
+            settings:modeSettings.both,
             callback:callbackBoth,
             is_radio:true,
         })
