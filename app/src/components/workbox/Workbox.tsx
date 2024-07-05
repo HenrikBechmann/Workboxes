@@ -164,14 +164,17 @@ const Workbox = (props) => {
         },
         onError = () => {
             navigate('/error')
-        }
+        },
+        workboxHandlerRef = useRef(null)
+
+    workboxHandlerRef.current = workboxHandler
 
     const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
         alert('workbox insertUnit ' + sessionID)
     },[])
 
     const editUnit = useCallback((sessionID) => {
-        alert('workbox editUnit ' + sessionID)
+        const workboxHandler = workboxHandlerRef.current
         workboxHandler.session.changesessionid = sessionID
     },[])
 
@@ -184,12 +187,13 @@ const Workbox = (props) => {
     },[])
 
     const saveChanges = useCallback((sessionID) => {
-        alert('workbox saveChanges ' + sessionID)
+        const workboxHandler = workboxHandlerRef.current
         workboxHandler.session.changesessionid = null
     },[])
 
     const cancelChanges = useCallback((sessionID) => {
         alert('workbox cancelChanges ' + sessionID)
+        const workboxHandler = workboxHandlerRef.current
         workboxHandler.session.changesessionid = null
     },[])
 
@@ -202,7 +206,7 @@ const Workbox = (props) => {
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
-        workboxHandlerContext.current = workboxHandler
+        // workboxHandlerContext.current = workboxHandler
 
         const 
             doccontrols = workboxHandler.session.document,

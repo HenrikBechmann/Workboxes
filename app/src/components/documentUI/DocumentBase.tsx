@@ -228,8 +228,6 @@ const DocumentBase = (props) => {
         sessionIDRef = useRef(sessionID),
         [baseEditState, setBaseEditState] = useState(false)
 
-    console.log('DocumentBase: workboxHandler', workboxHandler)
-
     let actionIcon, response
 
     const onInsert = () => {
