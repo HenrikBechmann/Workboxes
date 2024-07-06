@@ -6,7 +6,7 @@ import React, {
     useEffect, 
     useState, 
     useContext, 
-    CSSProperties, 
+    CSSProperties,
     forwardRef,
     Suspense,
 } from 'react'
@@ -15,7 +15,8 @@ import {
     Box
 } from '@chakra-ui/react'
 
-import documentModules from './documentModules'
+// import documentModules from './documentModules'
+import DocumentBase from './DocumentBase'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
@@ -47,7 +48,8 @@ const DocumentContent = (props) => {
         } else {
             const sessionID = nextDocumentUnitSessionIDRef.current++
             baseComponentRef.current = 
-                React.createElement(documentModules.base,{documentBaseData, documentConfig, mode, sessionID})
+                // React.createElement(documentModules.base,{documentBaseData, documentConfig, mode, sessionID})
+                React.createElement(DocumentBase,{documentBaseData, documentConfig, mode, sessionID})
         }
 
         setContentState('update')
