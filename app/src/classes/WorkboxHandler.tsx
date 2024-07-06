@@ -50,6 +50,8 @@ class WorkboxHandler {
     workboxRecord
     resourcesRecords = []
 
+    // --------------------[ process control & tracking ]------------------------
+
     // for document and resources, transitory mode settings
     session = {
         workbox: {
@@ -140,8 +142,6 @@ class WorkboxHandler {
         },
     }
 
-    // process control & tracking
-
     // persistent Workbox settings, stored with panels
     // settings: 
     // {
@@ -152,17 +152,14 @@ class WorkboxHandler {
     //         displaycode:'out', // over, under, out
     //         mode:'normal', // normal, insert, edit, remove, reorder
     //         show:false,
-    //         disabled:false,
     //     },
     //     resources: { 
     //         displaycode:'out', // over, under, out
     //         mode: 'normal', // normal, drill, insert, edit, remove, drag
     //         show:false,
-    //         disabled:false,
     //     },
     //     both: {
     //         show: true,
-    //         disabled: false,
     //     },
     // },
 

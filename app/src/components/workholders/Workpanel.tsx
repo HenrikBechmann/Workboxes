@@ -22,17 +22,14 @@ const defaultWorkboxConfig = {
         displaycode:'out',
         mode:'normal', // normal, insert, edit, remove, reorder
         show:false,
-        disabled:false,
     },
     resources: { 
         displaycode:'out',
         mode: 'normal', // normal, drill, insert, edit, remove, drag
         show:false,
-        disabled:false,
     },
     both: {
         show: true,
-        disabled: false,
     },
 }
 

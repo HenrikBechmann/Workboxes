@@ -175,8 +175,25 @@ const Workbox = (props) => {
     },[])
 
     const editUnit = useCallback((sessionID) => {
-        const workboxHandler = workboxHandlerRef.current
-        workboxHandler.session.changesessionid = sessionID
+        const 
+            workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession
+
+        documentsession.changesessionid = sessionID
+        workboxmodesettings.resources.disable = true
+        documentmodesettings.normal.disable = true
+        documentmodesettings.insert.disable = true
+        documentmodesettings.remove.disable = true
+        documentmodesettings.drag.disable = true
+
+        // TODO: disable resources toggles
+
+        setWorkboxHandlerContext({current:workboxHandler})
+
     },[])
 
     const removeUnit = useCallback((sessionID) => {
@@ -190,8 +207,25 @@ const Workbox = (props) => {
     },[])
 
     const saveChanges = useCallback((sessionID) => {
-        const workboxHandler = workboxHandlerRef.current
-        workboxHandler.session.changesessionid = null
+        const 
+            workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession
+
+        documentsession.changesessionid = null
+        workboxmodesettings.resources.disable = false
+        documentmodesettings.normal.disable = false
+        documentmodesettings.insert.disable = false
+        documentmodesettings.remove.disable = false
+        documentmodesettings.drag.disable = false
+
+        // TODO: enable resources toggles
+
+        setWorkboxHandlerContext({current:workboxHandler})
+
     },[])
 
     const cancelChanges = useCallback((sessionID) => {
