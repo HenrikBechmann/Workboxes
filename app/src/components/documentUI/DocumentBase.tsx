@@ -239,8 +239,9 @@ const DocumentBase = (props) => {
 
     const onEdit = () => {
 
-        workboxHandler.session.document.editunit(sessionIDRef.current)
-        setBaseEditState(true)
+        if (workboxHandler.session.document.editunit(sessionIDRef.current)) {
+            setBaseEditState(true)
+        }
 
     }
 
