@@ -190,6 +190,10 @@ const Workbox = (props) => {
         documentmodesettings.remove.disable = true
         documentmodesettings.drag.disable = true
 
+        resourcesmodesettings.insert.disable = true
+        resourcesmodesettings.edit.disable = true
+        resourcesmodesettings.remove.disable = true
+
         // TODO: disable resources toggles
 
         setWorkboxHandlerContext({current:workboxHandler})
@@ -222,15 +226,36 @@ const Workbox = (props) => {
         documentmodesettings.remove.disable = false
         documentmodesettings.drag.disable = false
 
-        // TODO: enable resources toggles
+        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.edit.disable = false
+        resourcesmodesettings.remove.disable = false
 
         setWorkboxHandlerContext({current:workboxHandler})
 
     },[])
 
     const cancelChanges = useCallback((sessionID) => {
-        const workboxHandler = workboxHandlerRef.current
-        workboxHandler.session.changesessionid = null
+        const 
+            workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession
+
+        documentsession.changesessionid = null
+        workboxmodesettings.resources.disable = false
+        documentmodesettings.normal.disable = false
+        documentmodesettings.insert.disable = false
+        documentmodesettings.remove.disable = false
+        documentmodesettings.drag.disable = false
+
+        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.edit.disable = false
+        resourcesmodesettings.remove.disable = false
+
+        setWorkboxHandlerContext({current:workboxHandler})
+
     },[])
 
     // create workboxHandler
