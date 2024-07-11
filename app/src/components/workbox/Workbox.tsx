@@ -229,7 +229,6 @@ const Workbox = (props) => {
     },[])
 
     const cancelChanges = useCallback((sessionID) => {
-        alert('workbox cancelChanges ' + sessionID)
         const workboxHandler = workboxHandlerRef.current
         workboxHandler.session.changesessionid = null
     },[])

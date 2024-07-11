@@ -29,6 +29,7 @@ import editIcon from '../../../assets/edit.png'
 import saveIcon from '../../../assets/save.png'
 import removeIcon from '../../../assets/close.png'
 import dragIcon from '../../../assets/drag.png'
+import cancelEditIcon from '../../../assets/edit_off.png'
 
 const baseStyles = {
 
@@ -283,10 +284,12 @@ const DocumentBase = (props) => {
                 <SideIcon icon = {actionIcon} response = {response} />
             </Box>
         }
-        {baseEditState
-            ? <BaseEdit />
-            : <BaseDisplay documentBaseData = {documentBaseData}/>
-        }
+        {baseEditState && <>
+            <Box float = 'right'>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel}></SideIcon>
+            </Box>
+        <BaseEdit /></>}
+        {!baseEditState && <BaseDisplay documentBaseData = {documentBaseData}/>}
     </Box>
 }
 
