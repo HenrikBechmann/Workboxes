@@ -229,7 +229,7 @@ const DocumentBase = (props) => {
         sessionIDRef = useRef(sessionID),
         [baseEditState, setBaseEditState] = useState(false)
 
-    let actionIcon, response
+    let actionIcon, response, tooltip, canceltip
 
     const onInsert = () => {
 
@@ -262,17 +262,21 @@ const DocumentBase = (props) => {
     if (baseEditState) {
         actionIcon = saveIcon
         response = onSave
+        tooltip = 'save section changes'
+        canceltip = 'cancel section changes'
     } else {
 
         switch (mode) {
             case 'insert': {
                 actionIcon = insertIcon
                 response = onInsert
+                tooltip = 'insert next section'
                 break
             }
             case 'edit': {
                 actionIcon = editIcon
                 response = onEdit
+                tooltip = 'edit this section'
                 break
             }
         }
@@ -282,12 +286,12 @@ const DocumentBase = (props) => {
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
         {(!['normal', 'drag', 'remove'].includes(mode)) && 
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {actionIcon} response = {response} />
+                <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
             </Box>
         }
         {baseEditState && <>
             <Box float = 'right'>
-                <SideIcon icon = {cancelEditIcon} response = {onCancel}></SideIcon>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
             </Box>
         <BaseEdit /></>}
         {!baseEditState && <BaseDisplay documentBaseData = {documentBaseData}/>}
