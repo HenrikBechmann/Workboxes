@@ -76,16 +76,14 @@ const DocumentToolbar = (props) => {
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.document,
-        modeSettings = workboxHandler.session.document.modesettings
-        // toggleOnDropRef = useRef(null),
-        // disabledDropRef = useRef(null),
-        // dropToggle = useToggleIcon({
-        //     icon:dragIcon, 
-        //     tooltip:'Re-sort, and import items from resources',
-        //     caption:'import',
-        //     toggleOnRef:toggleOnDropRef,
-        //     disabledRef:disabledDropRef, 
-        // })
+        modeSettings = workboxHandler.session.document.modesettings,
+        insertTypeRef = useRef(null)
+
+    useEffect(()=>{
+
+            workboxHandler.session.document.insertselection = insertTypeRef.current.value
+
+    },[])
 
     const
         onNormal = (value) => {
@@ -174,7 +172,10 @@ const DocumentToolbar = (props) => {
             settings:modeSettings.drag,
             is_radio: true,
             callback: onDrag
-        })
+        }),
+        onChangeInsertType = (event) => {
+            workboxHandler.session.document.insertselection = event.target.value
+        }
 
         // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
 
@@ -229,7 +230,7 @@ const DocumentToolbar = (props) => {
         { normalToggle }
         { addToggle }
         <Box style = {selectStyles} width = {selectwidth} >
-            <Select size = 'xs' marginLeft = '8px' width = '80px'>
+            <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
                 <option value="image">Image</option>
                 <option value="callout">Callout</option>
