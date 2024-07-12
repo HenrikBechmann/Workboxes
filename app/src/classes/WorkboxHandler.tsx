@@ -47,7 +47,8 @@ class WorkboxHandler {
     workboxID
     workboxSessionID
 
-    workboxRecord
+    workboxRecord = null
+    editRecord = null
     resourcesRecords = []
 
     // --------------------[ process control & tracking ]------------------------

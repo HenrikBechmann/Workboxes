@@ -11,6 +11,8 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { useFirestore, useUsage, useSnapshotControl, useErrorControl } from '../../system/WorkboxesProvider'
+import {cloneDeep as _cloneDeep} from 'lodash'
+
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
 import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
 import ContentFrame, {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
@@ -186,6 +188,8 @@ const Workbox = (props) => {
 
         if (isChanging) return false
 
+        workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
+
         documentsession.changesessionid = sessionID
         workboxmodesettings.resources.disable = true
         documentmodesettings.normal.disable = true
@@ -235,6 +239,8 @@ const Workbox = (props) => {
         resourcesmodesettings.remove.disable = false
         resourcesmodesettings.drag.disable = false
 
+        workboxHandler.editRecord = null
+
         setWorkboxHandlerContext({current:workboxHandler})
 
     },[])
@@ -259,6 +265,8 @@ const Workbox = (props) => {
         resourcesmodesettings.edit.disable = false
         resourcesmodesettings.remove.disable = false
         resourcesmodesettings.drag.disable = false
+
+        workboxHandler.editRecord = null
 
         setWorkboxHandlerContext({current:workboxHandler})
 

@@ -54,17 +54,13 @@ const BaseEdit = (props) => {
     
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        { workboxRecord } = workboxHandler,
-        documentBaseData = workboxRecord.document.base,
-        { description, image, summary } = documentBaseData,
-        [editValues, setEditValues] = useState({...documentBaseData}),
-        [editState,setEditState] = useState('ready'),
-        // invalidFieldFlags = invalidStandardFieldFlagsRef.current,
+        editData = workboxHandler.editRecord.document.base,
+        [editState,setEditState] = useState('setup'),
+
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
-        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
-        editDataRef = useRef(null)
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min
 
     const errorMessages = {
         name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
@@ -76,38 +72,46 @@ const BaseEdit = (props) => {
         description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
     }
 
-    editDataRef.current = editValues
-
+    // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
 
-        isInvalidTests.name(editValues.name ?? '')
-        isInvalidTests.description(editValues.description ?? '')
-        isInvalidTests.image(editValues.image ?? '')
-        isInvalidTests.summary(editValues.summary ?? '')
+        const 
+            editData = workboxHandler.editRecord.document.base
+
+        isInvalidTests.name(editData.name ?? '')
+        isInvalidTests.description(editData.description ?? '')
+        isInvalidTests.image(editData.image ?? '')
+        isInvalidTests.summary(editData.summary ?? '')
+
         setEditState('checking')
 
     },[])
 
     useEffect(()=>{
 
-        if (editState != 'ready') setEditState('ready')
+        if (['checking','validating'].includes(editState)) setEditState('ready')
 
     },[editState])
 
     const onChangeFunctions = {
         name:(event) => {
-            const target = event.target as HTMLInputElement
-            const value = target.value
+            const 
+                editData = workboxHandler.editRecord.documnt.base,
+                target = event.target as HTMLInputElement,
+                value = target.value
+
             isInvalidTests.name(value)
-            editValues.name = value
-            setEditValues({...editValues})
+            editData.name = value
+            setEditState('validating')
         },
         description:(event) => {
-            const target = event.target as HTMLInputElement
-            const value = target.value
+            const
+                editData = workboxHandler.editRecord.documnt.base,
+                target = event.target as HTMLInputElement,
+                value = target.value
             isInvalidTests.description(value)
-            editValues.description = value
-            setEditValues({...editValues})
+            editData.description = value
+            setEditState('validating')
         },
     }
 
@@ -158,16 +162,16 @@ const BaseEdit = (props) => {
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.name*/}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                     <Input 
-                        value = {editValues.name || ''} 
+                        value = {editData.name || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.name}
                     >
                     </Input>
                     <FormErrorMessage>
-                        {errorMessages.name} Current length is {editValues.name?.length || '0 (blank)'}.
+                        {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.name} Current length is {editValues.name?.length || '0 (blank)'}.
+                        {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -175,16 +179,16 @@ const BaseEdit = (props) => {
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.description*/}>
                     <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
                     <Textarea 
-                        value = {editValues.description || ''} 
+                        value = {editData.description || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.description}
                     >
                     </Textarea>
                     <FormErrorMessage>
-                        {errorMessages.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                        {errorMessages.description} Current length is {editData.description?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.description} Current length is {editValues.description?.length || '0 (blank)'}.
+                        {helperText.description} Current length is {editData.description?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>

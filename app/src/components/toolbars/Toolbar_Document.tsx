@@ -132,7 +132,7 @@ const DocumentToolbar = (props) => {
             dispatchWorkboxHandler()
         },
 
-        // normal, drill, insert, edit, remove, select, drag
+        // normal, drill, insert, edit, remove, drag
         normalToggle = useToggleIcon({
             icon:articleIcon, 
             tooltip:'Normal viewing',
