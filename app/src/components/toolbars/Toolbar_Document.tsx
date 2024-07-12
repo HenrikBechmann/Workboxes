@@ -233,7 +233,7 @@ const DocumentToolbar = (props) => {
             <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
                 <option value="image">Image</option>
-                <option value="callout">Callout</option>
+                <option value="import">Callout</option>
             </Select>
         </Box>
         { editToggle }

@@ -286,7 +286,7 @@ const WorkspaceToolbar = (props) => {
         />}
         {panelMemberRecord && <MemberControl
             memberTitle = {panelMemberRecord.profile.member.name} 
-            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'membership workbox'
+            memberIcon = {panelMemberRecord.profile.member.image.source} caption = 'member workbox'
             response = {showMemberWorkbox}
         />}
         <ToolbarVerticalDivider />
