@@ -298,7 +298,8 @@ const DocumentBase = (props) => {
             <Box float = 'right'>
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
             </Box>
-        <BaseEdit /></>}
+            <BaseEdit />
+        </>}
         {!baseEditState && <BaseDisplay documentBaseData = {documentBaseData}/>}
     </Box>
 }

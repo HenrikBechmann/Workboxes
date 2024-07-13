@@ -5,7 +5,8 @@ import React, { useState, useRef, useEffect, useCallback, createContext, CSSProp
 
 import {
     Box,
-    Grid, GridItem
+    Grid, GridItem,
+    useToast
 } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
@@ -76,8 +77,8 @@ export const useWorkboxHandler = () => {
 const WorkboxFrame = (props) => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        workboxFrameElementRef = useRef(null) // for resizeObserver
-
+        workboxFrameElementRef = useRef(null), // for resizeObserver
+        toast = useToast({duration:4000, isClosable: true})
     // console.log('running WorkboxFrame workboxRecord', workboxHandler.workboxRecord)
 
     // update the width record of this panel on resize
@@ -146,13 +147,11 @@ const WorkboxFrame = (props) => {
 
 
     const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
-        // const workboxHandler = workboxHandlerRef.current
         alert('workbox insertUnit ' + sessionID)
     },[])
 
     const editUnit = useCallback((sessionID) => {
         const 
-            // workboxHandler = workboxHandlerRef.current,
             { session } = workboxHandler,
             { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
             { modesettings: workboxmodesettings } = workboxsession,
@@ -160,7 +159,10 @@ const WorkboxFrame = (props) => {
             { modesettings: resourcesmodesettings } = resourcessession,
             isChanging = ((documentsession.changesessionid ?? false )|| (resourcessession.changesessionid ?? false))
 
-        if (isChanging) return false
+        if (isChanging) {
+            toast({description:'save or cancel your current change before beginning another',status:'warning'})
+            return false
+        }
 
         workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
 
@@ -182,18 +184,15 @@ const WorkboxFrame = (props) => {
     },[])
 
     const removeUnit = useCallback((sessionID) => {
-        // const workboxHandler = workboxHandlerRef.current
         
     },[])
 
     const reorderUnit = useCallback((sessionID) => {
-        // const workboxHandler = workboxHandlerRef.current
         
     },[])
 
     const saveChanges = useCallback((sessionID) => {
         const 
-            // workboxHandler = workboxHandlerRef.current,
             { session } = workboxHandler,
             { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
             { modesettings: workboxmodesettings } = workboxsession,
@@ -219,7 +218,6 @@ const WorkboxFrame = (props) => {
 
     const cancelChanges = useCallback((sessionID) => {
         const 
-            // workboxHandler = workboxHandlerRef.current,
             { session } = workboxHandler,
             { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
             { modesettings: workboxmodesettings } = workboxsession,
