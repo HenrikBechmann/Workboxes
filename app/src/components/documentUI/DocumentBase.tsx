@@ -230,6 +230,7 @@ const DocumentBase = (props) => {
     const 
         { documentBaseData, documentConfig, mode, sessionID } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        {document: sessiondocument} = workboxHandler.session,
         sessionIDRef = useRef(sessionID),
         [baseEditState, setBaseEditState] = useState(false)
 
@@ -237,13 +238,13 @@ const DocumentBase = (props) => {
 
     const onInsert = () => {
 
-        workboxHandler.session.document.insertunit(sessionIDRef.current)
+        sessiondocument.insertunit(sessionIDRef.current)
 
     }
 
     const onEdit = () => {
 
-        if (workboxHandler.session.document.editunit(sessionIDRef.current)) {
+        if (sessiondocument.editunit(sessionIDRef.current)) {
             setBaseEditState(true)
         }
 
@@ -251,14 +252,14 @@ const DocumentBase = (props) => {
 
     const onSave = () => {
 
-        workboxHandler.session.document.savechanges(sessionIDRef.current)
+        sessiondocument.savechanges(sessionIDRef.current)
         setBaseEditState(false)
 
     }
 
     const onCancel = () => {
 
-        workboxHandler.session.document.cancelchanges(sessionIDRef.current)
+        sessiondocument.cancelchanges(sessionIDRef.current)
         setBaseEditState(false)
         
     }
