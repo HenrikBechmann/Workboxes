@@ -8,7 +8,7 @@ import {
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
-import systemDomainIcon from '../../../assets/member.png'
+import systemDomainIcon from '../../../../assets/member.png'
 
 const MemberControl = (props) => {
 

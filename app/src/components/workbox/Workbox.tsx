@@ -114,12 +114,136 @@ const WorkboxFrame = (props) => {
 
     },[])
 
+    useEffect(()=> {
+        const 
+            doccontrols = workboxHandler.session.document,
+            resourcecontrols = workboxHandler.session.resources
+
+        doccontrols.insertunit = insertUnit
+        doccontrols.editunit = editUnit
+        doccontrols.removeunit = removeUnit
+        doccontrols.reorderunit = reorderUnit
+        doccontrols.savechanges = saveChanges
+        doccontrols.cancelchanges = cancelChanges
+
+        /*
+        resourcecontrols.drillitem = 
+        resourcecontrols.insertitem =
+        resourcecontrols.edititem =
+        resourcecontrols.removeitem = 
+        resourcecontrols.dragitem =
+        resourcecontrols.savechanges = 
+        */
+    },[])
+
     async function setWorkboxSnapshot() {
         await workboxHandler.setWorkboxSnapshot()
     }
 
     useEffect(()=> {
         setWorkboxSnapshot()
+    },[])
+
+
+    const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
+        // const workboxHandler = workboxHandlerRef.current
+        alert('workbox insertUnit ' + sessionID)
+    },[])
+
+    const editUnit = useCallback((sessionID) => {
+        const 
+            // workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession,
+            isChanging = ((documentsession.changesessionid ?? false )|| (resourcessession.changesessionid ?? false))
+
+        if (isChanging) return false
+
+        workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
+
+        documentsession.changesessionid = sessionID
+        workboxmodesettings.resources.disable = true
+        documentmodesettings.normal.disable = true
+        documentmodesettings.insert.disable = true
+        documentmodesettings.remove.disable = true
+        documentmodesettings.drag.disable = true
+
+        resourcesmodesettings.insert.disable = true
+        resourcesmodesettings.edit.disable = true
+        resourcesmodesettings.remove.disable = true
+        resourcesmodesettings.drag.disable = true
+
+        dispatchWorkboxHandler()
+
+        return true
+
+    },[])
+
+    const removeUnit = useCallback((sessionID) => {
+        // const workboxHandler = workboxHandlerRef.current
+        
+    },[])
+
+    const reorderUnit = useCallback((sessionID) => {
+        // const workboxHandler = workboxHandlerRef.current
+        
+    },[])
+
+    const saveChanges = useCallback((sessionID) => {
+        const 
+            // workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession
+
+        documentsession.changesessionid = null
+        workboxmodesettings.resources.disable = false
+        documentmodesettings.normal.disable = false
+        documentmodesettings.insert.disable = false
+        documentmodesettings.remove.disable = false
+        documentmodesettings.drag.disable = false
+
+        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.edit.disable = false
+        resourcesmodesettings.remove.disable = false
+        resourcesmodesettings.drag.disable = false
+
+        workboxHandler.editRecord = null
+
+        dispatchWorkboxHandler()
+
+    },[])
+
+    const cancelChanges = useCallback((sessionID) => {
+        const 
+            // workboxHandler = workboxHandlerRef.current,
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession
+
+        documentsession.changesessionid = null
+        workboxmodesettings.resources.disable = false
+        documentmodesettings.normal.disable = false
+        documentmodesettings.insert.disable = false
+        documentmodesettings.remove.disable = false
+        documentmodesettings.drag.disable = false
+
+        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.edit.disable = false
+        resourcesmodesettings.remove.disable = false
+        resourcesmodesettings.drag.disable = false
+
+        workboxHandler.editRecord = null
+
+        dispatchWorkboxHandler()
+
     },[])
 
     return <Grid
@@ -171,106 +295,106 @@ const Workbox = (props) => {
 
     workboxHandlerRef.current = workboxHandler
 
-    const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
-        const workboxHandler = workboxHandlerRef.current
-        alert('workbox insertUnit ' + sessionID)
-    },[])
+    // const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
+    //     const workboxHandler = workboxHandlerRef.current
+    //     alert('workbox insertUnit ' + sessionID)
+    // },[])
 
-    const editUnit = useCallback((sessionID) => {
-        const 
-            workboxHandler = workboxHandlerRef.current,
-            { session } = workboxHandler,
-            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
-            { modesettings: workboxmodesettings } = workboxsession,
-            { modesettings: documentmodesettings } = documentsession,
-            { modesettings: resourcesmodesettings } = resourcessession,
-            isChanging = ((documentsession.changesessionid ?? false )|| (resourcessession.changesessionid ?? false))
+    // const editUnit = useCallback((sessionID) => {
+    //     const 
+    //         workboxHandler = workboxHandlerRef.current,
+    //         { session } = workboxHandler,
+    //         { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+    //         { modesettings: workboxmodesettings } = workboxsession,
+    //         { modesettings: documentmodesettings } = documentsession,
+    //         { modesettings: resourcesmodesettings } = resourcessession,
+    //         isChanging = ((documentsession.changesessionid ?? false )|| (resourcessession.changesessionid ?? false))
 
-        if (isChanging) return false
+    //     if (isChanging) return false
 
-        workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
+    //     workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
 
-        documentsession.changesessionid = sessionID
-        workboxmodesettings.resources.disable = true
-        documentmodesettings.normal.disable = true
-        documentmodesettings.insert.disable = true
-        documentmodesettings.remove.disable = true
-        documentmodesettings.drag.disable = true
+    //     documentsession.changesessionid = sessionID
+    //     workboxmodesettings.resources.disable = true
+    //     documentmodesettings.normal.disable = true
+    //     documentmodesettings.insert.disable = true
+    //     documentmodesettings.remove.disable = true
+    //     documentmodesettings.drag.disable = true
 
-        resourcesmodesettings.insert.disable = true
-        resourcesmodesettings.edit.disable = true
-        resourcesmodesettings.remove.disable = true
-        resourcesmodesettings.drag.disable = true
+    //     resourcesmodesettings.insert.disable = true
+    //     resourcesmodesettings.edit.disable = true
+    //     resourcesmodesettings.remove.disable = true
+    //     resourcesmodesettings.drag.disable = true
 
-        setWorkboxHandlerContext({current:workboxHandler})
+    //     setWorkboxHandlerContext({current:workboxHandler})
 
-        return true
+    //     return true
 
-    },[])
+    // },[])
 
-    const removeUnit = useCallback((sessionID) => {
-        const workboxHandler = workboxHandlerRef.current
+    // const removeUnit = useCallback((sessionID) => {
+    //     const workboxHandler = workboxHandlerRef.current
         
-    },[])
+    // },[])
 
-    const reorderUnit = useCallback((sessionID) => {
-        const workboxHandler = workboxHandlerRef.current
+    // const reorderUnit = useCallback((sessionID) => {
+    //     const workboxHandler = workboxHandlerRef.current
         
-    },[])
+    // },[])
 
-    const saveChanges = useCallback((sessionID) => {
-        const 
-            workboxHandler = workboxHandlerRef.current,
-            { session } = workboxHandler,
-            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
-            { modesettings: workboxmodesettings } = workboxsession,
-            { modesettings: documentmodesettings } = documentsession,
-            { modesettings: resourcesmodesettings } = resourcessession
+    // const saveChanges = useCallback((sessionID) => {
+    //     const 
+    //         workboxHandler = workboxHandlerRef.current,
+    //         { session } = workboxHandler,
+    //         { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+    //         { modesettings: workboxmodesettings } = workboxsession,
+    //         { modesettings: documentmodesettings } = documentsession,
+    //         { modesettings: resourcesmodesettings } = resourcessession
 
-        documentsession.changesessionid = null
-        workboxmodesettings.resources.disable = false
-        documentmodesettings.normal.disable = false
-        documentmodesettings.insert.disable = false
-        documentmodesettings.remove.disable = false
-        documentmodesettings.drag.disable = false
+    //     documentsession.changesessionid = null
+    //     workboxmodesettings.resources.disable = false
+    //     documentmodesettings.normal.disable = false
+    //     documentmodesettings.insert.disable = false
+    //     documentmodesettings.remove.disable = false
+    //     documentmodesettings.drag.disable = false
 
-        resourcesmodesettings.insert.disable = false
-        resourcesmodesettings.edit.disable = false
-        resourcesmodesettings.remove.disable = false
-        resourcesmodesettings.drag.disable = false
+    //     resourcesmodesettings.insert.disable = false
+    //     resourcesmodesettings.edit.disable = false
+    //     resourcesmodesettings.remove.disable = false
+    //     resourcesmodesettings.drag.disable = false
 
-        workboxHandler.editRecord = null
+    //     workboxHandler.editRecord = null
 
-        setWorkboxHandlerContext({current:workboxHandler})
+    //     setWorkboxHandlerContext({current:workboxHandler})
 
-    },[])
+    // },[])
 
-    const cancelChanges = useCallback((sessionID) => {
-        const 
-            workboxHandler = workboxHandlerRef.current,
-            { session } = workboxHandler,
-            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
-            { modesettings: workboxmodesettings } = workboxsession,
-            { modesettings: documentmodesettings } = documentsession,
-            { modesettings: resourcesmodesettings } = resourcessession
+    // const cancelChanges = useCallback((sessionID) => {
+    //     const 
+    //         workboxHandler = workboxHandlerRef.current,
+    //         { session } = workboxHandler,
+    //         { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+    //         { modesettings: workboxmodesettings } = workboxsession,
+    //         { modesettings: documentmodesettings } = documentsession,
+    //         { modesettings: resourcesmodesettings } = resourcessession
 
-        documentsession.changesessionid = null
-        workboxmodesettings.resources.disable = false
-        documentmodesettings.normal.disable = false
-        documentmodesettings.insert.disable = false
-        documentmodesettings.remove.disable = false
-        documentmodesettings.drag.disable = false
+    //     documentsession.changesessionid = null
+    //     workboxmodesettings.resources.disable = false
+    //     documentmodesettings.normal.disable = false
+    //     documentmodesettings.insert.disable = false
+    //     documentmodesettings.remove.disable = false
+    //     documentmodesettings.drag.disable = false
 
-        resourcesmodesettings.insert.disable = false
-        resourcesmodesettings.edit.disable = false
-        resourcesmodesettings.remove.disable = false
-        resourcesmodesettings.drag.disable = false
+    //     resourcesmodesettings.insert.disable = false
+    //     resourcesmodesettings.edit.disable = false
+    //     resourcesmodesettings.remove.disable = false
+    //     resourcesmodesettings.drag.disable = false
 
-        workboxHandler.editRecord = null
+    //     workboxHandler.editRecord = null
 
-        setWorkboxHandlerContext({current:workboxHandler})
+    //     setWorkboxHandlerContext({current:workboxHandler})
 
-    },[])
+    // },[])
 
     // create workboxHandler
     useEffect(() => {
@@ -283,25 +407,25 @@ const Workbox = (props) => {
         workboxHandler.internal.onFail = onFail
         // workboxHandlerContext.current = workboxHandler
 
-        const 
-            doccontrols = workboxHandler.session.document,
-            resourcecontrols = workboxHandler.session.resources
+        // const 
+        //     doccontrols = workboxHandler.session.document,
+        //     resourcecontrols = workboxHandler.session.resources
 
-        doccontrols.insertunit = insertUnit
-        doccontrols.editunit = editUnit
-        doccontrols.removeunit = removeUnit
-        doccontrols.reorderunit = reorderUnit
-        doccontrols.savechanges = saveChanges
-        doccontrols.cancelchanges = cancelChanges
+        // doccontrols.insertunit = insertUnit
+        // doccontrols.editunit = editUnit
+        // doccontrols.removeunit = removeUnit
+        // doccontrols.reorderunit = reorderUnit
+        // doccontrols.savechanges = saveChanges
+        // doccontrols.cancelchanges = cancelChanges
 
-        /*
-        resourcecontrols.drillitem = 
-        resourcecontrols.insertitem =
-        resourcecontrols.edititem =
-        resourcecontrols.removeitem = 
-        resourcecontrols.dragitem =
-        resourcecontrols.savechanges = 
-        */
+        // /*
+        // resourcecontrols.drillitem = 
+        // resourcecontrols.insertitem =
+        // resourcecontrols.edititem =
+        // resourcecontrols.removeitem = 
+        // resourcecontrols.dragitem =
+        // resourcecontrols.savechanges = 
+        // */
 
         setWorkboxHandlerContext({current:workboxHandler})
 

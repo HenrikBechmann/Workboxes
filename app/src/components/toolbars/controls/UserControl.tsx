@@ -8,7 +8,7 @@ import {
     Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup
 } from '@chakra-ui/react'
 
-import userIcon from '../../../assets/user.png'
+import userIcon from '../../../../assets/user.png'
 
 const iconWrapperStyles = {
     display:'inline-block',

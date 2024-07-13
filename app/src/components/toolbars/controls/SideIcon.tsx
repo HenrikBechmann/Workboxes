@@ -6,8 +6,8 @@ import React, {useRef, CSSProperties} from 'react'
 import {
   Tooltip, Box,
 } from '@chakra-ui/react'
-import dialogIcon from '../../../assets/dialog.png'
-import infoIcon from '../../../assets/info.png'
+import dialogIcon from '../../../../assets/dialog.png'
+import infoIcon from '../../../../assets/info.png'
 
 import NumberBadge from './NumberBadge'
 

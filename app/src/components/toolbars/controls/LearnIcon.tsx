@@ -7,7 +7,7 @@ import {
   Tooltip, Box,
 } from '@chakra-ui/react'
 
-import helpIcon from '../../../assets/help.png'
+import helpIcon from '../../../../assets/help.png'
 
 const smallerIconStyles = {
     height:'18px', 
