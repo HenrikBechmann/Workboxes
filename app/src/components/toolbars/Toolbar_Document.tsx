@@ -92,7 +92,7 @@ const DocumentToolbar = (props) => {
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
-            modeSettings.drag.select = false
+            // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
@@ -101,7 +101,7 @@ const DocumentToolbar = (props) => {
             modeSettings.insert.select = true
             modeSettings.edit.select = false
             modeSettings.remove.select = false
-            modeSettings.drag.select = false
+            // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
@@ -110,7 +110,7 @@ const DocumentToolbar = (props) => {
             modeSettings.insert.select = false
             modeSettings.edit.select = true
             modeSettings.remove.select = false
-            modeSettings.drag.select = false
+            // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onRemove = (value) => {
@@ -119,7 +119,7 @@ const DocumentToolbar = (props) => {
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = true
-            modeSettings.drag.select = false
+            // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onDrag = (value) => {
@@ -128,7 +128,7 @@ const DocumentToolbar = (props) => {
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
-            modeSettings.drag.select = true
+            // modeSettings.drag.select = true
             dispatchWorkboxHandler()
         },
 

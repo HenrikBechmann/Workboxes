@@ -75,15 +75,8 @@ const WorkboxToolbar = (props) => {
         { workboxRecord } = workboxHandler,
         { settings } = workboxHandler,
         modeSettings = workboxHandler.session.workbox.modesettings
-        // [toolbarState, setToolbarState] = useState('ready')
 
     const
-        // toggleOnDocumentRef = useRef(settings.document.show),
-        // disabledDocumentRef = useRef(settings.document.disabled),
-        // toggleOnResourcesRef = useRef(settings.resources.show),
-        // disabledResourcesRef = useRef(settings.resources.disabled),
-        // toggleOnBothRef = useRef(settings.both.show),
-        // disabledBothRef = useRef(settings.both.disabled),
 
         domainTitle = workboxRecord?.profile.domain.name,
         domainIcon = workboxRecord?.profile.domain.image?.source,

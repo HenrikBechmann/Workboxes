@@ -98,10 +98,6 @@ class WorkboxHandler {
                     select:false,
                     disable:false,
                 },
-                drag: {
-                    select:false,
-                    disable:false,
-                }
             }
         },
         resources:{
@@ -254,11 +250,11 @@ class WorkboxHandler {
 
     }
 
-    async getItemList(parms) {
+    async getResources(parms) {
 
     }
 
-    async saveItems(items) {
+    async saveResources(items) {
 
     }
 
