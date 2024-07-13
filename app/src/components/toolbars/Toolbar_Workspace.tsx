@@ -281,7 +281,7 @@ const WorkspaceToolbar = (props) => {
         <ToolbarVerticalDivider />
         {panelDomainRecord && <DomainControl 
             domainTitle = {panelDomainRecord.profile.domain.name} 
-            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "base domain workbox"
+            domainIcon = {panelDomainRecord.profile.domain.image.source} caption = "domain workbox"
             response = {showDomainWorkbox}
         />}
         {panelMemberRecord && <MemberControl
