@@ -9,11 +9,11 @@ import {
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-import MenuIcon from './MenuIcon'
-import StandardIcon from './StandardIcon'
-import { useToggleIcon } from './ToggleIcon'
-import LearnIcon from './LearnIcon'
-import ToolbarVerticalDivider from './VerticalDivider'
+import MenuIcon from './controls/MenuIcon'
+import StandardIcon from './controls/StandardIcon'
+import { useToggleIcon } from './controls/ToggleIcon'
+import LearnIcon from './controls/LearnIcon'
+import ToolbarVerticalDivider from './controls/VerticalDivider'
 
 import emptylistIcon from '../../../assets/empty_list.png'
 import labelIcon from '../../../assets/label.png'

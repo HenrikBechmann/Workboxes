@@ -9,12 +9,12 @@ import {
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-import { useToggleIcon } from './ToggleIcon'
+import { useToggleIcon } from './controls/ToggleIcon'
 
-import MenuIcon from './MenuIcon'
-import StandardIcon from './StandardIcon'
-import LearnIcon from './LearnIcon'
-import ToolbarVerticalDivider from './VerticalDivider'
+import MenuIcon from './controls/MenuIcon'
+import StandardIcon from './controls/StandardIcon'
+import LearnIcon from './controls/LearnIcon'
+import ToolbarVerticalDivider from './controls/VerticalDivider'
 
 const documentToolbarStyles = {
     padding:'2px',

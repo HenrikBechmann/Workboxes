@@ -22,7 +22,7 @@ import {
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-import SideIcon from '../toolbars/SideIcon'
+import SideIcon from '../toolbars/controls/SideIcon'
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'

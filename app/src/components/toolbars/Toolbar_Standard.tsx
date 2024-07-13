@@ -29,12 +29,12 @@ import WorkspaceSetDefaultDialog from '../dialogs/WorkspaceSetDefaultDialog'
 
 import { isMobile } from '../../index'
 
-import LearnIcon from './LearnIcon'
-import MenuIcon from './MenuIcon'
-import MenuControl from './MenuControl'
-import UserControl from './UserControl'
-import StandardIcon from './StandardIcon'
-import ToolbarVerticalDivider from './VerticalDivider'
+import LearnIcon from './controls/LearnIcon'
+import MenuIcon from './controls/MenuIcon'
+import MenuControl from './controls/MenuControl'
+import UserControl from './controls/UserControl'
+import StandardIcon from './controls/StandardIcon'
+import ToolbarVerticalDivider from './controls/VerticalDivider'
 
 import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'
