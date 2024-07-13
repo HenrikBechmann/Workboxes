@@ -165,14 +165,14 @@ const DocumentToolbar = (props) => {
             is_radio: true,
             callback: onRemove
         }),
-        dragToggle = useToggleIcon({
-            icon:dragIcon, 
-            tooltip:'re-order internal section items',
-            caption:'re-order',
-            settings:modeSettings.drag,
-            is_radio: true,
-            callback: onDrag
-        }),
+        // dragToggle = useToggleIcon({
+        //     icon:dragIcon, 
+        //     tooltip:'re-order internal section items',
+        //     caption:'re-order',
+        //     settings:modeSettings.drag,
+        //     is_radio: true,
+        //     callback: onDrag
+        // }),
         onChangeInsertType = (event) => {
             workboxHandler.session.document.insertselection = event.target.value
         }
@@ -221,6 +221,8 @@ const DocumentToolbar = (props) => {
 
     const selectwidth = (documentConfig.mode == 'insert')?'88px':0
 
+    // { dragToggle }
+
     return <Box data-type = 'document-toolbar' style = {documentToolbarStyles}>
 
         <MenuIcon icon = {profileIcon} caption = 'document' tooltip = 'Workbox Document' menulist = {documentmenulist} />  
@@ -233,12 +235,11 @@ const DocumentToolbar = (props) => {
             <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
                 <option value="image">Image</option>
-                <option value="import">Callout</option>
+                <option value="import">Import</option>
             </Select>
         </Box>
         { editToggle }
         { removeToggle }
-        { dragToggle }
         <ToolbarVerticalDivider />
         <StandardIcon icon = {downloadIcon} caption = 'pdf' tooltip = 'download a pdf of the document'/>
         <ToolbarVerticalDivider />
