@@ -232,6 +232,8 @@ const WorkboxFrame = (props) => {
             { modesettings: resourcesmodesettings } = resourcessession
 
         documentsession.changesessionid = null
+        documentsession.is_change_error = false
+
         workboxmodesettings.resources.disable = false
         documentmodesettings.normal.disable = false
         documentmodesettings.insert.disable = false
