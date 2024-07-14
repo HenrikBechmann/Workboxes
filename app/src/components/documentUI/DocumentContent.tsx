@@ -20,8 +20,6 @@ import DocumentBase from './DocumentBase'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-// let nextWBDocumentUnitSessionID = 0
-
 const DocumentContent = (props) => {
 
     const 

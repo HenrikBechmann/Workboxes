@@ -60,17 +60,22 @@ const BaseEdit = (props) => {
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
-        minNameLength = systemRecords.settings.constraints.input.nameLength_min
-
-    const errorMessages = {
-        name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
-        description:`The description can only be up to ${maxDescriptionLength} characters.`
-    }
-
-    const helperText = {
-        name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
-        description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
-    }
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        errorMessages = {
+            name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
+            description:`The description can only be up to ${maxDescriptionLength} characters.`
+        },
+        helperText = {
+            name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
+            description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
+        },
+        invalidFieldFlagsRef = useRef({
+            name:false,
+            description:false,
+            image:false,
+            summary:false,
+        }),
+        invalidFieldFlags = invalidFieldFlagsRef.current
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -96,7 +101,6 @@ const BaseEdit = (props) => {
     const onChangeFunctions = {
         name:(event) => {
             const 
-                editData = workboxHandler.editRecord.documnt.base,
                 target = event.target as HTMLInputElement,
                 value = target.value
 
@@ -106,7 +110,6 @@ const BaseEdit = (props) => {
         },
         description:(event) => {
             const
-                editData = workboxHandler.editRecord.documnt.base,
                 target = event.target as HTMLInputElement,
                 value = target.value
             isInvalidTests.description(value)
@@ -127,7 +130,7 @@ const BaseEdit = (props) => {
                     isInvalid = true
                 }
             }
-            // invalidFieldFlags.name = isInvalid
+            invalidFieldFlags.name = isInvalid
             return isInvalid
         },
         description:(value) => {
@@ -135,7 +138,7 @@ const BaseEdit = (props) => {
             if (value.length > maxDescriptionLength) {
                 isInvalid = true
             }
-            // invalidFieldFlags.description = isInvalid
+            invalidFieldFlags.description = isInvalid
             return isInvalid
         },
         image:(value) => {
@@ -159,7 +162,7 @@ const BaseEdit = (props) => {
         >--- Base section ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.name*/}>
+                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                     <Input 
                         value = {editData.name || ''} 
@@ -176,7 +179,7 @@ const BaseEdit = (props) => {
                 </FormControl>
             </Box>
             <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {false/*invalidFieldFlags.description*/}>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
                     <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
                     <Textarea 
                         value = {editData.description || ''} 
