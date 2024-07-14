@@ -118,6 +118,20 @@ const BaseEdit = (props) => {
         },
     }
 
+    const setChangeError = () => {
+
+        let is_change_error = false
+        for (const prop in invalidFieldFlags) {
+            if (invalidFieldFlags[prop]) {
+                is_change_error = true
+                break
+            }
+        }
+
+        workboxHandler.session.document.is_change_error = is_change_error
+
+    }
+
     const isInvalidTests = {
         // TODO check for blank, string
         name:(value) => {
@@ -131,6 +145,7 @@ const BaseEdit = (props) => {
                 }
             }
             invalidFieldFlags.name = isInvalid
+            setChangeError()
             return isInvalid
         },
         description:(value) => {
@@ -139,6 +154,7 @@ const BaseEdit = (props) => {
                 isInvalid = true
             }
             invalidFieldFlags.description = isInvalid
+            setChangeError()
             return isInvalid
         },
         image:(value) => {
@@ -255,8 +271,9 @@ const DocumentBase = (props) => {
 
     const onSave = () => {
 
-        sessiondocument.savechanges(sessionIDRef.current)
-        setBaseEditState(false)
+        if (sessiondocument.savechanges(sessionIDRef.current)) {
+            setBaseEditState(false)
+        }
 
     }
 

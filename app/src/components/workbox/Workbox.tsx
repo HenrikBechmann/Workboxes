@@ -199,6 +199,11 @@ const WorkboxFrame = (props) => {
             { modesettings: documentmodesettings } = documentsession,
             { modesettings: resourcesmodesettings } = resourcessession
 
+        if (documentsession.is_change_error) {
+            toast({description:'please resolve errors before saving',status:'error'})
+            return false
+        }
+
         documentsession.changesessionid = null
         workboxmodesettings.resources.disable = false
         documentmodesettings.normal.disable = false
@@ -213,6 +218,8 @@ const WorkboxFrame = (props) => {
         workboxHandler.editRecord = null
 
         dispatchWorkboxHandler()
+
+        return true
 
     },[])
 
