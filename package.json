@@ -15,9 +15,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@blocknote/core": "^0.14.2",
-    "@blocknote/mantine": "^0.14.2",
-    "@blocknote/react": "^0.14.2",
+    "@blocknote/core": "^0.15.0",
+    "@blocknote/mantine": "^0.15.0",
+    "@blocknote/react": "^0.15.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
