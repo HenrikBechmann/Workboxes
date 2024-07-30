@@ -5,14 +5,16 @@ import {
     getFirestore, 
     collection, doc, query, where,
     getDoc, getDocFromServer, getDocs, onSnapshot, setDoc, updateDoc,
-    increment, serverTimestamp, 
+    increment, serverTimestamp, Timestamp,
     writeBatch, runTransaction
 } from 'firebase/firestore'
+
+import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxHandler {
-    constructor( {workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
+    constructor( {userRecords, workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
 
         this.workboxID = workboxID
         this.workboxSessionID = workboxSessionID
@@ -23,6 +25,7 @@ class WorkboxHandler {
         this.internal.onError = onError
         this.internal.onFail = onFail
         this.internal.errorControl = errorControl
+        this.internal.userRecords = userRecords
 
     }
 
@@ -42,6 +45,7 @@ class WorkboxHandler {
         unsubscribeworkbox: null,
         setWorkboxHandlerContext: null, // for consumers
         trigger: null, // for debugging
+        userRecords: null,
     }
 
     workboxID
@@ -139,27 +143,29 @@ class WorkboxHandler {
         },
     }
 
-    // persistent Workbox settings, stored with panels
-    // settings: 
-    // {
-    //     content: {
-    //         displaycode:'both', // document, resources, both
-    //     },
-    //     document: {
-    //         displaycode:'out', // over, under, out
-    //         mode:'normal', // normal, insert, edit, remove, reorder
-    //         show:false,
-    //     },
-    //     resources: { 
-    //         displaycode:'out', // over, under, out
-    //         mode: 'normal', // normal, drill, insert, edit, remove, drag
-    //         show:false,
-    //     },
-    //     both: {
-    //         show: true,
-    //     },
-    // },
-
+    
+/*
+    persistent Workbox settings, stored with panels
+    settings: 
+    {
+        content: {
+            displaycode:'both', // document, resources, both
+        },
+        document: {
+            displaycode:'out', // over, under, out
+            mode:'normal', // normal, insert, edit, remove, reorder
+            show:false,
+        },
+        resources: { 
+            displaycode:'out', // over, under, out
+            mode: 'normal', // normal, drill, insert, edit, remove, drag
+            show:false,
+        },
+        both: {
+            show: true,
+        },
+    },
+*/    
     settings
 
     dimensions = {
@@ -247,6 +253,41 @@ class WorkboxHandler {
     }
 
     async saveWorkboxRecord(workboxRecord) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const 
+            saveRecord = _cloneDeep(workboxRecord),
+            userRecord = this.internal.userRecords.user,
+            workboxCollection = collection(this.internal.db, 'workboxes')
+
+        saveRecord.generation = increment(1)
+        saveRecord.profile.commits.updated_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
+        saveRecord.profile.commits.updated_timestamp = Timestamp.now()
+
+        try {
+
+            await setDoc(doc(this.internal.db,'workboxes',this.workboxID),saveRecord)
+            this.internal.usage.write(1)
+
+        } catch (error) {
+
+            const errdesc = 'error saving workbox record. Check internet'
+            this.internal.errorControl.push({description:errdesc,error})
+            console.log(errdesc,error)
+            this.internal.onError()
+            result.error = true
+            return result
+
+        }
+
+        result.notice = 'workbox saved'
+        return result
 
     }
 

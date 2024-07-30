@@ -11,7 +11,7 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUsage, useSnapshotControl, useErrorControl } from '../../system/WorkboxesProvider'
+import { useFirestore, useUsage, useSnapshotControl, useErrorControl, useUserRecords } from '../../system/WorkboxesProvider'
 import {cloneDeep as _cloneDeep} from 'lodash'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
@@ -191,7 +191,8 @@ const WorkboxFrame = (props) => {
         
     },[])
 
-    const saveChanges = useCallback((sessionID) => {
+    const saveChanges = useCallback(async function (sessionID) {
+        
         const 
             { session } = workboxHandler,
             { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
@@ -203,6 +204,14 @@ const WorkboxFrame = (props) => {
             toast({description:'please resolve errors before saving',status:'error'})
             return false
         }
+
+        const result = await workboxHandler.saveWorkboxRecord(workboxHandler.editRecord)
+
+        if (result.error) {
+            return false
+        }
+
+        toast({description: result.notice})
 
         documentsession.changesessionid = null
         workboxmodesettings.resources.disable = false
@@ -217,7 +226,7 @@ const WorkboxFrame = (props) => {
 
         workboxHandler.editRecord = null
 
-        dispatchWorkboxHandler()
+        // dispatchWorkboxHandler()
 
         return true
 
@@ -283,6 +292,8 @@ const Workbox = (props) => {
         navigate = useNavigate(),
         errorControl = useErrorControl,
 
+        userRecords = useUserRecords(),
+
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         workboxHandler = workboxHandlerContext.current,
         unsubscribeworkbox = workboxHandler?.internal.unsubscribeworkbox,
@@ -302,7 +313,7 @@ const Workbox = (props) => {
     // create workboxHandler
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
+        const workboxHandler = new WorkboxHandler({userRecords, workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
 
         workboxHandler.settings = workboxSettings.settings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
