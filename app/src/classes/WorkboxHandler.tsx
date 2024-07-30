@@ -272,7 +272,7 @@ class WorkboxHandler {
 
         try {
 
-            await setDoc(doc(this.internal.db,'workboxes',this.workboxID),saveRecord)
+            await setDoc(doc(workboxCollection,this.workboxID),saveRecord)
             this.internal.usage.write(1)
 
         } catch (error) {
