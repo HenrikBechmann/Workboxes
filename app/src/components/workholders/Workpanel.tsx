@@ -253,8 +253,6 @@ const Workpanel = (props:any) => {
         const component = _createWindowComponent(windowSessionID, windowData)
         windowComponentList.push(component)
 
-        // console.log('windowComponentList',windowComponentList)
-
         // set window index and save window record
         windowData.window.index = windowComponentList.length - 1
         windowDataMap.set(windowSessionID, windowData)
@@ -268,8 +266,6 @@ const Workpanel = (props:any) => {
     // ** private ** only called by addWindow above
     const _createWindowComponent = (windowSessionID, windowData) => {
 
-        // console.log('_createWindowComponent: windowSessionID, windowData', windowSessionID, windowData)
-
         const 
             // required to position window
             panelElement = panelElementRef.current,
@@ -277,8 +273,6 @@ const Workpanel = (props:any) => {
             // required to configure window
             { viewDeclaration, zOrder, configuration, identity } = windowData.window
 
-        // console.log('Workwindow parms: windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs\n',
-        //     windowSessionID, viewDeclaration, containerDimensionSpecs, windowCallbacks, windowSpecs)
         return <Workwindow 
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }

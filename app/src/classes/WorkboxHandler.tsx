@@ -262,18 +262,51 @@ class WorkboxHandler {
         }
 
         const 
-            saveRecord = _cloneDeep(workboxRecord),
+            workboxRecordClone = _cloneDeep(workboxRecord),
             userRecord = this.internal.userRecords.user,
-            workboxCollection = collection(this.internal.db, 'workboxes')
+            workboxCollection = collection(this.internal.db, 'workboxes'),
+            batch = writeBatch(this.internal.db)
 
-        saveRecord.generation = increment(1)
-        saveRecord.profile.commits.updated_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
-        saveRecord.profile.commits.updated_timestamp = Timestamp.now()
+        let writecount = 1
+        workboxRecordClone.generation = increment(1)
+        workboxRecordClone.profile.commits.updated_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
+        workboxRecordClone.profile.commits.updated_timestamp = Timestamp.now()
+        workboxRecordClone.profile.workbox.name = workboxRecordClone.document.base.name
+
+
+        let syncCollection, syncDoc, syncUpdate
+        if (workboxRecordClone.profile.type.name == 'member') {
+            workboxRecordClone.profile.member.name = workboxRecordClone.document.base.name
+            writecount++
+            syncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
+            syncDoc = doc(syncCollection, workboxRecordClone.profile.member.id)
+            syncUpdate = {
+                generation: increment(1),
+                'profile.member.name':workboxRecordClone.document.base.name,
+                'profile.member.description':workboxRecordClone.document.base.description,
+                'profile.workbox.name':workboxRecordClone.document.base.name
+            }
+            batch.update(syncDoc,syncUpdate)
+        } else if (workboxRecordClone.profile.type.name == 'domain') {
+            workboxRecordClone.profile.domain.name = workboxRecordClone.document.base.name
+            writecount++
+            syncCollection = collection(this.internal.db,'domains')
+            syncDoc = doc(syncCollection, workboxRecordClone.profile.domain.id)
+            syncUpdate = {
+                generation: increment(1),
+                'profile.domain.name':workboxRecordClone.document.base.name,
+                'profile.domain.description':workboxRecordClone.document.base.description,
+                'profile.workbox.name':workboxRecordClone.document.base.name
+            }
+            batch.update(syncDoc,syncUpdate)
+        }
 
         try {
 
-            await setDoc(doc(workboxCollection,this.workboxID),saveRecord)
-            this.internal.usage.write(1)
+            batch.set(doc(workboxCollection,this.workboxID),workboxRecordClone)
+            // await setDoc(doc(workboxCollection,this.workboxID),workboxRecordClone)
+            await batch.commit()
+            this.internal.usage.write(writecount)
 
         } catch (error) {
 

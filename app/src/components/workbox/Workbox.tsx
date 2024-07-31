@@ -79,7 +79,6 @@ const WorkboxFrame = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxFrameElementRef = useRef(null), // for resizeObserver
         toast = useToast({duration:4000, isClosable: true})
-    // console.log('running WorkboxFrame workboxRecord', workboxHandler.workboxRecord)
 
     // update the width record of this panel on resize
     // TODO: use of imported CONTENT_FRAME_PADDING_WIDTH for intialization is a sequencing anomaly
