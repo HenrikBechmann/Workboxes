@@ -696,9 +696,6 @@ const Workpanel = (props:any) => {
     const windowComponentList = [...windowComponentListRef.current]
     const windowCount = windowComponentListRef.current.length
 
-    // console.log('RENDER panelState, windowCount, windowComponentList[0], windowComponentList.length, windowComponentList before render\n', 
-    //     panelState, windowCount, windowComponentList[0], windowComponentList.length, [...windowComponentList])
-
     return <Box 
         id = 'panel-display' 
         data-type = 'panel-display' 

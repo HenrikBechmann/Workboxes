@@ -274,31 +274,43 @@ class WorkboxHandler {
         workboxRecordClone.profile.workbox.name = workboxRecordClone.document.base.name
 
 
-        let syncCollection, syncDoc, syncUpdate
+        let memberSyncCollection, memberSyncDoc, memberSyncUpdate, domainSyncCollection, domainSyncDoc, domainSyncUpdate
         if (workboxRecordClone.profile.type.name == 'member') {
+            // update member data
             workboxRecordClone.profile.member.name = workboxRecordClone.document.base.name
             writecount++
-            syncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
-            syncDoc = doc(syncCollection, workboxRecordClone.profile.member.id)
-            syncUpdate = {
+            memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
+            memberSyncDoc = doc(memberSyncCollection, workboxRecordClone.profile.member.id)
+            memberSyncUpdate = {
                 generation: increment(1),
                 'profile.member.name':workboxRecordClone.document.base.name,
                 'profile.member.description':workboxRecordClone.document.base.description,
                 'profile.workbox.name':workboxRecordClone.document.base.name
             }
-            batch.update(syncDoc,syncUpdate)
+            batch.update(memberSyncDoc,memberSyncUpdate)
         } else if (workboxRecordClone.profile.type.name == 'domain') {
+            // update domain data
             workboxRecordClone.profile.domain.name = workboxRecordClone.document.base.name
             writecount++
-            syncCollection = collection(this.internal.db,'domains')
-            syncDoc = doc(syncCollection, workboxRecordClone.profile.domain.id)
-            syncUpdate = {
+            domainSyncCollection = collection(this.internal.db,'domains')
+            domainSyncDoc = doc(domainSyncCollection, workboxRecordClone.profile.domain.id)
+            domainSyncUpdate = {
                 generation: increment(1),
                 'profile.domain.name':workboxRecordClone.document.base.name,
                 'profile.domain.description':workboxRecordClone.document.base.description,
                 'profile.workbox.name':workboxRecordClone.document.base.name
             }
-            batch.update(syncDoc,syncUpdate)
+            batch.update(domainSyncDoc,domainSyncUpdate)
+
+            // updata member domain name // TODO find member id somehow
+            // writecount++
+            // memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
+            // memberSyncDoc = doc(memberSyncCollection, workboxRecordClone.profile.member.id)
+            // memberSyncUpdate = {
+            //     generation: increment(1),
+            //     'profile.domain.name':workboxRecordClone.document.base.name,
+            // }
+            // batch.update(memberSyncDoc,memberSyncUpdate)
         }
 
         try {

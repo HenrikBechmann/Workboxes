@@ -84,6 +84,8 @@ const WorkboxToolbar = (props) => {
         itemTitle = workboxRecord?.profile.workbox.name,
         typeName = workboxRecord?.profile.type.alias
 
+    // console.log('domainIcon',domainIcon, workboxRecord)
+
     // any change of configuration triggers message to workboxcontent
     useEffect(()=> {
 

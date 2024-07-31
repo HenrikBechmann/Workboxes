@@ -14,6 +14,8 @@ const DomainControl = (props) => {
 
     const { domainTitle, domainIcon, caption, response } = props
 
+    // console.log('DomainControl: domainIcon', domainIcon)
+
     const workboxItemIconStyles = {
         width:'24px', 
         height:'24px', 

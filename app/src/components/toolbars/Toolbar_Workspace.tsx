@@ -85,6 +85,8 @@ const WorkspaceToolbar = (props) => {
         // messaging
         toast = useToast({duration:4000, isClosable:true}) 
 
+        // console.log('panelDomainRecord, panelMemberRecord', panelDomainRecord, panelMemberRecord)
+
    // ----------------------[ state changes ]---------------------
 
     // update previous/next
