@@ -96,7 +96,7 @@ export const UserProvider = ({children}) => {
         [userState, setUserState] = useState('setup'),
         // for contexts...
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
-        [userRecords, setUserRecords] = useState({user:null, account:null, domain:null}),
+        [userRecords, setUserRecords] = useState({user:null, account:null, domain:null, memberships:null}),
         [systemRecords, setSystemRecords] = useState({settings:null}),
         [workspaceHandlerContext, setWorkspaceHandlerContext] = useState({ current: workspaceHandlerInstance }),
         // bootstrap resources
@@ -332,7 +332,8 @@ export const UserProvider = ({children}) => {
                 userRecords = userRecordsRef.current,
                 userRecord = userRecords.user,
                 accountID = userRecord.profile.account.id,
-                domainID = userRecord.profile.domain.id
+                domainID = userRecord.profile.domain.id,
+                userID = userRecord.profile.user.id
 
             const accountIndex = "UserProvider.accounts." + accountID
             if (!snapshotControl.has(accountIndex)) {
