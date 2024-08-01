@@ -302,6 +302,8 @@ class WorkboxHandler {
             }
             batch.update(domainSyncDoc,domainSyncUpdate)
 
+            // TODO update panel domain name
+
             // updata member domain name // TODO find member id somehow
             // writecount++
             // memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')

@@ -120,7 +120,7 @@ const versionMaps = {
   },
   members: {
     standard: {
-      latest_version:1,
+      latest_version:2,
       datamap: new Map(),
       functionmap: new Map(),
     },
@@ -564,7 +564,7 @@ const versionData = {
   members: {
     standard: [
     {
-      version: 1,
+      version: 2,
       generation: 0,
       profile: {
         user: {
@@ -580,6 +580,10 @@ const versionData = {
           location: null,
           description: null,
           date_joined: null,
+        },
+        roles: {
+          read:[],
+          write:[],
         },
         handle: {
           plain: null,

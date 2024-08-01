@@ -446,7 +446,7 @@ class PanelHandler {
         }
 
         const accessCollection = collection(this.db, 'users', this.userID, 'access')
-        const domainsRef = doc(accessCollection, 'domains')
+        const domainsRef = doc(accessCollection, 'memberships')
 
         let domainList
         try {
@@ -454,7 +454,8 @@ class PanelHandler {
             const recordData = await getDoc(domainsRef)
             this.usage.read(1)
             if (recordData.exists()) {
-                domainList = recordData.data().domains
+                domainList = Object.keys(recordData.data().domains)
+                console.log('domainList',domainList)
                 if (domainList.length === 0) {
                     result.success = false
                     result.notice = 'error: no domains found for this user in the domain access record.'
