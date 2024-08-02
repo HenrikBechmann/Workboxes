@@ -117,7 +117,7 @@ export const UserProvider = ({children}) => {
     userRecordsRef.current = userRecords
     errorControlRef.current = errorControl
 
-    // console.log('userState',userState, userRecordsRef.current)
+    // console.log('userRecords', userRecords)
 
     // --------------------------------[ initialization effects ]------------------------
 
@@ -253,7 +253,7 @@ export const UserProvider = ({children}) => {
 
     },[systemRecords])
 
-    // open base listeners for user, in sequence: user, account, and domain records
+    // open base listeners for user, in sequence: user, account, domain records, and memberships record
     useEffect(()=>{
 
         if (userState == 'useridentified') { // collected user record, now collect application records
@@ -443,6 +443,63 @@ export const UserProvider = ({children}) => {
 
                 snapshotControl.registerUnsub(domainIndex, unsubscribedomain)
             }
+
+            const membershipsIndex = "UserProvider.memberships." + userID
+            if (!snapshotControl.has(membershipsIndex)) {
+                snapshotControl.create(membershipsIndex)
+
+                const accessCollection = collection(db, "users", userID, 'access')
+                const unsubscribememberships = 
+                    onSnapshot(doc(accessCollection,'memberships'), 
+                        async (returndoc) =>{
+                            snapshotControl.incrementCallCount(membershipsIndex, 1)
+                            usage.read(1)
+                            const userMembershipsRecord = returndoc.data()
+                            if (!userMembershipsRecord) { // error
+                                errorControlRef.current.push({description:'error getting user memberships record.',error:null})
+                                console.log('error getting user memberships record.')
+                                setUserAuthData({...userAuthData})
+                                setUserState('error')
+                                return
+                            }
+                            setUserRecords((previousState) => {
+                               previousState.memberships = userMembershipsRecord
+                               return {...previousState}
+                            })
+                            if (!snapshotControl.wasSchemaChecked(membershipsIndex)) {
+                                const updatedRecord = updateDocumentSchema('memberships', 'standard',userMembershipsRecord)
+                                if (!Object.is(userMembershipsRecord, updatedRecord)) {
+                                    try {
+                                        await setDoc(doc(accessCollection,'memberships'),updatedRecord)
+                                        usage.write(1)
+                                    } catch(error) {
+
+                                        errorControlRef.current.push({description:'error updating user memberships version. Check internet',error})
+                                        console.log('error updating account memberships version. Check internet',error)
+                                        setUserAuthData({...userAuthData})
+                                        setUserState('error')
+                                        return
+
+                                    }
+
+                                }
+                                snapshotControl.setSchemaChecked(membershipsIndex)
+                            }
+                        }, (error) => {
+                            const errdesc = 'onSnapshot error for user memberships'
+                            console.log(errdesc,error)
+                            errorControl.push({description:errdesc,error})
+                            setUserAuthData({...userAuthData})
+                            setUserState('error')
+                            return
+
+                        }
+                    )
+
+                snapshotControl.registerUnsub(membershipsIndex, unsubscribememberships)
+            }
+
+
             setUserState('ready')
 
         }

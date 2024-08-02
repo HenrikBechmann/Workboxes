@@ -125,6 +125,13 @@ const versionMaps = {
       functionmap: new Map(),
     },
   },
+  memberships: {
+    standard: {
+      latest_version:2,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
   handles: {
     user: {
       latest_version:0,
@@ -617,6 +624,28 @@ const versionData = {
         },
         counts: {
           workboxes:0,
+        },
+      },
+    }],
+  },
+  memberships: {
+    standard: [
+    {
+      version: 2,
+      generation: 0,
+      domains:{},
+      profile: {
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
         },
       },
     }],

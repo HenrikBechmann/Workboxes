@@ -326,7 +326,7 @@ const Workbox = (props) => {
     },[])
 
     useEffect(()=>{
-        workboxHandler && (workboxHandler.userRecords = userRecords) // fails on initial load
+        workboxHandler && (workboxHandler.userRecords = userRecords) // fails on initial load; succeeds on workboxHandlerState == 'ready'
     },[userRecords, workboxHandlerState])
 
     // store onSnapshot unsubscribe function
