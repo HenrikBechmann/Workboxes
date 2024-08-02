@@ -290,6 +290,7 @@ const Workbox = (props) => {
         snapshotControl = useSnapshotControl(),
         navigate = useNavigate(),
         errorControl = useErrorControl,
+        [workboxHandlerState, setWorkboxHandlerState] = useState('setup'),
 
         userRecords = useUserRecords(),
 
@@ -318,15 +319,15 @@ const Workbox = (props) => {
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
-        workboxHandler.userRecords = userRecords
+        setWorkboxHandlerState('ready')
 
         setWorkboxHandlerContext({current:workboxHandler})
 
     },[])
 
     useEffect(()=>{
-        workboxHandler && (workboxHandler.userRecords = userRecords)
-    },[userRecords])
+        workboxHandler && (workboxHandler.userRecords = userRecords) // fails on initial load
+    },[userRecords, workboxHandlerState])
 
     // store onSnapshot unsubscribe function
     useEffect(()=>{
