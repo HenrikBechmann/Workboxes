@@ -312,16 +312,21 @@ const Workbox = (props) => {
     // create workboxHandler
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({userRecords, workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
+        const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
 
         workboxHandler.settings = workboxSettings.settings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
+        workboxHandler.userRecords = userRecords
 
         setWorkboxHandlerContext({current:workboxHandler})
 
     },[])
+
+    useEffect(()=>{
+        workboxHandler && (workboxHandler.userRecords = userRecords)
+    },[userRecords])
 
     // store onSnapshot unsubscribe function
     useEffect(()=>{

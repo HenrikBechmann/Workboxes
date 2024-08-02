@@ -14,7 +14,7 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxHandler {
-    constructor( {userRecords, workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
+    constructor( { workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
 
         this.workboxID = workboxID
         this.workboxSessionID = workboxSessionID
@@ -25,7 +25,6 @@ class WorkboxHandler {
         this.internal.onError = onError
         this.internal.onFail = onFail
         this.internal.errorControl = errorControl
-        this.internal.userRecords = userRecords
 
     }
 
@@ -45,8 +44,9 @@ class WorkboxHandler {
         unsubscribeworkbox: null,
         setWorkboxHandlerContext: null, // for consumers
         trigger: null, // for debugging
-        userRecords: null,
     }
+
+    userRecords // not static
 
     workboxID
     workboxSessionID
@@ -263,7 +263,7 @@ class WorkboxHandler {
 
         const 
             workboxRecordClone = _cloneDeep(workboxRecord),
-            userRecord = this.internal.userRecords.user,
+            userRecord = this.userRecords.user,
             workboxCollection = collection(this.internal.db, 'workboxes'),
             batch = writeBatch(this.internal.db)
 
