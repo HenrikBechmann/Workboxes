@@ -38,7 +38,7 @@ class PanelHandler {
     userID
 
     // TODO: check schema for domain record
-    async getPanelDomainContext(panelSelection, userRecord) {
+    async getPanelDomainContext(panelSelection) {//, userRecord) {
         const result = {
             error: false,
             success: true,
@@ -50,7 +50,8 @@ class PanelHandler {
             panelDomainID = panelRecord.profile.domain.id,
             domainCollection = collection(this.db,'domains'),
             domainDocRef = doc(domainCollection, panelDomainID),
-            memberCollection = collection(this.db, 'domains',panelDomainID, 'members')
+            memberCollection = collection(this.db, 'domains',panelDomainID, 'members'),
+            userRecord = this.workspaceHandler.userRecords.user
 
         let panelDomainRecord
         try {

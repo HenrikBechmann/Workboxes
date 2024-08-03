@@ -1258,8 +1258,8 @@ class WorkspaceHandler {
         return await this.panelHandler.panelReset(panelSelection)
     }
 
-    async getPanelDomainContext(panelSelection, userRecord) {
-        return await this.panelHandler.getPanelDomainContext(panelSelection, userRecord)
+    async getPanelDomainContext(panelSelection) {//, userRecord) {
+        return await this.panelHandler.getPanelDomainContext(panelSelection) // , userRecord)
     }
 
     async duplicatePanelAs(panelSelection, newname) {

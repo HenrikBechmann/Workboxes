@@ -58,7 +58,7 @@ const WorkspaceToolbar = (props) => {
     const 
         // panel context
         { panelComponentListRef } = props, // used by panelReorderListDialog
-        userRecords = useUserRecords(),
+        // userRecords = useUserRecords(),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         {     
             workspaceRecord, 
@@ -157,7 +157,7 @@ const WorkspaceToolbar = (props) => {
 
     async function getPanelDomainContext(panelSelection) {
 
-        const result = await workspaceHandler.getPanelDomainContext(panelSelection, userRecords.user)
+        const result = await workspaceHandler.getPanelDomainContext(panelSelection) //, userRecords.user)
         if (!result.success) {
             toast({description:'unable to collect domain context'})
         }
