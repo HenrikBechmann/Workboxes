@@ -89,7 +89,7 @@ class WorkspaceHandler {
     // workspace data
     setWorkspaceHandlerContext = null // initialized in WorkboxesProvider, used in useWorkspace
 
-    userRecords
+    userRecords // not static
 
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
