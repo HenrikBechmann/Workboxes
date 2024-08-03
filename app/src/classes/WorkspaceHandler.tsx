@@ -89,6 +89,8 @@ class WorkspaceHandler {
     // workspace data
     setWorkspaceHandlerContext = null // initialized in WorkboxesProvider, used in useWorkspace
 
+    userRecords
+
     workspaceSelection = {id:null, name:null}
     workspaceRecord = null
     panelSelection = {

@@ -132,6 +132,12 @@ export const UserProvider = ({children}) => {
 
     },[])
 
+    useEffect(()=> {
+
+        workspaceHandlerInstance.userRecords = userRecords
+
+    },[userRecords])
+
     // event listener
     useEffect(()=>{
 

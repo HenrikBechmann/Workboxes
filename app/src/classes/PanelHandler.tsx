@@ -445,37 +445,45 @@ class PanelHandler {
             payload: null,
         }
 
-        const accessCollection = collection(this.db, 'users', this.userID, 'access')
-        const domainsRef = doc(accessCollection, 'memberships')
+        const domainList = Object.keys(this.workspaceHandler.userRecords.memberships.domains)
 
-        let domainList
-        try {
-
-            const recordData = await getDoc(domainsRef)
-            this.usage.read(1)
-            if (recordData.exists()) {
-                domainList = Object.keys(recordData.data().domains)
-                console.log('domainList',domainList)
-                if (domainList.length === 0) {
-                    result.success = false
-                    result.notice = 'error: no domains found for this user in the domain access record.'
-                    return result
-                }
-            } else {
-                result.success = false
-                result.notice = 'error: no domain access record found for this user.'
-                return result
-            }
-
-        } catch (error) {
-
-            const errdesc = 'error fetching user domain list'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
+        if (domainList.length === 0) {
+            result.success = false
+            result.notice = 'error: no domains found for this user in the users memberships list.'
             return result
-
         }
+
+        // const accessCollection = collection(this.db, 'users', this.userID, 'access')
+        // const domainsRef = doc(accessCollection, 'memberships')
+
+        // let domainList
+        // try {
+
+        //     const recordData = await getDoc(domainsRef)
+        //     this.usage.read(1)
+        //     if (recordData.exists()) {
+        //         domainList = Object.keys(recordData.data().domains)
+        //         console.log('domainList',domainList)
+        //         if (domainList.length === 0) {
+        //             result.success = false
+        //             result.notice = 'error: no domains found for this user in the domain access record.'
+        //             return result
+        //         }
+        //     } else {
+        //         result.success = false
+        //         result.notice = 'error: no domain access record found for this user.'
+        //         return result
+        //     }
+
+        // } catch (error) {
+
+        //     const errdesc = 'error fetching user domain list'
+        //     console.log(errdesc, error)
+        //     this.errorControl.push({description:errdesc, error})
+        //     result.error = true
+        //     return result
+
+        // }
 
         const domainCollection = collection(this.db, 'domains')
 
