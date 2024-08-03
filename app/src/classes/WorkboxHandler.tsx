@@ -302,17 +302,16 @@ class WorkboxHandler {
             }
             batch.update(domainSyncDoc,domainSyncUpdate)
 
-            // TODO update panel domain name
-
-            // updata member domain name // TODO find member id somehow
-            // writecount++
-            // memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
-            // memberSyncDoc = doc(memberSyncCollection, workboxRecordClone.profile.member.id)
-            // memberSyncUpdate = {
-            //     generation: increment(1),
-            //     'profile.domain.name':workboxRecordClone.document.base.name,
-            // }
-            // batch.update(memberSyncDoc,memberSyncUpdate)
+            // update member domain name // TODO find member id somehow
+            writecount++
+            memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
+            const memberID = this.userRecords.memberships.domains[workboxRecordClone.profile.domain.id].memberid
+            memberSyncDoc = doc(memberSyncCollection, memberID)
+            memberSyncUpdate = {
+                generation: increment(1),
+                'profile.domain.name':workboxRecordClone.document.base.name,
+            }
+            batch.update(memberSyncDoc,memberSyncUpdate)
         }
 
         try {
