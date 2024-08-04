@@ -102,6 +102,7 @@ class WorkspaceHandler {
     // set on load of all panels
     panelCount = 0 
     panelControlMap = new Map()
+    domainRecordSubscriptions = new Map()
     panelRecords = []
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
@@ -144,6 +145,81 @@ class WorkspaceHandler {
     get usage() {
         return this._usage
     }
+
+    // =========================[ DOMAINS AND MEMBERSHIPS ]===================
+
+    // async setDomainSnapshots(domainID) {
+    //     const 
+    //         workboxCollection = collection(this.internal.db, 'workboxes'),
+    //         workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
+
+    //     this.internal.workboxSnapshotIndex = workboxSnapshotIndex
+
+    //     if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
+    //         this.internal.snapshotControl.create(workboxSnapshotIndex)
+
+    //         this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+    //             async (returndoc) =>{
+    //                 this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
+    //                 this.internal.usage.read(1)
+                    
+    //                 let workboxRecord = returndoc.data()
+
+    //                 if (!workboxRecord) {
+    //                     this.internal.onFail()
+    //                     return
+    //                 } else {
+
+    //                     if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+
+    //                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
+    //                         if (!Object.is(workboxRecord, updatedRecord)) {
+    //                             try {
+
+    //                                 await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
+    //                                 this.internal.usage.write(1)
+
+    //                             } catch (error) {
+
+    //                                 const errdesc = 'error updating workbox record version. Check internet'
+    //                                 this.internal.errorControl.push({description:errdesc,error})
+    //                                 console.log(errdesc,error)
+    //                                 this.internal.onError()
+    //                                 return
+
+    //                             }
+
+    //                             workboxRecord = updatedRecord
+
+    //                         }
+    //                         this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
+    //                     }
+
+    //                     this.workboxRecord = workboxRecord
+
+    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
+
+    //                     this.internal.trigger = 'updaterecord'
+    //                     this.internal.setWorkboxHandlerContext({current:this})
+
+    //                 }
+
+    //             },(error) => {
+
+    //                 const errdesc = 'error from workbox record listener. Check permissions'
+    //                 this.internal.errorControl.push({description:errdesc,error})
+    //                 console.log(errdesc,error)
+    //                 this.internal.onError()
+    //                 return
+
+    //             }
+    //         )
+    //         // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+    //         this.internal.trigger = 'unsubscribeworkbox'
+    //         this.internal.setWorkboxHandlerContext({current:this})
+    //     }
+    // }
+
 
     // =========================[ UTILITIES ]========================
 
@@ -358,7 +434,9 @@ class WorkspaceHandler {
     // ---------------------[ setupWorkspace ]--------------------------
 
     // sets both the selection and the workspaceRecord
-    async setupWorkspace(userRecord) { // userRecord passed to get current workspace selection
+    async setupWorkspace() { // userRecord) { // userRecord passed to get current workspace selection
+
+        const userRecord = this.userRecords.user
 
         const result = {
             error: false,
@@ -702,7 +780,9 @@ class WorkspaceHandler {
 
     // ---------------------[ loadWorkspace ]--------------------------
 
-    async loadWorkspace(workspaceID, userRecord) {
+    async loadWorkspace(workspaceID) { //, userRecord) {
+
+        const userRecord = this.userRecords.user
 
         const result = {
             error: false,
@@ -729,7 +809,7 @@ class WorkspaceHandler {
         this.usage.read(1)
         if (!dbdoc.exists()) {
             result.notice = 'requested workspace record does not exist. Reloading...'
-            const setupResult = await this.setupWorkspace(userRecord)
+            const setupResult = await this.setupWorkspace() // userRecord)
             if (setupResult.error) result.error = true // TODO there could be multiple notices here
             return result
         }
@@ -1127,7 +1207,9 @@ class WorkspaceHandler {
 
     // ---------------------[ deleteWorkspace ]--------------------------
 
-    async deleteWorkspace(userRecord) {
+    async deleteWorkspace() { // userRecord) {
+
+        const userRecord = this.userRecords.user
 
         const result = {
             error: false,
@@ -1159,7 +1241,7 @@ class WorkspaceHandler {
 
         } else {
 
-            const setupResult = await this.setupWorkspace(userRecord)
+            const setupResult = await this.setupWorkspace() // userRecord)
             return setupResult
 
         }
@@ -1259,7 +1341,7 @@ class WorkspaceHandler {
     }
 
     async getPanelDomainContext(panelSelection) {
-        return await this.panelHandler.getPanelDomainContext(panelSelection) // , userRecord)
+        return await this.panelHandler.getPanelDomainContext(panelSelection)
     }
 
     async duplicatePanelAs(panelSelection, newname) {

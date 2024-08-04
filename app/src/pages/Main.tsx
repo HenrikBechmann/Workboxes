@@ -30,7 +30,7 @@ export const Main = (props) => {
     // for setup
     async function setupWorkspace() {
 
-        const result = await workspaceHandler.setupWorkspace(userRecords.user)
+        const result = await workspaceHandler.setupWorkspace() // userRecords.user)
 
         if (result.error) {
 
@@ -54,7 +54,7 @@ export const Main = (props) => {
     // for switch
     async function loadWorkspace(workspaceID) {
 
-        const result = await workspaceHandler.loadWorkspace(workspaceID, userRecords.user)
+        const result = await workspaceHandler.loadWorkspace(workspaceID) // , userRecords.user)
 
         if (result.error) {
             navigate('error')

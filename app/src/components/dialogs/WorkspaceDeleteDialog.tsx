@@ -43,7 +43,7 @@ const WorkspaceDeleteDialog = (props) => {
 
     async function doDeleteWorkspace() {
 
-        const result = await workspaceHandler.deleteWorkspace(userRecords.user)
+        const result = await workspaceHandler.deleteWorkspace() // userRecords.user)
 
         if (result.error) {
             navigate('/error')
