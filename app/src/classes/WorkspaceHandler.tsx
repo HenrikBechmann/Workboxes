@@ -1258,7 +1258,7 @@ class WorkspaceHandler {
         return await this.panelHandler.panelReset(panelSelection)
     }
 
-    async getPanelDomainContext(panelSelection) {//, userRecord) {
+    async getPanelDomainContext(panelSelection) {
         return await this.panelHandler.getPanelDomainContext(panelSelection) // , userRecord)
     }
 
