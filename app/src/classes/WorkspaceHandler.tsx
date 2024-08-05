@@ -27,7 +27,6 @@
     getWorkspaceList
     resetWorkspace
     // database operations
-    setupWorkpace
     createWorkspace
     loadWorkspace
     reloadWorkspace
@@ -105,8 +104,8 @@ class WorkspaceHandler {
     // set on load of all panels
     panelCount = 0 
     panelControlMap = new Map()
-    domainRecordSubscriptions = new Map()
     panelRecords = []
+    domainRecordSubscriptions = new Map()
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
     panelMemberRecord = null
@@ -858,7 +857,7 @@ class WorkspaceHandler {
 
     // ---------------------[ loadWorkspace ]--------------------------
 
-    async loadWorkspace(workspaceID) { //, userRecord) {
+    async loadWorkspace(workspaceID) { 
 
         const userRecord = this.userRecords.user
 

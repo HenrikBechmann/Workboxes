@@ -153,8 +153,6 @@ const Workspace = (props) => {
             const panelRecord = panelRecords[index]
             const panelID = panelRecord.profile.panel.id
 
-            // const panelSelector = {index, id:panelRecord.profile.panel.id, name:panelRecord.profile.panel.name}
-
             if (selectedPanelID && selectedPanelID == panelRecord.profile.panel.id) {
                 selectedIndex = index
             }

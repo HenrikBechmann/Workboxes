@@ -261,11 +261,28 @@ class PanelHandler {
             }
             this.usage.create(1)
             panelRecords.push(newPanelData)
+            const panelRecord = newPanelData
+            const panelRecordID = panelRecord.profile.panel.id
+            const panelControlData = {
+                selector:{
+                    index:0,
+                    id:panelRecordID,
+                    name:panelRecord.profile.panel.name
+                },
+                functions:{ // repository for direct calls
+                    showDomainWorkbox:null, 
+                    showMemberWorkbox: null,
+                }
+            }
+            panelControlMap.set(panelRecordID, panelControlData)
         }
 
         return result
         
     }
+
+    async subscribeToDomainChanges(panelID)
+
     async panelRename(panelSelection, newname) {
 
         const result = {
