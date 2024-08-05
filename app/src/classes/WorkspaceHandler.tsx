@@ -54,6 +54,7 @@ import {
     arrayUnion, arrayRemove,
     increment, serverTimestamp, Timestamp,
     runTransaction, writeBatch,
+    onSnapshot,
 } from 'firebase/firestore'
 
 import { cloneDeep as _cloneDeep } from 'lodash'
@@ -66,9 +67,10 @@ import { isMobile } from '../index'
 
 class WorkspaceHandler {
 
-    constructor(db, errorControl) {
+    constructor(db, errorControl, snapshotControl) {
         this.db = db
         this.errorControl = errorControl
+        this.snapshotControl = snapshotControl
         this.panelHandler = new PanelHandler(this, db, errorControl)
     }
 
@@ -77,6 +79,7 @@ class WorkspaceHandler {
     // data controls
     db
     errorControl
+    snapshotControl
     panelHandler
 
     // initialized in WorkboxesProvider through properties below
@@ -121,6 +124,9 @@ class WorkspaceHandler {
         new_workspace_load:false // triggers load of panels
     }
 
+    onError
+    onFail
+
     // properties to allow for distribution to panelHandler with consistent interface
     set userName(userName) {
         this._userName = userName
@@ -148,52 +154,58 @@ class WorkspaceHandler {
 
     // =========================[ DOMAINS AND MEMBERSHIPS ]===================
 
-    // async setDomainSnapshots(domainID) {
-    //     const 
-    //         workboxCollection = collection(this.internal.db, 'workboxes'),
-    //         workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
+    async setDomainSnapshots(domainID) {
 
-    //     this.internal.workboxSnapshotIndex = workboxSnapshotIndex
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
 
-    //     if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
-    //         this.internal.snapshotControl.create(workboxSnapshotIndex)
+        const 
+            domainCollection = collection(this.db, 'domains'),
+            domainSnapshotIndex = 'Domain.' + domainID
 
-    //         this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
-    //             async (returndoc) =>{
-    //                 this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-    //                 this.internal.usage.read(1)
+        if (!this.snapshotControl.has(domainSnapshotIndex)) { // once only
+            this.snapshotControl.create(domainSnapshotIndex)
+
+            const unsubscribedomain = await onSnapshot(doc(domainCollection, domainID), 
+                async (returndoc) =>{
+                    this.snapshotControl.incrementCallCount(domainSnapshotIndex, 1)
+                    this.usage.read(1)
                     
-    //                 let workboxRecord = returndoc.data()
+                    let domainRecord = returndoc.data()
 
-    //                 if (!workboxRecord) {
-    //                     this.internal.onFail()
-    //                     return
-    //                 } else {
+                    if (!domainRecord) {
+                        result.success = false
+                        this.onFail('System: domain record not found')
+                        return
+                    } else {
 
-    //                     if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+                        if (!this.snapshotControl.wasSchemaChecked(domainSnapshotIndex)) {
 
-    //                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
-    //                         if (!Object.is(workboxRecord, updatedRecord)) {
-    //                             try {
+                            const updatedRecord = updateDocumentSchema('domains', 'standard' ,domainRecord)
+                            if (!Object.is(domainRecord, updatedRecord)) {
+                                try {
 
-    //                                 await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
-    //                                 this.internal.usage.write(1)
+                                    await setDoc(doc(domainCollection, domainID),updatedRecord)
+                                    this.usage.write(1)
 
-    //                             } catch (error) {
+                                } catch (error) {
 
-    //                                 const errdesc = 'error updating workbox record version. Check internet'
-    //                                 this.internal.errorControl.push({description:errdesc,error})
-    //                                 console.log(errdesc,error)
-    //                                 this.internal.onError()
-    //                                 return
+                                    const errdesc = 'error updating domain record version. Check internet'
+                                    this.errorControl.push({description:errdesc,error})
+                                    console.log(errdesc,error)
+                                    this.onError()
+                                    return
 
-    //                             }
+                                }
 
-    //                             workboxRecord = updatedRecord
+                                domainRecord = updatedRecord
 
-    //                         }
-    //                         this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
-    //                     }
+                            }
+                            this.snapshotControl.setSchemaChecked(domainSnapshotIndex)
+                        }
 
     //                     this.workboxRecord = workboxRecord
 
@@ -202,23 +214,25 @@ class WorkspaceHandler {
     //                     this.internal.trigger = 'updaterecord'
     //                     this.internal.setWorkboxHandlerContext({current:this})
 
-    //                 }
+                    }
 
-    //             },(error) => {
+                },(error) => {
 
-    //                 const errdesc = 'error from workbox record listener. Check permissions'
-    //                 this.internal.errorControl.push({description:errdesc,error})
-    //                 console.log(errdesc,error)
-    //                 this.internal.onError()
-    //                 return
+                    const errdesc = 'error from domain record listener. Check permissions'
+                    this.errorControl.push({description:errdesc,error})
+                    console.log(errdesc,error)
+                    this.onError()
+                    return
 
-    //             }
-    //         )
-    //         // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-    //         this.internal.trigger = 'unsubscribeworkbox'
-    //         this.internal.setWorkboxHandlerContext({current:this})
-    //     }
-    // }
+                }
+            )
+
+            this.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
+            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+            // this.internal.trigger = 'unsubscribeworkbox'
+            // this.internal.setWorkboxHandlerContext({current:this})
+        }
+    }
 
 
     // =========================[ UTILITIES ]========================

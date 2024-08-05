@@ -299,8 +299,8 @@ const Workbox = (props) => {
         unsubscribeworkbox = workboxHandler?.internal.unsubscribeworkbox,
         // specialized data connection handling
         onFail = () => {
-            console.log('failure to find workbox record')
-            alert('failure to find workbox record')
+            console.log('System:failure to find workbox record')
+            alert('System: failure to find workbox record')
             // TODO
         },
         onError = () => {

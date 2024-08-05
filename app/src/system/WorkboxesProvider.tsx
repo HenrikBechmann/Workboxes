@@ -9,7 +9,7 @@
     check unsub with error condition
 */
 import React, { useEffect, useRef, useState, createContext, useContext } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '@chakra-ui/react'
 
@@ -53,7 +53,7 @@ const
     snapshotControl = new SnapshotControl(),
     errorArray = [],
     ErrorControlContext = createContext(errorArray),
-    workspaceHandlerInstance = new WorkspaceHandler(firestore,errorArray),
+    workspaceHandlerInstance = new WorkspaceHandler(firestore,errorArray, snapshotControl),
     SnapshotControlContext = createContext(snapshotControl),
 
     // for UserProvider
@@ -103,6 +103,7 @@ export const UserProvider = ({children}) => {
         db = useFirestore(),
         userAuthDataRef = useRef(null),
         userRecordsRef = useRef(null),
+        navigate = useNavigate(),
 
         // bootstrap control
         authStateUnsubscribeRef = useRef(null),
@@ -165,6 +166,19 @@ export const UserProvider = ({children}) => {
 
     },[])
 
+    const 
+        onFail = (notice) => {
+            console.log(notice)
+            alert(notice)
+            // TODO
+        },
+        onError = () => {
+            navigate('/error')
+        }
+    useEffect(()=>{
+        workspaceHandlerInstance.onError = onError
+        workspaceHandlerInstance.onFail = onFail
+    },[])
     // initialize workspaceHandler with dispatchWorkspaceHandler function
     useEffect(()=>{
         workspaceHandlerContext.current.setWorkspaceHandlerContext = setWorkspaceHandlerContext
