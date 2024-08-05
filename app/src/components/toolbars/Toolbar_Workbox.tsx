@@ -37,6 +37,7 @@ import viewsIcon from '../../../assets/views.png'
 import commentsIcon from '../../../assets/comments.png'
 import hideIcon from '../../../assets/expand_less.png'
 import lastUpdateIcon from '../../../assets/last_update.png'
+import refreshIcon from '../../../assets/refresh.png'
 
 // ----------------------------- static values -----------------------------
 const workboxToolbarStyles = {
@@ -195,6 +196,8 @@ const WorkboxToolbar = (props) => {
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh linked names'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && (<><ToolbarVerticalDivider />

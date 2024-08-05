@@ -37,6 +37,10 @@ class PanelHandler {
     userName
     userID
 
+    async subscribeToDomainChanges(panelControlData) {
+        
+    }
+
     // TODO: check schema for domain record
     async getPanelDomainContext(panelSelection) {
         const result = {
@@ -195,6 +199,7 @@ class PanelHandler {
                         showMemberWorkbox: null,
                     }
                 }
+                this.subscribeToDomainChanges(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
@@ -274,14 +279,11 @@ class PanelHandler {
                     showMemberWorkbox: null,
                 }
             }
+            this.subscribeToDomainChanges(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
         }
 
         return result
-        
-    }
-
-    async subscribeToDomainChanges(panelID) {
         
     }
 

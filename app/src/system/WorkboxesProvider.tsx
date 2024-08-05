@@ -103,7 +103,7 @@ export const UserProvider = ({children}) => {
         db = useFirestore(),
         userAuthDataRef = useRef(null),
         userRecordsRef = useRef(null),
-        navigate = useNavigate(),
+        // navigate = useNavigate(),
 
         // bootstrap control
         authStateUnsubscribeRef = useRef(null),
@@ -173,7 +173,7 @@ export const UserProvider = ({children}) => {
             // TODO
         },
         onError = () => {
-            navigate('/error')
+            // navigate('/error') TODO adapt to non-router setting
         }
     useEffect(()=>{
         workspaceHandlerInstance.onError = onError
