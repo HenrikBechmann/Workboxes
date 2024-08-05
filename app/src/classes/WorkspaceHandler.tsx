@@ -156,11 +156,11 @@ class WorkspaceHandler {
 
     async setDomainSnapshots(domainID) {
 
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
+        // const result = {
+        //     error: false,
+        //     success: true,
+        //     notice: null,
+        // }
 
         const 
             domainCollection = collection(this.db, 'domains'),
@@ -177,7 +177,6 @@ class WorkspaceHandler {
                     let domainRecord = returndoc.data()
 
                     if (!domainRecord) {
-                        result.success = false
                         this.onFail('System: domain record not found')
                         return
                     } else {
