@@ -281,7 +281,9 @@ class PanelHandler {
         
     }
 
-    async subscribeToDomainChanges(panelID)
+    async subscribeToDomainChanges(panelID) {
+        
+    }
 
     async panelRename(panelSelection, newname) {
 
