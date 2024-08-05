@@ -231,6 +231,77 @@ class WorkspaceHandler {
             // this.internal.trigger = 'unsubscribeworkbox'
             // this.internal.setWorkboxHandlerContext({current:this})
         }
+        const 
+            memberCollection = collection(this.db, 'domains', domainID, 'members'),
+            memberID = this.userRecords.memberships.domains[domainID].memberid,
+            memberSnapshotIndex = 'Member.' + memberID
+
+        if (!this.snapshotControl.has(memberSnapshotIndex)) { // once only
+            this.snapshotControl.create(memberSnapshotIndex)
+
+            const unsubscribemember = await onSnapshot(doc(memberCollection, memberID), 
+                async (returndoc) =>{
+                    this.snapshotControl.incrementCallCount(memberSnapshotIndex, 1)
+                    this.usage.read(1)
+                    
+                    let memberRecord = returndoc.data()
+
+                    if (!memberRecord) {
+                        this.onFail('System: member record not found')
+                        return
+                    } else {
+
+                        if (!this.snapshotControl.wasSchemaChecked(memberSnapshotIndex)) {
+
+                            const updatedRecord = updateDocumentSchema('members', 'standard' ,memberRecord)
+                            if (!Object.is(memberRecord, updatedRecord)) {
+                                try {
+
+                                    await setDoc(doc(memberCollection, memberID),updatedRecord)
+                                    this.usage.write(1)
+
+                                } catch (error) {
+
+                                    const errdesc = 'error updating member record version. Check internet'
+                                    this.errorControl.push({description:errdesc,error})
+                                    console.log(errdesc,error)
+                                    this.onError()
+                                    return
+
+                                }
+
+                                memberRecord = updatedRecord
+
+                            }
+                            this.snapshotControl.setSchemaChecked(memberSnapshotIndex)
+                        }
+
+    //                     this.workboxRecord = workboxRecord
+
+    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
+
+    //                     this.internal.trigger = 'updaterecord'
+    //                     this.internal.setWorkboxHandlerContext({current:this})
+
+                    }
+
+                },(error) => {
+
+                    const errdesc = 'error from member record listener. Check permissions'
+                    this.errorControl.push({description:errdesc,error})
+                    console.log(errdesc,error)
+                    this.onError()
+                    return
+
+                }
+            )
+
+            this.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
+            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+            // this.internal.trigger = 'unsubscribeworkbox'
+            // this.internal.setWorkboxHandlerContext({current:this})
+        }
+ 
     }
 
 
