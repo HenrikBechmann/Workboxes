@@ -156,12 +156,6 @@ class WorkspaceHandler {
 
     async setDomainSnapshots(domainID) {
 
-        // const result = {
-        //     error: false,
-        //     success: true,
-        //     notice: null,
-        // }
-
         const 
             domainCollection = collection(this.db, 'domains'),
             domainSnapshotIndex = 'Domain.' + domainID
