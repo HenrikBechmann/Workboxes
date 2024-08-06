@@ -193,9 +193,9 @@ const WorkboxToolbar = (props) => {
         { resourcesToggle }
         { bothToggle }
         <ToolbarVerticalDivider />
-        <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
+        <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
         <ToolbarVerticalDivider />
         <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh linked names'/>
         <ToolbarVerticalDivider />
