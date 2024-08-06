@@ -25,7 +25,7 @@ const DomainControl = (props) => {
 
     const localCaption = caption || 'workbox domain'
 
-   return <Box 
+    return <Box 
         cursor = 'pointer' 
         onClick = {response} 
         display = 'flex' 
