@@ -182,6 +182,8 @@ const WorkboxToolbar = (props) => {
         // <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
+        // <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh linked names'/>
+        // <ToolbarVerticalDivider />
 
     // console.log('domainTitle, itemTitle, typeName',domainTitle, itemTitle, typeName)
 
@@ -196,8 +198,6 @@ const WorkboxToolbar = (props) => {
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
         <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
-        <ToolbarVerticalDivider />
-        <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh linked names'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && (<><ToolbarVerticalDivider />
