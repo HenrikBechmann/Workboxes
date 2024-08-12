@@ -121,7 +121,7 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     // console.log('running Workwindow: props', props)
-    // console.log('identity', props.identity)
+    // console.log('titleData', props.titleData)
 
     // --------------------------------[ initialization ]-----------------------------
 
@@ -134,15 +134,15 @@ const Workwindow = (props) => {
             // - change maxSizeConstraints for Resizable through useEffect for state change)
             // - helps to set bounds for Draggable
             containerDimensionSpecs, // height, width of Workpanel; change can cause repositioning and resizing of window
-            identity, // workbox identity, for titleName
+            titleData, // workbox titleData, for titleName
             windowCallbacks, // change zOrder etc.
             windowSessionID, // system control, repo access
             viewDeclaration, // object with view = normalized, maximized, minimized; stackOrder for minimized windows
             zOrder, // inherited; modified by setFocus 
         } = props,
 
-        titleName = identity.name,
-        typeAlias = identity.type?.alias,
+        titleName = titleData.name,
+        typeAlias = titleData.type?.alias,
         defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
 
         // various elements brought into play

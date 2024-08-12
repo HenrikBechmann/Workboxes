@@ -58,7 +58,7 @@ import {
 
 import { cloneDeep as _cloneDeep } from 'lodash'
 
-import PanelHandler from './PanelHandler'
+import PanelsHandler from './PanelsHandler'
 
 import { updateDocumentSchema } from '../system/utilities'
 
@@ -70,7 +70,7 @@ class WorkspaceHandler {
         this.db = db
         this.errorControl = errorControl
         this.snapshotControl = snapshotControl
-        this.panelHandler = new PanelHandler(this, db, errorControl)
+        this.panelsHandler = new PanelsHandler(this, db, errorControl)
     }
 
     // // =========================[ DATA ]=======================
@@ -79,7 +79,7 @@ class WorkspaceHandler {
     db
     errorControl
     snapshotControl
-    panelHandler
+    panelsHandler
 
     // initialized in WorkboxesProvider through properties below
     private _userID
@@ -126,10 +126,10 @@ class WorkspaceHandler {
     onError
     onFail
 
-    // properties to allow for distribution to panelHandler with consistent interface
+    // properties to allow for distribution to panelsHandler with consistent interface
     set userName(userName) {
         this._userName = userName
-        this.panelHandler.userName = userName
+        this.panelsHandler.userName = userName
     }
     get userName() {
         return this._userName
@@ -137,7 +137,7 @@ class WorkspaceHandler {
 
     set userID(userID) {
         this._userID = userID
-        this.panelHandler.userID = userID
+        this.panelsHandler.userID = userID
     }
     get userID() {
         return this._userID        
@@ -145,7 +145,7 @@ class WorkspaceHandler {
 
     set usage(usage) {
         this._usage = usage
-        this.panelHandler.usage = usage
+        this.panelsHandler.usage = usage
     }
     get usage() {
         return this._usage
@@ -1406,43 +1406,43 @@ class WorkspaceHandler {
     // =============================[ PANELS FACADE ]===========================
 
     async loadPanels() {
-        return await this.panelHandler.loadPanels()
+        return await this.panelsHandler.loadPanels()
     }
 
     async panelRename(panelSelection, newname){
-        return await this.panelHandler.panelRename(panelSelection, newname)
+        return await this.panelsHandler.panelRename(panelSelection, newname)
     }
 
     async panelReset(panelSelection){
-        return await this.panelHandler.panelReset(panelSelection)
+        return await this.panelsHandler.panelReset(panelSelection)
     }
 
     async getPanelDomainContext(panelSelection) {
-        return await this.panelHandler.getPanelDomainContext(panelSelection)
+        return await this.panelsHandler.getPanelDomainContext(panelSelection)
     }
 
     async duplicatePanelAs(panelSelection, newname) {
-        return await this.panelHandler.duplicatePanelAs(panelSelection, newname)
+        return await this.panelsHandler.duplicatePanelAs(panelSelection, newname)
     }
 
     async deletePanel(panelSelection) {
-        return await this.panelHandler.deletePanel(panelSelection)
+        return await this.panelsHandler.deletePanel(panelSelection)
     }
 
     async getUserDomainList() {
-        return await this.panelHandler.getUserDomainList()
+        return await this.panelsHandler.getUserDomainList()
     }
 
     async panelCreate(newname, domainSelection) {
-        return await this.panelHandler.panelCreate(newname, domainSelection)
+        return await this.panelsHandler.panelCreate(newname, domainSelection)
     }
 
     async setDefaultPanel(fromIndex, toIndex) {
-        return await this.panelHandler.setDefaultPanel(fromIndex, toIndex)
+        return await this.panelsHandler.setDefaultPanel(fromIndex, toIndex)
     }
 
     async panelReorder(newOrderList) {
-        return await this.panelHandler.panelReorder(newOrderList)
+        return await this.panelsHandler.panelReorder(newOrderList)
     }
 
 }

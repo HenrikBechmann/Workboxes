@@ -117,7 +117,7 @@ const Workpanel = (props:any) => {
     const showDomainWorkbox = () => {
 
         const 
-            identity = Object.assign({},
+            titleData = Object.assign({},
                 workspaceHandler.panelDomainRecord.profile.workbox,
                 {type:workspaceHandler.panelDomainRecord.profile.workbox_type}),
             windowSpecs = {
@@ -127,7 +127,7 @@ const Workpanel = (props:any) => {
                     stackOrder: null,
                 },
                 // zOrder: nextZOrderRef.current++,
-                identity,
+                titleData,
             },
             workboxSpecs = {
                 settings: _cloneDeep(defaultWorkboxConfig),
@@ -147,7 +147,7 @@ const Workpanel = (props:any) => {
         // console.log('workspaceHandler.panelMemberRecord.profile',workspaceHandler.panelMemberRecord.profile)
 
         const 
-            identity = Object.assign({},
+            titleData = Object.assign({},
                 workspaceHandler.panelMemberRecord.profile.workbox,
                 {type:workspaceHandler.panelMemberRecord.profile.workbox_type}),
             windowSpecs = {
@@ -156,7 +156,7 @@ const Workpanel = (props:any) => {
                     view: 'normalized',
                     stackOrder: null,
                 },
-                identity,
+                titleData,
             },
             workboxSpecs = {
                 settings: _cloneDeep(defaultWorkboxConfig),
@@ -271,7 +271,7 @@ const Workpanel = (props:any) => {
             panelElement = panelElementRef.current,
             containerDimensionSpecs = { width:panelElement.offsetWidth, height:panelElement.offsetHeight },
             // required to configure window
-            { viewDeclaration, zOrder, configuration, identity } = windowData.window
+            { viewDeclaration, zOrder, configuration, titleData } = windowData.window
 
         return <Workwindow 
             key = { windowSessionID } 
@@ -281,7 +281,7 @@ const Workpanel = (props:any) => {
             containerDimensionSpecs = { containerDimensionSpecs }
             windowCallbacks = { windowCallbacks } 
             configuration = { configuration }
-            identity = { identity }
+            titleData = { titleData }
         >
             <Workbox 
                 workboxSettings = { windowData.workbox }

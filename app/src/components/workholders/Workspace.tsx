@@ -56,20 +56,18 @@ const Workspace = (props) => {
 
     // ---------------------------[ state change effects ]------------------------
 
-    // init resizeObserver
+    // init workspace resizeObserver
     useEffect(()=>{
-        const observer = new ResizeObserver(resizeCallback)
+        const observer = new ResizeObserver(resizeCallback) // set dimensions to be applied to all panels
         observer.observe(workspaceFrameElementRef.current)
         return () => {
             observer.disconnect()
         }
     },[])
 
-    // init workbox resource repositiories
+    // init panel selection
     useEffect(()=>{
 
-        // workboxComponentMapRef.current = new Map()
-        // workboxHandlerMapRef.current = new Map()
         workspaceHandler.setPanelSelection = setPanelSelection
 
     },[])
