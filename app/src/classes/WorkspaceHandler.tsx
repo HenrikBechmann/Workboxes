@@ -31,7 +31,7 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
-    updateWorkspacePanelSelection
+    setCurrentWorkspacePanelSelection
     saveWorkspaceData
     copyWorkspaceAs
     deleteWorkspace
@@ -1035,9 +1035,9 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ updateWorkspacePanelSelection ]--------------------------
+    // ---------------------[ setCurrentWorkspacePanelSelection ]--------------------------
 
-    async updateWorkspacePanelSelection(id, name) {
+    async setCurrentWorkspacePanelSelection(id, name) {
 
         const result = {
             error: false,

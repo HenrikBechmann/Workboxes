@@ -90,7 +90,7 @@ const Workspace = (props) => {
         const is_set = panelSelection.index ?? false
         if (is_set === false) return
 
-        updateWorkspacePanelSelection(panelSelection)
+        setCurrentWorkspacePanelSelection(panelSelection)
 
         document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
@@ -98,13 +98,13 @@ const Workspace = (props) => {
 
     // -------------------[ operations ]----------------------
     
-    async function updateWorkspacePanelSelection(panelSelection) {
+    async function setCurrentWorkspacePanelSelection(panelSelection) {
 
         const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
 
-        const result = await workspaceHandler.updateWorkspacePanelSelection(
+        const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
             panelRecord.profile.panel.id , panelRecord.profile.panel.name)
 
         if (result.error) {
@@ -176,7 +176,7 @@ const Workspace = (props) => {
             panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
 
-            const result = await workspaceHandler.updateWorkspacePanelSelection(
+            const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
                 defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
@@ -185,7 +185,7 @@ const Workspace = (props) => {
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
-            const result = await workspaceHandler.updateWorkspacePanelSelection(
+            const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
