@@ -93,7 +93,7 @@ const Workspace = (props) => {
         const is_set = panelSelection.index ?? false
         if (is_set === false) return
 
-        setCurrentWorkspacePanelSelection(panelSelection)
+        setPanelSelection(panelSelection)
 
         document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
@@ -101,13 +101,13 @@ const Workspace = (props) => {
 
     // -------------------[ operation functions ]----------------------
     
-    async function setCurrentWorkspacePanelSelection(panelSelection) {
+    async function changePanelSelection(panelSelection) {
 
         const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
 
-        const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
+        const result = await workspaceHandler.changePanelSelection(
             panelRecord.profile.panel.id , panelRecord.profile.panel.name)
 
         if (result.error) {
@@ -115,7 +115,7 @@ const Workspace = (props) => {
             return
         }
 
-        dispatchWorkspaceHandler('updatepanelselection')
+        dispatchWorkspaceHandler('setpanelselection')
 
     }
 
@@ -178,7 +178,7 @@ const Workspace = (props) => {
             panelSelection.index = defaultIndex
             const defaultRecord = panelRecords[defaultIndex]
 
-            const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
+            const result = await workspaceHandler.changePanelSelection(
                 defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
@@ -187,7 +187,7 @@ const Workspace = (props) => {
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
-            const result = await workspaceHandler.setCurrentWorkspacePanelSelection(
+            const result = await workspaceHandler.changePanelSelection(
                 fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
             if (result.error) {
                 navigate('/error')
@@ -199,7 +199,7 @@ const Workspace = (props) => {
         panelSelection.id = panelSelectionRecord.profile.panel.id
         panelSelection.name = panelSelectionRecord.profile.panel.name
 
-        // console.log('setPanelSelection to', panelSelection)
+        // console.log('changePanelSelection to', panelSelection)
 
         setPanelSelection(panelSelection)
         setWorkspaceState('ready')
