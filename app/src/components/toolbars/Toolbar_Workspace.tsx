@@ -296,11 +296,9 @@ const WorkspaceToolbar = (props) => {
         {false && <><ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/></>}
         &nbsp; &nbsp;
-        {panelRenameDialogState && <PanelRenameDialog 
-            setPanelRenameDialogState = {setPanelRenameDialogState} 
-        />}
-        {panelResetDialogState && <PanelResetDialog 
-            setPanelResetDialogState = {setPanelResetDialogState} 
+        {panelCreateDialogState && <PanelCreateDialog 
+            setPanelCreateDialogState = {setPanelCreateDialogState} 
+            panelComponentListRef = {panelComponentListRef}
         />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
@@ -311,9 +309,11 @@ const WorkspaceToolbar = (props) => {
             setPanelResetDialogState = {setPanelResetDialogState} 
             panelComponentListRef = {panelComponentListRef}
         />}
-        {panelCreateDialogState && <PanelCreateDialog 
-            setPanelCreateDialogState = {setPanelCreateDialogState} 
-            panelComponentListRef = {panelComponentListRef}
+        {panelRenameDialogState && <PanelRenameDialog 
+            setPanelRenameDialogState = {setPanelRenameDialogState} 
+        />}
+        {panelResetDialogState && <PanelResetDialog 
+            setPanelResetDialogState = {setPanelResetDialogState} 
         />}
         {panelSetDefaultDialogState && <PanelSetDefaultDialog 
             setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 

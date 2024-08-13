@@ -24,7 +24,7 @@ import {
 const PanelCreateDialog = (props) => {
 
     const 
-        { setPanelCreateDialogState } = props,
+        { setPanelCreateDialogState, panelComponentListRef } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,

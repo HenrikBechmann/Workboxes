@@ -19,7 +19,7 @@ import {
 const PanelDeleteDialog = (props) => {
 
     const 
-        { setPanelDeleteDialogState, setPanelResetDialogState } = props,
+        { setPanelDeleteDialogState, setPanelResetDialogState, panelComponentListRef } = props,
         cancelRef = useRef(null),
         [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
         [alertState, setAlertState] = useState('ready'),

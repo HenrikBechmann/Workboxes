@@ -23,7 +23,7 @@ import {
 const PanelDuplicateAsDialog = (props) => {
 
     const 
-        { setPanelDuplicateAsDialogState } = props,
+        { setPanelDuplicateAsDialogState, panelComponentListRef } = props,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.panelNameLength_max,
         minNameLength = systemRecords.settings.constraints.input.panelNameLength_min,
