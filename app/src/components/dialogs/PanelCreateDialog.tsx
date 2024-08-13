@@ -21,6 +21,8 @@ import {
     useUserRecords,
 } from '../../system/WorkboxesProvider'
 
+import Workpanel from '../workholders/Workpanel'
+
 const PanelCreateDialog = (props) => {
 
     const 
@@ -136,6 +138,13 @@ const PanelCreateDialog = (props) => {
         const { payload } = result
 
         toast({description:result.notice})
+
+        panelComponentListRef.current.push(
+            <Workpanel 
+                key = {payload.id} 
+                panelID = {payload.id}
+            />
+        )
 
         if (checkboxRef.current.checked) {
 

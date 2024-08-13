@@ -20,6 +20,8 @@ import {
     useSystemRecords,
 } from '../../system/WorkboxesProvider'
 
+import Workpanel from '../workholders/Workpanel'
+
 const PanelDuplicateAsDialog = (props) => {
 
     const 
@@ -102,6 +104,13 @@ const PanelDuplicateAsDialog = (props) => {
         }
 
         toast({description:result.notice})
+
+            panelComponentListRef.current.push(
+                <Workpanel 
+                    key = {result.payload} 
+                    panelID = {result.payload}
+                />
+            )
 
         if (checkboxRef.current.checked) {
             setPanelSelection((previousState)=>{

@@ -49,6 +49,8 @@ const PanelDeleteDialog = (props) => {
             return
         }
 
+        panelComponentListRef.current.splice(panelSelection.index, 1)
+
         const newPanelIndex = result.payload
         const newPanelRecord = workspaceHandler.panelRecords[newPanelIndex]
         setPanelSelection({index:newPanelIndex, id:newPanelRecord.profile.panel.id, name:newPanelRecord.profile.panel.name})

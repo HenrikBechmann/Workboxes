@@ -63,7 +63,7 @@ const Workpanel = (props:any) => {
         // windows setup
         { panelID } = props
 
-    console.log('Workpanel: panelID',panelID)
+    // console.log('Workpanel: panelID',panelID)
 
     const
 

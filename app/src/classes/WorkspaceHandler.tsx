@@ -1426,7 +1426,7 @@ class WorkspaceHandler {
     }
 
     async panelDeleteRecord(panelSelection) {
-        return await this.panelsHandler.deleteDeleteRecord(panelSelection)
+        return await this.panelsHandler.panelDeleteRecord(panelSelection)
     }
 
     async getUserDomainList() {

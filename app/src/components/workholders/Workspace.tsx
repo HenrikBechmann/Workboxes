@@ -55,7 +55,7 @@ const Workspace = (props) => {
     workspaceHandler.panelSelection = panelSelection // always up to date
 
     // console.log('panelSelection, panelComponentListRef', panelSelection, panelComponentListRef.current)
-    console.log('Workspace: panelSelection', panelSelection)
+    // console.log('Workspace: panelSelection', panelSelection)
 
     // ---------------------------[ state change effects ]------------------------
 

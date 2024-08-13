@@ -409,6 +409,13 @@ class PanelsHandler {
         panelRecords.splice(panelSelection.index, 1)
         panelControlMap.delete(panelSelection.id)
 
+        const deletedIndex = panelSelection.index
+        panelControlMap.forEach((index, value) =>{
+            if (value.index > deletedIndex) {
+                value.index--
+            }
+        })
+
         workspaceHandler.panelCount--
 
         for (let index = panelSelection.index + 1; index < panelRecords.length; index ++) {
