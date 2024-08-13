@@ -41,33 +41,34 @@ const PanelReorderDialog = (props) => {
         [alertState, setAlertState] = useState('ready'),
         toast = useToast({duration:4000, isClosable:true}),
         navigate = useNavigate(),
-        panelOrderChangesRef = useRef([]),
+        newPanelOrderRef = useRef([]),
         panelOrderChangesCountRef = useRef(0)
 
+    // collect array of panelRecord indexes in order (with names for debug)
     useEffect(()=>{
         for (let index = 0; index < panelCount; index++) {
-            panelOrderChangesRef.current.push({index,name:panelRecords[index].profile.panel.name})
+            newPanelOrderRef.current.push({index,name:panelRecords[index].profile.panel.name})
         }
     },[])
 
-    const doClose = () => {
-        setPanelReorderDialogState(false)
-    }
 
+    // modify the order of newPanelOrderRef, one change at a time
     const dragDropTransferCallback = (fromScrollerID, fromIndex, toScrollerID, toIndex, context) => {
-        const movedItems = panelOrderChangesRef.current.splice(fromIndex,1)
-        panelOrderChangesRef.current.splice(toIndex,0,movedItems[0])
+
+        const movedItems = newPanelOrderRef.current.splice(fromIndex,1)
+        newPanelOrderRef.current.splice(toIndex,0,movedItems[0])
         panelOrderChangesCountRef.current++
     }
 
 
+    // apply new panel order to panelRecords, and then create new panelComponents array from existing components
     async function doPanelReorder () {
 
         const newPanelSelection = {...panelSelection}
 
         if (panelOrderChangesCountRef.current) {
 
-            const result = await workspaceHandler.panelsReorderRecords(panelOrderChangesRef.current)
+            const result = await workspaceHandler.panelsReorderRecords(newPanelOrderRef.current)
 
             if (result.error) {
                 navigate('/error')
@@ -76,13 +77,12 @@ const PanelReorderDialog = (props) => {
 
             const newComponentList = []
 
-            // console.log('newPanelSelection before, panelOrderChangesRef.current', panelOrderChangesRef.current, {...newPanelSelection})
             let newSelectionIndex
-            for (let index = 0; index < panelOrderChangesRef.current.length; index++) {
+            for (let index = 0; index < newPanelOrderRef.current.length; index++) {
                 newComponentList.push(
-                    panelComponentListRef.current[panelOrderChangesRef.current[index].index]
+                    panelComponentListRef.current[newPanelOrderRef.current[index].index]
                 )
-                if (newPanelSelection.index === panelOrderChangesRef.current[index].index) {
+                if (newPanelSelection.index === newPanelOrderRef.current[index].index) {
                     newSelectionIndex = index
                 }
             }
@@ -90,8 +90,6 @@ const PanelReorderDialog = (props) => {
             newPanelSelection.index = newSelectionIndex
 
             panelComponentListRef.current = newComponentList
-
-            // console.log('newPanelSelection after', newPanelSelection)
 
             setPanelSelection(newPanelSelection)
 
@@ -118,6 +116,10 @@ const PanelReorderDialog = (props) => {
             dndOptions:{type:'panel', dragText:panelProfile.panel.name + (panelProfile.flags.is_default?'*':'')}
         }
 
+    }
+
+    const doClose = () => {
+        setPanelReorderDialogState(false)
     }
 
     return (<>

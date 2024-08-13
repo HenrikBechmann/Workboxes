@@ -304,13 +304,16 @@ const WorkspaceToolbar = (props) => {
         />}
         {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
+            panelComponentListRef = {panelComponentListRef}
         />}
         {panelDeleteDialogState && <PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 
             setPanelResetDialogState = {setPanelResetDialogState} 
+            panelComponentListRef = {panelComponentListRef}
         />}
         {panelCreateDialogState && <PanelCreateDialog 
             setPanelCreateDialogState = {setPanelCreateDialogState} 
+            panelComponentListRef = {panelComponentListRef}
         />}
         {panelSetDefaultDialogState && <PanelSetDefaultDialog 
             setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 

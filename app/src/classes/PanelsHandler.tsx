@@ -206,6 +206,7 @@ class PanelsHandler {
             error: false,
             success: true,
             notice: null,
+            // payload: null,
         }
 
         const { panelRecords, changedRecords, settings, panelControlMap } = this.workspaceHandler
@@ -633,7 +634,6 @@ class PanelsHandler {
         }
 
     }
-
 
     async setDefaultPanel(fromIndex, toIndex) {
 

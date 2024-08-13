@@ -105,7 +105,6 @@ class WorkspaceHandler {
     panelCount = 0 
     panelControlMap = new Map()
     panelRecords = []
-    panelComponents = []
     domainRecordSubscriptions = new Map()
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
