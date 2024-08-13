@@ -110,7 +110,7 @@ const PanelCreateDialog = (props) => {
     }
 
     // TODO make sure record exists before saving
-    async function doCreate() {
+    async function doCreatePanel() {
         if (isInvalidFieldFlags.name) {
             // TODO use chakra Alert instead
             alert('Please correct errors before saving')
@@ -126,7 +126,7 @@ const PanelCreateDialog = (props) => {
         })
 
         const 
-            result = await workspaceHandler.panelCreate(writeValues.name, domainSelection)
+            result = await workspaceHandler.panelCreateRecord(writeValues.name, domainSelection)
 
         if (result.error) {
            navigate('/error')
@@ -150,7 +150,7 @@ const PanelCreateDialog = (props) => {
             })
         }
 
-        dispatchWorkspaceHandler('createpanel')
+        dispatchWorkspaceHandler('createpanelrecord')
 
         doClose()
 
@@ -259,7 +259,7 @@ const PanelCreateDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {(alertState == 'processing') || !selectedDomain} ml = '8px' colorScheme = 'blue'
-                            onClick = {doCreate}
+                            onClick = {doCreatePanel}
                         >
                           Create
                         </Button>

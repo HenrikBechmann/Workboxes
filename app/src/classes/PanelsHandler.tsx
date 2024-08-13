@@ -21,7 +21,7 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
 
-class PanelHandler {
+class PanelsHandler {
 
     constructor(workspaceHandler, db, errorControl) {
         this.workspaceHandler = workspaceHandler
@@ -41,94 +41,7 @@ class PanelHandler {
         
     }
 
-    // TODO: check schema for domain record
-    async getPanelDomainContext(panelSelection) {
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        const 
-            panelRecord = this.workspaceHandler.panelRecords[panelSelection.index],
-            panelDomainID = panelRecord.profile.domain.id,
-            domainCollection = collection(this.db,'domains'),
-            domainDocRef = doc(domainCollection, panelDomainID),
-            memberCollection = collection(this.db, 'domains',panelDomainID, 'members'),
-            userRecord = this.workspaceHandler.userRecords.user
-
-        let panelDomainRecord
-        try {
-            const domainDoc = await getDoc(domainDocRef)
-            this.usage.read(1)
-            if (domainDoc.exists()) {
-                panelDomainRecord = domainDoc.data()
-            } else {
-                result.success = false
-                result.notice = 'domain record not found'
-                return result
-            }
-        } catch(error) {
-
-            const errdesc = 'error getting domain record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
-
-        }
-
-        const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
-
-        let panelMemberRecord
-        try {
-            const queryPayload = await getDocs(querySpec)
-            this.usage.read(Math.min(1,queryPayload.size))
-            if (queryPayload.size !==1 ) {
-                result.success = false
-                result.notice = 'error fetching domain membership for this user'
-                return result
-            }
-            let memberRecord = queryPayload.docs[0].data()
-            const updatedRecord = updateDocumentSchema('members', 'standard', memberRecord)
-            if (!Object.is(memberRecord, updatedRecord)) {
-                try {
-
-                    await setDoc(doc(memberCollection,memberRecord.profile.member.id),updatedRecord)
-                    this.usage.write(1)
-
-                } catch (error) {
-
-                    const errdesc = 'error updating member record version'
-                    console.log(errdesc, error)
-                    this.errorControl.push({description:errdesc, error})
-                    result.error = true
-                    return result
-
-                }
-
-                memberRecord = updatedRecord
-
-            }
-
-            panelMemberRecord = memberRecord
-        } catch(error) {
-
-            const errdesc = 'error getting domain member record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
-
-        }
-
-        this.workspaceHandler.panelDomainRecord = panelDomainRecord
-        this.workspaceHandler.panelMemberRecord = panelMemberRecord
-
-        return result        
-    }
-
-    async loadPanels() {
+    async panelsLoadRecords() {
 
         const result = {
             error: false,
@@ -287,7 +200,7 @@ class PanelHandler {
         
     }
 
-    async panelRename(panelSelection, newname) {
+    async panelsReorderRecords(newOrderList) {
 
         const result = {
             error: false,
@@ -295,220 +208,42 @@ class PanelHandler {
             notice: null,
         }
 
-        const 
-            { workspaceHandler } = this,
-            panelRecord = workspaceHandler.panelRecords[panelSelection.index]
+        const { panelRecords, changedRecords, settings, panelControlMap } = this.workspaceHandler
 
-        panelRecord.profile.panel.name = newname
-        workspaceHandler.workspaceRecord.panel.name = newname
-        const panelID = panelRecord.profile.panel.id
-        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
-
-        workspaceHandler.changedRecords.setpanels.add(panelID)
-        workspaceHandler.settings.changed = true
-
-        if (workspaceHandler.settings.mode == 'automatic') {
-
-            const result = await workspaceHandler.saveWorkspaceData()
-
-            if (!result.error) {
-                result.notice = 'panel name changed to [' + newname + ']'
-            }
-
-            return result
-
-        } else {
-
-            result.notice = 'panel name changed to [' + newname + ']'
-            return result
-
-        }
-
-    }
-
-    // TODO remove all but the default window
-    async panelReset(panelSelection) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        result.notice = `panel selection ${panelSelection.name} has been reset`
-
-        return result
-
-    }
-
-    async duplicatePanelAs(panelSelection, newname) {
-        
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-            payload:null
-        }
-
-        const 
-            { workspaceHandler } = this,
-            panelRef = doc(
-                collection(this.db, 'users',this.userID, 'workspaces',workspaceHandler.workspaceRecord.profile.workspace.id, 'panels')),
-            newPanelID = panelRef.id
-
-        const 
-            newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelection.index]),
-            oldPanelName = newPanelRecord.profile.panel.name,
-            oldPanelID = newPanelRecord.profile.panel.id,
-            newPanelControlRecord = _cloneDeep(workspaceHandler.panelControlMap.get(oldPanelID)),
-            newPanelIndex = workspaceHandler.panelRecords.length - 1,
-            { profile } = newPanelRecord
-
-        newPanelControlRecord.selector.index = newPanelIndex
-        newPanelControlRecord.selector.name = newname
-        newPanelControlRecord.functions = {}
-        workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
-
-        profile.panel.id = newPanelID
-        profile.panel.name = newname
-        profile.display_order = newPanelIndex
-        profile.owner = {id:this.userID, name: this.userName}
-        profile.commits = {
-          created_by: {
-            id: this.userID, 
-            name: this.userName
-          },
-          created_timestamp: Timestamp.now(),
-          updated_by: {
-            id: this.userID, 
-            name: this.userName
-          },
-          updated_timestamp: Timestamp.now(),            
-        }
-        profile.flags.is_default = false
-
-        workspaceHandler.panelRecords.push(newPanelRecord)
-        workspaceHandler.panelCount++
-
-        workspaceHandler.changedRecords.setpanels.add(newPanelID)
-        workspaceHandler.settings.changed = true
-
-        const notice = `[${oldPanelName}] has been duplicated as [${newname}]`
-        if (workspaceHandler.settings.mode == 'automatic') {
-            const result = await workspaceHandler.saveWorkspaceData()
-            result.notice = notice
-            result.payload = newPanelID
-            return result
-        }
-
-        result.payload = newPanelID
-        result.notice = notice
-        return result
-
-    }
-
-    async deletePanel(panelSelection) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-            payload: null,
-        }
-
-        const 
-            { workspaceHandler } = this,
-            { panelRecords, changedRecords, panelControlMap } = workspaceHandler
-
-        panelRecords.splice(panelSelection.index, 1)
-        panelControlMap.delete(panelSelection.id)
-
-        workspaceHandler.panelCount--
-
-        for (let index = panelSelection.index + 1; index < panelRecords.length; index ++) {
-            const panelRecord = panelRecords[index]
-            panelRecord.profile.display_order = index
-            changedRecords.setpanels.add(panelRecord.profile.panel.id)
-        }
-
-        let index
-        for (index = 0; index < panelRecords.length; index++) {
-            if (panelRecords[index].profile.flags.is_default) {
-                break
+        for (let index = 0; index < newOrderList.length; index++) {
+            const changeData = newOrderList[index]
+            const panelRecord = panelRecords[changeData.index]
+            const panelID = panelRecord.profile.panel.id
+            panelControlMap.get(panelID).selector.index = index
+            if (panelRecord.profile.display_order !== index) {
+                panelRecord.profile.display_order = index
+                changedRecords.setpanels.add(panelRecord.profile.panel.id)
             }
         }
+        settings.changed = true
 
-        result.payload = index
-        workspaceHandler.settings.changed = true
-        changedRecords.deletepanels.add(panelSelection.id)
-        changedRecords.setworkspace = workspaceHandler.workspaceRecord.profile.workspace.id
+        panelRecords.sort((a,b) =>{
+            if (a.profile.display_order < b.profile.display_order) {
+                return -1
+            } else {
+                return 1
+            }
+        })
 
-        let saveResult
-        if (workspaceHandler.settings.mode == 'automatic') {
-            saveResult = await workspaceHandler.saveWorkspaceData()
-        }
-
-        if (!saveResult.error) {
-            result.notice = `panel [${panelSelection.name}] was deleted`
-        } else {
-            return saveResult
-        }
-
-        return result
-
-    }
-
-    async getUserDomainList() {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-            payload: null,
-        }
-
-        const domainList = Object.keys(this.workspaceHandler.userRecords.memberships.domains)
-
-        if (!domainList || domainList.length === 0) {
-            result.success = false
-            result.notice = 'error: no domains found for this user in the users memberships list.'
-            return result
-        }
-
-        const domainCollection = collection(this.db, 'domains')
-
-        const querySpec = query(domainCollection, where('profile.domain.id','in',domainList))
-
-        let domainRecordSelections = []
-        try {
-            const queryDocs = await getDocs(querySpec)
-            this.usage.read(queryDocs.size || 1)
-            if (queryDocs.size === 0) {
-                result.success = false
-                result.notice = 'error: no domain records for user domains found.'
+        if (settings.mode == 'automatic') {
+            const result = await this.workspaceHandler.saveWorkspaceData()
+            if (result.error) {
                 return result
             }
-            for (let index = 0; index < queryDocs.size; index++) {
-                const 
-                    record = queryDocs.docs[index].data(),
-                    selection = record.profile.domain
-
-                domainRecordSelections.push(selection)
-            }
-            result.payload = domainRecordSelections
-            return result
-
-        } catch (error) {
-            const errdesc = 'error fetching user domain records'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
         }
+
+        result.notice = 'panels have been re-ordered'
+
+        return result
 
     }
 
-    async panelCreate(newname, domainSelection) {
+    async panelCreateRecord(newname, domainSelection) {
 
         const result = {
             error: false,
@@ -591,6 +326,315 @@ class PanelHandler {
 
     }
 
+    async panelDuplicateRecord(panelSelection, newname) {
+        
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload:null
+        }
+
+        const 
+            { workspaceHandler } = this,
+            panelRef = doc(
+                collection(this.db, 'users',this.userID, 'workspaces',workspaceHandler.workspaceRecord.profile.workspace.id, 'panels')),
+            newPanelID = panelRef.id
+
+        const 
+            newPanelRecord = _cloneDeep(workspaceHandler.panelRecords[panelSelection.index]),
+            oldPanelName = newPanelRecord.profile.panel.name,
+            oldPanelID = newPanelRecord.profile.panel.id,
+            newPanelControlRecord = _cloneDeep(workspaceHandler.panelControlMap.get(oldPanelID)),
+            newPanelIndex = workspaceHandler.panelRecords.length - 1,
+            { profile } = newPanelRecord
+
+        newPanelControlRecord.selector.index = newPanelIndex
+        newPanelControlRecord.selector.name = newname
+        newPanelControlRecord.functions = {}
+        workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
+
+        profile.panel.id = newPanelID
+        profile.panel.name = newname
+        profile.display_order = newPanelIndex
+        profile.owner = {id:this.userID, name: this.userName}
+        profile.commits = {
+          created_by: {
+            id: this.userID, 
+            name: this.userName
+          },
+          created_timestamp: Timestamp.now(),
+          updated_by: {
+            id: this.userID, 
+            name: this.userName
+          },
+          updated_timestamp: Timestamp.now(),            
+        }
+        profile.flags.is_default = false
+
+        workspaceHandler.panelRecords.push(newPanelRecord)
+        workspaceHandler.panelCount++
+
+        workspaceHandler.changedRecords.setpanels.add(newPanelID)
+        workspaceHandler.settings.changed = true
+
+        const notice = `[${oldPanelName}] has been duplicated as [${newname}]`
+        if (workspaceHandler.settings.mode == 'automatic') {
+            const result = await workspaceHandler.saveWorkspaceData()
+            result.notice = notice
+            result.payload = newPanelID
+            return result
+        }
+
+        result.payload = newPanelID
+        result.notice = notice
+        return result
+
+    }
+
+    async panelDeleteRecord(panelSelection) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            { panelRecords, changedRecords, panelControlMap } = workspaceHandler
+
+        panelRecords.splice(panelSelection.index, 1)
+        panelControlMap.delete(panelSelection.id)
+
+        workspaceHandler.panelCount--
+
+        for (let index = panelSelection.index + 1; index < panelRecords.length; index ++) {
+            const panelRecord = panelRecords[index]
+            panelRecord.profile.display_order = index
+            changedRecords.setpanels.add(panelRecord.profile.panel.id)
+        }
+
+        let index
+        for (index = 0; index < panelRecords.length; index++) {
+            if (panelRecords[index].profile.flags.is_default) {
+                break
+            }
+        }
+
+        result.payload = index
+        workspaceHandler.settings.changed = true
+        changedRecords.deletepanels.add(panelSelection.id)
+        changedRecords.setworkspace = workspaceHandler.workspaceRecord.profile.workspace.id
+
+        let saveResult
+        if (workspaceHandler.settings.mode == 'automatic') {
+            saveResult = await workspaceHandler.saveWorkspaceData()
+        }
+
+        if (!saveResult.error) {
+            result.notice = `panel [${panelSelection.name}] was deleted`
+        } else {
+            return saveResult
+        }
+
+        return result
+
+    }
+
+    // TODO: check schema for domain record
+    async getPanelDomainContext(panelSelection) {
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            panelRecord = this.workspaceHandler.panelRecords[panelSelection.index],
+            panelDomainID = panelRecord.profile.domain.id,
+            domainCollection = collection(this.db,'domains'),
+            domainDocRef = doc(domainCollection, panelDomainID),
+            memberCollection = collection(this.db, 'domains',panelDomainID, 'members'),
+            userRecord = this.workspaceHandler.userRecords.user
+
+        let panelDomainRecord
+        try {
+            const domainDoc = await getDoc(domainDocRef)
+            this.usage.read(1)
+            if (domainDoc.exists()) {
+                panelDomainRecord = domainDoc.data()
+            } else {
+                result.success = false
+                result.notice = 'domain record not found'
+                return result
+            }
+        } catch(error) {
+
+            const errdesc = 'error getting domain record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
+
+        let panelMemberRecord
+        try {
+            const queryPayload = await getDocs(querySpec)
+            this.usage.read(Math.min(1,queryPayload.size))
+            if (queryPayload.size !==1 ) {
+                result.success = false
+                result.notice = 'error fetching domain membership for this user'
+                return result
+            }
+            let memberRecord = queryPayload.docs[0].data()
+            const updatedRecord = updateDocumentSchema('members', 'standard', memberRecord)
+            if (!Object.is(memberRecord, updatedRecord)) {
+                try {
+
+                    await setDoc(doc(memberCollection,memberRecord.profile.member.id),updatedRecord)
+                    this.usage.write(1)
+
+                } catch (error) {
+
+                    const errdesc = 'error updating member record version'
+                    console.log(errdesc, error)
+                    this.errorControl.push({description:errdesc, error})
+                    result.error = true
+                    return result
+
+                }
+
+                memberRecord = updatedRecord
+
+            }
+
+            panelMemberRecord = memberRecord
+        } catch(error) {
+
+            const errdesc = 'error getting domain member record'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+
+        }
+
+        this.workspaceHandler.panelDomainRecord = panelDomainRecord
+        this.workspaceHandler.panelMemberRecord = panelMemberRecord
+
+        return result        
+    }
+
+    async panelRename(panelSelection, newname) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            panelRecord = workspaceHandler.panelRecords[panelSelection.index]
+
+        panelRecord.profile.panel.name = newname
+        workspaceHandler.workspaceRecord.panel.name = newname
+        const panelID = panelRecord.profile.panel.id
+        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
+
+        workspaceHandler.changedRecords.setpanels.add(panelID)
+        workspaceHandler.settings.changed = true
+
+        if (workspaceHandler.settings.mode == 'automatic') {
+
+            const result = await workspaceHandler.saveWorkspaceData()
+
+            if (!result.error) {
+                result.notice = 'panel name changed to [' + newname + ']'
+            }
+
+            return result
+
+        } else {
+
+            result.notice = 'panel name changed to [' + newname + ']'
+            return result
+
+        }
+
+    }
+
+    // TODO remove all but the default window
+    async panelReset(panelSelection) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        result.notice = `panel selection ${panelSelection.name} has been reset`
+
+        return result
+
+    }
+
+    async getUserDomainList() {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+            payload: null,
+        }
+
+        const domainList = Object.keys(this.workspaceHandler.userRecords.memberships.domains)
+
+        if (!domainList || domainList.length === 0) {
+            result.success = false
+            result.notice = 'error: no domains found for this user in the users memberships list.'
+            return result
+        }
+
+        const domainCollection = collection(this.db, 'domains')
+
+        const querySpec = query(domainCollection, where('profile.domain.id','in',domainList))
+
+        let domainRecordSelections = []
+        try {
+            const queryDocs = await getDocs(querySpec)
+            this.usage.read(queryDocs.size || 1)
+            if (queryDocs.size === 0) {
+                result.success = false
+                result.notice = 'error: no domain records for user domains found.'
+                return result
+            }
+            for (let index = 0; index < queryDocs.size; index++) {
+                const 
+                    record = queryDocs.docs[index].data(),
+                    selection = record.profile.domain
+
+                domainRecordSelections.push(selection)
+            }
+            result.payload = domainRecordSelections
+            return result
+
+        } catch (error) {
+            const errdesc = 'error fetching user domain records'
+            console.log(errdesc, error)
+            this.errorControl.push({description:errdesc, error})
+            result.error = true
+            return result
+        }
+
+    }
+
+
     async setDefaultPanel(fromIndex, toIndex) {
 
         const result = {
@@ -624,49 +668,6 @@ class PanelHandler {
 
     }
 
-    async panelReorder(newOrderList) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        const { panelRecords, changedRecords, settings, panelControlMap } = this.workspaceHandler
-
-        for (let index = 0; index < newOrderList.length; index++) {
-            const changeData = newOrderList[index]
-            const panelRecord = panelRecords[changeData.index]
-            const panelID = panelRecord.profile.panel.id
-            panelControlMap.get(panelID).selector.index = index
-            if (panelRecord.profile.display_order !== index) {
-                panelRecord.profile.display_order = index
-                changedRecords.setpanels.add(panelRecord.profile.panel.id)
-            }
-        }
-        settings.changed = true
-
-        panelRecords.sort((a,b) =>{
-            if (a.profile.display_order < b.profile.display_order) {
-                return -1
-            } else {
-                return 1
-            }
-        })
-
-        if (settings.mode == 'automatic') {
-            const result = await this.workspaceHandler.saveWorkspaceData()
-            if (result.error) {
-                return result
-            }
-        }
-
-        result.notice = 'panels have been re-ordered'
-
-        return result
-
-    }
 }
 
-
-export default PanelHandler
+export default PanelsHandler

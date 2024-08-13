@@ -40,10 +40,10 @@ const Workspace = (props) => {
         navigate = useNavigate(),
 
         // basics
-        [workspaceState,setWorkspaceState] = useState('setup'),
-        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(),
-        { workspaceRecord, workspaceSelection } = workspaceHandler,
-        [panelSelection, setPanelSelection] = useState({index:0,id:null, name:null}),
+        [workspaceState,setWorkspaceState] = useState('setup'), // machine state
+        [workspaceHandler, dispatchWorkspaceHandler] = useWorkspaceHandler(), // data operations
+        { workspaceRecord, workspaceSelection } = workspaceHandler, // current workspace record; long and short forms
+        [panelSelection, setPanelSelection] = useState({index:0,id:null, name:null}), // current workspace panel
 
         // resources
         workspaceFrameElementRef = useRef(null), // for resizeObserver
@@ -53,6 +53,9 @@ const Workspace = (props) => {
         scrollerAcceptsRef = useRef({accept:[]}) //static, no anticipated direct child scrollers
 
     workspaceHandler.panelSelection = panelSelection // always up to date
+
+    // console.log('panelSelection, panelComponentListRef', panelSelection, panelComponentListRef.current)
+    console.log('Workspace: panelSelection', panelSelection)
 
     // ---------------------------[ state change effects ]------------------------
 
@@ -65,19 +68,19 @@ const Workspace = (props) => {
         }
     },[])
 
-    // init panel selection
+    // set panel selection function for workspaceHandler
     useEffect(()=>{
 
         workspaceHandler.setPanelSelection = setPanelSelection
 
     },[])
 
-    // initialize panels list
+    // initialize new panels list
     useEffect(()=>{
 
         if (workspaceHandler.flags.new_workspace_load) {
-            panelComponentListRef.current = []
             workspaceHandler.flags.new_workspace_load = false
+            panelComponentListRef.current = []
             loadPanels()
             setWorkspaceState('loading')
         } 
@@ -96,7 +99,7 @@ const Workspace = (props) => {
 
     },[panelSelection])
 
-    // -------------------[ operations ]----------------------
+    // -------------------[ operation functions ]----------------------
     
     async function setCurrentWorkspacePanelSelection(panelSelection) {
 
@@ -112,11 +115,10 @@ const Workspace = (props) => {
             return
         }
 
-        dispatchWorkspaceHandler('updatepanel')
+        dispatchWorkspaceHandler('updatepanelselection')
 
     }
 
-    // --------------------------[ operations ]--------------------------
     const resizeCallback = useCallback((entries)=>{
 
         const element = entries[0].target
@@ -134,7 +136,7 @@ const Workspace = (props) => {
     // panel data and components are all kept in memory
     async function loadPanels() {
 
-        const result = await workspaceHandler.loadPanels()
+        const result = await workspaceHandler.panelsLoadRecords()
 
         if (result.error) {
             navigate('/error')

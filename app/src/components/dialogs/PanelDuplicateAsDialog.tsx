@@ -85,7 +85,7 @@ const PanelDuplicateAsDialog = (props) => {
     }
 
     // TODO make sure record exists before saving
-    async function doDuplicateAs() {
+    async function doDuplicatePanel() {
         if (isInvalidFieldFlags.name) {
             // TODO use chakra Alert instead
             alert('Please correct errors before saving')
@@ -94,7 +94,7 @@ const PanelDuplicateAsDialog = (props) => {
         setAlertState('processing')
 
         const 
-            result = await workspaceHandler.duplicatePanelAs(panelSelection, writeValues.name)
+            result = await workspaceHandler.panelDuplicateRecord(panelSelection, writeValues.name)
 
         if (result.error) {
            navigate('/error')
@@ -182,7 +182,7 @@ const PanelDuplicateAsDialog = (props) => {
                           Cancel
                         </Button>
                         <Button isDisabled = {alertState == 'processing'} ml = '8px' colorScheme = 'blue'
-                            onClick = {doDuplicateAs}
+                            onClick = {doDuplicatePanel}
                         >
                           Duplicate the panel
                         </Button>

@@ -37,11 +37,11 @@
     deleteWorkspace
 
     // panels facade
-    loadPanels
+    panelsLoadRecords
     panelRename
     panelReset
     getPanelDomainContext
-    duplicatePanelAs
+    panelDuplicateRecord
     deletePanel
 
 */
@@ -105,6 +105,7 @@ class WorkspaceHandler {
     panelCount = 0 
     panelControlMap = new Map()
     panelRecords = []
+    panelComponents = []
     domainRecordSubscriptions = new Map()
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
@@ -1405,8 +1406,8 @@ class WorkspaceHandler {
 
     // =============================[ PANELS FACADE ]===========================
 
-    async loadPanels() {
-        return await this.panelsHandler.loadPanels()
+    async panelsLoadRecords() {
+        return await this.panelsHandler.panelsLoadRecords()
     }
 
     async panelRename(panelSelection, newname){
@@ -1421,28 +1422,28 @@ class WorkspaceHandler {
         return await this.panelsHandler.getPanelDomainContext(panelSelection)
     }
 
-    async duplicatePanelAs(panelSelection, newname) {
-        return await this.panelsHandler.duplicatePanelAs(panelSelection, newname)
+    async panelDuplicateRecord(panelSelection, newname) {
+        return await this.panelsHandler.panelDuplicateRecord(panelSelection, newname)
     }
 
-    async deletePanel(panelSelection) {
-        return await this.panelsHandler.deletePanel(panelSelection)
+    async panelDeleteRecord(panelSelection) {
+        return await this.panelsHandler.deleteDeleteRecord(panelSelection)
     }
 
     async getUserDomainList() {
         return await this.panelsHandler.getUserDomainList()
     }
 
-    async panelCreate(newname, domainSelection) {
-        return await this.panelsHandler.panelCreate(newname, domainSelection)
+    async panelCreateRecord(newname, domainSelection) {
+        return await this.panelsHandler.panelCreateRecord(newname, domainSelection)
     }
 
     async setDefaultPanel(fromIndex, toIndex) {
         return await this.panelsHandler.setDefaultPanel(fromIndex, toIndex)
     }
 
-    async panelReorder(newOrderList) {
-        return await this.panelsHandler.panelReorder(newOrderList)
+    async panelsReorderRecords(newOrderList) {
+        return await this.panelsHandler.panelsReorderRecords(newOrderList)
     }
 
 }

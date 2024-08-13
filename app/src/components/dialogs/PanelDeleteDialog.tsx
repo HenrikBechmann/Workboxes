@@ -42,7 +42,7 @@ const PanelDeleteDialog = (props) => {
     }
     async function doDeletePanel() {
 
-        const result = await workspaceHandler.deletePanel(panelSelection)
+        const result = await workspaceHandler.panelDeleteRecord(panelSelection)
 
         if (result.error) {
             navigate('/error')

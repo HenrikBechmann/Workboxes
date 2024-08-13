@@ -61,7 +61,11 @@ const Workpanel = (props:any) => {
 
     const 
         // windows setup
-        { panelID } = props,
+        { panelID } = props
+
+    console.log('Workpanel: panelID',panelID)
+
+    const
 
         [panelState, setPanelState] = useState('setup'), // setup, configured, resized, ready, windowadded
 
@@ -85,6 +89,8 @@ const Workpanel = (props:any) => {
         panelElementRef = useRef(null)
 
     panelStateRef.current = panelState
+
+    // console.log('panelControlMap',panelControlMap)
 
     const startingWindowsSpecsListRef = useRef(panelWindows)
 

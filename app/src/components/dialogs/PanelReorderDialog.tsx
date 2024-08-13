@@ -67,7 +67,7 @@ const PanelReorderDialog = (props) => {
 
         if (panelOrderChangesCountRef.current) {
 
-            const result = await workspaceHandler.panelReorder(panelOrderChangesRef.current)
+            const result = await workspaceHandler.panelsReorderRecords(panelOrderChangesRef.current)
 
             if (result.error) {
                 navigate('/error')
