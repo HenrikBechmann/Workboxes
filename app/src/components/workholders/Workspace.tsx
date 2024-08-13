@@ -68,7 +68,7 @@ const Workspace = (props) => {
         }
     },[])
 
-    // set panel selection function for workspaceHandler
+    // set panel selection function for workspaceHandler, passed to dialogs
     useEffect(()=>{
 
         workspaceHandler.setPanelSelection = setPanelSelection
@@ -93,7 +93,7 @@ const Workspace = (props) => {
         const is_set = panelSelection.index ?? false
         if (is_set === false) return
 
-        setPanelSelection(panelSelection)
+        changePanelSelection(panelSelection)
 
         document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
@@ -115,7 +115,7 @@ const Workspace = (props) => {
             return
         }
 
-        dispatchWorkspaceHandler('setpanelselection')
+        dispatchWorkspaceHandler('changepanelselection')
 
     }
 

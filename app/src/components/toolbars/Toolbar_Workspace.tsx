@@ -111,7 +111,7 @@ const WorkspaceToolbar = (props) => {
 
     // -----------------------[ operations ]------------------------
 
-    const changePanelSelection = (panelID) => {
+    const userPanelSelection = (panelID) => {
 
         let index, panelRecord
         for (index = 0; index < panelRecords.length; index ++) {
@@ -234,7 +234,7 @@ const WorkspaceToolbar = (props) => {
             <MenuOptionGroup 
                 key = {panelMenuIteration++} 
                 defaultValue = {defaultValue} 
-                onChange = {changePanelSelection} 
+                onChange = {userPanelSelection} 
                 fontSize = 'small' 
                 fontStyle = 'italic' 
                 title = 'Select a panel:'
