@@ -103,8 +103,8 @@ class WorkspaceHandler {
     setPanelSelection = null
     // set on load of all panels
     panelCount = 0 
-    panelControlMap = new Map()
-    panelRecords = []
+    panelControlMap = new Map() // each panelControl.index must be synchronized with panelComponentList order
+    panelRecords = [] // display_order must be synchronized with panelControl
     domainRecordSubscriptions = new Map()
     // set with getPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
