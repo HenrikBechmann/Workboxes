@@ -54,9 +54,6 @@ const Workspace = (props) => {
 
     workspaceHandler.panelSelection = panelSelection // always up to date
 
-    // console.log('panelSelection, panelComponentListRef', panelSelection, panelComponentListRef.current)
-    // console.log('Workspace: panelSelection', panelSelection)
-
     // ---------------------------[ state change effects ]------------------------
 
     // init workspace resizeObserver
@@ -87,7 +84,7 @@ const Workspace = (props) => {
 
     },[workspaceHandler.flags.new_workspace_load])
 
-    // handle scroller effects for panel selection
+    // handle scroller effects for new panel selection
     useEffect(()=>{
 
         const is_set = panelSelection.index ?? false
@@ -176,23 +173,23 @@ const Workspace = (props) => {
             panelSelection.index = selectedIndex
         } else if (defaultIndex !== undefined) {
             panelSelection.index = defaultIndex
-            const defaultRecord = panelRecords[defaultIndex]
+            // const defaultRecord = panelRecords[defaultIndex]
 
-            const result = await workspaceHandler.changePanelSelection(
-                defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
-            if (result.error) {
-                navigate('/error')
-                return
-            }
+            // const result = await workspaceHandler.changePanelSelection(
+            //     defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
+            // if (result.error) {
+            //     navigate('/error')
+            //     return
+            // }
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
-            const result = await workspaceHandler.changePanelSelection(
-                fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
-            if (result.error) {
-                navigate('/error')
-                return
-            }
+            // const result = await workspaceHandler.changePanelSelection(
+            //     fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
+            // if (result.error) {
+            //     navigate('/error')
+            //     return
+            // }
         }
 
         const panelSelectionRecord = panelRecords[panelSelection.index]
