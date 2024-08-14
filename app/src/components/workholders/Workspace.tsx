@@ -173,23 +173,9 @@ const Workspace = (props) => {
             panelSelection.index = selectedIndex
         } else if (defaultIndex !== undefined) {
             panelSelection.index = defaultIndex
-            // const defaultRecord = panelRecords[defaultIndex]
-
-            // const result = await workspaceHandler.changePanelSelection(
-            //     defaultRecord.profile.panel.id , defaultRecord.profile.panel.name)
-            // if (result.error) {
-            //     navigate('/error')
-            //     return
-            // }
         } else {
             const fallbackRecord = panelRecords[0]
             panelSelection.index = 0
-            // const result = await workspaceHandler.changePanelSelection(
-            //     fallbackRecord.profile.panel.id , fallbackRecord.profile.panel.name)
-            // if (result.error) {
-            //     navigate('/error')
-            //     return
-            // }
         }
 
         const panelSelectionRecord = panelRecords[panelSelection.index]
@@ -200,7 +186,7 @@ const Workspace = (props) => {
 
         setPanelSelection(panelSelection)
         setWorkspaceState('ready')
-        dispatchWorkspaceHandler()
+        // dispatchWorkspaceHandler()
 
     }
 
