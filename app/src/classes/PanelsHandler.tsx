@@ -41,6 +41,14 @@ class PanelsHandler {
         
     }
 
+    async unsubscribeFromDomainChanges(panelControlData) {
+        
+    }
+
+    async clearSubscribtionsToDomainChanges() {
+
+    }
+
     async panelsLoadRecords() {
 
         const result = {
@@ -51,6 +59,7 @@ class PanelsHandler {
 
         const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
+        await this.clearSubscribtionsToDomainChanges()
         panelControlMap.clear()
 
         const 
@@ -112,7 +121,7 @@ class PanelsHandler {
                         showMemberWorkbox: null,
                     }
                 }
-                this.subscribeToDomainChanges(panelControlData)
+                await this.subscribeToDomainChanges(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
@@ -192,7 +201,7 @@ class PanelsHandler {
                     showMemberWorkbox: null,
                 }
             }
-            this.subscribeToDomainChanges(panelControlData)
+            await this.subscribeToDomainChanges(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
         }
 
@@ -302,7 +311,7 @@ class PanelsHandler {
             functions:{}
         }
         panelRecords.push(newPanelData)
-        this.subscribeToDomainChanges(panelControlRecord)
+        await this.subscribeToDomainChanges(panelControlRecord)
         panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
@@ -354,7 +363,7 @@ class PanelsHandler {
         newPanelControlRecord.selector.index = newPanelIndex
         newPanelControlRecord.selector.name = newname
         newPanelControlRecord.functions = {}
-        this.subscribeToDomainChanges(newPanelControlRecord)
+        await this.subscribeToDomainChanges(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
         profile.panel.id = newPanelID
@@ -409,6 +418,7 @@ class PanelsHandler {
             { panelRecords, changedRecords, panelControlMap } = workspaceHandler
 
         panelRecords.splice(panelSelection.index, 1)
+        await this.unsubscribeFromDomainChanges(panelSelection)
         panelControlMap.delete(panelSelection.id)
 
         const deletedIndex = panelSelection.index
