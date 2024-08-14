@@ -302,6 +302,7 @@ class PanelsHandler {
             functions:{}
         }
         panelRecords.push(newPanelData)
+        this.subscribeToDomainChanges(panelControlRecord)
         panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
@@ -353,6 +354,7 @@ class PanelsHandler {
         newPanelControlRecord.selector.index = newPanelIndex
         newPanelControlRecord.selector.name = newname
         newPanelControlRecord.functions = {}
+        this.subscribeToDomainChanges(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
         profile.panel.id = newPanelID
