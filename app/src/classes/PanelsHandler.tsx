@@ -119,7 +119,9 @@ class PanelsHandler {
                     functions:{ // repository for direct calls
                         showDomainWorkbox:null, 
                         showMemberWorkbox: null,
-                    }
+                        updateDomainData: null,
+                    },
+                    domain: panelRecord.profile.domain,
                 }
                 await this.subscribeToDomainChanges(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
@@ -141,6 +143,7 @@ class PanelsHandler {
             this.usage.write(writes)
         } else { // no panels found - create a panel
             const newPanelDocRef = doc(dbPanelCollection)
+            const userRecord = this.workspaceHandler.userRecords.user
             const newPanelData = updateDocumentSchema('panels','standard',{},
                 {
                   profile: {
@@ -153,6 +156,7 @@ class PanelsHandler {
                       id: this.userID,
                       name: this.userName,
                     },
+                    domain: userRecord.profile.domain,
                     commits: {
                       created_by: {
                           id: this.userID,
@@ -199,7 +203,10 @@ class PanelsHandler {
                 functions:{ // repository for direct calls
                     showDomainWorkbox:null, 
                     showMemberWorkbox: null,
-                }
+                },
+                domain:{
+                    domainid:panelRecord.profile.domain
+                },
             }
             await this.subscribeToDomainChanges(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
@@ -308,7 +315,8 @@ class PanelsHandler {
                 name: newname,
                 index: workspaceHandler.panelCount,
             },
-            functions:{}
+            functions:{},
+            domain:newPanelData.profile.domain,
         }
         panelRecords.push(newPanelData)
         await this.subscribeToDomainChanges(panelControlRecord)
@@ -363,6 +371,7 @@ class PanelsHandler {
         newPanelControlRecord.selector.index = newPanelIndex
         newPanelControlRecord.selector.name = newname
         newPanelControlRecord.functions = {}
+        newPanelControlRecord.domain = newPanelRecord.profile.domain
         await this.subscribeToDomainChanges(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
