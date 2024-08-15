@@ -109,6 +109,7 @@ const Workpanel = (props:any) => {
             showDomainWorkbox,
             showMemberWorkbox,
             updateDomainData,
+            updateMemberData,
         }
 
         const startingWindowsSpecs = startingWindowsSpecsListRef.current
@@ -123,6 +124,11 @@ const Workpanel = (props:any) => {
 
     const updateDomainData = (domainRecord) => {
         console.log('updating domain data', domainRecord)
+    }
+
+
+    const updateMemberData = (memberRecord) => {
+        console.log('updating member data', memberRecord)
     }
 
     const showDomainWorkbox = () => {

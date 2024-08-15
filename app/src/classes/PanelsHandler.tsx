@@ -120,6 +120,7 @@ class PanelsHandler {
                         showDomainWorkbox:null, 
                         showMemberWorkbox: null,
                         updateDomainData: null,
+                        updateMemberData: null,
                     },
                     domain: panelRecord.profile.domain,
                 }
@@ -203,6 +204,8 @@ class PanelsHandler {
                 functions:{ // repository for direct calls
                     showDomainWorkbox:null, 
                     showMemberWorkbox: null,
+                    updateDomainData: null,
+                    updateMemberData: null,
                 },
                 domain:{
                     domainid:panelRecord.profile.domain
