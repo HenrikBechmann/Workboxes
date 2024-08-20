@@ -37,6 +37,22 @@ class PanelsHandler {
     userName
     userID
 
+    // const panelControlData = {
+    //     selector:{
+    //         index,
+    //         id:panelRecordID,
+    //         name:panelRecord.profile.panel.name
+    //     },
+    //     functions:{ // repository for direct calls
+    //         showDomainWorkbox:null, 
+    //         showMemberWorkbox: null,
+    //         updateDomainData: null,
+    //         updateMemberData: null,
+    //     },
+    //     domain: panelRecord.profile.domain,
+    // }
+    
+
     async subscribeToDomainChanges(panelControlData) {
         
     }
