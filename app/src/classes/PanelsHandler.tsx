@@ -51,18 +51,40 @@ class PanelsHandler {
     //     },
     //     domain: panelRecord.profile.domain,
     // }
-    
+
 
     async subscribeToDomainChanges(panelControlData) {
+        const { domainRecordPublishers } = this.workspaceHandler
+        const domainID = panelControlData.domain.id
+
+        if (!domainRecordPublishers.has(domainID)) {
+            // await // create a domainRecordPublisher
+        }
+
+        const domainRecordPublisher = domainRecordPublishers.get(domainID)
+        domainRecordPublisher.subscribe(panelControlData.selector.id)
         
     }
 
     async unsubscribeFromDomainChanges(panelControlData) {
-        
+        const { domainRecordPublishers } = this.workspaceHandler
+        const domainID = panelControlData.domain.id
+
+        if (!domainRecordPublishers.has(domainID)) {
+            return
+        }
+
+        const domainRecordPublisher = domainRecordPublishers.get(domainID)
+        domainRecordPublisher.unSubscribe(panelControlData.selector.id)
+
     }
 
-    async clearSubscribtionsToDomainChanges() {
+    async clearSubscriptionsToDomainChanges() {
+        const { domainRecordPublishers } = this.workspaceHandler
 
+        domainRecordPublishers.forEach((domainRecordPublisher) => {
+            domainRecordPublisher.unSubscribeAll()
+        })
     }
 
     async panelsLoadRecords() {
@@ -75,7 +97,7 @@ class PanelsHandler {
 
         const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
-        await this.clearSubscribtionsToDomainChanges()
+        await this.clearSubscriptionsToDomainChanges()
         panelControlMap.clear()
 
         const 
