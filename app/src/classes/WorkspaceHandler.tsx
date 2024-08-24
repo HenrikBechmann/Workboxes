@@ -151,7 +151,7 @@ class WorkspaceHandler {
         return this._usage
     }
 
-    // =========================[ DOMAINS AND MEMBERSHIPS ]===================
+    // =========================[ DOMAIN AND MEMBERSHIP SNAPSHOTS ]===================
 
     async setDomainSnapshots(domainID) {
 
@@ -199,12 +199,7 @@ class WorkspaceHandler {
                             this.snapshotControl.setSchemaChecked(domainSnapshotIndex)
                         }
 
-    //                     this.workboxRecord = workboxRecord
-
-    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
-
-    //                     this.internal.trigger = 'updaterecord'
-    //                     this.internal.setWorkboxHandlerContext({current:this})
+                    // set new domain record
 
                     }
 
@@ -220,9 +215,9 @@ class WorkspaceHandler {
             )
 
             this.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
-            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-            // this.internal.trigger = 'unsubscribeworkbox'
-            // this.internal.setWorkboxHandlerContext({current:this})
+
+            // return domainSnapshotIndex
+
         }
         const 
             memberCollection = collection(this.db, 'domains', domainID, 'members'),
@@ -269,12 +264,7 @@ class WorkspaceHandler {
                             this.snapshotControl.setSchemaChecked(memberSnapshotIndex)
                         }
 
-    //                     this.workboxRecord = workboxRecord
-
-    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
-
-    //                     this.internal.trigger = 'updaterecord'
-    //                     this.internal.setWorkboxHandlerContext({current:this})
+                        // set new membership record
 
                     }
 
@@ -290,9 +280,9 @@ class WorkspaceHandler {
             )
 
             this.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
-            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-            // this.internal.trigger = 'unsubscribeworkbox'
-            // this.internal.setWorkboxHandlerContext({current:this})
+
+            // return memberSnapshotIndex
+
         }
  
     }
