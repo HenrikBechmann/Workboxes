@@ -21,6 +21,8 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
 
+import DomainRecordPublisher from './DomainRecordPublisher'
+
 class PanelsHandler {
 
     constructor(workspaceHandler, db, errorControl) {
@@ -54,15 +56,22 @@ class PanelsHandler {
 
 
     async subscribeToDomainChanges(panelControlData) {
-        const { domainRecordPublishers } = this.workspaceHandler
-        const domainID = panelControlData.domain.id
+        const 
+            { domainRecordPublishers } = this.workspaceHandler,
+            domainID = panelControlData.domain.id,
+            panelID = panelControlData.selector.id,
+            panelHandler = this
 
         if (!domainRecordPublishers.has(domainID)) {
             // await // create a domainRecordPublisher
+            const 
+                workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
+                userID = this.userID
+            domainRecordPublishers.set(domainID, new DomainRecordPublisher(panelID, workspaceID, userID, panelHandler))
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.subscribe(panelControlData.selector.id)
+        domainRecordPublisher.subscribe(panelID)
         
     }
 

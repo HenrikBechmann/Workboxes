@@ -3,8 +3,23 @@
 
 class DomainRecordPublisher {
 
-    constructor() {
+    //     selector:{
+    //         index,
+    //         id:panelRecordID,
+    //         name:panelRecord.profile.panel.name
+    //     },
+    constructor(panelID, workspaceID, userID, panelHandler) {
         
     }
 
+    subscribe = () => {
+
+    }
+
+    unSubscribe = () => {
+
+    }
+
 }
+
+export default DomainRecordPublisher
