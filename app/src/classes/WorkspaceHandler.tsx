@@ -153,7 +153,7 @@ class WorkspaceHandler {
 
     // =========================[ DOMAIN AND MEMBERSHIP SNAPSHOTS ]===================
 
-    async setDomainSnapshots(domainID) {
+    async setDomainSnapshots(domainID, setDomainRecord, setMemberRecord) {
 
         const 
             domainCollection = collection(this.db, 'domains'),
@@ -199,7 +199,8 @@ class WorkspaceHandler {
                             this.snapshotControl.setSchemaChecked(domainSnapshotIndex)
                         }
 
-                    // set new domain record
+                        // set new domain record
+                        setDomainRecord(domainRecord)
 
                     }
 
@@ -215,8 +216,6 @@ class WorkspaceHandler {
             )
 
             this.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
-
-            // return domainSnapshotIndex
 
         }
         const 
@@ -265,6 +264,7 @@ class WorkspaceHandler {
                         }
 
                         // set new membership record
+                        setMemberRecord(memberRecord)
 
                     }
 
@@ -281,9 +281,9 @@ class WorkspaceHandler {
 
             this.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
 
-            // return memberSnapshotIndex
-
         }
+
+        return {domainSnapshotIndex, memberSnapshotIndex}
  
     }
 

@@ -38,6 +38,7 @@ class PanelsHandler {
     usage
     userName
     userID
+    snapshotControl
 
     // const panelControlData = {
     //     selector:{
@@ -67,9 +68,10 @@ class PanelsHandler {
             const 
                 workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
                 userID = this.userID,
-                domainRecordPublisher = new DomainRecordPublisher(domainID, workspaceID, userID)
+                domainRecordPublisher = 
+                    new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl )
 
-            await domainRecordPublisher.openSnapshot()
+            await domainRecordPublisher.openSnapshot(this.workspaceHandler.setDomainSnapshots)
             domainRecordPublishers.set(domainID, domainRecordPublisher)
         }
 
