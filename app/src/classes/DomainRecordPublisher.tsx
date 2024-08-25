@@ -1,6 +1,12 @@
 // DomainRecordPublisher.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+
+    TODO: update all error handling related to this, particularly in WorkboxesProvider
+
+*/
+
 class DomainRecordPublisher {
 
     constructor(domainID, snapshotControl) {
