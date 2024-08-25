@@ -66,34 +66,50 @@ class PanelsHandler {
             // await // create a domainRecordPublisher
             const 
                 workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
-                userID = this.userID
-            domainRecordPublishers.set(domainID, new DomainRecordPublisher(panelID, workspaceID, userID, panelHandler))
+                userID = this.userID,
+                domainRecordPublisher = new DomainRecordPublisher(domainID, workspaceID, userID)
+
+            await domainRecordPublisher.openSnapshot()
+            domainRecordPublishers.set(domainID, domainRecordPublisher)
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.subscribe(panelID)
+        domainRecordPublisher.subscribe(panelID, panelControlData)
         
     }
 
     async unsubscribeFromDomainChanges(panelControlData) {
         const { domainRecordPublishers } = this.workspaceHandler
-        const domainID = panelControlData.domain.id
+        const 
+            domainID = panelControlData.domain.id,
+            panelID = panelControlData.selector.id
 
         if (!domainRecordPublishers.has(domainID)) {
             return
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.unSubscribe(panelControlData.selector.id)
+        await domainRecordPublisher.unSubscribe(panelID)
+
+        if (!domainRecordPublisher.subscriptions.size) {
+            await domainRecordPublisher.closeSnapshot()
+            domainRecordPublishers.delete(domainID)
+        }
 
     }
 
     async clearSubscriptionsToDomainChanges() {
         const { domainRecordPublishers } = this.workspaceHandler
 
-        domainRecordPublishers.forEach((domainRecordPublisher) => {
-            domainRecordPublisher.unSubscribeAll()
-        })
+        const domainList = Array.from(Object.keys(domainRecordPublishers))
+        for (let index = 0; index < domainRecordPublishers.size; index++) {
+            const domainID = domainList[index]
+            const domainRecordPublisher = domainRecordPublishers.get(domainID)
+            await domainRecordPublisher.unSubscribeAll()
+            await domainRecordPublisher.closeSnapshot()
+        }
+
+        domainRecordPublishers.clear()
     }
 
     async panelsLoadRecords() {

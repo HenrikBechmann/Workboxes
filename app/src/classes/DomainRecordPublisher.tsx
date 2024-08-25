@@ -8,15 +8,29 @@ class DomainRecordPublisher {
     //         id:panelRecordID,
     //         name:panelRecord.profile.panel.name
     //     },
-    constructor(panelID, workspaceID, userID, panelHandler) {
+    constructor(domainID, workspaceID, userID) {
         
     }
 
-    subscribe = () => {
+    subscriptions = new Map()
+
+    async subscribe (panelID, panelControlData) {
 
     }
 
-    unSubscribe = () => {
+    async unSubscribe(panelID) {
+
+    }
+
+    async openSnapshot() {
+        
+    }
+
+    async closeSnapshot() {
+
+    }
+
+    async unSubscribeAll() {
 
     }
 
