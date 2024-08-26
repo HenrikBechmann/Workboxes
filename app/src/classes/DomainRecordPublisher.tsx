@@ -64,7 +64,7 @@ class DomainRecordPublisher {
 
     }
 
-    setDomainRecord = (domainRecord) => {
+    private setDomainRecord = (domainRecord) => {
 
         console.log('setting domain record', domainRecord)
 
@@ -72,7 +72,7 @@ class DomainRecordPublisher {
 
     }
 
-    setMemberRecord = (memberRecord) => {
+    private setMemberRecord = (memberRecord) => {
 
         console.log('setting member record', memberRecord)
 
@@ -82,13 +82,22 @@ class DomainRecordPublisher {
 
     async subscribe (panelID, panelControlData) {
 
+        this.subscriptions.set(panelID, panelControlData)
+
+        panelControlData.functions.updateDomainData(this.domainRecord)
+        panelControlData.functions.updateMemberData(this.memberRecord)
+
     }
 
     async unSubscribe(panelID) {
 
+        this.subscriptions.delete(panelID)
+
     }
 
     async unSubscribeAll() {
+
+        this.subscriptions.clear()
 
     }
 
