@@ -71,7 +71,7 @@ class PanelsHandler {
                 domainRecordPublisher = 
                     new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl, this.workspaceHandler )
 
-            await domainRecordPublisher.openSnapshot(this.workspaceHandler.setDomainSnapshots)
+            await domainRecordPublisher.openSnapshot()
             domainRecordPublishers.set(domainID, domainRecordPublisher)
         }
 

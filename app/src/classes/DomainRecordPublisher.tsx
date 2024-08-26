@@ -44,12 +44,14 @@ class DomainRecordPublisher {
     domainRecord
     memberRecord
 
-    async openSnapshot(setDomainSnapshots) {
+    async openSnapshot() {
 
         const {domainSnapshotIndex, memberSnapshotIndex} = 
             await this.setDomainSnapshots(this.workspaceHandler, this.domainID, this.setDomainRecord, this.setMemberRecord)
         this.domainSnapshotIndex = domainSnapshotIndex
         this.memberSnapshotIndex = memberSnapshotIndex
+
+        console.log('domainSnapshotIndex, memberSnapshotIndex',domainSnapshotIndex, memberSnapshotIndex)
 
     }
 
