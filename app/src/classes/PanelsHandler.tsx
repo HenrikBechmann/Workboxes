@@ -105,7 +105,7 @@ class PanelsHandler {
 
         const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
 
-        console.log('clearSubscriptionsToDomainChanges: domainRecordPublishers, domainList',domainRecordPublishers, domainList)
+        // console.log('clearSubscriptionsToDomainChanges: domainRecordPublishers, domainList',domainRecordPublishers, domainList)
 
         for (let index = 0; index < domainRecordPublishers.size; index++) {
             const domainID = domainList[index]
@@ -192,7 +192,7 @@ class PanelsHandler {
                     },
                     domain: panelRecord.profile.domain,
                 }
-                console.log('panelLoadRecords subscribeToDomainChanges',panelControlData)
+                // console.log('panelLoadRecords subscribeToDomainChanges',panelControlData)
                 await this.subscribeToDomainChanges(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }

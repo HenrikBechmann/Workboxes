@@ -51,13 +51,13 @@ class DomainRecordPublisher {
         this.domainSnapshotIndex = domainSnapshotIndex
         this.memberSnapshotIndex = memberSnapshotIndex
 
-        console.log('domainSnapshotIndex, memberSnapshotIndex',domainSnapshotIndex, memberSnapshotIndex)
+        // console.log('domainSnapshotIndex, memberSnapshotIndex',domainSnapshotIndex, memberSnapshotIndex)
 
     }
 
     async closeSnapshot() {
 
-        console.log('closing domain and member snapshots',this.domainSnapshotIndex, this.memberSnapshotIndex)
+        // console.log('closing domain and member snapshots',this.domainSnapshotIndex, this.memberSnapshotIndex)
 
         this.snapshotControl.unsub(this.domainSnapshotIndex)
         this.snapshotControl.unsub(this.memberSnapshotIndex)
