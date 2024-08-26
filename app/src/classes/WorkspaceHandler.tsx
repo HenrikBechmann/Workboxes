@@ -153,139 +153,139 @@ class WorkspaceHandler {
 
     // =========================[ DOMAIN AND MEMBERSHIP SNAPSHOTS ]===================
 
-    async setDomainSnapshots(domainID, setDomainRecord, setMemberRecord) {
+    // async setDomainSnapshots(workspaceHandler, domainID, setDomainRecord, setMemberRecord) {
 
-        const 
-            domainCollection = collection(this.db, 'domains'),
-            domainSnapshotIndex = 'Domain.' + domainID
+    //     const 
+    //         domainCollection = collection(workspaceHandler.db, 'domains'),
+    //         domainSnapshotIndex = 'Domain.' + domainID
 
-        if (!this.snapshotControl.has(domainSnapshotIndex)) { // once only
-            this.snapshotControl.create(domainSnapshotIndex)
+    //     if (!workspaceHandler.snapshotControl.has(domainSnapshotIndex)) { // once only
+    //         workspaceHandler.snapshotControl.create(domainSnapshotIndex)
 
-            const unsubscribedomain = await onSnapshot(doc(domainCollection, domainID), 
-                async (returndoc) =>{
-                    this.snapshotControl.incrementCallCount(domainSnapshotIndex, 1)
-                    this.usage.read(1)
+    //         const unsubscribedomain = await onSnapshot(doc(domainCollection, domainID), 
+    //             async (returndoc) =>{
+    //                 workspaceHandler.snapshotControl.incrementCallCount(domainSnapshotIndex, 1)
+    //                 workspaceHandler.usage.read(1)
                     
-                    let domainRecord = returndoc.data()
+    //                 let domainRecord = returndoc.data()
 
-                    if (!domainRecord) {
-                        this.onFail('System: domain record not found')
-                        return
-                    } else {
+    //                 if (!domainRecord) {
+    //                     workspaceHandler.onFail('System: domain record not found')
+    //                     return
+    //                 } else {
 
-                        if (!this.snapshotControl.wasSchemaChecked(domainSnapshotIndex)) {
+    //                     if (!workspaceHandler.snapshotControl.wasSchemaChecked(domainSnapshotIndex)) {
 
-                            const updatedRecord = updateDocumentSchema('domains', 'standard' ,domainRecord)
-                            if (!Object.is(domainRecord, updatedRecord)) {
-                                try {
+    //                         const updatedRecord = updateDocumentSchema('domains', 'standard' ,domainRecord)
+    //                         if (!Object.is(domainRecord, updatedRecord)) {
+    //                             try {
 
-                                    await setDoc(doc(domainCollection, domainID),updatedRecord)
-                                    this.usage.write(1)
+    //                                 await setDoc(doc(domainCollection, domainID),updatedRecord)
+    //                                 workspaceHandler.usage.write(1)
 
-                                } catch (error) {
+    //                             } catch (error) {
 
-                                    const errdesc = 'error updating domain record version. Check internet'
-                                    this.errorControl.push({description:errdesc,error})
-                                    console.log(errdesc,error)
-                                    this.onError()
-                                    return
+    //                                 const errdesc = 'error updating domain record version. Check internet'
+    //                                 workspaceHandler.errorControl.push({description:errdesc,error})
+    //                                 console.log(errdesc,error)
+    //                                 workspaceHandler.onError()
+    //                                 return
 
-                                }
+    //                             }
 
-                                domainRecord = updatedRecord
+    //                             domainRecord = updatedRecord
 
-                            }
-                            this.snapshotControl.setSchemaChecked(domainSnapshotIndex)
-                        }
+    //                         }
+    //                         workspaceHandler.snapshotControl.setSchemaChecked(domainSnapshotIndex)
+    //                     }
 
-                        // set new domain record
-                        setDomainRecord(domainRecord)
+    //                     // set new domain record
+    //                     setDomainRecord(domainRecord)
 
-                    }
+    //                 }
 
-                },(error) => {
+    //             },(error) => {
 
-                    const errdesc = 'error from domain record listener. Check permissions'
-                    this.errorControl.push({description:errdesc,error})
-                    console.log(errdesc,error)
-                    this.onError()
-                    return
+    //                 const errdesc = 'error from domain record listener. Check permissions'
+    //                 workspaceHandler.errorControl.push({description:errdesc,error})
+    //                 console.log(errdesc,error)
+    //                 workspaceHandler.onError()
+    //                 return
 
-                }
-            )
+    //             }
+    //         )
 
-            this.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
+    //         workspaceHandler.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
 
-        }
-        const 
-            memberCollection = collection(this.db, 'domains', domainID, 'members'),
-            memberID = this.userRecords.memberships.domains[domainID].memberid,
-            memberSnapshotIndex = 'Member.' + memberID
+    //     }
+    //     const 
+    //         memberCollection = collection(workspaceHandler.db, 'domains', domainID, 'members'),
+    //         memberID = workspaceHandler.userRecords.memberships.domains[domainID].memberid,
+    //         memberSnapshotIndex = 'Member.' + memberID
 
-        if (!this.snapshotControl.has(memberSnapshotIndex)) { // once only
-            this.snapshotControl.create(memberSnapshotIndex)
+    //     if (!workspaceHandler.snapshotControl.has(memberSnapshotIndex)) { // once only
+    //         workspaceHandler.snapshotControl.create(memberSnapshotIndex)
 
-            const unsubscribemember = await onSnapshot(doc(memberCollection, memberID), 
-                async (returndoc) =>{
-                    this.snapshotControl.incrementCallCount(memberSnapshotIndex, 1)
-                    this.usage.read(1)
+    //         const unsubscribemember = await onSnapshot(doc(memberCollection, memberID), 
+    //             async (returndoc) =>{
+    //                 workspaceHandler.snapshotControl.incrementCallCount(memberSnapshotIndex, 1)
+    //                 workspaceHandler.usage.read(1)
                     
-                    let memberRecord = returndoc.data()
+    //                 let memberRecord = returndoc.data()
 
-                    if (!memberRecord) {
-                        this.onFail('System: member record not found')
-                        return
-                    } else {
+    //                 if (!memberRecord) {
+    //                     workspaceHandler.onFail('System: member record not found')
+    //                     return
+    //                 } else {
 
-                        if (!this.snapshotControl.wasSchemaChecked(memberSnapshotIndex)) {
+    //                     if (!workspaceHandler.snapshotControl.wasSchemaChecked(memberSnapshotIndex)) {
 
-                            const updatedRecord = updateDocumentSchema('members', 'standard' ,memberRecord)
-                            if (!Object.is(memberRecord, updatedRecord)) {
-                                try {
+    //                         const updatedRecord = updateDocumentSchema('members', 'standard' ,memberRecord)
+    //                         if (!Object.is(memberRecord, updatedRecord)) {
+    //                             try {
 
-                                    await setDoc(doc(memberCollection, memberID),updatedRecord)
-                                    this.usage.write(1)
+    //                                 await setDoc(doc(memberCollection, memberID),updatedRecord)
+    //                                 workspaceHandler.usage.write(1)
 
-                                } catch (error) {
+    //                             } catch (error) {
 
-                                    const errdesc = 'error updating member record version. Check internet'
-                                    this.errorControl.push({description:errdesc,error})
-                                    console.log(errdesc,error)
-                                    this.onError()
-                                    return
+    //                                 const errdesc = 'error updating member record version. Check internet'
+    //                                 workspaceHandler.errorControl.push({description:errdesc,error})
+    //                                 console.log(errdesc,error)
+    //                                 workspaceHandler.onError()
+    //                                 return
 
-                                }
+    //                             }
 
-                                memberRecord = updatedRecord
+    //                             memberRecord = updatedRecord
 
-                            }
-                            this.snapshotControl.setSchemaChecked(memberSnapshotIndex)
-                        }
+    //                         }
+    //                         workspaceHandler.snapshotControl.setSchemaChecked(memberSnapshotIndex)
+    //                     }
 
-                        // set new membership record
-                        setMemberRecord(memberRecord)
+    //                     // set new membership record
+    //                     setMemberRecord(memberRecord)
 
-                    }
+    //                 }
 
-                },(error) => {
+    //             },(error) => {
 
-                    const errdesc = 'error from member record listener. Check permissions'
-                    this.errorControl.push({description:errdesc,error})
-                    console.log(errdesc,error)
-                    this.onError()
-                    return
+    //                 const errdesc = 'error from member record listener. Check permissions'
+    //                 workspaceHandler.errorControl.push({description:errdesc,error})
+    //                 console.log(errdesc,error)
+    //                 workspaceHandler.onError()
+    //                 return
 
-                }
-            )
+    //             }
+    //         )
 
-            this.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
+    //         workspaceHandler.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
 
-        }
+    //     }
 
-        return {domainSnapshotIndex, memberSnapshotIndex}
+    //     return {domainSnapshotIndex, memberSnapshotIndex}
  
-    }
+    // }
 
 
     // =========================[ UTILITIES ]========================

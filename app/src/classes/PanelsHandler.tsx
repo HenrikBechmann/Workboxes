@@ -69,7 +69,7 @@ class PanelsHandler {
                 workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
                 userID = this.userID,
                 domainRecordPublisher = 
-                    new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl )
+                    new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl, this.workspaceHandler )
 
             await domainRecordPublisher.openSnapshot(this.workspaceHandler.setDomainSnapshots)
             domainRecordPublishers.set(domainID, domainRecordPublisher)
@@ -189,6 +189,7 @@ class PanelsHandler {
                     },
                     domain: panelRecord.profile.domain,
                 }
+                console.log('panelLoadRecords subscribeToDomainChanges',panelControlData)
                 await this.subscribeToDomainChanges(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
