@@ -57,15 +57,24 @@ class DomainRecordPublisher {
 
     async closeSnapshot() {
 
+        console.log('closing domain and member snapshots',this.domainSnapshotIndex, this.memberSnapshotIndex)
+
+        this.snapshotControl.unsub(this.domainSnapshotIndex)
+        this.snapshotControl.unsub(this.memberSnapshotIndex)
+
     }
 
     setDomainRecord = (domainRecord) => {
+
+        console.log('setting domain record', domainRecord)
 
         this.domainRecord = domainRecord
 
     }
 
     setMemberRecord = (memberRecord) => {
+
+        console.log('setting member record', memberRecord)
 
         this.memberRecord = memberRecord
 

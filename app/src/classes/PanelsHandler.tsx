@@ -103,7 +103,10 @@ class PanelsHandler {
     async clearSubscriptionsToDomainChanges() {
         const { domainRecordPublishers } = this.workspaceHandler
 
-        const domainList = Array.from(Object.keys(domainRecordPublishers))
+        const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
+
+        console.log('clearSubscriptionsToDomainChanges: domainRecordPublishers, domainList',domainRecordPublishers, domainList)
+
         for (let index = 0; index < domainRecordPublishers.size; index++) {
             const domainID = domainList[index]
             const domainRecordPublisher = domainRecordPublishers.get(domainID)
