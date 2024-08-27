@@ -104,7 +104,7 @@ const WorkspaceToolbar = (props) => {
     useEffect(()=>{
 
         if (panelSelection.id) {
-            getPanelDomainContext(panelSelection)
+            setPanelDomainContext(panelSelection)
         }
 
     },[panelSelection])
@@ -155,9 +155,9 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
-    async function getPanelDomainContext(panelSelection) {
+    async function setPanelDomainContext(panelSelection) {
 
-        const result = await workspaceHandler.getPanelDomainContext(panelSelection)
+        const result = await workspaceHandler.setPanelDomainContext(panelSelection)
         if (!result.success) {
             toast({description:'unable to collect domain context'})
         }

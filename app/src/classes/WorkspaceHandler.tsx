@@ -31,7 +31,7 @@
     loadWorkspace
     reloadWorkspace
     renameWorkspace
-    changePanelSelection
+    updatePanelSelection
     saveWorkspaceData
     copyWorkspaceAs
     deleteWorkspace
@@ -40,7 +40,7 @@
     panelsLoadRecords
     panelRename
     panelReset
-    getPanelDomainContext
+    setPanelDomainContext
     panelDuplicateRecord
     deletePanel
 
@@ -106,7 +106,7 @@ class WorkspaceHandler {
     panelControlMap = new Map() // each panelControl.index must be synchronized with panelComponentList order
     panelRecords = [] // display_order must be synchronized with panelControl
     domainRecordPublishers = new Map()
-    // set with getPanelDomainContext of toolbarWorkspace
+    // set with setPanelDomainContext of toolbarWorkspace
     panelDomainRecord = null
     panelMemberRecord = null
     // maintained by toolbarWorkspace
@@ -888,9 +888,9 @@ class WorkspaceHandler {
 
     }
 
-    // ---------------------[ changePanelSelection ]--------------------------
+    // ---------------------[ updatePanelSelection ]--------------------------
 
-    async changePanelSelection(id, name) {
+    async updatePanelSelection(id, name) {
 
         const result = {
             error: false,
@@ -1270,8 +1270,8 @@ class WorkspaceHandler {
         return await this.panelsHandler.panelReset(panelSelection)
     }
 
-    async getPanelDomainContext(panelSelection) {
-        return await this.panelsHandler.getPanelDomainContext(panelSelection)
+    async setPanelDomainContext(panelSelection) {
+        return await this.panelsHandler.setPanelDomainContext(panelSelection)
     }
 
     async panelDuplicateRecord(panelSelection, newname) {

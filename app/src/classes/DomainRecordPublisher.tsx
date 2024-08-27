@@ -84,9 +84,6 @@ class DomainRecordPublisher {
 
         this.subscriptions.set(panelID, panelControlData)
 
-        panelControlData.functions.updateDomainData(this.domainRecord)
-        panelControlData.functions.updateMemberData(this.memberRecord)
-
     }
 
     async unSubscribe(panelID) {

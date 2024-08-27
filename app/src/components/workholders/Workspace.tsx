@@ -9,6 +9,23 @@
 
 */
 
+/*
+
+    Workspace bootstrap:
+    - load panel records
+        - for each record
+            - load record
+            - subscribe to domain and member records
+                - create snapshots for domain and member records
+                - store domain and member records in DomainRecordPublisher of domainRecordPublishers Map
+    - generate panel components
+    - set panel selection
+        - update panel selection in workspace record
+        - update viewport to show selectedpanel
+        - setPanelDomainContext for workspace toolbar
+
+*/
+
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 
 import { useNavigate } from 'react-router-dom'
@@ -90,7 +107,7 @@ const Workspace = (props) => {
         const is_set = panelSelection.index ?? false
         if (is_set === false) return
 
-        changePanelSelection(panelSelection)
+        updatePanelSelection(panelSelection)
 
         document.documentElement.style.setProperty('--wb_panel_selection',(-(panelSelection.index)).toString())
 
@@ -98,13 +115,13 @@ const Workspace = (props) => {
 
     // -------------------[ operation functions ]----------------------
     
-    async function changePanelSelection(panelSelection) {
+    async function updatePanelSelection(panelSelection) {
 
         const panelRecord = workspaceHandler.panelRecords[panelSelection.index]
 
         if (!panelRecord) return
 
-        const result = await workspaceHandler.changePanelSelection(
+        const result = await workspaceHandler.updatePanelSelection(
             panelRecord.profile.panel.id , panelRecord.profile.panel.name)
 
         if (result.error) {
@@ -112,7 +129,7 @@ const Workspace = (props) => {
             return
         }
 
-        dispatchWorkspaceHandler('changepanelselection')
+        dispatchWorkspaceHandler('updatepanelselection')
 
     }
 
@@ -182,11 +199,8 @@ const Workspace = (props) => {
         panelSelection.id = panelSelectionRecord.profile.panel.id
         panelSelection.name = panelSelectionRecord.profile.panel.name
 
-        // console.log('changePanelSelection to', panelSelection)
-
         setPanelSelection(panelSelection)
         setWorkspaceState('ready')
-        // dispatchWorkspaceHandler()
 
     }
 

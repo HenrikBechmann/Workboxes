@@ -40,6 +40,8 @@ class PanelsHandler {
     userID
     snapshotControl
 
+    // ============================[ domain record subscriptions ]=========================
+
     // const panelControlData = {
     //     selector:{
     //         index,
@@ -56,7 +58,7 @@ class PanelsHandler {
     // }
 
 
-    async subscribeToDomainChanges(panelControlData) {
+    async subscribeToDomainRecord(panelControlData) {
         const 
             { domainRecordPublishers } = this.workspaceHandler,
             domainID = panelControlData.domain.id,
@@ -80,7 +82,7 @@ class PanelsHandler {
         
     }
 
-    async unsubscribeFromDomainChanges(panelControlData) {
+    async unsubscribeFromDomainRecord(panelControlData) {
         const { domainRecordPublishers } = this.workspaceHandler
         const 
             domainID = panelControlData.domain.id,
@@ -100,12 +102,10 @@ class PanelsHandler {
 
     }
 
-    async clearSubscriptionsToDomainChanges() {
+    async clearSubscriptionsToDomainRecords() {
         const { domainRecordPublishers } = this.workspaceHandler
 
         const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
-
-        // console.log('clearSubscriptionsToDomainChanges: domainRecordPublishers, domainList',domainRecordPublishers, domainList)
 
         for (let index = 0; index < domainRecordPublishers.size; index++) {
             const domainID = domainList[index]
@@ -117,6 +117,8 @@ class PanelsHandler {
         domainRecordPublishers.clear()
     }
 
+    // ================================[ panel mangement ]==========================
+
     async panelsLoadRecords() {
 
         const result = {
@@ -127,7 +129,7 @@ class PanelsHandler {
 
         const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
-        await this.clearSubscriptionsToDomainChanges()
+        await this.clearSubscriptionsToDomainRecords()
         panelControlMap.clear()
 
         const 
@@ -192,8 +194,8 @@ class PanelsHandler {
                     },
                     domain: panelRecord.profile.domain,
                 }
-                // console.log('panelLoadRecords subscribeToDomainChanges',panelControlData)
-                await this.subscribeToDomainChanges(panelControlData)
+                // console.log('panelLoadRecords subscribeToDomainRecord',panelControlData)
+                await this.subscribeToDomainRecord(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
@@ -280,7 +282,7 @@ class PanelsHandler {
                     domainid:panelRecord.profile.domain
                 },
             }
-            await this.subscribeToDomainChanges(panelControlData)
+            await this.subscribeToDomainRecord(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
         }
 
@@ -391,7 +393,7 @@ class PanelsHandler {
             domain:newPanelData.profile.domain,
         }
         panelRecords.push(newPanelData)
-        await this.subscribeToDomainChanges(panelControlRecord)
+        await this.subscribeToDomainRecord(panelControlRecord)
         panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
@@ -444,7 +446,7 @@ class PanelsHandler {
         newPanelControlRecord.selector.name = newname
         newPanelControlRecord.functions = {}
         newPanelControlRecord.domain = newPanelRecord.profile.domain
-        await this.subscribeToDomainChanges(newPanelControlRecord)
+        await this.subscribeToDomainRecord(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
         profile.panel.id = newPanelID
@@ -499,7 +501,7 @@ class PanelsHandler {
             { panelRecords, changedRecords, panelControlMap } = workspaceHandler
 
         panelRecords.splice(panelSelection.index, 1)
-        await this.unsubscribeFromDomainChanges(panelSelection)
+        await this.unsubscribeFromDomainRecord(panelSelection)
         panelControlMap.delete(panelSelection.id)
 
         const deletedIndex = panelSelection.index
@@ -544,8 +546,97 @@ class PanelsHandler {
 
     }
 
+    async panelRename(panelSelection, newname) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            panelRecord = workspaceHandler.panelRecords[panelSelection.index]
+
+        panelRecord.profile.panel.name = newname
+        workspaceHandler.workspaceRecord.panel.name = newname
+        const panelID = panelRecord.profile.panel.id
+        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
+
+        workspaceHandler.changedRecords.setpanels.add(panelID)
+        workspaceHandler.settings.changed = true
+
+        if (workspaceHandler.settings.mode == 'automatic') {
+
+            const result = await workspaceHandler.saveWorkspaceData()
+
+            if (!result.error) {
+                result.notice = 'panel name changed to [' + newname + ']'
+            }
+
+            return result
+
+        } else {
+
+            result.notice = 'panel name changed to [' + newname + ']'
+            return result
+
+        }
+
+    }
+
+    // TODO remove all but the default window
+    async panelReset(panelSelection) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        result.notice = `panel selection ${panelSelection.name} has been reset`
+
+        return result
+
+    }
+
+    async setDefaultPanel(fromIndex, toIndex) {
+
+        const result = {
+            error: false,
+            success: true,
+            notice: null,
+        }
+
+        const 
+            { workspaceHandler } = this,
+            { panelRecords, changedRecords, settings } = workspaceHandler,
+            fromPanelRecord = panelRecords[fromIndex],
+            toPanelRecord = panelRecords[toIndex]
+
+        fromPanelRecord.profile.flags.is_default = false
+        toPanelRecord.profile.flags.is_default = true
+        settings.changed = true
+        changedRecords.setpanels.add(fromPanelRecord.profile.panel.id)
+        changedRecords.setpanels.add(toPanelRecord.profile.panel.id)
+
+        if (settings.mode == 'automatic') {
+            const result = await workspaceHandler.saveWorkspaceData()
+            if (result.error) {
+                return result
+            }
+        }
+
+        result.notice = `default panel has been changed from [${fromPanelRecord.profile.panel.name}] to [${toPanelRecord.profile.panel.name}]`
+
+        return result
+
+    }
+
+    // =============================[ panel domain context ]=========================
+
     // TODO: check schema for domain record
-    async getPanelDomainContext(panelSelection) {
+    async setPanelDomainContext(panelSelection) {
         const result = {
             error: false,
             success: true,
@@ -631,60 +722,6 @@ class PanelsHandler {
         return result        
     }
 
-    async panelRename(panelSelection, newname) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        const 
-            { workspaceHandler } = this,
-            panelRecord = workspaceHandler.panelRecords[panelSelection.index]
-
-        panelRecord.profile.panel.name = newname
-        workspaceHandler.workspaceRecord.panel.name = newname
-        const panelID = panelRecord.profile.panel.id
-        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
-
-        workspaceHandler.changedRecords.setpanels.add(panelID)
-        workspaceHandler.settings.changed = true
-
-        if (workspaceHandler.settings.mode == 'automatic') {
-
-            const result = await workspaceHandler.saveWorkspaceData()
-
-            if (!result.error) {
-                result.notice = 'panel name changed to [' + newname + ']'
-            }
-
-            return result
-
-        } else {
-
-            result.notice = 'panel name changed to [' + newname + ']'
-            return result
-
-        }
-
-    }
-
-    // TODO remove all but the default window
-    async panelReset(panelSelection) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        result.notice = `panel selection ${panelSelection.name} has been reset`
-
-        return result
-
-    }
-
     async getUserDomainList() {
 
         const result = {
@@ -732,39 +769,6 @@ class PanelsHandler {
             result.error = true
             return result
         }
-
-    }
-
-    async setDefaultPanel(fromIndex, toIndex) {
-
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
-
-        const 
-            { workspaceHandler } = this,
-            { panelRecords, changedRecords, settings } = workspaceHandler,
-            fromPanelRecord = panelRecords[fromIndex],
-            toPanelRecord = panelRecords[toIndex]
-
-        fromPanelRecord.profile.flags.is_default = false
-        toPanelRecord.profile.flags.is_default = true
-        settings.changed = true
-        changedRecords.setpanels.add(fromPanelRecord.profile.panel.id)
-        changedRecords.setpanels.add(toPanelRecord.profile.panel.id)
-
-        if (settings.mode == 'automatic') {
-            const result = await workspaceHandler.saveWorkspaceData()
-            if (result.error) {
-                return result
-            }
-        }
-
-        result.notice = `default panel has been changed from [${fromPanelRecord.profile.panel.name}] to [${toPanelRecord.profile.panel.name}]`
-
-        return result
 
     }
 
