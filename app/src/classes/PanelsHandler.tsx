@@ -636,91 +636,91 @@ class PanelsHandler {
     // =============================[ panel domain context ]=========================
 
     // TODO: check schema for domain record
-    async setPanelDomainContext(panelSelection) {
-        const result = {
-            error: false,
-            success: true,
-            notice: null,
-        }
+    // async setPanelDomainContext(panelSelection) {
+    //     const result = {
+    //         error: false,
+    //         success: true,
+    //         notice: null,
+    //     }
 
-        const 
-            panelRecord = this.workspaceHandler.panelRecords[panelSelection.index],
-            panelDomainID = panelRecord.profile.domain.id,
-            domainCollection = collection(this.db,'domains'),
-            domainDocRef = doc(domainCollection, panelDomainID),
-            memberCollection = collection(this.db, 'domains',panelDomainID, 'members'),
-            userRecord = this.workspaceHandler.userRecords.user
+    //     const 
+    //         panelRecord = this.workspaceHandler.panelRecords[panelSelection.index],
+    //         panelDomainID = panelRecord.profile.domain.id,
+    //         domainCollection = collection(this.db,'domains'),
+    //         domainDocRef = doc(domainCollection, panelDomainID),
+    //         memberCollection = collection(this.db, 'domains',panelDomainID, 'members'),
+    //         userRecord = this.workspaceHandler.userRecords.user
 
-        let panelDomainRecord
-        try {
-            const domainDoc = await getDoc(domainDocRef)
-            this.usage.read(1)
-            if (domainDoc.exists()) {
-                panelDomainRecord = domainDoc.data()
-            } else {
-                result.success = false
-                result.notice = 'domain record not found'
-                return result
-            }
-        } catch(error) {
+    //     let panelDomainRecord
+    //     try {
+    //         const domainDoc = await getDoc(domainDocRef)
+    //         this.usage.read(1)
+    //         if (domainDoc.exists()) {
+    //             panelDomainRecord = domainDoc.data()
+    //         } else {
+    //             result.success = false
+    //             result.notice = 'domain record not found'
+    //             return result
+    //         }
+    //     } catch(error) {
 
-            const errdesc = 'error getting domain record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
+    //         const errdesc = 'error getting domain record'
+    //         console.log(errdesc, error)
+    //         this.errorControl.push({description:errdesc, error})
+    //         result.error = true
+    //         return result
 
-        }
+    //     }
 
-        const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
+    //     const querySpec = query(memberCollection, where('profile.user.id','==',userRecord.profile.user.id))
 
-        let panelMemberRecord
-        try {
-            const queryPayload = await getDocs(querySpec)
-            this.usage.read(Math.min(1,queryPayload.size))
-            if (queryPayload.size !==1 ) {
-                result.success = false
-                result.notice = 'error fetching domain membership for this user'
-                return result
-            }
-            let memberRecord = queryPayload.docs[0].data()
-            const updatedRecord = updateDocumentSchema('members', 'standard', memberRecord)
-            if (!Object.is(memberRecord, updatedRecord)) {
-                try {
+    //     let panelMemberRecord
+    //     try {
+    //         const queryPayload = await getDocs(querySpec)
+    //         this.usage.read(Math.min(1,queryPayload.size))
+    //         if (queryPayload.size !==1 ) {
+    //             result.success = false
+    //             result.notice = 'error fetching domain membership for this user'
+    //             return result
+    //         }
+    //         let memberRecord = queryPayload.docs[0].data()
+    //         const updatedRecord = updateDocumentSchema('members', 'standard', memberRecord)
+    //         if (!Object.is(memberRecord, updatedRecord)) {
+    //             try {
 
-                    await setDoc(doc(memberCollection,memberRecord.profile.member.id),updatedRecord)
-                    this.usage.write(1)
+    //                 await setDoc(doc(memberCollection,memberRecord.profile.member.id),updatedRecord)
+    //                 this.usage.write(1)
 
-                } catch (error) {
+    //             } catch (error) {
 
-                    const errdesc = 'error updating member record version'
-                    console.log(errdesc, error)
-                    this.errorControl.push({description:errdesc, error})
-                    result.error = true
-                    return result
+    //                 const errdesc = 'error updating member record version'
+    //                 console.log(errdesc, error)
+    //                 this.errorControl.push({description:errdesc, error})
+    //                 result.error = true
+    //                 return result
 
-                }
+    //             }
 
-                memberRecord = updatedRecord
+    //             memberRecord = updatedRecord
 
-            }
+    //         }
 
-            panelMemberRecord = memberRecord
-        } catch(error) {
+    //         panelMemberRecord = memberRecord
+    //     } catch(error) {
 
-            const errdesc = 'error getting domain member record'
-            console.log(errdesc, error)
-            this.errorControl.push({description:errdesc, error})
-            result.error = true
-            return result
+    //         const errdesc = 'error getting domain member record'
+    //         console.log(errdesc, error)
+    //         this.errorControl.push({description:errdesc, error})
+    //         result.error = true
+    //         return result
 
-        }
+    //     }
 
-        this.workspaceHandler.panelDomainRecord = panelDomainRecord
-        this.workspaceHandler.panelMemberRecord = panelMemberRecord
+    //     this.workspaceHandler.panelDomainRecord = panelDomainRecord
+    //     this.workspaceHandler.panelMemberRecord = panelMemberRecord
 
-        return result        
-    }
+    //     return result        
+    // }
 
     async getUserDomainList() {
 

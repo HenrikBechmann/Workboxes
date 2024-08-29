@@ -155,16 +155,28 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
-    async function setPanelDomainContext(panelSelection) {
+    // TODO requires subscription
+    const setPanelDomainContext = (panelSelection) => {
 
-        const result = await workspaceHandler.setPanelDomainContext(panelSelection)
-        if (!result.success) {
-            toast({description:'unable to collect domain context'})
-        }
-        if (result.error) {
-            navigate('/error')
-            return
-        }
+        console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection)
+
+        const 
+            panelDomainID = panelRecord.profile.domain.id,
+            domainRecordPublisher = workspaceHandler.domainRecordPublishers.get(panelDomainID),
+            panelDomainRecord = domainRecordPublisher.domainRecord,
+            panelMemberRecord = domainRecordPublisher.memberRecord
+
+        // const result = await workspaceHandler.setPanelDomainContext(panelSelection)
+        // if (!result.success) {
+        //     toast({description:'unable to collect domain context'})
+        // }
+        // if (result.error) {
+        //     navigate('/error')
+        //     return
+        // }
+
+        workspaceHandler.panelDomainRecord = panelDomainRecord
+        workspaceHandler.panelMemberRecord = panelMemberRecord
         dispatchWorkspaceHandler('getpanelcontext')
     }
 
