@@ -158,13 +158,13 @@ const WorkspaceToolbar = (props) => {
     // TODO requires subscription
     const setPanelDomainContext = (panelSelection) => {
 
-        console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection)
-
         const 
             panelDomainID = panelRecord.profile.domain.id,
             domainRecordPublisher = workspaceHandler.domainRecordPublishers.get(panelDomainID),
             panelDomainRecord = domainRecordPublisher.domainRecord,
             panelMemberRecord = domainRecordPublisher.memberRecord
+
+        console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection, {...domainRecordPublisher})
 
         // const result = await workspaceHandler.setPanelDomainContext(panelSelection)
         // if (!result.success) {

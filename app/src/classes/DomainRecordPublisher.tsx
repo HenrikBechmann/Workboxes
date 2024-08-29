@@ -41,8 +41,8 @@ class DomainRecordPublisher {
     domainSnapshotIndex
     memberSnapshotIndex
 
-    domainRecord
-    memberRecord
+    domainRecord = null
+    memberRecord = null
 
     async openSnapshot() {
 
