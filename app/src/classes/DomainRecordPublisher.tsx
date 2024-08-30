@@ -56,8 +56,6 @@ class DomainRecordPublisher {
 
     async closeSnapshot() {
 
-        // console.log('closing domain and member snapshots',this.domainSnapshotIndex, this.memberSnapshotIndex)
-
         this.snapshotControl.unsub(this.domainSnapshotIndex)
         this.snapshotControl.unsub(this.memberSnapshotIndex)
 
@@ -76,11 +74,9 @@ class DomainRecordPublisher {
 
     private setMemberRecord = (memberRecord) => {
 
-        // console.log('setting member record', memberRecord)
-
         this.memberRecord = memberRecord
         this.subscriptions.forEach((subscription) =>{
-            subscription.functions.updateMemberData(memberRecord)
+            subscription.functions.updateMemberData && subscription.functions.updateMemberData(memberRecord)
         })
 
     }
@@ -93,7 +89,7 @@ class DomainRecordPublisher {
 
     async unSubscribe(subscriptionControlData) {
 
-        this.subscriptions.delete(subscriptionControlData.subscriptionIndex)
+        this.subscriptions.delete(subscriptionControlData.subscriptionindex)
 
     }
 

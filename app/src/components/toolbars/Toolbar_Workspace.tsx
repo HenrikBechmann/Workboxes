@@ -78,6 +78,8 @@ const WorkspaceToolbar = (props) => {
         [panelSetDefaultDialogState, setPanelSetDefaultDialogState] = useState(false),
         [panelReorderDialogState, setPanelReorderDialogState] = useState(false),
 
+        previousSubscriptionControlDataRef = useRef(null),
+
         // navigation
         navigate = useNavigate(),
         [navState, setNavState] = useState({previousDisabled:false, nextDisabled: false}),
@@ -169,41 +171,28 @@ const WorkspaceToolbar = (props) => {
 
     }
 
-    // TODO requires subscription
     const setPanelDomainContext = (panelSelection) => {
 
         const 
             panelDomainID = panelRecord.profile.domain.id,
-            panelID = panelSelection.id,
             subscriptionControlData = {
-                panel: panelSelection,
                 domain: panelRecord.profile.domain,
                 functions: {
                     updateDomainData,
                     updateMemberData,
                 },
-                subscriptionindex:'menu.' + panelSelection.id
-            }
+                subscriptionindex:'workspacemenu.' + panelSelection.id
+            },
+            previousSubscriptionControlData = previousSubscriptionControlDataRef.current
+
+            // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
             workspaceHandler.panelsHandler.subscribeToDomainRecord(subscriptionControlData)
 
-            // domainRecordPublisher = workspaceHandler.domainRecordPublishers.get(panelDomainID),
-            // panelDomainRecord = domainRecordPublisher.domainRecord,
-            // panelMemberRecord = domainRecordPublisher.memberRecord
+            if (previousSubscriptionControlData) {
+                workspaceHandler.panelsHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData)
+            }
+            previousSubscriptionControlDataRef.current = subscriptionControlData
 
-        // console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection, {...domainRecordPublisher})
-
-        // const result = await workspaceHandler.setPanelDomainContext(panelSelection)
-        // if (!result.success) {
-        //     toast({description:'unable to collect domain context'})
-        // }
-        // if (result.error) {
-        //     navigate('/error')
-        //     return
-        // }
-
-        // workspaceHandler.panelDomainRecord = panelDomainRecord
-        // workspaceHandler.panelMemberRecord = panelMemberRecord
-        // dispatchWorkspaceHandler('getpanelcontext')
     }
 
     // ------------------------[ dialog calls ]-----------------------

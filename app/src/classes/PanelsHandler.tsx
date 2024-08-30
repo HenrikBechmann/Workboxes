@@ -43,11 +43,6 @@ class PanelsHandler {
     // ============================[ domain record subscriptions ]=========================
 
     // const subscriptionControlData = {
-    //     panel:{
-    //         index,
-    //         id:panelRecordID,
-    //         name:panelRecord.profile.panel.name
-    //     },
     //     functions:{ // repository for direct calls
     //         updateDomainData: null,
     //         updateMemberData: null,
@@ -55,20 +50,18 @@ class PanelsHandler {
     //     domain: {
     //         id,
     //         name,
+    //     },
     //     subscriptionindex: <prefix>.<entityid>
     // }
 
 
     async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
-        // console.log('subscribeToDomainRecord: subscriptionControlData',subscriptionControlData )
         const 
             { domainRecordPublishers } = this.workspaceHandler,
             domainID = subscriptionControlData.domain.id,
-            panelID = subscriptionControlData.panel.id,
             panelHandler = this
 
         if (!domainRecordPublishers.has(domainID)) {
-            // await // create a domainRecordPublisher
             const 
                 workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
                 userID = this.userID,
