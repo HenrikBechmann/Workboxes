@@ -66,29 +66,35 @@ class DomainRecordPublisher {
 
     private setDomainRecord = (domainRecord) => {
 
-        console.log('setting domain record', domainRecord)
+        // console.log('setting domain record', domainRecord)
 
         this.domainRecord = domainRecord
+        this.subscriptions.forEach((subscription) =>{
+            subscription.functions.updateDomainData(domainRecord)
+        })
 
     }
 
     private setMemberRecord = (memberRecord) => {
 
-        console.log('setting member record', memberRecord)
+        // console.log('setting member record', memberRecord)
 
         this.memberRecord = memberRecord
+        this.subscriptions.forEach((subscription) =>{
+            subscription.functions.updateMemberData(memberRecord)
+        })
 
     }
 
-    async subscribe (panelID, panelControlData) {
+    async subscribe (subscriptionControlData) {
 
-        this.subscriptions.set(panelID, panelControlData)
+        this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
 
     }
 
-    async unSubscribe(panelID) {
+    async unSubscribe(subscriptionControlData) {
 
-        this.subscriptions.delete(panelID)
+        this.subscriptions.delete(subscriptionControlData.subscriptionIndex)
 
     }
 

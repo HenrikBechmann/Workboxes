@@ -73,7 +73,7 @@ const Workpanel = (props:any) => {
         [workspaceHandler] = useWorkspaceHandler(),
         {panelRecords, panelControlMap} = workspaceHandler,
         panelControl = panelControlMap.get(panelID),
-        panelSelector = panelControl.selector,
+        panelSelector = panelControl.panel,
         panelRecord = panelRecords[panelSelector.index],
 
         // track windows and their views

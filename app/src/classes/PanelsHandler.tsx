@@ -42,27 +42,29 @@ class PanelsHandler {
 
     // ============================[ domain record subscriptions ]=========================
 
-    // const panelControlData = {
-    //     selector:{
+    // const subscriptionControlData = {
+    //     panel:{
     //         index,
     //         id:panelRecordID,
     //         name:panelRecord.profile.panel.name
     //     },
     //     functions:{ // repository for direct calls
-    //         showDomainWorkbox:null, 
-    //         showMemberWorkbox: null,
     //         updateDomainData: null,
     //         updateMemberData: null,
     //     },
-    //     domain: panelRecord.profile.domain,
+    //     domain: {
+    //         id,
+    //         name,
+    //     subscriptionindex: <prefix>.<entityid>
     // }
 
 
-    async subscribeToDomainRecord(panelControlData) {
+    async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
+        // console.log('subscribeToDomainRecord: subscriptionControlData',subscriptionControlData )
         const 
             { domainRecordPublishers } = this.workspaceHandler,
-            domainID = panelControlData.domain.id,
-            panelID = panelControlData.selector.id,
+            domainID = subscriptionControlData.domain.id,
+            panelID = subscriptionControlData.panel.id,
             panelHandler = this
 
         if (!domainRecordPublishers.has(domainID)) {
@@ -78,22 +80,21 @@ class PanelsHandler {
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.subscribe(panelID, panelControlData)
+        domainRecordPublisher.subscribe(subscriptionControlData)
         
     }
 
-    async unsubscribeFromDomainRecord(panelControlData) {
+    async unsubscribeFromDomainRecord(subscriptionControlData) {
         const { domainRecordPublishers } = this.workspaceHandler
         const 
-            domainID = panelControlData.domain.id,
-            panelID = panelControlData.selector.id
+            domainID = subscriptionControlData.domain.id
 
         if (!domainRecordPublishers.has(domainID)) {
             return
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        await domainRecordPublisher.unSubscribe(panelID)
+        await domainRecordPublisher.unSubscribe(subscriptionControlData)
 
         if (!domainRecordPublisher.subscriptions.size) {
             await domainRecordPublisher.closeSnapshot()
@@ -181,7 +182,7 @@ class PanelsHandler {
                 const panelRecord = panelRecords[index]
                 const panelRecordID = panelRecord.profile.panel.id
                 const panelControlData = {
-                    selector:{
+                    panel:{
                         index,
                         id:panelRecordID,
                         name:panelRecord.profile.panel.name
@@ -195,7 +196,7 @@ class PanelsHandler {
                     domain: panelRecord.profile.domain,
                 }
                 // console.log('panelLoadRecords subscribeToDomainRecord',panelControlData)
-                await this.subscribeToDomainRecord(panelControlData)
+                // await this.subscribeToDomainRecord(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
@@ -267,7 +268,7 @@ class PanelsHandler {
             const panelRecord = newPanelData
             const panelRecordID = panelRecord.profile.panel.id
             const panelControlData = {
-                selector:{
+                panel:{
                     index:0,
                     id:panelRecordID,
                     name:panelRecord.profile.panel.name
@@ -282,7 +283,7 @@ class PanelsHandler {
                     domainid:panelRecord.profile.domain
                 },
             }
-            await this.subscribeToDomainRecord(panelControlData)
+            // await this.subscribeToDomainRecord(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
         }
 
@@ -305,7 +306,7 @@ class PanelsHandler {
             const changeData = newOrderList[index]
             const panelRecord = panelRecords[changeData.index]
             const panelID = panelRecord.profile.panel.id
-            panelControlMap.get(panelID).selector.index = index
+            panelControlMap.get(panelID).panel.index = index
             if (panelRecord.profile.display_order !== index) {
                 panelRecord.profile.display_order = index
                 changedRecords.setpanels.add(panelRecord.profile.panel.id)
@@ -384,7 +385,7 @@ class PanelsHandler {
         )
 
         const panelControlRecord = {
-            selector:{
+            panel:{
                 id: newPanelDocRef.id,
                 name: newname,
                 index: workspaceHandler.panelCount,
@@ -393,7 +394,7 @@ class PanelsHandler {
             domain:newPanelData.profile.domain,
         }
         panelRecords.push(newPanelData)
-        await this.subscribeToDomainRecord(panelControlRecord)
+        // await this.subscribeToDomainRecord(panelControlRecord)
         panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
@@ -442,11 +443,11 @@ class PanelsHandler {
             newPanelIndex = workspaceHandler.panelRecords.length - 1,
             { profile } = newPanelRecord
 
-        newPanelControlRecord.selector.index = newPanelIndex
-        newPanelControlRecord.selector.name = newname
+        newPanelControlRecord.panel.index = newPanelIndex
+        newPanelControlRecord.panel.name = newname
         newPanelControlRecord.functions = {}
         newPanelControlRecord.domain = newPanelRecord.profile.domain
-        await this.subscribeToDomainRecord(newPanelControlRecord)
+        // await this.subscribeToDomainRecord(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
         profile.panel.id = newPanelID
@@ -561,7 +562,7 @@ class PanelsHandler {
         panelRecord.profile.panel.name = newname
         workspaceHandler.workspaceRecord.panel.name = newname
         const panelID = panelRecord.profile.panel.id
-        workspaceHandler.panelControlMap.get(panelID).selector.name = newname
+        workspaceHandler.panelControlMap.get(panelID).panel.name = newname
 
         workspaceHandler.changedRecords.setpanels.add(panelID)
         workspaceHandler.settings.changed = true

@@ -155,16 +155,42 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
+    const updateDomainData = (panelDomainRecord) => {
+
+        workspaceHandler.panelDomainRecord = panelDomainRecord
+        dispatchWorkspaceHandler('getpaneldomaincontext')
+
+    }
+
+    const updateMemberData = (panelMemberRecord) => {
+
+        workspaceHandler.panelMemberRecord = panelMemberRecord
+        dispatchWorkspaceHandler('getpanelmembercontext')
+
+    }
+
     // TODO requires subscription
     const setPanelDomainContext = (panelSelection) => {
 
         const 
             panelDomainID = panelRecord.profile.domain.id,
-            domainRecordPublisher = workspaceHandler.domainRecordPublishers.get(panelDomainID),
-            panelDomainRecord = domainRecordPublisher.domainRecord,
-            panelMemberRecord = domainRecordPublisher.memberRecord
+            panelID = panelSelection.id,
+            subscriptionControlData = {
+                panel: panelSelection,
+                domain: panelRecord.profile.domain,
+                functions: {
+                    updateDomainData,
+                    updateMemberData,
+                },
+                subscriptionindex:'menu.' + panelSelection.id
+            }
+            workspaceHandler.panelsHandler.subscribeToDomainRecord(subscriptionControlData)
 
-        console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection, {...domainRecordPublisher})
+            // domainRecordPublisher = workspaceHandler.domainRecordPublishers.get(panelDomainID),
+            // panelDomainRecord = domainRecordPublisher.domainRecord,
+            // panelMemberRecord = domainRecordPublisher.memberRecord
+
+        // console.log('WorkpsaceToolbar.setPanelDomainContext: panelSelection', panelSelection, {...domainRecordPublisher})
 
         // const result = await workspaceHandler.setPanelDomainContext(panelSelection)
         // if (!result.success) {
@@ -175,9 +201,9 @@ const WorkspaceToolbar = (props) => {
         //     return
         // }
 
-        workspaceHandler.panelDomainRecord = panelDomainRecord
-        workspaceHandler.panelMemberRecord = panelMemberRecord
-        dispatchWorkspaceHandler('getpanelcontext')
+        // workspaceHandler.panelDomainRecord = panelDomainRecord
+        // workspaceHandler.panelMemberRecord = panelMemberRecord
+        // dispatchWorkspaceHandler('getpanelcontext')
     }
 
     // ------------------------[ dialog calls ]-----------------------
