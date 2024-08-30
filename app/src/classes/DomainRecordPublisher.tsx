@@ -23,7 +23,6 @@ class DomainRecordPublisher {
 
     constructor(domainID, snapshotControl, workspaceHandler) {
 
-        // TODO next 3 may not be needed
         this.domainID = domainID
 
         this.snapshotControl = snapshotControl
