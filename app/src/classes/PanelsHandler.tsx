@@ -58,8 +58,8 @@ class PanelsHandler {
     async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
         const 
             { domainRecordPublishers } = this.workspaceHandler.publishers,
-            domainID = subscriptionControlData.domain.id,
-            panelHandler = this
+            domainID = subscriptionControlData.domain.id
+            // panelHandler = this
 
         if (!domainRecordPublishers.has(domainID)) {
             const 
