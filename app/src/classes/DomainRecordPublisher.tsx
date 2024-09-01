@@ -134,7 +134,7 @@ class DomainRecordPublisher {
                                     const errdesc = 'error updating domain record version. Check internet'
                                     workspaceHandler.errorControl.push({description:errdesc,error})
                                     console.log(errdesc,error)
-                                    workspaceHandler.onError()
+                                    workspaceHandler.onError(errdesc)
                                     return
 
                                 }
@@ -155,7 +155,7 @@ class DomainRecordPublisher {
                     const errdesc = 'error from domain record listener. Check permissions'
                     workspaceHandler.errorControl.push({description:errdesc,error})
                     console.log(errdesc,error)
-                    workspaceHandler.onError()
+                    workspaceHandler.onError(errdesc)
                     return
 
                 }
@@ -198,7 +198,7 @@ class DomainRecordPublisher {
                                     const errdesc = 'error updating member record version. Check internet'
                                     workspaceHandler.errorControl.push({description:errdesc,error})
                                     console.log(errdesc,error)
-                                    workspaceHandler.onError()
+                                    workspaceHandler.onError(errdesc)
                                     return
 
                                 }
@@ -219,7 +219,7 @@ class DomainRecordPublisher {
                     const errdesc = 'error from member record listener. Check permissions'
                     workspaceHandler.errorControl.push({description:errdesc,error})
                     console.log(errdesc,error)
-                    workspaceHandler.onError()
+                    workspaceHandler.onError(errdesc)
                     return
 
                 }

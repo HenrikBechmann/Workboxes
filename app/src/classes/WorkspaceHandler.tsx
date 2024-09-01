@@ -86,7 +86,7 @@ class WorkspaceHandler {
     private _userName
     private _usage
 
-    trigger // dispatch trigger set by dispatchWorkspaceHandler
+    trigger // dispatch trigger set by dispatchWorkspaceHandler, for debug
 
     // workspace data
     setWorkspaceHandlerContext = null // initialized in WorkboxesProvider, used in useWorkspace
@@ -105,8 +105,11 @@ class WorkspaceHandler {
     panelCount = 0 
     panelControlMap = new Map() // each panelControl.index must be synchronized with panelComponentList order
     panelRecords = [] // display_order must be synchronized with panelControl
-    domainRecordPublishers = new Map()
+    publishers = {
+        domainRecordPublishers:new Map()
+    }
     // set with setPanelDomainContext of toolbarWorkspace
+    // for workspace toolbar
     panelDomainRecord = null
     panelMemberRecord = null
     // maintained by toolbarWorkspace

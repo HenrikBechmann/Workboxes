@@ -57,7 +57,7 @@ class PanelsHandler {
 
     async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
         const 
-            { domainRecordPublishers } = this.workspaceHandler,
+            { domainRecordPublishers } = this.workspaceHandler.publishers,
             domainID = subscriptionControlData.domain.id,
             panelHandler = this
 
@@ -78,7 +78,7 @@ class PanelsHandler {
     }
 
     async unsubscribeFromDomainRecord(subscriptionControlData) {
-        const { domainRecordPublishers } = this.workspaceHandler
+        const { domainRecordPublishers } = this.workspaceHandler.publishers
         const 
             domainID = subscriptionControlData.domain.id
 
@@ -97,7 +97,7 @@ class PanelsHandler {
     }
 
     async clearSubscriptionsToDomainRecords() {
-        const { domainRecordPublishers } = this.workspaceHandler
+        const { domainRecordPublishers } = this.workspaceHandler.publishers
 
         const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
 

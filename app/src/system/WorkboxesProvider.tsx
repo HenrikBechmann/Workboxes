@@ -166,13 +166,18 @@ export const UserProvider = ({children}) => {
 
     },[])
 
+    // handle errors from DomainRecordPublisher -- TODO test!!
     const 
         onFail = (notice) => {
             console.log(notice)
             alert(notice)
             // TODO
         },
-        onError = () => {
+        onError = (errdesc) => {
+            errorControlRef.current.push({description:errdesc})
+            console.log(errdesc)
+            setUserAuthData({...userAuthData})
+            setUserState('error')
             // navigate('/error') TODO adapt to non-router setting
         }
     useEffect(()=>{
