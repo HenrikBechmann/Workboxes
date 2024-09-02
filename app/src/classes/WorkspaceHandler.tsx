@@ -60,6 +60,8 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 
 import PanelsHandler from './PanelsHandler'
 
+import SubscriptionHandler from './SubscriptionsHandler'
+
 import { updateDocumentSchema } from '../system/utilities'
 
 import { isMobile } from '../index'
@@ -71,6 +73,7 @@ class WorkspaceHandler {
         this.errorControl = errorControl
         this.snapshotControl = snapshotControl
         this.panelsHandler = new PanelsHandler(this, db, errorControl)
+        this.subscriptionsHandler = new SubscriptionHandler(this)
     }
 
     // // =========================[ DATA ]=======================
@@ -80,6 +83,7 @@ class WorkspaceHandler {
     errorControl
     snapshotControl
     panelsHandler
+    subscriptionsHandler
 
     // initialized in WorkboxesProvider through properties below
     private _userID
@@ -1295,6 +1299,21 @@ class WorkspaceHandler {
 
     async panelsReorderRecords(newOrderList) {
         return await this.panelsHandler.panelsReorderRecords(newOrderList)
+    }
+
+
+    // =============================[ SUBSCRIPTIONS FACADE ]===========================
+
+    async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
+        return await this.subscriptionsHandler.subscribeToDomainRecord(subscriptionControlData)
+    }
+
+    async unsubscribeFromDomainRecord(subscriptionControlData) {
+        return await this.subscriptionsHandler.unsubscribeFromDomainRecord(subscriptionControlData)
+    }
+
+    async clearSubscriptionsToDomainRecords() {
+        return await this.subscriptionsHandler.clearSubscriptionsToDomainRecords()
     }
 
 }

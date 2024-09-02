@@ -21,8 +21,6 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
 
-import DomainRecordPublisher from './DomainRecordPublisher'
-
 class PanelsHandler {
 
     constructor(workspaceHandler, db, errorControl) {
@@ -40,77 +38,6 @@ class PanelsHandler {
     userID
     snapshotControl
 
-    // ============================[ domain record subscriptions ]=========================
-
-    // const subscriptionControlData = {
-    //     functions:{ // repository for direct calls
-    //         updateDomainData: null,
-    //         updateMemberData: null,
-    //     },
-    //     domain: {
-    //         id,
-    //         name,
-    //     },
-    //     subscriptionindex: <prefix>.<entityid>
-    // }
-
-
-    async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
-        const 
-            { domainRecordPublishers } = this.workspaceHandler.publishers,
-            domainID = subscriptionControlData.domain.id
-            // panelHandler = this
-
-        if (!domainRecordPublishers.has(domainID)) {
-            const 
-                workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
-                userID = this.userID,
-                domainRecordPublisher = 
-                    new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl, this.workspaceHandler )
-
-            await domainRecordPublisher.openSnapshot()
-            domainRecordPublishers.set(domainID, domainRecordPublisher)
-        }
-
-        const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.subscribe(subscriptionControlData)
-        
-    }
-
-    async unsubscribeFromDomainRecord(subscriptionControlData) {
-        const { domainRecordPublishers } = this.workspaceHandler.publishers
-        const 
-            domainID = subscriptionControlData.domain.id
-
-        if (!domainRecordPublishers.has(domainID)) {
-            return
-        }
-
-        const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        await domainRecordPublisher.unSubscribe(subscriptionControlData)
-
-        if (!domainRecordPublisher.subscriptions.size) {
-            await domainRecordPublisher.closeSnapshot()
-            domainRecordPublishers.delete(domainID)
-        }
-
-    }
-
-    async clearSubscriptionsToDomainRecords() {
-        const { domainRecordPublishers } = this.workspaceHandler.publishers
-
-        const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
-
-        for (let index = 0; index < domainRecordPublishers.size; index++) {
-            const domainID = domainList[index]
-            const domainRecordPublisher = domainRecordPublishers.get(domainID)
-            await domainRecordPublisher.unSubscribeAll()
-            await domainRecordPublisher.closeSnapshot()
-        }
-
-        domainRecordPublishers.clear()
-    }
-
     // ================================[ panel mangement ]==========================
 
     async panelsLoadRecords() {
@@ -123,7 +50,7 @@ class PanelsHandler {
 
         const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
-        await this.clearSubscriptionsToDomainRecords()
+        await this.workspaceHandler.clearSubscriptionsToDomainRecords()
         panelControlMap.clear()
 
         const 
@@ -189,7 +116,6 @@ class PanelsHandler {
                     domain: panelRecord.profile.domain,
                 }
                 // console.log('panelLoadRecords subscribeToDomainRecord',panelControlData)
-                // await this.subscribeToDomainRecord(panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
@@ -276,7 +202,6 @@ class PanelsHandler {
                     domainid:panelRecord.profile.domain
                 },
             }
-            // await this.subscribeToDomainRecord(panelControlData)
             panelControlMap.set(panelRecordID, panelControlData)
         }
 
@@ -387,7 +312,6 @@ class PanelsHandler {
             domain:newPanelData.profile.domain,
         }
         panelRecords.push(newPanelData)
-        // await this.subscribeToDomainRecord(panelControlRecord)
         panelControlMap.set(newPanelDocRef.id, panelControlRecord)
         workspaceHandler.panelCount++
         workspaceHandler.changedRecords.setpanels.add(newPanelDocRef.id)
@@ -440,7 +364,6 @@ class PanelsHandler {
         newPanelControlRecord.panel.name = newname
         newPanelControlRecord.functions = {}
         newPanelControlRecord.domain = newPanelRecord.profile.domain
-        // await this.subscribeToDomainRecord(newPanelControlRecord)
         workspaceHandler.panelControlMap.set(newPanelID, newPanelControlRecord)
 
         profile.panel.id = newPanelID
@@ -495,7 +418,7 @@ class PanelsHandler {
             { panelRecords, changedRecords, panelControlMap } = workspaceHandler
 
         panelRecords.splice(panelSelection.index, 1)
-        await this.unsubscribeFromDomainRecord(panelSelection)
+        await this.workspaceHandler.unsubscribeFromDomainRecord(panelSelection)
         panelControlMap.delete(panelSelection.id)
 
         const deletedIndex = panelSelection.index

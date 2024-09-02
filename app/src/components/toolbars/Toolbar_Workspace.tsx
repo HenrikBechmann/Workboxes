@@ -186,10 +186,10 @@ const WorkspaceToolbar = (props) => {
             previousSubscriptionControlData = previousSubscriptionControlDataRef.current
 
             // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
-            workspaceHandler.panelsHandler.subscribeToDomainRecord(subscriptionControlData)
+            workspaceHandler.subscribeToDomainRecord(subscriptionControlData)
 
             if (previousSubscriptionControlData) {
-                workspaceHandler.panelsHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData)
+                workspaceHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData)
             }
             previousSubscriptionControlDataRef.current = subscriptionControlData
 
