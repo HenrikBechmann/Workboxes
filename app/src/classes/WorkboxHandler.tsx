@@ -332,18 +332,22 @@ class WorkboxHandler {
 
             }
 
+            // TODO UPDATE DATABASE
             // update domain handle domain name
-            // const userHandle = userRecord.profile.handle.lower_case
+            // const domainDoc = await getDoc(doc(domainSyncCollection, workboxRecordClone.profile.domain.id))
+            // const domainRecord = domainDoc.data()
+            // const domainHandle = domainRecord.profile.handle
+
             // writecount++
             // const 
             //     handleSyncCollection = collection(this.internal.db,'handles'),
-            //     handleSyncDoc = doc(handleSyncCollection, userHandle),
+            //     handleSyncDoc = doc(handleSyncCollection, domainHandle),
             //     handleSyncUpdate = {
             //         generation: increment(1),
             //         'profile.domain.name':workboxRecordClone.document.base.name,
             //     }
 
-            //     batch.update(userSyncDoc,userSyncUpdate)
+            // batch.update(handleSyncDoc,handleSyncUpdate)
 
         }
 
