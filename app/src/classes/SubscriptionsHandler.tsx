@@ -1,6 +1,22 @@
 // SubscriptionHandler.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+
+    domain name edited in domain workbox is updated in
+        - domain.profile
+        - user members.profile
+        - users.profile
+        - handles.domain.profile
+
+    for synchronization, domain name exists in
+        multiples:
+        - all domain workboxes.profile
+        - selected panels.profile
+        - all domain members.profile
+
+*/
+
 import DomainRecordPublisher from './DomainRecordPublisher'
 
 class SubscriptionHandler {

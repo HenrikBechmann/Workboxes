@@ -302,7 +302,7 @@ class WorkboxHandler {
             }
             batch.update(domainSyncDoc,domainSyncUpdate)
 
-            // update member domain name // TODO find member id somehow
+            // update member domain name
             writecount++
             memberSyncCollection = collection(this.internal.db,'domains',workboxRecordClone.profile.domain.id,'members')
             const memberID = this.userRecords.memberships.domains[workboxRecordClone.profile.domain.id].memberid
@@ -312,6 +312,39 @@ class WorkboxHandler {
                 'profile.domain.name':workboxRecordClone.document.base.name,
             }
             batch.update(memberSyncDoc,memberSyncUpdate)
+
+            // update user domain name
+            const userDomainID = userRecord.profile.domain.id
+            const workboxDomainID = workboxRecordClone.profile.domain.id
+            if (userDomainID === workboxDomainID) {
+
+                writecount++
+                const 
+                    userID = userRecord.profile.user.id,
+                    userSyncCollection = collection(this.internal.db,'users'),
+                    userSyncDoc = doc(userSyncCollection, userID),
+                    userSyncUpdate = {
+                        generation: increment(1),
+                        'profile.domain.name':workboxRecordClone.document.base.name,
+                    }
+
+                batch.update(userSyncDoc,userSyncUpdate)
+
+            }
+
+            // update domain handle domain name
+            // const userHandle = userRecord.profile.handle.lower_case
+            // writecount++
+            // const 
+            //     handleSyncCollection = collection(this.internal.db,'handles'),
+            //     handleSyncDoc = doc(handleSyncCollection, userHandle),
+            //     handleSyncUpdate = {
+            //         generation: increment(1),
+            //         'profile.domain.name':workboxRecordClone.document.base.name,
+            //     }
+
+            //     batch.update(userSyncDoc,userSyncUpdate)
+
         }
 
         try {
@@ -323,7 +356,7 @@ class WorkboxHandler {
 
         } catch (error) {
 
-            const errdesc = 'error saving workbox record. Check internet'
+            const errdesc = 'error saving workbox record or related updates. Check internet'
             this.internal.errorControl.push({description:errdesc,error})
             console.log(errdesc,error)
             this.internal.onError()
