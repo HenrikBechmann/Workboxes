@@ -35,78 +35,78 @@ class WorkboxRecordPublisher {
 
     workboxRecord = null
 
-    // async setWorkboxSnapshot() {
-    //     const 
-    //         { workspaceHandler, snapshotControl } = this,
-    //         workboxCollection = collection(workspaceHandler.db, 'workboxes'),
-    //         workboxSnapshotIndex = 'Workbox.' + this.workboxID
+    async setWorkboxSnapshot() {
+        const 
+            { workspaceHandler, snapshotControl } = this,
+            workboxCollection = collection(workspaceHandler.db, 'workboxes'),
+            workboxSnapshotIndex = 'Workbox.' + this.workboxID
 
-    //     this.workspaceHandler.workboxSnapshotIndex = workboxSnapshotIndex
+        this.workspaceHandler.workboxSnapshotIndex = workboxSnapshotIndex
 
-    //     if (!snapshotControl.has(workboxSnapshotIndex)) { // once only
-    //         snapshotControl.create(workboxSnapshotIndex)
+        if (!snapshotControl.has(workboxSnapshotIndex)) { // once only
+            snapshotControl.create(workboxSnapshotIndex)
 
-    //         const unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
-    //             async (returndoc) =>{
-    //                 snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-    //                 workspaceHandler.usage.read(1)
+            const unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+                async (returndoc) =>{
+                    snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
+                    workspaceHandler.usage.read(1)
                     
-    //                 let workboxRecord = returndoc.data()
+                    let workboxRecord = returndoc.data()
 
-    //                 if (!workboxRecord) {
-    //                     workspaceHandler.onFail('failed to find workbox record')
-    //                     return
-    //                 } else {
+                    if (!workboxRecord) {
+                        workspaceHandler.onFail('failed to find workbox record')
+                        return
+                    } else {
 
-    //                     if (!snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+                        if (!snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
 
-    //                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
-    //                         if (!Object.is(workboxRecord, updatedRecord)) {
-    //                             try {
+                            const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
+                            if (!Object.is(workboxRecord, updatedRecord)) {
+                                try {
 
-    //                                 await setDoc(doc(workspaceHandler.db,'workboxes',this.workboxID),updatedRecord)
-    //                                 workspaceHandler.usage.write(1)
+                                    await setDoc(doc(workspaceHandler.db,'workboxes',this.workboxID),updatedRecord)
+                                    workspaceHandler.usage.write(1)
 
-    //                             } catch (error) {
+                                } catch (error) {
 
-    //                                 const errdesc = 'error updating workbox record version. Check internet'
-    //                                 workspaceHandler.errorControl.push({description:errdesc,error})
-    //                                 console.log(errdesc,error)
-    //                                 workspaceHandler.onError()
-    //                                 return
+                                    const errdesc = 'error updating workbox record version. Check internet'
+                                    workspaceHandler.errorControl.push({description:errdesc,error})
+                                    console.log(errdesc,error)
+                                    workspaceHandler.onError()
+                                    return
 
-    //                             }
+                                }
 
-    //                             workboxRecord = updatedRecord
+                                workboxRecord = updatedRecord
 
-    //                         }
-    //                         snapshotControl.setSchemaChecked(workboxSnapshotIndex)
-    //                     }
+                            }
+                            snapshotControl.setSchemaChecked(workboxSnapshotIndex)
+                        }
 
-    //                     workboxRecord = workboxRecord
+                        workboxRecord = workboxRecord
 
-    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
+                        // console.log('onSnapshot workboxRecord', workboxRecord)
 
-    //                     // workspaceHandler.trigger = 'updaterecord'
-    //                     // this.internal.setWorkboxHandlerContext({current:this})
+                        // workspaceHandler.trigger = 'updaterecord'
+                        // this.internal.setWorkboxHandlerContext({current:this})
 
-    //                 }
+                    }
 
-    //             },(error) => {
+                },(error) => {
 
-    //                 const errdesc = 'error from workbox record listener. Check permissions'
-    //                 workspaceHandler.errorControl.push({description:errdesc,error})
-    //                 console.log(errdesc,error)
-    //                 workspaceHandler.onError()
-    //                 return
+                    const errdesc = 'error from workbox record listener. Check permissions'
+                    workspaceHandler.errorControl.push({description:errdesc,error})
+                    console.log(errdesc,error)
+                    workspaceHandler.onError()
+                    return
 
-    //             }
-    //         )
-    //         // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-    //         // workspaceHandler.trigger = 'unsubscribeworkbox'
-    //         // this.internal.setWorkboxHandlerContext({current:this})
-    //     }
-    // }
+                }
+            )
+            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+            // workspaceHandler.trigger = 'unsubscribeworkbox'
+            // this.internal.setWorkboxHandlerContext({current:this})
+        }
+    }
 
 
 }
