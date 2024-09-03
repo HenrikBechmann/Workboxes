@@ -71,7 +71,7 @@ const ResourcesToolbar = (props) => {
         resourcesConfig = workboxHandler.settings.resources,
         modeSettings = workboxHandler.session.resources.modesettings,
         onNormal = (value) => {
-            modeSettings.normal.select = true
+            modeSettings.view.select = true
             modeSettings.drill.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = false
@@ -80,7 +80,7 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
         onDrill = (value) => {
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.drill.select = true
             modeSettings.insert.select = false
             modeSettings.edit.select = false
@@ -89,7 +89,7 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.drill.select = false
             modeSettings.insert.select = true
             modeSettings.edit.select = false
@@ -98,7 +98,7 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.drill.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = true
@@ -107,7 +107,7 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
         onRemove = (value) => {
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.drill.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = false
@@ -116,7 +116,7 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
         onDrag = (value) => {
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.drill.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = false
@@ -125,12 +125,12 @@ const ResourcesToolbar = (props) => {
             dispatchWorkboxHandler()
         },
 
-        // normal, drill, add, edit, remove, select, drag
+        // view, drill, add, edit, remove, select, drag
         normalToggle = useToggleIcon({
             icon:listIcon, 
             tooltip:'Normal browsing',
-            caption:'normal',
-            settings:modeSettings.normal,
+            caption:'view',
+            settings:modeSettings.view,
             is_radio: true,
             callback: onNormal
         }),

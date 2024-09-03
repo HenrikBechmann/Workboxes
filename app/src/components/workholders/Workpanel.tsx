@@ -20,12 +20,12 @@ const defaultWorkboxConfig = {
     },
     document: {
         displaycode:'out',
-        mode:'normal', // normal, insert, edit, remove, reorder
+        mode:'view', // view, insert, edit, remove, reorder
         show:false,
     },
     resources: { 
         displaycode:'out',
-        mode: 'normal', // normal, drill, insert, edit, remove, drag
+        mode: 'view', // view, drill, insert, edit, remove, drag
         show:false,
     },
     both: {

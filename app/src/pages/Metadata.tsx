@@ -21,7 +21,7 @@ import Workpanel from '../components/workholders/Workpanel'
 import appIcon from '../../assets/workbox-logo.png'
 
 const defaultDocumentState = {
-    mode:'normal',
+    mode:'view',
 }
 
 const defaultResourcesState = {

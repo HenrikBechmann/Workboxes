@@ -86,7 +86,7 @@ class WorkboxHandler {
             savechanges: null,
             cancelchanges: null,
             modesettings: {
-                normal:{
+                view:{
                     select:true,
                     disable:false,
                 },
@@ -115,7 +115,7 @@ class WorkboxHandler {
             savechanges: null,
             cancelchanges: null,
             modesettings: {
-                normal:{
+                view:{
                     select:true,
                     disable:false,
                 },
@@ -153,12 +153,12 @@ class WorkboxHandler {
         },
         document: {
             displaycode:'out', // over, under, out
-            mode:'normal', // normal, insert, edit, remove, reorder
+            mode:'view', // view, insert, edit, remove, reorder
             show:false,
         },
         resources: { 
             displaycode:'out', // over, under, out
-            mode: 'normal', // normal, drill, insert, edit, remove, drag
+            mode: 'view', // view, drill, insert, edit, remove, drag
             show:false,
         },
         both: {

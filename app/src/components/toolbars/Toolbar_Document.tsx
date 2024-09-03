@@ -87,8 +87,8 @@ const DocumentToolbar = (props) => {
 
     const
         onNormal = (value) => {
-            documentConfig.mode = 'normal'
-            modeSettings.normal.select = true
+            documentConfig.mode = 'view'
+            modeSettings.view.select = true
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
@@ -97,7 +97,7 @@ const DocumentToolbar = (props) => {
         },
         onAdd = (value) => {
             documentConfig.mode = 'insert'
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.insert.select = true
             modeSettings.edit.select = false
             modeSettings.remove.select = false
@@ -106,7 +106,7 @@ const DocumentToolbar = (props) => {
         },
         onEdit = (value) => {
             documentConfig.mode = 'edit'
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = true
             modeSettings.remove.select = false
@@ -115,7 +115,7 @@ const DocumentToolbar = (props) => {
         },
         onRemove = (value) => {
             documentConfig.mode = 'remove'
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = true
@@ -124,7 +124,7 @@ const DocumentToolbar = (props) => {
         },
         onDrag = (value) => {
             documentConfig.mode = 'drag'
-            modeSettings.normal.select = false
+            modeSettings.view.select = false
             modeSettings.insert.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
@@ -132,12 +132,12 @@ const DocumentToolbar = (props) => {
             dispatchWorkboxHandler()
         },
 
-        // normal, drill, insert, edit, remove, drag
+        // view, drill, insert, edit, remove, drag
         normalToggle = useToggleIcon({
             icon:articleIcon, 
             tooltip:'Normal viewing',
-            caption:'normal',
-            settings:modeSettings.normal,
+            caption:'view',
+            settings:modeSettings.view,
             is_radio: true,
             callback: onNormal
         }),

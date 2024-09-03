@@ -99,7 +99,7 @@ const SideIcon = (props) => {
             fontSize = 'xx-small' 
             color = {emphasis?'black':'gray'}
             fontStyle = 'italic' 
-            fontWeight = {emphasis?'bold':'normal'}
+            fontWeight = {emphasis?'bold':'view'}
         >
             <span>{caption}</span>
         </Box>

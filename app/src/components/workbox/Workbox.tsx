@@ -167,7 +167,7 @@ const WorkboxFrame = (props) => {
 
         documentsession.changesessionid = sessionID
         workboxmodesettings.resources.disable = true
-        documentmodesettings.normal.disable = true
+        documentmodesettings.view.disable = true
         documentmodesettings.insert.disable = true
         documentmodesettings.remove.disable = true
 
@@ -214,7 +214,7 @@ const WorkboxFrame = (props) => {
 
         documentsession.changesessionid = null
         workboxmodesettings.resources.disable = false
-        documentmodesettings.normal.disable = false
+        documentmodesettings.view.disable = false
         documentmodesettings.insert.disable = false
         documentmodesettings.remove.disable = false
 
@@ -243,7 +243,7 @@ const WorkboxFrame = (props) => {
         documentsession.is_change_error = false
 
         workboxmodesettings.resources.disable = false
-        documentmodesettings.normal.disable = false
+        documentmodesettings.view.disable = false
         documentmodesettings.insert.disable = false
         documentmodesettings.remove.disable = false
 

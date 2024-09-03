@@ -308,8 +308,8 @@ const DocumentBase = (props) => {
 
     }
 
-    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'normal'?'0': '24px'}>
-        {(!['normal', 'drag', 'remove'].includes(mode)) && 
+    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
+        {(!['view', 'drag', 'remove'].includes(mode)) && 
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
             </Box>
