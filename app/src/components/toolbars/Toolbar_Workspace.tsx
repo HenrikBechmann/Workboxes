@@ -157,6 +157,7 @@ const WorkspaceToolbar = (props) => {
         }
     }
 
+    // from subscribeToDomainRecord
     const updateDomainData = (panelDomainRecord) => {
 
         workspaceHandler.panelDomainRecord = panelDomainRecord

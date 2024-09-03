@@ -115,7 +115,6 @@ class PanelsHandler {
                     },
                     domain: panelRecord.profile.domain,
                 }
-                // console.log('panelLoadRecords subscribeToDomainRecord',panelControlData)
                 panelControlMap.set(panelRecordID, panelControlData)
             }
 
