@@ -27,6 +27,8 @@ import Draggable from 'react-draggable'
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
+import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
+
 // contains the titleName elements, and the dynamic controls
 import WindowTitle from './WindowTitle'
 
@@ -141,6 +143,8 @@ const Workwindow = (props) => {
             zOrder, // inherited; modified by setFocus 
         } = props,
 
+        [workspaceHandler] = useWorkspaceHandler(),
+
         titleName = titleData.name,
         typeAlias = titleData.type?.alias,
         defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
@@ -225,6 +229,39 @@ const Workwindow = (props) => {
         }
 
     },[])
+
+
+    // const workboxSubscriptionControlData = {
+    //     functions:{ // repository for direct calls
+    //         updateWorkboxData: null,
+    //     },
+    //     workbox: {
+    //         id,
+    //         name,
+    //     },
+    //     subscriptionindex: <prefix>.<entityid>
+    // }
+
+    const updateWorkboxData = (workboxRecord) => {
+        titleData.name = workboxRecord.profile.workbox.name
+    }
+
+    // async function subscribeToWorkboxRecord() {
+    //     const workboxSubscriptionControlData = {
+    //         functions:{
+    //             updateWorkboxData,
+    //         },
+    //         workbox: {
+    //             id
+    //         }
+    //     }
+    // }
+
+    // useEffect(()=>{
+
+    //     subscribeToWorkboxRecord()
+
+    // },[])
 
     // set and clear onFocus and onBlur event listeners
     useEffect(()=>{
