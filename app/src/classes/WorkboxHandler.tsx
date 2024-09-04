@@ -179,77 +179,6 @@ class WorkboxHandler {
     }
 
     // -----------------------------[ operations ]--------------------------
-    // async setWorkboxSnapshot() {
-    //     const 
-    //         workboxCollection = collection(this.internal.db, 'workboxes'),
-    //         workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
-
-    //     this.internal.workboxSnapshotIndex = workboxSnapshotIndex
-
-    //     if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
-    //         this.internal.snapshotControl.create(workboxSnapshotIndex)
-
-    //         this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
-    //             async (returndoc) =>{
-    //                 this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-    //                 this.internal.usage.read(1)
-                    
-    //                 let workboxRecord = returndoc.data()
-
-    //                 if (!workboxRecord) {
-    //                     this.internal.onFail()
-    //                     return
-    //                 } else {
-
-    //                     if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
-
-    //                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
-    //                         if (!Object.is(workboxRecord, updatedRecord)) {
-    //                             try {
-
-    //                                 await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
-    //                                 this.internal.usage.write(1)
-
-    //                             } catch (error) {
-
-    //                                 const errdesc = 'error updating workbox record version. Check internet'
-    //                                 this.internal.errorControl.push({description:errdesc,error})
-    //                                 console.log(errdesc,error)
-    //                                 this.internal.onError()
-    //                                 return
-
-    //                             }
-
-    //                             workboxRecord = updatedRecord
-
-    //                         }
-    //                         this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
-    //                     }
-
-    //                     this.workboxRecord = workboxRecord
-
-    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
-
-    //                     this.internal.trigger = 'updaterecord'
-    //                     this.internal.setWorkboxHandlerContext({current:this})
-
-    //                 }
-
-    //             },(error) => {
-
-    //                 const errdesc = 'error from workbox record listener. Check permissions'
-    //                 this.internal.errorControl.push({description:errdesc,error})
-    //                 console.log(errdesc,error)
-    //                 this.internal.onError()
-    //                 return
-
-    //             }
-    //         )
-    //         // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-    //         this.internal.trigger = 'unsubscribeworkbox'
-    //         this.internal.setWorkboxHandlerContext({current:this})
-    //     }
-    // }
 
     // const workboxSubscriptionControlData = {
     //     functions:{ // repository for direct calls
@@ -275,8 +204,6 @@ class WorkboxHandler {
             },
             subscriptionindex: 'workbox.' + this.workboxID + '.' + this.workboxSessionID
         }
-
-        // console.log('workboxHandler.subscribeToWorkboxRecord: workboxSubscriptionControlData',workboxSubscriptionControlData)
 
         await this.internal.workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
 
