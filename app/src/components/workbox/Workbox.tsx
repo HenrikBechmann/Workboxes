@@ -11,7 +11,14 @@ import {
 
 import { useNavigate } from 'react-router-dom'
 
-import { useFirestore, useUsage, useSnapshotControl, useErrorControl, useUserRecords } from '../../system/WorkboxesProvider'
+import { 
+    useFirestore, 
+    useUsage, 
+    useSnapshotControl, 
+    useErrorControl, 
+    useUserRecords,
+    useWorkspaceHandler,
+} from '../../system/WorkboxesProvider'
 import {cloneDeep as _cloneDeep} from 'lodash'
 
 import ToolbarFrame from '../toolbars/Toolbar_Frame'
@@ -284,12 +291,15 @@ const Workbox = (props) => {
         workboxID = workboxSettings.workbox.id,
         workboxSessionID = workboxSettings.workbox.sessionid,
 
+        [workspaceHandler] = useWorkspaceHandler(),
+
         // parameters for workboxHandler
-        db = useFirestore(),
-        usage = useUsage(),
-        snapshotControl = useSnapshotControl(),
+        // db = useFirestore(),
+        // usage = useUsage(),
+        // snapshotControl = useSnapshotControl(),
+        // errorControl = useErrorControl,
+        { db, usage, snapshotControl, errorControl } = workspaceHandler,
         navigate = useNavigate(),
-        errorControl = useErrorControl,
         [workboxHandlerState, setWorkboxHandlerState] = useState('setup'),
 
         userRecords = useUserRecords(),
@@ -313,7 +323,8 @@ const Workbox = (props) => {
     // create workboxHandler
     useEffect(() => {
 
-        const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl})
+        const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, 
+            db, usage, snapshotControl, errorControl, onError, onFail, })
 
         workboxHandler.settings = workboxSettings.settings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext

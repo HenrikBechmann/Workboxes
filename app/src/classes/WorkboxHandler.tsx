@@ -248,6 +248,24 @@ class WorkboxHandler {
         }
     }
 
+    // const subscriptionControlData = {
+    //     functions:{ // repository for direct calls
+    //         updateWorkboxData: null,
+    //     },
+    //     workbox: {
+    //         id,
+    //         name,
+    //     },
+    //     subscriptionindex: <prefix>.<entityid>
+    // }
+    // {async workspaceHandler.    }
+
+    // updateWorkboxData = (workboxRecord) => {
+
+    //     this.workboxRecord = workboxRecord
+
+    // }
+
     async getWorkboxRecord() {
 
     }
