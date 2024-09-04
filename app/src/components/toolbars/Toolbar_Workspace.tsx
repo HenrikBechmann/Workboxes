@@ -176,7 +176,7 @@ const WorkspaceToolbar = (props) => {
 
         const 
             panelDomainID = panelRecord.profile.domain.id,
-            subscriptionControlData = {
+            domainSubscriptionControlData = {
                 domain: panelRecord.profile.domain,
                 functions: {
                     updateDomainData,
@@ -187,12 +187,12 @@ const WorkspaceToolbar = (props) => {
             previousSubscriptionControlData = previousSubscriptionControlDataRef.current
 
             // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
-            workspaceHandler.subscribeToDomainRecord(subscriptionControlData)
+            workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData)
 
             if (previousSubscriptionControlData) {
                 workspaceHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData)
             }
-            previousSubscriptionControlDataRef.current = subscriptionControlData
+            previousSubscriptionControlDataRef.current = domainSubscriptionControlData
 
     }
 

@@ -1304,24 +1304,26 @@ class WorkspaceHandler {
 
     // =============================[ SUBSCRIPTIONS FACADE ]===========================
 
-    async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
-        return await this.subscriptionsHandler.subscribeToDomainRecord(subscriptionControlData)
+    // domain
+    async subscribeToDomainRecord(domainSubscriptionControlData) { // domain and member records
+        return await this.subscriptionsHandler.subscribeToDomainRecord(domainSubscriptionControlData)
     }
 
-    async unsubscribeFromDomainRecord(subscriptionControlData) {
-        return await this.subscriptionsHandler.unsubscribeFromDomainRecord(subscriptionControlData)
+    async unsubscribeFromDomainRecord(domainSubscriptionControlData) {
+        return await this.subscriptionsHandler.unsubscribeFromDomainRecord(domainSubscriptionControlData)
     }
 
     async clearSubscriptionsToDomainRecords() {
         return await this.subscriptionsHandler.clearSubscriptionsToDomainRecords()
     }
 
-    async subscribeToWorkboxRecord(subscriptionControlData) { // domain and member records
-        return await this.subscriptionsHandler.subscribeToWorkboxRecord(subscriptionControlData)
+    // workbox
+    async subscribeToWorkboxRecord(workboxSubscriptionControlData) { // domain and member records
+        return await this.subscriptionsHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
     }
 
-    async unsubscribeFromWorkboxRecord(subscriptionControlData) {
-        return await this.subscriptionsHandler.unsubscribeFromWorkboxRecord(subscriptionControlData)
+    async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData) {
+        return await this.subscriptionsHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData)
     }
 
     async clearSubscriptionsToWorkboxRecords() {

@@ -41,7 +41,7 @@ class SubscriptionHandler {
 
     // ============================[ domain record subscriptions ]=========================
 
-    // const subscriptionControlData = {
+    // const domainSubscriptionControlData = {
     //     functions:{ // repository for direct calls
     //         updateDomainData: null,
     //         updateMemberData: null,
@@ -54,10 +54,10 @@ class SubscriptionHandler {
     // }
 
 
-    async subscribeToDomainRecord(subscriptionControlData) { // domain and member records
+    async subscribeToDomainRecord(domainSubscriptionControlData) { // domain and member records
         const 
             { domainRecordPublishers } = this.publishers,
-            domainID = subscriptionControlData.domain.id
+            domainID = domainSubscriptionControlData.domain.id
 
         if (!domainRecordPublishers.has(domainID)) {
             const 
@@ -71,21 +71,21 @@ class SubscriptionHandler {
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        domainRecordPublisher.subscribe(subscriptionControlData)
+        domainRecordPublisher.subscribe(domainSubscriptionControlData)
         
     }
 
-    async unsubscribeFromDomainRecord(subscriptionControlData) {
+    async unsubscribeFromDomainRecord(domainSubscriptionControlData) {
         const { domainRecordPublishers } = this.publishers
         const 
-            domainID = subscriptionControlData.domain.id
+            domainID = domainSubscriptionControlData.domain.id
 
         if (!domainRecordPublishers.has(domainID)) {
             return
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
-        await domainRecordPublisher.unSubscribe(subscriptionControlData)
+        await domainRecordPublisher.unSubscribe(domainSubscriptionControlData)
 
         if (!domainRecordPublisher.subscriptions.size) {
             await domainRecordPublisher.closeSnapshot()
@@ -111,7 +111,7 @@ class SubscriptionHandler {
 
     // ============================[ workbox record subscriptions ]=========================
 
-    // const subscriptionControlData = {
+    // const workboxSubscriptionControlData = {
     //     functions:{ // repository for direct calls
     //         updateWorkboxData: null,
     //     },
@@ -123,10 +123,10 @@ class SubscriptionHandler {
     // }
 
 
-    async subscribeToWorkboxRecord(subscriptionControlData) { // workbox record
+    async subscribeToWorkboxRecord(workboxSubscriptionControlData) { // workbox record
         const 
             { workboxRecordPublishers } = this.publishers,
-            workboxID = subscriptionControlData.workbox.id
+            workboxID = workboxSubscriptionControlData.workbox.id
 
         if (!workboxRecordPublishers.has(workboxID)) {
             const 
@@ -140,21 +140,21 @@ class SubscriptionHandler {
         }
 
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
-        workboxRecordPublisher.subscribe(subscriptionControlData)
+        workboxRecordPublisher.subscribe(workboxSubscriptionControlData)
         
     }
 
-    async unsubscribeFromWorkboxRecord(subscriptionControlData) {
+    async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData) {
         const { workboxRecordPublishers } = this.publishers
         const 
-            workboxID = subscriptionControlData.workbox.id
+            workboxID = workboxSubscriptionControlData.workbox.id
 
         if (!workboxRecordPublishers.has(workboxID)) {
             return
         }
 
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
-        await workboxRecordPublisher.unSubscribe(subscriptionControlData)
+        await workboxRecordPublisher.unSubscribe(workboxSubscriptionControlData)
 
         if (!workboxRecordPublisher.subscriptions.size) {
             await workboxRecordPublisher.closeSnapshot()

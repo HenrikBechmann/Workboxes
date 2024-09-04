@@ -77,18 +77,18 @@ class DomainRecordPublisher {
 
     }
 
-    async subscribe (subscriptionControlData) {
+    async subscribe (domainSubscriptionControlData) {
 
-        this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
-        subscriptionControlData.functions.updateDomainData(this.domainRecord)
-        subscriptionControlData.functions.updateDomainData && 
-            subscriptionControlData.functions.updateDomainData(this.domainRecord)
+        this.subscriptions.set(domainSubscriptionControlData.subscriptionindex, domainSubscriptionControlData)
+        domainSubscriptionControlData.functions.updateDomainData(this.domainRecord)
+        domainSubscriptionControlData.functions.updateDomainData && 
+            domainSubscriptionControlData.functions.updateDomainData(this.domainRecord)
 
     }
 
-    async unSubscribe(subscriptionControlData) {
+    async unSubscribe(domainSubscriptionControlData) {
 
-        this.subscriptions.delete(subscriptionControlData.subscriptionindex)
+        this.subscriptions.delete(domainSubscriptionControlData.subscriptionindex)
 
     }
 

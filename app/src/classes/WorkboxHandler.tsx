@@ -251,7 +251,7 @@ class WorkboxHandler {
     //     }
     // }
 
-    // const subscriptionControlData = {
+    // const workboxSubscriptionControlData = {
     //     functions:{ // repository for direct calls
     //         updateWorkboxData: null,
     //     },
@@ -265,7 +265,7 @@ class WorkboxHandler {
 
     async subscribeToWorkboxRecord() {
 
-        const subscriptionControlData = {
+        const workboxSubscriptionControlData = {
             functions:{ // repository for direct calls
                 updateWorkboxData:this.updateWorkboxData
             },
@@ -276,9 +276,9 @@ class WorkboxHandler {
             subscriptionindex: 'workbox.' + this.workboxID + '.' + this.workboxSessionID
         }
 
-        console.log('workboxHandler.subscribeToWorkboxRecord: subscriptionControlData',subscriptionControlData)
+        // console.log('workboxHandler.subscribeToWorkboxRecord: workboxSubscriptionControlData',workboxSubscriptionControlData)
 
-        await this.internal.workspaceHandler.subscribeToWorkboxRecord(subscriptionControlData)
+        await this.internal.workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
 
     }
 

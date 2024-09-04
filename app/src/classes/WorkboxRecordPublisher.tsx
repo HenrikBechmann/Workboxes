@@ -56,16 +56,16 @@ class WorkboxRecordPublisher {
 
     }
 
-    async subscribe (subscriptionControlData) {
+    async subscribe (workboxSubscriptionControlData) {
 
-        this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
-        subscriptionControlData.functions.updateWorkboxData(this.workboxRecord)
+        this.subscriptions.set(workboxSubscriptionControlData.subscriptionindex, workboxSubscriptionControlData)
+        workboxSubscriptionControlData.functions.updateWorkboxData(this.workboxRecord)
 
     }
 
-    async unSubscribe(subscriptionControlData) {
+    async unSubscribe(workboxSubscriptionControlData) {
 
-        this.subscriptions.delete(subscriptionControlData.subscriptionindex)
+        this.subscriptions.delete(workboxSubscriptionControlData.subscriptionindex)
 
     }
 
