@@ -178,6 +178,8 @@ class WorkboxHandler {
         CONTENT_FRAME_PADDING_WIDTH:null,
     }
 
+    workboxSubscriptionControlData
+
     // -----------------------------[ operations ]--------------------------
 
     // const workboxSubscriptionControlData = {
@@ -205,7 +207,15 @@ class WorkboxHandler {
             subscriptionindex: 'workbox.' + this.workboxID + '.' + this.workboxSessionID
         }
 
+        this.workboxSubscriptionControlData = workboxSubscriptionControlData
+
         await this.internal.workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
+
+    }
+
+    async unsubscribeFromWorkboxRecord() {
+
+        await this.internal.workspaceHandler.unsubscribeFromWorkboxRecord(this.workboxSubscriptionControlData)
 
     }
 
