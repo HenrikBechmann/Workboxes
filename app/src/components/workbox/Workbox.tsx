@@ -334,6 +334,8 @@ const Workbox = (props) => {
 
         setWorkboxHandlerContext({current:workboxHandler})
 
+        return () => {workboxHandler.unsubscribeFromWorkboxRecord()}
+
     },[])
 
     useEffect(()=>{
