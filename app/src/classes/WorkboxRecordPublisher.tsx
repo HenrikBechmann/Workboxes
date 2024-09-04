@@ -15,7 +15,7 @@ import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxRecordPublisher {
 
-    constructor(workboxID, snapshotControl, workspaceHandler) {
+    constructor(workboxID, workspaceHandler) {
 
         this.workboxID = workboxID
 
