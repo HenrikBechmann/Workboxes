@@ -1316,6 +1316,18 @@ class WorkspaceHandler {
         return await this.subscriptionsHandler.clearSubscriptionsToDomainRecords()
     }
 
+    async subscribeToWorkboxRecord(subscriptionControlData) { // domain and member records
+        return await this.subscriptionsHandler.subscribeToWorkboxRecord(subscriptionControlData)
+    }
+
+    async unsubscribeFromWorkboxRecord(subscriptionControlData) {
+        return await this.subscriptionsHandler.unsubscribeFromWorkboxRecord(subscriptionControlData)
+    }
+
+    async clearSubscriptionsToWorkboxRecords() {
+        return await this.subscriptionsHandler.clearSubscriptionsToWorkboxRecords()
+    }
+
 }
 
 export default WorkspaceHandler

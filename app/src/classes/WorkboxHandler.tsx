@@ -14,8 +14,9 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 import { updateDocumentSchema } from '../system/utilities'
 
 class WorkboxHandler {
-    constructor( { workboxID, workboxSessionID, db, usage, snapshotControl, onError, onFail, errorControl} ) {
+    constructor( { workboxID, workboxSessionID, workspaceHandler, onError, onFail} ) {
 
+        const { db, usage, snapshotControl, errorControl } = workspaceHandler
         this.workboxID = workboxID
         this.workboxSessionID = workboxSessionID
 
@@ -25,6 +26,7 @@ class WorkboxHandler {
         this.internal.onError = onError
         this.internal.onFail = onFail
         this.internal.errorControl = errorControl
+        this.internal.workspaceHandler = workspaceHandler
 
     }
 
@@ -44,6 +46,7 @@ class WorkboxHandler {
         unsubscribeworkbox: null,
         setWorkboxHandlerContext: null, // for consumers
         trigger: null, // for debugging
+        workspaceHandler:null,
     }
 
     userRecords // not static
@@ -176,77 +179,77 @@ class WorkboxHandler {
     }
 
     // -----------------------------[ operations ]--------------------------
-    async setWorkboxSnapshot() {
-        const 
-            workboxCollection = collection(this.internal.db, 'workboxes'),
-            workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
+    // async setWorkboxSnapshot() {
+    //     const 
+    //         workboxCollection = collection(this.internal.db, 'workboxes'),
+    //         workboxSnapshotIndex = 'Workbox.' + this.workboxID + '.' + this.workboxSessionID
 
-        this.internal.workboxSnapshotIndex = workboxSnapshotIndex
+    //     this.internal.workboxSnapshotIndex = workboxSnapshotIndex
 
-        if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
-            this.internal.snapshotControl.create(workboxSnapshotIndex)
+    //     if (!this.internal.snapshotControl.has(workboxSnapshotIndex)) { // once only
+    //         this.internal.snapshotControl.create(workboxSnapshotIndex)
 
-            this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
-                async (returndoc) =>{
-                    this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
-                    this.internal.usage.read(1)
+    //         this.internal.unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+    //             async (returndoc) =>{
+    //                 this.internal.snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
+    //                 this.internal.usage.read(1)
                     
-                    let workboxRecord = returndoc.data()
+    //                 let workboxRecord = returndoc.data()
 
-                    if (!workboxRecord) {
-                        this.internal.onFail()
-                        return
-                    } else {
+    //                 if (!workboxRecord) {
+    //                     this.internal.onFail()
+    //                     return
+    //                 } else {
 
-                        if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
+    //                     if (!this.internal.snapshotControl.wasSchemaChecked(workboxSnapshotIndex)) {
 
-                            const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
-                            if (!Object.is(workboxRecord, updatedRecord)) {
-                                try {
+    //                         const updatedRecord = updateDocumentSchema('workboxes', workboxRecord.profile.type.name,workboxRecord)
+    //                         if (!Object.is(workboxRecord, updatedRecord)) {
+    //                             try {
 
-                                    await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
-                                    this.internal.usage.write(1)
+    //                                 await setDoc(doc(this.internal.db,'workboxes',this.workboxID),updatedRecord)
+    //                                 this.internal.usage.write(1)
 
-                                } catch (error) {
+    //                             } catch (error) {
 
-                                    const errdesc = 'error updating workbox record version. Check internet'
-                                    this.internal.errorControl.push({description:errdesc,error})
-                                    console.log(errdesc,error)
-                                    this.internal.onError()
-                                    return
+    //                                 const errdesc = 'error updating workbox record version. Check internet'
+    //                                 this.internal.errorControl.push({description:errdesc,error})
+    //                                 console.log(errdesc,error)
+    //                                 this.internal.onError()
+    //                                 return
 
-                                }
+    //                             }
 
-                                workboxRecord = updatedRecord
+    //                             workboxRecord = updatedRecord
 
-                            }
-                            this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
-                        }
+    //                         }
+    //                         this.internal.snapshotControl.setSchemaChecked(workboxSnapshotIndex)
+    //                     }
 
-                        this.workboxRecord = workboxRecord
+    //                     this.workboxRecord = workboxRecord
 
-                        // console.log('onSnapshot workboxRecord', workboxRecord)
+    //                     // console.log('onSnapshot workboxRecord', workboxRecord)
 
-                        this.internal.trigger = 'updaterecord'
-                        this.internal.setWorkboxHandlerContext({current:this})
+    //                     this.internal.trigger = 'updaterecord'
+    //                     this.internal.setWorkboxHandlerContext({current:this})
 
-                    }
+    //                 }
 
-                },(error) => {
+    //             },(error) => {
 
-                    const errdesc = 'error from workbox record listener. Check permissions'
-                    this.internal.errorControl.push({description:errdesc,error})
-                    console.log(errdesc,error)
-                    this.internal.onError()
-                    return
+    //                 const errdesc = 'error from workbox record listener. Check permissions'
+    //                 this.internal.errorControl.push({description:errdesc,error})
+    //                 console.log(errdesc,error)
+    //                 this.internal.onError()
+    //                 return
 
-                }
-            )
-            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-            this.internal.trigger = 'unsubscribeworkbox'
-            this.internal.setWorkboxHandlerContext({current:this})
-        }
-    }
+    //             }
+    //         )
+    //         // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
+    //         this.internal.trigger = 'unsubscribeworkbox'
+    //         this.internal.setWorkboxHandlerContext({current:this})
+    //     }
+    // }
 
     // const subscriptionControlData = {
     //     functions:{ // repository for direct calls
@@ -258,15 +261,34 @@ class WorkboxHandler {
     //     },
     //     subscriptionindex: <prefix>.<entityid>
     // }
-    // {async workspaceHandler.    }
 
-    // updateWorkboxData = (workboxRecord) => {
 
-    //     this.workboxRecord = workboxRecord
+    subscribeToWorkboxRecord() {
 
-    // }
+        const subscriptionControlData = {
+            functions:{ // repository for direct calls
+                updateWorkboxData:this.updateWorkboxData
+            },
+            workbox: {
+                id:this.workboxID,
+                name,
+            },
+            subscriptionindex: 'workbox.' + this.workboxID + '.' + this.workboxSessionID
+        }
+
+        this.internal.workspaceHandler.subscribeToWorkboxRecord(subscriptionControlData)
+
+    }
+
+    updateWorkboxData = (workboxRecord) => {
+
+        this.workboxRecord = workboxRecord
+        this.internal.setWorkboxHandlerContext({current:this})
+
+    }
 
     async getWorkboxRecord() {
+
 
     }
 

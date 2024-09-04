@@ -143,13 +143,13 @@ const WorkboxFrame = (props) => {
         */
     },[])
 
-    async function setWorkboxSnapshot() {
-        await workboxHandler.setWorkboxSnapshot()
-    }
+    // async function setWorkboxSnapshot() {
+    //     await workboxHandler.setWorkboxSnapshot()
+    // }
 
-    useEffect(()=> {
-        setWorkboxSnapshot()
-    },[])
+    // useEffect(()=> {
+    //     setWorkboxSnapshot()
+    // },[])
 
 
     const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
@@ -298,7 +298,6 @@ const Workbox = (props) => {
         // usage = useUsage(),
         // snapshotControl = useSnapshotControl(),
         // errorControl = useErrorControl,
-        { db, usage, snapshotControl, errorControl } = workspaceHandler,
         navigate = useNavigate(),
         [workboxHandlerState, setWorkboxHandlerState] = useState('setup'),
 
@@ -306,7 +305,7 @@ const Workbox = (props) => {
 
         [workboxHandlerContext, setWorkboxHandlerContext] = useState({ current: null }),
         workboxHandler = workboxHandlerContext.current,
-        unsubscribeworkbox = workboxHandler?.internal.unsubscribeworkbox,
+        // unsubscribeworkbox = workboxHandler?.internal.unsubscribeworkbox,
         // specialized data connection handling
         onFail = () => {
             console.log('System:failure to find workbox record')
@@ -324,12 +323,13 @@ const Workbox = (props) => {
     useEffect(() => {
 
         const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, 
-            db, usage, snapshotControl, errorControl, onError, onFail, })
+            workspaceHandler, onError, onFail, })
 
         workboxHandler.settings = workboxSettings.settings
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
+        workboxHandler.subscribeToWorkboxRecord()
         setWorkboxHandlerState('ready')
 
         setWorkboxHandlerContext({current:workboxHandler})
@@ -341,16 +341,16 @@ const Workbox = (props) => {
     },[userRecords, workboxHandlerState])
 
     // store onSnapshot unsubscribe function
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if (!unsubscribeworkbox) return
+    //     if (!unsubscribeworkbox) return
 
-        snapshotControl.registerUnsub(workboxHandler.internal.workboxSnapshotIndex, unsubscribeworkbox)
-        return () => {
-            snapshotControl.unsub(workboxHandler.internal.workboxSnapshotIndex)
-        }
+    //     snapshotControl.registerUnsub(workboxHandler.internal.workboxSnapshotIndex, unsubscribeworkbox)
+    //     return () => {
+    //         snapshotControl.unsub(workboxHandler.internal.workboxSnapshotIndex)
+    //     }
 
-    },[unsubscribeworkbox])
+    // },[unsubscribeworkbox])
 
 
     return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
