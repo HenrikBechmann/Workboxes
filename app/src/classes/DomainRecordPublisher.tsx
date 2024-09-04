@@ -80,6 +80,9 @@ class DomainRecordPublisher {
     async subscribe (subscriptionControlData) {
 
         this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
+        subscriptionControlData.functions.updateDomainData(this.domainRecord)
+        subscriptionControlData.functions.updateDomainData && 
+            subscriptionControlData.functions.updateDomainData(this.domainRecord)
 
     }
 

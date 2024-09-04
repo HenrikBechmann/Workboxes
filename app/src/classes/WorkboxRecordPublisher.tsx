@@ -59,6 +59,7 @@ class WorkboxRecordPublisher {
     async subscribe (subscriptionControlData) {
 
         this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
+        subscriptionControlData.functions.updateWorkboxData(this.workboxRecord)
 
     }
 

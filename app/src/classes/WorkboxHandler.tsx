@@ -263,7 +263,7 @@ class WorkboxHandler {
     // }
 
 
-    subscribeToWorkboxRecord() {
+    async subscribeToWorkboxRecord() {
 
         const subscriptionControlData = {
             functions:{ // repository for direct calls
@@ -276,7 +276,9 @@ class WorkboxHandler {
             subscriptionindex: 'workbox.' + this.workboxID + '.' + this.workboxSessionID
         }
 
-        this.internal.workspaceHandler.subscribeToWorkboxRecord(subscriptionControlData)
+        console.log('workboxHandler.subscribeToWorkboxRecord: subscriptionControlData',subscriptionControlData)
+
+        await this.internal.workspaceHandler.subscribeToWorkboxRecord(subscriptionControlData)
 
     }
 
