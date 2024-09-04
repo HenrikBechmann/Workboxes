@@ -21,17 +21,15 @@ import { updateDocumentSchema } from '../system/utilities'
 
 class DomainRecordPublisher {
 
-    constructor(domainID, snapshotControl, workspaceHandler) {
+    constructor(domainID, workspaceHandler) {
 
         this.domainID = domainID
 
-        this.snapshotControl = snapshotControl
         this.workspaceHandler = workspaceHandler
         
     }
 
     workspaceHandler
-    snapshotControl
 
     subscriptions = new Map()
 
@@ -50,20 +48,18 @@ class DomainRecordPublisher {
         this.domainSnapshotIndex = domainSnapshotIndex
         this.memberSnapshotIndex = memberSnapshotIndex
 
-        // console.log('domainSnapshotIndex, memberSnapshotIndex',domainSnapshotIndex, memberSnapshotIndex)
-
     }
 
     async closeSnapshot() {
 
-        this.snapshotControl.unsub(this.domainSnapshotIndex)
-        this.snapshotControl.unsub(this.memberSnapshotIndex)
+        const { snapshotControl } = this.workspaceHandler
+
+        snapshotControl.unsub(this.domainSnapshotIndex)
+        snapshotControl.unsub(this.memberSnapshotIndex)
 
     }
 
     private setDomainRecord = (domainRecord) => {
-
-        // console.log('setting domain record', domainRecord)
 
         this.domainRecord = domainRecord
         this.subscriptions.forEach((subscription) =>{
@@ -102,15 +98,16 @@ class DomainRecordPublisher {
     async setDomainSnapshots(workspaceHandler, domainID, setDomainRecord, setMemberRecord) {
 
         const 
+            { snapshotControl } = workspaceHandler,
             domainCollection = collection(workspaceHandler.db, 'domains'),
             domainSnapshotIndex = 'Domain.' + domainID
 
-        if (!workspaceHandler.snapshotControl.has(domainSnapshotIndex)) { // once only
-            workspaceHandler.snapshotControl.create(domainSnapshotIndex)
+        if (!snapshotControl.has(domainSnapshotIndex)) { // once only
+            snapshotControl.create(domainSnapshotIndex)
 
             const unsubscribedomain = await onSnapshot(doc(domainCollection, domainID), 
                 async (returndoc) =>{
-                    workspaceHandler.snapshotControl.incrementCallCount(domainSnapshotIndex, 1)
+                    snapshotControl.incrementCallCount(domainSnapshotIndex, 1)
                     workspaceHandler.usage.read(1)
                     
                     let domainRecord = returndoc.data()
@@ -120,7 +117,7 @@ class DomainRecordPublisher {
                         return
                     } else {
 
-                        if (!workspaceHandler.snapshotControl.wasSchemaChecked(domainSnapshotIndex)) {
+                        if (!snapshotControl.wasSchemaChecked(domainSnapshotIndex)) {
 
                             const updatedRecord = updateDocumentSchema('domains', 'standard' ,domainRecord)
                             if (!Object.is(domainRecord, updatedRecord)) {
@@ -142,7 +139,7 @@ class DomainRecordPublisher {
                                 domainRecord = updatedRecord
 
                             }
-                            workspaceHandler.snapshotControl.setSchemaChecked(domainSnapshotIndex)
+                            snapshotControl.setSchemaChecked(domainSnapshotIndex)
                         }
 
                         // set new domain record
@@ -161,7 +158,7 @@ class DomainRecordPublisher {
                 }
             )
 
-            workspaceHandler.snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
+            snapshotControl.registerUnsub(domainSnapshotIndex, unsubscribedomain)
 
         }
         const 
@@ -169,12 +166,12 @@ class DomainRecordPublisher {
             memberID = workspaceHandler.userRecords.memberships.domains[domainID].memberid,
             memberSnapshotIndex = 'Member.' + memberID
 
-        if (!workspaceHandler.snapshotControl.has(memberSnapshotIndex)) { // once only
-            workspaceHandler.snapshotControl.create(memberSnapshotIndex)
+        if (!snapshotControl.has(memberSnapshotIndex)) { // once only
+            snapshotControl.create(memberSnapshotIndex)
 
             const unsubscribemember = await onSnapshot(doc(memberCollection, memberID), 
                 async (returndoc) =>{
-                    workspaceHandler.snapshotControl.incrementCallCount(memberSnapshotIndex, 1)
+                    snapshotControl.incrementCallCount(memberSnapshotIndex, 1)
                     workspaceHandler.usage.read(1)
                     
                     let memberRecord = returndoc.data()
@@ -206,7 +203,7 @@ class DomainRecordPublisher {
                                 memberRecord = updatedRecord
 
                             }
-                            workspaceHandler.snapshotControl.setSchemaChecked(memberSnapshotIndex)
+                            snapshotControl.setSchemaChecked(memberSnapshotIndex)
                         }
 
                         // set new membership record
@@ -225,7 +222,7 @@ class DomainRecordPublisher {
                 }
             )
 
-            workspaceHandler.snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
+            snapshotControl.registerUnsub(memberSnapshotIndex, unsubscribemember)
 
         }
 

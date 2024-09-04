@@ -62,7 +62,7 @@ class SubscriptionHandler {
                 workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
                 userID = this.userID,
                 domainRecordPublisher = 
-                    new DomainRecordPublisher( domainID, this.workspaceHandler.snapshotControl, this.workspaceHandler )
+                    new DomainRecordPublisher( domainID, this.workspaceHandler )
 
             await domainRecordPublisher.openSnapshot()
             domainRecordPublishers.set(domainID, domainRecordPublisher)

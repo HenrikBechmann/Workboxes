@@ -19,13 +19,11 @@ class WorkboxRecordPublisher {
 
         this.workboxID = workboxID
 
-        this.snapshotControl = snapshotControl
         this.workspaceHandler = workspaceHandler
         
     }
 
     workspaceHandler
-    snapshotControl
 
     subscriptions = new Map()
 
@@ -35,18 +33,58 @@ class WorkboxRecordPublisher {
 
     workboxRecord = null
 
-    async setWorkboxSnapshot() {
+    async openSnapshot() {
+
+        const workboxSnapshotIndex = 
+            await this.setWorkboxSnapshot(this.workspaceHandler, this.workboxID, this.setWorkboxRecord)
+        this.workboxSnapshotIndex = workboxSnapshotIndex
+
+    }
+
+    async closeSnapshot() {
+
+        this.workspaceHandler.snapshotControl.unsub(this.workboxSnapshotIndex)
+
+    }
+
+    private setWorkboxRecord = (workboxRecord) => {
+
+        this.workboxRecord = workboxRecord
+        this.subscriptions.forEach((subscription) =>{
+            subscription.functions.updateWorkboxData(workboxRecord)
+        })
+
+    }
+
+    async subscribe (subscriptionControlData) {
+
+        this.subscriptions.set(subscriptionControlData.subscriptionindex, subscriptionControlData)
+
+    }
+
+    async unSubscribe(subscriptionControlData) {
+
+        this.subscriptions.delete(subscriptionControlData.subscriptionindex)
+
+    }
+
+    async unSubscribeAll() {
+
+        this.subscriptions.clear()
+
+    }
+
+    async setWorkboxSnapshot(workspaceHandler, workboxID, setWorkboxRecord) {
+
         const 
-            { workspaceHandler, snapshotControl } = this,
+            {snapshotControl } = workspaceHandler,
             workboxCollection = collection(workspaceHandler.db, 'workboxes'),
             workboxSnapshotIndex = 'Workbox.' + this.workboxID
-
-        this.workspaceHandler.workboxSnapshotIndex = workboxSnapshotIndex
 
         if (!snapshotControl.has(workboxSnapshotIndex)) { // once only
             snapshotControl.create(workboxSnapshotIndex)
 
-            const unsubscribeworkbox = await onSnapshot(doc(workboxCollection, this.workboxID), 
+            const unsubscribeworkbox = await onSnapshot(doc(workboxCollection, workboxID), 
                 async (returndoc) =>{
                     snapshotControl.incrementCallCount(workboxSnapshotIndex, 1)
                     workspaceHandler.usage.read(1)
@@ -64,7 +102,7 @@ class WorkboxRecordPublisher {
                             if (!Object.is(workboxRecord, updatedRecord)) {
                                 try {
 
-                                    await setDoc(doc(workspaceHandler.db,'workboxes',this.workboxID),updatedRecord)
+                                    await setDoc(doc(workspaceHandler.db,'workboxes',workboxID),updatedRecord)
                                     workspaceHandler.usage.write(1)
 
                                 } catch (error) {
@@ -72,7 +110,7 @@ class WorkboxRecordPublisher {
                                     const errdesc = 'error updating workbox record version. Check internet'
                                     workspaceHandler.errorControl.push({description:errdesc,error})
                                     console.log(errdesc,error)
-                                    workspaceHandler.onError()
+                                    workspaceHandler.onError(errdesc)
                                     return
 
                                 }
@@ -83,12 +121,7 @@ class WorkboxRecordPublisher {
                             snapshotControl.setSchemaChecked(workboxSnapshotIndex)
                         }
 
-                        workboxRecord = workboxRecord
-
-                        // console.log('onSnapshot workboxRecord', workboxRecord)
-
-                        // workspaceHandler.trigger = 'updaterecord'
-                        // this.internal.setWorkboxHandlerContext({current:this})
+                        setWorkboxRecord(workboxRecord)
 
                     }
 
@@ -97,16 +130,20 @@ class WorkboxRecordPublisher {
                     const errdesc = 'error from workbox record listener. Check permissions'
                     workspaceHandler.errorControl.push({description:errdesc,error})
                     console.log(errdesc,error)
-                    workspaceHandler.onError()
+                    workspaceHandler.onError(errdesc)
                     return
 
                 }
+
             )
-            // console.log('1. this.internal, this.internal.unsubscribeworkbox', this.internal, this.internal.unsubscribeworkbox)
-            // workspaceHandler.trigger = 'unsubscribeworkbox'
-            // this.internal.setWorkboxHandlerContext({current:this})
+
+            snapshotControl.registerUnsub(workboxSnapshotIndex, unsubscribeworkbox)
         }
+
+        return workboxSnapshotIndex
+
     }
 
-
 }
+
+export default WorkboxRecordPublisher
