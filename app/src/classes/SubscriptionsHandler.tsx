@@ -66,8 +66,9 @@ class SubscriptionHandler {
                 domainRecordPublisher = 
                     new DomainRecordPublisher( domainID, this.workspaceHandler )
 
-            await domainRecordPublisher.openSnapshot()
             domainRecordPublishers.set(domainID, domainRecordPublisher)
+
+            await domainRecordPublisher.openSnapshot()
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
@@ -76,6 +77,7 @@ class SubscriptionHandler {
     }
 
     async unsubscribeFromDomainRecord(domainSubscriptionControlData) {
+        
         const { domainRecordPublishers } = this.publishers
         const 
             domainID = domainSubscriptionControlData.domain.id
@@ -124,19 +126,24 @@ class SubscriptionHandler {
 
 
     async subscribeToWorkboxRecord(workboxSubscriptionControlData) { // workbox record
+
+        console.log('subscribeToWorkboxRecord', workboxSubscriptionControlData)
+
         const 
             { workboxRecordPublishers } = this.publishers,
             workboxID = workboxSubscriptionControlData.workbox.id
 
         if (!workboxRecordPublishers.has(workboxID)) {
+
+            console.log('setting up WorkboxRecordPublisher')
             const 
-                workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
                 userID = this.userID,
                 workboxRecordPublisher = 
                     new WorkboxRecordPublisher( workboxID, this.workspaceHandler )
 
-            await workboxRecordPublisher.openSnapshot()
             workboxRecordPublishers.set(workboxID, workboxRecordPublisher)
+
+            await workboxRecordPublisher.openSnapshot()
         }
 
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)

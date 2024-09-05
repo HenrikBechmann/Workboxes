@@ -123,7 +123,7 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     // console.log('running Workwindow: props', props)
-    // console.log('titleData', props.titleData)
+    console.log('titleData', props.titleData)
 
     // --------------------------------[ initialization ]-----------------------------
 
@@ -136,7 +136,7 @@ const Workwindow = (props) => {
             // - change maxSizeConstraints for Resizable through useEffect for state change)
             // - helps to set bounds for Draggable
             containerDimensionSpecs, // height, width of Workpanel; change can cause repositioning and resizing of window
-            titleData, // workbox titleData, for titleName
+            titleData, // workbox titleData, for titleName, workboxID
             windowCallbacks, // change zOrder etc.
             windowSessionID, // system control, repo access
             viewDeclaration, // object with view = normalized, maximized, minimized; stackOrder for minimized windows
@@ -147,6 +147,8 @@ const Workwindow = (props) => {
 
         titleName = titleData.name,
         typeAlias = titleData.type?.alias,
+        workboxID = titleData.id,
+        workboxSubscriptionControlDataRef = useRef(null),
         defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
 
         // various elements brought into play
@@ -243,25 +245,39 @@ const Workwindow = (props) => {
     // }
 
     const updateWorkboxData = (workboxRecord) => {
+        console.log('WorkWindow.updateWorkboxData: workboxRecord', workboxRecord)
         titleData.name = workboxRecord.profile.workbox.name
+        setWindowState('workboxrecordupdate')
     }
 
-    // async function subscribeToWorkboxRecord() {
-    //     const workboxSubscriptionControlData = {
-    //         functions:{
-    //             updateWorkboxData,
-    //         },
-    //         workbox: {
-    //             id
-    //         }
-    //     }
-    // }
+    async function subscribeToWorkboxRecord() {
+        const workboxSubscriptionControlData = {
+            functions:{
+                updateWorkboxData,
+            },
+            workbox: {
+                id: titleData.id,
+                name: titleData.name,
+            },
+            subcriptionindex: 'workwindow.' + windowSessionID
+        }
 
-    // useEffect(()=>{
+        console.log('for workWindow workboxSubscriptionControlData', workboxSubscriptionControlData, titleData)
 
-    //     subscribeToWorkboxRecord()
+        workboxSubscriptionControlDataRef.current = workboxSubscriptionControlData
+        await workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
+    }
 
-    // },[])
+    useEffect(()=>{
+
+        subscribeToWorkboxRecord()
+
+        return () => {
+            const workboxSubscriptionControlData = workboxSubscriptionControlDataRef.current
+            workspaceHandler.unSubscribeFromWorkboxRecord(workboxSubscriptionControlData)
+        }
+
+    },[])
 
     // set and clear onFocus and onBlur event listeners
     useEffect(()=>{

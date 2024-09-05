@@ -35,6 +35,8 @@ class WorkboxRecordPublisher {
 
     async openSnapshot() {
 
+        console.log('openSnapshot')
+
         const workboxSnapshotIndex = 
             await this.setWorkboxSnapshot(this.workspaceHandler, this.workboxID, this.setWorkboxRecord)
         this.workboxSnapshotIndex = workboxSnapshotIndex
@@ -49,8 +51,11 @@ class WorkboxRecordPublisher {
 
     private setWorkboxRecord = (workboxRecord) => {
 
+        console.log('workboxRecordPublisher.setWorkboxRecord', workboxRecord)
+
         this.workboxRecord = workboxRecord
         this.subscriptions.forEach((subscription) =>{
+            console.log('subscription', subscription, workboxRecord)
             subscription.functions.updateWorkboxData(workboxRecord)
         })
 
@@ -59,7 +64,11 @@ class WorkboxRecordPublisher {
     async subscribe (workboxSubscriptionControlData) {
 
         this.subscriptions.set(workboxSubscriptionControlData.subscriptionindex, workboxSubscriptionControlData)
+
         workboxSubscriptionControlData.functions.updateWorkboxData(this.workboxRecord)
+
+        console.log('WorkboxRecordPublisher.subscribe: workboxSubscriptionControlData, this.subscriptions, this.workboxRecord', 
+            workboxSubscriptionControlData, this.subscriptions, this.workboxRecord)
 
     }
 
