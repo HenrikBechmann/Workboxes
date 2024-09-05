@@ -127,7 +127,7 @@ class SubscriptionHandler {
 
     async subscribeToWorkboxRecord(workboxSubscriptionControlData) { // workbox record
 
-        console.log('subscribeToWorkboxRecord', workboxSubscriptionControlData)
+        // console.log('subscribeToWorkboxRecord', workboxSubscriptionControlData)
 
         const 
             { workboxRecordPublishers } = this.publishers,
@@ -135,7 +135,7 @@ class SubscriptionHandler {
 
         if (!workboxRecordPublishers.has(workboxID)) {
 
-            console.log('setting up WorkboxRecordPublisher')
+            // console.log('setting up WorkboxRecordPublisher')
             const 
                 userID = this.userID,
                 workboxRecordPublisher = 

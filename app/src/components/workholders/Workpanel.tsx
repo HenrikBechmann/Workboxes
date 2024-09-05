@@ -212,7 +212,7 @@ const Workpanel = (props:any) => {
                 workbox:workboxSpecs,
             }
 
-        console.log('windowData', windowData)
+        // console.log('windowData', windowData)
 
         let 
             zOrder, stackOrder

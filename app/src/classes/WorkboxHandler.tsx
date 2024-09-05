@@ -196,7 +196,7 @@ class WorkboxHandler {
 
     async subscribeToWorkboxRecord() {
 
-        console.log('subscribing workboxRecord for workbox')
+        // console.log('subscribing workboxRecord for workbox')
 
         const workboxSubscriptionControlData = {
             functions:{ // repository for direct calls
@@ -222,6 +222,8 @@ class WorkboxHandler {
     }
 
     updateWorkboxData = (workboxRecord) => {
+
+        // console.log('updating workboxRecord for workbox', workboxRecord)
 
         this.workboxRecord = workboxRecord
         this.internal.setWorkboxHandlerContext({current:this})

@@ -123,7 +123,7 @@ const WindowHandle = (props) => {
 const Workwindow = (props) => {
 
     // console.log('running Workwindow: props', props)
-    console.log('titleData', props.titleData)
+    // console.log('titleData', props.titleData)
 
     // --------------------------------[ initialization ]-----------------------------
 
@@ -245,7 +245,7 @@ const Workwindow = (props) => {
     // }
 
     const updateWorkboxData = (workboxRecord) => {
-        console.log('WorkWindow.updateWorkboxData: workboxRecord', workboxRecord)
+        // console.log('WorkWindow.updateWorkboxData: workboxRecord', workboxRecord)
         titleData.name = workboxRecord.profile.workbox.name
         setWindowState('workboxrecordupdate')
     }
@@ -259,10 +259,10 @@ const Workwindow = (props) => {
                 id: titleData.id,
                 name: titleData.name,
             },
-            subcriptionindex: 'workwindow.' + windowSessionID
+            subscriptionindex: 'workwindow.' + windowSessionID
         }
 
-        console.log('for workWindow workboxSubscriptionControlData', workboxSubscriptionControlData, titleData)
+        // console.log('subscribeToWorkboxRecord for workWindow workboxSubscriptionControlData', workboxSubscriptionControlData, titleData)
 
         workboxSubscriptionControlDataRef.current = workboxSubscriptionControlData
         await workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
