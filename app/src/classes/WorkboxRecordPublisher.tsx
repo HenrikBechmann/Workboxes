@@ -49,6 +49,17 @@ class WorkboxRecordPublisher {
 
     updateDomainData = (domainRecord) => {
         this.domainRecord = domainRecord
+
+        if (this.workboxRecord) {
+            if (this.workboxRecord.profile.domain.name !== domainRecord.profile.domain.name) {
+                this.workboxRecord.profile.domain.name = domainRecord.profile.domain.name
+                this.subscriptions.forEach((subscription) =>{
+                    // console.log('subscription', subscription)
+                    subscription.functions.updateWorkboxData(this.workboxRecord)
+                })
+            }
+        }
+
     }
 
     updateMemberData = (memberRecord) => {
@@ -108,6 +119,12 @@ class WorkboxRecordPublisher {
         const initialization = (!this.workboxRecord)
 
         this.workboxRecord = workboxRecord
+
+        if (this.domainRecord) {
+            if (workboxRecord.profile.domain.name !== this.domainRecord.profile.domain.name) {
+                workboxRecord.profile.domain.name = this.domainRecord.profile.domain.name
+            }
+        }
         this.subscriptions.forEach((subscription) =>{
             // console.log('subscription', subscription)
             subscription.functions.updateWorkboxData(workboxRecord)
