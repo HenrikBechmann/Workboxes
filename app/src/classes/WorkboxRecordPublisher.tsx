@@ -91,6 +91,7 @@ class WorkboxRecordPublisher {
 
         // console.log('WorkboxRecordPublisher.closeSnapshot', this.workboxSnapshotIndex)
 
+        // TODO try to remove race condition
         if (this.workspaceHandler.snapshotControl.has(this.workboxSnapshotIndex)) { // race condition possible
 
             this.workspaceHandler.snapshotControl.unsub(this.workboxSnapshotIndex)

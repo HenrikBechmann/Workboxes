@@ -54,6 +54,7 @@ class DomainRecordPublisher {
 
         const { snapshotControl } = this.workspaceHandler
 
+        // TODO try to remove race condition requiring check for subscription
         snapshotControl.has(this.domainSnapshotIndex) && snapshotControl.unsub(this.domainSnapshotIndex)
         snapshotControl.has(this.memberSnapshotIndex) && snapshotControl.unsub(this.memberSnapshotIndex)
 

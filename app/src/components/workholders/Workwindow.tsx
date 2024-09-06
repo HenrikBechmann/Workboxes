@@ -268,14 +268,18 @@ const Workwindow = (props) => {
         await workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
     }
 
+    async function unsubscribeFromWorkboxRecord() {
+        const workboxSubscriptionControlData = workboxSubscriptionControlDataRef.current
+        await workspaceHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData)
+    }
+
     useEffect(()=>{
 
         subscribeToWorkboxRecord()
 
         return () => {
-            const workboxSubscriptionControlData = workboxSubscriptionControlDataRef.current
             // console.log('Workwindow unmount unsubscribe',workboxSubscriptionControlData)
-            workspaceHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData)
+            unsubscribeFromWorkboxRecord()
         }
 
     },[])
