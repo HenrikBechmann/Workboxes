@@ -235,7 +235,8 @@ const DocumentToolbar = (props) => {
             <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
                 <option value="image">Image</option>
-                <option value="import">Import</option>
+                <option value="image">Video</option>
+                <option value="resource">Resource</option>
             </Select>
         </Box>
         { editToggle }
