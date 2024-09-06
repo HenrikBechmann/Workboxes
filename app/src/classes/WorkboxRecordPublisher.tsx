@@ -50,6 +50,8 @@ class WorkboxRecordPublisher {
     updateDomainData = (domainRecord) => {
         this.domainRecord = domainRecord
 
+        // console.log('updateDomainData for workboxID, domainRecord, workboxRecord', this.workboxID, domainRecord, this.workboxRecord)
+
         if (this.workboxRecord) {
             if (this.workboxRecord.profile.domain.name !== domainRecord.profile.domain.name) {
                 this.workboxRecord.profile.domain.name = domainRecord.profile.domain.name
@@ -115,6 +117,9 @@ class WorkboxRecordPublisher {
 
         // console.log('workboxRecordPublisher.setWorkboxRecord: workboxID, workboxRecod, subscriptions', 
         //     this.workboxID, workboxRecord, this.subscriptions)
+
+        // console.log('setWorkboxRecord for workboxID, domainRecord, workboxRecord', 
+        //     this.workboxID, this.domainRecord, workboxRecord)
 
         const initialization = (!this.workboxRecord)
 
