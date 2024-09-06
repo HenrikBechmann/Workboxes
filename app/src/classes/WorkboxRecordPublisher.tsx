@@ -32,6 +32,10 @@ class WorkboxRecordPublisher {
     workboxSnapshotIndex
 
     workboxRecord = null
+    domainRecord = null
+    memberRecord = null
+
+    domainSubscriptionControlData
 
     async openSnapshot() {
 
@@ -43,9 +47,55 @@ class WorkboxRecordPublisher {
 
     }
 
+    updateDomainData = (domainRecord) => {
+        this.domainRecord = domainRecord
+    }
+
+    updateMemberData = (memberRecord) => {
+        this.memberRecord = memberRecord
+    }
+
+    subscribeToDomainRecord() {
+
+        const { workboxRecord, workspaceHandler } = this
+
+        const 
+            domainID = workboxRecord.profile.domain.id,
+            domainSubscriptionControlData = {
+                domain: workboxRecord.profile.domain,
+                functions: {
+                    updateDomainData:this.updateDomainData,
+                    updateMemberData:this.updateMemberData,
+                },
+                subscriptionindex:'workbox.' + workboxRecord.profile.workbox.id
+            }
+
+        this.domainSubscriptionControlData = domainSubscriptionControlData
+        
+        // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
+        workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData)
+
+    }
+
+    async unsubscribeFromDomainRecord() {
+
+        const {workspaceHandler} = this
+
+        await workspaceHandler.unsubscribeFromDomainRecord(this.domainSubscriptionControlData)
+
+    }
+
     async closeSnapshot() {
 
-        this.workspaceHandler.snapshotControl.unsub(this.workboxSnapshotIndex)
+        this.unsubscribeFromDomainRecord()
+
+        // console.log('WorkboxRecordPublisher.closeSnapshot', this.workboxSnapshotIndex)
+
+        if (this.workspaceHandler.snapshotControl.has(this.workboxSnapshotIndex)) { // race condition possible
+
+            this.workspaceHandler.snapshotControl.unsub(this.workboxSnapshotIndex)
+
+        }
 
     }
 
@@ -54,11 +104,17 @@ class WorkboxRecordPublisher {
         // console.log('workboxRecordPublisher.setWorkboxRecord: workboxID, workboxRecod, subscriptions', 
         //     this.workboxID, workboxRecord, this.subscriptions)
 
+        const initialization = (!this.workboxRecord)
+
         this.workboxRecord = workboxRecord
         this.subscriptions.forEach((subscription) =>{
             // console.log('subscription', subscription)
             subscription.functions.updateWorkboxData(workboxRecord)
         })
+
+        if (initialization) {
+            this.subscribeToDomainRecord()
+        }
 
     }
 
@@ -75,6 +131,9 @@ class WorkboxRecordPublisher {
     }
 
     async unSubscribe(workboxSubscriptionControlData) {
+
+        // console.log('WorkboxPublisher.unsubscribe: workboxSubscriptionControlData, this.subscriptions', 
+        //     workboxSubscriptionControlData, this.subscriptions)
 
         this.subscriptions.delete(workboxSubscriptionControlData.subscriptionindex)
 
@@ -95,6 +154,8 @@ class WorkboxRecordPublisher {
 
         if (!snapshotControl.has(workboxSnapshotIndex)) { // once only
             snapshotControl.create(workboxSnapshotIndex)
+
+            // console.log('create snapshotControl',workboxSnapshotIndex)
 
             const unsubscribeworkbox = await onSnapshot(doc(workboxCollection, workboxID), 
                 async (returndoc) =>{
@@ -148,6 +209,8 @@ class WorkboxRecordPublisher {
                 }
 
             )
+
+            // console.log('registerUnsub', workboxSnapshotIndex)
 
             snapshotControl.registerUnsub(workboxSnapshotIndex, unsubscribeworkbox)
         }

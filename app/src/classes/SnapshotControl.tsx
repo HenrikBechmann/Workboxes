@@ -24,6 +24,8 @@ class SnapshotControl {
     }
 
     unsub = (index) => {
+
+        // console.log('unsub index',index)
         const 
             record = this.snapshotData.get(index),
             unsubscribe = record.unsub

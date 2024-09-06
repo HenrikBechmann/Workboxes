@@ -1323,6 +1323,9 @@ class WorkspaceHandler {
     }
 
     async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData) {
+
+        // console.log('WorkboxHandler unsubscribe',workboxSubscriptionControlData)
+
         return await this.subscriptionsHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData)
     }
 

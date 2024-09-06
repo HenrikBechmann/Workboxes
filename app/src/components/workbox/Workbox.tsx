@@ -334,7 +334,10 @@ const Workbox = (props) => {
 
         setWorkboxHandlerContext({current:workboxHandler})
 
-        return () => {workboxHandler.unsubscribeFromWorkboxRecord()}
+        return () => {
+            // console.log('Workbox unmount workboxHandler.unsubscribeFromWorkboxRecord()', workboxID)
+            workboxHandler.unsubscribeFromWorkboxRecord()
+        }
 
     },[])
 

@@ -54,8 +54,8 @@ class DomainRecordPublisher {
 
         const { snapshotControl } = this.workspaceHandler
 
-        snapshotControl.unsub(this.domainSnapshotIndex)
-        snapshotControl.unsub(this.memberSnapshotIndex)
+        snapshotControl.has(this.domainSnapshotIndex) && snapshotControl.unsub(this.domainSnapshotIndex)
+        snapshotControl.has(this.memberSnapshotIndex) && snapshotControl.unsub(this.memberSnapshotIndex)
 
     }
 

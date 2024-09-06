@@ -152,10 +152,16 @@ class SubscriptionHandler {
     }
 
     async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData) {
+
+        // console.log('-------------------------------\n','SubscriptionHandler unsubscribeFromWorkboxRecord',
+        //     workboxSubscriptionControlData)
+
         const { workboxRecordPublishers } = this.publishers
         const 
             workboxID = workboxSubscriptionControlData.workbox.id
 
+        // console.log('ONE workboxID, workboxRecordPublishers', 
+        //     workboxID, workboxRecordPublishers)
         if (!workboxRecordPublishers.has(workboxID)) {
             return
         }
@@ -163,10 +169,19 @@ class SubscriptionHandler {
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
         await workboxRecordPublisher.unSubscribe(workboxSubscriptionControlData)
 
+        // console.log('TWO workboxID, workboxRecordPublishers', 
+        //     workboxID, workboxRecordPublishers)
+
+        // console.log('workboxRecordPublisher.subscriptions', workboxRecordPublisher.subscriptions)
+
         if (!workboxRecordPublisher.subscriptions.size) {
-            await workboxRecordPublisher.closeSnapshot()
+            // console.log('closeSnapshot from SubscriptionHandler.unsubscribeFromWorkboxRecord', workboxID)
+            // console.log('deleting workboxRecordPublishers workboxID')
             workboxRecordPublishers.delete(workboxID)
+            await workboxRecordPublisher.closeSnapshot()
         }
+
+        // console.log('--------------------------\n')
 
     }
 
@@ -179,6 +194,7 @@ class SubscriptionHandler {
             const workboxID = workboxList[index]
             const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
             await workboxRecordPublisher.unSubscribeAll()
+            console.log('closeSnapshot from clearSubscriptionsToWorkboxRecords', workboxRecordPublishers)
             await workboxRecordPublisher.closeSnapshot()
         }
 
