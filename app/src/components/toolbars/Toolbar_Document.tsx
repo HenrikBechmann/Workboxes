@@ -236,7 +236,7 @@ const DocumentToolbar = (props) => {
                 <option value="note">Note</option>
                 <option value="image">Image</option>
                 <option value="video">Video</option>
-                <option audio="audio">Audio</option>
+                <option value="audio">Audio</option>
                 <option value="resource">Resource</option>
             </Select>
         </Box>
