@@ -49,6 +49,15 @@ const actionIconStyles = {
     float:'left',
 } as CSSProperties
 
+const alternateActionIconStyles = {
+    height: '24px',
+    width: '24px',
+    marginLeft: '-28px',
+    marginTop:'10px',
+    float:'left',
+    clear:'left',
+} as CSSProperties
+
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
 const BaseEdit = (props) => {
     
@@ -309,17 +318,17 @@ const DocumentBase = (props) => {
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
-        {(!['view', 'drag', 'remove'].includes(mode)) && 
+        {(!['view', 'drag', 'remove'].includes(mode)) && <>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
             </Box>
+            {baseEditState &&
+                <Box style = {alternateActionIconStyles} data-type = 'cancelbox'>
+                    <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
+                </Box>
+            }</>
         }
-        {baseEditState && <>
-            <Box float = 'right'>
-                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
-            </Box>
-            <BaseEdit />
-        </>}
+        {baseEditState && <BaseEdit />}
         {!baseEditState && <BaseDisplay documentBaseData = {documentBaseData}/>}
     </Box>
 }
