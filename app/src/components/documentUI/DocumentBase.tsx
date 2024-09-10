@@ -84,7 +84,8 @@ const BaseEdit = (props) => {
             image:false,
             summary:false,
         }),
-        invalidFieldFlags = invalidFieldFlagsRef.current
+        invalidFieldFlags = invalidFieldFlagsRef.current,
+        editor = useCreateBlockNote()
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -226,6 +227,9 @@ const BaseEdit = (props) => {
         </Flex>
         <Box>
             Summary:
+            <Box>
+                <BlockNoteView editor={editor} />
+            </Box>
         </Box>
     </Box>
 }
