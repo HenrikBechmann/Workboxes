@@ -185,7 +185,7 @@ export const UserProvider = ({children}) => {
         workspaceHandlerInstance.onFail = onFail
     },[])
     // initialize workspaceHandler with dispatchWorkspaceHandler function
-    useEffect(()=>{
+ useEffect(()=>{
         workspaceHandlerContext.current.setWorkspaceHandlerContext = setWorkspaceHandlerContext
         workspaceHandlerContext.current.usage = usage
     },[])
@@ -199,6 +199,8 @@ export const UserProvider = ({children}) => {
         authStateUnsubscribeRef.current = onAuthStateChanged(auth, async (user) => {
 
             let userAuthData = null
+
+            console.log('WorkboxesProvider.onAuthStateChanged: auth, user',auth, user)
 
             if (user) {
                 const 

@@ -61,6 +61,8 @@ const Signin = (props) => {
         getRedirectResult(auth)
             .then((result) => {
 
+                console.log('getRedirectResult', result)
+
                 if (result === null) {
 
                     return
