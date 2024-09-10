@@ -208,7 +208,7 @@ const BaseEdit = (props) => {
             </Box>
             <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
-                    <FormLabel fontSize = 'sm'>Workbox description:</FormLabel>
+                    <FormLabel fontSize = 'sm'>Description:</FormLabel>
                     <Textarea 
                         value = {editData.description || ''} 
                         size = 'sm'
@@ -252,13 +252,13 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 
     return <Box data-type = 'displaybase' padding = '3px'>
         <Box>
-            Name: {name}
+            Workbox Name: {name}
         </Box>
         <Box>
            Description: {description}
         </Box>
         <Box>
-           Image:
+           Thumbnail:
         </Box>
         <Box>
            Summary note: {summary}
