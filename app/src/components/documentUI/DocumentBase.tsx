@@ -228,7 +228,7 @@ const BaseEdit = (props) => {
             </Box>
         </Flex>
         <Box>
-            Summary:
+            Summary note:
             <Box>
                 <BlockNoteView editor={editor} onChange={() => {
                     setBlocks(editor.document);
@@ -261,7 +261,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
            Image:
         </Box>
         <Box>
-           Summary: {summary}
+           Summary note: {summary}
         </Box>
     </Box>
 }
