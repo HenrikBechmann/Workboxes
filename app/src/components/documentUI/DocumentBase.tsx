@@ -10,9 +10,13 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import { Block } from "@blocknote/core"
+import { Block, filterSuggestionItems } from "@blocknote/core"
 import "@blocknote/core/fonts/inter.css";
-import { useCreateBlockNote } from "@blocknote/react";
+import { 
+    getDefaultReactSlashMenuItems,
+    SuggestionMenuController,
+    useCreateBlockNote 
+} from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 
@@ -87,7 +91,8 @@ const BaseEdit = (props) => {
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current,
         editor = useCreateBlockNote(),
-        [blocks,setBlocks] = useState<Block[]>([])
+        [blocks,setBlocks] = useState<Block[]>([]),
+        customSlashMenuItemsRef = useRef([])
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -101,6 +106,16 @@ const BaseEdit = (props) => {
         isInvalidTests.summary(editData.summary ?? '')
 
         setEditState('checking')
+
+        const defaultSlashMenuItems = getDefaultReactSlashMenuItems(editor)
+        const customSlashMenuItems = defaultSlashMenuItems.filter((value) => {
+            const key = value['key']
+            // console.log('value.key, value', value['key'],value)
+            // return true
+            return !['image','video','audio' ].includes(key)
+        })
+        // console.log('customSlashMenuItems',customSlashMenuItems)
+         customSlashMenuItemsRef.current = customSlashMenuItems
 
     },[])
 
@@ -232,7 +247,13 @@ const BaseEdit = (props) => {
             <Box>
                 <BlockNoteView editor={editor} onChange={() => {
                     setBlocks(editor.document);
-                }}/>
+                    }} slashMenu = {false}><SuggestionMenuController
+                        triggerCharacter={"/"}
+                        getItems={async (query) =>
+                          filterSuggestionItems(customSlashMenuItemsRef.current, query)
+                        }
+                    />
+                </BlockNoteView>
             </Box>
             <div>Document JSON:</div>
             <div className={"item bordered"}>
