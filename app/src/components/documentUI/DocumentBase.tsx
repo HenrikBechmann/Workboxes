@@ -10,6 +10,7 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
+import { Block } from "@blocknote/core"
 import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
@@ -85,7 +86,8 @@ const BaseEdit = (props) => {
             summary:false,
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current,
-        editor = useCreateBlockNote()
+        editor = useCreateBlockNote(),
+        [blocks,setBlocks] = useState<Block[]>([])
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -228,8 +230,16 @@ const BaseEdit = (props) => {
         <Box>
             Summary:
             <Box>
-                <BlockNoteView editor={editor} />
+                <BlockNoteView editor={editor} onChange={() => {
+                    setBlocks(editor.document);
+                }}/>
             </Box>
+            <div>Document JSON:</div>
+            <div className={"item bordered"}>
+                <pre>
+                    <code>{JSON.stringify(blocks, null, 2)}</code>
+                </pre>
+            </div>
         </Box>
     </Box>
 }
