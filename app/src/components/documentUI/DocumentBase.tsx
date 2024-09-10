@@ -90,9 +90,13 @@ const BaseEdit = (props) => {
             summary:false,
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current,
-        editor = useCreateBlockNote(),
-        [blocks,setBlocks] = useState<Block[]>([]),
+        editor = useCreateBlockNote({initialContent:editData.summary, trailingBlock:false}),
+        [blocks,setBlocks] = useState<Block[]>(editData.summary),
         customSlashMenuItemsRef = useRef([])
+
+    editData.summary = blocks
+
+    // console.log('changed editData.summary', editData.summary)
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -103,7 +107,7 @@ const BaseEdit = (props) => {
         isInvalidTests.name(editData.name ?? '')
         isInvalidTests.description(editData.description ?? '')
         isInvalidTests.image(editData.image ?? '')
-        isInvalidTests.summary(editData.summary ?? '')
+        isInvalidTests.summary(editData.summary)
 
         setEditState('checking')
 
@@ -255,21 +259,23 @@ const BaseEdit = (props) => {
                     />
                 </BlockNoteView>
             </Box>
-            <div>Document JSON:</div>
-            <div className={"item bordered"}>
-                <pre>
-                    <code>{JSON.stringify(blocks, null, 2)}</code>
-                </pre>
-            </div>
         </Box>
     </Box>
 }
 
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
-    const {documentBaseData} = props
+    const 
+        {documentBaseData} = props,
+        { name, description, image, summary } = documentBaseData,
+        editor = useCreateBlockNote({initialContent:summary}),
+        previousBlocksRef = useRef(summary)
 
-    const { name, description, image, summary } = documentBaseData
+    // console.log('documentBaseData', summary, documentBaseData)
+
+    editor.replaceBlocks(previousBlocksRef.current, summary)
+
+    previousBlocksRef.current = summary
 
     return <Box data-type = 'displaybase' padding = '3px'>
         <Box>
@@ -282,7 +288,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
            Thumbnail:
         </Box>
         <Box>
-           Summary note: {summary}
+           Summary note: <BlockNoteView editor={editor} editable = {false} />
         </Box>
     </Box>
 }
