@@ -268,7 +268,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
     const 
         {documentBaseData} = props,
         { name, description, image, summary } = documentBaseData,
-        editor = useCreateBlockNote({initialContent:summary})
+        editor = useCreateBlockNote({initialContent:summary, trailingBlock:false})
 
     useEffect(()=>{
 
