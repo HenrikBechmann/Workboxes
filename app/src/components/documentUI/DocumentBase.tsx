@@ -268,16 +268,13 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
     const 
         {documentBaseData} = props,
         { name, description, image, summary } = documentBaseData,
-        editor = useCreateBlockNote({initialContent:summary}),
-        previousBlocksRef = useRef(null)
+        editor = useCreateBlockNote({initialContent:summary})
 
-    // console.log('documentBaseData', summary, documentBaseData)
+    useEffect(()=>{
 
-    // console.log('previousBlocksRef.current, summary',previousBlocksRef.current, summary)
+        editor.replaceBlocks(editor.document,summary)
 
-    if (previousBlocksRef.current) editor.replaceBlocks(previousBlocksRef.current, summary)
-
-    previousBlocksRef.current = summary
+    },[summary])
 
     return <Box data-type = 'displaybase' padding = '3px'>
         <Box>
