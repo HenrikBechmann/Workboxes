@@ -38,6 +38,12 @@ const GeneralRouteController = (props) => {
         // return
     }
 
+    console.log('userAuthData, userRecordx', userAuthData, userRecords)
+
+    // if (!userAuthData && !userRecords.user) {
+    //     return <Box> Setup... </Box>
+    // }
+
     if (userAuthData === undefined) {
 
         return <Box> Loading... </Box>

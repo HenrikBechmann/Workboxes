@@ -15,7 +15,7 @@ import "@blocknote/core/fonts/inter.css";
 import { 
     getDefaultReactSlashMenuItems,
     SuggestionMenuController,
-    useCreateBlockNote 
+    useCreateBlockNote
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
@@ -90,8 +90,8 @@ const BaseEdit = (props) => {
             summary:false,
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current,
-        editor = useCreateBlockNote({initialContent:editData.summary, trailingBlock:false}),
-        [blocks,setBlocks] = useState<Block[]>(editData.summary),
+        editor = useCreateBlockNote({initialContent:editData.summary || [{}], trailingBlock:false}),
+        [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
         customSlashMenuItemsRef = useRef([])
 
     editData.summary = blocks
@@ -269,11 +269,13 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         {documentBaseData} = props,
         { name, description, image, summary } = documentBaseData,
         editor = useCreateBlockNote({initialContent:summary}),
-        previousBlocksRef = useRef(summary)
+        previousBlocksRef = useRef(null)
 
     // console.log('documentBaseData', summary, documentBaseData)
 
-    editor.replaceBlocks(previousBlocksRef.current, summary)
+    // console.log('previousBlocksRef.current, summary',previousBlocksRef.current, summary)
+
+    if (previousBlocksRef.current) editor.replaceBlocks(previousBlocksRef.current, summary)
 
     previousBlocksRef.current = summary
 

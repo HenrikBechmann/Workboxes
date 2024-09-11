@@ -200,7 +200,7 @@ export const UserProvider = ({children}) => {
 
             let userAuthData = null
 
-            // console.log('WorkboxesProvider.onAuthStateChanged: auth, user',auth, user)
+            console.log('WorkboxesProvider.onAuthStateChanged: auth, user',auth, user)
 
             if (user) {
                 const 

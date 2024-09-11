@@ -3,7 +3,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams, useLocation, NavLink } from 'react-router-dom'
-import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, getAdditionalUserInfo } from "firebase/auth"
+import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult, getAdditionalUserInfo } from "firebase/auth"
 import { 
     Card, CardHeader, CardBody, CardFooter,
     Box, VStack, HStack, StackDivider, Center,
@@ -55,15 +55,15 @@ const Signin = (props) => {
 
     },[userAuthData])
 
+    async function getRedirect() {
 
-    useEffect (()=>{
+        await getRedirectResult(auth)
+        
+            .then((user) => {
 
-        getRedirectResult(auth)
-            .then((result) => {
+                console.log('getRedirectResult', user, auth)
 
-                console.log('getRedirectResult', result)
-
-                if (result === null) {
+                if (user === null) {
 
                     return
 
@@ -74,7 +74,7 @@ const Signin = (props) => {
                 // const user = result.user
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
-                if (result) { //(userRef.current) {
+                if (user) { //(userRef.current) {
 
                     // const credential = GoogleAuthProvider.credentialFromResult(result)
                     // const additionalInfo = getAdditionalUserInfo(result)
@@ -112,12 +112,96 @@ const Signin = (props) => {
                 // const credential = GoogleAuthProvider.credentialFromError(error);
             });
 
+    }
+
+
+    useEffect (()=>{
+
+        getRedirect()
+
+        // getRedirectResult(auth)
+        //     .then((result) => {
+
+        //         console.log('getRedirectResult', result)
+
+        //         if (result === null) {
+
+        //             return
+
+        //         }
+
+        //         // additional properties if needed
+        //         // const token = credential.accessToken
+        //         // const user = result.user
+        //         // IdP data available using getAdditionalUserInfo(result)
+        //         // ...
+        //         if (result) { //(userRef.current) {
+
+        //             // const credential = GoogleAuthProvider.credentialFromResult(result)
+        //             // const additionalInfo = getAdditionalUserInfo(result)
+        //             // console.log('credential, additionalInfo',credential, additionalInfo)
+        //             // setSigninState('signedin')
+        //             navigate(from)
+
+        //         }
+
+        //     }).catch((error) => {
+
+        //         console.log('signin error', error)
+
+        //         try {
+        //             const jsonstring = error.message.match(/\{(.*)\}/)[0]
+        //             const json = JSON.parse(jsonstring)
+        //             const errorStatus = json.error?.status
+        //             if (errorStatus == 'PERMISSION_DENIED') {
+        //                 json.error.status = 'Sorry, permission is denied.'
+        //             }
+        //             setErrorState(json)
+        //         } catch(e) {
+
+        //             console.log('e', e)
+        //             errorControlRef.current.push({description: 'error interpreting server error',error:e})
+        //             navigate('/error',{replace:true})
+
+        //         }
+        //         // Handle Errors here.
+        //         // const errorCode = error.code;
+        //         // const errorMessage = error.message;
+        //         // // The email of the user's account used.
+        //         // const email = error.customData?.email;
+        //         // // The AuthCredential type that was used.
+        //         // const credential = GoogleAuthProvider.credentialFromError(error);
+        //     });
+
     },[])
 
     const signInWithGoogle = () => {
 
-        signInWithRedirect(auth, provider)
+        // signInWithRedirect(auth, provider)
+        // signInWithPopup(auth, provider)
 
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            // IdP data available using getAdditionalUserInfo(result)
+            // ...
+            if (user) {
+                navigate(from)
+            }
+          }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+          });
     }
 
     if (userAuthData === undefined) { // signin in progress
