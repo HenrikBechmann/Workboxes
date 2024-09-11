@@ -55,69 +55,68 @@ const Signin = (props) => {
 
     },[userAuthData])
 
-    async function getRedirect() {
+    // async function getRedirect() {
 
-        await getRedirectResult(auth)
+    //     await getRedirectResult(auth)
         
-            .then((user) => {
+    //         .then((user) => {
 
-                console.log('getRedirectResult', user, auth)
+    //             console.log('getRedirectResult', user, auth)
 
-                if (user === null) {
+    //             if (user === null) {
 
-                    return
+    //                 return
 
-                }
+    //             }
 
-                // additional properties if needed
-                // const token = credential.accessToken
-                // const user = result.user
-                // IdP data available using getAdditionalUserInfo(result)
-                // ...
-                if (user) { //(userRef.current) {
+    //             // additional properties if needed
+    //             // const token = credential.accessToken
+    //             // const user = result.user
+    //             // IdP data available using getAdditionalUserInfo(result)
+    //             // ...
+    //             if (user) { //(userRef.current) {
 
-                    // const credential = GoogleAuthProvider.credentialFromResult(result)
-                    // const additionalInfo = getAdditionalUserInfo(result)
-                    // console.log('credential, additionalInfo',credential, additionalInfo)
-                    // setSigninState('signedin')
-                    navigate(from)
+    //                 // const credential = GoogleAuthProvider.credentialFromResult(result)
+    //                 // const additionalInfo = getAdditionalUserInfo(result)
+    //                 // console.log('credential, additionalInfo',credential, additionalInfo)
+    //                 // setSigninState('signedin')
+    //                 navigate(from)
 
-                }
+    //             }
 
-            }).catch((error) => {
+    //         }).catch((error) => {
 
-                console.log('signin error', error)
+    //             console.log('signin error', error)
 
-                try {
-                    const jsonstring = error.message.match(/\{(.*)\}/)[0]
-                    const json = JSON.parse(jsonstring)
-                    const errorStatus = json.error?.status
-                    if (errorStatus == 'PERMISSION_DENIED') {
-                        json.error.status = 'Sorry, permission is denied.'
-                    }
-                    setErrorState(json)
-                } catch(e) {
+    //             try {
+    //                 const jsonstring = error.message.match(/\{(.*)\}/)[0]
+    //                 const json = JSON.parse(jsonstring)
+    //                 const errorStatus = json.error?.status
+    //                 if (errorStatus == 'PERMISSION_DENIED') {
+    //                     json.error.status = 'Sorry, permission is denied.'
+    //                 }
+    //                 setErrorState(json)
+    //             } catch(e) {
 
-                    console.log('e', e)
-                    errorControlRef.current.push({description: 'error interpreting server error',error:e})
-                    navigate('/error',{replace:true})
+    //                 console.log('e', e)
+    //                 errorControlRef.current.push({description: 'error interpreting server error',error:e})
+    //                 navigate('/error',{replace:true})
 
-                }
-                // Handle Errors here.
-                // const errorCode = error.code;
-                // const errorMessage = error.message;
-                // // The email of the user's account used.
-                // const email = error.customData?.email;
-                // // The AuthCredential type that was used.
-                // const credential = GoogleAuthProvider.credentialFromError(error);
-            });
+    //             }
+    //             // Handle Errors here.
+    //             // const errorCode = error.code;
+    //             // const errorMessage = error.message;
+    //             // // The email of the user's account used.
+    //             // const email = error.customData?.email;
+    //             // // The AuthCredential type that was used.
+    //             // const credential = GoogleAuthProvider.credentialFromError(error);
+    //         });
 
-    }
-
+    // }
 
     useEffect (()=>{
 
-        getRedirect()
+        // getRedirect()
 
         // getRedirectResult(auth)
         //     .then((result) => {
