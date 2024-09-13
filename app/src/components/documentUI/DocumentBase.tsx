@@ -251,14 +251,34 @@ const BaseEdit = (props) => {
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image:
-                <HStack padding = '3px'>
-                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
-                        upload <img width = '24px' src = {tapIcon}/> <img width = '24px' src = {dropIcon} /></Box>
-                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
-                        embed <img width = '24px' src = {tapIcon}/> <img width = '24px' src = {dropIcon} /></Box>
-                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
-                        resource <img width = '24px' src = {dropIcon} /></Box>
-                </HStack>
+                <Flex>
+                    <Flex style = {{
+                        alignItems:'center',
+                        padding: '3px',
+                        width: '130px',
+                        border: '1px solid silver',
+                        opacity: 0.5}}>
+                        <span>upload</span> 
+                        <img width = '18px' height = '18px' src = {tapIcon}/> 
+                        <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
+                    <Flex style = {{
+                        alignItems:'center',
+                        padding: '3px',
+                        width: '130px',
+                        border: '1px solid silver',
+                        opacity: 0.5}}>
+                        <span>embed</span> 
+                        <img  width = '18px' height = '18px' src = {tapIcon}/> 
+                        <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
+                    <Flex style = {{
+                        alignItems:'center',
+                        padding: '3px',
+                        width: '130px',
+                        border: '1px solid silver',
+                        opacity: 0.5}}>
+                        <span>resource</span> 
+                        <img width = '18px' height = '18px' src = {dropIcon} /></Flex>
+                </Flex>
             </Box>
         </Flex>
         <Box>
