@@ -6,7 +6,7 @@ import React, {useRef, useState, useEffect, CSSProperties} from 'react'
 import {
     Box,
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
-    Flex,
+    Flex, HStack,
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
@@ -19,6 +19,8 @@ import {
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+
+import { useDrop } from 'react-dnd'
 
 import {useDropzone} from 'react-dropzone'
 import ReactCrop from 'react-image-crop'
@@ -67,6 +69,7 @@ const alternateActionIconStyles = {
 const BaseEdit = (props) => {
     
     const 
+        // [dropA, dropB] = useDrop({accept:'ANY'}),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editData = workboxHandler.editRecord.document.base,
         [editState,setEditState] = useState('setup'),
@@ -93,6 +96,8 @@ const BaseEdit = (props) => {
         editor = useCreateBlockNote({initialContent:editData.summary || [{}], trailingBlock:false}),
         [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
         customSlashMenuItemsRef = useRef([])
+
+    // console.log('dropA, dropB', dropA, dropB)
 
     editData.summary = blocks
 
@@ -244,9 +249,11 @@ const BaseEdit = (props) => {
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image:
-                <Box border = '1px solid silver' opacity = {0.5}>drop or tap for upload</Box>
-                <Box mt = '5px' border = '1px solid silver' opacity = {0.5}>drop or tap for embed</Box>
-                <Box mt = '5px' border = '1px solid silver' opacity = {0.5}>drop a resource</Box>
+                <HStack>
+                    <Box width = '130px' border = '1px solid silver' opacity = {0.5}>upload: drop or tap</Box>
+                    <Box width = '130px' mt = '5px' border = '1px solid silver' opacity = {0.5}>embed: drop or tap</Box>
+                    <Box width = '130px' mt = '5px' border = '1px solid silver' opacity = {0.5}>resource: drop</Box>
+                </HStack>
             </Box>
         </Flex>
         <Box>
