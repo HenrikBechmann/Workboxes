@@ -34,6 +34,37 @@ import SnapshotControl from '../classes/SnapshotControl'
 import WorkspaceHandler from '../classes/WorkspaceHandler'
 import Usage from '../classes/Usage'
 
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend, NativeTypes } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
+import ismobile from 'is-mobile'
+
+const isMobile = ismobile({featureDetect: true, tablet: true})
+
+const DndBackend = 
+    isMobile
+        ? TouchBackend
+        : HTML5Backend
+
+// recommended by TouchBackend...
+const hasNativeElementsFromPoint =
+  document && (document['elementsFromPoint'] || document['msElementsFromPoint'])
+
+function getDropTargetElementsAtPoint(x, y, dropTargets) {
+  return dropTargets.filter((t) => {
+    const rect = t.getBoundingClientRect()
+    return (
+      x >= rect.left && x <= rect.right && y <= rect.bottom && y >= rect.top
+    )
+  })
+}
+
+const backendOptions = {
+
+  getDropTargetElementsAtPoint: !hasNativeElementsFromPoint && getDropTargetElementsAtPoint
+
+}
+
 // =============================[ global ]============================
 
 const 
@@ -872,8 +903,9 @@ export const UserProvider = ({children}) => {
         setUserState('baserecordscreated')
 
     }
-
+    // add props context={window} for 2 html backend error.
     return (
+        <DndProvider backend={DndBackend} options = {backendOptions} context = {window}>
         <UsageContext.Provider value = {usage}>
         <ErrorControlContext.Provider value = {errorArray}>
         <SnapshotControlContext.Provider value = {snapshotControl}>
@@ -889,6 +921,7 @@ export const UserProvider = ({children}) => {
         </SnapshotControlContext.Provider>
         </ErrorControlContext.Provider>
         </UsageContext.Provider>
+        </DndProvider>
     )
 
 } // UserProvider
