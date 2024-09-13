@@ -244,6 +244,9 @@ const BaseEdit = (props) => {
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image:
+                <Box border = '1px solid silver' opacity = {0.5}>drop or tap for upload</Box>
+                <Box mt = '5px' border = '1px solid silver' opacity = {0.5}>drop or tap for embed</Box>
+                <Box mt = '5px' border = '1px solid silver' opacity = {0.5}>drop a resource</Box>
             </Box>
         </Flex>
         <Box>
