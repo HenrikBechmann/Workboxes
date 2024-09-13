@@ -37,6 +37,8 @@ import saveIcon from '../../../assets/save.png'
 import removeIcon from '../../../assets/close.png'
 import dragIcon from '../../../assets/drag.png'
 import cancelEditIcon from '../../../assets/edit_off.png'
+import tapIcon from '../../../assets/tap.png'
+import dropIcon from '../../../assets/drop.png'
 
 const baseStyles = {
 
@@ -249,10 +251,13 @@ const BaseEdit = (props) => {
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image:
-                <HStack>
-                    <Box width = '130px' border = '1px solid silver' opacity = {0.5}>upload: drop or tap</Box>
-                    <Box width = '130px' mt = '5px' border = '1px solid silver' opacity = {0.5}>embed: drop or tap</Box>
-                    <Box width = '130px' mt = '5px' border = '1px solid silver' opacity = {0.5}>resource: drop</Box>
+                <HStack padding = '3px'>
+                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
+                        upload <img width = '24px' src = {tapIcon}/> <img width = '24px' src = {dropIcon} /></Box>
+                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
+                        embed <img width = '24px' src = {tapIcon}/> <img width = '24px' src = {dropIcon} /></Box>
+                    <Box padding = '3px' display = 'flex' width = '130px' border = '1px solid silver' opacity = {0.5}>
+                        resource <img width = '24px' src = {dropIcon} /></Box>
                 </HStack>
             </Box>
         </Flex>
