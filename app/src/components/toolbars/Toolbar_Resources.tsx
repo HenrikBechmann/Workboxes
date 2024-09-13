@@ -29,6 +29,7 @@ import resourcesIcon from '../../../assets/resources.png'
 import filterIcon from '../../../assets/filter.png'
 import sortIcon from '../../../assets/sort.png'
 import directionIcon from '../../../assets/direction.png'
+import spreadIcon from '../../../assets/spread.png'
 import moveIcon from '../../../assets/move.png'
 import hideIcon from '../../../assets/expand_less.png'
 import arrowbackIcon from '../../../assets/arrow_back.png'
@@ -70,6 +71,11 @@ const ResourcesToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         resourcesConfig = workboxHandler.settings.resources,
         modeSettings = workboxHandler.session.resources.modesettings,
+        spreadSettingsRef = useRef({select: false, disabled: false}),
+        onSpread = (value) => {
+            spreadSettingsRef.current.select = !spreadSettingsRef.current.select
+            dispatchWorkboxHandler()
+        },
         onNormal = (value) => {
             modeSettings.view.select = true
             modeSettings.drill.select = false
@@ -173,6 +179,14 @@ const ResourcesToolbar = (props) => {
             settings:modeSettings.drag,
             is_radio: true,
             callback: onDrag
+        }),
+        spreadToggle = useToggleIcon({
+            icon:spreadIcon,
+            tooltip:'toggle vertical/horizontal',
+            caption:'spread',
+            settings:spreadSettingsRef.current,
+            is_radio: false,
+            callback: onSpread
         })
 
     // emptylistIcon is the wrong size for some reason; needs to be coerced
@@ -212,14 +226,14 @@ const ResourcesToolbar = (props) => {
         { removeToggle }
         { dragToggle }
         <ToolbarVerticalDivider />
-        <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'spread' tooltip = 'horizontal view'/>
+        { spreadToggle }
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}
 
     </Box>
 }
-
+        // <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'spread' tooltip = 'horizontal view'/>
         // <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
         // <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>
 

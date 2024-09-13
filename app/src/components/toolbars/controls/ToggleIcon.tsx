@@ -26,6 +26,8 @@ const iconToggleStyles = {
 
 const ToggleIcon = (props) => {
 
+    // console.log('toggleIcon props', props)
+
     const 
         { toggleOn, disabled, callback, icon, tooltip, caption , is_radio = false} = props,
         toggleValueRef = useRef(toggleOn),
