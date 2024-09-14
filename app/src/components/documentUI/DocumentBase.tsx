@@ -213,7 +213,7 @@ const BaseEdit = (props) => {
             color = 'gray' 
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
-        >--- Base section ---</Heading>
+        >--- About this workbox ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
