@@ -220,12 +220,11 @@ const ResourcesToolbar = (props) => {
         <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         { normalToggle }
-        { drillToggle }
         { addToggle }
         { editToggle }
         { removeToggle }
-        { dragToggle }
         <ToolbarVerticalDivider />
+        { dragToggle }
         { spreadToggle }
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
@@ -233,6 +232,7 @@ const ResourcesToolbar = (props) => {
 
     </Box>
 }
+        // { drillToggle }
         // <StandardIcon icon = {directionIcon} iconStyles = {{transform:'rotate(90deg)'}} caption = 'spread' tooltip = 'horizontal view'/>
         // <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter items'/>
         // <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort items'/>

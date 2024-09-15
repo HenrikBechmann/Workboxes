@@ -248,7 +248,7 @@ const DocumentToolbar = (props) => {
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}
-
+        
     </Box>
 }
 
