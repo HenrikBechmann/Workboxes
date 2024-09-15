@@ -234,9 +234,7 @@ const DocumentToolbar = (props) => {
         <Box style = {selectStyles} width = {selectwidth} >
             <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
-                <option value="image">Image</option>
-                <option value="video">Video</option>
-                <option value="audio">Audio</option>
+                <option value="image">Media</option>
                 <option value="file">File</option>
                 <option value="resource">Resource</option>
             </Select>
