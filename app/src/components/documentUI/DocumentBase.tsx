@@ -10,15 +10,15 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import { Block, filterSuggestionItems } from "@blocknote/core"
-import "@blocknote/core/fonts/inter.css";
-import { 
-    getDefaultReactSlashMenuItems,
-    SuggestionMenuController,
-    useCreateBlockNote
-} from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
+// import { Block, filterSuggestionItems } from "@blocknote/core"
+// import "@blocknote/core/fonts/inter.css";
+// import { 
+//     getDefaultReactSlashMenuItems,
+//     SuggestionMenuController,
+//     useCreateBlockNote
+// } from "@blocknote/react";
+// import { BlockNoteView } from "@blocknote/mantine";
+// import "@blocknote/mantine/style.css";
 
 import { useDrop } from 'react-dnd'
 
@@ -92,16 +92,16 @@ const BaseEdit = (props) => {
             name:false,
             description:false,
             image:false,
-            summary:false,
+            todo:false,
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current,
-        editor = useCreateBlockNote({initialContent:editData.summary || [{}], trailingBlock:false}),
-        [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
+        // editor = useCreateBlockNote({initialContent:editData.summary || [{}], trailingBlock:false}),
+        // [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
         customSlashMenuItemsRef = useRef([])
 
     // console.log('dropA, dropB', dropA, dropB)
 
-    editData.summary = blocks
+    // editData.summary = blocks
 
     // console.log('changed editData.summary', editData.summary)
 
@@ -114,19 +114,19 @@ const BaseEdit = (props) => {
         isInvalidTests.name(editData.name ?? '')
         isInvalidTests.description(editData.description ?? '')
         isInvalidTests.image(editData.image ?? '')
-        isInvalidTests.summary(editData.summary)
+        isInvalidTests.todo(editData.todo)
 
         setEditState('checking')
 
-        const defaultSlashMenuItems = getDefaultReactSlashMenuItems(editor)
-        const customSlashMenuItems = defaultSlashMenuItems.filter((value) => {
-            const key = value['key']
-            // console.log('value.key, value', value['key'],value)
-            // return true
-            return !['image','video','audio' ].includes(key)
-        })
+        // const defaultSlashMenuItems = getDefaultReactSlashMenuItems(editor)
+        // const customSlashMenuItems = defaultSlashMenuItems.filter((value) => {
+        //     const key = value['key']
+        //     // console.log('value.key, value', value['key'],value)
+        //     // return true
+        //     return !['image','video','audio' ].includes(key)
+        // })
         // console.log('customSlashMenuItems',customSlashMenuItems)
-         customSlashMenuItemsRef.current = customSlashMenuItems
+         // customSlashMenuItemsRef.current = customSlashMenuItems
 
     },[])
 
@@ -152,6 +152,14 @@ const BaseEdit = (props) => {
                 value = target.value
             isInvalidTests.description(value)
             editData.description = value
+            setEditState('validating')
+        },
+        todo:(event) => {
+            const
+                target = event.target as HTMLInputElement,
+                value = target.value
+            isInvalidTests.todo(value)
+            editData.todo = value
             setEditState('validating')
         },
     }
@@ -200,7 +208,7 @@ const BaseEdit = (props) => {
 
             return isInvalid
         },
-        summary:(value) => {
+        todo:(value) => {
             let isInvalid = false
 
             return isInvalid
@@ -215,6 +223,23 @@ const BaseEdit = (props) => {
             backgroundColor = '#F0F0F0'
         >--- About this workbox ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+            <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                    <FormLabel fontSize = 'sm'>To do:</FormLabel>
+                    <Textarea 
+                        value = {editData.todo || ''} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.todo}
+                    >
+                    </Textarea>
+                    <FormErrorMessage>
+                        {errorMessages.description} Current length is {editData.todo?.length || '0 (blank)'}.
+                    </FormErrorMessage>
+                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                        {helperText.description} Current length is {editData.todo?.length || '0 (blank)'}.
+                    </FormHelperText>
+                </FormControl>
+            </Box>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
@@ -281,48 +306,40 @@ const BaseEdit = (props) => {
                 </Flex>
             </Box>
         </Flex>
-        <Box>
-            Summary note:
-            <Box>
-                <BlockNoteView editor={editor} onChange={() => {
-                    setBlocks(editor.document);
-                    }} slashMenu = {false}><SuggestionMenuController
-                        triggerCharacter={"/"}
-                        getItems={async (query) =>
-                          filterSuggestionItems(customSlashMenuItemsRef.current, query)
-                        }
-                    />
-                </BlockNoteView>
-            </Box>
-        </Box>
     </Box>
 }
 
+// <BlockNoteView editor={editor} onChange={() => {
+//     setBlocks(editor.document);
+//     }} slashMenu = {false}><SuggestionMenuController
+//         triggerCharacter={"/"}
+//         getItems={async (query) =>
+//           filterSuggestionItems(customSlashMenuItemsRef.current, query)
+//         }
+//     />
+// </BlockNoteView>
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
     const 
         {documentBaseData} = props,
-        { name, description, image, summary } = documentBaseData,
-        editor = useCreateBlockNote({initialContent:summary, trailingBlock:false})
+        { name, description, image, todo } = documentBaseData
+        // editor = useCreateBlockNote({initialContent:summary, trailingBlock:false})
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        editor.replaceBlocks(editor.document,summary)
+    //     editor.replaceBlocks(editor.document,summary)
 
-    },[summary])
+    // },[summary])
 
     return <Box data-type = 'displaybase' padding = '3px'>
-        <Box>
-            Workbox Name: {name}
+        { todo && <Box border = '1px solid silver'>
+           To do: {todo}
+        </Box>}
+        <Box fontWeight = 'bold'>
+            {name}
         </Box>
-        <Box>
-           Description: {description}
-        </Box>
-        <Box>
-           Thumbnail:
-        </Box>
-        <Box>
-           Summary note: <BlockNoteView editor={editor} editable = {false} />
+        <Box fontStyle = 'italic'>
+           {description}
         </Box>
     </Box>
 }

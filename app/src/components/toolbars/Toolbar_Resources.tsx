@@ -213,7 +213,7 @@ const ResourcesToolbar = (props) => {
         // { moveToggle }
         // { selectToggle }
     // render
-    return <Box data-type = 'document-toolbar' style = {resourcesToolbarStyles}>
+    return <Box data-type = 'resource-toolbar' style = {resourcesToolbarStyles}>
     
         <MenuIcon icon = {resourcesIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {resourcesmenulist} />
         <ToolbarVerticalDivider />

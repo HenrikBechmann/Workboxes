@@ -35,6 +35,8 @@ import {
     Grid, GridItem 
 } from '@chakra-ui/react'
 
+import { useDragDropManager } from 'react-dnd'
+
 import {RigsDnd as Scroller} from 'react-infinite-grid-scroller'
 
 import '../../system/panel-variables.css'
@@ -65,11 +67,14 @@ const Workspace = (props) => {
         // resources
         workspaceFrameElementRef = useRef(null), // for resizeObserver
         panelComponentListRef = useRef(null), // workspace children, viewd in workpanel scroller
+        // dragDropManager = useDragDropManager(),
 
         // required scroller property
         scrollerAcceptsRef = useRef({accept:[]}) //static, no anticipated direct child scrollers
 
     workspaceHandler.panelSelection = panelSelection // always up to date
+
+    // console.log('dragDropManager', dragDropManager)
 
     // ---------------------------[ state change effects ]------------------------
 
