@@ -33,7 +33,7 @@ import SideIcon from '../toolbars/controls/SideIcon'
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
-import saveIcon from '../../../assets/save.png'
+import saveIcon from '../../../assets/check.png'
 import removeIcon from '../../../assets/close.png'
 import dragIcon from '../../../assets/drag.png'
 import cancelEditIcon from '../../../assets/edit_off.png'
