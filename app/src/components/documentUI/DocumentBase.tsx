@@ -88,7 +88,7 @@ const BaseEdit = (props) => {
         helperText = {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
-            todo:`The to do field holds notes for administrators`,
+            todo:`The to do field holds notes for administrators.`,
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -223,11 +223,11 @@ const BaseEdit = (props) => {
             color = 'gray' 
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
-        >--- About this workbox ---</Heading>
+        >--- Workbox basics ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
-                    <FormLabel fontSize = 'sm'>To do:</FormLabel>
+                    <FormLabel fontSize = 'sm'>To do notes:</FormLabel>
                     <Textarea 
                         value = {editData.todo || ''} 
                         size = 'sm'
