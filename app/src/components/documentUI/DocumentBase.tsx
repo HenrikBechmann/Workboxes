@@ -82,11 +82,13 @@ const BaseEdit = (props) => {
         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
         errorMessages = {
             name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
-            description:`The description can only be up to ${maxDescriptionLength} characters.`
+            description:`The description can only be up to ${maxDescriptionLength} characters.`,
+            todo: 'There are no limits to content'
         },
         helperText = {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
+            todo:`The to do field holds notes for administrators`,
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -224,7 +226,7 @@ const BaseEdit = (props) => {
         >--- About this workbox ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
                     <FormLabel fontSize = 'sm'>To do:</FormLabel>
                     <Textarea 
                         value = {editData.todo || ''} 
@@ -233,10 +235,10 @@ const BaseEdit = (props) => {
                     >
                     </Textarea>
                     <FormErrorMessage>
-                        {errorMessages.description} Current length is {editData.todo?.length || '0 (blank)'}.
+                        {errorMessages.todo} Current length is {editData.todo?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.description} Current length is {editData.todo?.length || '0 (blank)'}.
+                        {helperText.todo} Current length is {editData.todo?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
