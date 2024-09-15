@@ -35,7 +35,7 @@ const selectStyles = {
     display: 'inline-block',
     transition: 'width 0.5s',
     overflow: 'hidden',
-}
+} as CSSProperties
 
 import collectionIcon from '../../../assets/collection.png'
 import reorderIcon from '../../../assets/reorder.png'
@@ -81,7 +81,7 @@ const DocumentToolbar = (props) => {
 
     useEffect(()=>{
 
-            workboxHandler.session.document.insertselection = insertTypeRef.current.value
+        workboxHandler.session.document.insertselection = insertTypeRef.current.value
 
     },[])
 
@@ -220,6 +220,7 @@ const DocumentToolbar = (props) => {
     // render
 
     const selectwidth = (documentConfig.mode == 'insert')?'88px':0
+    const insertStyles = Object.assign({}, selectStyles, {width:selectwidth})
 
     // { dragToggle }
 
@@ -231,7 +232,7 @@ const DocumentToolbar = (props) => {
         <ToolbarVerticalDivider />
         { normalToggle }
         { addToggle }
-        <Box style = {selectStyles} width = {selectwidth} >
+        <Box style = {insertStyles}>
             <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
                 <option value="note">Note</option>
                 <option value="image">Media</option>
