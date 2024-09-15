@@ -335,8 +335,10 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>
-           <div style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do:</div>
-           <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+           <details>
+               <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
+               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+           </details>
         </Box>}
         <Box fontWeight = 'bold'>
             {name}
