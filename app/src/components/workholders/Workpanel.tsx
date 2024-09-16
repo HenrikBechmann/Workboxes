@@ -563,8 +563,8 @@ const Workpanel = (props:any) => {
             zOrder = nextZOrderRef.current
             windowData.window.zOrder = zOrder
 
-            windowComponentList.forEach((item)=>{
-                const component = item.props.children
+            windowComponentList.forEach((suspenseComponent)=>{
+                const component = suspenseComponent.props.children
                 const subjectSessionID = component.props.windowSessionID
                 if ( subjectSessionID !== windowSessionID) {
                     const 
@@ -574,7 +574,8 @@ const Workpanel = (props:any) => {
 
                     if (subjectZOrder > 0 && (subjectZOrder > previousZOrder)) {
                         subjectRecord.window.zOrder--
-                        windowComponentList[subjectIndex] = React.createElement(component, {zOrder: subjectZOrder - 1})
+                        const cloneComponent = React.createElement(component, {zOrder: subjectZOrder - 1})
+                        windowComponentList[subjectIndex] = React.createElement(suspenseComponent,{children:cloneComponent})
                     }
                 }
             })
@@ -637,8 +638,8 @@ const Workpanel = (props:any) => {
         } else {
             zOrder = nextZOrderRef.current
             windowData.window.zOrder = zOrder
-            windowComponentList.forEach((item)=>{
-                const component = item.props.children
+            windowComponentList.forEach((suspenseComponent)=>{
+                const component = suspenseComponent.props.children
                 // console.log('component.props.children',component.props.children.props)
                 const subjectSessionID = component.props.windowSessionID
                 if ( subjectSessionID !== windowSessionID) {
@@ -649,7 +650,8 @@ const Workpanel = (props:any) => {
 
                     if (subjectZOrder > 0 && (subjectZOrder > previousZOrder)) {
                         subjectRecord.window.zOrder--
-                        windowComponentList[subjectIndex] = React.createElement(component, {zOrder: subjectZOrder - 1})
+                        const cloneComponent = React.createElement(component, {zOrder: subjectZOrder - 1})
+                        windowComponentList[subjectIndex] = React.createElement(suspenseComponent, {childre:cloneComponent})
                     }
                 }
             })
