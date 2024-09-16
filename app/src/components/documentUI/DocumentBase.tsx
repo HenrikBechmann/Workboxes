@@ -10,18 +10,6 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-// import { Block, filterSuggestionItems } from "@blocknote/core"
-// import "@blocknote/core/fonts/inter.css";
-// import { 
-//     getDefaultReactSlashMenuItems,
-//     SuggestionMenuController,
-//     useCreateBlockNote
-// } from "@blocknote/react";
-// import { BlockNoteView } from "@blocknote/mantine";
-// import "@blocknote/mantine/style.css";
-
-import { useDrop } from 'react-dnd'
-
 import {useDropzone} from 'react-dropzone'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
@@ -71,7 +59,6 @@ const alternateActionIconStyles = {
 const BaseEdit = (props) => {
     
     const 
-        // [dropA, dropB] = useDrop({accept:'ANY'}),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editData = workboxHandler.editRecord.document.base,
         [editState,setEditState] = useState('setup'),
@@ -100,8 +87,6 @@ const BaseEdit = (props) => {
         // editor = useCreateBlockNote({initialContent:editData.summary || [{}], trailingBlock:false}),
         // [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
         customSlashMenuItemsRef = useRef([])
-
-    // console.log('dropA, dropB', dropA, dropB)
 
     // editData.summary = blocks
 
@@ -313,27 +298,11 @@ const BaseEdit = (props) => {
     </Box>
 }
 
-// <BlockNoteView editor={editor} onChange={() => {
-//     setBlocks(editor.document);
-//     }} slashMenu = {false}><SuggestionMenuController
-//         triggerCharacter={"/"}
-//         getItems={async (query) =>
-//           filterSuggestionItems(customSlashMenuItemsRef.current, query)
-//         }
-//     />
-// </BlockNoteView>
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
     const 
         {documentBaseData} = props,
         { name, description, image, todo } = documentBaseData
-        // editor = useCreateBlockNote({initialContent:summary, trailingBlock:false})
-
-    // useEffect(()=>{
-
-    //     editor.replaceBlocks(editor.document,summary)
-
-    // },[summary])
 
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>
