@@ -1,7 +1,7 @@
 // Toolbar_Document.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, useEffect, CSSProperties} from 'react'
+import React, {useState, useRef, useEffect, useMemo, CSSProperties} from 'react'
 
 import {
   Box, MenuList, MenuItem, Icon, Select
@@ -28,7 +28,6 @@ const documentToolbarStyles = {
     backgroundColor:'cornsilk',
     borderRadius:'8px 8px 0 0',
     // borderBottom:'1px solid silver',
-
 } as CSSProperties
 
 const selectStyles = {
@@ -220,7 +219,10 @@ const DocumentToolbar = (props) => {
     // render
 
     const selectwidth = (documentConfig.mode == 'insert')?'88px':0
-    const insertStyles = Object.assign({}, selectStyles, {width:selectwidth})
+
+    const insertStyles = useMemo(()=>{
+        return Object.assign({}, selectStyles, {width:selectwidth})
+    },[selectwidth])
 
     // { dragToggle }
 

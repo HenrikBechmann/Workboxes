@@ -1,7 +1,8 @@
 // DocumentContent.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { 
+import React, {
+    lazy,
     useRef, 
     useEffect, 
     useState, 
@@ -16,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 
 // import documentModules from './documentModules'
-import DocumentBase from './DocumentBase'
+const DocumentBase = lazy(()=>import('./DocumentBase'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 

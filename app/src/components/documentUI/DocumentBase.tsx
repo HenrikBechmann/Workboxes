@@ -227,7 +227,7 @@ const BaseEdit = (props) => {
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <details>
-                <summary style = {{ fontSize:'small'}}>To do notes</summary>
+                <summary style = {{fontSize:'small'}}>To do notes</summary>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
                     <Textarea 
                         value = {editData.todo || ''} 
