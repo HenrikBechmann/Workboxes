@@ -1,7 +1,7 @@
 // Toolbar_Standard.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect, lazy} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -20,12 +20,14 @@ import {
     useUsage,
 } from '../../system/WorkboxesProvider'
 
-import WorkspaceWriteDialog from '../dialogs/WorkspaceWriteDialog'
-import WorkspaceDeleteDialog from '../dialogs/WorkspaceDeleteDialog'
-import WorkspaceSaveDialog from '../dialogs/WorkspaceSaveDialog'
-import WorkspaceSaveAsDialog from '../dialogs/WorkspaceSaveAsDialog'
-import WorkspaceResetDialog from '../dialogs/WorkspaceResetDialog'
-import WorkspaceSetDefaultDialog from '../dialogs/WorkspaceSetDefaultDialog'
+const WorkspaceWriteDialog = lazy(() => import('../dialogs/WorkspaceWriteDialog'))
+const WorkspaceDeleteDialog = lazy(() => import('../dialogs/WorkspaceDeleteDialog'))
+const WorkspaceSaveDialog = lazy(() => import('../dialogs/WorkspaceSaveDialog'))
+const WorkspaceSaveAsDialog = lazy(() => import('../dialogs/WorkspaceSaveAsDialog'))
+const WorkspaceResetDialog = lazy(() => import('../dialogs/WorkspaceResetDialog'))
+const WorkspaceSetDefaultDialog = lazy(() => import('../dialogs/WorkspaceSetDefaultDialog'))
+
+import ToolbarVerticalDivider from './controls/VerticalDivider'
 
 import { isMobile } from '../../index'
 
@@ -34,8 +36,6 @@ import MenuIcon from './controls/MenuIcon'
 import MenuControl from './controls/MenuControl'
 import UserControl from './controls/UserControl'
 import StandardIcon from './controls/StandardIcon'
-import ToolbarVerticalDivider from './controls/VerticalDivider'
-
 import fireIcon from '../../../assets/workbox-logo.png'
 import notificationsIcon from '../../../assets/notifications.png'
 import chatIcon from '../../../assets/chat.png'

@@ -1,7 +1,7 @@
 // PanelCreateDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect, lazy} from 'react'
 
 import {
     Button, Text, Input, Select, Checkbox,
@@ -21,7 +21,7 @@ import {
     useUserRecords,
 } from '../../system/WorkboxesProvider'
 
-import Workpanel from '../workholders/Workpanel'
+const Workpanel = lazy(() => import('../workholders/Workpanel'))
 
 const PanelCreateDialog = (props) => {
 

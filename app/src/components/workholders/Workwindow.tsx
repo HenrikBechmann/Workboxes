@@ -15,7 +15,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, CSSProperties } from 'react'
+import React, { useState, useRef, useEffect, CSSProperties, lazy } from 'react'
 
 import {
     Grid, GridItem,
@@ -23,14 +23,14 @@ import {
 } from '@chakra-ui/react'
 
 // both Draggable and Resizable apply their dynamics to the existing wrapped element
-import Draggable from 'react-draggable'
+const Draggable = lazy(() => import('react-draggable'))
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
 // contains the titleName elements, and the dynamic controls
-import WindowTitle from './WindowTitle'
+const WindowTitle = lazy(() => import('./WindowTitle'))
 
 import dragCornerIcon from '../../../assets/drag-corner.png'
 

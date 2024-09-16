@@ -1,7 +1,7 @@
 // Toolbar_Worspace.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, useRef, useState, useEffect, CSSProperties} from 'react'
+import React, {useMemo, useRef, useState, useEffect, CSSProperties, lazy} from 'react'
 
 import { useWorkspaceHandler, useUserRecords } from '../../system/WorkboxesProvider'
 
@@ -13,13 +13,13 @@ import {
   MenuList, MenuGroup, MenuItem, MenuDivider, MenuItemOption, MenuOptionGroup, useToast,
 } from '@chakra-ui/react'
 
-import PanelRenameDialog from '../dialogs/PanelRenameDialog'
-import PanelResetDialog from '../dialogs/PanelResetDialog'
-import PanelDuplicateAsDialog from '../dialogs/PanelDuplicateAsDialog'
-import PanelDeleteDialog from '../dialogs/PanelDeleteDialog'
-import PanelCreateDialog from '../dialogs/PanelCreateDialog'
-import PanelSetDefaultDialog from '../dialogs/PanelSetDefaultDialog'
-import PanelReorderDialog from '../dialogs/PanelReorderDialog'
+const PanelRenameDialog = lazy(() => import('../dialogs/PanelRenameDialog'))
+const PanelResetDialog = lazy(() => import('../dialogs/PanelResetDialog'))
+const PanelDuplicateAsDialog = lazy(() => import('../dialogs/PanelDuplicateAsDialog'))
+const PanelDeleteDialog = lazy(() => import('../dialogs/PanelDeleteDialog'))
+const PanelCreateDialog = lazy(() => import('../dialogs/PanelCreateDialog'))
+const PanelSetDefaultDialog = lazy(() => import('../dialogs/PanelSetDefaultDialog'))
+const PanelReorderDialog = lazy(() => import('../dialogs/PanelReorderDialog'))
 
 import StandardIcon from './controls/StandardIcon'
 import DomainControl from './controls/DomainControl'

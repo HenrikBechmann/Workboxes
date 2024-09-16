@@ -26,7 +26,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, lazy} from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -43,9 +43,9 @@ import '../../system/panel-variables.css'
 
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 
-import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import WorkspaceToolbar from '../toolbars/Toolbar_Workspace'
-import Workpanel from './Workpanel'
+const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
+const WorkspaceToolbar = lazy(() => import('../toolbars/Toolbar_Workspace'))
+const Workpanel = lazy(() => import('./Workpanel'))
 
 import collectionIcon from '../../../assets/shelves.png'
 import notebookIcon from '../../../assets/notebook.png'
