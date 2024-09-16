@@ -1,7 +1,7 @@
 // Workpanel.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, CSSProperties, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback, CSSProperties, useMemo, lazy, startTransition, Suspense } from 'react'
 
 import {
     Box
@@ -9,7 +9,7 @@ import {
 
 import { cloneDeep as _cloneDeep } from 'lodash'
 
-import Workwindow from './Workwindow'
+const Workwindow = lazy(() => import('./Workwindow'))
 import Workbox from './../workbox/Workbox'
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
@@ -292,7 +292,7 @@ const Workpanel = (props:any) => {
             // required to configure window
             { viewDeclaration, zOrder, configuration, titleData } = windowData.window
 
-        return <Workwindow 
+        return <Suspense><Workwindow 
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
@@ -305,7 +305,7 @@ const Workpanel = (props:any) => {
             <Workbox 
                 workboxSettings = { windowData.workbox }
             />        
-        </Workwindow>
+        </Workwindow></Suspense>
     }
 
     // ----------------------------[ data callbacks ]--------------------------

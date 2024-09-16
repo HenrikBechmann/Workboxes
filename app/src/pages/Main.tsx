@@ -8,14 +8,14 @@
 
 */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
 
 import { useUserRecords, useWorkspaceHandler } from '../system/WorkboxesProvider'
 
-import Workspace from '../components/workholders/Workspace'
+const Workspace = lazy(() => import('../components/workholders/Workspace'))
 
 // Bootstrap: setupWorkspace() is called; after that loadWorkspace below for switches;
 //      switches are triggered by setWorkspaceSelection in Toolbar_Standard
