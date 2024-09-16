@@ -1,7 +1,7 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, CSSProperties} from 'react'
+import React, {useRef, useState, useEffect, CSSProperties, lazy} from 'react'
 
 import {
     Box,
@@ -11,13 +11,13 @@ import {
 } from '@chakra-ui/react'
 
 import {useDropzone} from 'react-dropzone'
-import ReactCrop from 'react-image-crop'
+const ReactCrop = lazy(() => import('react-image-crop'))
 import 'react-image-crop/dist/ReactCrop.css'
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-import SideIcon from '../toolbars/controls/SideIcon'
+const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'

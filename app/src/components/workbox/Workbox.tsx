@@ -1,7 +1,7 @@
 // Workbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'
 
 import {
     Box,
@@ -21,9 +21,10 @@ import {
 } from '../../system/WorkboxesProvider'
 import {cloneDeep as _cloneDeep} from 'lodash'
 
-import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import WorkboxToolbar from '../toolbars/Toolbar_Workbox'
-import ContentFrame, {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
+const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
+const WorkboxToolbar = lazy(() => import('../toolbars/Toolbar_Workbox'))
+const ContentFrame = lazy(() => import('./ContentFrame'))
+import {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
 
 export const WorkboxHandlerContext = createContext({current:null})
 

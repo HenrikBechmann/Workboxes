@@ -1,45 +1,45 @@
 // scaffold.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React from 'react'
+import React, { lazy } from 'react'
 
 // general support
-import Signin from '../pages/Signin'
+const Signin = lazy(()=> import('../pages/Signin'))
 
 // GeneralRouteController; GeneralLayout
-import GeneralRouteController from '../components/routing/GeneralRouteController'
+const GeneralRouteController = lazy(()=> import('../components/routing/GeneralRouteController'))
 // public
-import About from '../pages/About'
-import Workbox from '../pages/WorkboxShared'
-import NotFound from '../pages/NotFound'
-import ErrorPage from '../pages/ErrorPage'
+const About = lazy(()=> import('../pages/About'))
+const Workbox = lazy(()=> import('../pages/WorkboxShared'))
+const NotFound = lazy(()=> import('../pages/NotFound'))
+const ErrorPage = lazy(()=> import('../pages/ErrorPage'))
 
 // user support
-import UserRouteController from '../components/routing/UserRouteController'
-import UserRegistration from '../pages/UserRegistration' // TODO part of user support?
+const UserRouteController = lazy(()=> import('../components/routing/UserRouteController'))
+const UserRegistration = lazy(()=> import('../pages/UserRegistration')) // TODO part of user support?
 
-import UserLayout from '../components/routing/UserLayout'
-import Main from '../pages/Main'
-import Notices from '../pages/Notices'
-import Classifieds from '../pages/Classifieds'
+const UserLayout = lazy(()=> import('../components/routing/UserLayout'))
+const Main = lazy(()=> import('../pages/Main'))
+const Notices = lazy(()=> import('../pages/Notices'))
+const Classifieds = lazy(()=> import('../pages/Classifieds'))
 
-import Account from '../pages/Account'
-import Domains from '../pages/Domains'
-import Memberships from '../pages/Memberships'
-import Subscriptions from '../pages/Subscriptions'
+const Account = lazy(()=> import('../pages/Account'))
+const Domains = lazy(()=> import('../pages/Domains'))
+const Memberships = lazy(()=> import('../pages/Memberships'))
+const Subscriptions = lazy(()=> import('../pages/Subscriptions'))
 
-import Unauthorized from '../pages/Unauthorized'
+const Unauthorized = lazy(()=> import('../pages/Unauthorized'))
 
 // system support
-import AdminRouteController from '../components/routing/AdminRouteController'
+const AdminRouteController = lazy(()=> import('../components/routing/AdminRouteController'))
 
-import AdminLayout from '../components/routing/AdminLayout'
-import Sysadmin from '../pages/Sysadmin'
-import SysSettings from '../pages/SysSettings'
-import Metadata from '../pages/Metadata'
-import UserControls from '../pages/UserControls'
-import HelpPanels from '../pages/HelpPanels'
-import Administration from '../pages/Administration'
+const AdminLayout = lazy(()=> import('../components/routing/AdminLayout'))
+const Sysadmin = lazy(()=> import('../pages/Sysadmin'))
+const SysSettings = lazy(()=> import('../pages/SysSettings'))
+const Metadata = lazy(()=> import('../pages/Metadata'))
+const UserControls = lazy(()=> import('../pages/UserControls'))
+const HelpPanels = lazy(()=> import('../pages/HelpPanels'))
+const Administration = lazy(()=> import('../pages/Administration'))
 
 const routes = [
     

@@ -1,7 +1,7 @@
 // Toolbar_Document.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, useEffect, useMemo, CSSProperties} from 'react'
+import React, {useState, useRef, useEffect, useMemo, CSSProperties, lazy} from 'react'
 
 import {
   Box, MenuList, MenuItem, Icon, Select
@@ -11,10 +11,10 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 import { useToggleIcon } from './controls/ToggleIcon'
 
-import MenuIcon from './controls/MenuIcon'
-import StandardIcon from './controls/StandardIcon'
-import LearnIcon from './controls/LearnIcon'
-import ToolbarVerticalDivider from './controls/VerticalDivider'
+const MenuIcon = lazy(()=> import('./controls/MenuIcon'))
+const StandardIcon = lazy(()=> import('./controls/StandardIcon'))
+const LearnIcon = lazy(()=> import('./controls/LearnIcon'))
+const ToolbarVerticalDivider = lazy(()=> import('./controls/VerticalDivider'))
 
 const documentToolbarStyles = {
     padding:'2px',

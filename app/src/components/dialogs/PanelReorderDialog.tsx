@@ -1,7 +1,7 @@
 // PanelReorderDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useMemo, useEffect} from 'react'
+import React, {useRef, useState, useMemo, useEffect, lazy} from 'react'
 
 import {
     Button, Text, Box,
@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
-import Scroller from 'react-infinite-grid-scroller'
+const Scroller = lazy(() => import('react-infinite-grid-scroller'))
 import { useWorkspaceHandler } from '../../system/WorkboxesProvider'
 import { isMobile } from '../../index'
 

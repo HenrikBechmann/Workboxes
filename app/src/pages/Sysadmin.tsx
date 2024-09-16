@@ -1,11 +1,11 @@
 // Sysadmin.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React, {CSSProperties} from 'react'
+import React, {CSSProperties, lazy} from 'react'
 
 import { Box } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
-import Scroller from 'react-infinite-grid-scroller'
+const Scroller = lazy(() => import('react-infinite-grid-scroller'))
 
 import { 
     Button, Text, Heading,

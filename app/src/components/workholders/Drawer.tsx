@@ -13,7 +13,7 @@ import "react-resizable/css/styles.css"
 
 import { isMobile } from '../../index'
 
-import Workbox from './../workbox/Workbox'
+// import Workbox from './../workbox/Workbox'
 
 import handleIcon from '../../../assets/handle.png'
 import helpIcon from '../../../assets/help.png'

@@ -1,14 +1,14 @@
 // GeneralRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, lazy} from 'react'
 import { Outlet as RouterOutput, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
 import { useUserAuthData, useUserRecords, useAuth, useErrorControl } from '../../system/WorkboxesProvider'
 
-import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import ToolbarStandard from '../toolbars/Toolbar_Standard'
+const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
+const ToolbarStandard = lazy(() => import('../toolbars/Toolbar_Standard'))
 
 const bodyStyle = {
     height: '100%', 

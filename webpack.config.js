@@ -12,7 +12,7 @@ module.exports = {
   output: {
     filename: 'build.js',
     path: path.resolve('dist'),
-    library:'tribalopolis',
+    library:'workboxes',
     libraryTarget:'umd',
     clean:true,
   },

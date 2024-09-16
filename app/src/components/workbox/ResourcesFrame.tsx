@@ -8,7 +8,8 @@ import React, {
     // useCallback, 
     // useContext, 
     CSSProperties, 
-    forwardRef 
+    forwardRef,
+    lazy,
 } from 'react'
 
 import {
@@ -16,8 +17,8 @@ import {
     Grid, GridItem,
 } from '@chakra-ui/react'
 
-import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import ResourcesToolbar from '../toolbars/Toolbar_Resources'
+const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
+const ResourcesToolbar = lazy(() => import('../toolbars/Toolbar_Resources'))
 import { useWorkboxHandler } from './Workbox'
 
 const 

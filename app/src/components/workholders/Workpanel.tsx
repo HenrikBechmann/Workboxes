@@ -10,7 +10,7 @@ import {
 import { cloneDeep as _cloneDeep } from 'lodash'
 
 const Workwindow = lazy(() => import('./Workwindow'))
-import Workbox from './../workbox/Workbox'
+const Workbox = lazy(() => import('./../workbox/Workbox'))
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
 
@@ -229,10 +229,12 @@ const Workpanel = (props:any) => {
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
                     maxedIndex = maxedWindowRecord.index,
-                    maxedComponent = windowComponentList[maxedIndex]
+                    maxedSuspenseComponent = windowComponentList[maxedIndex],
+                    maxedComponent = maxedSuspenseComponent.props.children
 
                 maxedWindowRecord.window.zOrder = zOrder
-                windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {zOrder})
+                const cloneMaxedComponent = React.cloneElement(maxedComponent, {zOrder})
+                windowComponentList[maxedIndex] = React.cloneElement(maxedSuspenseComponent, {children:cloneMaxedComponent})
                 zOrder--
             }
 
@@ -251,15 +253,16 @@ const Workpanel = (props:any) => {
                     maxedSessionID = windowMaximizedRef.current,
                     maxedWindowRecord = windowDataMap.get(maxedSessionID),
                     maxedIndex = maxedWindowRecord.index,
-                    maxedComponent = windowComponentList[maxedIndex]
+                    maxedSuspenseComponent = windowComponentList[maxedIndex],
+                    maxedComponent = maxedSuspenseComponent.props.children
 
-                    maxedWindowRecord.window.viewDeclaration.view = 'normalized'
-                    windowComponentList[maxedIndex] = React.cloneElement(maxedComponent, {
-                        viewDeclaration:{
-                            view:maxedWindowRecord.window.viewDeclaration.view,
-                            stackOrder:null,
-                        }
-                    })
+                maxedWindowRecord.window.viewDeclaration.view = 'normalized'
+                const cloneMaxedComponent = React.cloneElement(maxedComponent, {
+                    viewDeclaration:{
+                        view:maxedWindowRecord.window.viewDeclaration.view,
+                        stackOrder:null,
+                    }})
+                windowComponentList[maxedIndex] = React.cloneElement(maxedSuspenseComponent,{children:cloneMaxedComponent})
             }
             windowMaximizedRef.current = windowSessionID
         }
@@ -292,7 +295,7 @@ const Workpanel = (props:any) => {
             // required to configure window
             { viewDeclaration, zOrder, configuration, titleData } = windowData.window
 
-        return <Suspense><Workwindow 
+        return <Suspense key = {windowSessionID}><Workwindow
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
@@ -304,7 +307,7 @@ const Workpanel = (props:any) => {
         >
             <Workbox 
                 workboxSettings = { windowData.workbox }
-            />        
+            />
         </Workwindow></Suspense>
     }
 
@@ -330,14 +333,16 @@ const Workpanel = (props:any) => {
 
         let isChange = false
         for (let index = 0; index < numberOfWindows; index++) {
-            const component = windowComponentList[index]
+            const suspenseComponent = windowComponentList[index]
+            const component = suspenseComponent.props.children
             const {zOrder: subjectZOrder, windowSessionID: subjectSessionID} = component.props
 
             if (subjectZOrder === zOrder) {
                 if (zOrder !== (nextZOrderRef.current - 1)) {
 
                     isChange = true
-                    windowComponentList[index] = React.cloneElement(component, {zOrder:nextZOrderRef.current - 1})
+                    const cloneComponent = React.cloneElement(component, {zOrder:nextZOrderRef.current - 1})
+                    windowComponentList[index] = React.cloneElement(suspenseComponent, {children:cloneComponent})
                     windowDataMap.get(subjectSessionID).window.zOrder = nextZOrderRef.current -1
 
                 }
@@ -345,7 +350,8 @@ const Workpanel = (props:any) => {
             } else if (subjectZOrder > zOrder) {
 
                 isChange = true
-                windowComponentList[index] = React.cloneElement(component, {zOrder:subjectZOrder - 1})
+                const cloneComponent = React.cloneElement(component, {zOrder:subjectZOrder - 1})
+                windowComponentList[index] = React.cloneElement(suspenseComponent, {children:cloneComponent})
                 windowDataMap.get(subjectSessionID).window.zOrder = subjectZOrder - 1
 
             }
@@ -387,14 +393,16 @@ const Workpanel = (props:any) => {
         if (zOrder > 0) { // adjust peer zOrders as necessary
             for (let index = 0; index < numberOfWindows; index++) {
                 const 
-                    component = windowComponentList[index],
+                    suspenseComponent = windowComponentList[index],
+                    component = suspenseComponent.props.children,
                     componentZOrder = component.props.zOrder,
                     componentSessionID = component.props.windowSessionID
 
                 if (componentSessionID !== windowSessionID) {
                     if (componentZOrder > zOrder) {
                         const newZOrder = componentZOrder - 1
-                        windowComponentList[index] = React.cloneElement(component, {zOrder:newZOrder})
+                        const cloneComponent = React.cloneElement(component, {zOrder:newZOrder})
+                        windowComponentList[index] = React.cloneElement(suspenseComponent,{children:cloneComponent})
                         windowDataMap.get(windowSessionID).window.zOrder = newZOrder
                     }
                 }
@@ -441,10 +449,12 @@ const Workpanel = (props:any) => {
         const viewDeclaration = {view:'minimized', stackOrder}
 
         for (let index = 0; index < numberOfWindows; index++) {
-            const component = windowComponentList[index]
+            const suspenseComponent = windowComponentList[index]
+            const component = suspenseComponent.props.children
             const subjectSessionID = component.props.windowSessionID
             if ( subjectSessionID === windowSessionID) {
-                windowComponentList[index] = React.cloneElement(component,{viewDeclaration, zOrder:0})
+                const cloneComponent = React.cloneElement(component,{viewDeclaration, zOrder:0})
+                windowComponentList[index] = React.cloneElement(suspenseComponent,{children:cloneComponent})
                 windowData.window.zOrder = 0
             } else {
                 const indexZOrder = component.props.zOrder
@@ -453,7 +463,8 @@ const Workpanel = (props:any) => {
                     subjectRecord.window.zOrder = indexZOrder - 1
                     const subjectViewDeclaration = 
                         {view:subjectRecord.window.viewDeclaration.view,stackOrder:subjectRecord.window.viewDeclaration.stackOrder}
-                    windowComponentList[index] = React.cloneElement(component,{subjectViewDeclaration, zOrder:indexZOrder - 1})
+                    const cloneComponent = React.cloneElement(component,{subjectViewDeclaration, zOrder:indexZOrder - 1})
+                    windowComponentList[index] = React.cloneElement(suspenseComponent, {children: cloneComponent})
                 }
             }
         }
@@ -481,11 +492,13 @@ const Workpanel = (props:any) => {
                 windowData.window.viewDeclaration.stackOrder = index
 
                 const 
-                    component = windowComponentList[windowData.window.index],
+                    suspenseComponent = windowComponentList[windowData.window.index],
+                    component = suspenseComponent.props.children,
                     viewDeclaration = component.props.viewDeclaration
 
                 viewDeclaration.stackOrder = index
-                windowComponentList[windowData.window.index] = React.cloneElement(component, {viewDeclaration:{...viewDeclaration}})
+                const cloneComponent = React.cloneElement(component, {viewDeclaration:{...viewDeclaration}})
+                windowComponentList[windowData.window.index] = React.cloneElement(suspenseComponent, {children:cloneComponent})
             }
             index++
         })
@@ -550,7 +563,8 @@ const Workpanel = (props:any) => {
             zOrder = nextZOrderRef.current
             windowData.window.zOrder = zOrder
 
-            windowComponentList.forEach((component)=>{
+            windowComponentList.forEach((item)=>{
+                const component = item.props.children
                 const subjectSessionID = component.props.windowSessionID
                 if ( subjectSessionID !== windowSessionID) {
                     const 
@@ -569,11 +583,13 @@ const Workpanel = (props:any) => {
         const 
             viewDeclaration = {view:'normalized',stackOrder:null},
             index = windowData.window.index,
-            component = windowComponentList[index]
+            suspenseComponent = windowComponentList[index],
+            component = suspenseComponent.props.children
 
         // console.log('index, windowData, windowComponentList',index, windowData, windowComponentList)
 
-        windowComponentList[index] = React.cloneElement(component,{viewDeclaration, zOrder})
+        const cloneComponent = React.cloneElement(component,{viewDeclaration, zOrder})
+        windowComponentList[index] = React.cloneElement(suspenseComponent,{children:cloneComponent})
 
         windowComponentListRef.current = [...windowComponentList]
         setPanelState('normalizewindow')
@@ -621,7 +637,9 @@ const Workpanel = (props:any) => {
         } else {
             zOrder = nextZOrderRef.current
             windowData.window.zOrder = zOrder
-            windowComponentList.forEach((component)=>{
+            windowComponentList.forEach((item)=>{
+                const component = item.props.children
+                // console.log('component.props.children',component.props.children.props)
                 const subjectSessionID = component.props.windowSessionID
                 if ( subjectSessionID !== windowSessionID) {
                     const 
@@ -644,12 +662,14 @@ const Workpanel = (props:any) => {
         const 
             viewDeclaration = {view:'maximized', stackOrder:null},
             index = windowData.window.index,
-            component = windowComponentList[index]
+            suspenseComponent = windowComponentList[index],
+            component = suspenseComponent.props.children
 
         // console.log('index, component, windowComponentList',index, component, windowComponentList)
 
         if (component.props.windowSessionID === windowSessionID) {
-            windowComponentList[index] = React.cloneElement(component,{viewDeclaration, zOrder})
+            const cloneComponent = React.cloneElement(component,{viewDeclaration, zOrder})
+            windowComponentList[index] = React.cloneElement(suspenseComponent, {children:cloneComponent})
         }
 
         windowComponentListRef.current = [...windowComponentList]
@@ -676,8 +696,10 @@ const Workpanel = (props:any) => {
             length = windowComponentList.length
 
         for (let index = 0; index < length; index++ ) {
-            const component = windowComponentList[index]
-            windowComponentList[index] = React.cloneElement(component, {containerDimensionSpecs})
+            const suspenseComponent = windowComponentList[index]
+            const component = suspenseComponent.props.children
+            const cloneComponent = React.cloneElement(component, {containerDimensionSpecs})
+            windowComponentList[index] = React.cloneElement(suspenseComponent, {children:cloneComponent})
         }
         windowComponentListRef.current = [...windowComponentList]
         if (panelStateRef.current == 'setup') { // initialize; ongoing updates at Workspace

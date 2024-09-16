@@ -1,11 +1,11 @@
 // UserLayout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React, {CSSProperties} from 'react'
+import React, {CSSProperties, lazy} from 'react'
 import { Outlet as RouterOutput } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
-import ToolbarFrame from '../toolbars/Toolbar_Frame'
-import ToolbarStandard from '../toolbars/Toolbar_Standard'
+const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
+const ToolbarStandard = lazy(() => import('../toolbars/Toolbar_Standard'))
 
 const bodyStyle = {
     height:'100%',
