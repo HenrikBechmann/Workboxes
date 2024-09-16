@@ -305,7 +305,7 @@ const versionData = {
             description: null,
             todo: null,
         },
-        sections: [
+        extensions: [
         ],
         locked: false,
       },
@@ -380,7 +380,7 @@ const versionData = {
             description: null,
             todo: null,
         },
-        sections: [
+        extensions: [
         ],
         locked:false,
       },
@@ -463,7 +463,7 @@ const versionData = {
             description: null,
             todo: null,
         },
-        sections: [
+        extensions: [
         ],
         locked: false,
       },

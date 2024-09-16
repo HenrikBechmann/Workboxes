@@ -226,8 +226,9 @@ const BaseEdit = (props) => {
         >--- Workbox basics ---</Heading>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+                <details>
+                <summary style = {{ fontSize:'small'}}>To do notes</summary>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
-                    <FormLabel fontSize = 'sm'>To do notes:</FormLabel>
                     <Textarea 
                         value = {editData.todo || ''} 
                         size = 'sm'
@@ -241,6 +242,7 @@ const BaseEdit = (props) => {
                         {helperText.todo} Current length is {editData.todo?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
+                </details>
             </Box>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
