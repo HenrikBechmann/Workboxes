@@ -76,6 +76,7 @@ const BaseEdit = (props) => {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
+            thumbnail:`This image is used as an avatar in resource listings.`
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -209,10 +210,9 @@ const BaseEdit = (props) => {
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
         >--- Workbox basics ---</Heading>
-        <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+        <details>
+        <summary style = {{fontSize:'small'}}>To do notes</summary>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <details>
-                <summary style = {{fontSize:'small'}}>To do notes</summary>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
                     <Textarea 
                         value = {editData.todo || ''} 
@@ -227,8 +227,11 @@ const BaseEdit = (props) => {
                         {helperText.todo} Current length is {editData.todo?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
-                </details>
             </Box>
+        </details>
+        <details open>
+        <summary style = {{fontSize:'small'}}>workbox identity</summary>
+        <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
@@ -293,8 +296,15 @@ const BaseEdit = (props) => {
                         <span>resource</span> 
                         <img width = '18px' height = '18px' src = {dropIcon} /></Flex>
                 </Flex>
+                <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.thumbnail}
+                </Box>
             </Box>
         </Flex>
+        </details>
+        <details open>
+            <summary style = {{fontSize:'small'}}>workbox data</summary>
+        </details>
     </Box>
 }
 
