@@ -3,7 +3,12 @@
 
 import React from 'react'
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
 const BaseDataDisplay = () => {
+    const
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler()
+
     return <div>base data display</div>
 }
 
