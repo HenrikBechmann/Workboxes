@@ -60,7 +60,7 @@ const BaseEdit = (props) => {
     
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editData = workboxHandler.editRecord.document.base,
+        editBaseRecord = workboxHandler.editRecord.document.base,
         [editState,setEditState] = useState('setup'),
 
         systemRecords = useSystemRecords(),
@@ -117,7 +117,7 @@ const BaseEdit = (props) => {
                 value = target.value
 
             isInvalidTests.name(value)
-            editData.name = value
+            editBaseRecord.name = value
             setEditState('validating')
         },
         description:(event) => {
@@ -125,7 +125,7 @@ const BaseEdit = (props) => {
                 target = event.target as HTMLInputElement,
                 value = target.value
             isInvalidTests.description(value)
-            editData.description = value
+            editBaseRecord.description = value
             setEditState('validating')
         },
         todo:(event) => {
@@ -133,7 +133,7 @@ const BaseEdit = (props) => {
                 target = event.target as HTMLInputElement,
                 value = target.value
             isInvalidTests.todo(value)
-            editData.todo = value
+            editBaseRecord.todo = value
             setEditState('validating')
         },
     }
@@ -201,16 +201,16 @@ const BaseEdit = (props) => {
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
                     <Textarea 
-                        value = {editData.todo || ''} 
+                        value = {editBaseRecord.todo || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.todo}
                     >
                     </Textarea>
                     <FormErrorMessage>
-                        {errorMessages.todo} Current length is {editData.todo?.length || '0 (blank)'}.
+                        {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.todo} Current length is {editData.todo?.length || '0 (blank)'}.
+                        {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -222,16 +222,16 @@ const BaseEdit = (props) => {
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
                     <Input 
-                        value = {editData.name || ''} 
+                        value = {editBaseRecord.name || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.name}
                     >
                     </Input>
                     <FormErrorMessage>
-                        {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
+                        {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
+                        {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -239,16 +239,16 @@ const BaseEdit = (props) => {
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
                     <FormLabel fontSize = 'sm'>Description:</FormLabel>
                     <Textarea 
-                        value = {editData.description || ''} 
+                        value = {editBaseRecord.description || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.description}
                     >
                     </Textarea>
                     <FormErrorMessage>
-                        {errorMessages.description} Current length is {editData.description?.length || '0 (blank)'}.
+                        {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.description} Current length is {editData.description?.length || '0 (blank)'}.
+                        {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -298,7 +298,9 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 
     const 
         {documentBaseData} = props,
-        { name, description, image, todo } = documentBaseData
+        baseFields = documentBaseData.base,
+        baseData = documentBaseData.data,
+        { name, description, image, todo } = baseFields
 
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>
@@ -312,6 +314,8 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         </Box>
         <Box fontStyle = 'italic'>
            {description}
+        </Box>
+        <Box>
         </Box>
     </Box>
 }

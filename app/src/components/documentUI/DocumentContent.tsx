@@ -16,7 +16,6 @@ import {
     Box
 } from '@chakra-ui/react'
 
-// import documentModules from './documentModules'
 const DocumentBase = lazy(()=>import('./DocumentBase'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -39,7 +38,10 @@ const DocumentContent = (props) => {
 
         is_workboxRecordParameterRef.current = true
 
-        const documentBaseData = workboxRecord.document.base
+        const documentBaseData = {
+            base:workboxRecord.document.base,
+            data:workboxRecord.document.data,
+        }
 
         if (baseComponentRef.current) {
             baseComponentRef.current =
@@ -47,7 +49,6 @@ const DocumentContent = (props) => {
         } else {
             const sessionID = nextDocumentUnitSessionIDRef.current++
             baseComponentRef.current = 
-                // React.createElement(documentModules.base,{documentBaseData, documentConfig, mode, sessionID})
                 React.createElement(DocumentBase,{documentBaseData, documentConfig, mode, sessionID})
         }
 
