@@ -290,9 +290,6 @@ const versionData = {
       },
       document: {
         data:{
-            name:'collection information',
-            title:null,
-            display_order: 1,
             content:null,
         },
         base: {
@@ -365,9 +362,6 @@ const versionData = {
       },
       document: {
         data:{
-            name:'domain information',
-            title:null,
-            display_order: 1,
             content:null,
         },
         base: {
@@ -448,9 +442,6 @@ const versionData = {
       },
       document: {
         data:{
-            name:'member information',
-            title:null,
-            display_order: 1,
             content:null,
         },
         base: {
