@@ -89,10 +89,6 @@ const BaseEdit = (props) => {
         // [blocks,setBlocks] = useState<Block[]>(editData.summary || [{}]),
         customSlashMenuItemsRef = useRef([])
 
-    // editData.summary = blocks
-
-    // console.log('changed editData.summary', editData.summary)
-
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
 
@@ -105,16 +101,6 @@ const BaseEdit = (props) => {
         isInvalidTests.todo(editData.todo)
 
         setEditState('checking')
-
-        // const defaultSlashMenuItems = getDefaultReactSlashMenuItems(editor)
-        // const customSlashMenuItems = defaultSlashMenuItems.filter((value) => {
-        //     const key = value['key']
-        //     // console.log('value.key, value', value['key'],value)
-        //     // return true
-        //     return !['image','video','audio' ].includes(key)
-        // })
-        // console.log('customSlashMenuItems',customSlashMenuItems)
-         // customSlashMenuItemsRef.current = customSlashMenuItems
 
     },[])
 
