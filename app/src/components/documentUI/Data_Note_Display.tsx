@@ -13,6 +13,21 @@ import {
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 
+import { useWorkboxHandler } from '../workbox/Workbox'
+
+const DataNoteDisplay = () => {
+
+    const 
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        { workboxRecord } = workboxHandler,
+        recordData = workboxRecord.document.base
+
+    return <div>data note display</div>
+
+}
+
+export default DataNoteDisplay
+
 // <BlockNoteView editor={editor} onChange={() => {
 //     setBlocks(editor.document);
 //     }} slashMenu = {false}><SuggestionMenuController

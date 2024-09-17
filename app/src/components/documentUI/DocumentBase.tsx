@@ -17,8 +17,8 @@ import 'react-image-crop/dist/ReactCrop.css'
 import { useSystemRecords } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-const BaseDataDisplay = lazy(()=> import('./BaseDataDisplay'))
-const BaseDataEdit = lazy(()=> import('./BaseDataEdit'))
+const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
+const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
 
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
@@ -293,7 +293,7 @@ const BaseEdit = (props) => {
         </details>
         <details open>
             <summary style = {{fontSize:'small'}}>workbox data</summary>
-            <BaseDataEdit />
+            <BaseDataEditController />
         </details>
     </Box>
 }
@@ -320,7 +320,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
            {description}
         </Box>
         <Box>
-            <BaseDataDisplay />
+            <BaseDataDisplayController />
         </Box>
     </Box>
 }
