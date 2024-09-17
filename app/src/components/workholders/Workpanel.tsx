@@ -517,7 +517,7 @@ const Workpanel = (props:any) => {
 
         for (let index = 0; index < numberOfWindows; index++) {
             const 
-                windowSessionID = windowComponentList[index].props.windowSessionID,
+                windowSessionID = windowComponentList[index].props.children.props.windowSessionID,
                 windowData = windowDataMap.get(windowSessionID)
 
             // console.log('index, windowSessionID, windowData',
