@@ -293,7 +293,6 @@ const versionData = {
             content:null,
         },
         base: {
-            display_order: 0,
             name: null,
             image: {
               caption: null,
@@ -302,8 +301,9 @@ const versionData = {
             description: null,
             todo: null,
         },
-        extensions: [
-        ],
+        extensions: {
+          list:[],
+        },
         locked: false,
       },
       resources: {
@@ -365,7 +365,6 @@ const versionData = {
             content:null,
         },
         base: {
-            display_order: 0,
             name: null,
             image: {
               caption: null,
@@ -374,8 +373,9 @@ const versionData = {
             description: null,
             todo: null,
         },
-        extensions: [
-        ],
+        extensions: {
+          list:[],
+        },
         locked:false,
       },
       resources: {
@@ -445,7 +445,6 @@ const versionData = {
             content:null,
         },
         base: {
-            display_order: 1,
             name: null,
             image: {
               source: null,
@@ -454,8 +453,9 @@ const versionData = {
             description: null,
             todo: null,
         },
-        extensions: [
-        ],
+        extensions: {
+          list:[],
+        },
         locked: false,
       },
       resources: {
