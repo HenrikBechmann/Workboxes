@@ -3,7 +3,7 @@
 
 import React, {useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { Block, filterSuggestionItems } from "@blocknote/core"
+import { Block, filterSuggestionItems, PartialBlock } from "@blocknote/core"
 import "@blocknote/core/fonts/inter.css";
 import { 
     getDefaultReactSlashMenuItems,

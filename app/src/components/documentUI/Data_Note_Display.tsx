@@ -3,7 +3,7 @@
 
 import React, {useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { Block, filterSuggestionItems } from "@blocknote/core"
+import { Block, filterSuggestionItems, PartialBlock } from "@blocknote/core"
 import "@blocknote/core/fonts/inter.css";
 import { 
     getDefaultReactSlashMenuItems,
@@ -20,9 +20,16 @@ const DataNoteDisplay = () => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
-        recordData = workboxRecord.document.base
+        documentData = workboxRecord.document.data,
+        editor = useCreateBlockNote({initialContent:documentData.content || [{}] as PartialBlock[], trailingBlock:false})
 
-    return <div>data note display</div>
+    useEffect(()=>{
+
+        editor.replaceBlocks(editor.document,documentData.content)
+
+    },[documentData.content])
+
+    return <div><BlockNoteView editor = { editor } editable = { false } sideMenu = { false }/></div>
 
 }
 
