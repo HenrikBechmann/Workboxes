@@ -3,11 +3,8 @@
 
 import React, {useRef, useState, useEffect, CSSProperties} from 'react'
 
-import { Block, filterSuggestionItems, PartialBlock } from "@blocknote/core"
 import "@blocknote/core/fonts/inter.css";
 import { 
-    getDefaultReactSlashMenuItems,
-    SuggestionMenuController,
     useCreateBlockNote
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
@@ -20,10 +17,19 @@ const DataNoteEdit = () => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
-        recordData = editRecord.document.base
+        recordData = editRecord.document.data,
+        editor = useCreateBlockNote({initialContent:recordData.content || [{}], trailingBlock:false}),
+        [blocks, setBlocks] = useState(recordData.content || [{}])
 
+    recordData.content = blocks
 
-    return <div>data note edit</div>
+    const changeData = () => {
+
+        setBlocks(editor.document)
+
+    }
+
+    return <div><BlockNoteView editor={editor} onChange= {changeData} /></div>
 }
 
 export default DataNoteEdit

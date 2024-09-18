@@ -22,7 +22,9 @@ const DataNoteDisplay = () => {
 
     useEffect(()=>{
 
-        editor.replaceBlocks(editor.document,documentData.content)
+        const data = documentData.content || [{}]
+
+        editor.replaceBlocks(editor.document,data)
 
     },[documentData.content])
 
