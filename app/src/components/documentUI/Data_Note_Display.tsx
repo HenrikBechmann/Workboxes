@@ -18,7 +18,11 @@ const DataNoteDisplay = () => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         documentData = workboxRecord.document.data,
-        editor = useCreateBlockNote({initialContent:documentData.content || [{}], trailingBlock:false}),
+        editor = useCreateBlockNote(
+            {
+                initialContent:documentData.content || [{}], 
+                trailingBlock:false,
+            }),
         [isEmpty, setIsEmpty] = useState(false)
 
     useEffect(()=>{
@@ -35,7 +39,16 @@ const DataNoteDisplay = () => {
 
     },[documentData.content])
 
-    return <div>{(!isEmpty) && <BlockNoteView editor = { editor } editable = { false } sideMenu = { false }/>}</div>
+    return <div>
+            <style>
+                {
+                    `.bn-editor {
+                        padding-inline: 0;
+                    }`
+                }
+            </style>
+            {(!isEmpty) && <BlockNoteView editor = { editor } editable = { false } sideMenu = { false }/>}
+        </div>
 
 }
 
