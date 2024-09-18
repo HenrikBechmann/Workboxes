@@ -6,8 +6,8 @@
   "author": "Henrik Bechmann <hbechmann@gmail.com> (https://twitter.com/HenrikBechmann)",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "webpack --mode=development --devtool 'eval-source-map' --config webpack.config.js",
-    "build": "webpack --mode=production --config webpack.config.js",
+    "dev": "webpack --mode development --devtool 'eval-source-map' --config webpack.config.js",
+    "build": "webpack --mode production --config webpack.config.js",
     "start": "webpack serve --mode development",
     "prod": "webpack serve --mode production"
   },
