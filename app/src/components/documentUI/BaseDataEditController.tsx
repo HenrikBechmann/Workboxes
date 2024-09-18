@@ -1,7 +1,7 @@
 // BaseDataEdit.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { useMemo, lazy } from 'react'
+import React, { useMemo, lazy, Suspense } from 'react'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
@@ -19,7 +19,7 @@ const BaseDataEditController = () => {
         switch (workboxType) {
         case 'member':
         case 'domain': 
-            component = <DataNoteEdit />
+            component = <Suspense><DataNoteEdit /></Suspense>
         }
 
         return component

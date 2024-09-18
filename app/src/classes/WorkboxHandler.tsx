@@ -252,6 +252,8 @@ class WorkboxHandler {
             workboxCollection = collection(this.internal.db, 'workboxes'),
             batch = writeBatch(this.internal.db)
 
+        console.log('workboxRecordClone',workboxRecordClone)
+
         let writecount = 1
         workboxRecordClone.generation = increment(1)
         workboxRecordClone.profile.commits.updated_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
