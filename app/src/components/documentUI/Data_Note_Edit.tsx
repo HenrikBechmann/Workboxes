@@ -18,10 +18,13 @@ const DataNoteEdit = () => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
         recordData = editRecord.document.data,
-        editor = useCreateBlockNote({initialContent:recordData.content || [{}], trailingBlock:false}),
+        firstcontent = recordData.content?JSON.parse(recordData.content):[{}],
+        content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
+        editor = useCreateBlockNote({initialContent:content, trailingBlock:false}),
         [blocks, setBlocks] = useState(recordData.content || [{}])
 
-    recordData.content = blocks
+    // TODO this is inefficient!
+    recordData.content = JSON.stringify(blocks)
 
     const changeData = () => {
 

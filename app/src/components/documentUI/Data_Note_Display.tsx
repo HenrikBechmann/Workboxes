@@ -18,22 +18,31 @@ const DataNoteDisplay = () => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         documentData = workboxRecord.document.data,
+
+        firstcontent = documentData.content?JSON.parse(documentData.content):[{}],
+        content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent
+
+        // console.log('documentData, initialContent',documentData, documentData.content?JSON.parse(JSON.parse(documentData.content)):[{}])
+
+    const
         editor = useCreateBlockNote(
             {
-                initialContent:documentData.content || [{}], 
+                initialContent:(content), 
                 trailingBlock:false,
             }),
         [isEmpty, setIsEmpty] = useState(false)
 
     useEffect(()=>{
 
-        const data = documentData.content || [{}],
-            block = data[0]
+        const
+            firstcontent = documentData.content?JSON.parse(documentData.content):[{}],
+            content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
+            block = content[0]
 
-        editor.replaceBlocks(editor.document,data)
+        editor.replaceBlocks(editor.document,content)
 
         const isEmpty = (!documentData.content || 
-            (data.length == 1 && block.type == 'paragraph' && block.content.length == 0))
+            (content.length == 1 && block.type == 'paragraph' && block.content.length == 0))
 
         setIsEmpty( isEmpty )
 
