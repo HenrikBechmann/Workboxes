@@ -19,8 +19,8 @@ const DataNoteDisplay = () => {
         { workboxRecord } = workboxHandler,
         documentData = workboxRecord.document.data,
 
-        firstcontent = documentData.content?JSON.parse(documentData.content):[{}],
-        content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent
+        content = documentData.content?JSON.parse(documentData.content):[{}]
+        // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent
 
     const
         editor = useCreateBlockNote(
@@ -33,8 +33,8 @@ const DataNoteDisplay = () => {
     useEffect(()=>{
 
         const
-            firstcontent = documentData.content?JSON.parse(documentData.content):[{}],
-            content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
+            content = documentData.content?JSON.parse(documentData.content):[{}],
+            // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
             block = content[0]
 
         editor.replaceBlocks(editor.document,content)

@@ -18,8 +18,8 @@ const DataNoteEdit = () => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
         recordData = editRecord.document.data,
-        firstcontent = recordData.content?JSON.parse(recordData.content):[{}],
-        content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
+        content = recordData.content?JSON.parse(recordData.content):[{}],
+        // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false}),
         [blocks, setBlocks] = useState(content)
 
