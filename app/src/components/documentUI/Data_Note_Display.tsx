@@ -22,12 +22,10 @@ const DataNoteDisplay = () => {
         firstcontent = documentData.content?JSON.parse(documentData.content):[{}],
         content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent
 
-        // console.log('documentData, initialContent',documentData, documentData.content?JSON.parse(JSON.parse(documentData.content)):[{}])
-
     const
         editor = useCreateBlockNote(
             {
-                initialContent:(content), 
+                initialContent:content, 
                 trailingBlock:false,
             }),
         [isEmpty, setIsEmpty] = useState(false)

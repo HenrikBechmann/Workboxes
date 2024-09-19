@@ -21,7 +21,7 @@ const DataNoteEdit = () => {
         firstcontent = recordData.content?JSON.parse(recordData.content):[{}],
         content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false}),
-        [blocks, setBlocks] = useState(recordData.content || [{}])
+        [blocks, setBlocks] = useState(content)
 
     // TODO this is inefficient!
     recordData.content = JSON.stringify(blocks)
