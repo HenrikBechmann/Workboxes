@@ -179,7 +179,6 @@ const WorkboxToolbar = (props) => {
 
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {commentIcon} caption = 'comment' tooltip = 'add a comment to this workbox'/>
-        // <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         // <ToolbarVerticalDivider />
         // <StandardIcon icon = {lastUpdateIcon} caption = 'last update' tooltip = 'last update of this workbox'/>
         // <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh linked names'/>
@@ -194,6 +193,8 @@ const WorkboxToolbar = (props) => {
         { documentToggle }
         { resourcesToggle }
         { bothToggle }
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {shareIcon} caption = 'share' tooltip = 'share this workbox'/>
         <ToolbarVerticalDivider />
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />

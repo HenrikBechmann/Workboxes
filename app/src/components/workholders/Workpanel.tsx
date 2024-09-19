@@ -752,7 +752,7 @@ const Workpanel = (props:any) => {
             {(panelState != 'setup') && windowComponentList}
             {(panelState != 'setup' && windowCount === 0) && 
                 <Box style = {panelMessageStyles} >
-                    To load a workbox tap the domain workbox or your member workbox in the panel toolbar below
+                    To load a workbox tap the domain workbox or your domain member workbox in the panel toolbar below
                 </Box>
             }
         </Box>

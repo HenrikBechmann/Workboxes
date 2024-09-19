@@ -65,7 +65,7 @@ class WorkboxHandler {
         workbox: {
             modesettings: {
                 document: {
-                    select:false,
+                    select:true,
                     disable:false
                 },
                 resources: {
@@ -73,7 +73,7 @@ class WorkboxHandler {
                     disable:false
                 },
                 both: {
-                    select:true,
+                    select:false,
                     disable:false
                 }
             }
