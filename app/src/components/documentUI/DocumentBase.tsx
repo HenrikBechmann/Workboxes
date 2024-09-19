@@ -242,6 +242,7 @@ const BaseEdit = (props) => {
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
                     <FormLabel fontSize = 'sm'>Description:</FormLabel>
                     <Textarea 
+                        rows = {2}
                         value = {editBaseRecord.description || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.description}
