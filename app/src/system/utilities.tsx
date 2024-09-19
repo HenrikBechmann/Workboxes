@@ -304,6 +304,9 @@ const versionData = {
         extensions: {
           list:[],
         },
+        messages: {
+          list:[],
+        },
         locked: false,
       },
       resources: {
@@ -374,6 +377,9 @@ const versionData = {
             todo: null,
         },
         extensions: {
+          list:[],
+        },
+        messages: {
           list:[],
         },
         locked:false,
@@ -454,6 +460,9 @@ const versionData = {
             todo: null,
         },
         extensions: {
+          list:[],
+        },
+        messages: {
           list:[],
         },
         locked: false,

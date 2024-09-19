@@ -241,6 +241,7 @@ const DocumentToolbar = (props) => {
                 <option value="image">Media</option>
                 <option value="file">File</option>
                 <option value="resource">Resource</option>
+                <option value="mesessage">Message</option>
             </Select>
         </Box>
         { editToggle }
