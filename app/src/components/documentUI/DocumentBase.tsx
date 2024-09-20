@@ -79,7 +79,7 @@ const BaseEdit = (props) => {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
-            thumbnail:`This image is used as an avatar in resource listings.`
+            thumbnail:`This image is used as a visual representation in resource listings.`
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -198,7 +198,7 @@ const BaseEdit = (props) => {
             color = 'gray' 
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
-        >--- Workbox basics ---</Heading>
+        >--- Workbox main body ---</Heading>
         <details>
         <summary style = {{fontSize:'small'}}>To do notes</summary>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -293,7 +293,7 @@ const BaseEdit = (props) => {
         </Flex>
         </details>
         <details open>
-            <summary style = {{fontSize:'small'}}>workbox data</summary>
+            <summary style = {{fontSize:'small'}}>workbox particulars</summary>
             <BaseDataEditController />
         </details>
     </Box>

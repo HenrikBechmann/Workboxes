@@ -429,7 +429,7 @@ const versionData = {
         },
         type: {
           name: "member",
-          alias: "Member",
+          alias: "Domain Member",
           image: {
             source: null,
           },
