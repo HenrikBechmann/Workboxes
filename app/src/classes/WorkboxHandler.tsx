@@ -195,7 +195,7 @@ class WorkboxHandler {
     //     subscriptionindex: <prefix>.<entityid>
     // }
 
-    async reconcileRepoFiles(repoFiles, editorFiles) {
+    async reconcileDocumentFiles(documentFiles, editorFiles) {
 
     }
 
