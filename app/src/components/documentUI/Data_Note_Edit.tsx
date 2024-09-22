@@ -20,7 +20,7 @@ const DataNoteEdit = () => {
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
-        { data:recordData, files:recordFiles } = editRecord.document.data,
+        { data:recordData, files:recordFiles } = editRecord.document,
         content = recordData.content?JSON.parse(recordData.content):[{}],
         // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
