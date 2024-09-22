@@ -5,7 +5,7 @@ import React, { useMemo, lazy, Suspense } from 'react'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-const DataNodeDisplay = lazy(()=> import('./Data_Note_Display'))
+const DataNoteDisplay = lazy(()=> import('./Data_Note_Display'))
 
 const BaseDataDisplayController = () => {
     const
@@ -19,7 +19,7 @@ const BaseDataDisplayController = () => {
         switch (workboxType) {
         case 'member':
         case 'domain': 
-            component = <Suspense><DataNodeDisplay /></Suspense>
+            component = <Suspense><DataNoteDisplay /></Suspense>
         }
 
         return component

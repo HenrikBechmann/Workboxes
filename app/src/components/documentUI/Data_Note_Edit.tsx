@@ -20,7 +20,7 @@ const DataNoteEdit = () => {
         recordData = editRecord.document.data,
         content = recordData.content?JSON.parse(recordData.content):[{}],
         // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
-        editor = useCreateBlockNote({initialContent:content, trailingBlock:false}),
+        editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
         [blocks, setBlocks] = useState(content)
 
     // TODO this is inefficient!
@@ -29,6 +29,14 @@ const DataNoteEdit = () => {
     const changeData = () => {
 
         setBlocks(editor.document)
+
+    }
+
+    async function uploadFile(file:File) {
+
+        console.log('uploadFile file', file)
+
+        return null
 
     }
 

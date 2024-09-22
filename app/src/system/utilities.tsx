@@ -289,9 +289,10 @@ const versionData = {
         },
       },
       document: {
+        files:[],
         data:{
-            content:null,
-            attachments:[],
+          content:null,
+          attachments:[],
         },
         base: {
             name: null,
@@ -365,9 +366,10 @@ const versionData = {
         },
       },
       document: {
+        files:[],
         data:{
-            content:null,
-            attachments:[],
+          content:null,
+          attachments:[],
         },
         base: {
             name: null,
@@ -449,9 +451,10 @@ const versionData = {
         },
       },
       document: {
+        files:[],
         data:{
-            content:null,
-            attachments:[],
+          content:null,
+          attachments:[],
         },
         base: {
             name: null,
