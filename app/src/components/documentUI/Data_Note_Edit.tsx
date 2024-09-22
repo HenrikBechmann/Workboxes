@@ -10,11 +10,14 @@ import {
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 
+import { useStorage } from '../../system/WorkboxesProvider'
+
 import { useWorkboxHandler } from '../workbox/Workbox'
 
 const DataNoteEdit = () => {
 
     const 
+        storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
         { data:recordData, files:recordFiles } = editRecord.document.data,

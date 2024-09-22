@@ -68,8 +68,9 @@ import { isMobile } from '../index'
 
 class WorkspaceHandler {
 
-    constructor(db, errorControl, snapshotControl) {
+    constructor(db, storage, errorControl, snapshotControl) {
         this.db = db
+        this.storage = storage
         this.errorControl = errorControl
         this.snapshotControl = snapshotControl
         this.panelsHandler = new PanelsHandler(this, db, errorControl)
@@ -80,6 +81,7 @@ class WorkspaceHandler {
 
     // data controls
     db
+    storage
     errorControl
     snapshotControl
     panelsHandler

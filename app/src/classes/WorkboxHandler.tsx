@@ -16,11 +16,12 @@ import { updateDocumentSchema } from '../system/utilities'
 class WorkboxHandler {
     constructor( { workboxID, workboxSessionID, workspaceHandler, onError, onFail} ) {
 
-        const { db, usage, snapshotControl, errorControl } = workspaceHandler
+        const { db, storage, usage, snapshotControl, errorControl } = workspaceHandler
         this.workboxID = workboxID
         this.workboxSessionID = workboxSessionID
 
         this.internal.db = db
+        this.internal.storage = storage
         this.internal.usage = usage
         this.internal.snapshotControl = snapshotControl
         this.internal.onError = onError
@@ -35,6 +36,7 @@ class WorkboxHandler {
     internal = {
         // constructor parameters
         db: null,
+        storage: null,
         usage: null,
         snapshotControl: null,
         onError: null,
@@ -193,6 +195,9 @@ class WorkboxHandler {
     //     subscriptionindex: <prefix>.<entityid>
     // }
 
+    async reconcileRepoFiles(repoFiles, editorFiles) {
+
+    }
 
     async subscribeToWorkboxRecord() {
 

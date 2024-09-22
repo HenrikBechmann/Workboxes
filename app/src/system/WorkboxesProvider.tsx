@@ -84,7 +84,7 @@ const
     snapshotControl = new SnapshotControl(),
     errorArray = [],
     ErrorControlContext = createContext(errorArray),
-    workspaceHandlerInstance = new WorkspaceHandler(firestore,errorArray, snapshotControl),
+    workspaceHandlerInstance = new WorkspaceHandler(firestore, storage, errorArray, snapshotControl),
     SnapshotControlContext = createContext(snapshotControl),
 
     // for UserProvider
