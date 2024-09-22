@@ -198,7 +198,7 @@ const BaseEdit = (props) => {
             color = 'gray' 
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
-        >--- Workbox main body ---</Heading>
+        >--- Document basics ---</Heading>
         <details>
         <summary style = {{fontSize:'small'}}>To do notes</summary>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -219,7 +219,7 @@ const BaseEdit = (props) => {
             </Box>
         </details>
         <details open>
-        <summary style = {{fontSize:'small'}}>workbox identity</summary>
+        <summary style = {{fontSize:'small'}}>workbox basics</summary>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
@@ -293,7 +293,7 @@ const BaseEdit = (props) => {
         </Flex>
         </details>
         <details open>
-            <summary style = {{fontSize:'small'}}>workbox particulars</summary>
+            <summary style = {{fontSize:'small'}}>document data</summary>
             <BaseDataEditController />
         </details>
     </Box>
