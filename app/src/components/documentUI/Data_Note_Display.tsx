@@ -33,6 +33,8 @@ const DataNoteDisplay = () => {
             // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
             block = content[0]
 
+        console.log('content',content)
+
         editor.replaceBlocks(editor.document,content)
 
         const isEmpty = (!documentData.content || 
@@ -47,6 +49,12 @@ const DataNoteDisplay = () => {
                 {
                     `.bn-editor {
                         padding-inline: 0;
+                    }
+                    [data-file-block] .bn-visual-media-wrapper {
+                        max-width: 500px;
+                    }
+                    [data-file-block] img {
+                        width:auto;
                     }`
                 }
             </style>
@@ -54,5 +62,6 @@ const DataNoteDisplay = () => {
         </div>
 
 }
+
 
 export default DataNoteDisplay
