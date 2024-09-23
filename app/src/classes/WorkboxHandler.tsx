@@ -220,7 +220,7 @@ class WorkboxHandler {
                 try {
                     deleteObject(fileRef)
                 } catch (error) {
-                    console.log('error deleting file', error.message)
+                    console.log('error deleting file', filename, error.message)
                 }
             }
         })
