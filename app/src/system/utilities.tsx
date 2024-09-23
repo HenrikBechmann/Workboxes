@@ -289,6 +289,8 @@ const versionData = {
         },
       },
       document: {
+        reconcilefileserror:false,
+        reconcilemonth:'0',
         files:[],
         data:{
           content:null,
@@ -366,6 +368,8 @@ const versionData = {
         },
       },
       document: {
+        reconcilefileserror:false,
+        reconcilemonth:'0',
         files:[],
         data:{
           content:null,
@@ -451,6 +455,8 @@ const versionData = {
         },
       },
       document: {
+        reconcilefileserror:false,
+        reconcilemonth:'0',
         files:[],
         data:{
           content:null,
