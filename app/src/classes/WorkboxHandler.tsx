@@ -58,6 +58,7 @@ class WorkboxHandler {
 
     workboxRecord = null
     editRecord = null
+    editorcontent = null
     resourcesRecords = []
 
     // --------------------[ process control & tracking ]------------------------

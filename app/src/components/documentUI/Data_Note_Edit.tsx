@@ -29,7 +29,8 @@ const DataNoteEdit = () => {
         [blocks, setBlocks] = useState(content)
 
     // TODO this is inefficient!
-    recordData.content = JSON.stringify(blocks)
+    // recordData.content = JSON.stringify(blocks)
+    workboxHandler.editorcontent = blocks
 
     const changeData = () => {
 

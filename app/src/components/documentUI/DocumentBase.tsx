@@ -354,6 +354,7 @@ const DocumentBase = (props) => {
 
     const onSave = () => {
 
+        if (workboxHandler.editorcontent) workboxHandler.editRecord.document.data.content = JSON.stringify(workboxHandler.editorcontent)
         if (sessiondocument.savechanges(sessionIDRef.current)) {
             setBaseEditState(false)
         }
