@@ -10,6 +10,8 @@ import {
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+
 import { useStorage } from '../../system/WorkboxesProvider'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -37,9 +39,21 @@ const DataNoteEdit = () => {
 
     async function uploadFile(file:File) {
 
-        console.log('uploadFile file', file)
+        console.log('uploading file', file)
+        const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/document/' + file.name, )
+        try {
+            await uploadBytes(fileRef, file)
+        } catch (error) {
+            console.log('An error occured uploading file.name', file.name)
+            alert (error.message)
+            return null
+        }
 
-        return null
+        const url = await getDownloadURL(fileRef)
+
+        console.log('downloadURL', url)
+
+        return url
 
     }
 
