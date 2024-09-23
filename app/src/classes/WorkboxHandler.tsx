@@ -208,6 +208,10 @@ class WorkboxHandler {
         return editorFiles
     }
 
+    async reconcileRepositoryFiles(repositoryFiles, editorFiles) {
+        
+    }
+
     // deletes files not in editorFiles
     async reconcileDocumentFiles(documentFiles, editorFiles) {
 
