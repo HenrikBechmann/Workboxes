@@ -9,6 +9,8 @@ import {
     writeBatch, runTransaction
 } from 'firebase/firestore'
 
+import { ref, deleteObject } from 'firebase/storage'
+
 import { cloneDeep as _cloneDeep } from 'lodash'
 
 import { updateDocumentSchema } from '../system/utilities'
@@ -181,10 +183,6 @@ class WorkboxHandler {
         CONTENT_FRAME_PADDING_WIDTH:null,
     }
 
-    workboxSubscriptionControlData
-
-    // -----------------------------[ operations ]--------------------------
-
     // const workboxSubscriptionControlData = {
     //     functions:{ // repository for direct calls
     //         updateWorkboxData: null,
@@ -196,7 +194,41 @@ class WorkboxHandler {
     //     subscriptionindex: <prefix>.<entityid>
     // }
 
+    workboxSubscriptionControlData
+
+    // -----------------------------[ operations ]--------------------------
+
+    getEditorFiles = (editorDocument) => {
+        const editorFiles = []
+        editorDocument.forEach((block) => {
+            if (['image','video','audio','file'].includes(block.type)) {
+                editorFiles.push(block.props.name)
+            }
+        })
+        return editorFiles
+    }
+
+    // deletes files not in editorFiles
     async reconcileDocumentFiles(documentFiles, editorFiles) {
+
+        const documentFileSet = new Set(documentFiles)
+        const editorFileSet = new Set(editorFiles)
+
+        documentFileSet.forEach((filename) => {
+            if (!editorFileSet.has(filename)) {
+                const fileRef = ref(this.internal.storage,this.editRecord.profile.workbox.id + '/document/' + filename )
+                try {
+                    deleteObject(fileRef)
+                } catch (error) {
+                    console.log('error deleting file', error.message)
+                }
+            }
+        })
+
+        documentFiles.length = 0
+        editorFileSet.forEach((filename) => {
+            documentFiles.push(filename)
+        })
 
     }
 

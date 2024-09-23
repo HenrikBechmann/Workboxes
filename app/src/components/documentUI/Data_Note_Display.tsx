@@ -18,6 +18,7 @@ const DataNoteDisplay = () => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         documentData = workboxRecord.document.data,
+        documentFiles = workboxRecord.document.files,
         content = documentData.content?JSON.parse(documentData.content):[{}],
         editor = useCreateBlockNote(
             {
@@ -33,7 +34,7 @@ const DataNoteDisplay = () => {
             // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
             block = content[0]
 
-        console.log('content',content)
+        // console.log('content',content)
 
         editor.replaceBlocks(editor.document,content)
 

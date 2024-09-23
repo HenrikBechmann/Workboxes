@@ -22,15 +22,13 @@ const DataNoteEdit = () => {
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
-        { data:recordData, files:recordFiles } = editRecord.document,
-        content = recordData.content?JSON.parse(recordData.content):[{}],
+        { data:editRecordData, files:editRecordFiles } = editRecord.document,
+        content = editRecordData.content?JSON.parse(editRecordData.content):[{}],
         // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
         [blocks, setBlocks] = useState(content)
 
-    // TODO this is inefficient!
-    // recordData.content = JSON.stringify(blocks)
-    workboxHandler.editorcontent = blocks
+    workboxHandler.editorcontent = blocks // stringify to editRecord.document.data.content in DocumentBase.save()
 
     const changeData = () => {
 
@@ -40,19 +38,23 @@ const DataNoteEdit = () => {
 
     async function uploadFile(file:File) {
 
-        console.log('uploading file', file)
-        const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/document/' + file.name, )
+        if (editRecordFiles.includes(file.name)) { // avoid invalidation of the first
+            alert(file.name + ' has already been uploaded') // placeholder
+            return null
+        }
+
+        const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/document/' + file.name)
         try {
             await uploadBytes(fileRef, file)
         } catch (error) {
             console.log('An error occured uploading file.name', file.name)
-            alert (error.message)
+            alert (error.message) // placeholder
             return null
         }
 
-        const url = await getDownloadURL(fileRef)
+        editRecordFiles.push(file.name)
 
-        console.log('downloadURL', url)
+        const url = await getDownloadURL(fileRef)
 
         return url
 
@@ -72,8 +74,6 @@ export default DataNoteEdit
 //         }
 //     />
 // </BlockNoteView>
-
-        // editor = useCreateBlockNote({initialContent:summary, trailingBlock:false})
 
     // useEffect(()=>{
 

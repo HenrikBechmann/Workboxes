@@ -352,10 +352,17 @@ const DocumentBase = (props) => {
 
     }
 
-    const onSave = () => {
+    async function onSave () {
 
-        if (workboxHandler.editorcontent) workboxHandler.editRecord.document.data.content = JSON.stringify(workboxHandler.editorcontent)
-        if (sessiondocument.savechanges(sessionIDRef.current)) {
+        let editorFiles = []
+        const documentFiles = workboxHandler.editRecord.document.files
+        if (workboxHandler.editorcontent) {
+            workboxHandler.editRecord.document.data.content = 
+                JSON.stringify(workboxHandler.editorcontent)
+            editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
+        }
+        await workboxHandler.reconcileDocumentFiles(documentFiles, editorFiles)
+        if (sessiondocument.savechanges(sessionIDRef.current)) { // check for errors or other blocking conditions
             setBaseEditState(false)
         }
 
