@@ -361,7 +361,7 @@ const DocumentBase = (props) => {
                 JSON.stringify(workboxHandler.editorcontent)
             editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
         }
-        await workboxHandler.reconcileDocumentFiles(documentFiles, editorFiles)
+        await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
         if (sessiondocument.savechanges(sessionIDRef.current)) { // check for errors or other blocking conditions
             setBaseEditState(false)
         }
@@ -377,7 +377,7 @@ const DocumentBase = (props) => {
             editorFiles = workboxHandler.getEditorFiles(editorcontent)
             // console.log('documentFiles, editorcontent, editorFiles',documentFiles, editorcontent, editorFiles)
         }
-        await workboxHandler.revertDocumentFiles(documentFiles, editorFiles)
+        await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
 
         sessiondocument.cancelchanges(sessionIDRef.current)
         setBaseEditState(false)
