@@ -368,7 +368,16 @@ const DocumentBase = (props) => {
 
     }
 
-    const onCancel = () => {
+    async function onCancel() {
+
+        let editorFiles = []
+        const documentFiles = workboxHandler.editRecord.document.files
+        if (workboxHandler.workboxRecord.document.data.content) {
+            const editorcontent = JSON.parse(workboxHandler.workboxRecord.document.data.content)
+            editorFiles = workboxHandler.getEditorFiles(editorcontent)
+            // console.log('documentFiles, editorcontent, editorFiles',documentFiles, editorcontent, editorFiles)
+        }
+        await workboxHandler.revertDocumentFiles(documentFiles, editorFiles)
 
         sessiondocument.cancelchanges(sessionIDRef.current)
         setBaseEditState(false)

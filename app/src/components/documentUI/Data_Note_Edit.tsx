@@ -22,7 +22,7 @@ const DataNoteEdit = () => {
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
-        { data:editRecordData, files:editRecordFiles } = editRecord.document,
+        { data:editRecordData, files:editorUploadedFiles } = editRecord.document,
         content = editRecordData.content?JSON.parse(editRecordData.content):[{}],
         // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
@@ -38,7 +38,7 @@ const DataNoteEdit = () => {
 
     async function uploadFile(file:File) {
 
-        if (editRecordFiles.includes(file.name)) { // avoid invalidation of the first
+        if (editorUploadedFiles.includes(file.name)) { // avoid invalidation of the first
             alert(file.name + ' has already been uploaded') // placeholder
             return null
         }
@@ -52,7 +52,7 @@ const DataNoteEdit = () => {
             return null
         }
 
-        editRecordFiles.push(file.name)
+        editorUploadedFiles.push(file.name)
 
         const url = await getDownloadURL(fileRef)
 

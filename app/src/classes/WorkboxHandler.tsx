@@ -198,6 +198,7 @@ class WorkboxHandler {
 
     // -----------------------------[ operations ]--------------------------
 
+    // -- sync files - start
     getEditorFiles = (editorDocument) => {
         const editorFiles = []
         editorDocument.forEach((block) => {
@@ -208,33 +209,48 @@ class WorkboxHandler {
         return editorFiles
     }
 
-    async reconcileRepositoryFiles(repositoryFiles, editorFiles) {
-        
-    }
+    // deletes storage files not in editor files, before firestore save of edited document
+    reconcileUploadedFiles = (uploadedFiles, editorFiles) => {
 
-    // deletes files not in editorFiles
-    async reconcileDocumentFiles(documentFiles, editorFiles) {
-
-        const documentFileSet = new Set(documentFiles)
+        // avoid duplicates
+        const uploadedFileSet = new Set(uploadedFiles)
         const editorFileSet = new Set(editorFiles)
 
-        documentFileSet.forEach((filename) => {
+        this.removeOrphans(uploadedFileSet, editorFileSet, this)
+
+        // refreshes firestore document files list to match editor files, in place
+        uploadedFiles.length = 0
+        editorFileSet.forEach((filename) => {
+            uploadedFiles.push(filename)
+        })
+
+    }
+
+    // takes edited file list and compares with pre-edit editor.content
+    revertUploadedFiles = (uploadedFiles, editorFiles) => {
+
+        // avoid duplicates
+        const uploadedFileSet = new Set(uploadedFiles)
+        const editorFileSet = new Set(editorFiles)
+
+        this.removeOrphans(uploadedFileSet, editorFileSet, this)
+
+    }
+
+    private removeOrphans = (uploadedFileSet, editorFileSet, self) => {
+        // delete storage files not referenced in editor files
+        uploadedFileSet.forEach(async function (filename) {
             if (!editorFileSet.has(filename)) {
-                const fileRef = ref(this.internal.storage,this.editRecord.profile.workbox.id + '/document/' + filename )
+                const fileRef = ref(self.internal.storage,self.workboxRecord.profile.workbox.id + '/document/' + filename )
                 try {
-                    deleteObject(fileRef)
+                    await deleteObject(fileRef)
                 } catch (error) {
-                    console.log('error deleting file', filename, error.message)
+                    console.log('error deleting file for revert', filename, error.message)
                 }
             }
         })
-
-        documentFiles.length = 0
-        editorFileSet.forEach((filename) => {
-            documentFiles.push(filename)
-        })
-
     }
+    // -- sync files - end
 
     async subscribeToWorkboxRecord() {
 
