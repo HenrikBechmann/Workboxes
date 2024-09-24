@@ -61,6 +61,10 @@ const DataNoteDisplay = () => {
                         max-width: 500px;
                         width: auto;
                     }
+                    .bn-file-default-preview {
+                        max-width: 500px;
+                        width: auto;
+                    }
                     `
                 }
             </style>
