@@ -56,13 +56,17 @@ const DataNoteDisplay = () => {
                     }
                     [data-file-block] img, [data-file-block] video {
                         width:auto;
-                    }`
+                    }
+                    [data-content-type=audio] {
+                        max-width: 500px;
+                        width: auto;
+                    }
+                    `
                 }
             </style>
             {(!isEmpty) && <BlockNoteView editor = { editor } editable = { false } sideMenu = { false }/>}
         </div>
 
 }
-
 
 export default DataNoteDisplay
