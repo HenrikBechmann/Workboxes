@@ -1,7 +1,9 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, CSSProperties, lazy} from 'react'
+import React, {useRef, useState, useEffect, CSSProperties, useCallback, lazy} from 'react'
+
+import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import {
     Box,
@@ -14,7 +16,7 @@ import {useDropzone} from 'react-dropzone'
 const ReactCrop = lazy(() => import('react-image-crop'))
 import 'react-image-crop/dist/ReactCrop.css'
 
-import { useSystemRecords } from '../../system/WorkboxesProvider'
+import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
@@ -62,9 +64,35 @@ const alternateActionIconStyles = {
 const BaseEdit = (props) => {
     
     const 
+        storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
-        [editState,setEditState] = useState('setup'),
+        [editState,setEditState] = useState('setup')
+
+    const
+        onDrop = useCallback(async (acceptedFiles) => {
+            console.log('acceptedFiles', acceptedFiles)
+            const file = acceptedFiles[0]
+            const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name)
+            try {
+                await uploadBytes(fileRef, file)
+            } catch (error) {
+                console.log('An error occured uploading file.name', file.name)
+                alert (error.message) // placeholder
+                return null
+            }
+            console.log('file has been uploaded', file.name)
+
+            const url = await getDownloadURL(fileRef)
+
+            workboxHandler.editRecord.document.base.image.source = url
+
+            setEditState('uploading')
+
+        }, [])
+
+    const
+        {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple:false}),
 
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
@@ -79,7 +107,7 @@ const BaseEdit = (props) => {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
-            thumbnail:`This image is used as a visual representation in resource listings.`
+            thumbnail:`This image (90 x 90 px) is used as a visual representation in resource listings.`
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -109,7 +137,7 @@ const BaseEdit = (props) => {
 
     useEffect(()=>{
 
-        if (['checking','validating'].includes(editState)) setEditState('ready')
+        if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
 
     },[editState])
 
@@ -258,37 +286,18 @@ const BaseEdit = (props) => {
             </Box>
             <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
                 Thumbnail image:
-                <Flex>
-                    <Flex style = {{
-                        alignItems:'center',
-                        padding: '3px',
-                        width: '130px',
-                        border: '1px solid silver',
-                        opacity: 0.5}}>
-                        <span>upload</span> 
-                        <img width = '18px' height = '18px' src = {tapIcon}/> 
-                        <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
-                    <Flex style = {{
-                        alignItems:'center',
-                        padding: '3px',
-                        width: '130px',
-                        border: '1px solid silver',
-                        opacity: 0.5}}>
-                        <span>embed</span> 
-                        <img  width = '18px' height = '18px' src = {tapIcon}/> 
-                        <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
-                    <Flex style = {{
-                        alignItems:'center',
-                        padding: '3px',
-                        width: '130px',
-                        border: '1px solid silver',
-                        opacity: 0.5}}>
-                        <span>resource</span> 
-                        <img width = '18px' height = '18px' src = {dropIcon} /></Flex>
-                </Flex>
+                <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                {
+                    isDragActive ?
+                        <p>Drop the files here ...</p> :
+                        <p>Drag 'n' drop some files here, or click to select files</p>
+                    }
+                </div>                
                 <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.thumbnail}
+                {helperText.thumbnail}
                 </Box>
+                <Box><img style = {{width: '90px', height: '90px'}} src = {workboxHandler.editRecord.document.base.image.source} /></Box>
             </Box>
         </Flex>
         </details>
@@ -298,6 +307,35 @@ const BaseEdit = (props) => {
         </details>
     </Box>
 }
+
+// <Flex>
+//     <Flex style = {{
+//         alignItems:'center',
+//         padding: '3px',
+//         width: '130px',
+//         border: '1px solid silver',
+//         opacity: 0.5}}>
+//         <span>upload</span> 
+//         <img width = '18px' height = '18px' src = {tapIcon}/> 
+//         <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
+// </Flex>
+// <Flex style = {{
+//     alignItems:'center',
+//     padding: '3px',
+//     width: '130px',
+//     border: '1px solid silver',
+//     opacity: 0.5}}>
+//     <span>embed</span> 
+//     <img  width = '18px' height = '18px' src = {tapIcon}/> 
+//     <img  width = '18px' height = '18px' src = {dropIcon} /></Flex>
+// <Flex style = {{
+//     alignItems:'center',
+//     padding: '3px',
+//     width: '130px',
+//     border: '1px solid silver',
+//     opacity: 0.5}}>
+//     <span>resource</span> 
+//     <img width = '18px' height = '18px' src = {dropIcon} /></Flex>
 
 export const BaseDisplay = (props) => { // simplicity makes component available for document callout
 
@@ -314,13 +352,14 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
                <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
            </details>
         </Box>}
+        <Box style = {{float:'left'}} ><img style = {{width: '90px', height: '90px'}} src = {image.source} /></Box>
         <Box fontWeight = 'bold'>
             {name}
         </Box>
         <Box fontStyle = 'italic'>
            {description}
         </Box>
-        <Box>
+        <Box style = {{clear:'left'}} >
             <BaseDataDisplayController />
         </Box>
     </Box>
