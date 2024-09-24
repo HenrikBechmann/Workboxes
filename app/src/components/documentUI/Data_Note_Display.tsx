@@ -54,7 +54,7 @@ const DataNoteDisplay = () => {
                     [data-file-block] .bn-visual-media-wrapper {
                         max-width: 500px;
                     }
-                    [data-file-block] img, video {
+                    [data-file-block] img, [data-file-block] video {
                         width:auto;
                     }`
                 }
