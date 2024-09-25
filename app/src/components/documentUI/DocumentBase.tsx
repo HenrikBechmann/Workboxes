@@ -12,7 +12,7 @@ import {
     Input, Textarea, Heading
 } from '@chakra-ui/react'
 
-import {useDropzone} from 'react-dropzone'
+// import {useDropzone} from 'react-dropzone'
 
 import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -68,30 +68,30 @@ const BaseEdit = (props) => {
         editBaseRecord = workboxHandler.editRecord.document.base,
         [editState,setEditState] = useState('setup')
 
+    // const
+    //     onDrop = useCallback(async (acceptedFiles) => {
+    //         console.log('acceptedFiles', acceptedFiles)
+    //         const file = acceptedFiles[0]
+    //         const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name)
+    //         try {
+    //             await uploadBytes(fileRef, file)
+    //         } catch (error) {
+    //             console.log('An error occured uploading file.name', file.name)
+    //             alert (error.message) // placeholder
+    //             return null
+    //         }
+    //         console.log('file has been uploaded', file.name)
+
+    //         const url = await getDownloadURL(fileRef)
+
+    //         workboxHandler.editRecord.document.base.image.source = url
+
+    //         setEditState('uploading')
+
+    //     }, [])
+
     const
-        onDrop = useCallback(async (acceptedFiles) => {
-            console.log('acceptedFiles', acceptedFiles)
-            const file = acceptedFiles[0]
-            const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name)
-            try {
-                await uploadBytes(fileRef, file)
-            } catch (error) {
-                console.log('An error occured uploading file.name', file.name)
-                alert (error.message) // placeholder
-                return null
-            }
-            console.log('file has been uploaded', file.name)
-
-            const url = await getDownloadURL(fileRef)
-
-            workboxHandler.editRecord.document.base.image.source = url
-
-            setEditState('uploading')
-
-        }, [])
-
-    const
-        {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple:false}),
+        // {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple:false}),
 
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
@@ -106,7 +106,7 @@ const BaseEdit = (props) => {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
-            thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
+            // thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -292,7 +292,6 @@ const BaseEdit = (props) => {
         </details>
     </Box>
 }
-
 
 // <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
 //     Thumbnail image:

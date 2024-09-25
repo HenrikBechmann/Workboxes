@@ -1,20 +1,20 @@
 // IntakeCroppedImage.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, CSSProperties, useCallback, lazy} from 'react'
+import React, {useState, useCallback} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import {
     Box,
-    FormControl, FormLabel, FormHelperText, FormErrorMessage,
-    Flex, HStack,
-    Input, Textarea, Heading
+    // FormControl, FormLabel, FormHelperText, FormErrorMessage,
+    // Flex, HStack,
+    // Input, Textarea, Heading
 } from '@chakra-ui/react'
 
 import {useDropzone} from 'react-dropzone'
 
-import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
+import { useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
 const IntakeCroppedImage = (props) => {
