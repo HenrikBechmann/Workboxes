@@ -299,6 +299,8 @@ const versionData = {
         base: {
             name: null,
             image: {
+              filename: null,
+              previous_filename: null,
               caption: null,
               source: null,
             },
@@ -378,6 +380,8 @@ const versionData = {
         base: {
             name: null,
             image: {
+              filename: null,
+              previous_filename: null,
               caption: null,
               source: null,
             },
@@ -465,6 +469,8 @@ const versionData = {
         base: {
             name: null,
             image: {
+              filename: null,
+              previous_filename: null,
               source: null,
               caption: null,
             },

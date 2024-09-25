@@ -13,8 +13,6 @@ import {
 } from '@chakra-ui/react'
 
 import {useDropzone} from 'react-dropzone'
-const ReactCrop = lazy(() => import('react-image-crop'))
-import 'react-image-crop/dist/ReactCrop.css'
 
 import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -107,7 +105,7 @@ const BaseEdit = (props) => {
             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
-            thumbnail:`This image (90 x 90 px) is used as a visual representation in resource listings.`
+            thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
         },
         invalidFieldFlagsRef = useRef({
             name:false,
@@ -246,7 +244,7 @@ const BaseEdit = (props) => {
                 </FormControl>
             </Box>
         </details>
-        <details open>
+        <details open = {!(editBaseRecord.name && editBaseRecord.description && editBaseRecord.image.source)}>
         <summary style = {{fontSize:'small'}}>workbox basics</summary>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
@@ -299,6 +297,7 @@ const BaseEdit = (props) => {
                 </Box>
                 <Box><img style = {{width: '90px', height: '90px'}} src = {workboxHandler.editRecord.document.base.image.source} /></Box>
             </Box>
+                
         </Flex>
         </details>
         <details open>
