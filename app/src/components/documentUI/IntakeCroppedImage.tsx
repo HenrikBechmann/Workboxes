@@ -1,7 +1,7 @@
 // IntakeCroppedImage.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useCallback} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -32,7 +32,8 @@ const IntakeCroppedImage = (props) => {
         onDrop = useCallback(async (acceptedFiles) => {
             console.log('acceptedFiles', acceptedFiles)
             const file = acceptedFiles[0]
-            const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name)
+            const fileRef = file?.name? ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name):null
+            if (!fileRef) return
             try {
                 await uploadBytes(fileRef, file)
             } catch (error) {
@@ -50,8 +51,22 @@ const IntakeCroppedImage = (props) => {
 
         }, [])
 
+    useEffect(()=>{
+
+        setEditState('ready')
+
+    },[editState])
+
     const
-        {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple:false})
+        {getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject} = useDropzone(
+            {
+                onDrop, 
+                multiple:false,
+                accept: {
+                    'image/*': [],
+                }
+            }
+        )
 
     return <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
         Thumbnail image:
@@ -59,9 +74,10 @@ const IntakeCroppedImage = (props) => {
             <input {...getInputProps()} />
         {
             isDragActive ?
-                <p>Drop the files here ...</p> :
-                <p>Drag 'n' drop some files here, or click to select files</p>
+                <p style = {{fontSize:'small'}} >Drop the Image here ...</p> :
+                <p style = {{fontSize:'small'}}>Drag 'n' drop an image here, or click to select an image</p>
             }
+            {isDragReject && <div style = {{color:'red',fontSize:'small'}} >file rejected - file must be an image</div>}
         </div>                
         <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
         {helperText.thumbnail}
