@@ -19,6 +19,7 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
 const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
+const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
 
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
@@ -282,22 +283,7 @@ const BaseEdit = (props) => {
                     </FormHelperText>
                 </FormControl>
             </Box>
-            <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
-                Thumbnail image:
-                <div {...getRootProps()}>
-                    <input {...getInputProps()} />
-                {
-                    isDragActive ?
-                        <p>Drop the files here ...</p> :
-                        <p>Drag 'n' drop some files here, or click to select files</p>
-                    }
-                </div>                
-                <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                {helperText.thumbnail}
-                </Box>
-                <Box><img style = {{width: '90px', height: '90px'}} src = {workboxHandler.editRecord.document.base.image.source} /></Box>
-            </Box>
-                
+            <IntakeCroppedImage />
         </Flex>
         </details>
         <details open>
@@ -306,6 +292,23 @@ const BaseEdit = (props) => {
         </details>
     </Box>
 }
+
+
+// <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
+//     Thumbnail image:
+//     <div {...getRootProps()}>
+//         <input {...getInputProps()} />
+//     {
+//         isDragActive ?
+//             <p>Drop the files here ...</p> :
+//             <p>Drag 'n' drop some files here, or click to select files</p>
+//         }
+//     </div>                
+//     <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//     {helperText.thumbnail}
+//     </Box>
+//     <Box><img style = {{width: '90px', height: '90px'}} src = {workboxHandler.editRecord.document.base.image.source} /></Box>
+// </Box>
 
 // <Flex>
 //     <Flex style = {{
