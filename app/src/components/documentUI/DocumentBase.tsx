@@ -9,7 +9,8 @@ import {
     Box,
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
     Flex, HStack,
-    Input, Textarea, Heading
+    Input, Textarea, Heading,
+    Divider,
 } from '@chakra-ui/react'
 
 // import {useDropzone} from 'react-dropzone'
@@ -36,7 +37,7 @@ const baseStyles = {
 
     transition: 'margin-left 0.5s',
     borderLeft: '1px solid silver',
-    borderBottom: '1px solid silver',
+    // borderBottom: '1px solid silver',
 }
 
 const displayStyles = {
@@ -346,6 +347,8 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         baseData = documentBaseData.data,
         { name, description, image, todo } = baseFields
 
+    console.log('documentBaseData',documentBaseData)
+
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>
            <details>
@@ -353,14 +356,17 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
                <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
            </details>
         </Box>}
-        <Box style = {{float:'left'}} ><img style = {{width: '90px', height: '90px'}} src = {image.source} /></Box>
+        {image.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
+            <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+        </Box>}
         <Box fontWeight = 'bold'>
             {name}
         </Box>
         <Box fontStyle = 'italic'>
            {description}
         </Box>
-        <Box style = {{clear:'left'}} >
+        <Divider style = {{clear:'left', borderColor: 'gray'}} />
+        <Box >
             <BaseDataDisplayController />
         </Box>
     </Box>
