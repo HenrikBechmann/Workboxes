@@ -347,7 +347,7 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         baseData = documentBaseData.data,
         { name, description, image, todo } = baseFields
 
-    console.log('documentBaseData',documentBaseData)
+    // console.log('documentBaseData',documentBaseData)
 
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>

@@ -12,7 +12,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import {
-    Box,
+    Box, Button,
     // FormControl, FormLabel, FormHelperText, FormErrorMessage,
     // Flex, HStack,
     // Input, Textarea, Heading
@@ -20,8 +20,84 @@ import {
 
 import {useDropzone} from 'react-dropzone'
 
+import ReactCrop, {type Crop, makeAspectCrop, centerCrop} from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
 import { useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
+
+//     const [src, setSrc] = useState(null);
+//     const [crop, setCrop] = useState({ aspect: 16 / 9 });
+//     const [image, setImage] = useState(null);
+//     const [output, setOutput] = useState(null);
+
+//     const selectImage = (file) => {
+//         setSrc(URL.createObjectURL(file));
+//     };
+
+//     const cropImageNow = () => {
+//         const canvas = document.createElement('canvas');
+//         const scaleX = image.naturalWidth / image.width;
+//         const scaleY = image.naturalHeight / image.height;
+//         canvas.width = crop.width;
+//         canvas.height = crop.height;
+//         const ctx = canvas.getContext('2d');
+
+//         const pixelRatio = window.devicePixelRatio;
+//         canvas.width = crop.width * pixelRatio;
+//         canvas.height = crop.height * pixelRatio;
+//         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+//         ctx.imageSmoothingQuality = 'high';
+
+//         ctx.drawImage(
+//             image,
+//             crop.x * scaleX,
+//             crop.y * scaleY,
+//             crop.width * scaleX,
+//             crop.height * scaleY,
+//             0,
+//             0,
+//             crop.width,
+//             crop.height,
+//         );
+
+//         // Converting to base64
+//         const base64Image = canvas.toDataURL('image/jpeg');
+//         setOutput(base64Image);
+//     };
+
+// ------------------------------------------
+
+//     return (
+//         <div className="App">
+//             <center>
+//                 <input
+//                     type="file"
+//                     accept="image/*"
+//                     onChange={(e) => {
+//                         selectImage(e.target.files[0]);
+//                     }}
+//                 />
+//                 <br />
+//                 <br />
+                // <div>
+                //     {src && (
+                //         <div>
+                //             <ReactCrop src={src} onImageLoaded={setImage}
+                //                 crop={crop} onChange={setCrop} />
+                //             <br />
+                //             <button onClick={cropImageNow}>Crop</button>
+                //             <br />
+                //             <br />
+                //         </div>
+                //     )}
+                // </div>
+                // <div>{output && <img src={output} />}</div>
+//             </center>
+//         </div>
+//     );
+
+
 
 const IntakeCroppedImage = (props) => {
 
@@ -32,30 +108,114 @@ const IntakeCroppedImage = (props) => {
         [editState,setEditState] = useState('setup'),
         helperText = {
             thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
-        }
+        },
+        [error, setError] = useState(''),
+        [imgSrc, setImgSrc] = useState(''),
+        [crop, setCrop] = useState<Crop>(),
+        [image, setImage] = useState(null),
+        [output, setOutput] = useState(null)
 
+    // onImageLoaded={setImage}
+    // TODO check availability of error value for reset in imageElement.setEventListener
     const
         onDrop = useCallback(async (acceptedFiles) => {
-            console.log('acceptedFiles', acceptedFiles)
+            // console.log('acceptedFiles', acceptedFiles)
             const file = acceptedFiles[0]
-            const fileRef = file?.name? ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name):null
-            if (!fileRef) return
-            try {
-                await uploadBytes(fileRef, file)
-            } catch (error) {
-                console.log('An error occured uploading file.name', file.name)
-                alert (error.message) // placeholder
-                return null
-            }
-            console.log('file has been uploaded', file.name)
+            if (!file) return
 
-            const url = await getDownloadURL(fileRef)
+            const reader = new FileReader()
 
-            workboxHandler.editRecord.document.base.image.source = url
+            reader.addEventListener('load',() => {
 
-            setEditState('uploading')
+                // validate image size
+                const imageElement = new Image()
+                const imageUrl = reader.result?.toString() || ''
+                imageElement.src = imageUrl
 
-        }, [])
+                imageElement.addEventListener('load',(e) => {
+                    if (error) setError('')
+                    const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement
+                    if (naturalWidth < 90 || naturalHeight < 90) {
+                        setError('image must be at least 90 x 90 pixels.')
+                        return setImgSrc('')
+                    }
+                })
+
+                setImgSrc(imageUrl)
+                
+            })
+
+            reader.readAsDataURL(file)
+
+            // selectImage(file)
+
+
+            // const fileRef = file?.name? ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name):null
+            // if (!fileRef) return
+            // try {
+            //     await uploadBytes(fileRef, file)
+            // } catch (error) {
+            //     console.log('An error occured uploading file.name', file.name)
+            //     alert (error.message) // placeholder
+            //     return null
+            // }
+            // console.log('file has been uploaded', file.name)
+
+            // const url = await getDownloadURL(fileRef)
+
+            // workboxHandler.editRecord.document.base.image.source = url
+
+            // setEditState('uploading')
+
+        }, [error])
+
+    // const selectImage = (file) => {
+    //     setSrc(URL.createObjectURL(file));
+    // };
+
+    const onImageLoad = (e) => {
+        const { width, height } = e.currentTarget
+        const cropWidthByPercent = (90/width) * 100
+        const crop = makeAspectCrop(
+            {
+                unit: '%',
+                width: cropWidthByPercent,
+            }, 1, width, height
+        )
+        const centeredCrop = centerCrop(crop, width, height)
+        setCrop(centeredCrop)
+    }
+
+    const cropImageNow = () => {
+        const canvas = document.createElement('canvas');
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
+        const ctx = canvas.getContext('2d');
+
+        const pixelRatio = window.devicePixelRatio;
+        canvas.width = crop.width * pixelRatio;
+        canvas.height = crop.height * pixelRatio;
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        ctx.imageSmoothingQuality = 'high';
+
+        ctx.drawImage(
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width,
+            crop.height,
+        );
+
+        // Converting to base64
+        const base64Image = canvas.toDataURL('image/jpeg');
+        setOutput(base64Image);
+    };
 
     useEffect(()=>{
 
@@ -84,10 +244,31 @@ const IntakeCroppedImage = (props) => {
                 <p style = {{fontSize:'small'}}>Drag 'n' drop an image here, or click to select an image</p>
             }
             {isDragReject && <div style = {{color:'red',fontSize:'small'}} >file rejected - file must be an image</div>}
+            {error && <div style = {{color:'red', fontSize: 'small'}} >{error}</div> }
         </div>                
         <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
         {helperText.thumbnail}
         </Box>
+        <div>
+            {( imgSrc && 
+                <div>
+                    <ReactCrop
+                        crop={crop} 
+                        onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
+                        keepSelection
+                        aspect = {1}
+                        minWidth = {90}
+                    >
+                        <img src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
+                    </ReactCrop>
+                    <br />
+                    <Button onClick={cropImageNow} colorScheme = 'blue'>Crop and upload image</Button>
+                    <br />
+                    <br />
+                </div>
+            )}
+        </div>
+        <div>{output && <img src={output} />}</div>
         <Box><img style = {
             {
                 width: '90px', 
