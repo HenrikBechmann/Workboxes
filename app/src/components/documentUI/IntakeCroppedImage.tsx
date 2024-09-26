@@ -1,6 +1,12 @@
 // IntakeCroppedImage.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    TODO:
+    provide way to clear image
+    
+*/
+
 import React, {useState, useEffect, useCallback} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -82,7 +88,15 @@ const IntakeCroppedImage = (props) => {
         <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
         {helperText.thumbnail}
         </Box>
-        <Box><img style = {{width: '90px', height: '90px'}} src = {workboxHandler.editRecord.document.base.image.source} /></Box>
+        <Box><img style = {
+            {
+                width: '90px', 
+                height: '90px', 
+                border: '1px solid gray', 
+                borderRadius: '6px',
+                marginTop: '3px',
+            }
+        } src = {workboxHandler.editRecord.document.base.image.source} /></Box>
     </Box>
 
 }
