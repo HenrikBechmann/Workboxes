@@ -25,29 +25,19 @@
     ],
     "headers": [
       {
-        "source": "lib/**",
+        "source": "dist/**",
         "headers": [
           {
-            "key": "cache-control",
-            "value": "public,max-age=0,must-revalidate"
-          }
-        ]
-      },
-      {
-        "source": "public/**",
-        "headers": [
+            "key": "Cache-Control",
+            "value": "no-cache,no-store,must-revalidate"
+          },
           {
-            "key": "cache-control",
-            "value": "public,max-age=0,must-revalidate"
-          }
-        ]
-      },
-      {
-        "source": "css/**",
-        "headers": [
+            "key": "Pragma",
+            "value": "no-cache"
+          },
           {
-            "key": "cache-control",
-            "value": "public,max-age=0,must-revalidate"
+            "key": "Expires",
+            "value": "0"
           }
         ]
       }
