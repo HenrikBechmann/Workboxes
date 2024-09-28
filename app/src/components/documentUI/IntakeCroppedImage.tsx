@@ -12,7 +12,7 @@ import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import {
-    Box, Button,
+    Box, Button, Flex,
 } from '@chakra-ui/react'
 
 import {useDropzone} from 'react-dropzone'
@@ -104,7 +104,7 @@ const IntakeCroppedImage = (props) => {
         editBaseRecord = workboxHandler.editRecord.document.base,
         [editState,setEditState] = useState('setup'),
         helperText = {
-            thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
+            thumbnail:'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
         },
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
@@ -219,9 +219,9 @@ const IntakeCroppedImage = (props) => {
         ctx.restore()
 
         // Converting to base64
-        // const base64Image = canvas.toDataURL('image/jpeg')
+        const base64Image = canvas.toDataURL('image/jpeg')
 
-        // setOutput(base64Image)
+        setOutput(base64Image)
 
     }
 
@@ -243,13 +243,13 @@ const IntakeCroppedImage = (props) => {
         )
 
     return <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
-        Thumbnail image:
+        New thumbnail image:
         <div {...getRootProps()}>
             <input {...getInputProps()} />
         {
             isDragActive ?
-                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >Drop the Image here ...</Box> :
-                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>Drag 'n' drop an image here, or click to select an image</Box>
+                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >Drop the new image here ...</Box> :
+                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>Drag 'n' drop a new image here, or click to select a new image</Box>
             }
             {isDragReject && <div style = {{color:'red',fontSize:'small'}} >file rejected - file must be an image</div>}
             {error && <div style = {{color:'red', fontSize: 'small'}} >{error}</div> }
@@ -258,8 +258,8 @@ const IntakeCroppedImage = (props) => {
         {helperText.thumbnail}
         </Box>
         <Box>
-            {( imgSrc && 
-                <Box>
+            {( imgSrc &&
+                <Box border = '2px solid black' padding = '3px'>
                     <ReactCrop
                         crop={crop} 
                         onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
@@ -270,17 +270,20 @@ const IntakeCroppedImage = (props) => {
                         <img ref = {imgRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
                     </ReactCrop>
                     <br />
-                    <Button onClick={cropImageNow} colorScheme = 'blue'>Crop and upload image</Button>
+                    <Button onClick={cropImageNow} colorScheme = 'blue'>Preview cropped image</Button>
                     <br /><br />
-                    {crop && 
+                    {crop && <Flex>
                         <canvas style = {
                             {
                                 width:'90px', 
                                 height:'90px', 
                                 border: '1px solid gray', 
-                                objectFit: 'contain'
+                                objectFit: 'contain',
+                                marginRight: '3px',
                             }
-                        } ref = {canvasRef} />}
+                
+                        } ref = {canvasRef} /><Button isDisabled = {!output} colorScheme = 'blue'>Upload cropped image</Button></Flex>
+                    }
                 </Box>
             )}
         </Box>
