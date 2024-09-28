@@ -198,7 +198,7 @@ const IntakeCroppedImage = (props) => {
             image,
             crop.x * scaleX,
             crop.y * scaleY,
-            crop.width * scaleX,
+            crop.width * scaleX,          
             crop.height * scaleY,
             0,
             0,
@@ -236,8 +236,8 @@ const IntakeCroppedImage = (props) => {
             <input {...getInputProps()} />
         {
             isDragActive ?
-                <p style = {{fontSize:'small'}} >Drop the Image here ...</p> :
-                <p style = {{fontSize:'small'}}>Drag 'n' drop an image here, or click to select an image</p>
+                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >Drop the Image here ...</Box> :
+                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>Drag 'n' drop an image here, or click to select an image</Box>
             }
             {isDragReject && <div style = {{color:'red',fontSize:'small'}} >file rejected - file must be an image</div>}
             {error && <div style = {{color:'red', fontSize: 'small'}} >{error}</div> }
