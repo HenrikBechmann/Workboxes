@@ -191,8 +191,8 @@ const IntakeCroppedImage = (props) => {
             pixelRatio = window.devicePixelRatio,
             ctx = canvas.getContext('2d')
 
-        canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
-        canvas.height = Math.floor(crop.height * scaleY * pixelRatio) 
+        canvas.width = Math.floor(pxCrop.width * scaleX * pixelRatio)
+        canvas.height = Math.floor(pxCrop.height * scaleY * pixelRatio) 
 
         // ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
         ctx.scale(pixelRatio, pixelRatio)
