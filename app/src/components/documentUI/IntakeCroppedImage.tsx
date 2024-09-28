@@ -1,6 +1,7 @@
 // IntakeCroppedImage.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+// many details of conversions taken from https://www.youtube.com/watch?v=odscV57kToU by Nikita Dev (recommended)
 /*
     TODO:
     provide way to clear image
@@ -23,78 +24,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-//     const [src, setSrc] = useState(null);
-//     const [crop, setCrop] = useState({ aspect: 16 / 9 });
-//     const [image, setImage] = useState(null);
-//     const [output, setOutput] = useState(null);
-
-//     const selectImage = (file) => {
-//         setSrc(URL.createObjectURL(file));
-//     };
-
-//     const cropImageNow = () => {
-//         const canvas = document.createElement('canvas');
-//         const scaleX = image.naturalWidth / image.width;
-//         const scaleY = image.naturalHeight / image.height;
-//         canvas.width = crop.width;
-//         canvas.height = crop.height;
-//         const ctx = canvas.getContext('2d');
-
-//         const pixelRatio = window.devicePixelRatio;
-//         canvas.width = crop.width * pixelRatio;
-//         canvas.height = crop.height * pixelRatio;
-//         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-//         ctx.imageSmoothingQuality = 'high';
-
-//         ctx.drawImage(
-//             image,
-//             crop.x * scaleX,
-//             crop.y * scaleY,
-//             crop.width * scaleX,
-//             crop.height * scaleY,
-//             0,
-//             0,
-//             crop.width,
-//             crop.height,
-//         );
-
-//         // Converting to base64
-//         const base64Image = canvas.toDataURL('image/jpeg');
-//         setOutput(base64Image);
-//     };
-
-// ------------------------------------------
-
-//     return (
-//         <div className="App">
-//             <center>
-//                 <input
-//                     type="file"
-//                     accept="image/*"
-//                     onChange={(e) => {
-//                         selectImage(e.target.files[0]);
-//                     }}
-//                 />
-//                 <br />
-//                 <br />
-                // <div>
-                //     {src && (
-                //         <div>
-                //             <ReactCrop src={src} onImageLoaded={setImage}
-                //                 crop={crop} onChange={setCrop} />
-                //             <br />
-                //             <button onClick={cropImageNow}>Crop</button>
-                //             <br />
-                //             <br />
-                //         </div>
-                //     )}
-                // </div>
-                // <div>{output && <img src={output} />}</div>
-//             </center>
-//         </div>
-//     );
-
-
 
 const IntakeCroppedImage = (props) => {
 
@@ -102,20 +31,18 @@ const IntakeCroppedImage = (props) => {
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
-        [editState,setEditState] = useState('setup'),
-        helperText = {
-            thumbnail:'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
-        },
-        [error, setError] = useState(''),
-        [imgSrc, setImgSrc] = useState(''),
+        // [editState,setEditState] = useState('setup'),
         imgRef = useRef(null),
         canvasRef = useRef(null),
+        [error, setError] = useState(''),
+        [imgSrc, setImgSrc] = useState(''),
         [crop, setCrop] = useState<Crop>(),
         // [image, setImage] = useState(null),
-        [output, setOutput] = useState(null)
+        [output, setOutput] = useState(null),
+        helperText = {
+            thumbnail:'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
+        }
 
-    // onImageLoaded={setImage}
-    // TODO check availability of error value for reset in imageElement.setEventListener
     const
         onDrop = useCallback(async (acceptedFiles) => {
             // console.log('acceptedFiles', acceptedFiles)
@@ -165,7 +92,7 @@ const IntakeCroppedImage = (props) => {
 
             // setEditState('uploading')
 
-        }, [error])
+        }, [error]) // TODO check availability of error value for reset in imageElement.setEventListener
 
     const onImageLoad = (e) => {
         const { width, height } = e.currentTarget
@@ -180,7 +107,7 @@ const IntakeCroppedImage = (props) => {
         setCrop(centeredCrop)
     }
 
-    const cropImageNow = () => {
+    const cropImage = () => {
         const 
             image = imgRef.current,
             pxCrop = convertToPixelCrop(crop, image.width, image.height ),
@@ -194,7 +121,6 @@ const IntakeCroppedImage = (props) => {
         canvas.width = Math.floor(pxCrop.width * scaleX * pixelRatio)
         canvas.height = Math.floor(pxCrop.height * scaleY * pixelRatio) 
 
-        // ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
         ctx.scale(pixelRatio, pixelRatio)
         ctx.imageSmoothingQuality = 'high'
         ctx.save()
@@ -225,11 +151,11 @@ const IntakeCroppedImage = (props) => {
 
     }
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        (editState == 'ready') && setEditState('ready')
+    //     (editState == 'ready') && setEditState('ready')
 
-    },[editState])
+    // },[editState])
 
     const
         {getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject} = useDropzone(
@@ -270,7 +196,7 @@ const IntakeCroppedImage = (props) => {
                         <img ref = {imgRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
                     </ReactCrop>
                     <br />
-                    <Button onClick={cropImageNow} colorScheme = 'blue'>Preview cropped image</Button>
+                    <Button onClick={cropImage} colorScheme = 'blue'>Preview cropped image</Button>
                     <br /><br />
                     {crop && <Flex>
                         <canvas style = {
@@ -297,7 +223,6 @@ const IntakeCroppedImage = (props) => {
             }
         } src = {workboxHandler.editRecord.document.base.image.source} /></Box>
     </Box>
-
 }
 
 export default IntakeCroppedImage
