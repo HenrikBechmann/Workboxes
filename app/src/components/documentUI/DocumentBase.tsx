@@ -49,6 +49,8 @@ const actionIconStyles = {
     width: '24px',
     marginLeft: '-28px',
     float:'left',
+    position:'sticky',
+    top:0,
 } as CSSProperties
 
 const alternateActionIconStyles = {
@@ -58,6 +60,8 @@ const alternateActionIconStyles = {
     marginTop:'10px',
     float:'left',
     clear:'left',
+    position:'sticky',
+    top:'26px',
 } as CSSProperties
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints

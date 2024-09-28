@@ -7,15 +7,12 @@
     
 */
 
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useRef, useCallback} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import {
     Box, Button,
-    // FormControl, FormLabel, FormHelperText, FormErrorMessage,
-    // Flex, HStack,
-    // Input, Textarea, Heading
 } from '@chakra-ui/react'
 
 import {useDropzone} from 'react-dropzone'
@@ -111,8 +108,9 @@ const IntakeCroppedImage = (props) => {
         },
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
+        imgRef = useRef(null),
         [crop, setCrop] = useState<Crop>(),
-        [image, setImage] = useState(null),
+        // [image, setImage] = useState(null),
         [output, setOutput] = useState(null)
 
     // onImageLoaded={setImage}
@@ -142,13 +140,12 @@ const IntakeCroppedImage = (props) => {
                 })
 
                 setImgSrc(imageUrl)
-                
+
             })
 
             reader.readAsDataURL(file)
 
             // selectImage(file)
-
 
             // const fileRef = file?.name? ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name):null
             // if (!fileRef) return
@@ -169,10 +166,6 @@ const IntakeCroppedImage = (props) => {
 
         }, [error])
 
-    // const selectImage = (file) => {
-    //     setSrc(URL.createObjectURL(file));
-    // };
-
     const onImageLoad = (e) => {
         const { width, height } = e.currentTarget
         const cropWidthByPercent = (90/width) * 100
@@ -187,18 +180,19 @@ const IntakeCroppedImage = (props) => {
     }
 
     const cropImageNow = () => {
-        const canvas = document.createElement('canvas');
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
+        const 
+            image = imgRef.current,
+            canvas = document.createElement('canvas'),
+            scaleX = image.naturalWidth / image.width,
+            scaleY = image.naturalHeight / image.height,
+            pixelRatio = window.devicePixelRatio,
+            ctx = canvas.getContext('2d')
 
-        const pixelRatio = window.devicePixelRatio;
-        canvas.width = crop.width * pixelRatio;
-        canvas.height = crop.height * pixelRatio;
-        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        ctx.imageSmoothingQuality = 'high';
+        canvas.width = crop.width * pixelRatio
+        canvas.height = crop.height * pixelRatio
+
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
+        ctx.imageSmoothingQuality = 'high'
 
         ctx.drawImage(
             image,
@@ -209,17 +203,19 @@ const IntakeCroppedImage = (props) => {
             0,
             0,
             crop.width,
-            crop.height,
-        );
+            crop.height
+        )
 
         // Converting to base64
-        const base64Image = canvas.toDataURL('image/jpeg');
-        setOutput(base64Image);
-    };
+        const base64Image = canvas.toDataURL('image/jpeg')
+
+        setOutput(base64Image)
+
+    }
 
     useEffect(()=>{
 
-        setEditState('ready')
+        (editState == 'ready') && setEditState('ready')
 
     },[editState])
 
@@ -259,7 +255,7 @@ const IntakeCroppedImage = (props) => {
                         aspect = {1}
                         minWidth = {90}
                     >
-                        <img src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
+                        <img ref = {imgRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
                     </ReactCrop>
                     <br />
                     <Button onClick={cropImageNow} colorScheme = 'blue'>Crop and upload image</Button>
@@ -268,7 +264,6 @@ const IntakeCroppedImage = (props) => {
                 </div>
             )}
         </div>
-        <div>{output && <img src={output} />}</div>
         <Box><img style = {
             {
                 width: '90px', 
