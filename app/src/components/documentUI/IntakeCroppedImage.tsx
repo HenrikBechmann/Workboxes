@@ -17,7 +17,7 @@ import {
 
 import {useDropzone} from 'react-dropzone'
 
-import ReactCrop, {type Crop, makeAspectCrop, centerCrop} from 'react-image-crop';
+import ReactCrop, {type Crop, makeAspectCrop, centerCrop, convertToPixelCrop} from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { useStorage } from '../../system/WorkboxesProvider'
@@ -109,6 +109,7 @@ const IntakeCroppedImage = (props) => {
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
         imgRef = useRef(null),
+        canvasRef = useRef(null),
         [crop, setCrop] = useState<Crop>(),
         // [image, setImage] = useState(null),
         [output, setOutput] = useState(null)
@@ -182,34 +183,45 @@ const IntakeCroppedImage = (props) => {
     const cropImageNow = () => {
         const 
             image = imgRef.current,
-            canvas = document.createElement('canvas'),
+            pxCrop = convertToPixelCrop(crop, image.width, image.height ),
+            // canvas = document.createElement('canvas'),
+            canvas = canvasRef.current,
             scaleX = image.naturalWidth / image.width,
             scaleY = image.naturalHeight / image.height,
             pixelRatio = window.devicePixelRatio,
             ctx = canvas.getContext('2d')
 
-        canvas.width = crop.width * pixelRatio
-        canvas.height = crop.height * pixelRatio
+        canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
+        canvas.height = Math.floor(crop.height * scaleY * pixelRatio) 
 
-        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
+        // ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
+        ctx.scale(pixelRatio, pixelRatio)
         ctx.imageSmoothingQuality = 'high'
+        ctx.save()
+
+        const cropX = pxCrop.x * scaleX
+        const cropY = pxCrop.y * scaleY
+
+        ctx.translate(-cropX, -cropY)
 
         ctx.drawImage(
             image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,          
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
+            0, // sx
+            0, // sy
+            image.naturalWidth, // sWidth
+            image.naturalHeight, // sHeight
+            0, // dx
+            0, // dy
+            image.naturalWidth, // dWidth
+            image.naturalHeight, // dHeight
         )
 
-        // Converting to base64
-        const base64Image = canvas.toDataURL('image/jpeg')
+        ctx.restore()
 
-        setOutput(base64Image)
+        // Converting to base64
+        // const base64Image = canvas.toDataURL('image/jpeg')
+
+        // setOutput(base64Image)
 
     }
 
@@ -245,9 +257,9 @@ const IntakeCroppedImage = (props) => {
         <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
         {helperText.thumbnail}
         </Box>
-        <div>
+        <Box>
             {( imgSrc && 
-                <div>
+                <Box>
                     <ReactCrop
                         crop={crop} 
                         onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
@@ -259,11 +271,19 @@ const IntakeCroppedImage = (props) => {
                     </ReactCrop>
                     <br />
                     <Button onClick={cropImageNow} colorScheme = 'blue'>Crop and upload image</Button>
-                    <br />
-                    <br />
-                </div>
+                    <br /><br />
+                    {crop && 
+                        <canvas style = {
+                            {
+                                width:'90px', 
+                                height:'90px', 
+                                border: '1px solid gray', 
+                                objectFit: 'contain'
+                            }
+                        } ref = {canvasRef} />}
+                </Box>
             )}
-        </div>
+        </Box>
         <Box><img style = {
             {
                 width: '90px', 
