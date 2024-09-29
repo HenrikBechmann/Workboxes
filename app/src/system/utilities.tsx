@@ -241,6 +241,9 @@ const versionData = {
       version: 2,
       generation: 0,
       profile: {
+        origin: {
+          id:null,
+        },
         workbox: {
           id:null,
           name: null,
@@ -325,6 +328,9 @@ const versionData = {
       version: 3,
       generation: 0,
       profile: {
+        origin: {
+          id:null,
+        },
         workbox: {
           id:null,
           name: null,
@@ -406,6 +412,9 @@ const versionData = {
       version: 3,
       generation: 0,
       profile: {
+        origin: {
+          id:null,
+        },
         workbox: {
           id:null,
           name: null,

@@ -22,8 +22,15 @@ import ReactCrop, {type Crop, makeAspectCrop, centerCrop, convertToPixelCrop} fr
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { useStorage } from '../../system/WorkboxesProvider'
-import { useWorkboxHandler } from '../workbox/Workbox'
+import { useWorkboxHandler } from '../workbox/Workbox'let canvas = document.createElement('canvas');
 
+
+// https://cloudinary.com/guides/bulk-image-resize/transform-your-visuals-how-to-resize-an-image-in-javascript
+// Resizing template
+// canvas.width = desiredWidth;
+// canvas.height = desiredHeight;
+// let context = canvas.getContext('2d');
+// context.drawImage(img, 0, 0, desiredWidth,  desiredHeight);
 
 const IntakeCroppedImage = (props) => {
 
