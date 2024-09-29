@@ -24,13 +24,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-// https://cloudinary.com/guides/bulk-image-resize/transform-your-visuals-how-to-resize-an-image-in-javascript
-// Resizing template
-// canvas.width = desiredWidth;
-// canvas.height = desiredHeight;
-// let context = canvas.getContext('2d');
-// context.drawImage(img, 0, 0, desiredWidth,  desiredHeight);
-
 const IntakeCroppedImage = (props) => {
 
     const 
@@ -38,11 +31,13 @@ const IntakeCroppedImage = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
         // [editState,setEditState] = useState('setup'),
+        fileNameRef = useRef(null),
         imgRef = useRef(null),
-        canvasRef = useRef(null),
+        previewCanvasRef = useRef(null),
+        outputCanvasRef = useRef(null),
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
-        [crop, setCrop] = useState<Crop>(),
+        [pctCrop, setPctCrop] = useState<Crop>(),
         // [image, setImage] = useState(null),
         [output, setOutput] = useState(null),
         helperText = {
@@ -54,6 +49,8 @@ const IntakeCroppedImage = (props) => {
             // console.log('acceptedFiles', acceptedFiles)
             const file = acceptedFiles[0]
             if (!file) return
+
+            fileNameRef.current = file.name
 
             const reader = new FileReader()
 
@@ -79,46 +76,27 @@ const IntakeCroppedImage = (props) => {
 
             reader.readAsDataURL(file)
 
-            // selectImage(file)
-
-            // const fileRef = file?.name? ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + file.name):null
-            // if (!fileRef) return
-            // try {
-            //     await uploadBytes(fileRef, file)
-            // } catch (error) {
-            //     console.log('An error occured uploading file.name', file.name)
-            //     alert (error.message) // placeholder
-            //     return null
-            // }
-            // console.log('file has been uploaded', file.name)
-
-            // const url = await getDownloadURL(fileRef)
-
-            // workboxHandler.editRecord.document.base.image.source = url
-
-            // setEditState('uploading')
-
         }, [error]) // TODO check availability of error value for reset in imageElement.setEventListener
 
     const onImageLoad = (e) => {
         const { width, height } = e.currentTarget
         const cropWidthByPercent = (90/width) * 100
-        const crop = makeAspectCrop(
+        const pctCrop = makeAspectCrop(
             {
                 unit: '%',
                 width: cropWidthByPercent,
             }, 1, width, height
         )
-        const centeredCrop = centerCrop(crop, width, height)
-        setCrop(centeredCrop)
+        const centeredCrop = centerCrop(pctCrop, width, height)
+        setPctCrop(centeredCrop)
     }
 
     const cropImage = () => {
         const 
             image = imgRef.current,
-            pxCrop = convertToPixelCrop(crop, image.width, image.height ),
+            pxCrop = convertToPixelCrop(pctCrop, image.width, image.height ),
             // canvas = document.createElement('canvas'),
-            canvas = canvasRef.current,
+            canvas = previewCanvasRef.current,
             scaleX = image.naturalWidth / image.width,
             scaleY = image.naturalHeight / image.height,
             pixelRatio = window.devicePixelRatio,
@@ -151,17 +129,55 @@ const IntakeCroppedImage = (props) => {
         ctx.restore()
 
         // Converting to base64
-        const base64Image = canvas.toDataURL('image/jpeg')
+        const base64Image = canvas.toDataURL()
 
         setOutput(base64Image)
 
     }
 
-    // useEffect(()=>{
+    async function blobCallback (blob) {
 
-    //     (editState == 'ready') && setEditState('ready')
+        const fileName = fileNameRef.current
 
-    // },[editState])
+        const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + fileName)
+        if (!fileRef) return
+        try {
+            await uploadBytes(fileRef, blob)
+        } catch (error) {
+            console.log('An error occured uploading file.name', fileName)
+            alert (error.message) // placeholder
+            return null
+        }
+        // console.log('file has been uploaded', fileName)
+
+        const url = await getDownloadURL(fileRef)
+
+        workboxHandler.editRecord.document.base.image.source = url
+
+        setImgSrc('')
+        setPctCrop(null)
+        setOutput(null)
+
+    } 
+
+    const acceptCroppedImage = () => {
+
+        if (!output) return
+
+        const 
+            outputCanvas = outputCanvasRef.current,
+            ctx = outputCanvas.getContext('2d')
+
+        outputCanvas.width = 90
+        outputCanvas.height = 90
+        ctx.drawImage(
+            previewCanvasRef.current,
+            0,0,90,90
+        )
+
+        outputCanvas.toBlob(blobCallback)
+
+    }
 
     const
         {getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject} = useDropzone(
@@ -190,11 +206,11 @@ const IntakeCroppedImage = (props) => {
         {helperText.thumbnail}
         </Box>
         <Box>
-            {( imgSrc &&
+            {(imgSrc &&
                 <Box border = '2px solid black' padding = '3px'>
                     <ReactCrop
-                        crop={crop} 
-                        onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
+                        crop={pctCrop} 
+                        onChange={(pixelCrop, percentCrop) => setPctCrop(percentCrop)}
                         keepSelection
                         aspect = {1}
                         minWidth = {90}
@@ -204,7 +220,7 @@ const IntakeCroppedImage = (props) => {
                     <br />
                     <Button onClick={cropImage} colorScheme = 'blue'>Preview cropped image</Button>
                     <br /><br />
-                    {crop && <Flex>
+                    {pctCrop && <Flex>
                         <canvas style = {
                             {
                                 width:'90px', 
@@ -214,12 +230,29 @@ const IntakeCroppedImage = (props) => {
                                 marginRight: '3px',
                             }
                 
-                        } ref = {canvasRef} /><Button isDisabled = {!output} colorScheme = 'blue'>Accept cropped image</Button></Flex>
-                    }
+                        } ref = {previewCanvasRef} />
+                        <Button 
+                            onClick = {acceptCroppedImage}
+                            isDisabled = {!output} 
+                            colorScheme = 'blue'
+                        >
+                                Accept cropped image
+                        </Button>
+                        <canvas style = {
+                            {
+                                width:'90px', 
+                                height:'90px', 
+                                border: '1px solid gray', 
+                                objectFit: 'contain',
+                                marginRight: '3px',
+                            }
+                
+                        } ref = {outputCanvasRef} />
+                    </Flex>}
                 </Box>
             )}
         </Box>
-        <Box><img style = {
+        <Box><Flex><img style = {
             {
                 width: '90px', 
                 height: '90px', 
@@ -227,7 +260,8 @@ const IntakeCroppedImage = (props) => {
                 borderRadius: '6px',
                 marginTop: '3px',
             }
-        } src = {workboxHandler.editRecord.document.base.image.source} /></Box>
+        } src = {workboxHandler.editRecord.document.base.image.source} />
+        {!pctCrop && <Button margin = '3px' colorScheme = 'blue'>Remove thumbnail</Button>}</Flex></Box>
     </Box>
 }
 
