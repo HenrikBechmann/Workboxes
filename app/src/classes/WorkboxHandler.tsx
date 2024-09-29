@@ -412,7 +412,7 @@ class WorkboxHandler {
 
         }
 
-        result.notice = 'workbox saved'
+        result.notice = 'Workbox document saved'
         return result
 
     }

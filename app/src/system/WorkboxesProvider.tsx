@@ -128,7 +128,13 @@ export const UserProvider = ({children}) => {
         // for contexts...
         [userAuthData, setUserAuthData] = useState(undefined), // undefined before call; null after logout
         [userRecords, setUserRecords] = useState({user:null, account:null, domain:null, memberships:null}),
-        [systemRecords, setSystemRecords] = useState({settings:null}),
+        [systemRecords, setSystemRecords] = useState(
+            {
+                settings:null,
+                versions:null,
+                workboxaliases:null,
+            }
+        ),
         [workspaceHandlerContext, setWorkspaceHandlerContext] = useState({ current: workspaceHandlerInstance }),
         // bootstrap resources
         db = useFirestore(),
@@ -658,10 +664,14 @@ export const UserProvider = ({children}) => {
             try {
 
                 const 
-                    systemSettings = await getDoc(doc(db, 'system','settings')),
-                    systemSettingsData = systemSettings.data()
+                    settingsDoc = await getDoc(doc(db, 'system','settings')),
+                    versionsDoc = await getDoc(doc(db,'system', 'versions')),
+                    workboxaliasesDoc = await getDoc(doc(db, 'system','workboxaliases')),
+                    settings = settingsDoc.data(),
+                    versions = versionsDoc.data(),
+                    workboxaliases = workboxaliasesDoc.data()
 
-                setSystemRecords({settings:systemSettingsData})
+                setSystemRecords({settings, versions, workboxaliases})
 
             } catch (error) {
                 const errdesc = 'error getting system settings'
@@ -864,19 +874,31 @@ export const UserProvider = ({children}) => {
               },
             },
             document: {
-              sections: [
-                {
-                  name: "standard",
-                  alias: "Standard",
-                  position: 0,
-                  data: {
+                reconcilefileserror:false,
+                reconcilemonth:'0',
+                files:[],
+                data:{
+                  content:null,
+                  attachments:[],
+                },
+                base: {
                     name: displayName,
                     image: {
+                      filename: null,
+                      previous_filename: null,
+                      caption: null,
                       source: photoURL,
                     },
-                  },
+                    description: null,
+                    todo: null,
                 },
-              ],
+                extensions: {
+                  list:[],
+                },
+                messages: {
+                  list:[],
+                },
+                locked:false,
             },
         })
 

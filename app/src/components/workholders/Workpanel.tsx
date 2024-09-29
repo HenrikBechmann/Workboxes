@@ -12,7 +12,7 @@ import { cloneDeep as _cloneDeep } from 'lodash'
 const Workwindow = lazy(() => import('./Workwindow'))
 const Workbox = lazy(() => import('./../workbox/Workbox'))
 import WorkboxHandler from '../../classes/WorkboxHandler'
-import {useWorkspaceHandler} from '../../system/WorkboxesProvider'
+import {useWorkspaceHandler, useSystemRecords} from '../../system/WorkboxesProvider'
 
 const defaultWorkboxConfig = {
     content: {
@@ -86,7 +86,8 @@ const Workpanel = (props:any) => {
 
         // panel state; panelElement
         panelStateRef = useRef(null),
-        panelElementRef = useRef(null)
+        panelElementRef = useRef(null),
+        systemRecords = useSystemRecords()
 
     panelStateRef.current = panelState
 
@@ -153,6 +154,8 @@ const Workpanel = (props:any) => {
                 }
             }
 
+        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name]
+
         addWindow(windowSpecs, workboxSpecs)
 
         setPanelState('windowadded')
@@ -181,6 +184,8 @@ const Workpanel = (props:any) => {
                     id:workspaceHandler.panelMemberRecord.profile.workbox.id,
                 }
             }
+
+        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name]
 
         addWindow(windowSpecs, workboxSpecs)
 

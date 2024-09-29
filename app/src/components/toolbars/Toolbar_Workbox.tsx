@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
+import { useSystemRecords } from '../../system/WorkboxesProvider'
 
 import { useToggleIcon } from './controls/ToggleIcon'
 import ToolbarVerticalDivider from './controls/VerticalDivider'
@@ -75,7 +76,8 @@ const WorkboxToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         { settings } = workboxHandler,
-        modeSettings = workboxHandler.session.workbox.modesettings
+        modeSettings = workboxHandler.session.workbox.modesettings,
+        systemRecords = useSystemRecords()
 
     const
 
@@ -83,7 +85,8 @@ const WorkboxToolbar = (props) => {
         domainIcon = workboxRecord?.profile.domain.image?.source,
         itemIcon = workboxRecord?.profile.workbox.image.source,
         itemTitle = workboxRecord?.profile.workbox.name,
-        typeName = workboxRecord?.profile.type.alias
+        type = workboxRecord?.profile.type.name,
+        typeName = workboxRecord?systemRecords.workboxaliases.aliases[type]:null
 
     // console.log('domainIcon',domainIcon, workboxRecord)
 
