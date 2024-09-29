@@ -245,6 +245,7 @@ const IntakeCroppedImage = (props) => {
                                 border: '1px solid gray', 
                                 objectFit: 'contain',
                                 marginRight: '3px',
+                                display:'none',
                             }
                 
                         } ref = {outputCanvasRef} />
