@@ -32,9 +32,9 @@ const IntakeCroppedImage = (props) => {
         editBaseRecord = workboxHandler.editRecord.document.base,
 
         fileNameRef = useRef(null),
-        imgRef = useRef(null),
+        imageRef = useRef(null),
         previewCanvasRef = useRef(null),
-        outputCanvasRef = useRef(null),
+        resizedCanvasRef = useRef(null),
 
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
@@ -109,7 +109,7 @@ const IntakeCroppedImage = (props) => {
     // crop image by selection to the preview canvas
     const cropImage = () => {
         const 
-            image = imgRef.current,
+            image = imageRef.current,
             pxCrop = convertToPixelCrop(pctCrop, image.width, image.height ),
             // canvas = document.createElement('canvas'),
             previewCanvas = previewCanvasRef.current,
@@ -154,17 +154,17 @@ const IntakeCroppedImage = (props) => {
         if (!isOutput) return
 
         const 
-            outputCanvas = outputCanvasRef.current,
-            ctx = outputCanvas.getContext('2d')
+            resizedCanvas = resizedCanvasRef.current,
+            ctx = resizedCanvas.getContext('2d')
 
-        outputCanvas.width = 90
-        outputCanvas.height = 90
+        resizedCanvas.width = 90
+        resizedCanvas.height = 90
         ctx.drawImage(
             previewCanvasRef.current,
             0,0,90,90
         )
 
-        outputCanvas.toBlob(blobCallback)
+        resizedCanvas.toBlob(blobCallback)
 
     }
 
@@ -220,7 +220,7 @@ const IntakeCroppedImage = (props) => {
                         aspect = {1}
                         minWidth = {90}
                     >
-                        <img ref = {imgRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
+                        <img ref = {imageRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
                     </ReactCrop>
                     <br />
                     <Button onClick={cropImage} colorScheme = 'blue'>Preview cropped image</Button>
@@ -253,7 +253,7 @@ const IntakeCroppedImage = (props) => {
                                 display:'none',
                             }
                 
-                        } ref = {outputCanvasRef} />
+                        } ref = {resizedCanvasRef} />
                     </Flex>}
                 </Box>
             )}
