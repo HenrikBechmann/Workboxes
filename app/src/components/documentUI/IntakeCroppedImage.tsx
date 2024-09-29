@@ -1,14 +1,14 @@
 // IntakeCroppedImage.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-// many details of conversions taken from https://www.youtube.com/watch?v=odscV57kToU by Nikita Dev (recommended)
+// many details of conversions taken from https://www.youtube.com/watch?v=odscV57kToU by Nikita Dev
 /*
     TODO:
     provide way to clear image
     
 */
 
-import React, {useState, useEffect, useRef, useCallback} from 'react'
+import React, {useState, useRef, useCallback} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -30,20 +30,22 @@ const IntakeCroppedImage = (props) => {
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
-        // [editState,setEditState] = useState('setup'),
+
         fileNameRef = useRef(null),
         imgRef = useRef(null),
         previewCanvasRef = useRef(null),
         outputCanvasRef = useRef(null),
+
         [error, setError] = useState(''),
         [imgSrc, setImgSrc] = useState(''),
         [pctCrop, setPctCrop] = useState<Crop>(),
-        // [image, setImage] = useState(null),
-        [output, setOutput] = useState(null),
+        [isOutput, setIsOutput] = useState(false),
+
         helperText = {
             thumbnail:'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
         }
 
+    // drop or select image
     const
         onDrop = useCallback(async (acceptedFiles) => {
             // console.log('acceptedFiles', acceptedFiles)
@@ -78,6 +80,19 @@ const IntakeCroppedImage = (props) => {
 
         }, [error]) // TODO check availability of error value for reset in imageElement.setEventListener
 
+    // get dropzone resources
+    const
+        {getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject} = useDropzone(
+            {
+                onDrop, // defined above
+                multiple:false,
+                accept: {
+                    'image/*': [],
+                }
+            }
+        )
+
+    // present loaded image with crop outline
     const onImageLoad = (e) => {
         const { width, height } = e.currentTarget
         const cropWidthByPercent = (90/width) * 100
@@ -91,19 +106,20 @@ const IntakeCroppedImage = (props) => {
         setPctCrop(centeredCrop)
     }
 
+    // crop image by selection to the preview canvas
     const cropImage = () => {
         const 
             image = imgRef.current,
             pxCrop = convertToPixelCrop(pctCrop, image.width, image.height ),
             // canvas = document.createElement('canvas'),
-            canvas = previewCanvasRef.current,
+            previewCanvas = previewCanvasRef.current,
             scaleX = image.naturalWidth / image.width,
             scaleY = image.naturalHeight / image.height,
             pixelRatio = window.devicePixelRatio,
-            ctx = canvas.getContext('2d')
+            ctx = previewCanvas.getContext('2d')
 
-        canvas.width = Math.floor(pxCrop.width * scaleX * pixelRatio)
-        canvas.height = Math.floor(pxCrop.height * scaleY * pixelRatio) 
+        previewCanvas.width = Math.floor(pxCrop.width * scaleX * pixelRatio)
+        previewCanvas.height = Math.floor(pxCrop.height * scaleY * pixelRatio) 
 
         ctx.scale(pixelRatio, pixelRatio)
         ctx.imageSmoothingQuality = 'high'
@@ -128,13 +144,31 @@ const IntakeCroppedImage = (props) => {
 
         ctx.restore()
 
-        // Converting to base64
-        const base64Image = canvas.toDataURL()
-
-        setOutput(base64Image)
+        setIsOutput(true)
 
     }
 
+    // resize and save image
+    const acceptCroppedImage = () => {
+
+        if (!isOutput) return
+
+        const 
+            outputCanvas = outputCanvasRef.current,
+            ctx = outputCanvas.getContext('2d')
+
+        outputCanvas.width = 90
+        outputCanvas.height = 90
+        ctx.drawImage(
+            previewCanvasRef.current,
+            0,0,90,90
+        )
+
+        outputCanvas.toBlob(blobCallback)
+
+    }
+
+    // save the cropped image
     async function blobCallback (blob) {
 
         const fileName = fileNameRef.current
@@ -154,41 +188,12 @@ const IntakeCroppedImage = (props) => {
 
         workboxHandler.editRecord.document.base.image.source = url
 
+        // reset crop data
         setImgSrc('')
         setPctCrop(null)
-        setOutput(null)
+        setIsOutput(false)
 
     } 
-
-    const acceptCroppedImage = () => {
-
-        if (!output) return
-
-        const 
-            outputCanvas = outputCanvasRef.current,
-            ctx = outputCanvas.getContext('2d')
-
-        outputCanvas.width = 90
-        outputCanvas.height = 90
-        ctx.drawImage(
-            previewCanvasRef.current,
-            0,0,90,90
-        )
-
-        outputCanvas.toBlob(blobCallback)
-
-    }
-
-    const
-        {getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject} = useDropzone(
-            {
-                onDrop, 
-                multiple:false,
-                accept: {
-                    'image/*': [],
-                }
-            }
-        )
 
     return <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
         New thumbnail image:
@@ -233,7 +238,7 @@ const IntakeCroppedImage = (props) => {
                         } ref = {previewCanvasRef} />
                         <Button 
                             onClick = {acceptCroppedImage}
-                            isDisabled = {!output} 
+                            isDisabled = {!isOutput} 
                             colorScheme = 'blue'
                         >
                                 Accept cropped image
