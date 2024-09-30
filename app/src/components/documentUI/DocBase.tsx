@@ -45,7 +45,7 @@ const displayStyles = {
 }
 
 const actionIconStyles = {
-    height: '24px',
+    height: '36px',
     width: '24px',
     marginLeft: '-28px',
     float:'left',
@@ -282,25 +282,41 @@ const DocBaseDisplayEditMode = (props) => { // simplicity makes component availa
         { name, description, image, todo } = baseFields
 
     return <Box data-type = 'displaybaseeditmode' padding = '3px'>
+        <Box>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
+        </Box>
         <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
         <Box borderBottom = '1px solid silver'>
                <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
         </Box>
-        {image.source && <Box data-type = 'image container' 
+        </Box>
+        <Box data-type = 'image container' 
             style = {{borderBottom:'1px solid silver', display:'flex'}}
         >
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+            </Box>
             <Box style = {{margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
                 <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
             </Box>
-        </Box>}
+        </Box>
+        <Box>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+        </Box>
         <Box fontWeight = 'bold' style = {{clear:'left'}}>
             {name}
         </Box>
         <Box fontStyle = 'italic'>
            {description}
         </Box>
+        </Box>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
         <Box >
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
+            </Box>
             <BaseDataDisplayController />
         </Box>
     </Box>
@@ -420,19 +436,20 @@ const DocBase = (props) => {
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
-        {(!['view', 'drag', 'remove'].includes(mode)) && <>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
-            </Box>
-            {baseEditMode &&
-                <Box style = {alternateActionIconStyles} data-type = 'cancelbox'>
-                    <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
-                </Box>
-            }</>
-        }
         {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
         {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
     </Box>
 }
+
+// {(!['view', 'drag', 'remove'].includes(mode)) && <>
+//     <Box style = {actionIconStyles} data-type = 'actionbox'>
+//         <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
+//     </Box>
+//     {baseEditMode &&
+//         <Box style = {alternateActionIconStyles} data-type = 'cancelbox'>
+//             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
+//         </Box>
+//     }</>
+// }
 
 export default DocBase
