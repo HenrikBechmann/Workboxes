@@ -206,8 +206,8 @@ const DocBaseEdit = (props) => {
             borderTop = '1px solid silver'
             backgroundColor = '#F0F0F0'
         >--- Document basics ---</Heading>
-        <details>
-        <summary style = {{fontSize:'small'}}>To do notes</summary>
+        <Box data-type = 'active-edit-todo-list'>
+        <Box style = {{fontSize:'small'}}>To do notes</Box>
             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
                     <Textarea 
@@ -224,9 +224,9 @@ const DocBaseEdit = (props) => {
                     </FormHelperText>
                 </FormControl>
             </Box>
-        </details>
-        <details open = {!(editBaseRecord.name && editBaseRecord.description && editBaseRecord.image.source)}>
-        <summary style = {{fontSize:'small'}}>workbox basics</summary>
+        </Box>
+        <Box data-type = 'active-edit-basic-data'>
+        <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
@@ -265,11 +265,11 @@ const DocBaseEdit = (props) => {
             </Box>
             <IntakeCroppedImage />
         </Flex>
-        </details>
-        <details open>
-            <summary style = {{fontSize:'small'}}>document data</summary>
+        </Box>
+        <Box data-type = 'active-edit-thumbnail'>
+            <Box style = {{fontSize:'small'}}>document data</Box>
             <BaseDataEditController />
-        </details>
+        </Box>
     </Box>
 }
 
@@ -279,41 +279,44 @@ const DocBaseDisplayEditMode = (props) => { // simplicity makes component availa
         {documentBaseData} = props,
         baseFields = documentBaseData.base,
         baseData = documentBaseData.data,
-        { name, description, image, todo } = baseFields
+        { name, description, image, todo } = baseFields,
+        [activeEdit, setActiveEdit] = useState(false)
 
     return <Box data-type = 'displaybaseeditmode' padding = '3px'>
-        <Box>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
-        </Box>
-        <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
-        <Box borderBottom = '1px solid silver'>
-               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-        </Box>
-        </Box>
-        <Box data-type = 'image container' 
-            style = {{borderBottom:'1px solid silver', display:'flex'}}
-        >
+        <Box data-type = 'editmode-todo-list'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+                <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
             </Box>
-            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+            <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+            <Box borderBottom = '1px solid silver'>
+                   <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
             </Box>
         </Box>
-        <Box>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+        <Box data-type = 'editmode-thumbnail'>
+            <Box 
+                style = {{borderBottom:'1px solid silver', display:'flex'}}
+            >
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+                </Box>
+                <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
+                    <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+                </Box>
+            </Box>
         </Box>
-        <Box fontWeight = 'bold' style = {{clear:'left'}}>
-            {name}
-        </Box>
-        <Box fontStyle = 'italic'>
-           {description}
-        </Box>
+        <Box data-type = 'editmode-basic-data'>
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+            </Box>
+            <Box fontWeight = 'bold' style = {{clear:'left'}}>
+                {name}
+            </Box>
+            <Box fontStyle = 'italic'>
+               {description}
+            </Box>
         </Box>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
-        <Box >
+        <Box data-type = 'editmode-summary'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
             </Box>
