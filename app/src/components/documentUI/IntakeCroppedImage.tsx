@@ -28,8 +28,7 @@ const IntakeCroppedImage = (props) => {
 
     const 
         storage = useStorage(),
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord.document.base,
+        [workboxHandler] = useWorkboxHandler(),
 
         fileNameRef = useRef(null),
         imageRef = useRef(null),
@@ -41,9 +40,7 @@ const IntakeCroppedImage = (props) => {
         [pctCrop, setPctCrop] = useState<Crop>(),
         [isOutput, setIsOutput] = useState(false),
 
-        helperText = {
-            thumbnail:'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
-        }
+        helperText = 'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
 
     // drop or select image
     const
@@ -106,12 +103,11 @@ const IntakeCroppedImage = (props) => {
         setPctCrop(centeredCrop)
     }
 
-    // crop image by selection to the preview canvas
+    // crop image, by user selection, to the preview canvas
     const cropImage = () => {
         const 
             image = imageRef.current,
             pxCrop = convertToPixelCrop(pctCrop, image.width, image.height ),
-            // canvas = document.createElement('canvas'),
             previewCanvas = previewCanvasRef.current,
             scaleX = image.naturalWidth / image.width,
             scaleY = image.naturalHeight / image.height,
@@ -171,10 +167,13 @@ const IntakeCroppedImage = (props) => {
     // save the cropped image
     async function blobCallback (blob) {
 
-        const fileName = fileNameRef.current
+        const 
+            fileName = fileNameRef.current,
+            { editRecord } = workboxHandler,
+            fileRef = ref(storage, editRecord.profile.workbox.id + '/thumbnail/' + fileName)
 
-        const fileRef = ref(storage, workboxHandler.editRecord.profile.workbox.id + '/thumbnail/' + fileName)
         if (!fileRef) return
+
         try {
             await uploadBytes(fileRef, blob)
         } catch (error) {
@@ -182,11 +181,10 @@ const IntakeCroppedImage = (props) => {
             alert (error.message) // placeholder
             return null
         }
-        // console.log('file has been uploaded', fileName)
 
         const url = await getDownloadURL(fileRef)
 
-        workboxHandler.editRecord.document.base.image.source = url
+        editRecord.document.base.image.source = url
 
         // reset crop data
         setImgSrc('')
@@ -199,16 +197,22 @@ const IntakeCroppedImage = (props) => {
         New thumbnail image:
         <div {...getRootProps()}>
             <input {...getInputProps()} />
-        {
-            isDragActive ?
-                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >Drop the new image here ...</Box> :
-                <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>Drag 'n' drop a new image here, or click to select a new image</Box>
+            {
+                isDragActive 
+                    ? <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >
+                        Drop the new image here ...
+                    </Box> 
+                    : <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>
+                        Drag 'n' drop a new image here, or click to select a new image
+                    </Box>
             }
-            {isDragReject && <div style = {{color:'red',fontSize:'small'}} >file rejected - file must be an image</div>}
+            {isDragReject && <div style = {{color:'red',fontSize:'small'}} >
+                file rejected - file must be an image
+            </div>}
             {error && <div style = {{color:'red', fontSize: 'small'}} >{error}</div> }
         </div>                
         <Box fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-        {helperText.thumbnail}
+            { helperText }
         </Box>
         <Box>
             {(imgSrc &&
@@ -220,54 +224,68 @@ const IntakeCroppedImage = (props) => {
                         aspect = {1}
                         minWidth = {90}
                     >
-                        <img ref = {imageRef} src = {imgSrc} style = {{width:'100%', maxWidth: '700px'}} onLoad = {onImageLoad} />
+                        <img 
+                            ref = {imageRef} 
+                            src = {imgSrc} 
+                            style = {{width:'100%', maxWidth: '700px'}} 
+                            onLoad = {onImageLoad} 
+                        />
                     </ReactCrop>
                     <br />
                     <Button onClick={cropImage} colorScheme = 'blue'>Preview cropped image</Button>
                     <br /><br />
                     {pctCrop && <Flex>
-                        <canvas style = {
-                            {
-                                width:'90px', 
-                                height:'90px', 
-                                border: '1px solid gray', 
-                                objectFit: 'contain',
-                                marginRight: '3px',
-                            }
-                
-                        } ref = {previewCanvasRef} />
+                        <canvas 
+                            style = {
+                                {
+                                    width:'90px', 
+                                    height:'90px', 
+                                    border: '1px solid gray', 
+                                    objectFit: 'contain',
+                                    marginRight: '3px',
+                                }
+                            } 
+                            ref = {previewCanvasRef} 
+                        />
                         <Button 
                             onClick = {acceptCroppedImage}
                             isDisabled = {!isOutput} 
                             colorScheme = 'blue'
                         >
-                                Accept cropped image
+                            Accept cropped image
                         </Button>
-                        <canvas style = {
-                            {
-                                width:'90px', 
-                                height:'90px', 
-                                border: '1px solid gray', 
-                                objectFit: 'contain',
-                                marginRight: '3px',
-                                display:'none',
-                            }
-                
-                        } ref = {resizedCanvasRef} />
+                        <canvas 
+                            style = {
+                                {
+                                    width:'90px', 
+                                    height:'90px', 
+                                    border: '1px solid gray', 
+                                    objectFit: 'contain',
+                                    marginRight: '3px',
+                                    display:'none',
+                                }
+                            } 
+                            ref = {resizedCanvasRef} 
+                        />
                     </Flex>}
                 </Box>
             )}
         </Box>
-        <Box><Flex><img style = {
-            {
-                width: '90px', 
-                height: '90px', 
-                border: '1px solid gray', 
-                borderRadius: '6px',
-                marginTop: '3px',
-            }
-        } src = {workboxHandler.editRecord.document.base.image.source} />
-        {!pctCrop && <Button margin = '3px' colorScheme = 'blue'>Remove thumbnail</Button>}</Flex></Box>
+        <Box><Flex>
+            <img 
+                style = {
+                    {
+                        width: '90px', 
+                        height: '90px', 
+                        border: '1px solid gray', 
+                        borderRadius: '6px',
+                        marginTop: '3px',
+                    }
+                } 
+                src = {workboxHandler.editRecord.document.base.image.source} 
+            />
+            {!pctCrop && <Button margin = '3px' colorScheme = 'blue'>Remove thumbnail</Button>}
+        </Flex></Box>
     </Box>
 }
 
