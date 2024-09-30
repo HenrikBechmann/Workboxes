@@ -297,7 +297,7 @@ const DocBaseDisplayEditMode = (props) => { // simplicity makes component availa
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
             </Box>
-            <Box style = {{margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
+            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
                 <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
             </Box>
         </Box>
