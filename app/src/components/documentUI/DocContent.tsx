@@ -16,7 +16,7 @@ import {
     Box
 } from '@chakra-ui/react'
 
-const DocumentBase = lazy(()=>import('./DocumentBase'))
+const DocumentBase = lazy(()=>import('./DocBase'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
