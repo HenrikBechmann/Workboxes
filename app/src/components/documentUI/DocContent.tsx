@@ -16,7 +16,7 @@ import {
     Box
 } from '@chakra-ui/react'
 
-const DocumentBase = lazy(()=>import('./DocBase'))
+const DocBase = lazy(()=>import('./DocBase'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
@@ -49,7 +49,7 @@ const DocumentContent = (props) => {
         } else {
             const sessionID = nextDocumentUnitSessionIDRef.current++
             baseComponentRef.current = 
-                React.createElement(DocumentBase,{documentBaseData, documentConfig, mode, sessionID})
+                React.createElement(DocBase,{documentBaseData, documentConfig, mode, sessionID})
         }
 
         setContentState('update')

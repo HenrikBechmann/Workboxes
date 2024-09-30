@@ -65,7 +65,7 @@ const alternateActionIconStyles = {
 } as CSSProperties
 
 // TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
-const BaseEdit = (props) => {
+const DocBaseEdit = (props) => {
     
     const 
         storage = useStorage(),
@@ -273,7 +273,7 @@ const BaseEdit = (props) => {
     </Box>
 }
 
-export const BaseDisplay = (props) => { // simplicity makes component available for document callout
+const DocBaseDisplayEditMode = (props) => { // simplicity makes component available for document callout
 
     const 
         {documentBaseData} = props,
@@ -281,7 +281,38 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
         baseData = documentBaseData.data,
         { name, description, image, todo } = baseFields
 
-    // console.log('documentBaseData',documentBaseData)
+    return <Box data-type = 'displaybaseeditmode' padding = '3px'>
+        <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+        <Box borderBottom = '1px solid silver'>
+               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+        </Box>
+        {image.source && <Box data-type = 'image container' 
+            style = {{borderBottom:'1px solid silver', display:'flex'}}
+        >
+            <Box style = {{margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
+                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+            </Box>
+        </Box>}
+        <Box fontWeight = 'bold' style = {{clear:'left'}}>
+            {name}
+        </Box>
+        <Box fontStyle = 'italic'>
+           {description}
+        </Box>
+        <Divider style = {{clear:'left', borderColor: 'gray'}} />
+        <Box >
+            <BaseDataDisplayController />
+        </Box>
+    </Box>
+}
+
+const DocBaseDisplay = (props) => { // simplicity makes component available for document callout
+
+    const 
+        {documentBaseData} = props,
+        baseFields = documentBaseData.base,
+        baseData = documentBaseData.data,
+        { name, description, image, todo } = baseFields
 
     return <Box data-type = 'displaybase' padding = '3px'>
         { todo && <Box borderBottom = '1px solid silver'>
@@ -307,14 +338,14 @@ export const BaseDisplay = (props) => { // simplicity makes component available 
 }
 
 // controller directs to appropriate component
-const DocumentBase = (props) => {
+const DocBase = (props) => {
 
     const 
         { documentBaseData, documentConfig, mode, sessionID } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
         sessionIDRef = useRef(sessionID),
-        [baseEditState, setBaseEditState] = useState(false)
+        [baseEditMode, setBaseEditMode] = useState(false)
 
     let actionIcon, response, tooltip, canceltip
 
@@ -327,7 +358,7 @@ const DocumentBase = (props) => {
     const onEdit = () => {
 
         if (sessiondocument.editunit(sessionIDRef.current)) {
-            setBaseEditState(true)
+            setBaseEditMode(true)
         }
 
     }
@@ -343,7 +374,7 @@ const DocumentBase = (props) => {
         }
         await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
         if (sessiondocument.savechanges(sessionIDRef.current)) { // check for errors or other blocking conditions
-            setBaseEditState(false)
+            setBaseEditMode(false)
         }
 
     }
@@ -360,11 +391,11 @@ const DocumentBase = (props) => {
         await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
 
         sessiondocument.cancelchanges(sessionIDRef.current)
-        setBaseEditState(false)
+        setBaseEditMode(false)
         
     }
 
-    if (baseEditState) {
+    if (baseEditMode) {
         actionIcon = saveIcon
         response = onSave
         tooltip = 'save section changes'
@@ -393,15 +424,15 @@ const DocumentBase = (props) => {
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
             </Box>
-            {baseEditState &&
+            {baseEditMode &&
                 <Box style = {alternateActionIconStyles} data-type = 'cancelbox'>
                     <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
                 </Box>
             }</>
         }
-        {baseEditState && <BaseEdit />}
-        {!baseEditState && <BaseDisplay documentBaseData = {documentBaseData}/>}
+        {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
+        {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
     </Box>
 }
 
-export default DocumentBase
+export default DocBase
