@@ -273,57 +273,6 @@ const DocBaseEdit = (props) => {
     </Box>
 }
 
-const DocBaseDisplayEditMode = (props) => { // simplicity makes component available for document callout
-
-    const 
-        {documentBaseData} = props,
-        baseFields = documentBaseData.base,
-        baseData = documentBaseData.data,
-        { name, description, image, todo } = baseFields,
-        [activeEdit, setActiveEdit] = useState(false)
-
-    return <Box data-type = 'displaybaseeditmode' padding = '3px'>
-        <Box data-type = 'editmode-todo-list'>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
-            </Box>
-            <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
-            <Box borderBottom = '1px solid silver'>
-                   <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-            </Box>
-        </Box>
-        <Box data-type = 'editmode-thumbnail'>
-            <Box 
-                style = {{borderBottom:'1px solid silver', display:'flex'}}
-            >
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
-                </Box>
-                <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-                    <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
-                </Box>
-            </Box>
-        </Box>
-        <Box data-type = 'editmode-identity'>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
-            </Box>
-            <Box fontWeight = 'bold' style = {{clear:'left'}}>
-                {name}
-            </Box>
-            <Box fontStyle = 'italic'>
-               {description}
-            </Box>
-        </Box>
-        <Divider style = {{clear:'left', borderColor: 'gray'}} />
-        <Box data-type = 'editmode-summary'>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
-            </Box>
-            <BaseDataDisplayController />
-        </Box>
-    </Box>
-}
 
 // edit
 
@@ -459,36 +408,6 @@ const Base_Display_Data = (props) => {
 
 }
 
-const DocBaseDisplay = (props) => {
-
-    const 
-        {documentBaseData} = props,
-        baseFields = documentBaseData.base,
-        baseData = documentBaseData.data,
-        { name, description, image, todo } = baseFields
-
-    return <Box data-type = 'displaybase' padding = '3px'>
-        { todo && <Box borderBottom = '1px solid silver'>
-           <details>
-               <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
-               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-           </details>
-        </Box>}
-        {image.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
-            <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
-        </Box>}
-        <Box fontWeight = 'bold'>
-            {name}
-        </Box>
-        <Box fontStyle = 'italic'>
-           {description}
-        </Box>
-        <Divider style = {{clear:'left', borderColor: 'gray'}} />
-        <Box >
-            <BaseDataDisplayController />
-        </Box>
-    </Box>
-}
 
 // controller directs to appropriate component
 const DocBase = (props) => {
@@ -594,6 +513,8 @@ const DocBase = (props) => {
     </Box>
 }
 
+export default DocBase
+
 // {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
 // {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
 // {(!['view', 'drag', 'remove'].includes(mode)) && <>
@@ -607,4 +528,85 @@ const DocBase = (props) => {
 //     }</>
 // }
 
-export default DocBase
+// const DocBaseDisplayEditMode = (props) => { // simplicity makes component available for document callout
+
+//     const 
+//         {documentBaseData} = props,
+//         baseFields = documentBaseData.base,
+//         baseData = documentBaseData.data,
+//         { name, description, image, todo } = baseFields,
+//         [activeEdit, setActiveEdit] = useState(false)
+
+//     return <Box data-type = 'displaybaseeditmode' padding = '3px'>
+//         <Box data-type = 'editmode-todo-list'>
+//             <Box style = {actionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
+//             </Box>
+//             <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+//             <Box borderBottom = '1px solid silver'>
+//                    <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+//             </Box>
+//         </Box>
+//         <Box data-type = 'editmode-thumbnail'>
+//             <Box 
+//                 style = {{borderBottom:'1px solid silver', display:'flex'}}
+//             >
+//                 <Box style = {actionIconStyles} data-type = 'actionbox'>
+//                     <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+//                 </Box>
+//                 <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
+//                     <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+//                 </Box>
+//             </Box>
+//         </Box>
+//         <Box data-type = 'editmode-identity'>
+//             <Box style = {actionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+//             </Box>
+//             <Box fontWeight = 'bold' style = {{clear:'left'}}>
+//                 {name}
+//             </Box>
+//             <Box fontStyle = 'italic'>
+//                {description}
+//             </Box>
+//         </Box>
+//         <Divider style = {{clear:'left', borderColor: 'gray'}} />
+//         <Box data-type = 'editmode-summary'>
+//             <Box style = {actionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
+//             </Box>
+//             <BaseDataDisplayController />
+//         </Box>
+//     </Box>
+// }
+
+// const DocBaseDisplay = (props) => {
+
+//     const 
+//         {documentBaseData} = props,
+//         baseFields = documentBaseData.base,
+//         baseData = documentBaseData.data,
+//         { name, description, image, todo } = baseFields
+
+//     return <Box data-type = 'displaybase' padding = '3px'>
+//         { todo && <Box borderBottom = '1px solid silver'>
+//            <details>
+//                <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
+//                <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+//            </details>
+//         </Box>}
+//         {image.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
+//             <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
+//         </Box>}
+//         <Box fontWeight = 'bold'>
+//             {name}
+//         </Box>
+//         <Box fontStyle = 'italic'>
+//            {description}
+//         </Box>
+//         <Divider style = {{clear:'left', borderColor: 'gray'}} />
+//         <Box >
+//             <BaseDataDisplayController />
+//         </Box>
+//     </Box>
+// }
