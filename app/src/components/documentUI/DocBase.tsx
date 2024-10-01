@@ -408,7 +408,6 @@ const Base_Display_Data = (props) => {
 
 }
 
-
 // controller directs to appropriate component
 const DocBase = (props) => {
 
