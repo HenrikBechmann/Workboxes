@@ -304,7 +304,7 @@ const DocBaseDisplayEditMode = (props) => { // simplicity makes component availa
                 </Box>
             </Box>
         </Box>
-        <Box data-type = 'editmode-basic-data'>
+        <Box data-type = 'editmode-identity'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
             </Box>
@@ -325,7 +325,141 @@ const DocBaseDisplayEditMode = (props) => { // simplicity makes component availa
     </Box>
 }
 
-const DocBaseDisplay = (props) => { // simplicity makes component available for document callout
+// edit
+
+const Base_Edit_Todo = (props) => {
+
+}
+
+const Base_Edit_Identity = (props) => {
+    
+}
+
+const Base_Edit_Thumbnail = (props) => {
+    
+}
+const Base_Edit_Data = (props) => {
+    
+}
+
+// edit mode
+
+const Base_EditMode_Todo = (props) => {
+
+    const { todo } = props
+
+    return <Box data-type = 'editmode-todo-list'>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
+        </Box>
+        <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+        <Box borderBottom = '1px solid silver'>
+               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+        </Box>
+    </Box>
+
+}
+
+const Base_EditMode_Identity = (props) => {
+
+    const { name, description } = props
+
+    return <Box data-type = 'editmode-identity'>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+        </Box>
+        <Box fontWeight = 'bold' style = {{clear:'left'}}>
+            {name}
+        </Box>
+        <Box fontStyle = 'italic'>
+           {description}
+        </Box>
+    </Box>
+    
+}
+
+const Base_EditMode_Thumbnail = (props) => {
+
+    const { thumbnail } = props
+
+    return <Box data-type = 'editmode-thumbnail'>
+        <Box 
+            style = {{borderBottom:'1px solid silver', display:'flex'}}
+        >
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+            </Box>
+            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
+                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
+            </Box>
+        </Box>
+    </Box>
+    
+}
+const Base_EditMode_Data = (props) => {
+
+    return <>
+        <Divider style = {{clear:'left', borderColor: 'gray'}} />
+        <Box data-type = 'editmode-summary'>
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
+            </Box>
+            <BaseDataDisplayController />
+        </Box>
+    </>
+}
+
+// display
+
+const Base_Display_Todo = (props) => {
+
+    const {todo} = props
+
+    return <>{ todo && <Box borderBottom = '1px solid silver'>
+       <details>
+           <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
+           <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+       </details>
+    </Box>}</>
+
+}
+
+const Base_Display_Identity = (props) => {
+
+    const { name, description } = props
+
+    return <>
+        <Box fontWeight = 'bold'>
+            {name}
+        </Box>
+        <Box fontStyle = 'italic'>
+           {description}
+        </Box>
+    </>
+    
+}
+
+const Base_Display_Thumbnail = (props) => {
+
+    const { thumbnail } = props
+
+    return <>{ thumbnail.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
+        <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
+    </Box>}</>
+    
+}
+const Base_Display_Data = (props) => {
+
+    return  <>
+        <Divider style = {{clear:'left', borderColor: 'gray'}} />
+        <Box >
+            <BaseDataDisplayController />
+        </Box>
+    </>
+
+}
+
+const DocBaseDisplay = (props) => {
 
     const 
         {documentBaseData} = props,
@@ -361,6 +495,8 @@ const DocBase = (props) => {
 
     const 
         { documentBaseData, documentConfig, mode, sessionID } = props,
+        baseFields = documentBaseData.base,
+        { name, description, image, todo } = baseFields,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
         sessionIDRef = useRef(sessionID),
@@ -439,11 +575,27 @@ const DocBase = (props) => {
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
-        {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
-        {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
+        <Box>
+            {(mode !='edit') && <Base_Display_Todo todo = {todo}/>}
+            {(mode =='edit') && <Base_EditMode_Todo todo = {todo}/>}
+        </Box>
+        <Box>
+            {(mode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
+            {(mode =='edit') && <Base_EditMode_Identity name = {name} description = {description} />}
+        </Box>
+        <Box>
+            {(mode !='edit') && <Base_Display_Thumbnail thumbnail = {image} />}
+            {(mode =='edit') && <Base_EditMode_Thumbnail thumbnail = {image} />}
+        </Box>
+        <Box>
+            {(mode !='edit') && <Base_Display_Data />}
+            {(mode =='edit') && <Base_EditMode_Data />}
+        </Box>
     </Box>
 }
 
+// {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
+// {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
 // {(!['view', 'drag', 'remove'].includes(mode)) && <>
 //     <Box style = {actionIconStyles} data-type = 'actionbox'>
 //         <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
