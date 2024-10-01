@@ -408,6 +408,54 @@ const Base_Display_Data = (props) => {
 
 }
 
+const TodoController = (props) => {
+
+    const { mode, todo } = props
+
+    return <Box>
+        {(mode !='edit') 
+            ? <Base_Display_Todo todo = {todo}/>
+            : <Base_EditMode_Todo todo = {todo}/>
+        }
+    </Box>
+}
+
+const IdentityController = (props) => {
+
+    const { mode, name, description } = props
+
+    return <Box>
+        {(mode !='edit')
+            ? <Base_Display_Identity name = {name} description = {description} />
+            : <Base_EditMode_Identity name = {name} description = {description} />
+        }
+    </Box>
+}
+
+const ThumbnailController = (props) => {
+
+    const { mode, thumbnail } = props
+
+    return <Box>
+        {(mode !='edit')
+            ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
+            : <Base_EditMode_Thumbnail thumbnail = {thumbnail} />
+        }
+    </Box>
+}
+
+const DataController = (props) => {
+
+    const {mode} = props
+
+    return <Box>
+        {(mode !='edit')
+            ? <Base_Display_Data />
+            : <Base_EditMode_Data />
+        }
+    </Box>
+}
+
 // controller directs to appropriate component
 const DocBase = (props) => {
 
@@ -494,20 +542,16 @@ const DocBase = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
         <Box>
-            {(mode !='edit') && <Base_Display_Todo todo = {todo}/>}
-            {(mode =='edit') && <Base_EditMode_Todo todo = {todo}/>}
+            <TodoController mode = {mode} todo = { todo } />
         </Box>
         <Box>
-            {(mode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
-            {(mode =='edit') && <Base_EditMode_Identity name = {name} description = {description} />}
+            <IdentityController mode = {mode} name = {name} description = {description}/>
         </Box>
         <Box>
-            {(mode !='edit') && <Base_Display_Thumbnail thumbnail = {image} />}
-            {(mode =='edit') && <Base_EditMode_Thumbnail thumbnail = {image} />}
+            <ThumbnailController mode = {mode} thumbnail = {image} />
         </Box>
         <Box>
-            {(mode !='edit') && <Base_Display_Data />}
-            {(mode =='edit') && <Base_EditMode_Data />}
+            <DataController mode = {mode} />
         </Box>
     </Box>
 }
