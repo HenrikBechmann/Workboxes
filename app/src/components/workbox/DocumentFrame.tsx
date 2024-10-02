@@ -141,7 +141,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         // elements
         // documentFrameElementRef forwarded to caller (DisplayController)
         documentPanelElementRef = useRef(null),
-        primaryFrameElementRef = useRef(null), // for direct config updates
+        displayControllerElementRef = useRef(null), // for direct config updates
         handleElementRef = useRef(null),
 
         // timeouts
@@ -166,8 +166,8 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     // initialization effect
     useEffect(()=>{
 
-        primaryFrameElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
-        handleElementRef.current = primaryFrameElementRef.current.querySelector('#handle')
+        displayControllerElementRef.current = documentPanelElementRef.current.closest('#primary-frame')
+        handleElementRef.current = displayControllerElementRef.current.querySelector('#handle')
 
     },[])
 
@@ -215,7 +215,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
     const onResizeStart = () => {
         is_local_resizingRef.current = true
         documentFrameElementRef.current.style.transition = 'none'
-        const primaryFrameWidth = primaryFrameElementRef.current.offsetWidth
+        const primaryFrameWidth = displayControllerElementRef.current.offsetWidth
         const constraints = {
             minX:MIN_DOCUMENT_FRAME_WIDTH,
             maxX: Math.min(

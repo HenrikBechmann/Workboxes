@@ -51,7 +51,7 @@ const DisplayController = (props) => {
 
         // controls
         previousDisplayConfigCodeRef = useRef(displayCode), // determine change being made
-        primaryFrameElementRef = useRef(null),
+        displayControllerElementRef = useRef(null),
         timeoutRef = useRef(null)
 
     /*
@@ -70,7 +70,7 @@ const DisplayController = (props) => {
 
         const
             // elements being manipulated 
-            primaryFrameElement = primaryFrameElementRef.current, // flex, width
+            primaryFrameElement = displayControllerElementRef.current, // flex, width
 
             documentFrameElement = documentFrameElementRef.current, // flex, width, minWidth, transition, transitionDelay
             documentPanelElement = documentFrameElement.firstChild,
@@ -299,7 +299,7 @@ const DisplayController = (props) => {
     // CentralWidthContext informs DocumentFrame
     return <Box 
         data-type = 'primary-frame' 
-        ref = {primaryFrameElementRef} 
+        ref = {displayControllerElementRef} 
         id = 'primary-frame' 
         style = {primaryFrameStyles}
     >
