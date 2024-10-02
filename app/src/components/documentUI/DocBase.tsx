@@ -87,6 +87,12 @@ const Base_Edit_Todo = (props) => {
 
     return <Box data-type = 'active-edit-todo-list'>
         <Box style = {{fontSize:'small'}}>To do notes</Box>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+        </Box>
+        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+        </Box>
         <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
             <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
                 <Textarea 
@@ -208,56 +214,75 @@ const Base_Edit_Identity = (props) => {
         },
     }
 
-    return <><Box style = {{fontSize:'small'}}>workbox basics</Box>
-    <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
-        <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-            <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
-                <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
-                <Input 
-                    value = {editBaseRecord.name || ''} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.name}
-                >
-                </Input>
-                <FormErrorMessage>
-                    {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-                </FormErrorMessage>
-                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
+    return <>
+        <Box style = {{fontSize:'small'}}>workbox basics</Box>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
-        <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
-                <FormLabel fontSize = 'sm'>Description:</FormLabel>
-                <Textarea 
-                    rows = {2}
-                    value = {editBaseRecord.description || ''} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.description}
-                >
-                </Textarea>
-                <FormErrorMessage>
-                    {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-                </FormErrorMessage>
-                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
+        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'cancel changes' caption = 'cancel'/>
         </Box>
-    </Flex></>
+        <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+            <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
+                    <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
+                    <Input 
+                        value = {editBaseRecord.name || ''} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.name}
+                    >
+                    </Input>
+                    <FormErrorMessage>
+                        {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                    </FormErrorMessage>
+                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                        {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                    </FormHelperText>
+                </FormControl>
+            </Box>
+            <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                    <FormLabel fontSize = 'sm'>Description:</FormLabel>
+                    <Textarea 
+                        rows = {2}
+                        value = {editBaseRecord.description || ''} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.description}
+                    >
+                    </Textarea>
+                    <FormErrorMessage>
+                        {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                    </FormErrorMessage>
+                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                        {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                    </FormHelperText>
+                </FormControl>
+            </Box>
+        </Flex>
+    </>
     
 }
 
 const Base_Edit_Thumbnail = (props) => {
 
-    return <IntakeCroppedImage />
+    return <>
+        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+        </Box>
+        <IntakeCroppedImage />
+    </>
 
 }
 const Base_Edit_Data = (props) => {
 
     return <Box data-type = 'active-edit-data'>
         <Box style = {{fontSize:'small'}}>document data</Box>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+        </Box>
+        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+        </Box>
         <BaseDataEditController />
     </Box>
 
@@ -400,8 +425,9 @@ const TodoController = (props) => {
 
 const IdentityController = (props) => {
 
-    const { controlPack, name, description } = props,
-    { mode } = controlPack
+    const 
+        { controlPack, name, description } = props,
+        { mode } = controlPack
 
     return <Box>
         {(mode !='edit')
