@@ -45,16 +45,16 @@ const DocumentContent = (props) => {
 
         if (baseComponentRef.current) {
             baseComponentRef.current =
-                React.cloneElement(baseComponentRef.current,{documentBaseData, documentConfig, mode})
+                React.cloneElement(baseComponentRef.current,{documentBaseData, mode})
         } else {
             const sessionID = nextDocumentUnitSessionIDRef.current++
             baseComponentRef.current = 
-                React.createElement(DocBase,{documentBaseData, documentConfig, mode, sessionID})
+                React.createElement(DocBase,{documentBaseData, mode, sessionID})
         }
 
         setContentState('update')
 
-    },[workboxRecord, documentConfig, mode])
+    },[workboxRecord, mode])
 
     useEffect(()=>{
 

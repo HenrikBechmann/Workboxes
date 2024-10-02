@@ -267,7 +267,7 @@ const Base_Edit_Data = (props) => {
 
 const Base_EditMode_Todo = (props) => {
 
-    const { todo } = props
+    const { controlPack, todo } = props
 
     return <Box data-type = 'editmode-todo-list'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
@@ -283,7 +283,7 @@ const Base_EditMode_Todo = (props) => {
 
 const Base_EditMode_Identity = (props) => {
 
-    const { name, description } = props
+    const { controlPack, name, description } = props
 
     return <Box data-type = 'editmode-identity'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
@@ -301,7 +301,8 @@ const Base_EditMode_Identity = (props) => {
 
 const Base_EditMode_Thumbnail = (props) => {
 
-    const { thumbnail } = props
+    const 
+        { controlPack, thumbnail } = props
 
     return <Box data-type = 'editmode-thumbnail'>
         <Box 
@@ -318,6 +319,9 @@ const Base_EditMode_Thumbnail = (props) => {
     
 }
 const Base_EditMode_Data = (props) => {
+
+    const 
+        { controlPack } = props
 
     return <>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
@@ -382,48 +386,55 @@ const Base_Display_Data = (props) => {
 
 const TodoController = (props) => {
 
-    const { mode, todo } = props
+    const 
+        { controlPack, todo } = props,
+        { mode } = controlPack
 
     return <Box>
         {(mode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
-            : <Base_EditMode_Todo todo = {todo}/>
+            : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
         }
     </Box>
 }
 
 const IdentityController = (props) => {
 
-    const { mode, name, description } = props
+    const { controlPack, name, description } = props,
+    { mode } = controlPack
 
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Identity name = {name} description = {description} />
-            : <Base_EditMode_Identity name = {name} description = {description} />
+            : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
         }
     </Box>
 }
 
 const ThumbnailController = (props) => {
 
-    const { mode, thumbnail } = props
+    const 
+        { controlPack, thumbnail } = props,
+        {mode} = controlPack
 
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
-            : <Base_EditMode_Thumbnail thumbnail = {thumbnail} />
+            : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
         }
     </Box>
 }
 
 const DataController = (props) => {
 
-    const {mode} = props
+    const 
+        {controlPack} = props,
+        { mode } = controlPack
 
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Data />
-            : <Base_EditMode_Data />
+            : <Base_EditMode_Data controlPack = {controlPack}/>
         }
     </Box>
 }
@@ -432,7 +443,7 @@ const DataController = (props) => {
 const DocBase = (props) => {
 
     const 
-        { documentBaseData, documentConfig, mode, sessionID } = props,
+        { documentBaseData, mode, sessionID } = props,
         baseFields = documentBaseData.base,
         { name, description, image, todo } = baseFields,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
@@ -488,6 +499,8 @@ const DocBase = (props) => {
         
     }
 
+    const actionResponses = {onInsert, onEdit, onSave, onCancel}
+
     if (baseEditMode) {
         actionIcon = saveIcon
         response = onSave
@@ -512,18 +525,36 @@ const DocBase = (props) => {
 
     }
 
+    const controlPack = {
+        mode,
+        sessionID,
+        actionResponses,
+    }
+
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
         <Box>
-            <TodoController mode = {mode} todo = { todo } />
+            <TodoController 
+                controlPack = {controlPack}
+                todo = { todo } 
+            />
         </Box>
         <Box>
-            <IdentityController mode = {mode} name = {name} description = {description}/>
+            <IdentityController 
+                controlPack = {controlPack}
+                name = {name} 
+                description = {description} 
+            />
         </Box>
         <Box>
-            <ThumbnailController mode = {mode} thumbnail = {image} />
+            <ThumbnailController 
+                controlPack = {controlPack}
+                thumbnail = { image }
+            />
         </Box>
         <Box>
-            <DataController mode = {mode} />
+            <DataController 
+                controlPack = {controlPack}
+            />
         </Box>
     </Box>
 }
