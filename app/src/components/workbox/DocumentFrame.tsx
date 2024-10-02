@@ -139,7 +139,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         displayCode = workboxHandler.settings.document.displaycode, // out, over, under
 
         // elements
-        // documentFrameElementRef forwarded to caller (PrimaryFrame)
+        // documentFrameElementRef forwarded to caller (DisplayController)
         documentPanelElementRef = useRef(null),
         primaryFrameElementRef = useRef(null), // for direct config updates
         handleElementRef = useRef(null),

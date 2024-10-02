@@ -1,6 +1,14 @@
 // Workbox.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    Workbox
+    WorkboxController
+        WorkboxToolbar
+        WorkboxContent
+
+*/
+
 import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'
 
 import {
@@ -23,8 +31,8 @@ import {cloneDeep as _cloneDeep} from 'lodash'
 
 const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
 const WorkboxToolbar = lazy(() => import('../toolbars/Toolbar_Workbox'))
-const ContentFrame = lazy(() => import('./ContentFrame'))
-import {CONTENT_FRAME_PADDING_WIDTH} from './ContentFrame'
+const WorkboxContent = lazy(() => import('./WorkboxContent'))
+import {CONTENT_FRAME_PADDING_WIDTH} from './WorkboxContent'
 
 export const WorkboxHandlerContext = createContext({current:null})
 
@@ -82,7 +90,7 @@ export const useWorkboxHandler = () => {
 }
 
 // show the main toolbar and the workbox content area
-const WorkboxFrame = (props) => {
+const WorkboxController = (props) => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxFrameElementRef = useRef(null), // for resizeObserver
@@ -151,7 +159,6 @@ const WorkboxFrame = (props) => {
     // useEffect(()=> {
     //     setWorkboxSnapshot()
     // },[])
-
 
     const insertUnit = useCallback((sessionID) => { // TODO identify target of insert
         alert('workbox insertUnit ' + sessionID)
@@ -277,7 +284,7 @@ const WorkboxFrame = (props) => {
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
-                <ContentFrame />
+                <WorkboxContent />
             </Box>
         </GridItem>
     </Grid>
@@ -360,7 +367,7 @@ const Workbox = (props) => {
 
 
     return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
-        {workboxHandlerContext.current && <WorkboxFrame />}
+        {workboxHandlerContext.current && <WorkboxController />}
     </WorkboxHandlerContext.Provider>
 
 }
