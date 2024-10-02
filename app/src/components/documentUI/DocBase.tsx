@@ -71,95 +71,30 @@ const Base_Edit_Todo = (props) => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
-        [editState,setEditState] = useState('setup'),
-        systemRecords = useSystemRecords(),
-        maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
-        maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
-        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
-        errorMessages = {
-            name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
-            description:`The description can only be up to ${maxDescriptionLength} characters.`,
-            todo: 'There are no limits to content'
-        },
         helperText = {
-            name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
-            description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
             todo:`The to do field holds notes for administrators.`,
             // thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
-        },
-        invalidFieldFlagsRef = useRef({
-            name:false,
-            description:false,
-            image:false,
-            todo:false,
-        }),
-        invalidFieldFlags = invalidFieldFlagsRef.current
-
-    // initialize editRecord and editData (editRecord subset)
-    useEffect(()=>{
-
-        const 
-            editData = workboxHandler.editRecord.document.base
-
-        isInvalidTests.todo(editData.todo)
-
-        setEditState('checking')
-
-    },[])
-
-    useEffect(()=>{
-
-        if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
-
-    },[editState])
+        }
 
     const onChangeFunctions = {
         todo:(event) => {
             const
                 target = event.target as HTMLInputElement,
                 value = target.value
-            isInvalidTests.todo(value)
             editBaseRecord.todo = value
-            setEditState('validating')
         },
-    }
-
-    const setChangeError = () => {
-
-        let is_change_error = false
-        for (const prop in invalidFieldFlags) {
-            if (invalidFieldFlags[prop]) {
-                is_change_error = true
-                break
-            }
-        }
-
-        workboxHandler.session.document.is_change_error = is_change_error
-
-    }
-
-    const isInvalidTests = {
-
-        todo:(value) => {
-            let isInvalid = false
-
-            return isInvalid
-        }
     }
 
     return <Box data-type = 'active-edit-todo-list'>
         <Box style = {{fontSize:'small'}}>To do notes</Box>
         <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
+            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
                 <Textarea 
                     value = {editBaseRecord.todo || ''} 
                     size = 'sm'
                     onChange = {onChangeFunctions.todo}
                 >
                 </Textarea>
-                <FormErrorMessage>
-                    {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
-                </FormErrorMessage>
                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
                     {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
                 </FormHelperText>
