@@ -64,17 +64,14 @@ const alternateActionIconStyles = {
     top:'26px',
 } as CSSProperties
 
-// TODO import maxNameLength and maxDescriptionLength from db system.settings.constraints
-const DocBaseEdit = (props) => {
-    
+// edit
+
+const Base_Edit_Todo = (props) => {
+
     const 
-        storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
-        [editState,setEditState] = useState('setup')
-
-    const
-
+        [editState,setEditState] = useState('setup'),
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
@@ -96,8 +93,105 @@ const DocBaseEdit = (props) => {
             image:false,
             todo:false,
         }),
-        invalidFieldFlags = invalidFieldFlagsRef.current,
-        customSlashMenuItemsRef = useRef([])
+        invalidFieldFlags = invalidFieldFlagsRef.current
+
+    // initialize editRecord and editData (editRecord subset)
+    useEffect(()=>{
+
+        const 
+            editData = workboxHandler.editRecord.document.base
+
+        isInvalidTests.todo(editData.todo)
+
+        setEditState('checking')
+
+    },[])
+
+    useEffect(()=>{
+
+        if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
+
+    },[editState])
+
+    const onChangeFunctions = {
+        todo:(event) => {
+            const
+                target = event.target as HTMLInputElement,
+                value = target.value
+            isInvalidTests.todo(value)
+            editBaseRecord.todo = value
+            setEditState('validating')
+        },
+    }
+
+    const setChangeError = () => {
+
+        let is_change_error = false
+        for (const prop in invalidFieldFlags) {
+            if (invalidFieldFlags[prop]) {
+                is_change_error = true
+                break
+            }
+        }
+
+        workboxHandler.session.document.is_change_error = is_change_error
+
+    }
+
+    const isInvalidTests = {
+
+        todo:(value) => {
+            let isInvalid = false
+
+            return isInvalid
+        }
+    }
+
+    return <Box data-type = 'active-edit-todo-list'>
+        <Box style = {{fontSize:'small'}}>To do notes</Box>
+        <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
+                <Textarea 
+                    value = {editBaseRecord.todo || ''} 
+                    size = 'sm'
+                    onChange = {onChangeFunctions.todo}
+                >
+                </Textarea>
+                <FormErrorMessage>
+                    {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
+                </FormErrorMessage>
+                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
+        </Box>
+    </Box>
+
+}
+
+const Base_Edit_Identity = (props) => {
+
+    const 
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        editBaseRecord = workboxHandler.editRecord.document.base,
+        [editState,setEditState] = useState('setup'),
+        systemRecords = useSystemRecords(),
+        maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
+        maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
+        minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        errorMessages = {
+            name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
+            description:`The description can only be up to ${maxDescriptionLength} characters.`,
+        },
+        helperText = {
+            name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
+            description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
+        },
+        invalidFieldFlagsRef = useRef({
+            name:false,
+            description:false,
+        }),
+        invalidFieldFlags = invalidFieldFlagsRef.current
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -107,8 +201,6 @@ const DocBaseEdit = (props) => {
 
         isInvalidTests.name(editData.name ?? '')
         isInvalidTests.description(editData.description ?? '')
-        isInvalidTests.image(editData.image ?? '')
-        isInvalidTests.todo(editData.todo)
 
         setEditState('checking')
 
@@ -136,14 +228,6 @@ const DocBaseEdit = (props) => {
                 value = target.value
             isInvalidTests.description(value)
             editBaseRecord.description = value
-            setEditState('validating')
-        },
-        todo:(event) => {
-            const
-                target = event.target as HTMLInputElement,
-                value = target.value
-            isInvalidTests.todo(value)
-            editBaseRecord.todo = value
             setEditState('validating')
         },
     }
@@ -187,108 +271,61 @@ const DocBaseEdit = (props) => {
             setChangeError()
             return isInvalid
         },
-        image:(value) => {
-            let isInvalid = false
-
-            return isInvalid
-        },
-        todo:(value) => {
-            let isInvalid = false
-
-            return isInvalid
-        }
     }
 
-    return <Box padding = '3px'>
-        <Heading as = 'h6' 
-            fontSize = 'x-small' 
-            color = 'gray' 
-            borderTop = '1px solid silver'
-            backgroundColor = '#F0F0F0'
-        >--- Document basics ---</Heading>
-        <Box data-type = 'active-edit-todo-list'>
-        <Box style = {{fontSize:'small'}}>To do notes</Box>
-            <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
-                    <Textarea 
-                        value = {editBaseRecord.todo || ''} 
-                        size = 'sm'
-                        onChange = {onChangeFunctions.todo}
-                    >
-                    </Textarea>
-                    <FormErrorMessage>
-                        {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
-                    </FormErrorMessage>
-                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
-                    </FormHelperText>
-                </FormControl>
-            </Box>
+    return <><Box style = {{fontSize:'small'}}>workbox basics</Box>
+    <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+        <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+            <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
+                <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
+                <Input 
+                    value = {editBaseRecord.name || ''} 
+                    size = 'sm'
+                    onChange = {onChangeFunctions.name}
+                >
+                </Input>
+                <FormErrorMessage>
+                    {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                </FormErrorMessage>
+                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
         </Box>
-        <Box data-type = 'active-edit-basic-data'>
-        <Box style = {{fontSize:'small'}}>workbox basics</Box>
-        <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
-            <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
-                    <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
-                    <Input 
-                        value = {editBaseRecord.name || ''} 
-                        size = 'sm'
-                        onChange = {onChangeFunctions.name}
-                    >
-                    </Input>
-                    <FormErrorMessage>
-                        {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-                    </FormErrorMessage>
-                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-                    </FormHelperText>
-                </FormControl>
-            </Box>
-            <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-                <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
-                    <FormLabel fontSize = 'sm'>Description:</FormLabel>
-                    <Textarea 
-                        rows = {2}
-                        value = {editBaseRecord.description || ''} 
-                        size = 'sm'
-                        onChange = {onChangeFunctions.description}
-                    >
-                    </Textarea>
-                    <FormErrorMessage>
-                        {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-                    </FormErrorMessage>
-                    <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-                    </FormHelperText>
-                </FormControl>
-            </Box>
-            <IntakeCroppedImage />
-        </Flex>
+        <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+                <FormLabel fontSize = 'sm'>Description:</FormLabel>
+                <Textarea 
+                    rows = {2}
+                    value = {editBaseRecord.description || ''} 
+                    size = 'sm'
+                    onChange = {onChangeFunctions.description}
+                >
+                </Textarea>
+                <FormErrorMessage>
+                    {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                </FormErrorMessage>
+                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
         </Box>
-        <Box data-type = 'active-edit-thumbnail'>
-            <Box style = {{fontSize:'small'}}>document data</Box>
-            <BaseDataEditController />
-        </Box>
-    </Box>
-}
-
-
-// edit
-
-const Base_Edit_Todo = (props) => {
-
-}
-
-const Base_Edit_Identity = (props) => {
+    </Flex></>
     
 }
 
 const Base_Edit_Thumbnail = (props) => {
-    
+
+    return <IntakeCroppedImage />
+
 }
 const Base_Edit_Data = (props) => {
-    
+
+    return <Box data-type = 'active-edit-data'>
+        <Box style = {{fontSize:'small'}}>document data</Box>
+        <BaseDataEditController />
+    </Box>
+
 }
 
 // edit mode
@@ -650,6 +687,209 @@ export default DocBase
 //         <Divider style = {{clear:'left', borderColor: 'gray'}} />
 //         <Box >
 //             <BaseDataDisplayController />
+//         </Box>
+//     </Box>
+// }
+
+// const DocBaseEdit = (props) => {
+    
+//     const 
+//         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+//         editBaseRecord = workboxHandler.editRecord.document.base,
+//         [editState,setEditState] = useState('setup'),
+//         systemRecords = useSystemRecords(),
+//         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
+//         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
+//         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+//         errorMessages = {
+//             name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
+//             description:`The description can only be up to ${maxDescriptionLength} characters.`,
+//             todo: 'There are no limits to content'
+//         },
+//         helperText = {
+//             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
+//             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
+//             todo:`The to do field holds notes for administrators.`,
+//             // thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
+//         },
+//         invalidFieldFlagsRef = useRef({
+//             name:false,
+//             description:false,
+//             image:false,
+//             todo:false,
+//         }),
+//         invalidFieldFlags = invalidFieldFlagsRef.current
+
+//     // initialize editRecord and editData (editRecord subset)
+//     useEffect(()=>{
+
+//         const 
+//             editData = workboxHandler.editRecord.document.base
+
+//         isInvalidTests.name(editData.name ?? '')
+//         isInvalidTests.description(editData.description ?? '')
+//         isInvalidTests.image(editData.image ?? '')
+//         isInvalidTests.todo(editData.todo)
+
+//         setEditState('checking')
+
+//     },[])
+
+//     useEffect(()=>{
+
+//         if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
+
+//     },[editState])
+
+//     const onChangeFunctions = {
+//         name:(event) => {
+//             const 
+//                 target = event.target as HTMLInputElement,
+//                 value = target.value
+
+//             isInvalidTests.name(value)
+//             editBaseRecord.name = value
+//             setEditState('validating')
+//         },
+//         description:(event) => {
+//             const
+//                 target = event.target as HTMLInputElement,
+//                 value = target.value
+//             isInvalidTests.description(value)
+//             editBaseRecord.description = value
+//             setEditState('validating')
+//         },
+//         todo:(event) => {
+//             const
+//                 target = event.target as HTMLInputElement,
+//                 value = target.value
+//             isInvalidTests.todo(value)
+//             editBaseRecord.todo = value
+//             setEditState('validating')
+//         },
+//     }
+
+//     const setChangeError = () => {
+
+//         let is_change_error = false
+//         for (const prop in invalidFieldFlags) {
+//             if (invalidFieldFlags[prop]) {
+//                 is_change_error = true
+//                 break
+//             }
+//         }
+
+//         workboxHandler.session.document.is_change_error = is_change_error
+
+//     }
+
+//     const isInvalidTests = {
+//         // TODO check for blank, string
+//         name:(value) => {
+//             let isInvalid = false
+//             if (value.length > maxNameLength || value.length < minNameLength) {
+//                 isInvalid = true
+//             }
+//             if (!isInvalid) {
+//                 if (!value) {// blank
+//                     isInvalid = true
+//                 }
+//             }
+//             invalidFieldFlags.name = isInvalid
+//             setChangeError()
+//             return isInvalid
+//         },
+//         description:(value) => {
+//             let isInvalid = false
+//             if (value.length > maxDescriptionLength) {
+//                 isInvalid = true
+//             }
+//             invalidFieldFlags.description = isInvalid
+//             setChangeError()
+//             return isInvalid
+//         },
+//         image:(value) => {
+//             let isInvalid = false
+
+//             return isInvalid
+//         },
+//         todo:(value) => {
+//             let isInvalid = false
+
+//             return isInvalid
+//         }
+//     }
+
+//     return <Box padding = '3px'>
+//         <Heading as = 'h6' 
+//             fontSize = 'x-small' 
+//             color = 'gray' 
+//             borderTop = '1px solid silver'
+//             backgroundColor = '#F0F0F0'
+//         >--- Document basics ---</Heading>
+//         <Box data-type = 'active-edit-todo-list'>
+//             <Box style = {{fontSize:'small'}}>To do notes</Box>
+//             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+//                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
+//                     <Textarea 
+//                         value = {editBaseRecord.todo || ''} 
+//                         size = 'sm'
+//                         onChange = {onChangeFunctions.todo}
+//                     >
+//                     </Textarea>
+//                     <FormErrorMessage>
+//                         {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
+//                     </FormErrorMessage>
+//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//                         {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
+//                     </FormHelperText>
+//                 </FormControl>
+//             </Box>
+//         </Box>
+//         <Box data-type = 'active-edit-basic-data'>
+//         <Box style = {{fontSize:'small'}}>workbox basics</Box>
+//         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
+//             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+//                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
+//                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
+//                     <Input 
+//                         value = {editBaseRecord.name || ''} 
+//                         size = 'sm'
+//                         onChange = {onChangeFunctions.name}
+//                     >
+//                     </Input>
+//                     <FormErrorMessage>
+//                         {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+//                     </FormErrorMessage>
+//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//                         {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+//                     </FormHelperText>
+//                 </FormControl>
+//             </Box>
+//             <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+//                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
+//                     <FormLabel fontSize = 'sm'>Description:</FormLabel>
+//                     <Textarea 
+//                         rows = {2}
+//                         value = {editBaseRecord.description || ''} 
+//                         size = 'sm'
+//                         onChange = {onChangeFunctions.description}
+//                     >
+//                     </Textarea>
+//                     <FormErrorMessage>
+//                         {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+//                     </FormErrorMessage>
+//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//                         {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+//                     </FormHelperText>
+//                 </FormControl>
+//             </Box>
+//             <IntakeCroppedImage />
+//         </Flex>
+//         </Box>
+//         <Box data-type = 'active-edit-data'>
+//             <Box style = {{fontSize:'small'}}>document data</Box>
+//             <BaseDataEditController />
 //         </Box>
 //     </Box>
 // }
