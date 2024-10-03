@@ -21,7 +21,6 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
 const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
 const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
-
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
 import insertIcon from '../../../assets/add.png'
@@ -44,6 +43,29 @@ const displayStyles = {
     padding: '3px',
 }
 
+const actionBoxStyles = {
+    height: '82px',
+    width: '24px',
+    marginLeft: '-28px',
+    float:'left',
+    position:'sticky',
+    top:0,
+} as CSSProperties
+
+const basicActionIconStyles = {
+    height: '36px',
+    width: '24px',
+    float:'left',
+} as CSSProperties
+
+const basicAlternateActionIconStyles = {
+    height: '36px',
+    width: '24px',
+    marginTop:'10px',
+    float:'left',
+    clear:'left',
+} as CSSProperties
+
 const actionIconStyles = {
     height: '36px',
     width: '24px',
@@ -54,14 +76,14 @@ const actionIconStyles = {
 } as CSSProperties
 
 const alternateActionIconStyles = {
-    height: '24px',
+    height: '36px',
     width: '24px',
     marginLeft: '-28px',
     marginTop:'10px',
     float:'left',
     clear:'left',
     position:'sticky',
-    top:'26px',
+    top:'36px',
 } as CSSProperties
 
 // edit
@@ -73,7 +95,6 @@ const Base_Edit_Todo = (props) => {
         editBaseRecord = workboxHandler.editRecord.document.base,
         helperText = {
             todo:`The to do field holds notes for administrators.`,
-            // thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
         }
 
     const onChangeFunctions = {
@@ -86,13 +107,15 @@ const Base_Edit_Todo = (props) => {
     }
 
     return <Box data-type = 'active-edit-todo-list'>
+        <Box style = {actionBoxStyles} data-type = 'action box'> 
+            <Box style = {basicActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+            </Box>
+            <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+            </Box>
+        </Box>
         <Box style = {{fontSize:'small'}}>To do notes</Box>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
-        </Box>
-        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
-        </Box>
         <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
             <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
                 <Textarea 
@@ -215,13 +238,13 @@ const Base_Edit_Identity = (props) => {
     }
 
     return <>
-        <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'cancel changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel changes' caption = 'cancel'/>
         </Box>
+        <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
@@ -267,7 +290,7 @@ const Base_Edit_Thumbnail = (props) => {
 
     return <>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
         <IntakeCroppedImage />
     </>
@@ -281,7 +304,7 @@ const Base_Edit_Data = (props) => {
             <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
         <BaseDataEditController />
     </Box>
@@ -292,11 +315,19 @@ const Base_Edit_Data = (props) => {
 
 const Base_EditMode_Todo = (props) => {
 
+    console.log('running Base_EditMode_Todo', props)
+
     const { controlPack, todo } = props
+
+    const onEdit = () => {
+        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('todo'))
+    }
+
+    const isDisabled = !!controlPack.currentEditBlockID
 
     return <Box data-type = 'editmode-todo-list'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
+            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
         </Box>
         <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
         <Box borderBottom = '1px solid silver'>
@@ -310,11 +341,13 @@ const Base_EditMode_Identity = (props) => {
 
     const { controlPack, name, description } = props
 
+    const isDisabled = !!controlPack.currentEditBlockID
+
     return <Box data-type = 'editmode-identity'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
+            <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the basics' caption = 'edit'/>
         </Box>
-        <Box fontWeight = 'bold' style = {{clear:'left'}}>
+        <Box fontWeight = 'bold'>
             {name}
         </Box>
         <Box fontStyle = 'italic'>
@@ -329,12 +362,14 @@ const Base_EditMode_Thumbnail = (props) => {
     const 
         { controlPack, thumbnail } = props
 
+    const isDisabled = !!controlPack.currentEditBlockID
+
     return <Box data-type = 'editmode-thumbnail'>
         <Box 
             style = {{borderBottom:'1px solid silver', display:'flex'}}
         >
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
+                <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the thumbnail' caption = 'edit'/>
             </Box>
             <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
                 <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
@@ -348,11 +383,13 @@ const Base_EditMode_Data = (props) => {
     const 
         { controlPack } = props
 
+    const isDisabled = !!controlPack.currentEditBlockID
+
     return <>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
         <Box data-type = 'editmode-summary'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
+                <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the summary' caption = 'edit'/>
             </Box>
             <BaseDataDisplayController />
         </Box>
@@ -418,7 +455,7 @@ const TodoController = (props) => {
     return <Box>
         {(mode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'))
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
         }
@@ -434,7 +471,7 @@ const IdentityController = (props) => {
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Identity name = {name} description = {description} />
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'))
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
         }
@@ -546,9 +583,9 @@ const DocBase = (props) => {
             blockIDMap:blockIDMapRef.current,
             currentEditBlockID: workboxHandler.session.document.changesessionid,
         }
-    },[workboxHandler.session.document.changesessionid])
+    },[workboxHandler.session.document.changesessionid, mode])
 
-    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
+    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         <Box>
             <TodoController 
                 controlPack = {controlPack}
