@@ -28,7 +28,7 @@ const DataNoteEdit = () => {
         editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
         [blocks, setBlocks] = useState(content)
 
-    workboxHandler.editorcontent = blocks // stringify to editRecord.document.data.content in DocumentBase.save()
+    workboxHandler.editoreditcontent = blocks // stringify to editRecord.document.data.content in DocumentBase.save()
 
     const changeData = () => {
 

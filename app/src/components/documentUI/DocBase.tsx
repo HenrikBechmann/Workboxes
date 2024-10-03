@@ -557,12 +557,12 @@ const DocBase = (props) => {
 
     async function onSave (sessionBlockID) {
 
-        if (workboxHandler.editorcontent) { // there was a blocknote edit
+        if (workboxHandler.editoreditcontent) { // there was a blocknote edit
             let editorFiles = []
             const documentFiles = workboxHandler.editRecord.document.files
             workboxHandler.editRecord.document.data.content = 
-                JSON.stringify(workboxHandler.editorcontent)
-            editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
+                JSON.stringify(workboxHandler.editoreditcontent)
+            editorFiles = workboxHandler.getEditorFiles(workboxHandler.editoreditcontent)
             await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
         }
         return sessiondocument.savechanges(sessionBlockID) // check for errors or other blocking conditions
@@ -571,12 +571,12 @@ const DocBase = (props) => {
 
     async function onCancel(sessionBlockID) {
 
-        if (workboxHandler.editorcontent) { // there was a blocknote edit; reconcile files
+        if (workboxHandler.editoreditcontent) { // there was a blocknote edit; reconcile files
             let editorFiles = []
             const documentFiles = workboxHandler.editRecord.document.files
             if (workboxHandler.workboxRecord.document.data.content) {
-                const editorcontent = JSON.parse(workboxHandler.workboxRecord.document.data.content)
-                editorFiles = workboxHandler.getEditorFiles(editorcontent)
+                const editoreditcontent = JSON.parse(workboxHandler.workboxRecord.document.data.content)
+                editorFiles = workboxHandler.getEditorFiles(editoreditcontent)
             }
             await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
         }
