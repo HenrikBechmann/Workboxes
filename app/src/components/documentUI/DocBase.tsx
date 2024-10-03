@@ -90,42 +90,55 @@ const alternateActionIconStyles = {
 
 const Base_Edit_Todo = (props) => {
 
+    const { controlPack } = props
+
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
+        [todoText, setTodoText] = useState(editBaseRecord.todo),
         helperText = {
             todo:`The to do field holds notes for administrators.`,
         }
+
+    // console.log('Base_Edit_Todo: editBaseRecord', editBaseRecord)
 
     const onChangeFunctions = {
         todo:(event) => {
             const
                 target = event.target as HTMLInputElement,
                 value = target.value
-            editBaseRecord.todo = value
+            setTodoText(value)
         },
+    }
+
+    const onSave = () => {
+        editBaseRecord.todo = todoText
+        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('todo'))
+    }
+
+    const onCancel = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('todo'))
     }
 
     return <Box data-type = 'active-edit-todo-list'>
         <Box style = {actionBoxStyles} data-type = 'action box'> 
             <Box style = {basicActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
             </Box>
             <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
             </Box>
         </Box>
         <Box style = {{fontSize:'small'}}>To do notes</Box>
         <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
             <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
                 <Textarea 
-                    value = {editBaseRecord.todo || ''} 
+                    value = {todoText || ''} 
                     size = 'sm'
                     onChange = {onChangeFunctions.todo}
-                >
-                </Textarea>
+                />
                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
+                    {helperText.todo} Current length is {todoText.length || '0 (blank)'}.
                 </FormHelperText>
             </FormControl>
         </Box>
@@ -314,8 +327,6 @@ const Base_Edit_Data = (props) => {
 // edit mode
 
 const Base_EditMode_Todo = (props) => {
-
-    console.log('running Base_EditMode_Todo', props)
 
     const { controlPack, todo } = props
 
@@ -538,35 +549,37 @@ const DocBase = (props) => {
 
     const onEdit = (sessionBlockID) => {
 
+        // console.log('DocBase.onEdit: sessionBlockID', sessionBlockID)
+
         return sessiondocument.editblock(sessionBlockID)
 
     }
 
     async function onSave (sessionBlockID) {
 
-        let editorFiles = []
-        const documentFiles = workboxHandler.editRecord.document.files
-        if (workboxHandler.editorcontent) {
+        if (workboxHandler.editorcontent) { // there was a blocknote edit
+            let editorFiles = []
+            const documentFiles = workboxHandler.editRecord.document.files
             workboxHandler.editRecord.document.data.content = 
                 JSON.stringify(workboxHandler.editorcontent)
             editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
+            await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
         }
-        await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
         return sessiondocument.savechanges(sessionBlockID) // check for errors or other blocking conditions
 
     }
 
     async function onCancel(sessionBlockID) {
 
-        let editorFiles = []
-        const documentFiles = workboxHandler.editRecord.document.files
-        if (workboxHandler.workboxRecord.document.data.content) {
-            const editorcontent = JSON.parse(workboxHandler.workboxRecord.document.data.content)
-            editorFiles = workboxHandler.getEditorFiles(editorcontent)
-            // console.log('documentFiles, editorcontent, editorFiles',documentFiles, editorcontent, editorFiles)
+        if (workboxHandler.editorcontent) { // there was a blocknote edit; reconcile files
+            let editorFiles = []
+            const documentFiles = workboxHandler.editRecord.document.files
+            if (workboxHandler.workboxRecord.document.data.content) {
+                const editorcontent = JSON.parse(workboxHandler.workboxRecord.document.data.content)
+                editorFiles = workboxHandler.getEditorFiles(editorcontent)
+            }
+            await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
         }
-        await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
-
         sessiondocument.cancelchanges(sessionBlockID)
         return true
         
