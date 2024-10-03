@@ -1,7 +1,7 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, CSSProperties, useCallback, lazy} from 'react'
+import React, {useRef, useState, useEffect, CSSProperties, useCallback, useMemo, lazy} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -537,36 +537,16 @@ const DocBase = (props) => {
 
     const actionResponses = {onInsert, onEdit, onSave, onCancel}
 
-    // if (baseEditMode) {
-    //     actionIcon = saveIcon
-    //     response = onSave
-    //     tooltip = 'save section changes'
-    //     canceltip = 'cancel section changes'
-    // } else {
+    const controlPack = useMemo(() => {
 
-    //     switch (mode) {
-    //         case 'insert': {
-    //             actionIcon = insertIcon
-    //             response = onInsert
-    //             tooltip = 'insert next section'
-    //             break
-    //         }
-    //         case 'edit': {
-    //             actionIcon = editIcon
-    //             response = onEdit
-    //             tooltip = 'edit this section'
-    //             break
-    //         }
-    //     }
-    // }
-
-    const controlPack = {
-        mode,
-        // sessionDocumentSectionID,
-        actionResponses,
-        blockIDMap:blockIDMapRef.current,
-        currentEditBlockID: workboxHandler.session.document.changesessionid,
-    }
+        return {
+            mode,
+            // sessionDocumentSectionID,
+            actionResponses,
+            blockIDMap:blockIDMapRef.current,
+            currentEditBlockID: workboxHandler.session.document.changesessionid,
+        }
+    },[workboxHandler.session.document.changesessionid])
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
         <Box>
@@ -597,6 +577,28 @@ const DocBase = (props) => {
 }
 
 export default DocBase
+
+// if (baseEditMode) {
+//     actionIcon = saveIcon
+//     response = onSave
+//     tooltip = 'save section changes'
+//     canceltip = 'cancel section changes'
+// } else {
+//     switch (mode) {
+//         case 'insert': {
+//             actionIcon = insertIcon
+//             response = onInsert
+//             tooltip = 'insert next section'
+//             break
+//         }
+//         case 'edit': {
+//             actionIcon = editIcon
+//             response = onEdit
+//             tooltip = 'edit this section'
+//             break
+//         }
+//     }
+// }
 
 // {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
 // {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
