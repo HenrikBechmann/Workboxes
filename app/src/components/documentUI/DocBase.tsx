@@ -418,7 +418,9 @@ const TodoController = (props) => {
     return <Box>
         {(mode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
-            : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+                ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
+                : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
         }
     </Box>
 }
@@ -432,7 +434,9 @@ const IdentityController = (props) => {
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Identity name = {name} description = {description} />
-            : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+                ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
+                : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
         }
     </Box>
 }
@@ -446,7 +450,9 @@ const ThumbnailController = (props) => {
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
-            : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+                ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
+                : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
         }
     </Box>
 }
@@ -460,7 +466,9 @@ const DataController = (props) => {
     return <Box>
         {(mode !='edit')
             ? <Base_Display_Data />
-            : <Base_EditMode_Data controlPack = {controlPack}/>
+            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('data'))
+                ? <Base_Edit_Data controlPack = {controlPack} />
+                : <Base_EditMode_Data controlPack = {controlPack}/>
         }
     </Box>
 }
@@ -475,7 +483,7 @@ const DocBase = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
         // sessionIDRef = useRef(sessionDocumentSectionID),
-        [baseEditMode, setBaseEditMode] = useState(false),
+        // [baseEditMode, setBaseEditMode] = useState(false),
         blockIDMapRef = useRef(new Map([
             ['todo',sessionDocumentSectionID + '.base.todo'],
             ['identity',sessionDocumentSectionID + '.base.identity'],
@@ -487,15 +495,13 @@ const DocBase = (props) => {
 
     const onInsert = (sessionBlockID) => {
 
-        sessiondocument.insertblock(sessionBlockID)
+        return sessiondocument.insertblock(sessionBlockID)
 
     }
 
     const onEdit = (sessionBlockID) => {
 
-        if (sessiondocument.editblock(sessionBlockID)) {
-            setBaseEditMode(true)
-        }
+        return sessiondocument.editblock(sessionBlockID)
 
     }
 
@@ -509,9 +515,7 @@ const DocBase = (props) => {
             editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
         }
         await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
-        if (sessiondocument.savechanges(sessionBlockID)) { // check for errors or other blocking conditions
-            setBaseEditMode(false)
-        }
+        return sessiondocument.savechanges(sessionBlockID) // check for errors or other blocking conditions
 
     }
 
@@ -527,41 +531,41 @@ const DocBase = (props) => {
         await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
 
         sessiondocument.cancelchanges(sessionBlockID)
-        setBaseEditMode(false)
+        return true
         
     }
 
     const actionResponses = {onInsert, onEdit, onSave, onCancel}
 
-    if (baseEditMode) {
-        actionIcon = saveIcon
-        response = onSave
-        tooltip = 'save section changes'
-        canceltip = 'cancel section changes'
-    } else {
+    // if (baseEditMode) {
+    //     actionIcon = saveIcon
+    //     response = onSave
+    //     tooltip = 'save section changes'
+    //     canceltip = 'cancel section changes'
+    // } else {
 
-        switch (mode) {
-            case 'insert': {
-                actionIcon = insertIcon
-                response = onInsert
-                tooltip = 'insert next section'
-                break
-            }
-            case 'edit': {
-                actionIcon = editIcon
-                response = onEdit
-                tooltip = 'edit this section'
-                break
-            }
-        }
-
-    }
+    //     switch (mode) {
+    //         case 'insert': {
+    //             actionIcon = insertIcon
+    //             response = onInsert
+    //             tooltip = 'insert next section'
+    //             break
+    //         }
+    //         case 'edit': {
+    //             actionIcon = editIcon
+    //             response = onEdit
+    //             tooltip = 'edit this section'
+    //             break
+    //         }
+    //     }
+    // }
 
     const controlPack = {
         mode,
-        sessionDocumentSectionID,
+        // sessionDocumentSectionID,
         actionResponses,
-        blockIDMap:blockIDMapRef,
+        blockIDMap:blockIDMapRef.current,
+        currentEditBlockID: workboxHandler.session.document.changesessionid,
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
