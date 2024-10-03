@@ -84,13 +84,13 @@ class WorkboxHandler {
             }
         },
         document:{
-            insertunit: null,
+            insertblock: null,
             insertselection: null,
-            editunit: null,
+            editblock: null,
             changesessionid: null,
             is_change_error:false,
-            removeunit: null,
-            reorderunit: null,
+            removeblock: null,
+            reorderblock: null,
             savechanges: null,
             cancelchanges: null,
             modesettings: {

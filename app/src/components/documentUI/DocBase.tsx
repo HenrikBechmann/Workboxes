@@ -469,31 +469,37 @@ const DataController = (props) => {
 const DocBase = (props) => {
 
     const 
-        { documentBaseData, mode, sessionID } = props,
+        { documentBaseData, mode, sessionDocumentSectionID } = props,
         baseFields = documentBaseData.base,
         { name, description, image, todo } = baseFields,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
-        sessionIDRef = useRef(sessionID),
-        [baseEditMode, setBaseEditMode] = useState(false)
+        // sessionIDRef = useRef(sessionDocumentSectionID),
+        [baseEditMode, setBaseEditMode] = useState(false),
+        blockIDMapRef = useRef(new Map([
+            ['todo',sessionDocumentSectionID + '.base.todo'],
+            ['identity',sessionDocumentSectionID + '.base.identity'],
+            ['thumbnail',sessionDocumentSectionID + '.base.thumbnail'],
+            ['data',sessionDocumentSectionID + '.base.data'],
+        ]))
 
     let actionIcon, response, tooltip, canceltip
 
-    const onInsert = () => {
+    const onInsert = (sessionBlockID) => {
 
-        sessiondocument.insertunit(sessionIDRef.current)
+        sessiondocument.insertblock(sessionBlockID)
 
     }
 
-    const onEdit = () => {
+    const onEdit = (sessionBlockID) => {
 
-        if (sessiondocument.editunit(sessionIDRef.current)) {
+        if (sessiondocument.editblock(sessionBlockID)) {
             setBaseEditMode(true)
         }
 
     }
 
-    async function onSave () {
+    async function onSave (sessionBlockID) {
 
         let editorFiles = []
         const documentFiles = workboxHandler.editRecord.document.files
@@ -503,13 +509,13 @@ const DocBase = (props) => {
             editorFiles = workboxHandler.getEditorFiles(workboxHandler.editorcontent)
         }
         await workboxHandler.reconcileUploadedFiles(documentFiles, editorFiles)
-        if (sessiondocument.savechanges(sessionIDRef.current)) { // check for errors or other blocking conditions
+        if (sessiondocument.savechanges(sessionBlockID)) { // check for errors or other blocking conditions
             setBaseEditMode(false)
         }
 
     }
 
-    async function onCancel() {
+    async function onCancel(sessionBlockID) {
 
         let editorFiles = []
         const documentFiles = workboxHandler.editRecord.document.files
@@ -520,7 +526,7 @@ const DocBase = (props) => {
         }
         await workboxHandler.revertUploadedFiles(documentFiles, editorFiles)
 
-        sessiondocument.cancelchanges(sessionIDRef.current)
+        sessiondocument.cancelchanges(sessionBlockID)
         setBaseEditMode(false)
         
     }
@@ -553,8 +559,9 @@ const DocBase = (props) => {
 
     const controlPack = {
         mode,
-        sessionID,
+        sessionDocumentSectionID,
         actionResponses,
+        blockIDMap:blockIDMapRef,
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '24px'}>
