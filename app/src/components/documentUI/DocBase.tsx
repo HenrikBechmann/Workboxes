@@ -133,8 +133,8 @@ const Base_Edit_Todo = (props) => {
 
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord.document.base,
-        [todoText, setTodoText] = useState(editBaseRecord.todo),
+        editBaseRecord = workboxHandler.editRecord?.document.base, // allow for animation delay
+        [todoText, setTodoText] = useState(editBaseRecord?.todo), // allow for animation delay
         helperText = {
             todo:`The to do field holds notes for administrators.`,
         }
@@ -550,7 +550,9 @@ const TodoController = (props) => {
         { mode } = controlPack,
         animationBoxRef = useRef(null),
         isInitializedRef = useRef(false),
-        [newMode, setNewMode] = useState('mode')
+        [newMode, setNewMode] = useState('mode'),
+        activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'),
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
 
     useEffect(()=>{
 
@@ -563,20 +565,21 @@ const TodoController = (props) => {
         animationBoxRef.current.style.height = startingHeight + 'px'
 
         setNewMode(mode)
+        setIsActiveEdit(activeEdit)
 
-    },[mode])
+    },[mode, activeEdit])
 
 
     useEffect(()=>{
 
         animateModeChange(animationBoxRef.current)
 
-    },[newMode])
+    },[newMode, isActiveEdit])
 
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'))
+            : isActiveEdit
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
         }
