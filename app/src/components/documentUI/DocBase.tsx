@@ -86,20 +86,29 @@ const alternateActionIconStyles = {
     top:'36px',
 } as CSSProperties
 
-const animateTransition = 'height .5s'
+const animateTransition = 'all .5s'
 
 const animateModeChange = (element) => {
 
     const sectionHeight = element.firstChild.scrollHeight;
-  
-    element.style.transition = animateTransition
+
+    element.style.opacity = 0 
 
     requestAnimationFrame(() => {
-        element.style.height = sectionHeight + 'px';
+
+        element.style.transition = animateTransition
+
+        setTimeout(()=>{
+            requestAnimationFrame(()=> {
+                element.style.height = sectionHeight + 'px';
+                element.style.opacity = 1
+            })
+        },25)           
+
     });
 
     setTimeout(()=>{
-        element.style.transtion = ''
+        element.style.transition = ''
         element.style.height = 'auto'
     },600)
   
@@ -133,8 +142,9 @@ const Base_Edit_Todo = (props) => {
 
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord?.document.base, // allow for animation delay
-        [todoText, setTodoText] = useState(editBaseRecord?.todo), // allow for animation delay
+        editBaseRecord = workboxHandler.editRecord?.document.base || 
+            workboxHandler.workboxRecord.document.base, // allow for animation delay
+        [todoText, setTodoText] = useState(editBaseRecord.todo), // allow for animation delay
         helperText = {
             todo:`The to do field holds notes for administrators.`,
         }
@@ -557,7 +567,6 @@ const TodoController = (props) => {
     useEffect(()=>{
 
         if (!isInitializedRef.current) {
-            isInitializedRef.current = true
             return
         }
 
@@ -572,11 +581,16 @@ const TodoController = (props) => {
 
     useEffect(()=>{
 
+        if (!isInitializedRef.current) {
+            isInitializedRef.current = true
+            return
+        }
+
         animateModeChange(animationBoxRef.current)
 
     },[newMode, isActiveEdit])
 
-    return <Box ref = {animationBoxRef} ><Box>
+    return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
         {(newMode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
             : isActiveEdit
