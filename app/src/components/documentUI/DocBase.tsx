@@ -423,7 +423,7 @@ const Base_EditMode_Todo = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-todo-list'>
+    return <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} >
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
         </Box>
@@ -445,7 +445,7 @@ const Base_EditMode_Identity = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-identity'>
+    return <Box data-type = 'editmode-identity'  opacity = {isDisabled? 0.5:1}>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the basics' caption = 'edit'/>
         </Box>
@@ -470,7 +470,7 @@ const Base_EditMode_Thumbnail = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-thumbnail'>
+    return <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
         <Box 
             style = {{borderBottom:'1px solid silver', display:'flex'}}
         >
@@ -497,7 +497,7 @@ const Base_EditMode_Data = (props) => {
 
     return <>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
-        <Box data-type = 'editmode-summary'>
+        <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} >
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
             </Box>
