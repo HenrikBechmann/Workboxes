@@ -199,7 +199,8 @@ const Base_Edit_Identity = (props) => {
 
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord.document.base,
+        editBaseRecord = workboxHandler.editRecord?.document.base || 
+            workboxHandler.workboxRecord.document.base,
         { controlPack } = props,
         [editState,setEditState] = useState('setup'),
         systemRecords = useSystemRecords(),
@@ -604,12 +605,43 @@ const IdentityController = (props) => {
 
     const 
         { controlPack, name, description } = props,
-        { mode } = controlPack
+        { mode } = controlPack,
+        animationBoxRef = useRef(null),
+        isInitializedRef = useRef(false),
+        [newMode, setNewMode] = useState('mode'),
+        activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'),
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
 
-    return <Box><Box>
-        {(mode !='edit')
+    useEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            return
+        }
+
+        const startingHeight = animationBoxRef.current.scrollHeight
+        animationBoxRef.current.style.height = startingHeight + 'px'
+
+        setNewMode(mode)
+        setIsActiveEdit(activeEdit)
+
+    },[mode, activeEdit])
+
+
+    useEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            isInitializedRef.current = true
+            return
+        }
+
+        animateModeChange(animationBoxRef.current)
+
+    },[newMode, isActiveEdit])
+
+    return <Box ref = {animationBoxRef}><Box>
+        {(newMode !='edit')
             ? <Base_Display_Identity name = {name} description = {description} />
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'))
+            : isActiveEdit
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
         }
