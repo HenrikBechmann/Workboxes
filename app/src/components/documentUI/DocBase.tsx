@@ -311,11 +311,13 @@ const Base_Edit_Identity = (props) => {
 
 
     return <>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-        </Box>
-        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel changes' caption = 'cancel'/>
+        <Box style = {actionBoxStyles} data-type = 'action box'> 
+            <Box style = {basicActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+            </Box>
+            <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+            </Box>
         </Box>
         <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
