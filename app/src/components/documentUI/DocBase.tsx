@@ -151,6 +151,7 @@ const Base_Edit_Identity = (props) => {
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord.document.base,
+        { controlPack } = props,
         [editState,setEditState] = useState('setup'),
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
@@ -250,12 +251,21 @@ const Base_Edit_Identity = (props) => {
         },
     }
 
+    const onSave = () => {
+        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('identity'))
+    }
+
+    const onCancel = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('identity'))
+    }
+
+
     return <>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel changes' caption = 'cancel'/>
         </Box>
         <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
@@ -301,9 +311,23 @@ const Base_Edit_Identity = (props) => {
 
 const Base_Edit_Thumbnail = (props) => {
 
+    const
+        { controlPack } = props
+
+    const onSave = () => {
+        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('thumbnail'))
+    }
+
+    const onCancel = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('thumbnail'))
+    }
+
     return <>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+        </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel changes' caption = 'cancel'/>
         </Box>
         <IntakeCroppedImage />
     </>
@@ -311,14 +335,25 @@ const Base_Edit_Thumbnail = (props) => {
 }
 const Base_Edit_Data = (props) => {
 
+    const
+        { controlPack } = props
+
+    const onSave = () => {
+        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('data'))
+    }
+
+    const onCancel = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('data'))
+    }
+
     return <Box data-type = 'active-edit-data'>
-        <Box style = {{fontSize:'small'}}>document data</Box>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} tooltip = 'save the changes' caption = 'edit'/>
+            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} tooltip = 'cancel the changes' caption = 'cancel'/>
+            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
+        <Box style = {{fontSize:'small'}}>document data</Box>
         <BaseDataEditController />
     </Box>
 
@@ -352,11 +387,15 @@ const Base_EditMode_Identity = (props) => {
 
     const { controlPack, name, description } = props
 
+    const onEdit = () => {
+        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('identity'))
+    }
+
     const isDisabled = !!controlPack.currentEditBlockID
 
     return <Box data-type = 'editmode-identity'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the basics' caption = 'edit'/>
+            <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the basics' caption = 'edit'/>
         </Box>
         <Box fontWeight = 'bold'>
             {name}
@@ -373,6 +412,10 @@ const Base_EditMode_Thumbnail = (props) => {
     const 
         { controlPack, thumbnail } = props
 
+    const onEdit = () => {
+        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('thumbnail'))
+    }
+
     const isDisabled = !!controlPack.currentEditBlockID
 
     return <Box data-type = 'editmode-thumbnail'>
@@ -380,7 +423,7 @@ const Base_EditMode_Thumbnail = (props) => {
             style = {{borderBottom:'1px solid silver', display:'flex'}}
         >
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the thumbnail' caption = 'edit'/>
+                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
             </Box>
             <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
                 <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
@@ -394,13 +437,17 @@ const Base_EditMode_Data = (props) => {
     const 
         { controlPack } = props
 
+    const onEdit = () => {
+        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('data'))
+    }
+
     const isDisabled = !!controlPack.currentEditBlockID
 
     return <>
         <Divider style = {{clear:'left', borderColor: 'gray'}} />
         <Box data-type = 'editmode-summary'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} isDisabled = {isDisabled} tooltip = 'edit the summary' caption = 'edit'/>
+                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
             </Box>
             <BaseDataDisplayController />
         </Box>
@@ -591,7 +638,6 @@ const DocBase = (props) => {
 
         return {
             mode,
-            // sessionDocumentSectionID,
             actionResponses,
             blockIDMap:blockIDMapRef.current,
             currentEditBlockID: workboxHandler.session.document.changesessionid,
