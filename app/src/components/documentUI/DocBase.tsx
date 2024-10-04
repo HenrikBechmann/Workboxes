@@ -508,16 +508,21 @@ const TodoController = (props) => {
 
     const 
         { controlPack, todo } = props,
-        { mode } = controlPack
+        { mode } = controlPack,
+        animationBoxRef = useRef(null)
 
-    return <Box>
+    useEffect(()=>{
+
+    },[mode])
+
+    return <Box ref = {animationBoxRef} ><Box>
         {(mode !='edit') 
             ? <Base_Display_Todo todo = {todo}/>
             : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'))
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
         }
-    </Box>
+    </Box></Box>
 }
 
 const IdentityController = (props) => {
@@ -526,14 +531,14 @@ const IdentityController = (props) => {
         { controlPack, name, description } = props,
         { mode } = controlPack
 
-    return <Box>
+    return <Box><Box>
         {(mode !='edit')
             ? <Base_Display_Identity name = {name} description = {description} />
             : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'))
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
         }
-    </Box>
+    </Box></Box>
 }
 
 const ThumbnailController = (props) => {
@@ -542,14 +547,14 @@ const ThumbnailController = (props) => {
         { controlPack, thumbnail } = props,
         {mode} = controlPack
 
-    return <Box>
+    return <Box><Box>
         {(mode !='edit')
             ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
             : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
                 ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
                 : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
         }
-    </Box>
+    </Box></Box>
 }
 
 const DataController = (props) => {
@@ -558,14 +563,14 @@ const DataController = (props) => {
         {controlPack} = props,
         { mode } = controlPack
 
-    return <Box>
+    return <Box><Box>
         {(mode !='edit')
             ? <Base_Display_Data />
             : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('data'))
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>
         }
-    </Box>
+    </Box></Box>
 }
 
 // controller directs to appropriate component
