@@ -1,7 +1,7 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, CSSProperties, useCallback, useMemo, lazy} from 'react'
+import React, {useRef, useState, useEffect, useLayoutEffect, CSSProperties, useCallback, useMemo, lazy} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -113,26 +113,6 @@ const animateModeChange = (element) => {
     },600)
   
 }
-
-// function expandSection(element) {
-//   // get the height of the element's inner content, regardless of its actual size
-//   var sectionHeight = element.scrollHeight;
-  
-//   // have the element transition to the height of its inner content
-//   element.style.height = sectionHeight + 'px';
-
-//   // when the next css transition finishes (which should be the one we just triggered)
-//   element.addEventListener('transitionend', function(e) {
-//     // remove this event listener so it only gets triggered once
-//     element.removeEventListener('transitionend', arguments.callee);
-    
-//     // remove "height" from the element's inline styles, so it can return to its initial value
-//     element.style.height = null;
-//   });
-  
-//   // mark the section as "currently not collapsed"
-//   element.setAttribute('data-collapsed', 'false');
-// }
 
 // edit
 
@@ -375,11 +355,13 @@ const Base_Edit_Thumbnail = (props) => {
     }
 
     return <>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-        </Box>
-        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel changes' caption = 'cancel'/>
+        <Box style = {actionBoxStyles} data-type = 'action box'> 
+            <Box style = {basicActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+            </Box>
+            <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+            </Box>
         </Box>
         <IntakeCroppedImage />
     </>
@@ -567,7 +549,7 @@ const TodoController = (props) => {
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'),
         [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
 
-    useEffect(()=>{
+    useLayoutEffect(()=>{
 
         if (!isInitializedRef.current) {
             return
@@ -614,7 +596,7 @@ const IdentityController = (props) => {
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'),
         [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
 
-    useEffect(()=>{
+    useLayoutEffect(()=>{
 
         if (!isInitializedRef.current) {
             return
@@ -627,7 +609,6 @@ const IdentityController = (props) => {
         setIsActiveEdit(activeEdit)
 
     },[mode, activeEdit])
-
 
     useEffect(()=>{
 
@@ -654,12 +635,42 @@ const ThumbnailController = (props) => {
 
     const 
         { controlPack, thumbnail } = props,
-        {mode} = controlPack
+        {mode} = controlPack,
+        animationBoxRef = useRef(null),
+        isInitializedRef = useRef(false),
+        [newMode, setNewMode] = useState('mode'),
+        activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'),
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
 
-    return <Box><Box>
-        {(mode !='edit')
+    useLayoutEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            return
+        }
+
+        const startingHeight = animationBoxRef.current.scrollHeight
+        animationBoxRef.current.style.height = startingHeight + 'px'
+
+        setNewMode(mode)
+        setIsActiveEdit(activeEdit)
+
+    },[mode, activeEdit])
+
+    useEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            isInitializedRef.current = true
+            return
+        }
+
+        animateModeChange(animationBoxRef.current)
+
+    },[newMode, isActiveEdit])
+
+    return <Box ref = {animationBoxRef} ><Box>
+        {(newMode !='edit')
             ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'))
+            : isActiveEdit
                 ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
                 : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
         }

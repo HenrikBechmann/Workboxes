@@ -282,7 +282,8 @@ const IntakeCroppedImage = (props) => {
                         marginTop: '3px',
                     }
                 } 
-                src = {workboxHandler.editRecord.document.base.image.source} 
+                src = {workboxHandler.editRecord?.document.base.image.source || 
+                    workboxHandler.workboxRecord.document.base.image.source} 
             />
             {!pctCrop && <Button margin = '3px' colorScheme = 'blue'>Remove thumbnail</Button>}
         </Flex></Box>
