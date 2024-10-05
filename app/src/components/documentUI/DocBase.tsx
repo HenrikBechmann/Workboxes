@@ -114,6 +114,32 @@ const animateModeChange = (element) => {
   
 }
 
+const SectionDivider = (props) => {
+
+    const { title } = props
+
+    return <> 
+    <Divider style = {
+        {
+            clear:'left', 
+            borderColor: 'black', 
+            borderWidth:'2px', 
+            marginLeft:'-32px', 
+            width:'calc(100% + 32px)'
+        }
+    } />
+    <Box style = {
+        {
+            textAlign:'center', 
+            backgroundColor:'silver', 
+            fontSize:'small', 
+            marginLeft:'-32px',
+            width:'calc(100% + 32px)'
+        }
+    } >{title}</Box>
+    </>
+}
+
 // edit
 
 const Base_Edit_Todo = (props) => {
@@ -172,7 +198,6 @@ const Base_Edit_Todo = (props) => {
             </FormControl>
         </Box>
     </Box>
-
 }
 
 const Base_Edit_Identity = (props) => {
@@ -299,7 +324,6 @@ const Base_Edit_Identity = (props) => {
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
             </Box>
         </Box>
-        <Box style = {{fontSize:'small'}}>workbox basics</Box>
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
@@ -355,6 +379,7 @@ const Base_Edit_Thumbnail = (props) => {
     }
 
     return <>
+        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
         <Box style = {actionBoxStyles} data-type = 'action box'> 
             <Box style = {basicActionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
@@ -380,17 +405,19 @@ const Base_Edit_Data = (props) => {
         controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('data'))
     }
 
-    return <Box data-type = 'active-edit-data'>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+    return <>
+        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
+        <Box data-type = 'active-edit-data'>
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+            </Box>
+            <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+            </Box>
+            <Box style = {{fontSize:'small'}}>document data</Box>
+            <BaseDataEditController />
         </Box>
-        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
-        </Box>
-        <Box style = {{fontSize:'small'}}>document data</Box>
-        <BaseDataEditController />
-    </Box>
-
+    </>
 }
 
 // edit mode
@@ -405,16 +432,17 @@ const Base_EditMode_Todo = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} >
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
+    return <>
+        <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} >
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
+            </Box>
+            <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+            <Box borderBottom = '1px solid silver'>
+                   <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+            </Box>
         </Box>
-        <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
-        <Box borderBottom = '1px solid silver'>
-               <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-        </Box>
-    </Box>
-
+    </>
 }
 
 const Base_EditMode_Identity = (props) => {
@@ -452,18 +480,21 @@ const Base_EditMode_Thumbnail = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
-        <Box 
-            style = {{borderBottom:'1px solid silver', display:'flex'}}
-        >
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
-            </Box>
-            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
+    return <>
+        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
+        <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
+            <Box 
+                style = {{borderBottom:'1px solid silver', display:'flex'}}
+            >
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
+                </Box>
+                <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
+                    <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
+                </Box>
             </Box>
         </Box>
-    </Box>
+    </>
     
 }
 const Base_EditMode_Data = (props) => {
@@ -478,7 +509,7 @@ const Base_EditMode_Data = (props) => {
     const isDisabled = !!controlPack.currentEditBlockID
 
     return <>
-        <Divider style = {{clear:'left', borderColor: 'gray'}} />
+        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
         <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} >
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
@@ -576,12 +607,14 @@ const TodoController = (props) => {
     },[newMode, isActiveEdit])
 
     return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
-        {(newMode !='edit') 
-            ? <Base_Display_Todo todo = {todo}/>
-            : isActiveEdit
+        {(newMode !='edit') && <Base_Display_Todo todo = {todo}/>}
+        {(newMode == 'edit') && <>
+            <SectionDivider title = 'Workbox todo notes' />
+            {(isActiveEdit
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
-                : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>
-        }
+                : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>)
+            }
+        </>}
     </Box></Box>
 }
 
@@ -622,12 +655,14 @@ const IdentityController = (props) => {
     },[newMode, isActiveEdit])
 
     return <Box ref = {animationBoxRef}><Box>
-        {(newMode !='edit')
-            ? <Base_Display_Identity name = {name} description = {description} />
-            : isActiveEdit
+        {(newMode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
+        {(newMode == 'edit') && <>
+            <SectionDivider title = 'Workbox identity'/>
+            {isActiveEdit
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
-        }
+            }
+        </>}
     </Box></Box>
 }
 
