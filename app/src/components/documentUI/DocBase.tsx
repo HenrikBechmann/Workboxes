@@ -1,7 +1,7 @@
 // DocumentBase.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, useLayoutEffect, CSSProperties, useCallback, useMemo, lazy} from 'react'
+import React, {useRef, useState, useEffect, useLayoutEffect, CSSProperties, useCallback, useMemo, Suspense, lazy} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -113,7 +113,7 @@ const animateModeChange = (element) => {
   
 }
 
-// utility component
+// utility components
 const SectionDivider = (props) => {
 
     const { title, isDisabled } = props
@@ -139,6 +139,10 @@ const SectionDivider = (props) => {
         }
     } >{title}</Box>
     </>
+}
+
+const Loading = (props) => {
+    return <Box minHeight = '100px'>Loading...</Box>
 }
 
 // --------------------------------------[ section edit displays ]-------------------------------------
@@ -388,7 +392,7 @@ const Base_Edit_Thumbnail = (props) => {
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
             </Box>
         </Box>
-        <IntakeCroppedImage />
+        <Suspense fallback = {<Loading />}><IntakeCroppedImage /></Suspense>
     </>
 
 }
@@ -413,7 +417,7 @@ const Base_Edit_Data = (props) => {
             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
         <Box style = {{fontSize:'small'}}>document data</Box>
-        <BaseDataEditController />
+        <Suspense fallback = {<Loading />}><BaseDataEditController /></Suspense>
     </Box>
 }
 
@@ -507,7 +511,7 @@ const Base_EditMode_Data = (props) => {
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
         </Box>
-        <BaseDataDisplayController />
+        <Suspense fallback = {<Loading />}><BaseDataDisplayController /></Suspense>
     </Box>
 }
 
