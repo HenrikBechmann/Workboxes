@@ -11,7 +11,7 @@ const BaseDataEditController = () => {
     const
         [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
-        workboxType = editRecord.profile.type.name
+        workboxType = editRecord?.profile.type.name || workboxHandler.workboxRecord.profile.type.name
 
     const datacomponent = useMemo(()=> {
 

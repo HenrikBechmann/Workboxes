@@ -8,12 +8,10 @@ import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import {
     Box,
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
-    Flex, HStack,
-    Input, Textarea, Heading,
+    Flex,
+    Input, Textarea,
     Divider,
 } from '@chakra-ui/react'
-
-// import {useDropzone} from 'react-dropzone'
 
 import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -88,6 +86,7 @@ const alternateActionIconStyles = {
 
 const animateTransition = 'all .5s'
 
+// utility function
 const animateModeChange = (element) => {
 
     const sectionHeight = element.firstChild.scrollHeight;
@@ -114,9 +113,10 @@ const animateModeChange = (element) => {
   
 }
 
+// utility component
 const SectionDivider = (props) => {
 
-    const { title } = props
+    const { title, isDisabled } = props
 
     return <> 
     <Divider style = {
@@ -134,13 +134,14 @@ const SectionDivider = (props) => {
             backgroundColor:'silver', 
             fontSize:'small', 
             marginLeft:'-32px',
-            width:'calc(100% + 32px)'
+            width:'calc(100% + 32px)',
+            opacity: isDisabled?.5:1,
         }
     } >{title}</Box>
     </>
 }
 
-// edit
+// --------------------------------------[ section edit displays ]-------------------------------------
 
 const Base_Edit_Todo = (props) => {
 
@@ -379,7 +380,6 @@ const Base_Edit_Thumbnail = (props) => {
     }
 
     return <>
-        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
         <Box style = {actionBoxStyles} data-type = 'action box'> 
             <Box style = {basicActionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
@@ -405,22 +405,19 @@ const Base_Edit_Data = (props) => {
         controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('data'))
     }
 
-    return <>
-        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
-        <Box data-type = 'active-edit-data'>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-            </Box>
-            <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
-            </Box>
-            <Box style = {{fontSize:'small'}}>document data</Box>
-            <BaseDataEditController />
+    return <Box data-type = 'active-edit-data'>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
-    </>
+        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+        </Box>
+        <Box style = {{fontSize:'small'}}>document data</Box>
+        <BaseDataEditController />
+    </Box>
 }
 
-// edit mode
+// -----------------------------------[ section edit mode displays ]-------------------------------
 
 const Base_EditMode_Todo = (props) => {
 
@@ -480,23 +477,21 @@ const Base_EditMode_Thumbnail = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <>
-        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
-        <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
-            <Box 
-                style = {{borderBottom:'1px solid silver', display:'flex'}}
-            >
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
-                </Box>
-                <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-                    <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
-                </Box>
+    return <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
+        <Box 
+            style = {{borderBottom:'1px solid silver', display:'flex'}}
+        >
+            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
+            </Box>
+            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
+                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
             </Box>
         </Box>
-    </>
+    </Box>
     
 }
+
 const Base_EditMode_Data = (props) => {
 
     const 
@@ -508,18 +503,15 @@ const Base_EditMode_Data = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <>
-        <Divider style = {{clear:'left', borderColor: 'black', borderWidth:'2px', marginLeft:'-32px', width:'calc(100% + 32px)'}} />
-        <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} >
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
-            </Box>
-            <BaseDataDisplayController />
+    return <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} >
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
         </Box>
-    </>
+        <BaseDataDisplayController />
+    </Box>
 }
 
-// display
+// ---------------------------[ section view displays ]-------------------------------------------
 
 const Base_Display_Todo = (props) => {
 
@@ -560,14 +552,13 @@ const Base_Display_Thumbnail = (props) => {
 }
 const Base_Display_Data = (props) => {
 
-    return  <>
-        <Divider style = {{clear:'left', borderColor: 'gray'}} />
-        <Box >
-            <BaseDataDisplayController />
-        </Box>
-    </>
+    return <Box style = {{clear:'left'}} >
+        <BaseDataDisplayController />
+    </Box>
 
 }
+
+// ------------------------[ section display controllers ]----------------------------------
 
 const TodoController = (props) => {
 
@@ -578,7 +569,8 @@ const TodoController = (props) => {
         isInitializedRef = useRef(false),
         [newMode, setNewMode] = useState('mode'),
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'),
-        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
+        isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
     useLayoutEffect(()=>{
 
@@ -609,7 +601,7 @@ const TodoController = (props) => {
     return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Todo todo = {todo}/>}
         {(newMode == 'edit') && <>
-            <SectionDivider title = 'Workbox todo notes' />
+            <SectionDivider isDisabled = {isDisabled} title = 'Workbox todo notes' />
             {(isActiveEdit
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>)
@@ -627,7 +619,8 @@ const IdentityController = (props) => {
         isInitializedRef = useRef(false),
         [newMode, setNewMode] = useState('mode'),
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('identity'),
-        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
+        isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
     useLayoutEffect(()=>{
 
@@ -657,7 +650,7 @@ const IdentityController = (props) => {
     return <Box ref = {animationBoxRef}><Box>
         {(newMode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
         {(newMode == 'edit') && <>
-            <SectionDivider title = 'Workbox identity'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Workbox identity section'/>
             {isActiveEdit
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
@@ -675,7 +668,8 @@ const ThumbnailController = (props) => {
         isInitializedRef = useRef(false),
         [newMode, setNewMode] = useState('mode'),
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'),
-        [isActiveEdit, setIsActiveEdit] = useState(activeEdit)
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
+        isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
     useLayoutEffect(()=>{
 
@@ -703,12 +697,14 @@ const ThumbnailController = (props) => {
     },[newMode, isActiveEdit])
 
     return <Box ref = {animationBoxRef} ><Box>
-        {(newMode !='edit')
-            ? <Base_Display_Thumbnail thumbnail = {thumbnail} />
-            : isActiveEdit
+        {(newMode !='edit') && <Base_Display_Thumbnail thumbnail = {thumbnail} />}
+        {(newMode =='edit') && <> 
+            <SectionDivider isDisabled = {isDisabled} title = 'Workbox thumbnail'/>
+            {isActiveEdit
                 ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
                 : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
-        }
+            }
+        </>}
     </Box></Box>
 }
 
@@ -716,19 +712,54 @@ const DataController = (props) => {
 
     const 
         {controlPack} = props,
-        { mode } = controlPack
+        { mode } = controlPack,
+        animationBoxRef = useRef(null),
+        isInitializedRef = useRef(false),
+        [newMode, setNewMode] = useState('mode'),
+        activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('data'),
+        [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
+        isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
-    return <Box><Box>
-        {(mode !='edit')
-            ? <Base_Display_Data />
-            : (controlPack.currentEditBlockID === controlPack.blockIDMap.get('data'))
+    useLayoutEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            return
+        }
+
+        const startingHeight = animationBoxRef.current.scrollHeight
+        animationBoxRef.current.style.height = startingHeight + 'px'
+
+        setNewMode(mode)
+        setIsActiveEdit(activeEdit)
+
+    },[mode, activeEdit])
+
+    useEffect(()=>{
+
+        if (!isInitializedRef.current) {
+            isInitializedRef.current = true
+            return
+        }
+
+        animateModeChange(animationBoxRef.current)
+
+    },[newMode, isActiveEdit])
+
+    return <Box ref = {animationBoxRef} ><Box>
+        {(newMode !='edit') && <Base_Display_Data />}
+        {(newMode == 'edit') && <>
+            <SectionDivider isDisabled = {isDisabled} title = 'Workbox data section'/>
+            {isActiveEdit
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>
-        }
+            }
+        </>}
     </Box></Box>
 }
 
-// controller directs to appropriate component
+// ----------------------[ document base controller ]-------------------------------
+//directs to appropriate component
+
 const DocBase = (props) => {
 
     const 
@@ -812,16 +843,16 @@ const DocBase = (props) => {
             />
         </Box>
         <Box>
+            <ThumbnailController 
+                controlPack = {controlPack}
+                thumbnail = { image }
+            />
+        </Box>
+        <Box>
             <IdentityController 
                 controlPack = {controlPack}
                 name = {name} 
                 description = {description} 
-            />
-        </Box>
-        <Box>
-            <ThumbnailController 
-                controlPack = {controlPack}
-                thumbnail = { image }
             />
         </Box>
         <Box>
@@ -833,324 +864,3 @@ const DocBase = (props) => {
 }
 
 export default DocBase
-
-// if (baseEditMode) {
-//     actionIcon = saveIcon
-//     response = onSave
-//     tooltip = 'save section changes'
-//     canceltip = 'cancel section changes'
-// } else {
-//     switch (mode) {
-//         case 'insert': {
-//             actionIcon = insertIcon
-//             response = onInsert
-//             tooltip = 'insert next section'
-//             break
-//         }
-//         case 'edit': {
-//             actionIcon = editIcon
-//             response = onEdit
-//             tooltip = 'edit this section'
-//             break
-//         }
-//     }
-// }
-
-// {(mode == 'edit') && <DocBaseDisplayEditMode documentBaseData = {documentBaseData}/>}
-// {(mode !='edit') && <DocBaseDisplay documentBaseData = {documentBaseData}/>}
-// {(!['view', 'drag', 'remove'].includes(mode)) && <>
-//     <Box style = {actionIconStyles} data-type = 'actionbox'>
-//         <SideIcon icon = {actionIcon} response = {response} tooltip = {tooltip} />
-//     </Box>
-//     {baseEditMode &&
-//         <Box style = {alternateActionIconStyles} data-type = 'cancelbox'>
-//             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = {canceltip}></SideIcon>
-//         </Box>
-//     }</>
-// }
-
-// const DocBaseDisplayEditMode = (props) => { // simplicity makes component available for document callout
-
-//     const 
-//         {documentBaseData} = props,
-//         baseFields = documentBaseData.base,
-//         baseData = documentBaseData.data,
-//         { name, description, image, todo } = baseFields,
-//         [activeEdit, setActiveEdit] = useState(false)
-
-//     return <Box data-type = 'displaybaseeditmode' padding = '3px'>
-//         <Box data-type = 'editmode-todo-list'>
-//             <Box style = {actionIconStyles} data-type = 'actionbox'>
-//                 <SideIcon icon = {editIcon} tooltip = 'edit the todo list' caption = 'edit'/>
-//             </Box>
-//             <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
-//             <Box borderBottom = '1px solid silver'>
-//                    <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-//             </Box>
-//         </Box>
-//         <Box data-type = 'editmode-thumbnail'>
-//             <Box 
-//                 style = {{borderBottom:'1px solid silver', display:'flex'}}
-//             >
-//                 <Box style = {actionIconStyles} data-type = 'actionbox'>
-//                     <SideIcon icon = {editIcon} tooltip = 'edit the thumbnail' caption = 'edit'/>
-//                 </Box>
-//                 <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-//                     <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
-//                 </Box>
-//             </Box>
-//         </Box>
-//         <Box data-type = 'editmode-identity'>
-//             <Box style = {actionIconStyles} data-type = 'actionbox'>
-//                 <SideIcon icon = {editIcon} tooltip = 'edit the basics' caption = 'edit'/>
-//             </Box>
-//             <Box fontWeight = 'bold' style = {{clear:'left'}}>
-//                 {name}
-//             </Box>
-//             <Box fontStyle = 'italic'>
-//                {description}
-//             </Box>
-//         </Box>
-//         <Divider style = {{clear:'left', borderColor: 'gray'}} />
-//         <Box data-type = 'editmode-summary'>
-//             <Box style = {actionIconStyles} data-type = 'actionbox'>
-//                 <SideIcon icon = {editIcon} tooltip = 'edit the summary' caption = 'edit'/>
-//             </Box>
-//             <BaseDataDisplayController />
-//         </Box>
-//     </Box>
-// }
-
-// const DocBaseDisplay = (props) => {
-
-//     const 
-//         {documentBaseData} = props,
-//         baseFields = documentBaseData.base,
-//         baseData = documentBaseData.data,
-//         { name, description, image, todo } = baseFields
-
-//     return <Box data-type = 'displaybase' padding = '3px'>
-//         { todo && <Box borderBottom = '1px solid silver'>
-//            <details>
-//                <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
-//                <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-//            </details>
-//         </Box>}
-//         {image.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
-//             <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {image.source} />
-//         </Box>}
-//         <Box fontWeight = 'bold'>
-//             {name}
-//         </Box>
-//         <Box fontStyle = 'italic'>
-//            {description}
-//         </Box>
-//         <Divider style = {{clear:'left', borderColor: 'gray'}} />
-//         <Box >
-//             <BaseDataDisplayController />
-//         </Box>
-//     </Box>
-// }
-
-// const DocBaseEdit = (props) => {
-    
-//     const 
-//         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-//         editBaseRecord = workboxHandler.editRecord.document.base,
-//         [editState,setEditState] = useState('setup'),
-//         systemRecords = useSystemRecords(),
-//         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
-//         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
-//         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
-//         errorMessages = {
-//             name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
-//             description:`The description can only be up to ${maxDescriptionLength} characters.`,
-//             todo: 'There are no limits to content'
-//         },
-//         helperText = {
-//             name:`This name will appear to app users. Can be changed. Up to ${maxNameLength} characters.`,
-//             description:`This description will appear to app users. Max ${maxDescriptionLength} characters.`,
-//             todo:`The to do field holds notes for administrators.`,
-//             // thumbnail:`This image (sized to 90 x 90 px) is used as a visual representation in resource listings.`
-//         },
-//         invalidFieldFlagsRef = useRef({
-//             name:false,
-//             description:false,
-//             image:false,
-//             todo:false,
-//         }),
-//         invalidFieldFlags = invalidFieldFlagsRef.current
-
-//     // initialize editRecord and editData (editRecord subset)
-//     useEffect(()=>{
-
-//         const 
-//             editData = workboxHandler.editRecord.document.base
-
-//         isInvalidTests.name(editData.name ?? '')
-//         isInvalidTests.description(editData.description ?? '')
-//         isInvalidTests.image(editData.image ?? '')
-//         isInvalidTests.todo(editData.todo)
-
-//         setEditState('checking')
-
-//     },[])
-
-//     useEffect(()=>{
-
-//         if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
-
-//     },[editState])
-
-//     const onChangeFunctions = {
-//         name:(event) => {
-//             const 
-//                 target = event.target as HTMLInputElement,
-//                 value = target.value
-
-//             isInvalidTests.name(value)
-//             editBaseRecord.name = value
-//             setEditState('validating')
-//         },
-//         description:(event) => {
-//             const
-//                 target = event.target as HTMLInputElement,
-//                 value = target.value
-//             isInvalidTests.description(value)
-//             editBaseRecord.description = value
-//             setEditState('validating')
-//         },
-//         todo:(event) => {
-//             const
-//                 target = event.target as HTMLInputElement,
-//                 value = target.value
-//             isInvalidTests.todo(value)
-//             editBaseRecord.todo = value
-//             setEditState('validating')
-//         },
-//     }
-
-//     const setChangeError = () => {
-
-//         let is_change_error = false
-//         for (const prop in invalidFieldFlags) {
-//             if (invalidFieldFlags[prop]) {
-//                 is_change_error = true
-//                 break
-//             }
-//         }
-
-//         workboxHandler.session.document.is_change_error = is_change_error
-
-//     }
-
-//     const isInvalidTests = {
-//         // TODO check for blank, string
-//         name:(value) => {
-//             let isInvalid = false
-//             if (value.length > maxNameLength || value.length < minNameLength) {
-//                 isInvalid = true
-//             }
-//             if (!isInvalid) {
-//                 if (!value) {// blank
-//                     isInvalid = true
-//                 }
-//             }
-//             invalidFieldFlags.name = isInvalid
-//             setChangeError()
-//             return isInvalid
-//         },
-//         description:(value) => {
-//             let isInvalid = false
-//             if (value.length > maxDescriptionLength) {
-//                 isInvalid = true
-//             }
-//             invalidFieldFlags.description = isInvalid
-//             setChangeError()
-//             return isInvalid
-//         },
-//         image:(value) => {
-//             let isInvalid = false
-
-//             return isInvalid
-//         },
-//         todo:(value) => {
-//             let isInvalid = false
-
-//             return isInvalid
-//         }
-//     }
-
-//     return <Box padding = '3px'>
-//         <Heading as = 'h6' 
-//             fontSize = 'x-small' 
-//             color = 'gray' 
-//             borderTop = '1px solid silver'
-//             backgroundColor = '#F0F0F0'
-//         >--- Document basics ---</Heading>
-//         <Box data-type = 'active-edit-todo-list'>
-//             <Box style = {{fontSize:'small'}}>To do notes</Box>
-//             <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-//                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.todo}>
-//                     <Textarea 
-//                         value = {editBaseRecord.todo || ''} 
-//                         size = 'sm'
-//                         onChange = {onChangeFunctions.todo}
-//                     >
-//                     </Textarea>
-//                     <FormErrorMessage>
-//                         {errorMessages.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
-//                     </FormErrorMessage>
-//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-//                         {helperText.todo} Current length is {editBaseRecord.todo?.length || '0 (blank)'}.
-//                     </FormHelperText>
-//                 </FormControl>
-//             </Box>
-//         </Box>
-//         <Box data-type = 'active-edit-basic-data'>
-//         <Box style = {{fontSize:'small'}}>workbox basics</Box>
-//         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
-//             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-//                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
-//                     <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
-//                     <Input 
-//                         value = {editBaseRecord.name || ''} 
-//                         size = 'sm'
-//                         onChange = {onChangeFunctions.name}
-//                     >
-//                     </Input>
-//                     <FormErrorMessage>
-//                         {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-//                     </FormErrorMessage>
-//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-//                         {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
-//                     </FormHelperText>
-//                 </FormControl>
-//             </Box>
-//             <Box data-type = 'descriptionfield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-//                 <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px' isInvalid = {invalidFieldFlags.description}>
-//                     <FormLabel fontSize = 'sm'>Description:</FormLabel>
-//                     <Textarea 
-//                         rows = {2}
-//                         value = {editBaseRecord.description || ''} 
-//                         size = 'sm'
-//                         onChange = {onChangeFunctions.description}
-//                     >
-//                     </Textarea>
-//                     <FormErrorMessage>
-//                         {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-//                     </FormErrorMessage>
-//                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-//                         {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
-//                     </FormHelperText>
-//                 </FormControl>
-//             </Box>
-//             <IntakeCroppedImage />
-//         </Flex>
-//         </Box>
-//         <Box data-type = 'active-edit-data'>
-//             <Box style = {{fontSize:'small'}}>document data</Box>
-//             <BaseDataEditController />
-//         </Box>
-//     </Box>
-// }
