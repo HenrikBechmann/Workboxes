@@ -191,7 +191,7 @@ const ResourcesToolbar = (props) => {
 
     // emptylistIcon is the wrong size for some reason; needs to be coerced
     const resourcesmenulist = <MenuList >
-        <MenuItem icon = {<img src = {labelIcon}/>}>Resource types to accept</MenuItem>
+        <MenuItem icon = {<img src = {labelIcon}/>}>Workbox types to accept</MenuItem>
         <MenuItem icon = {<img src = {lockIcon}/>}>Lock this list</MenuItem>
         <MenuItem icon = {<img style = {{height:'24px', width:'24px'}} src = {emptylistIcon}/>}>Empty this list</MenuItem>
     </MenuList>
@@ -215,7 +215,7 @@ const ResourcesToolbar = (props) => {
     // render
     return <Box data-type = 'resource-toolbar' style = {resourcesToolbarStyles}>
     
-        <MenuIcon icon = {resourcesIcon} caption = 'resources' tooltip = 'Workbox Resources' menulist = {resourcesmenulist} />
+        <MenuIcon icon = {resourcesIcon} caption = 'lists' tooltip = 'Workbox Resources' menulist = {resourcesmenulist} />
         <ToolbarVerticalDivider />
         <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />

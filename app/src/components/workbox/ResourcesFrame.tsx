@@ -126,7 +126,7 @@ const ResourcesFrame = forwardRef(function FoldersPanel(props:any, resourcesFram
                         </ToolbarFrame>
                     </GridItem>
                     <GridItem data-type = 'resources-body' style = {resourcesBodyStyles}>
-                        Resources list
+                        Workbox lists
                     </GridItem>
                 </Grid>
         </Box>

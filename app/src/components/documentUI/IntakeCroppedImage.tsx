@@ -202,7 +202,7 @@ const IntakeCroppedImage = (props) => {
                     ? <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >
                         Drop the new image here ...
                     </Box> 
-                    : <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}}>
+                    : <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94', minHeight:'40px'}}>
                         Drag 'n' drop a new image here, or click to select a new image
                     </Box>
             }

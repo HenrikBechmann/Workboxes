@@ -160,7 +160,7 @@ const WorkboxToolbar = (props) => {
         resourcesToggle = useToggleIcon({
             icon:resourcesIcon, 
             tooltip:'Show workbox resources view',
-            caption:'resources',
+            caption:'lists',
             settings:modeSettings.resources,
             callback:callbackResources,
             is_radio:true,

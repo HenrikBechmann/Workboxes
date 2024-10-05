@@ -605,7 +605,7 @@ const TodoController = (props) => {
     return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Todo todo = {todo}/>}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Workbox todo notes' />
+            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: to do notes' />
             {(isActiveEdit
                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>)
@@ -654,7 +654,7 @@ const IdentityController = (props) => {
     return <Box ref = {animationBoxRef}><Box>
         {(newMode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Workbox identity section'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: identity section'/>
             {isActiveEdit
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
@@ -703,7 +703,7 @@ const ThumbnailController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Thumbnail thumbnail = {thumbnail} />}
         {(newMode =='edit') && <> 
-            <SectionDivider isDisabled = {isDisabled} title = 'Workbox thumbnail'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: thumbnail'/>
             {isActiveEdit
                 ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
                 : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
@@ -752,7 +752,7 @@ const DataController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Data />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Workbox data section'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: data section'/>
             {isActiveEdit
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>

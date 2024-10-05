@@ -179,6 +179,7 @@ const DocumentToolbar = (props) => {
         // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
 
     const documentmenulist = <MenuList >
+        <MenuItem >Go to document extensions</MenuItem>
         <MenuItem icon = {<img style = {{width:'24px', height: '24px'}} src = {hideLabelIcon} />}>Hide section tags</MenuItem>
         <MenuItem icon = {<img src = {lockClosedIcon} />}>Lock this document</MenuItem>
     </MenuList>
@@ -240,8 +241,7 @@ const DocumentToolbar = (props) => {
                 <option value="weblink">Weblink</option>
                 <option value="image">Media</option>
                 <option value="file">File</option>
-                <option value="resource">Resource</option>
-                <option value="mesessage">Message</option>
+                <option value="workbox">Workbox</option>
             </Select>
         </Box>
         { editToggle }
