@@ -405,7 +405,7 @@ const Base_Edit_Data = (props) => {
         controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('data'))
     }
 
-    return <Box data-type = 'active-edit-data'>
+    return <Box data-type = 'active-edit-data' minHeight = '200px'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
         </Box>
@@ -430,7 +430,7 @@ const Base_EditMode_Todo = (props) => {
     const isDisabled = !!controlPack.currentEditBlockID
 
     return <>
-        <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} >
+        <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} minHeight = '100px'>
             <Box style = {actionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
             </Box>
@@ -503,7 +503,7 @@ const Base_EditMode_Data = (props) => {
 
     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} >
+    return <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} minHeight = '100px'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
         </Box>
