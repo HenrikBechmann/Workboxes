@@ -2,11 +2,6 @@
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 // many details of conversions taken from https://www.youtube.com/watch?v=odscV57kToU by Nikita Dev
-/*
-    TODO:
-    provide way to clear image
-    
-*/
 
 import React, {useState, useRef, useCallback} from 'react'
 

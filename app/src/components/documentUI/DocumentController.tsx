@@ -154,9 +154,8 @@ const Base_Edit_Identity = (props) => {
         editBaseRecord = workboxHandler.editRecord?.document.base || 
             workboxHandler.workboxRecord.document.base,
         { controlPack } = props,
-        [editState,setEditState] = useState('setup'),
-        [nameValue, setNameValue] = useState(editBaseRecord.name),
-        [descriptionValue, setDescriptionValue] = useState(editBaseRecord.description),
+        // [editState,setEditState] = useState('setup'),
+        [editData, setEditData] = useState(editBaseRecord),
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
@@ -175,7 +174,7 @@ const Base_Edit_Identity = (props) => {
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current
 
-    console.log('editState', editState)
+    // console.log('editState', editState)
 
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
@@ -186,15 +185,17 @@ const Base_Edit_Identity = (props) => {
         isInvalidTests.name(editData.name ?? '')
         isInvalidTests.description(editData.description ?? '')
 
-        setEditState('checking')
+        setEditData({...editData})
+
+        // setEditState('checking')
 
     },[])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if (editState !== 'ready') setEditState('ready')
+    //     if (editState !== 'ready') setEditState('ready')
 
-    },[editState])
+    // },[editState])
 
     const onChangeFunctions = {
         name:(event) => {
@@ -205,7 +206,7 @@ const Base_Edit_Identity = (props) => {
             if (!isInvalidTests.name(value)) {
                 editBaseRecord.name = value
             }
-            setNameValue(value)
+            setEditData({name:value, description:editData.description})
         },
         description:(event) => {
             const
@@ -217,7 +218,7 @@ const Base_Edit_Identity = (props) => {
             if (!isInvalidTests.description(value)) {
                 editBaseRecord.description = value
             }
-            setDescriptionValue(value)
+            setEditData({description:value, name:editData.name})
         },
     }
 
@@ -264,6 +265,7 @@ const Base_Edit_Identity = (props) => {
     }
 
     const onSave = () => {
+        Object.assign(editBaseRecord, editData)
         controlPack.actionResponses.onSave(controlPack.blockIDMap.get('identity'))
     }
 
@@ -286,7 +288,7 @@ const Base_Edit_Identity = (props) => {
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
                     <FormLabel fontSize = 'sm'>Workbox subject:</FormLabel>
                     <Input 
-                        value = {editBaseRecord.name || ''} 
+                        value = {editData.name || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.name}
                     >
@@ -304,16 +306,16 @@ const Base_Edit_Identity = (props) => {
                     <FormLabel fontSize = 'sm'>Description:</FormLabel>
                     <Textarea 
                         rows = {2}
-                        value = {editBaseRecord.description || ''} 
+                        value = {editData.description || ''} 
                         size = 'sm'
                         onChange = {onChangeFunctions.description}
                     >
                     </Textarea>
                     <FormErrorMessage>
-                        {errorMessages.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                        {errorMessages.description} Current length is {editData.description?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.description} Current length is {editBaseRecord.description?.length || '0 (blank)'}.
+                        {helperText.description} Current length is {editData.description?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -344,7 +346,7 @@ const Base_Edit_Thumbnail = (props) => {
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
             </Box>
         </Box>
-        <Suspense fallback = {<Loading />}><IntakeCroppedImage /></Suspense>
+        <Suspense fallback = {<Loading />}><IntakeCroppedImage onSave = {onSave} /></Suspense>
     </>
 
 }
@@ -388,10 +390,10 @@ const Base_EditMode_Identity = (props) => {
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the basics' caption = 'edit'/>
         </Box>
-        <Box >
+        <Box style = {{fontSize:'small'}} >
             Subject: <span style = {{fontWeight: 'bold'}}>{name}</span>
         </Box>
-        <Box>
+        <Box style = {{fontSize:'small'}}>
             Description: <span style = {{fontStyle: 'italic'}}>{description}</span>
         </Box>
     </Box>
