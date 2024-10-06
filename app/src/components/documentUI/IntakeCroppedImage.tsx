@@ -5,7 +5,7 @@
 
 import React, {useState, useRef, useCallback} from 'react'
 
-import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import {ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 
 import {
     Box, Button, Flex,
@@ -22,6 +22,7 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const IntakeCroppedImage = (props) => {
 
     const 
+        { onSave } = props,
         storage = useStorage(),
         [workboxHandler] = useWorkboxHandler(),
 
@@ -139,6 +140,29 @@ const IntakeCroppedImage = (props) => {
 
     }
 
+    async function removeImage () {
+        const 
+            { editRecord } = workboxHandler,
+            url = editRecord.document.base.image.source,
+            fileRef = ref(storage, url)
+
+            try {
+
+               await deleteObject(fileRef)
+
+            } catch(error) {
+
+                console.log('An error occured deleting file', url)
+                alert (error.message) // placeholder
+                return
+
+            }
+
+            editRecord.document.base.image.source = null
+            onSave()
+
+    }
+
     // resize and save image
     const acceptCroppedImage = () => {
 
@@ -186,6 +210,8 @@ const IntakeCroppedImage = (props) => {
         setPctCrop(null)
         setIsOutput(false)
 
+        onSave()
+
     } 
 
     return <Box minWidth = '300px' margin = '3px' padding = '3px' border = '1px dashed silver' >
@@ -194,7 +220,7 @@ const IntakeCroppedImage = (props) => {
             <input {...getInputProps()} />
             {
                 isDragActive 
-                    ? <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94'}} >
+                    ? <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94', minHeight:'40px'}} >
                         Drop the new image here ...
                     </Box> 
                     : <Box style = {{fontSize:'small', backgroundColor:'#cfcfcf94', minHeight:'40px'}}>
@@ -280,7 +306,7 @@ const IntakeCroppedImage = (props) => {
                 src = {workboxHandler.editRecord?.document.base.image.source || 
                     workboxHandler.workboxRecord.document.base.image.source} 
             />
-            {!pctCrop && <Button margin = '3px' colorScheme = 'blue'>Remove thumbnail</Button>}
+            {!pctCrop && <Button onClick = {removeImage} margin = '3px' colorScheme = 'blue'>Remove image</Button>}
         </Flex></Box>
     </Box>
 }

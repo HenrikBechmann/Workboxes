@@ -327,10 +327,12 @@ const Base_Edit_Identity = (props) => {
 const Base_Edit_Thumbnail = (props) => {
 
     const
-        { controlPack } = props
+        { controlPack } = props,
+        [editState, setEditState] = useState('edit')
 
     const onSave = () => {
         controlPack.actionResponses.onSave(controlPack.blockIDMap.get('thumbnail'))
+        setEditState('save')
     }
 
     const onCancel = () => {
@@ -339,9 +341,6 @@ const Base_Edit_Thumbnail = (props) => {
 
     return <>
         <Box style = {actionBoxStyles} data-type = 'action box'> 
-            <Box style = {basicActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-            </Box>
             <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
             </Box>
@@ -350,6 +349,11 @@ const Base_Edit_Thumbnail = (props) => {
     </>
 
 }
+
+// <Box style = {basicActionIconStyles} data-type = 'actionbox'>
+//     <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+// </Box>
+
 const Base_Edit_Data = (props) => {
 
     const
