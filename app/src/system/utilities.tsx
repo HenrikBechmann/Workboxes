@@ -308,7 +308,6 @@ const versionData = {
               source: null,
             },
             description: null,
-            todo: null,
         },
         extensions: {
           list:[],
@@ -392,7 +391,6 @@ const versionData = {
               source: null,
             },
             description: null,
-            todo: null,
         },
         extensions: {
           list:[],
@@ -484,7 +482,6 @@ const versionData = {
               caption: null,
             },
             description: null,
-            todo: null,
         },
         extensions: {
           list:[],
