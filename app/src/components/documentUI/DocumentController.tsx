@@ -389,11 +389,11 @@ const Base_EditMode_Identity = (props) => {
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the basics' caption = 'edit'/>
         </Box>
-        <Box fontWeight = 'bold'>
-            {name}
+        <Box >
+            Subject: <span style = {{fontWeight: 'bold'}}>{name}</span>
         </Box>
-        <Box fontStyle = 'italic'>
-           {description}
+        <Box>
+            Description: <span style = {{fontStyle: 'italic'}}>{description}</span>
         </Box>
     </Box>
     
@@ -520,7 +520,7 @@ const IdentityController = (props) => {
     return <Box ref = {animationBoxRef}><Box>
         {(newMode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: identity section'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Workbox identity information'/>
             {isActiveEdit
                 ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
                 : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
@@ -569,7 +569,7 @@ const ThumbnailController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Thumbnail thumbnail = {thumbnail} />}
         {(newMode =='edit') && <> 
-            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: thumbnail'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Iconic image (optional)'/>
             {isActiveEdit
                 ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
                 : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
@@ -618,7 +618,7 @@ const DataController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Data />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: main section'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Main content (shown in workbox lists)'/>
             {isActiveEdit
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>

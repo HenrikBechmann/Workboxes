@@ -54,16 +54,11 @@ const DataNoteDisplay = () => {
                     [data-file-block] .bn-visual-media-wrapper {
                         max-width: 500px;
                     }
-                    [data-file-block] img, [data-file-block] video {
-                        width:auto;
-                    }
                     [data-content-type=audio] {
                         max-width: 500px;
-                        width: auto;
                     }
                     .bn-file-default-preview {
                         max-width: 500px;
-                        width: auto;
                     }
                     `
                 }
