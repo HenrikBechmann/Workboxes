@@ -342,7 +342,7 @@ const Base_Edit_Identity = (props) => {
         <Flex data-type = 'documenteditflex' flexWrap = 'wrap'>
             <Box data-type = 'namefield' margin = '3px' padding = '3px' border = '1px dashed silver'>
                 <FormControl minWidth = '300px' maxWidth = '400px' isInvalid = {invalidFieldFlags.name}>
-                    <FormLabel fontSize = 'sm'>Workbox name:</FormLabel>
+                    <FormLabel fontSize = 'sm'>Workbox subject:</FormLabel>
                     <Input 
                         value = {editBaseRecord.name || ''} 
                         size = 'sm'
