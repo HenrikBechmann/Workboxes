@@ -207,17 +207,19 @@ const IntakeCroppedImage = (props) => {
 
         editRecord.document.base.image.source = url
 
-        const newFileRef = ref(storage, previousUrl)
+        if (previousUrl) {
+            const newFileRef = ref(storage, previousUrl)
 
-        try {
+            try {
 
-           await deleteObject(newFileRef)
+               await deleteObject(newFileRef)
 
-        } catch(error) {
+            } catch(error) {
 
-            console.log('An error occured deleting previous image', previousUrl)
-            alert (error.message) // placeholder
+                console.log('An error occured deleting previous image', previousUrl)
+                alert (error.message) // placeholder
 
+            }
         }
 
         // reset crop data
