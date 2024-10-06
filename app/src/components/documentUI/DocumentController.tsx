@@ -191,12 +191,6 @@ const Base_Edit_Identity = (props) => {
 
     },[])
 
-    // useEffect(()=>{
-
-    //     if (editState !== 'ready') setEditState('ready')
-
-    // },[editState])
-
     const onChangeFunctions = {
         name:(event) => {
             const 
@@ -327,12 +321,10 @@ const Base_Edit_Identity = (props) => {
 const Base_Edit_Thumbnail = (props) => {
 
     const
-        { controlPack } = props,
-        [editState, setEditState] = useState('edit')
+        { controlPack } = props
 
     const onSave = () => {
         controlPack.actionResponses.onSave(controlPack.blockIDMap.get('thumbnail'))
-        setEditState('save')
     }
 
     const onCancel = () => {
