@@ -368,7 +368,6 @@ const Base_Edit_Data = (props) => {
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
-        <Box style = {{fontSize:'small'}}>document data</Box>
         <Suspense fallback = {<Loading />}><BaseDataEditController /></Suspense>
     </Box>
 }

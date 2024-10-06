@@ -63,7 +63,7 @@ const DataNoteDisplay = () => {
                     `
                 }
             </style>
-            {(!isEmpty) && <BlockNoteView editor = { editor } editable = { false } sideMenu = { false }/>}
+            {(!isEmpty) && <BlockNoteView editor = { editor } editable = { false }/>}
         </div>
 
 }
