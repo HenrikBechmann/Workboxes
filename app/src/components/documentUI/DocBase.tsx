@@ -147,63 +147,63 @@ const Loading = (props) => {
 
 // --------------------------------------[ section edit displays ]-------------------------------------
 
-const Base_Edit_Todo = (props) => {
+// const Base_Edit_Todo = (props) => {
 
-    const { controlPack } = props
+//     const { controlPack } = props
 
-    const 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord?.document.base || 
-            workboxHandler.workboxRecord.document.base, // allow for animation delay
-        [todoText, setTodoText] = useState(editBaseRecord.todo), // allow for animation delay
-        helperText = {
-            todo:`The to do field holds notes for administrators.`,
-        }
+//     const 
+//         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+//         editBaseRecord = workboxHandler.editRecord?.document.base || 
+//             workboxHandler.workboxRecord.document.base, // allow for animation delay
+//         [todoText, setTodoText] = useState(editBaseRecord.todo), // allow for animation delay
+//         helperText = {
+//             todo:`The to do field holds notes for administrators.`,
+//         }
 
-    // console.log('Base_Edit_Todo: editBaseRecord', editBaseRecord)
+//     // console.log('Base_Edit_Todo: editBaseRecord', editBaseRecord)
 
-    const onChangeFunctions = {
-        todo:(event) => {
-            const
-                target = event.target as HTMLInputElement,
-                value = target.value
-            setTodoText(value)
-        },
-    }
+//     const onChangeFunctions = {
+//         todo:(event) => {
+//             const
+//                 target = event.target as HTMLInputElement,
+//                 value = target.value
+//             setTodoText(value)
+//         },
+//     }
 
-    const onSave = () => {
-        editBaseRecord.todo = todoText
-        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('todo'))
-    }
+//     const onSave = () => {
+//         editBaseRecord.todo = todoText
+//         controlPack.actionResponses.onSave(controlPack.blockIDMap.get('todo'))
+//     }
 
-    const onCancel = () => {
-        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('todo'))
-    }
+//     const onCancel = () => {
+//         controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('todo'))
+//     }
 
-    return <Box data-type = 'active-edit-todo-list'>
-        <Box style = {actionBoxStyles} data-type = 'action box'> 
-            <Box style = {basicActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-            </Box>
-            <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
-            </Box>
-        </Box>
-        <Box style = {{fontSize:'small'}}>To do notes</Box>
-        <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
-            <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
-                <Textarea 
-                    value = {todoText || ''} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.todo}
-                />
-                <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.todo} Current length is {todoText.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
-        </Box>
-    </Box>
-}
+//     return <Box data-type = 'active-edit-todo-list'>
+//         <Box style = {actionBoxStyles} data-type = 'action box'> 
+//             <Box style = {basicActionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+//             </Box>
+//             <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+//             </Box>
+//         </Box>
+//         <Box style = {{fontSize:'small'}}>To do notes</Box>
+//         <Box data-type = 'todofield' margin = '3px' padding = '3px' border = '1px dashed silver'>
+//             <FormControl minWidth = '300px' marginTop = '6px' maxWidth = '400px'>
+//                 <Textarea 
+//                     value = {todoText || ''} 
+//                     size = 'sm'
+//                     onChange = {onChangeFunctions.todo}
+//                 />
+//                 <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//                     {helperText.todo} Current length is {todoText.length || '0 (blank)'}.
+//                 </FormHelperText>
+//             </FormControl>
+//         </Box>
+//     </Box>
+// }
 
 const Base_Edit_Identity = (props) => {
 
@@ -213,6 +213,8 @@ const Base_Edit_Identity = (props) => {
             workboxHandler.workboxRecord.document.base,
         { controlPack } = props,
         [editState,setEditState] = useState('setup'),
+        [nameValue, setNameValue] = useState(editBaseRecord.name),
+        [descriptionValue, setDescriptionValue] = useState(editBaseRecord.description),
         systemRecords = useSystemRecords(),
         maxDescriptionLength = systemRecords.settings.constraints.input.descriptionLength_max,
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
@@ -231,6 +233,8 @@ const Base_Edit_Identity = (props) => {
         }),
         invalidFieldFlags = invalidFieldFlagsRef.current
 
+    console.log('editState', editState)
+
     // initialize editRecord and editData (editRecord subset)
     useEffect(()=>{
 
@@ -246,7 +250,7 @@ const Base_Edit_Identity = (props) => {
 
     useEffect(()=>{
 
-        if (['checking','validating', 'uploading'].includes(editState)) setEditState('ready')
+        if (editState !== 'ready') setEditState('ready')
 
     },[editState])
 
@@ -256,17 +260,22 @@ const Base_Edit_Identity = (props) => {
                 target = event.target as HTMLInputElement,
                 value = target.value
 
-            isInvalidTests.name(value)
-            editBaseRecord.name = value
-            setEditState('validating')
+            if (!isInvalidTests.name(value)) {
+                editBaseRecord.name = value
+            }
+            setNameValue(value)
         },
         description:(event) => {
             const
                 target = event.target as HTMLInputElement,
                 value = target.value
-            isInvalidTests.description(value)
-            editBaseRecord.description = value
-            setEditState('validating')
+
+            console.log('description value',value)
+
+            if (!isInvalidTests.description(value)) {
+                editBaseRecord.description = value
+            }
+            setDescriptionValue(value)
         },
     }
 
@@ -306,6 +315,7 @@ const Base_Edit_Identity = (props) => {
                 isInvalid = true
             }
             invalidFieldFlags.description = isInvalid
+            console.log('description isInvalid', isInvalid)
             setChangeError()
             return isInvalid
         },
@@ -423,28 +433,28 @@ const Base_Edit_Data = (props) => {
 
 // -----------------------------------[ section edit mode displays ]-------------------------------
 
-const Base_EditMode_Todo = (props) => {
+// const Base_EditMode_Todo = (props) => {
 
-    const { controlPack, todo } = props
+//     const { controlPack, todo } = props
 
-    const onEdit = () => {
-        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('todo'))
-    }
+//     const onEdit = () => {
+//         controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('todo'))
+//     }
 
-    const isDisabled = !!controlPack.currentEditBlockID
+//     const isDisabled = !!controlPack.currentEditBlockID
 
-    return <>
-        <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} minHeight = '100px'>
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
-            </Box>
-            <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
-            <Box borderBottom = '1px solid silver'>
-                   <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-            </Box>
-        </Box>
-    </>
-}
+//     return <>
+//         <Box data-type = 'editmode-todo-list' opacity = {isDisabled? 0.5:1} minHeight = '100px'>
+//             <Box style = {actionIconStyles} data-type = 'actionbox'>
+//                 <SideIcon icon = {editIcon} tooltip = 'edit the todo list' isDisabled = {isDisabled} response = {onEdit} caption = 'edit'/>
+//             </Box>
+//             <Box style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</Box>
+//             <Box borderBottom = '1px solid silver'>
+//                    <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+//             </Box>
+//         </Box>
+//     </>
+// }
 
 const Base_EditMode_Identity = (props) => {
 
@@ -517,18 +527,18 @@ const Base_EditMode_Data = (props) => {
 
 // ---------------------------[ section view displays ]-------------------------------------------
 
-const Base_Display_Todo = (props) => {
+// const Base_Display_Todo = (props) => {
 
-    const {todo} = props
+//     const {todo} = props
 
-    return <>{ todo && <Box borderBottom = '1px solid silver'>
-       <details>
-           <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
-           <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
-       </details>
-    </Box>}</>
+//     return <>{ todo && <Box borderBottom = '1px solid silver'>
+//        <details>
+//            <summary style = {{fontWeight:'bold',fontStyle:'italic',color:'red', fontSize:'0.8em'}}>To do</summary>
+//            <pre style = {{fontFamily:'inherit', fontSize:'0.8em'}} >{todo}</pre>
+//        </details>
+//     </Box>}</>
 
-}
+// }
 
 const Base_Display_Identity = (props) => {
 
@@ -550,7 +560,7 @@ const Base_Display_Thumbnail = (props) => {
     const { thumbnail } = props
 
     return <>{ thumbnail.source && <Box style = {{float:'left', margin:'3px 3px 3px 0', border:'3px ridge silver', borderRadius:'8px'}} >
-        <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
+        <img style = {{width: '30px', height: '30px', borderRadius:'5px'}} src = {thumbnail.source} />
     </Box>}</>
     
 }
@@ -564,55 +574,55 @@ const Base_Display_Data = (props) => {
 
 // ------------------------[ section display controllers ]----------------------------------
 
-const TodoController = (props) => {
+// const TodoController = (props) => {
 
-    const 
-        { controlPack, todo } = props,
-        { mode } = controlPack,
-        animationBoxRef = useRef(null),
-        isInitializedRef = useRef(false),
-        [newMode, setNewMode] = useState('mode'),
-        activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'),
-        [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
-        isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
+//     const 
+//         { controlPack, todo } = props,
+//         { mode } = controlPack,
+//         animationBoxRef = useRef(null),
+//         isInitializedRef = useRef(false),
+//         [newMode, setNewMode] = useState('mode'),
+//         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('todo'),
+//         [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
+//         isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
-    useLayoutEffect(()=>{
+//     useLayoutEffect(()=>{
 
-        if (!isInitializedRef.current) {
-            return
-        }
+//         if (!isInitializedRef.current) {
+//             return
+//         }
 
-        const startingHeight = animationBoxRef.current.scrollHeight
-        animationBoxRef.current.style.height = startingHeight + 'px'
+//         const startingHeight = animationBoxRef.current.scrollHeight
+//         animationBoxRef.current.style.height = startingHeight + 'px'
 
-        setNewMode(mode)
-        setIsActiveEdit(activeEdit)
+//         setNewMode(mode)
+//         setIsActiveEdit(activeEdit)
 
-    },[mode, activeEdit])
+//     },[mode, activeEdit])
 
 
-    useEffect(()=>{
+//     useEffect(()=>{
 
-        if (!isInitializedRef.current) {
-            isInitializedRef.current = true
-            return
-        }
+//         if (!isInitializedRef.current) {
+//             isInitializedRef.current = true
+//             return
+//         }
 
-        animateModeChange(animationBoxRef.current)
+//         animateModeChange(animationBoxRef.current)
 
-    },[newMode, isActiveEdit])
+//     },[newMode, isActiveEdit])
 
-    return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
-        {(newMode !='edit') && <Base_Display_Todo todo = {todo}/>}
-        {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: to do notes' />
-            {(isActiveEdit
-                ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
-                : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>)
-            }
-        </>}
-    </Box></Box>
-}
+//     return <Box data-type = 'animationbox' ref = {animationBoxRef} ><Box>
+//         {(newMode !='edit') && <Base_Display_Todo todo = {todo}/>}
+//         {(newMode == 'edit') && <>
+//             <SectionDivider isDisabled = {isDisabled} title = 'Document builder: to do notes' />
+//             {(isActiveEdit
+//                 ? <Base_Edit_Todo todo = {todo} controlPack = { controlPack }/>
+//                 : <Base_EditMode_Todo todo = {todo} controlPack = { controlPack }/>)
+//             }
+//         </>}
+//     </Box></Box>
+// }
 
 const IdentityController = (props) => {
 
@@ -752,7 +762,7 @@ const DataController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Data />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: data section'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Document builder: main section'/>
             {isActiveEdit
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>
@@ -839,32 +849,46 @@ const DocBase = (props) => {
         }
     },[workboxHandler.session.document.changesessionid, mode])
 
-    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
-        <Box>
-            <TodoController 
-                controlPack = {controlPack}
-                todo = { todo } 
-            />
-        </Box>
-        <Box>
-            <ThumbnailController 
-                controlPack = {controlPack}
-                thumbnail = { image }
-            />
-        </Box>
-        <Box>
+    const identityController = <Box key = 'identity'>
             <IdentityController 
                 controlPack = {controlPack}
                 name = {name} 
                 description = {description} 
             />
         </Box>
-        <Box>
+
+    const thumbnailController = <Box key = 'thumbnail'>
+            <ThumbnailController 
+                controlPack = {controlPack}
+                thumbnail = { image }
+            />
+        </Box>
+
+    const dataController = <Box key = 'data'>
             <DataController 
                 controlPack = {controlPack}
             />
         </Box>
+
+    let content
+    if (mode === 'view') {
+        content = [image.source?thumbnailController:null, identityController, dataController]
+    } else {
+        content = [identityController, thumbnailController, dataController]
+    }
+
+    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
+        
+        {content}
+        
     </Box>
 }
 
 export default DocBase
+
+// <Box>
+//     <TodoController 
+//         controlPack = {controlPack}
+//         todo = { todo } 
+//     />
+// </Box>

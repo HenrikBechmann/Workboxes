@@ -40,7 +40,7 @@ const IntakeCroppedImage = (props) => {
         [pctCrop, setPctCrop] = useState<Crop>(),
         [isOutput, setIsOutput] = useState(false),
 
-        helperText = 'This image (sized to max 90 x 90 px) is used as a visual representation in resource listings.'
+        helperText = 'This image (sized to max 90 x 90 px) is used as a visual representation in workbox lists.'
 
     // drop or select image
     const
