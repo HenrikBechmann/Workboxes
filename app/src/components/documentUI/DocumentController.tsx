@@ -735,9 +735,9 @@ const DocumentController = (props) => {
         {(!['edit','view'].includes(mode)) && <SectionDivider title = 'Base document content'/>}
         {basecontent}
         {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Base document add-ons'/>
-        <Box fontStyle = 'italic'>(no current add-ons)</Box></>}
+        <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
         {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Extra document sections'/>
-        <Box fontStyle = 'italic'>(no current extra sections)</Box></>}
+        <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
 
     </Box>
 }
