@@ -143,7 +143,7 @@ const DocumentToolbar = (props) => {
         addToggle = useToggleIcon({
             icon:insertIcon, 
             tooltip:'Insert a section',
-            caption:'insert',
+            caption:'add',
             settings:modeSettings.insert,
             is_radio: true,
             callback: onAdd

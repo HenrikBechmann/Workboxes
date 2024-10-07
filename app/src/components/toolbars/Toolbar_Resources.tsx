@@ -151,7 +151,7 @@ const ResourcesToolbar = (props) => {
         addToggle = useToggleIcon({
             icon:addIcon, 
             tooltip:'Insert a resource',
-            caption:'insert',
+            caption:'add',
             settings:modeSettings.insert,
             is_radio: true,
             callback: onAdd
