@@ -723,17 +723,22 @@ const DocumentController = (props) => {
             />
         </Box>
 
-    let content
+    let basecontent
     if (mode !== 'edit') {
-        content = [image.source?thumbnailController:null, identityController, dataController]
+        basecontent = [image.source?thumbnailController:null, identityController, dataController]
     } else {
-        content = [identityController, thumbnailController, dataController]
+        basecontent = [identityController, thumbnailController, dataController]
     }
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
-        {content}
-        
+        {(!['edit','view'].includes(mode)) && <SectionDivider title = 'Base document content'/>}
+        {basecontent}
+        {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Base document add-ons'/>
+        <Box fontStyle = 'italic'>(no current add-ons)</Box></>}
+        {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Extra document sections'/>
+        <Box fontStyle = 'italic'>(no current extra sections)</Box></>}
+
     </Box>
 }
 
