@@ -34,6 +34,7 @@ const baseStyles = {
 
     transition: 'margin-left 0.5s',
     borderLeft: '1px solid silver',
+    maxWidth: '1056px'
 
 }
 
