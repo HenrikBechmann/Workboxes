@@ -283,6 +283,9 @@ const WorkspaceToolbar = (props) => {
     //  panelRecords[panelSelection] guaranteed to be updated for change
     },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
 
+    // TODO  add <MenuItem>Tile windows</MenuItem> to windows menu
+
+
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
