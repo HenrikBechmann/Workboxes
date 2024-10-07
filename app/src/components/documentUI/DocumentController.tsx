@@ -724,7 +724,7 @@ const DocumentController = (props) => {
         </Box>
 
     let content
-    if (mode === 'view') {
+    if (mode !== 'edit') {
         content = [image.source?thumbnailController:null, identityController, dataController]
     } else {
         content = [identityController, thumbnailController, dataController]
