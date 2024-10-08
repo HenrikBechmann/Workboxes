@@ -83,6 +83,7 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
+            modeSettings.select.select = false
             dispatchWorkboxHandler()
         },
         onDrill = (value) => {
@@ -92,6 +93,7 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
+            modeSettings.select.select = false
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
@@ -101,6 +103,7 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
+            modeSettings.select.select = false
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
@@ -110,6 +113,7 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = true
             modeSettings.remove.select = false
             modeSettings.drag.select = false
+            modeSettings.select.select = false
             dispatchWorkboxHandler()
         },
         onRemove = (value) => {
@@ -119,6 +123,7 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = false
             modeSettings.remove.select = true
             modeSettings.drag.select = false
+            modeSettings.select.select = false
             dispatchWorkboxHandler()
         },
         onDrag = (value) => {
@@ -128,6 +133,17 @@ const ResourcesToolbar = (props) => {
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = true
+            modeSettings.select.select = false
+            dispatchWorkboxHandler()
+        },
+        onSelect = (value) => {
+            modeSettings.view.select = false
+            modeSettings.drill.select = false
+            modeSettings.insert.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = true
+            modeSettings.select.select = true
             dispatchWorkboxHandler()
         },
 
@@ -180,6 +196,14 @@ const ResourcesToolbar = (props) => {
             is_radio: true,
             callback: onDrag
         }),
+        selectToggle = useToggleIcon({
+            icon:selectIcon, 
+            tooltip:'Toggle select',
+            caption:'select',
+            settings:modeSettings.select,
+            is_radio: true,
+            callback: onSelect
+        }),
         spreadToggle = useToggleIcon({
             icon:spreadIcon,
             tooltip:'toggle vertical/horizontal',
@@ -224,6 +248,7 @@ const ResourcesToolbar = (props) => {
         { editToggle }
         { removeToggle }
         <ToolbarVerticalDivider />
+        { selectToggle }
         { dragToggle }
         { spreadToggle }
         <ToolbarVerticalDivider />

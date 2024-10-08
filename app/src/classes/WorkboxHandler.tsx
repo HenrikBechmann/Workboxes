@@ -146,6 +146,10 @@ class WorkboxHandler {
                 drag: {
                     select:false,
                     disable:false,
+                },
+                select: {
+                    select:false,
+                    disable:false,
                 }
             }
         },
