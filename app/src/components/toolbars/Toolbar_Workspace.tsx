@@ -34,6 +34,7 @@ import windowSelectIcon from '../../../assets/window_select.png'
 import hideIcon from '../../../assets/expand_more.png'
 import navNextIcon from '../../../assets/nav_next.png'
 import navBeforeIcon from '../../../assets/nav_before.png'
+import tileIcon from '../../../assets/grid_view.png'
 
 const standardToolbarStyles = {
     minHeight:0,
@@ -234,6 +235,23 @@ const WorkspaceToolbar = (props) => {
         panelControlMap.get(panelSelection.id).functions.showMemberWorkbox()
     } 
 
+    // windows menu
+    const windowsmenuList = useMemo(() => {
+
+        return <MenuList 
+                lineHeight = '1em' fontSize = 'small'
+                maxHeight = 'var(--wb_panel_display_height)' overflowY = 'scroll'
+            >
+            <MenuGroup title = 'Windows menu'>
+            <MenuItem icon = {<img style = {{width:'24px', height: '24px'}} src = {tileIcon} />}>Tile windows</MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuOptionGroup title = 'Select a window'>
+            </MenuOptionGroup>
+        </MenuList>
+
+    },[panelSelection, panelRecords])
+
     // update panel selection menu
     const panelmenuList = useMemo(() => {
 
@@ -283,9 +301,6 @@ const WorkspaceToolbar = (props) => {
     //  panelRecords[panelSelection] guaranteed to be updated for change
     },[panelSelection, panelRecords]) //panelSelectionData , panelRecords[panelSelection.index]])
 
-    // TODO  add <MenuItem>Tile windows</MenuItem> to windows menu
-
-
     // render
     return <Box style = {standardToolbarStyles}>
         <StandardIcon icon = {navBeforeIcon} caption = 'previous' tooltip = 'change to next left panel'
@@ -309,7 +324,9 @@ const WorkspaceToolbar = (props) => {
             tooltip = 'select a window'
             arrowdirection = 'up'
             icon = {windowSelectIcon}
+            placement = 'top'
             caption = 'windows'
+            menulist = {windowsmenuList}
         />
         <ToolbarVerticalDivider />
         {panelDomainRecord && <DomainControl 
