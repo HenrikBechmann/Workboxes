@@ -618,7 +618,7 @@ const DataController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Data />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Main content (shown in workbox lists)'/>
+            <SectionDivider isDisabled = {isDisabled} title = 'Main document content'/>
             {isActiveEdit
                 ? <Base_Edit_Data controlPack = {controlPack} />
                 : <Base_EditMode_Data controlPack = {controlPack}/>
@@ -637,7 +637,7 @@ const AttachmentsController = (props) => {
         {attachments} = workboxHandler.workboxRecord.document.data,
         isDisabled = !!controlPack.currentEditBlockID
     return <>
-        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
+        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons (also shown in workbox lists)'/>
         {((mode === 'insert') && attachments.list.length == 0) && 
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
@@ -659,7 +659,7 @@ const ExtensionsController = (props) => {
         isDisabled = !!controlPack.currentEditBlockID
 
     return <>
-        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections'/>
+        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
         {((mode === 'insert') && extensions.list.length == 0) && 
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
@@ -778,7 +778,7 @@ const DocumentController = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
-        {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content'/>}
+        {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content (shown in workbox lists)'/>}
         {basecontent}
         <AttachmentsController controlPack = {controlPack} />
         <ExtensionsController controlPack = {controlPack} />
