@@ -117,7 +117,9 @@ const animateModeChange = (element) => {
 // utility components
 const SectionDivider = (props) => {
 
-    const { title, isDisabled } = props
+    const { title, isDisabled, type } = props
+
+    const backgroundColor = type == 'block'?'#adf':'silver'
 
     return <> 
     <Divider style = {
@@ -132,7 +134,7 @@ const SectionDivider = (props) => {
     <Box style = {
         {
             textAlign:'center', 
-            backgroundColor:'silver', 
+            backgroundColor, 
             fontSize:'small', 
             marginLeft:'-32px',
             width:'calc(100% + 32px)',
@@ -733,11 +735,11 @@ const DocumentController = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
-        {(!['edit','view'].includes(mode)) && <SectionDivider title = 'Base document content'/>}
+        {(!['edit','view'].includes(mode)) && <SectionDivider type = 'block' title = 'Base document content'/>}
         {basecontent}
-        {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Base document add-ons'/>
+        {(!['edit','view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
         <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
-        {(!['edit','view'].includes(mode)) && <><SectionDivider title = 'Extra document sections'/>
+        {(!['edit','view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Extra document sections'/>
         <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
 
     </Box>
