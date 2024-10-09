@@ -627,6 +627,33 @@ const DataController = (props) => {
     </Box></Box>
 }
 
+const AttachmentsController = (props) => {
+
+    const 
+        { controlPack } = props,
+        { mode } = controlPack
+
+    return <>
+        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
+        <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
+    </>
+
+}
+
+const ExtensionsController = (props) => {
+
+    const 
+        { controlPack } = props,
+        { mode } = controlPack
+
+    return <>
+        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections'/>
+        <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
+    </>
+
+}
+
+
 // ----------------------[ document base controller ]-------------------------------
 //directs to appropriate component
 
@@ -735,12 +762,10 @@ const DocumentController = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
-        {(!['view'].includes(mode)) && <SectionDivider type = 'block' title = 'Base document content'/>}
+        {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content'/>}
         {basecontent}
-        {(!['view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
-        <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
-        {(!['view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Extra document sections'/>
-        <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
+        <AttachmentsController controlPack = {controlPack} />
+        <ExtensionsController controlPack = {controlPack} />
 
     </Box>
 }
