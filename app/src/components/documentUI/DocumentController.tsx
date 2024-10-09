@@ -631,23 +631,39 @@ const AttachmentsController = (props) => {
 
     const 
         { controlPack } = props,
-        { mode } = controlPack
-
+        { mode } = controlPack,
+        { onInsert } = controlPack.actionResponses,
+        [workboxHandler] = useWorkboxHandler(),
+        {attachments} = workboxHandler.workboxRecord.document.data,
+        isDisabled = !!controlPack.currentEditBlockID
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
+        {((mode === 'insert') && attachments.list.length == 0) && 
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+        </Box>}
         <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
     </>
 
 }
 
+
 const ExtensionsController = (props) => {
 
     const 
         { controlPack } = props,
-        { mode } = controlPack
+        { mode } = controlPack,
+        { onInsert } = controlPack.actionResponses,
+        [workboxHandler] = useWorkboxHandler(),
+        {extensions} = workboxHandler.workboxRecord.document,
+        isDisabled = !!controlPack.currentEditBlockID
 
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections'/>
+        {((mode === 'insert') && extensions.list.length == 0) && 
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+        </Box>}
         <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
     </>
 
