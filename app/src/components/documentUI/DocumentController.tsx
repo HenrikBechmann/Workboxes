@@ -635,18 +635,27 @@ const AttachmentsController = (props) => {
         { onInsert } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {attachments} = workboxHandler.workboxRecord.document.data,
-        isDisabled = !!controlPack.currentEditBlockID
+        isDisabled = !!controlPack.currentEditBlockID,
+        emptyList = attachments.list.length == 0,
+        extraText = 
+            mode == 'remove'
+                ? ' - nothing to remove'
+                : mode == 'edit'
+                    ? ' - nothing to edit'
+                    : null
+
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons (also shown in workbox lists)'/>
-        {((mode === 'insert') && attachments.list.length == 0) && 
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
-        </Box>}
-        <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
+            {((mode === 'insert') && attachments.list.length == 0) && 
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+                </Box>
+            }
+            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-ons {extraText})</Box>}
+        </>}
     </>
 
 }
-
 
 const ExtensionsController = (props) => {
 
@@ -656,15 +665,24 @@ const ExtensionsController = (props) => {
         { onInsert } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {extensions} = workboxHandler.workboxRecord.document,
-        isDisabled = !!controlPack.currentEditBlockID
+        isDisabled = !!controlPack.currentEditBlockID,
+        emptyList = extensions.list.length == 0,
+        extraText = 
+            mode == 'remove'
+                ? ' - nothing to remove'
+                : mode == 'edit'
+                    ? ' - nothing to edit'
+                    : null
 
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
-        {((mode === 'insert') && extensions.list.length == 0) && 
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
-        </Box>}
-        <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
+            {((mode === 'insert') && extensions.list.length == 0) && 
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+                </Box>
+            }
+            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
+        </>}
     </>
 
 }
