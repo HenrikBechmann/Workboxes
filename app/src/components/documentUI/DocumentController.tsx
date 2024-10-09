@@ -291,10 +291,10 @@ const Base_Edit_Identity = (props) => {
                     >
                     </Input>
                     <FormErrorMessage>
-                        {errorMessages.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                        {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
                     </FormErrorMessage>
                     <FormHelperText fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                        {helperText.name} Current length is {editBaseRecord.name?.length || '0 (blank)'}.
+                        {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
                     </FormHelperText>
                 </FormControl>
             </Box>
@@ -735,11 +735,11 @@ const DocumentController = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
-        {(!['edit','view'].includes(mode)) && <SectionDivider type = 'block' title = 'Base document content'/>}
+        {(!['view'].includes(mode)) && <SectionDivider type = 'block' title = 'Base document content'/>}
         {basecontent}
-        {(!['edit','view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
+        {(!['view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Base document add-ons'/>
         <Box fontStyle = 'italic' opacity = '0.5'>(no current add-ons)</Box></>}
-        {(!['edit','view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Extra document sections'/>
+        {(!['view'].includes(mode)) && <><SectionDivider type = 'block' title = 'Extra document sections'/>
         <Box fontStyle = 'italic' opacity = '0.5'>(no current extra sections)</Box></>}
 
     </Box>
