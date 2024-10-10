@@ -1,7 +1,7 @@
 // Base_Edit_Identity.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useEffect, useLayoutEffect, CSSProperties, useCallback, useMemo, Suspense, lazy} from 'react'
+import React, {useRef, useState, useEffect, CSSProperties, useCallback, useMemo, Suspense, lazy} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
