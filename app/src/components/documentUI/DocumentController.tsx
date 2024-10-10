@@ -18,11 +18,11 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
 const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
-const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 const Loading = lazy(() => import('../../system/Loading'))
 const SectionDivider = lazy(()=> import('./SectionDivider'))
 const Base_Edit_Identity = lazy(()=> import('./Base_Edit_Identity'))
+const Base_Edit_Thumbnail = lazy(()=> import('./Base_Edit_Thumbnail'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -118,30 +118,6 @@ const animateModeChange = (element) => {
 }
 
 // --------------------------------------[ section edit displays ]-------------------------------------
-
-const Base_Edit_Thumbnail = (props) => {
-
-    const
-        { controlPack } = props
-
-    const onSave = () => {
-        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('thumbnail'))
-    }
-
-    const onCancel = () => {
-        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('thumbnail'))
-    }
-
-    return <>
-        <Box style = {actionBoxStyles} data-type = 'action box'> 
-            <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
-            </Box>
-        </Box>
-        <Suspense fallback = {<Loading />}><IntakeCroppedImage onSave = {onSave} /></Suspense>
-    </>
-
-}
 
 const Base_Edit_Data = (props) => {
 
