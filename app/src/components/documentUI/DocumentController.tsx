@@ -21,6 +21,7 @@ const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
 const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 const Loading = lazy(() => import('../../system/Loading'))
+const SectionDivider = lazy(()=> import('./SectionDivider'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -113,36 +114,6 @@ const animateModeChange = (element) => {
         element.style.height = 'auto'
     },600)
   
-}
-
-// utility components
-const SectionDivider = (props) => {
-
-    const { title, isDisabled, type } = props
-
-    const backgroundColor = type == 'block'?'#adf':'silver'
-
-    return <> 
-    <Divider style = {
-        {
-            clear:'left', 
-            borderColor: 'black', 
-            borderWidth:'2px', 
-            marginLeft:'-32px', 
-            width:'calc(100% + 32px)'
-        }
-    } />
-    <Box style = {
-        {
-            textAlign:'center', 
-            backgroundColor, 
-            fontSize:'small', 
-            marginLeft:'-32px',
-            width:'calc(100% + 32px)',
-            opacity: isDisabled?.5:1,
-        }
-    } >{title}</Box>
-    </>
 }
 
 // --------------------------------------[ section edit displays ]-------------------------------------
