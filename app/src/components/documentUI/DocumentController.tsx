@@ -678,7 +678,7 @@ const ExtensionsController = (props) => {
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
             {((mode === 'insert') && extensions.list.length == 0) && 
                 <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an extension' caption = 'insert'/>
                 </Box>
             }
             {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}

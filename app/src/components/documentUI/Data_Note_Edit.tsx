@@ -24,20 +24,10 @@ import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-const DataNoteEdit = () => {
-
+const SubjectFieldInput = (props) => {
     const 
-        storage = useStorage(),
+        {editBaseRecord} = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        editBaseRecord = workboxHandler.editRecord?.document.base || 
-            workboxHandler.workboxRecord.document.base,
-        { editRecord } = workboxHandler,
-        { data:editRecordData, files:editorUploadedFiles } = (editRecord?.document || workboxHandler.workboxRecord.document),
-        // editData = (editRecord?.document.base || workboxHandler.workboxRecord.document.base),
-        content = editRecordData.content?JSON.parse(editRecordData.content):[{}],
-        // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
-        editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
-        [blocks, setBlocks] = useState(content),
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
@@ -52,14 +42,6 @@ const DataNoteEdit = () => {
         }),
         [editData, setEditData] = useState(editBaseRecord),
         invalidFieldFlags = invalidFieldFlagsRef.current
-
-    workboxHandler.editoreditcontent = blocks // stringify to editRecord.document.data.content in DocumentBase.save()
-
-    const changeData = () => {
-
-        setBlocks(editor.document)
-
-    }
 
     const onChangeFunctions = {
         name:(event) => {
@@ -104,6 +86,64 @@ const DataNoteEdit = () => {
         workboxHandler.session.document.is_change_error = is_change_error
 
     }
+    return <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+    <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
+        isInvalid = {invalidFieldFlags.name}>
+        <Flex data-type = 'documenteditflex' align = 'center'>
+            <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
+            <Input 
+                value = {editData.name || ''} 
+                size = 'sm'
+                onChange = {onChangeFunctions.name}
+            >
+            </Input>
+        </Flex>
+        <FormErrorMessage mt = '0'>
+            {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
+        </FormErrorMessage>
+        <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+            {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
+        </FormHelperText>
+    </FormControl>
+    </Box>
+}
+
+const DataNoteEdit = () => {
+
+    const 
+        storage = useStorage(),
+        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        editBaseRecord = workboxHandler.editRecord?.document.base || 
+            workboxHandler.workboxRecord.document.base,
+        { editRecord } = workboxHandler,
+        { data:editRecordData, files:editorUploadedFiles } = (editRecord?.document || workboxHandler.workboxRecord.document),
+        // editData = (editRecord?.document.base || workboxHandler.workboxRecord.document.base),
+        content = editRecordData.content?JSON.parse(editRecordData.content):[{}],
+        // content = (typeof(firstcontent) == 'string') ? JSON.parse(firstcontent):firstcontent,
+        editor = useCreateBlockNote({initialContent:content, trailingBlock:false, uploadFile}),
+        [blocks, setBlocks] = useState(content)
+        // systemRecords = useSystemRecords(),
+        // maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
+        // minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        // errorMessages = {
+        //     name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
+        // },
+        // helperText = {
+        //     name:`Subject is required. Betweeen ${minNameLength} and ${maxNameLength} characters.`,
+        // },
+        // invalidFieldFlagsRef = useRef({
+        //     name:false,
+        // }),
+        // [editData, setEditData] = useState(editBaseRecord),
+        // invalidFieldFlags = invalidFieldFlagsRef.current
+
+    workboxHandler.editoreditcontent = blocks // stringify to editRecord.document.data.content in DocumentBase.save()
+
+    const changeData = () => {
+
+        setBlocks(editor.document)
+
+    }
 
     async function uploadFile(file:File) {
 
@@ -130,29 +170,31 @@ const DataNoteEdit = () => {
     }
 
     return <Box>
-        <Box data-type = 'namefield' margin = '3px' padding = '3px'>
-            <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
-                isInvalid = {invalidFieldFlags.name}>
-                <Flex data-type = 'documenteditflex' align = 'center'>
-                    <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
-                    <Input 
-                        value = {editData.name || ''} 
-                        size = 'sm'
-                        onChange = {onChangeFunctions.name}
-                    >
-                    </Input>
-                </Flex>
-                <FormErrorMessage mt = '0'>
-                    {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
-                </FormErrorMessage>
-                <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                    {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
-                </FormHelperText>
-            </FormControl>
-        </Box>
+        <SubjectFieldInput editBaseRecord = {editBaseRecord} />
         <BlockNoteView editor={editor} onChange= {changeData} />
-        </Box>
+    </Box>
 }
+
+// <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+//     <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
+//         isInvalid = {invalidFieldFlags.name}>
+//         <Flex data-type = 'documenteditflex' align = 'center'>
+//             <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
+//             <Input 
+//                 value = {editData.name || ''} 
+//                 size = 'sm'
+//                 onChange = {onChangeFunctions.name}
+//             >
+//             </Input>
+//         </Flex>
+//         <FormErrorMessage mt = '0'>
+//             {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
+//         </FormErrorMessage>
+//         <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+//             {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
+//         </FormHelperText>
+//     </FormControl>
+// </Box>
 
 export default DataNoteEdit
 
