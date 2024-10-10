@@ -148,7 +148,6 @@ const Base_Edit_Identity = (props) => {
                 isInvalid = true
             }
             invalidFieldFlags.description = isInvalid
-            console.log('description isInvalid', isInvalid)
             setChangeError()
             return isInvalid
         },

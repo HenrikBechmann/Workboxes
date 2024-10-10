@@ -104,18 +104,18 @@ const animateModeChange = (element) => {
 
         element.style.transition = animateTransition
 
-        setTimeout(()=>{
+        // setTimeout(()=>{
             requestAnimationFrame(()=> {
                 element.style.height = sectionHeight + 'px';
                 element.style.opacity = 1
-                setTimeout(()=>{
+                // setTimeout(()=>{
                     requestAnimationFrame(()=> {
                         element.style.transition = ''
                         element.style.height = 'auto'
                     })
-                },600)
+                // },600)
             })
-        },25)           
+        // },25)           
 
     });
 
@@ -269,7 +269,7 @@ const DataController = (props) => {
         [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
         isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
 
-    useLayoutEffect(()=>{
+    useEffect(()=>{
 
         if (!isInitializedRef.current) {
             return
@@ -375,12 +375,9 @@ const DocumentController = (props) => {
     const 
         { documentBaseData, mode, sessionDocumentSectionID } = props,
         baseFields = documentBaseData.base,
-        // [newMode, setNewMode] = useState(mode), // coerce repaint
         { name, description, image, todo } = baseFields,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
-        // sessionIDRef = useRef(sessionDocumentSectionID),
-        // [baseEditMode, setBaseEditMode] = useState(false),
         blockIDMapRef = useRef(new Map([
             ['todo',sessionDocumentSectionID + '.base.todo'],
             ['identity',sessionDocumentSectionID + '.base.identity'],
@@ -389,12 +386,6 @@ const DocumentController = (props) => {
         ]))
 
     let actionIcon, response, tooltip, canceltip
-
-    // useEffect(()=>{
-
-    //     setNewMode(mode) // coerce repaint
-
-    // },[mode])
 
     const onInsert = (sessionBlockID) => {
 
@@ -467,7 +458,7 @@ const DocumentController = (props) => {
             />
         </Box>
 
-    const dataController = <Box key = 'data'>
+    const dataController = <Box data-type = 'datasectionwrapper' key = 'data'>
             <DataController 
                 controlPack = {controlPack}
             />
@@ -483,7 +474,9 @@ const DocumentController = (props) => {
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
         
         {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content (shown in workbox lists)'/>}
+        <Box data-type = 'documentcontrolframe'>
         {basecontent}
+        </Box>
         <AttachmentsController controlPack = {controlPack} />
         <ExtensionsController controlPack = {controlPack} />
 
