@@ -143,10 +143,6 @@ const Base_Edit_Thumbnail = (props) => {
 
 }
 
-// <Box style = {basicActionIconStyles} data-type = 'actionbox'>
-//     <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-// </Box>
-
 const Base_Edit_Data = (props) => {
 
     const
