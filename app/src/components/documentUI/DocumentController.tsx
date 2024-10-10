@@ -108,15 +108,17 @@ const animateModeChange = (element) => {
             requestAnimationFrame(()=> {
                 element.style.height = sectionHeight + 'px';
                 element.style.opacity = 1
+                setTimeout(()=>{
+                    requestAnimationFrame(()=> {
+                        element.style.transition = ''
+                        element.style.height = 'auto'
+                    })
+                },600)
             })
         },25)           
 
     });
 
-    setTimeout(()=>{
-        element.style.transition = ''
-        element.style.height = 'auto'
-    },600)
   
 }
 
@@ -178,8 +180,8 @@ const IdentityController = (props) => {
         const startingHeight = animationBoxRef.current.scrollHeight
         animationBoxRef.current.style.height = startingHeight + 'px'
 
-        setNewMode(mode)
         setIsActiveEdit(activeEdit)
+        setNewMode(mode)
 
     },[mode, activeEdit])
 
@@ -213,7 +215,7 @@ const ThumbnailController = (props) => {
         {mode} = controlPack,
         animationBoxRef = useRef(null),
         isInitializedRef = useRef(false),
-        [newMode, setNewMode] = useState('mode'),
+        [newMode, setNewMode] = useState(mode),
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('thumbnail'),
         [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
         isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
@@ -227,8 +229,8 @@ const ThumbnailController = (props) => {
         const startingHeight = animationBoxRef.current.scrollHeight
         animationBoxRef.current.style.height = startingHeight + 'px'
 
-        setNewMode(mode)
         setIsActiveEdit(activeEdit)
+        setNewMode(mode)
 
     },[mode, activeEdit])
 
@@ -262,7 +264,7 @@ const DataController = (props) => {
         { mode } = controlPack,
         animationBoxRef = useRef(null),
         isInitializedRef = useRef(false),
-        [newMode, setNewMode] = useState('mode'),
+        [newMode, setNewMode] = useState(mode),
         activeEdit = controlPack.currentEditBlockID === controlPack.blockIDMap.get('data'),
         [isActiveEdit, setIsActiveEdit] = useState(activeEdit),
         isDisabled = ((mode == 'edit') && controlPack.currentEditBlockID && !activeEdit)
@@ -276,8 +278,8 @@ const DataController = (props) => {
         const startingHeight = animationBoxRef.current.scrollHeight
         animationBoxRef.current.style.height = startingHeight + 'px'
 
-        setNewMode(mode)
         setIsActiveEdit(activeEdit)
+        setNewMode(mode)
 
     },[mode, activeEdit])
 
@@ -373,6 +375,7 @@ const DocumentController = (props) => {
     const 
         { documentBaseData, mode, sessionDocumentSectionID } = props,
         baseFields = documentBaseData.base,
+        // [newMode, setNewMode] = useState(mode), // coerce repaint
         { name, description, image, todo } = baseFields,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
@@ -386,6 +389,12 @@ const DocumentController = (props) => {
         ]))
 
     let actionIcon, response, tooltip, canceltip
+
+    // useEffect(()=>{
+
+    //     setNewMode(mode) // coerce repaint
+
+    // },[mode])
 
     const onInsert = (sessionBlockID) => {
 
@@ -465,7 +474,7 @@ const DocumentController = (props) => {
         </Box>
 
     let basecontent
-    if (mode !== 'edit') {
+    if (mode === 'view') {
         basecontent = [image.source?thumbnailController:null, identityController, dataController]
     } else {
         basecontent = [identityController, thumbnailController, dataController]

@@ -82,8 +82,8 @@ const WorkboxToolbar = (props) => {
     const
 
         domainTitle = workboxRecord?.profile.domain.name,
-        domainIcon = workboxRecord?.profile.domain.image?.source,
-        itemIcon = workboxRecord?.profile.workbox.image.source,
+        // domainIcon = workboxRecord?.profile.domain.image?.source,
+        itemIcon = workboxRecord?.document.base.image.source,
         itemTitle = workboxRecord?.profile.workbox.name,
         type = workboxRecord?.profile.type.name,
         typeName = workboxRecord?systemRecords.workboxaliases.aliases[type]:null
@@ -201,7 +201,7 @@ const WorkboxToolbar = (props) => {
         <ToolbarVerticalDivider />
         <ItemControl itemIcon = {itemIcon} itemTitle = {itemTitle} />
         <TypeControl typeName = {typeName} />
-        <DomainControl domainTitle = {domainTitle} domainIcon = {domainIcon}/>
+        <DomainControl domainTitle = {domainTitle}/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && (<><ToolbarVerticalDivider />

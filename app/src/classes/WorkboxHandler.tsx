@@ -331,6 +331,7 @@ class WorkboxHandler {
             memberSyncUpdate = {
                 generation: increment(1),
                 'profile.member.name':workboxRecordClone.document.base.name,
+                'profile.member.image.source':workboxRecordClone.document.base.image.source,
                 'profile.member.description':workboxRecordClone.document.base.description,
                 'profile.workbox.name':workboxRecordClone.document.base.name
             }
@@ -344,6 +345,7 @@ class WorkboxHandler {
             domainSyncUpdate = {
                 generation: increment(1),
                 'profile.domain.name':workboxRecordClone.document.base.name,
+                'profile.domain.image.source':workboxRecordClone.document.base.image.source,
                 'profile.domain.description':workboxRecordClone.document.base.description,
                 'profile.workbox.name':workboxRecordClone.document.base.name
             }
