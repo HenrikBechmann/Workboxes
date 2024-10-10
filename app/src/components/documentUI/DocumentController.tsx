@@ -23,6 +23,9 @@ const SectionDivider = lazy(()=> import('./SectionDivider'))
 const Base_Edit_Identity = lazy(()=> import('./Base_Edit_Identity'))
 const Base_Edit_Thumbnail = lazy(()=> import('./Base_Edit_Thumbnail'))
 const Base_Edit_Data = lazy(()=> import('./Base_Edit_Data'))
+const Base_EditMode_Identity = lazy(()=> import('./Base_EditMode_Identity'))
+const Base_EditMode_Thumbnail = lazy(()=> import('./Base_EditMode_Thumbnail'))
+const Base_EditMode_Data = lazy(()=> import('./Base_EditMode_Data'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -115,77 +118,6 @@ const animateModeChange = (element) => {
         element.style.height = 'auto'
     },600)
   
-}
-
-// --------------------------------------[ section edit displays ]-------------------------------------
-
-const Base_EditMode_Identity = (props) => {
-
-    const { controlPack, name, description } = props
-
-    const onEdit = () => {
-        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('identity'))
-    }
-
-    const isDisabled = !!controlPack.currentEditBlockID
-
-    return <Box data-type = 'editmode-identity'  opacity = {isDisabled? 0.5:1}>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the basics' caption = 'edit'/>
-        </Box>
-        <Box style = {{fontSize:'small'}} >
-            Subject: <span style = {{fontWeight: 'bold'}}>{name}</span>
-        </Box>
-        <Box style = {{fontSize:'small'}}>
-            Description: <span style = {{fontStyle: 'italic'}}>{description}</span>
-        </Box>
-    </Box>
-    
-}
-
-const Base_EditMode_Thumbnail = (props) => {
-
-    const 
-        { controlPack, thumbnail } = props
-
-    const onEdit = () => {
-        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('thumbnail'))
-    }
-
-    const isDisabled = !!controlPack.currentEditBlockID
-
-    return <Box data-type = 'editmode-thumbnail'  opacity = {isDisabled? 0.5:1}>
-        <Box 
-            style = {{borderBottom:'1px solid silver', display:'flex'}}
-        >
-            <Box style = {actionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the thumbnail' caption = 'edit'/>
-            </Box>
-            <Box style = {{margin:'3px', border:'3px ridge silver', borderRadius:'8px'}} >
-                <img style = {{width: '55px', height: '55px', borderRadius:'6px'}} src = {thumbnail.source} />
-            </Box>
-        </Box>
-    </Box>
-    
-}
-
-const Base_EditMode_Data = (props) => {
-
-    const 
-        { controlPack } = props
-
-    const onEdit = () => {
-        controlPack.actionResponses.onEdit(controlPack.blockIDMap.get('data'))
-    }
-
-    const isDisabled = !!controlPack.currentEditBlockID
-
-    return <Box data-type = 'editmode-summary'  opacity = {isDisabled? 0.5:1} minHeight = '100px'>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {editIcon} isDisabled = {isDisabled} response = {onEdit} tooltip = 'edit the summary' caption = 'edit'/>
-        </Box>
-        <Suspense fallback = {<Loading />}><BaseDataDisplayController /></Suspense>
-    </Box>
 }
 
 // ---------------------------[ section view displays ]-------------------------------------------
