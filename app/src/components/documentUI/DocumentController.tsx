@@ -17,12 +17,12 @@ import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
 import { useWorkboxHandler } from '../workbox/Workbox'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
-const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 const Loading = lazy(() => import('../../system/Loading'))
 const SectionDivider = lazy(()=> import('./SectionDivider'))
 const Base_Edit_Identity = lazy(()=> import('./Base_Edit_Identity'))
 const Base_Edit_Thumbnail = lazy(()=> import('./Base_Edit_Thumbnail'))
+const Base_Edit_Data = lazy(()=> import('./Base_Edit_Data'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -118,32 +118,6 @@ const animateModeChange = (element) => {
 }
 
 // --------------------------------------[ section edit displays ]-------------------------------------
-
-const Base_Edit_Data = (props) => {
-
-    const
-        { controlPack } = props
-
-    const onSave = () => {
-        controlPack.actionResponses.onSave(controlPack.blockIDMap.get('data'))
-    }
-
-    const onCancel = () => {
-        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('data'))
-    }
-
-    return <Box data-type = 'active-edit-data' minHeight = '200px'>
-        <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
-        </Box>
-        <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
-        </Box>
-        <Suspense fallback = {<Loading />}><BaseDataEditController /></Suspense>
-    </Box>
-}
-
-// -----------------------------------[ section edit mode displays ]-------------------------------
 
 const Base_EditMode_Identity = (props) => {
 
