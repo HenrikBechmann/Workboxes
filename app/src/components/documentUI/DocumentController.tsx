@@ -324,13 +324,13 @@ const AttachmentsController = (props) => {
                     : null
 
     return <>
-        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-ons (also shown in workbox lists)'/>
+        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
             {((mode === 'insert') && attachments.list.length == 0) && 
                 <Box style = {actionIconStyles} data-type = 'actionbox'>
                     <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
                 </Box>
             }
-            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-ons {extraText})</Box>}
+            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>}
         </>}
     </>
 
