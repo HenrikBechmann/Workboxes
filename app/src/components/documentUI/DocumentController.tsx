@@ -20,6 +20,7 @@ const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'
 const BaseDataEditController = lazy(()=> import('./BaseDataEditController'))
 const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
+const Loading = lazy(() => import('../../system/Loading'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -142,10 +143,6 @@ const SectionDivider = (props) => {
         }
     } >{title}</Box>
     </>
-}
-
-const Loading = (props) => {
-    return <Box minHeight = '100px'>Loading...</Box>
 }
 
 // --------------------------------------[ section edit displays ]-------------------------------------
@@ -470,6 +467,7 @@ const Base_Display_Thumbnail = (props) => {
     </Box>}</>
     
 }
+
 const Base_Display_Data = (props) => {
 
     return <Box style = {{clear:'left'}} >
