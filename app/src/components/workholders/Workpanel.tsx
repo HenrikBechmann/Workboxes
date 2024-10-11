@@ -14,6 +14,10 @@ const Workbox = lazy(() => import('./../workbox/Workbox'))
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler, useSystemRecords} from '../../system/WorkboxesProvider'
 
+const Loading = (props) => {
+    return <Box minHeight = '100px'>Loading...</Box>
+}
+
 const defaultWorkboxConfig = {
     content: {
         displaycode:'both',
@@ -300,7 +304,7 @@ const Workpanel = (props:any) => {
             // required to configure window
             { viewDeclaration, zOrder, configuration, titleData } = windowData.window
 
-        return <Suspense key = {windowSessionID}><Workwindow
+        return <Suspense key = {windowSessionID} fallback = {<Loading />}><Workwindow
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
