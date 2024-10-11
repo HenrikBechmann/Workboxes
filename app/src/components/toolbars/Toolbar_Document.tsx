@@ -30,7 +30,13 @@ const documentToolbarStyles = {
     // borderBottom:'1px solid silver',
 } as CSSProperties
 
-const selectStyles = {
+const selectCreateStyles = {
+    display: 'inline-block',
+    transition: 'width 0.5s',
+    overflow: 'hidden',
+} as CSSProperties
+
+const selectAddStyles = {
     display: 'inline-block',
     transition: 'width 0.5s',
     overflow: 'hidden',
@@ -57,6 +63,7 @@ import settingsIcon from '../../../assets/settings.png'
 import lockClosedIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
+import searchIcon from '../../../assets/search.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -76,11 +83,13 @@ const DocumentToolbar = (props) => {
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         documentConfig = workboxHandler.settings.document,
         modeSettings = workboxHandler.session.document.modesettings,
-        insertTypeRef = useRef(null)
+        createTypeRef = useRef(null),
+        addTypeRef = useRef(null)
 
     useEffect(()=>{
 
-        workboxHandler.session.document.insertselection = insertTypeRef.current.value
+        workboxHandler.session.document.createselection = createTypeRef.current.value
+        workboxHandler.session.document.addselection = addTypeRef.current.value
 
     },[])
 
@@ -88,25 +97,37 @@ const DocumentToolbar = (props) => {
         onNormal = (value) => {
             documentConfig.mode = 'view'
             modeSettings.view.select = true
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            // modeSettings.drag.select = false
+            dispatchWorkboxHandler()
+        },
+        onCreate = (value) => {
+            documentConfig.mode = 'create'
+            modeSettings.view.select = false
+            modeSettings.create.select = true
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
-            documentConfig.mode = 'insert'
+            documentConfig.mode = 'add'
             modeSettings.view.select = false
-            modeSettings.insert.select = true
+            modeSettings.create.select = false
+            modeSettings.add.select = true
             modeSettings.edit.select = false
             modeSettings.remove.select = false
-            // modeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
             documentConfig.mode = 'edit'
             modeSettings.view.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = true
             modeSettings.remove.select = false
             // modeSettings.drag.select = false
@@ -115,7 +136,8 @@ const DocumentToolbar = (props) => {
         onRemove = (value) => {
             documentConfig.mode = 'remove'
             modeSettings.view.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = true
             // modeSettings.drag.select = false
@@ -124,7 +146,8 @@ const DocumentToolbar = (props) => {
         onDrag = (value) => {
             documentConfig.mode = 'drag'
             modeSettings.view.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             // modeSettings.drag.select = true
@@ -140,11 +163,19 @@ const DocumentToolbar = (props) => {
             is_radio: true,
             callback: onNormal
         }),
-        addToggle = useToggleIcon({
+        createToggle = useToggleIcon({
             icon:insertIcon, 
-            tooltip:'Insert a section',
+            tooltip:'Create a section',
+            caption:'create',
+            settings:modeSettings.create,
+            is_radio: true,
+            callback: onCreate
+        }),
+        addToggle = useToggleIcon({
+            icon:searchIcon, 
+            tooltip:'Add a section',
             caption:'add',
-            settings:modeSettings.insert,
+            settings:modeSettings.add,
             is_radio: true,
             callback: onAdd
         }),
@@ -172,8 +203,12 @@ const DocumentToolbar = (props) => {
         //     is_radio: true,
         //     callback: onDrag
         // }),
-        onChangeInsertType = (event) => {
-            workboxHandler.session.document.insertselection = event.target.value
+        onChangeCreateType = (event) => {
+            workboxHandler.session.document.createselection = event.target.value
+        },
+
+        onChangeAddType = (event) => {
+            workboxHandler.session.document.addselection = event.target.value
         }
 
         // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
@@ -219,11 +254,17 @@ const DocumentToolbar = (props) => {
 
     // render
 
-    const selectwidth = (documentConfig.mode == 'insert')?'88px':0
+    const selectcreatewidth = (documentConfig.mode == 'create')?'88px':0
 
-    const insertStyles = useMemo(()=>{
-        return Object.assign({}, selectStyles, {width:selectwidth})
-    },[selectwidth])
+    const createStyles = useMemo(()=>{
+        return Object.assign({}, selectCreateStyles, {width:selectcreatewidth})
+    },[selectcreatewidth])
+
+    const selectaddwidth = (documentConfig.mode == 'add')?'88px':0
+
+    const addStyles = useMemo(()=>{
+        return Object.assign({}, selectAddStyles, {width:selectaddwidth})
+    },[selectaddwidth])
 
     // { dragToggle }
 
@@ -234,12 +275,18 @@ const DocumentToolbar = (props) => {
         <StandardIcon icon = {reorderIcon} caption = 'organize' tooltip = 'organize document sections'/>
         <ToolbarVerticalDivider />
         { normalToggle }
-        { addToggle }
-        <Box style = {insertStyles}>
-            <Select ref = {insertTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeInsertType}>
+        { createToggle }
+        <Box style = {createStyles}>
+            <Select ref = {createTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeCreateType}>
                 <option value="note">Note</option>
                 <option value="weblink">Weblink</option>
                 <option value="image">Media</option>
+                <option value="workbox">Workbox document</option>
+            </Select>
+        </Box>
+        { addToggle }
+        <Box style = {addStyles}>
+            <Select ref = {addTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeAddType}>
                 <option value="workbox">Workbox document</option>
             </Select>
         </Box>

@@ -40,6 +40,7 @@ import cardsIcon from '../../../assets/splitscreen.png'
 import settingsIcon from '../../../assets/settings.png'
 import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
+import searchIcon from '../../../assets/search.png'
 
 const resourcesToolbarStyles = {
     padding:'2px',
@@ -79,7 +80,8 @@ const ResourcesToolbar = (props) => {
         onNormal = (value) => {
             modeSettings.view.select = true
             modeSettings.drill.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
@@ -89,7 +91,19 @@ const ResourcesToolbar = (props) => {
         onDrill = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = true
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
+            modeSettings.edit.select = false
+            modeSettings.remove.select = false
+            modeSettings.drag.select = false
+            modeSettings.select.select = false
+            dispatchWorkboxHandler()
+        },
+        onCreate = (value) => {
+            modeSettings.view.select = false
+            modeSettings.drill.select = false
+            modeSettings.create.select = true
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
@@ -99,7 +113,8 @@ const ResourcesToolbar = (props) => {
         onAdd = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = false
-            modeSettings.insert.select = true
+            modeSettings.create.select = false
+            modeSettings.add.select = true
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = false
@@ -109,7 +124,8 @@ const ResourcesToolbar = (props) => {
         onEdit = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = true
             modeSettings.remove.select = false
             modeSettings.drag.select = false
@@ -119,7 +135,8 @@ const ResourcesToolbar = (props) => {
         onRemove = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = true
             modeSettings.drag.select = false
@@ -129,7 +146,8 @@ const ResourcesToolbar = (props) => {
         onDrag = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = true
@@ -139,7 +157,8 @@ const ResourcesToolbar = (props) => {
         onSelect = (value) => {
             modeSettings.view.select = false
             modeSettings.drill.select = false
-            modeSettings.insert.select = false
+            modeSettings.create.select = false
+            modeSettings.add.select = false
             modeSettings.edit.select = false
             modeSettings.remove.select = false
             modeSettings.drag.select = true
@@ -164,11 +183,19 @@ const ResourcesToolbar = (props) => {
             is_radio: true,
             callback: onDrill
         }),
-        addToggle = useToggleIcon({
+        createToggle = useToggleIcon({
             icon:addIcon, 
+            tooltip:'Create a resource',
+            caption:'create',
+            settings:modeSettings.create,
+            is_radio: true,
+            callback: onCreate
+        }),
+        addToggle = useToggleIcon({
+            icon:searchIcon, 
             tooltip:'Insert a resource',
             caption:'add',
-            settings:modeSettings.insert,
+            settings:modeSettings.add,
             is_radio: true,
             callback: onAdd
         }),
@@ -244,6 +271,7 @@ const ResourcesToolbar = (props) => {
         <MenuIcon icon = {layoutIcon} caption = 'format' tooltip = 'switch formats' menulist = {layoutmenulist}/>
         <ToolbarVerticalDivider />
         { normalToggle }
+        { createToggle }
         { addToggle }
         { editToggle }
         { removeToggle }

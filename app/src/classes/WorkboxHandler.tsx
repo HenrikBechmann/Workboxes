@@ -85,7 +85,8 @@ class WorkboxHandler {
         },
         document:{
             insertblock: null,
-            insertselection: null,
+            createselection: null,
+            addselection: null,
             editblock: null,
             changesessionid: null,
             is_change_error:false,
@@ -98,7 +99,11 @@ class WorkboxHandler {
                     select:true,
                     disable:false,
                 },
-                insert: {
+                create: {
+                    select:false,
+                    disable:false,
+                },
+                add: {
                     select:false,
                     disable:false,
                 },
@@ -115,7 +120,7 @@ class WorkboxHandler {
         resources:{
             drillitem: null,
             insertitem: null,
-            insertselection: null,
+            createselection: null,
             edititem: null,
             changesessionid: null,
             is_change_error:false,
@@ -131,7 +136,11 @@ class WorkboxHandler {
                     select:false,
                     disable:false,
                 },
-                insert: {
+                create: {
+                    select:false,
+                    disable:false,
+                },
+                add: {
                     select:false,
                     disable:false,
                 },

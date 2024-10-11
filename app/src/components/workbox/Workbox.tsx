@@ -183,10 +183,12 @@ const WorkboxController = (props) => {
         documentsession.changesessionid = sessionID
         workboxmodesettings.resources.disable = true
         documentmodesettings.view.disable = true
-        documentmodesettings.insert.disable = true
+        documentmodesettings.create.disable = true
+        documentmodesettings.add.disable = true
         documentmodesettings.remove.disable = true
 
-        resourcesmodesettings.insert.disable = true
+        resourcesmodesettings.create.disable = true
+        resourcesmodesettings.add.disable = true
         resourcesmodesettings.edit.disable = true
         resourcesmodesettings.remove.disable = true
         resourcesmodesettings.drag.disable = true
@@ -230,10 +232,12 @@ const WorkboxController = (props) => {
         documentsession.changesessionid = null
         workboxmodesettings.resources.disable = false
         documentmodesettings.view.disable = false
-        documentmodesettings.insert.disable = false
+        documentmodesettings.create.disable = false
+        documentmodesettings.add.disable = false
         documentmodesettings.remove.disable = false
 
-        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.create.disable = false
+        resourcesmodesettings.add.disable = false
         resourcesmodesettings.edit.disable = false
         resourcesmodesettings.remove.disable = false
         resourcesmodesettings.drag.disable = false
@@ -259,10 +263,12 @@ const WorkboxController = (props) => {
 
         workboxmodesettings.resources.disable = false
         documentmodesettings.view.disable = false
-        documentmodesettings.insert.disable = false
+        documentmodesettings.create.disable = false
+        documentmodesettings.add.disable = false
         documentmodesettings.remove.disable = false
 
-        resourcesmodesettings.insert.disable = false
+        resourcesmodesettings.create.disable = false
+        resourcesmodesettings.add.disable = false
         resourcesmodesettings.edit.disable = false
         resourcesmodesettings.remove.disable = false
         resourcesmodesettings.drag.disable = false
