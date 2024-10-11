@@ -389,6 +389,7 @@ const DocumentController = (props) => {
         { documentBaseData, mode, sessionDocumentSectionID } = props,
         baseFields = documentBaseData.base,
         { name, description, image, todo } = baseFields,
+        storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
         blockIDMapRef = useRef(new Map([
@@ -423,6 +424,8 @@ const DocumentController = (props) => {
     async function onSave (sessionBlockID) {
 
         if (workboxHandler.editoreditcontent) { // there was a blocknote edit
+
+            saveDataUrlsToFiles(workboxHandler.editoreditcontent)
             let editorFiles = []
             const documentFiles = workboxHandler.editRecord.document.files
             workboxHandler.editRecord.document.data.content = 
@@ -432,6 +435,67 @@ const DocumentController = (props) => {
         }
         return sessiondocument.savechanges(sessionBlockID) // check for errors or other blocking conditions
 
+    }
+
+    async function saveDataUrlsToFiles(editorContent) {
+
+        let extension
+
+        async function blobCallback(blob) {
+
+            console.log('blob in blobCallback',blob)
+
+            const 
+                fileName = Date.now() + '.' + extension,
+                { workboxRecord } = workboxHandler,
+                fileRef = ref(storage, workboxRecord.profile.workbox.id + '/document/' + fileName)
+
+            if (!fileRef) {
+                console.log('no fileRef')
+                return
+            }
+
+            try {
+                await uploadBytes(fileRef, blob)
+                console.log('uploaded fileRef of blob',fileRef,blob)
+            } catch (error) {
+                console.log('An error occured uploading file.name', fileName)
+                alert (error.message) // placeholder
+                return null
+            }
+
+        }
+
+        async function onLoad() {
+            const image = this
+            console.log('image',image)
+            const canvas = document.createElement('canvas') as HTMLCanvasElement
+            const ctx = canvas.getContext('2d')
+            ctx.drawImage(
+                image,
+                0,0,
+                image.naturalWidth,
+                image.naturalHeight
+            )
+            ctx.restore()
+            await canvas.toBlob(blobCallback)
+        }
+
+        editorContent.forEach(async (block) => {
+            if (['image','video','audio','file'].includes(block.type)) {
+                const url = block.props.url
+                const urlparts = url.split(':')
+                if (urlparts[0] =='data') {
+                    const type = urlparts[1].split(';')[0]
+                    extension = type.split('/')[1]
+                    const image = document.createElement('img') as HTMLImageElement
+                    image.onload = onLoad
+                    image.src = url
+                }
+            }
+        })
+
+        return editorContent
     }
 
     async function onCancel(sessionBlockID) {
