@@ -135,7 +135,7 @@ const WorkboxController = (props) => {
             doccontrols = workboxHandler.session.document,
             resourcecontrols = workboxHandler.session.resources
 
-        doccontrols.insertblock = insertBlock
+        doccontrols.crateblock = createBlock
         doccontrols.editblock = editBlock
         doccontrols.removeblock = removeBlock
         doccontrols.reorderblock = reorderBlock
@@ -160,8 +160,8 @@ const WorkboxController = (props) => {
     //     setWorkboxSnapshot()
     // },[])
 
-    const insertBlock = useCallback((sessionID) => { // TODO identify target of insert
-        alert('workbox insertUnit ' + sessionID)
+    const createBlock = useCallback((sessionID) => { // TODO identify target of insert
+        alert('workbox createUnit ' + sessionID)
     },[])
 
     const editBlock = useCallback((sessionID) => {

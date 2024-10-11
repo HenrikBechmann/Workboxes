@@ -35,6 +35,7 @@ import dragIcon from '../../../assets/drag.png'
 import cancelEditIcon from '../../../assets/edit_off.png'
 import tapIcon from '../../../assets/tap.png'
 import dropIcon from '../../../assets/drop.png'
+import searchIcon from '../../../assets/search.png'
 
 const baseStyles = {
 
@@ -311,7 +312,8 @@ const AttachmentsController = (props) => {
     const 
         { controlPack } = props,
         { mode } = controlPack,
-        { onInsert } = controlPack.actionResponses,
+        { onCreate } = controlPack.actionResponses,
+        { onAdd } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {attachments} = workboxHandler.workboxRecord.document.data,
         isDisabled = !!controlPack.currentEditBlockID,
@@ -325,9 +327,14 @@ const AttachmentsController = (props) => {
 
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
-            {((mode === 'insert') && attachments.list.length == 0) && 
+            {((mode === 'create') && attachments.list.length == 0) && 
                 <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an add-on' caption = 'insert'/>
+                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
+                </Box>
+            }
+            {((mode === 'add') && attachments.list.length == 0) && 
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
                 </Box>
             }
             {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>}
@@ -341,7 +348,8 @@ const ExtensionsController = (props) => {
     const 
         { controlPack } = props,
         { mode } = controlPack,
-        { onInsert } = controlPack.actionResponses,
+        { onCreate } = controlPack.actionResponses,
+        { onAdd } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {extensions} = workboxHandler.workboxRecord.document,
         isDisabled = !!controlPack.currentEditBlockID,
@@ -355,9 +363,14 @@ const ExtensionsController = (props) => {
 
     return <>
         {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
-            {((mode === 'insert') && extensions.list.length == 0) && 
+            {((mode === 'create') && extensions.list.length == 0) && 
                 <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onInsert} tooltip = 'insert an extension' caption = 'insert'/>
+                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an extension' caption = 'insert'/>
+                </Box>
+            }
+            {((mode === 'add') && extensions.list.length == 0) && 
+                <Box style = {actionIconStyles} data-type = 'actionbox'>
+                    <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
                 </Box>
             }
             {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
@@ -387,9 +400,15 @@ const DocumentController = (props) => {
 
     let actionIcon, response, tooltip, canceltip
 
-    const onInsert = (sessionBlockID) => {
+    const onCreate = (sessionBlockID) => {
 
-        return sessiondocument.insertblock(sessionBlockID)
+        return sessiondocument.createblock(sessionBlockID)
+
+    }
+
+    const onAdd = (sessionBlockID) => {
+
+        return sessiondocument.addblock(sessionBlockID)
 
     }
 
@@ -431,7 +450,7 @@ const DocumentController = (props) => {
         
     }
 
-    const actionResponses = {onInsert, onEdit, onSave, onCancel}
+    const actionResponses = {onCreate, onAdd, onEdit, onSave, onCancel}
 
     const controlPack = useMemo(() => {
 
