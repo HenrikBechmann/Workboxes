@@ -440,6 +440,8 @@ const DocumentController = (props) => {
     async function saveDataUrlsToFiles(editorContent) {
 
         let extension
+        const dataurlblocks = []
+        let blocks_to_process
 
         async function blobCallback(blob) {
 
@@ -483,15 +485,21 @@ const DocumentController = (props) => {
 
         editorContent.forEach(async (block) => {
             if (['image','video','audio','file'].includes(block.type)) {
-                const url = block.props.url
-                const urlparts = url.split(':')
-                if (urlparts[0] =='data') {
-                    const type = urlparts[1].split(';')[0]
-                    extension = type.split('/')[1]
-                    const image = document.createElement('img') as HTMLImageElement
-                    image.onload = onLoad
-                    image.src = url
-                }
+                dataurlblocks.push(block)
+            }
+        })
+
+        blocks_to_process = dataurlblocks.length
+
+        dataurlblocks.forEach(async (block) => {
+            const url = block.props.url
+            const urlparts = url.split(':')
+            if (urlparts[0] =='data') {
+                const type = urlparts[1].split(';')[0]
+                extension = type.split('/')[1]
+                const image = document.createElement('img') as HTMLImageElement
+                image.onload = onLoad
+                image.src = url
             }
         })
 
