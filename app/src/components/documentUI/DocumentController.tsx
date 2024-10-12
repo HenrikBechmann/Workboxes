@@ -415,8 +415,6 @@ const DocumentController = (props) => {
 
     const onEdit = (sessionBlockID) => {
 
-        // console.log('DocBase.onEdit: sessionBlockID', sessionBlockID)
-
         return sessiondocument.editblock(sessionBlockID)
 
     }
@@ -425,7 +423,7 @@ const DocumentController = (props) => {
 
         if (workboxHandler.editoreditcontent) { // there was a blocknote edit
 
-            saveDataUrlsToFiles(workboxHandler.editoreditcontent)
+            const results = await saveDataUrlsToFiles(workboxHandler.editoreditcontent) // TODO: add error handling in results
             let editorFiles = []
             const documentFiles = workboxHandler.editRecord.document.files
             workboxHandler.editRecord.document.data.content = 
@@ -437,73 +435,106 @@ const DocumentController = (props) => {
 
     }
 
-    async function saveDataUrlsToFiles(editorContent) {
+    async function saveDataUrlsToFiles (editorContent) {
 
-        let extension
         const dataurlblocks = []
-        let blocks_to_process
+        const promises = []
 
-        async function blobCallback(blob) {
+        editorContent.forEach((block) => {
 
-            console.log('blob in blobCallback',blob)
-
-            const 
-                fileName = Date.now() + '.' + extension,
-                { workboxRecord } = workboxHandler,
-                fileRef = ref(storage, workboxRecord.profile.workbox.id + '/document/' + fileName)
-
-            if (!fileRef) {
-                console.log('no fileRef')
-                return
-            }
-
-            try {
-                await uploadBytes(fileRef, blob)
-                console.log('uploaded fileRef of blob',fileRef,blob)
-            } catch (error) {
-                console.log('An error occured uploading file.name', fileName)
-                alert (error.message) // placeholder
-                return null
-            }
-
-        }
-
-        async function onLoad() {
-            const image = this
-            console.log('image',image)
-            const canvas = document.createElement('canvas') as HTMLCanvasElement
-            const ctx = canvas.getContext('2d')
-            ctx.drawImage(
-                image,
-                0,0,
-                image.naturalWidth,
-                image.naturalHeight
-            )
-            ctx.restore()
-            await canvas.toBlob(blobCallback)
-        }
-
-        editorContent.forEach(async (block) => {
-            if (['image','video','audio','file'].includes(block.type)) {
-                dataurlblocks.push(block)
+            if (block.type == 'image') {
+                const url = block.props.url
+                const urlprotocol = url.split(':')[0]
+                if (urlprotocol =='data') {
+                    dataurlblocks.push(block)
+                }
             }
         })
 
-        blocks_to_process = dataurlblocks.length
+        dataurlblocks.forEach((block) => {
 
-        dataurlblocks.forEach(async (block) => {
-            const url = block.props.url
-            const urlparts = url.split(':')
-            if (urlparts[0] =='data') {
-                const type = urlparts[1].split(';')[0]
+            const promise = new Promise((resolve,reject)=>{
+
+                let extension
+
+                const 
+                    url = block.props.url,
+                    type = url.split(':')[1].split(';')[0],
+                    pixelRatio = window.devicePixelRatio
+
                 extension = type.split('/')[1]
+                // obtain dimensions
                 const image = document.createElement('img') as HTMLImageElement
+
                 image.onload = onLoad
-                image.src = url
-            }
+                image.src = url // trigger onload
+
+                function onLoad() { // tranlsate image to canvas
+                    const 
+                        image = this,
+                        { naturalWidth, naturalHeight} = image,
+                        canvas = document.createElement('canvas') as HTMLCanvasElement,
+                        ctx = canvas.getContext('2d')
+
+                    canvas.width = Math.floor(naturalWidth * pixelRatio)
+                    canvas.height = Math.floor(naturalHeight * pixelRatio) 
+
+                    ctx.scale(pixelRatio, pixelRatio)
+                    ctx.imageSmoothingQuality = 'high'
+                    ctx.save()
+
+                    ctx.drawImage(
+                        image,
+                        0,0,
+                        image.naturalWidth,
+                        image.naturalHeight,
+                        0,0,
+                        image.naturalWidth,
+                        image.naturalHeight
+                    )
+
+                    ctx.restore()
+
+                    setTimeout(()=>{ // guarantee unique filename, based on milliseconds
+                        canvas.toBlob(blobCallback, type)
+                    },1)
+                }
+
+                async function blobCallback(blob) { // get and save blob; update editor block data
+
+                    const 
+                        fileName = Date.now() + '.' + extension, // filename = milliseconds + extension
+                        { editRecord } = workboxHandler,
+                        fileRef = ref(storage, editRecord.profile.workbox.id + '/document/' + fileName)
+
+                    if (!fileRef) {
+                        console.log('no fileRef')
+                        reject()
+                        return
+                    }
+
+                    let url
+                    try {
+                        await uploadBytes(fileRef, blob)
+                        url = await getDownloadURL(fileRef)
+
+                    } catch (error) {
+                        console.log(error.message)
+                        reject()
+                    }
+                    // update block
+                    block.props.url = url
+                    block.props.name = fileName
+                    editRecord.document.files.push(fileName)
+                    resolve(true)
+                }
+            })
+
+            promises.push(promise)
+
         })
 
-        return editorContent
+        return Promise.allSettled(promises)
     }
 
     async function onCancel(sessionBlockID) {
