@@ -99,7 +99,7 @@ const documentGridHeaderStyles = {
     area: 'header',
     minWidth:0,
     borderRadius:'8px 8px 0 0',
-    borderBottom:'1px solid silver',
+    borderBottom:'3px outset gray',
 }
 
 const documentGridBodyStyles = {
