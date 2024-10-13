@@ -1,11 +1,12 @@
 // index.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {lazy} from 'react'
+import React, {lazy, Suspense} from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import ismobile from 'is-mobile'
+import Loading from './system/Loading'
 
 const WorkboxesProvider = lazy(() => import('./system/WorkboxesProvider'))
 
@@ -19,8 +20,8 @@ const root = createRoot(document.getElementById('root'))
 
 root.render(
     <ChakraProvider>
-        <WorkboxesProvider>
+        <Suspense><WorkboxesProvider>
             <RouterProvider router = {router} />
-        </WorkboxesProvider>
+        </WorkboxesProvider></Suspense>
     </ChakraProvider>
 )

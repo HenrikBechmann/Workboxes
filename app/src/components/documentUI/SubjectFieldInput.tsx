@@ -11,7 +11,7 @@ import {
     Divider,
 } from '@chakra-ui/react'
 
-import { useSystemRecords, useStorage } from '../../system/WorkboxesProvider'
+import { useSystemRecords } from '../../system/WorkboxesProvider'
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 

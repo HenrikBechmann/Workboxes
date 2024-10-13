@@ -953,7 +953,7 @@ class WorkspaceHandler {
 
         // console.log('workspaceHandler.settings', this.settings)
 
-        if (!this.settings.changed) return
+        if (!this.settings.changed) return result
 
         const 
             batch = writeBatch(this.db),
