@@ -713,6 +713,7 @@ const Workwindow = (props) => {
     // render
     return (
     <Draggable
+        nodeRef = {windowFrameElementRef}
         defaultPosition = {{x:0,y:0}}
         position = {{x:dynamicWindowConfiguration.left, y:dynamicWindowConfiguration.top}}
         handle = '#draghandle'
