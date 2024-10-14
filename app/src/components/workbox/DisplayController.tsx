@@ -272,6 +272,7 @@ const DisplayController = (props) => {
                 // restore transition defaults
                 documentFrameElement.style.transition = 'none'
                 documentFrameElement.style.transitionDelay = 'unset'
+                
                 resourcesFrameElement.style.transition = 'none'
                 resourcesFrameElement.style.transitionDelay = 'unset'
 

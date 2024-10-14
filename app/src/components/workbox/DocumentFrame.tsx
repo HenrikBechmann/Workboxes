@@ -22,7 +22,7 @@ import DocumentToolbar from '../toolbars/Toolbar_Document'
 
 import { useWorkboxHandler } from './Workbox'
 
-import DocumentContent from '../documentUI/DocContent'
+import DocumentContent from '../documentUI/DocumentContent'
 
 import handleIcon from '../../../assets/handle.png'
 
