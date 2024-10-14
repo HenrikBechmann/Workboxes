@@ -4,7 +4,7 @@
 /*
     role: 
     - display requested workbox content - 
-        WorkboxComplete
+        WorkboxPrimary
         WorkboxExtra
         WorkboxListing
     - create workboxHandler
@@ -40,7 +40,7 @@ import {
 } from '../../system/WorkboxesProvider'
 // import {cloneDeep as _cloneDeep} from 'lodash'
 
-const WorkboxComplete = lazy(() => import('./WorkboxComplete'))
+const WorkboxPrimary = lazy(() => import('./WorkboxPrimary'))
 // const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
 // const WorkboxToolbar = lazy(() => import('../toolbars/Toolbar_Workbox'))
 // const WorkboxContent = lazy(() => import('./WorkboxContent'))
@@ -138,7 +138,7 @@ const Workbox = (props) => {
 
 
     return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
-        {workboxHandlerContext.current && <WorkboxComplete />}
+        {workboxHandlerContext.current && <WorkboxPrimary />}
     </WorkboxHandlerContext.Provider>
 
 }
