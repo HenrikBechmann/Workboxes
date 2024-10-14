@@ -71,7 +71,7 @@ const ResourcesToolbar = (props) => {
 
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        resourcesConfig = workboxHandler.settings.resources,
+        resourcesConfig = workboxHandler.configuration.resources,
         modeSettings = workboxHandler.session.resources.modesettings,
         spreadSettingsRef = useRef({select: false, disabled: false}),
         onSpread = (value) => {

@@ -82,8 +82,8 @@ const resourcesBodyStyles = {
 const ResourcesFrame = forwardRef(function FoldersPanel(props:any, resourcesFrameElementRef:any) {
     const 
         [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
-        defaultResourcesState = workboxHandler.settings.resources,
-        displayCode = workboxHandler.settings.resources.displaycode, // out, over, under
+        defaultResourcesState = workboxHandler.configuration.resources,
+        displayCode = workboxHandler.configuration.resources.displaycode, // out, over, under
         resourcesPanelElementRef = useRef(null),
         timeoutRef = useRef(null),
         [resourcesConfig, setResourcesState] = useState(defaultResourcesState)

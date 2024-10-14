@@ -82,7 +82,7 @@ const DocumentToolbar = (props) => {
     const 
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        documentSettings = workboxHandler.settings.document,
+        documentSettings = workboxHandler.configuration.document,
         documentModeSettings = workboxHandler.session.document.modesettings,
         createTypeRef = useRef(null),
         addTypeRef = useRef(null)

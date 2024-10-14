@@ -26,8 +26,8 @@ const DocumentContent = (props) => {
         [contentState, setContentState] = useState('setup'),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxRecord = workboxHandler.workboxRecord,
-        documentSettings = workboxHandler.settings.document,
-        { mode } = documentSettings,
+        documentConfiguration = workboxHandler.configuration.document,
+        { mode } = documentConfiguration,
         baseComponentRef = useRef(null),
         nextSessionDocumentSectionIDRef = useRef(0),
         is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef

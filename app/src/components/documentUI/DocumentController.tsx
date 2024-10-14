@@ -427,7 +427,7 @@ const DocumentController = (props) => {
     const 
         { documentBaseData, mode, sessionDocumentSectionID } = props,
         baseFields = documentBaseData.base,
-        { name, description, image, todo } = baseFields,
+        { name, description, image } = baseFields,
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,

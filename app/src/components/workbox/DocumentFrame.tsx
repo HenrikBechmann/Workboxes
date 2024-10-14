@@ -136,7 +136,7 @@ const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrame
         // context
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         // triggers state change
-        displayCode = workboxHandler.settings.document.displaycode, // out, over, under
+        displayCode = workboxHandler.configuration.document.displaycode, // out, over, under
 
         // elements
         // documentFrameElementRef forwarded to caller (DisplayController)

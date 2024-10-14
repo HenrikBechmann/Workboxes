@@ -64,6 +64,7 @@ class WorkboxHandler {
     resourcesRecords = []
 
     // --------------------[ process control & tracking ]------------------------
+    configuration
 
     // for document and resources, transitory mode settings
     session = {
@@ -189,8 +190,6 @@ class WorkboxHandler {
         },
     },
 */    
-    settings
-
     dimensions = {
         UIDocumentWidth:300,
         UIDocumentWidthRatio:null,

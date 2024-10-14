@@ -130,7 +130,7 @@ const Workwindow = (props) => {
     const 
         {
             children, 
-            configuration, // default position; size, only used to set defaultwindowConfig
+            layout, // default position; size, only used to set defaultwindowConfig
             // containerDimensionSpecs can
             // - change dynamicWindowConfiguration (through useEffect for state change)
             // - change maxSizeConstraints for Resizable through useEffect for state change)
@@ -149,7 +149,7 @@ const Workwindow = (props) => {
         typeAlias = titleData.type?.alias,
         workboxID = titleData.id,
         workboxSubscriptionControlDataRef = useRef(null),
-        defaultWindowConfig = configuration, // semantics; only used to initialize dynamicWindowConfiguration
+        defaultWindowConfig = layout, // semantics; only used to initialize dynamicWindowConfiguration
 
         // various elements brought into play
         panelFrameElementRef = useRef(null),

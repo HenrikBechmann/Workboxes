@@ -75,7 +75,7 @@ const WorkboxToolbar = (props) => {
 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
-        { settings } = workboxHandler,
+        { configuration } = workboxHandler,
         modeSettings = workboxHandler.session.workbox.modesettings,
         systemRecords = useSystemRecords()
 
@@ -108,9 +108,9 @@ const WorkboxToolbar = (props) => {
             resourcesDisplayCode = 'under'
         }
 
-        settings.content.displaycode = contentDisplayCode        
-        settings.document.displaycode = documentDisplayCode
-        settings.resources.displaycode = resourcesDisplayCode
+        configuration.content.displaycode = contentDisplayCode        
+        configuration.document.displaycode = documentDisplayCode
+        configuration.resources.displaycode = resourcesDisplayCode
 
         dispatchWorkboxHandler()
 
