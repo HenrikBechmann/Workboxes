@@ -1,4 +1,4 @@
-// DocumentContent.tsx
+// DocumentPane.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, {
@@ -20,7 +20,7 @@ const DocumentController = lazy(()=>import('./DocumentController'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
 
-const DocumentContent = (props) => {
+const DocumentPane = (props) => {
 
     const 
         [contentState, setContentState] = useState('setup'),
@@ -28,7 +28,7 @@ const DocumentContent = (props) => {
         workboxRecord = workboxHandler.workboxRecord,
         documentConfiguration = workboxHandler.configuration.document,
         { mode } = documentConfiguration,
-        baseComponentRef = useRef(null),
+        documentComponentRef = useRef(null),
         nextSessionDocumentSectionIDRef = useRef(0),
         is_workboxRecordParameterRef = useRef(false) // set by useEffect for render of baseComponentRef
 
@@ -38,18 +38,18 @@ const DocumentContent = (props) => {
 
         is_workboxRecordParameterRef.current = true
 
-        const documentBaseData = {
+        const documentData = {
             base:workboxRecord.document.base,
             data:workboxRecord.document.data,
         }
 
-        if (baseComponentRef.current) {
-            baseComponentRef.current =
-                React.cloneElement(baseComponentRef.current,{documentBaseData, mode})
+        if (documentComponentRef.current) {
+            documentComponentRef.current =
+                React.cloneElement(documentComponentRef.current,{documentData, mode})
         } else {
             const sessionDocumentSectionID = nextSessionDocumentSectionIDRef.current++
-            baseComponentRef.current = 
-                React.createElement(DocumentController,{documentBaseData, mode, sessionDocumentSectionID})
+            documentComponentRef.current = 
+                React.createElement(DocumentController,{documentData, mode, sessionDocumentSectionID})
         }
 
         setContentState('update')
@@ -64,9 +64,9 @@ const DocumentContent = (props) => {
 
     return <Box>
         <Suspense>
-            {is_workboxRecordParameterRef.current && baseComponentRef.current}
+            {is_workboxRecordParameterRef.current && documentComponentRef.current}
         </Suspense>
     </Box>
 }
 
-export default DocumentContent
+export default DocumentPane

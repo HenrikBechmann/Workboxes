@@ -1,4 +1,4 @@
-// ResourcesFrame.tsx
+// ResourcesPane.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -79,7 +79,7 @@ const resourcesBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const ResourcesFrame = forwardRef(function FoldersPanel(props:any, resourcesFrameElementRef:any) {
+const ResourcesPane = forwardRef(function FoldersPanel(props:any, resourcesFrameElementRef:any) {
     const 
         [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
         defaultResourcesState = workboxHandler.configuration.resources,
@@ -133,4 +133,4 @@ const ResourcesFrame = forwardRef(function FoldersPanel(props:any, resourcesFram
     </Box>
 })
 
-export default ResourcesFrame
+export default ResourcesPane

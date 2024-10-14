@@ -425,8 +425,8 @@ const ExtensionsController = (props) => {
 const DocumentController = (props) => {
 
     const 
-        { documentBaseData, mode, sessionDocumentSectionID } = props,
-        baseFields = documentBaseData.base,
+        { documentData, mode, sessionDocumentSectionID } = props,
+        baseFields = documentData.base,
         { name, description, image } = baseFields,
         storage = useStorage(),
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),

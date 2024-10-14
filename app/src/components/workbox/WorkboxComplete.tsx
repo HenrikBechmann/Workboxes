@@ -4,8 +4,9 @@
 /*
     role: display full workbox content - document and resource list, with three toolbars
     - Workbox Toolbar
-    - Document Toolbar
-    - Resource Toolbar
+    - Workbox Content
+        - Document Toolbar
+        - Resource Toolbar
 */
 
 import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'

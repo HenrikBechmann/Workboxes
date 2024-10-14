@@ -1,4 +1,4 @@
-// DisplayController.tsx
+// DisplayPanes.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 import React, { 
@@ -33,7 +33,7 @@ const primaryFrameStyles = {
     boxSizing: 'border-box',
 } as CSSProperties
 
-const DisplayController = (props) => {
+const DisplayPanes = (props) => {
 
     const 
         {
@@ -308,4 +308,4 @@ const DisplayController = (props) => {
     </Box>
 }
 
-export default DisplayController
+export default DisplayPanes

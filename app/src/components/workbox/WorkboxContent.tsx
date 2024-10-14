@@ -7,9 +7,9 @@ import {
     Box, VStack, Center
 } from '@chakra-ui/react'
 
-import DisplayController from './DisplayController'
-import DocumentFrame from './DocumentFrame'
-import ResourcesFrame from './ResourcesFrame'
+import DisplayPanes from './DisplayPanes'
+import DocumentPane from './DocumentPane'
+import ResourcesPane from './ResourcesPane'
 
 import { useWorkboxHandler } from './Workbox'
 
@@ -58,17 +58,17 @@ const WorkboxContent = (props) => { // no props; all in workboxHandler
     },[contentState])
 
     return <Box data-type = 'workbox-content' style = {workboxContentStyles}>
-        <DisplayController 
+        <DisplayPanes 
             documentFrameElementRef = {documentFrameElementRef} 
             resourcesFrameElementRef = {resourcesFrameElementRef} 
         >
-            <DocumentFrame 
+            <DocumentPane 
                 ref = {documentFrameElementRef} 
             />
-            <ResourcesFrame 
+            <ResourcesPane 
                 ref = {resourcesFrameElementRef} 
             />
-        </DisplayController>
+        </DisplayPanes>
     </Box>
     
 } 
