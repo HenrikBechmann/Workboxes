@@ -14,7 +14,7 @@ import ResourcesFrame from './ResourcesFrame'
 import { useWorkboxHandler } from './Workbox'
 
 // sets workboxHandler value below
-export const CONTENT_FRAME_PADDING_WIDTH = 10 // import used by WorkboxController for initialization (a sequencing anomaly)
+export const CONTENT_FRAME_PADDING_WIDTH = 10 // import used by WorkboxComplete for initialization (a sequencing anomaly)
 
 const workboxContentStyles = {
     display:'flex',

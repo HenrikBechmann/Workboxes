@@ -2,8 +2,9 @@
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 /*
+    role: display full Workbox
     The Workwindow must stay inside the dynamically sized Workpane.
-    The Eorkwindow can be resized, minimized (to a stack upper left),
+    The Workwindow can be resized, minimized (to a stack upper left),
     maimized (takes on size of Workpanel viewport), and normalized
     (floating).
     The Workwindow id moveable and stackable (focussed Workwindow on top)
