@@ -333,9 +333,9 @@ const WorkboxController = (props) => {
 const Workbox = (props) => {
 
     const
-        { workboxConfiguration } = props,
+        { workboxSpecification } = props,
 
-        { id:workboxID, sessionid: workboxSessionID} = workboxConfiguration.identity,
+        { id:workboxID, sessionid: workboxSessionID} = workboxSpecification.identity,
 
         [workspaceHandler] = useWorkspaceHandler(),
 
@@ -371,7 +371,7 @@ const Workbox = (props) => {
         const workboxHandler = new WorkboxHandler({workboxID, workboxSessionID, 
             workspaceHandler, onError, onFail, })
 
-        workboxHandler.configuration = workboxConfiguration.configuration
+        workboxHandler.configuration = workboxSpecification.configuration
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
