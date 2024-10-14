@@ -252,8 +252,6 @@ const Workwindow = (props) => {
             subscriptionindex: 'workwindow.' + windowSessionID
         }
 
-        // console.log('subscribeToWorkboxRecord for workWindow workboxSubscriptionControlData', workboxSubscriptionControlData, titleData)
-
         workboxSubscriptionControlDataRef.current = workboxSubscriptionControlData
         await workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
     }
@@ -393,11 +391,6 @@ const Workwindow = (props) => {
                             height: panelFrameElement.offsetHeight + 'px',
                         }
                     )
-                    // windowElement.style.transition = WINDOW_TRANSITION
-                    // windowElement.style.top = 0
-                    // windowElement.style.left = 0
-                    // windowElement.style.width = panelFrameElement.offsetWidth + 'px'
-                    // windowElement.style.height = panelFrameElement.offsetHeight + 'px'
 
                 },1)
 
@@ -414,12 +407,6 @@ const Workwindow = (props) => {
                         height: null,
                         inset: 0,
                     })
-                    // windowElement.style.transition = null
-                    // windowElement.style.top = null
-                    // windowElement.style.left = null
-                    // windowElement.style.width = null
-                    // windowElement.style.height = null
-                    // windowElement.style.inset = 0
 
                     reservedWindowConfigurationRef.current.inprogress = false
 
@@ -461,13 +448,6 @@ const Workwindow = (props) => {
                         }
                     )
                     
-                    // windowElement.style.transition = WINDOW_TRANSITION
-                    // windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
-                    // windowElement.style.left = 0
-                    // windowElement.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
-                    // windowElement.style.height = windowTitlebarElementRef.current.offsetHeight + 'px'
-                    // windowElement.style.overflow = 'hidden'
-
                 },1)
 
                 // wait for animation completion, adjust CSS, set inprogress false for renderWindowFrameStyles
@@ -510,9 +490,6 @@ const Workwindow = (props) => {
                     top: 0,
                     left: 0,
                 })
-                // windowElement.style.inset = null
-                // windowElement.style.top = 0
-                // windowElement.style.left = 0
 
             }
 
@@ -538,11 +515,6 @@ const Workwindow = (props) => {
                     width: reservedLayout.width + 'px',
                     height: reservedLayout.height + 'px',
                 })
-                // windowElement.style.transition = WINDOW_TRANSITION
-                // windowElement.style.top = reservedLayout.top + 'px'
-                // windowElement.style.left = reservedLayout.left + 'px'
-                // windowElement.style.width = reservedLayout.width + 'px'
-                // windowElement.style.height = reservedLayout.height + 'px'
 
             },1)
 
@@ -557,10 +529,6 @@ const Workwindow = (props) => {
                     left: 0,
                     transform: `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`,
                 })
-                // windowElement.style.transition = null
-                // windowElement.style.top = 0
-                // windowElement.style.left = 0
-                // windowElement.style.transform = `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`
 
                 isDraggableDisabledRef.current = false
 
