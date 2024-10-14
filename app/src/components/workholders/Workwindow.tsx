@@ -234,18 +234,6 @@ const Workwindow = (props) => {
 
     },[])
 
-
-    // const workboxSubscriptionControlData = {
-    //     functions:{ // repository for direct calls
-    //         updateWorkboxData: null,
-    //     },
-    //     workbox: {
-    //         id,
-    //         name,
-    //     },
-    //     subscriptionindex: <prefix>.<entityid>
-    // }
-
     const updateWorkboxData = (workboxRecord) => {
         // console.log('WorkWindow.updateWorkboxData: workboxRecord', workboxRecord)
         titleData.name = workboxRecord.profile.workbox.name
@@ -396,11 +384,20 @@ const Workwindow = (props) => {
                 setTimeout(()=>{
 
                     const panelFrameElement = panelFrameElementRef.current
-                    windowElement.style.transition = WINDOW_TRANSITION
-                    windowElement.style.top = 0
-                    windowElement.style.left = 0
-                    windowElement.style.width = panelFrameElement.offsetWidth + 'px'
-                    windowElement.style.height = panelFrameElement.offsetHeight + 'px'
+                    Object.assign(windowElement.style,
+                        {
+                            transition: WINDOW_TRANSITION,
+                            top: 0,
+                            left: 0,
+                            width: panelFrameElement.offsetWidth + 'px',
+                            height: panelFrameElement.offsetHeight + 'px',
+                        }
+                    )
+                    // windowElement.style.transition = WINDOW_TRANSITION
+                    // windowElement.style.top = 0
+                    // windowElement.style.left = 0
+                    // windowElement.style.width = panelFrameElement.offsetWidth + 'px'
+                    // windowElement.style.height = panelFrameElement.offsetHeight + 'px'
 
                 },1)
 
@@ -408,12 +405,21 @@ const Workwindow = (props) => {
                 viewTransitionTimeoutRef.current = setTimeout(()=>{
 
                     if (!isMountedRef.current) return
-                    windowElement.style.transition = null
-                    windowElement.style.top = null
-                    windowElement.style.left = null
-                    windowElement.style.width = null
-                    windowElement.style.height = null
-                    windowElement.style.inset = 0
+
+                    Object.assign(windowElement.style,{
+                        transition: null,
+                        top: null,
+                        left: null,
+                        width: null,
+                        height: null,
+                        inset: 0,
+                    })
+                    // windowElement.style.transition = null
+                    // windowElement.style.top = null
+                    // windowElement.style.left = null
+                    // windowElement.style.width = null
+                    // windowElement.style.height = null
+                    // windowElement.style.inset = 0
 
                     reservedWindowConfigurationRef.current.inprogress = false
 
@@ -444,12 +450,23 @@ const Workwindow = (props) => {
                 // set targets for animation, yielding for base to take effect
                 setTimeout(()=>{
 
-                    windowElement.style.transition = WINDOW_TRANSITION
-                    windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
-                    windowElement.style.left = 0
-                    windowElement.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
-                    windowElement.style.height = windowTitlebarElementRef.current.offsetHeight + 'px'
-                    windowElement.style.overflow = 'hidden'
+                    Object.assign(windowElement.style,
+                        {
+                            transition: WINDOW_TRANSITION,
+                            top: (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px',
+                            left: 0,
+                            width: WINDOW_MINIMIZED_WIDTH + 'px',
+                            height: windowTitlebarElementRef.current.offsetHeight + 'px',
+                            overflow: 'hidden',
+                        }
+                    )
+                    
+                    // windowElement.style.transition = WINDOW_TRANSITION
+                    // windowElement.style.top = (viewDeclaration.stackOrder * windowTitlebarElementRef.current.offsetHeight) + 'px'
+                    // windowElement.style.left = 0
+                    // windowElement.style.width = WINDOW_MINIMIZED_WIDTH + 'px'
+                    // windowElement.style.height = windowTitlebarElementRef.current.offsetHeight + 'px'
+                    // windowElement.style.overflow = 'hidden'
 
                 },1)
 
@@ -488,13 +505,24 @@ const Workwindow = (props) => {
 
             if (previousViewStateRef.current === 'maximized') {
     
-                windowElement.style.inset = null
-                windowElement.style.top = 0
-                windowElement.style.left = 0
+                Object.assign(windowElement.style,{
+                    inset: null,
+                    top: 0,
+                    left: 0,
+                })
+                // windowElement.style.inset = null
+                // windowElement.style.top = 0
+                // windowElement.style.left = 0
+
             }
 
-            windowElement.style.width = currentWidth + 'px'
-            windowElement.style.height = currentHeight + 'px'
+            Object.assign(windowElement.style,{
+                width: currentWidth + 'px',
+                height: currentHeight + 'px',
+            })
+
+            // windowElement.style.width = currentWidth + 'px'
+            // windowElement.style.height = currentHeight + 'px'
 
             reservedWindowConfigurationRef.current.inprogress = true
 
@@ -502,11 +530,19 @@ const Workwindow = (props) => {
             setTimeout(()=>{
 
                 const reservedLayout = reservedWindowConfiguration.layout
-                windowElement.style.transition = WINDOW_TRANSITION
-                windowElement.style.top = reservedLayout.top + 'px'
-                windowElement.style.left = reservedLayout.left + 'px'
-                windowElement.style.width = reservedLayout.width + 'px'
-                windowElement.style.height = reservedLayout.height + 'px'
+
+                Object.assign(windowElement.style,{
+                    transition: WINDOW_TRANSITION,
+                    top: reservedLayout.top + 'px',
+                    left: reservedLayout.left + 'px',
+                    width: reservedLayout.width + 'px',
+                    height: reservedLayout.height + 'px',
+                })
+                // windowElement.style.transition = WINDOW_TRANSITION
+                // windowElement.style.top = reservedLayout.top + 'px'
+                // windowElement.style.left = reservedLayout.left + 'px'
+                // windowElement.style.width = reservedLayout.width + 'px'
+                // windowElement.style.height = reservedLayout.height + 'px'
 
             },1)
 
@@ -514,10 +550,18 @@ const Workwindow = (props) => {
             viewTransitionTimeoutRef.current = setTimeout(()=>{
 
                 if (!isMountedRef.current) return
-                windowElement.style.transition = null
-                windowElement.style.top = 0
-                windowElement.style.left = 0
-                windowElement.style.transform = `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`
+
+                Object.assign(windowElement.style,{
+                    transition: null,
+                    top: 0,
+                    left: 0,
+                    transform: `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`,
+                })
+                // windowElement.style.transition = null
+                // windowElement.style.top = 0
+                // windowElement.style.left = 0
+                // windowElement.style.transform = `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`
+
                 isDraggableDisabledRef.current = false
 
                 const {view, inprogress, layout:layoutData} = reservedWindowConfiguration
