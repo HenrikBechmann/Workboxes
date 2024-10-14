@@ -149,7 +149,7 @@ const Workwindow = (props) => {
         typeAlias = titleData.type?.alias,
         workboxID = titleData.id,
         workboxSubscriptionControlDataRef = useRef(null),
-        defaultWindowConfig = layout, // semantics; only used to initialize dynamicWindowConfiguration
+        defaultWindowLayout = layout, // semantics; only used to initialize dynamicWindowConfiguration
 
         // various elements brought into play
         panelFrameElementRef = useRef(null),
@@ -171,22 +171,24 @@ const Workwindow = (props) => {
         // source of truth for normalized window
         // width and height are set in onResize; top and left set in onDragStop
         // both can be changed with state change in useEffects for containerDimensionSpecs, or viewDeclaration.view
-        [dynamicWindowConfiguration, setDynamicWindowConfiguration] = useState( 
+        [dynamicWindowLayout, setDynamicWindowLayout] = useState( 
             {
-                top: defaultWindowConfig.top, 
-                left: defaultWindowConfig.left, 
-                width: defaultWindowConfig.width, 
-                height: defaultWindowConfig.height
+                top: defaultWindowLayout.top, 
+                left: defaultWindowLayout.left, 
+                width: defaultWindowLayout.width, 
+                height: defaultWindowLayout.height
             }
         ),
         // inside useEffect access for state changes of containerDimensionSpecs and viewDeclaration
-        dynamicWindowConfigurationRef = useRef(null), 
+        dynamicWindowLayoutRef = useRef(null), 
         // memory of normalized config, and spec of state, for minimized and maximized
-        reservedWindowConfigurationRef = useRef({ 
-            width:null,
-            height:null,
-            top: null,
-            left: null,
+        reservedWindowConfigurationRef = useRef({
+            layout: {
+                width:null,
+                height:null,
+                top: null,
+                left: null,
+            },
             view:null,
             inprogress:false,
         }),
@@ -197,12 +199,12 @@ const Workwindow = (props) => {
         renderWindowFrameStyles = { // dynamic update of width and height, and with change of mode
             ...windowFrameStyles,
             width:(!reservedViewDeclaration || is_viewTransformationInProgress)
-                ? dynamicWindowConfiguration.width + 'px'
+                ? dynamicWindowLayout.width + 'px'
                 : reservedViewDeclaration == 'minimized'
                     ?  WINDOW_MINIMIZED_WIDTH + 'px'
                     : null, // maximized
             height:(!reservedViewDeclaration || is_viewTransformationInProgress)
-                ? dynamicWindowConfiguration.height + 'px' 
+                ? dynamicWindowLayout.height + 'px' 
                 : (reservedViewDeclaration == 'minimized')
                     ? windowTitlebarElementRef.current.offsetHeight + 'px'
                     : null, // maximized
@@ -217,7 +219,7 @@ const Workwindow = (props) => {
         viewTransitionTimeoutRef = useRef(null)
 
     // available for closures
-    dynamicWindowConfigurationRef.current = dynamicWindowConfiguration
+    dynamicWindowLayoutRef.current = dynamicWindowLayout
     viewDeclarationRef.current = viewDeclaration
 
     // ------------------------------------[ setup effects ]-----------------------------------
@@ -350,7 +352,7 @@ const Workwindow = (props) => {
 
         // aliases
         const windowElement = windowFrameElementRef.current
-        const windowConfiguration = dynamicWindowConfigurationRef.current
+        const windowLayout = dynamicWindowLayoutRef.current
 
         if (['maximized','minimized'].includes(viewDeclaration.view)) { // not for normalized, that's below
 
@@ -372,7 +374,7 @@ const Workwindow = (props) => {
 
             // save normalized config for later restoration; save target view, inprogress flag
             reservedWindowConfigurationRef.current = {
-                ...windowConfiguration, // might have been changed by configurationSpecs state change
+                layout:{...windowLayout}, // might have been changed by configurationSpecs state change
                 view:viewDeclaration.view,
                 inprogress:true,
             }
@@ -385,8 +387,8 @@ const Workwindow = (props) => {
                 windowElement.style.transform = 'none'
                 if (previousViewStateRef.current == 'normalized') {
 
-                    windowElement.style.top = windowConfiguration.top + 'px'
-                    windowElement.style.left = windowConfiguration.left + 'px'
+                    windowElement.style.top = windowLayout.top + 'px'
+                    windowElement.style.left = windowLayout.left + 'px'
 
                 }
 
@@ -435,8 +437,8 @@ const Workwindow = (props) => {
 
                 } else {
 
-                    windowElement.style.top = windowConfiguration.top + 'px'
-                    windowElement.style.left = windowConfiguration.left + 'px'
+                    windowElement.style.top = windowLayout.top + 'px'
+                    windowElement.style.left = windowLayout.left + 'px'
 
                 }
                 // set targets for animation, yielding for base to take effect
@@ -499,11 +501,12 @@ const Workwindow = (props) => {
             // set targets
             setTimeout(()=>{
 
+                const reservedLayout = reservedWindowConfiguration.layout
                 windowElement.style.transition = WINDOW_TRANSITION
-                windowElement.style.top = reservedWindowConfiguration.top + 'px'
-                windowElement.style.left = reservedWindowConfiguration.left + 'px'
-                windowElement.style.width = reservedWindowConfiguration.width + 'px'
-                windowElement.style.height = reservedWindowConfiguration.height + 'px'
+                windowElement.style.top = reservedLayout.top + 'px'
+                windowElement.style.left = reservedLayout.left + 'px'
+                windowElement.style.width = reservedLayout.width + 'px'
+                windowElement.style.height = reservedLayout.height + 'px'
 
             },1)
 
@@ -514,19 +517,22 @@ const Workwindow = (props) => {
                 windowElement.style.transition = null
                 windowElement.style.top = 0
                 windowElement.style.left = 0
-                windowElement.style.transform = `translate(${reservedWindowConfiguration.left}px,${reservedWindowConfiguration.top}px)`
+                windowElement.style.transform = `translate(${reservedWindowConfiguration.layout.left}px,${reservedWindowConfiguration.layout.top}px)`
                 isDraggableDisabledRef.current = false
 
-                const {view, inprogress, ...configData} = reservedWindowConfiguration
+                const {view, inprogress, layout:layoutData} = reservedWindowConfiguration
 
-                Object.assign(windowConfiguration, configData)
+
+                Object.assign(windowLayout, {...layoutData})
 
                 // reset reserved
                 reservedWindowConfigurationRef.current = {
-                    width:null,
-                    height:null,
-                    top:null,
-                    left:null,
+                    layout:{
+                        width:null,
+                        height:null,
+                        top:null,
+                        left:null,
+                    },
                     view:null,
                     inprogress:false,
                 }
@@ -535,7 +541,7 @@ const Workwindow = (props) => {
 
                 previousViewStateRef.current = 'normalized'
 
-                setDynamicWindowConfiguration(windowConfiguration)
+                setDynamicWindowLayout(windowLayout)
 
                 setWindowState('activatenormalized')
 
@@ -558,32 +564,33 @@ const Workwindow = (props) => {
 
         const 
             reservedWindowConfiguration = reservedWindowConfigurationRef.current,
-            windowConfiguration = dynamicWindowConfigurationRef.current
+            windowLayout = dynamicWindowLayoutRef.current
 
-        let virtualWindowConfig // updated by change of containerDimensionSpecs
+        let virtualWindowLayout // updated by change of containerDimensionSpecs
         if (reservedWindowConfiguration.view) { // can't use dynamic version
 
-            virtualWindowConfig = {
-                width: reservedWindowConfiguration.width,
-                height: reservedWindowConfiguration.height,
-                top: reservedWindowConfiguration.top, // translate value
-                left: reservedWindowConfiguration.left, // translate value
+            const reservedLayout = reservedWindowConfiguration.layout
+            virtualWindowLayout = {
+                width: reservedLayout.width,
+                height: reservedLayout.height,
+                top: reservedLayout.top, // translate value
+                left: reservedLayout.left, // translate value
             }
 
         } else {
 
-            virtualWindowConfig = {
-                width: windowConfiguration.width,
-                height: windowConfiguration.height,
-                top: windowConfiguration.top,
-                left: windowConfiguration.left,
+            virtualWindowLayout = {
+                width: windowLayout.width,
+                height: windowLayout.height,
+                top: windowLayout.top,
+                left: windowLayout.left,
             }
 
         }
 
         const
-            widthFitBoundary = virtualWindowConfig.width + virtualWindowConfig.left,
-            heightFitBoundary = virtualWindowConfig.height + virtualWindowConfig.top
+            widthFitBoundary = virtualWindowLayout.width + virtualWindowLayout.left,
+            heightFitBoundary = virtualWindowLayout.height + virtualWindowLayout.top
 
         // keep entire window inside panel boundaries
         if (containerDimensionSpecs.width < widthFitBoundary || containerDimensionSpecs.height < heightFitBoundary) {
@@ -593,17 +600,17 @@ const Workwindow = (props) => {
             if (containerDimensionSpecs.width < widthFitBoundary) {
                 let widthOversize = widthFitBoundary - containerDimensionSpecs.width
                 const 
-                    newLeft = Math.max(0,virtualWindowConfig.left - widthOversize),
-                    leftShiftApplied = virtualWindowConfig.left - newLeft
+                    newLeft = Math.max(0,virtualWindowLayout.left - widthOversize),
+                    leftShiftApplied = virtualWindowLayout.left - newLeft
 
                 if (leftShiftApplied) { // save
 
-                    virtualWindowConfig.left = newLeft
+                    virtualWindowLayout.left = newLeft
 
                 }
 
                 widthOversize -= leftShiftApplied // remaining oversize
-                virtualWindowConfig.width -= widthOversize
+                virtualWindowLayout.width -= widthOversize
 
             }
 
@@ -611,35 +618,35 @@ const Workwindow = (props) => {
             if (containerDimensionSpecs.height < heightFitBoundary) {
                 let heightOverize = heightFitBoundary - containerDimensionSpecs.height
                 const 
-                    newTop = Math.max(0,virtualWindowConfig.top - heightOverize),
-                    topShiftApplied = virtualWindowConfig.top - newTop
+                    newTop = Math.max(0,virtualWindowLayout.top - heightOverize),
+                    topShiftApplied = virtualWindowLayout.top - newTop
 
                 if (topShiftApplied) {
 
-                    virtualWindowConfig.top = newTop
+                    virtualWindowLayout.top = newTop
 
                 }
 
                 heightOverize -= topShiftApplied // remaining oversize
-                virtualWindowConfig.height -= heightOverize
+                virtualWindowLayout.height -= heightOverize
 
             }
 
             if (!reservedWindowConfiguration.view) {
 
-                setDynamicWindowConfiguration(virtualWindowConfig)
+                setDynamicWindowLayout(virtualWindowLayout)
 
             } else {
 
-                Object.assign(reservedWindowConfiguration, virtualWindowConfig)
+                Object.assign(reservedWindowConfiguration.layout, virtualWindowLayout)
 
             }
 
         }
 
         maxSizeConstraintsRef.current = [
-            containerDimensionSpecs.width - virtualWindowConfig.left, 
-            containerDimensionSpecs.height - virtualWindowConfig.top,
+            containerDimensionSpecs.width - virtualWindowLayout.left, 
+            containerDimensionSpecs.height - virtualWindowLayout.top,
         ]
 
         setWindowState('repositioned')
@@ -665,7 +672,7 @@ const Workwindow = (props) => {
 
         if (isDraggableDisabledRef.current) return
 
-        setDynamicWindowConfiguration((previousState)=>{
+        setDynamicWindowLayout((previousState)=>{
             return {...previousState, width:size.width,height:size.height}})
 
     }
@@ -691,7 +698,7 @@ const Workwindow = (props) => {
 
         }
 
-        setDynamicWindowConfiguration((previousState) => {
+        setDynamicWindowLayout((previousState) => {
             return {...previousState, top:data.y - data.deltaY, left: data.x}
         })
 
@@ -705,8 +712,8 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = { // for Draggable
         top:0, 
-        right:containerDimensionSpecs.width - dynamicWindowConfiguration.width, 
-        bottom:containerDimensionSpecs.height - dynamicWindowConfiguration.height, 
+        right:containerDimensionSpecs.width - dynamicWindowLayout.width, 
+        bottom:containerDimensionSpecs.height - dynamicWindowLayout.height, 
         left:0,
     }
 
@@ -715,7 +722,7 @@ const Workwindow = (props) => {
     <Draggable
         nodeRef = {windowFrameElementRef} // avoid findDomNode deprecated warning
         defaultPosition = {{x:0,y:0}}
-        position = {{x:dynamicWindowConfiguration.left, y:dynamicWindowConfiguration.top}}
+        position = {{x:dynamicWindowLayout.left, y:dynamicWindowLayout.top}}
         handle = '#draghandle'
         bounds = {bounds}
         onStart = {onDragStart}
@@ -733,8 +740,8 @@ const Workwindow = (props) => {
                     viewDeclaration = {viewDeclaration}
                 />
             } 
-            height = {dynamicWindowConfiguration.height} 
-            width = {dynamicWindowConfiguration.width} 
+            height = {dynamicWindowLayout.height} 
+            width = {dynamicWindowLayout.width} 
             axis = 'both'
             resizeHandles = {['se']}
             minConstraints = {[300,300]}
