@@ -2,21 +2,10 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 /*
-    role: display full workbox content - document and resource list
-    Workbox
-    WorkboxComplete
-        WorkboxToolbar
-        WorkboxContent
-
-*/
-
-/*
-    TODO:
-    - Workbox Controller should direct processing to various workbox configurations:
-        window
-        document extra
-        resource listing versions
-
+    role: display full workbox content - document and resource list, with three toolbars
+    - Workbox Toolbar
+    - Document Toolbar
+    - Resource Toolbar
 */
 
 import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'

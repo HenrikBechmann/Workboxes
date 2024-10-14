@@ -2,11 +2,12 @@
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
 /*
-    role: display full workbox content - document and resource list
-    Workbox
-    WorkboxComplete
-        WorkboxToolbar
-        WorkboxContent
+    role: 
+    - display requested workbox content - 
+        WorkboxComplete
+        WorkboxExtra
+        WorkboxListing
+    - create workboxHandler
 
 */
 
