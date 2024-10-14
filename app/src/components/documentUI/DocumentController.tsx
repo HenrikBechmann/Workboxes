@@ -1,6 +1,11 @@
 // DocumentController.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    role:
+        - display various versions of base data, attachments, and extensions
+
+*/
 import React, {useRef, useState, useEffect, useLayoutEffect, CSSProperties, useCallback, useMemo, Suspense, lazy} from 'react'
 
 import {ref, uploadBytes, getDownloadURL } from 'firebase/storage'

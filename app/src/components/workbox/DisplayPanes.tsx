@@ -1,6 +1,11 @@
 // DisplayPanes.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+role:
+    - manipulate display of panes
+*/
+
 import React, { 
     useRef, 
     useEffect, 
