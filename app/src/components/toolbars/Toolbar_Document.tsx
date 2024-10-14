@@ -64,6 +64,7 @@ import lockClosedIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import downloadIcon from '../../../assets/download.png'
 import searchIcon from '../../../assets/search.png'
+import noteAddIcon from '../../../assets/note_add.png'
 
 const smallerIconStyles = {
     height:'18px', 
@@ -81,8 +82,8 @@ const DocumentToolbar = (props) => {
     const 
         { invalidStandardFieldFlagsRef } = props,
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
-        documentConfig = workboxHandler.settings.document,
-        modeSettings = workboxHandler.session.document.modesettings,
+        documentSettings = workboxHandler.settings.document,
+        documentModeSettings = workboxHandler.session.document.modesettings,
         createTypeRef = useRef(null),
         addTypeRef = useRef(null)
 
@@ -95,62 +96,62 @@ const DocumentToolbar = (props) => {
 
     const
         onNormal = (value) => {
-            documentConfig.mode = 'view'
-            modeSettings.view.select = true
-            modeSettings.create.select = false
-            modeSettings.add.select = false
-            modeSettings.edit.select = false
-            modeSettings.remove.select = false
-            // modeSettings.drag.select = false
+            documentSettings.mode = 'view'
+            documentModeSettings.view.select = true
+            documentModeSettings.create.select = false
+            documentModeSettings.add.select = false
+            documentModeSettings.edit.select = false
+            documentModeSettings.remove.select = false
+            // documentModeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onCreate = (value) => {
-            documentConfig.mode = 'create'
-            modeSettings.view.select = false
-            modeSettings.create.select = true
-            modeSettings.add.select = false
-            modeSettings.edit.select = false
-            modeSettings.remove.select = false
-            // modeSettings.drag.select = false
+            documentSettings.mode = 'create'
+            documentModeSettings.view.select = false
+            documentModeSettings.create.select = true
+            documentModeSettings.add.select = false
+            documentModeSettings.edit.select = false
+            documentModeSettings.remove.select = false
+            // documentModeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onAdd = (value) => {
-            documentConfig.mode = 'add'
-            modeSettings.view.select = false
-            modeSettings.create.select = false
-            modeSettings.add.select = true
-            modeSettings.edit.select = false
-            modeSettings.remove.select = false
+            documentSettings.mode = 'add'
+            documentModeSettings.view.select = false
+            documentModeSettings.create.select = false
+            documentModeSettings.add.select = true
+            documentModeSettings.edit.select = false
+            documentModeSettings.remove.select = false
             dispatchWorkboxHandler()
         },
         onEdit = (value) => {
-            documentConfig.mode = 'edit'
-            modeSettings.view.select = false
-            modeSettings.create.select = false
-            modeSettings.add.select = false
-            modeSettings.edit.select = true
-            modeSettings.remove.select = false
-            // modeSettings.drag.select = false
+            documentSettings.mode = 'edit'
+            documentModeSettings.view.select = false
+            documentModeSettings.create.select = false
+            documentModeSettings.add.select = false
+            documentModeSettings.edit.select = true
+            documentModeSettings.remove.select = false
+            // documentModeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onRemove = (value) => {
-            documentConfig.mode = 'remove'
-            modeSettings.view.select = false
-            modeSettings.create.select = false
-            modeSettings.add.select = false
-            modeSettings.edit.select = false
-            modeSettings.remove.select = true
-            // modeSettings.drag.select = false
+            documentSettings.mode = 'remove'
+            documentModeSettings.view.select = false
+            documentModeSettings.create.select = false
+            documentModeSettings.add.select = false
+            documentModeSettings.edit.select = false
+            documentModeSettings.remove.select = true
+            // documentModeSettings.drag.select = false
             dispatchWorkboxHandler()
         },
         onDrag = (value) => {
-            documentConfig.mode = 'drag'
-            modeSettings.view.select = false
-            modeSettings.create.select = false
-            modeSettings.add.select = false
-            modeSettings.edit.select = false
-            modeSettings.remove.select = false
-            // modeSettings.drag.select = true
+            documentSettings.mode = 'drag'
+            documentModeSettings.view.select = false
+            documentModeSettings.create.select = false
+            documentModeSettings.add.select = false
+            documentModeSettings.edit.select = false
+            documentModeSettings.remove.select = false
+            // documentModeSettings.drag.select = true
             dispatchWorkboxHandler()
         },
 
@@ -159,7 +160,7 @@ const DocumentToolbar = (props) => {
             icon:articleIcon, 
             tooltip:'Normal viewing',
             caption:'view',
-            settings:modeSettings.view,
+            settings:documentModeSettings.view,
             is_radio: true,
             callback: onNormal
         }),
@@ -167,15 +168,15 @@ const DocumentToolbar = (props) => {
             icon:insertIcon, 
             tooltip:'Create a section',
             caption:'create',
-            settings:modeSettings.create,
+            settings:documentModeSettings.create,
             is_radio: true,
             callback: onCreate
         }),
         addToggle = useToggleIcon({
-            icon:searchIcon, 
+            icon:noteAddIcon, 
             tooltip:'Add a section',
             caption:'add',
-            settings:modeSettings.add,
+            settings:documentModeSettings.add,
             is_radio: true,
             callback: onAdd
         }),
@@ -183,7 +184,7 @@ const DocumentToolbar = (props) => {
             icon:editIcon, 
             tooltip:'Edit a section',
             caption:'edit',
-            settings:modeSettings.edit,
+            settings:documentModeSettings.edit,
             is_radio: true,
             callback: onEdit
         }),
@@ -191,7 +192,7 @@ const DocumentToolbar = (props) => {
             icon:removeIcon, 
             tooltip:'Remove a section',
             caption:'remove',
-            settings:modeSettings.remove,
+            settings:documentModeSettings.remove,
             is_radio: true,
             callback: onRemove
         }),
@@ -199,7 +200,7 @@ const DocumentToolbar = (props) => {
         //     icon:dragIcon, 
         //     tooltip:'re-order internal section items',
         //     caption:'re-order',
-        //     settings:modeSettings.drag,
+        //     settings:documentModeSettings.drag,
         //     is_radio: true,
         //     callback: onDrag
         // }),
@@ -234,33 +235,33 @@ const DocumentToolbar = (props) => {
     // }
 
     // const toggleDocumentMode = () => {
-    //     if (documentConfig.mode == 'edit') {
+    //     if (documentSettings.mode == 'edit') {
     //         if (isInvalidStandardField()) {
     //             alert('Please correct errors, or cancel edit, before proceeding.')
     //             return
     //         } else {
-    //             documentConfig.mode = 'view'
+    //             documentSettings.mode = 'view'
     //         }
     //     } else {
-    //         documentConfig.mode = 'edit'
+    //         documentSettings.mode = 'edit'
     //     }
     //     dispatchWorkboxHandler()
     // }
 
     // const cancelEdit = () => {
-    //     documentConfig.mode = 'view'
+    //     documentSettings.mode = 'view'
     //     dispatchWorkboxHandler()
     // }
 
     // render
 
-    const selectcreatewidth = (documentConfig.mode == 'create')?'88px':0
+    const selectcreatewidth = (documentSettings.mode == 'create')?'88px':0
 
     const createStyles = useMemo(()=>{
         return Object.assign({}, selectCreateStyles, {width:selectcreatewidth})
     },[selectcreatewidth])
 
-    const selectaddwidth = (documentConfig.mode == 'add')?'88px':0
+    const selectaddwidth = (documentSettings.mode == 'add')?'88px':0
 
     const addStyles = useMemo(()=>{
         return Object.assign({}, selectAddStyles, {width:selectaddwidth})

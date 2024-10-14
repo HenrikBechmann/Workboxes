@@ -84,6 +84,7 @@ class WorkboxHandler {
             }
         },
         document:{
+            mode:'view',
             createblock: null,
             addblock: null,
             createselection: null,

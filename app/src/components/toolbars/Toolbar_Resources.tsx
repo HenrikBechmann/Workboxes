@@ -41,6 +41,7 @@ import settingsIcon from '../../../assets/settings.png'
 import lockIcon from '../../../assets/lock.png'
 import lockOpenIcon from '../../../assets/lock_open.png'
 import searchIcon from '../../../assets/search.png'
+import noteAddIcon from '../../../assets/note_add.png'
 
 const resourcesToolbarStyles = {
     padding:'2px',
@@ -192,7 +193,7 @@ const ResourcesToolbar = (props) => {
             callback: onCreate
         }),
         addToggle = useToggleIcon({
-            icon:searchIcon, 
+            icon:noteAddIcon, 
             tooltip:'Insert a resource',
             caption:'add',
             settings:modeSettings.add,

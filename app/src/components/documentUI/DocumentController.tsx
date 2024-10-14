@@ -36,6 +36,7 @@ import cancelEditIcon from '../../../assets/edit_off.png'
 import tapIcon from '../../../assets/tap.png'
 import dropIcon from '../../../assets/drop.png'
 import searchIcon from '../../../assets/search.png'
+import noteAddIcon from '../../../assets/note_add.png'
 
 const baseStyles = {
 
@@ -351,7 +352,7 @@ const AttachmentsController = (props) => {
                 }
                 {(mode === 'add') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
-                        <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
+                        <SideIcon icon = {noteAddIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
                     </Box>
                 }
                 <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>
@@ -406,10 +407,10 @@ const ExtensionsController = (props) => {
                 }
                 {(mode === 'add') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
-                        <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
+                        <SideIcon icon = {noteAddIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
                     </Box>
                 }
-                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
+                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>
             </>}
         </>}
         {!emptyList && (mode == 'view') && <ExtensionControllers mode = {mode} />}

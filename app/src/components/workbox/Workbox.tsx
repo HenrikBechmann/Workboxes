@@ -135,7 +135,7 @@ const WorkboxController = (props) => {
             doccontrols = workboxHandler.session.document,
             resourcecontrols = workboxHandler.session.resources
 
-        doccontrols.crateblock = createBlock
+        doccontrols.createblock = createBlock
         doccontrols.editblock = editBlock
         doccontrols.removeblock = removeBlock
         doccontrols.reorderblock = reorderBlock
@@ -161,7 +161,38 @@ const WorkboxController = (props) => {
     // },[])
 
     const createBlock = useCallback((sessionID) => { // TODO identify target of insert
-        alert('workbox createUnit ' + sessionID)
+        const 
+            { session } = workboxHandler,
+            { workbox: workboxsession, document: documentsession, resources: resourcessession } = session,
+            { modesettings: workboxmodesettings } = workboxsession,
+            { modesettings: documentmodesettings } = documentsession,
+            { modesettings: resourcesmodesettings } = resourcessession,
+            isChanging = ((documentsession.changesessionid ?? false )|| (resourcessession.changesessionid ?? false))
+
+        if (isChanging) {
+            toast({description:'save or cancel your current change before beginning another',status:'warning'})
+            return false
+        }
+
+        // workboxHandler.editRecord = _cloneDeep(workboxHandler.workboxRecord)
+
+        documentsession.changesessionid = sessionID
+        workboxmodesettings.resources.disable = true
+        documentmodesettings.view.disable = true
+        documentmodesettings.create.disable = false
+        documentmodesettings.add.disable = true
+        documentmodesettings.remove.disable = true
+        documentmodesettings.edit.disable = true
+
+        resourcesmodesettings.create.disable = true
+        resourcesmodesettings.add.disable = true
+        resourcesmodesettings.edit.disable = true
+        resourcesmodesettings.remove.disable = true
+        resourcesmodesettings.drag.disable = true
+
+        dispatchWorkboxHandler()
+
+        return true
     },[])
 
     const editBlock = useCallback((sessionID) => {
@@ -266,12 +297,14 @@ const WorkboxController = (props) => {
         documentmodesettings.create.disable = false
         documentmodesettings.add.disable = false
         documentmodesettings.remove.disable = false
+        documentmodesettings.edit.disable = false
 
         resourcesmodesettings.create.disable = false
         resourcesmodesettings.add.disable = false
         resourcesmodesettings.edit.disable = false
         resourcesmodesettings.remove.disable = false
         resourcesmodesettings.drag.disable = false
+        documentmodesettings.edit.disable = false
 
         workboxHandler.editRecord = null
 
