@@ -307,6 +307,21 @@ const DataController = (props) => {
     </Box></Box>
 }
 
+const AttachmentControllers = (props) => {
+    const
+        { mode } = props,
+        [attachmentComponents,setAttachmentComponents] = useState([])
+
+    useEffect(()=>{
+
+    },[mode])
+
+    return <>
+        {attachmentComponents}
+    </>
+
+}
+
 const AttachmentsController = (props) => {
 
     const 
@@ -338,7 +353,23 @@ const AttachmentsController = (props) => {
                 </Box>
             }
             {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>}
+            {!emptyList && <AttachmentControllers mode = {mode} />}
         </>}
+    </>
+
+}
+
+const ExtensionControllers = (props) => {
+    const
+        { mode } = props,
+        [extensionComponents,setExtensionComponents] = useState([])
+
+    useEffect(()=>{
+
+    },[mode])
+
+    return <>
+        {extensionComponents}
     </>
 
 }
@@ -374,6 +405,7 @@ const ExtensionsController = (props) => {
                 </Box>
             }
             {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
+            {!emptyList && <ExtensionControllers mode = {mode} />}
         </>}
     </>
 
