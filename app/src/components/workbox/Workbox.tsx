@@ -41,6 +41,9 @@ import {
 // import {cloneDeep as _cloneDeep} from 'lodash'
 
 const WorkboxPrimary = lazy(() => import('./WorkboxPrimary'))
+const WorkboxExtra = lazy(() => import('./WorkboxExtra'))
+const WorkboxListing = lazy(() => import('./WorkboxListing'))
+
 // const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
 // const WorkboxToolbar = lazy(() => import('../toolbars/Toolbar_Workbox'))
 // const WorkboxContent = lazy(() => import('./WorkboxContent'))
@@ -71,7 +74,7 @@ export const useWorkboxHandler = () => {
 const Workbox = (props) => {
 
     const
-        { workboxSpecification } = props,
+        { workboxSpecification, version } = props,
 
         { id:workboxID, sessionid: workboxSessionID} = workboxSpecification.identity,
 
@@ -138,7 +141,13 @@ const Workbox = (props) => {
 
 
     return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
-        {workboxHandlerContext.current && <WorkboxPrimary />}
+        {workboxHandlerContext.current && 
+            <>
+                {(version == 'primary') && <WorkboxPrimary />}
+                {(version == 'extra') && <WorkboxExtra />}
+                {(version == 'listing') && <WorkboxListing />}
+            </>
+        }
     </WorkboxHandlerContext.Provider>
 
 }

@@ -320,6 +320,7 @@ const Workpanel = (props:any) => {
             titleData = { titleData }
         >
             <Workbox 
+                version = 'primary'
                 workboxSpecification = { workboxSpecification }
             />
         </WorkboxWindow></Suspense>

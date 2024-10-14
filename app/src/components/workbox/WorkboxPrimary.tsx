@@ -69,7 +69,7 @@ const workboxBodyStyles = {
     minWidth: 0,
 } as CSSProperties
 
-const WorkboxPrimary = (props) => {
+const WorkboxPrimary = (props) => { // no props
     const 
         [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
         workboxFrameElementRef = useRef(null), // for resizeObserver

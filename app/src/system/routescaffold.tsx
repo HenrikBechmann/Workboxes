@@ -10,7 +10,7 @@ const Signin = lazy(()=> import('../pages/Signin'))
 const GeneralRouteController = lazy(()=> import('../components/routing/GeneralRouteController'))
 // public
 const About = lazy(()=> import('../pages/About'))
-const Workbox = lazy(()=> import('../pages/WorkboxShared'))
+const WorkboxShared = lazy(()=> import('../pages/WorkboxShared'))
 const NotFound = lazy(()=> import('../pages/NotFound'))
 const ErrorPage = lazy(()=> import('../pages/ErrorPage'))
 
@@ -153,7 +153,7 @@ const routes = [
             },
             {
                 path: 'workbox',
-                element: <Workbox />
+                element: <WorkboxShared />
             },
             {
                 path: '*',
