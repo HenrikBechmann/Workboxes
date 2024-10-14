@@ -1,6 +1,12 @@
 // Workpanel.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    role:
+    - display use selected workbox windows
+    - manage configuration of workbox windows
+*/
+
 import React, { useState, useRef, useEffect, useCallback, CSSProperties, useMemo, lazy, startTransition, Suspense } from 'react'
 
 import {
@@ -9,7 +15,7 @@ import {
 
 import { cloneDeep as _cloneDeep } from 'lodash'
 
-const Workwindow = lazy(() => import('./Workwindow'))
+const WorkboxWindow = lazy(() => import('./WorkboxWindow'))
 const Workbox = lazy(() => import('./../workbox/Workbox'))
 import WorkboxHandler from '../../classes/WorkboxHandler'
 import {useWorkspaceHandler, useSystemRecords} from '../../system/WorkboxesProvider'
@@ -115,9 +121,9 @@ const Workpanel = (props:any) => {
 
         const startingWindowsSpecs = startingWindowsSpecsRef.current
 
-        for (const startingconfigurations of startingWindowsSpecsRef.current) {
+        for (const startingspecifications of startingWindowsSpecsRef.current) {
 
-            addWindow(startingconfigurations.window, startingconfigurations.workbox)
+            addWindow(startingspecifications.window, startingspecifications.workbox)
 
         }
 
@@ -167,8 +173,6 @@ const Workpanel = (props:any) => {
     }
 
     const showMemberWorkbox = () => {
-
-        // console.log('workspaceHandler.panelMemberRecord.profile',workspaceHandler.panelMemberRecord.profile)
 
         const 
             titleData = Object.assign({},
@@ -305,7 +309,7 @@ const Workpanel = (props:any) => {
             { viewDeclaration, zOrder, layout } = windowSpecification.configuration,
             { titleData } = windowSpecification.identity
 
-        return <Suspense key = {windowSessionID} fallback = {<Loading />}><Workwindow
+        return <Suspense key = {windowSessionID} fallback = {<Loading />}><WorkboxWindow
             key = { windowSessionID } 
             windowSessionID = { windowSessionID }
             viewDeclaration = { viewDeclaration }
@@ -318,7 +322,7 @@ const Workpanel = (props:any) => {
             <Workbox 
                 workboxSpecification = { workboxSpecification }
             />
-        </Workwindow></Suspense>
+        </WorkboxWindow></Suspense>
     }
 
     // ----------------------------[ data callbacks ]--------------------------

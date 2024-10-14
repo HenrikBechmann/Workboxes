@@ -13,7 +13,7 @@ import { useFirestore, useUserAuthData } from '../system/WorkboxesProvider'
 const Draggable = lazy(() => import('react-draggable'))
 // import { useTypes } from '../system/TribalopolisProvider'
 import Drawer, { useDrawers } from '../components/workholders/Drawer'
-const Workwindow = lazy(() => import('../components/workholders/Workwindow'))
+const WorkboxWindow = lazy(() => import('../components/workholders/WorkboxWindow'))
 const Workbox = lazy(() => import('../components/workbox/Workbox'))
 const Workpanel = lazy(() => import('../components/workholders/Workpanel'))
 // import { metatype } from '../system/system.type'

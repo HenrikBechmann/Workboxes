@@ -120,7 +120,7 @@ const WindowHandle = (props) => {
 }
 
 // workWindow is called by Workpanel, which maintains an array of Workwindow components
-const Workwindow = (props) => {
+const WorkboxWindow = (props) => {
 
     // console.log('running Workwindow: props', props)
     // console.log('titleData', props.titleData)
@@ -783,4 +783,4 @@ const Workwindow = (props) => {
     </Draggable>)
 }
 
-export default Workwindow
+export default WorkboxWindow
