@@ -131,11 +131,11 @@ const Workwindow = (props) => {
         {
             children, 
             layout, // default position; size, only used to set defaultwindowConfig
-            // containerDimensionSpecs can
+            // containerLayout can
             // - change dynamicWindowConfiguration (through useEffect for state change)
             // - change maxSizeConstraints for Resizable through useEffect for state change)
             // - helps to set bounds for Draggable
-            containerDimensionSpecs, // height, width of Workpanel; change can cause repositioning and resizing of window
+            containerLayout, // height, width of Workpanel; change can cause repositioning and resizing of window
             titleData, // workbox titleData, for titleName, workboxID
             windowCallbacks, // change zOrder etc.
             windowSessionID, // system control, repo access
@@ -170,7 +170,7 @@ const Workwindow = (props) => {
         // top and left numbers are translation values; styles are left at 0
         // source of truth for normalized window
         // width and height are set in onResize; top and left set in onDragStop
-        // both can be changed with state change in useEffects for containerDimensionSpecs, or viewDeclaration.view
+        // both can be changed with state change in useEffects for containerLayout, or viewDeclaration.view
         [dynamicWindowLayout, setDynamicWindowLayout] = useState( 
             {
                 top: defaultWindowLayout.top, 
@@ -179,7 +179,7 @@ const Workwindow = (props) => {
                 height: defaultWindowLayout.height
             }
         ),
-        // inside useEffect access for state changes of containerDimensionSpecs and viewDeclaration
+        // inside useEffect access for state changes of containerLayout and viewDeclaration
         dynamicWindowLayoutRef = useRef(null), 
         // memory of normalized config, and spec of state, for minimized and maximized
         reservedWindowConfigurationRef = useRef({
@@ -555,18 +555,18 @@ const Workwindow = (props) => {
 
     // --------------
     // adjust window size as necessary to adapt to changed container size; 
-    // responds to new containerDimensionSpecs object
+    // responds to new containerLayout object
     useEffect(()=>{
 
         if (!isMountedRef.current) return
 
-        if (!containerDimensionSpecs) return
+        if (!containerLayout) return
 
         const 
             reservedWindowConfiguration = reservedWindowConfigurationRef.current,
             windowLayout = dynamicWindowLayoutRef.current
 
-        let virtualWindowLayout // updated by change of containerDimensionSpecs
+        let virtualWindowLayout // updated by change of containerLayout
         if (reservedWindowConfiguration.view) { // can't use dynamic version
 
             const reservedLayout = reservedWindowConfiguration.layout
@@ -593,12 +593,12 @@ const Workwindow = (props) => {
             heightFitBoundary = virtualWindowLayout.height + virtualWindowLayout.top
 
         // keep entire window inside panel boundaries
-        if (containerDimensionSpecs.width < widthFitBoundary || containerDimensionSpecs.height < heightFitBoundary) {
+        if (containerLayout.width < widthFitBoundary || containerLayout.height < heightFitBoundary) {
             // adjustments required
 
             // adjust left and width
-            if (containerDimensionSpecs.width < widthFitBoundary) {
-                let widthOversize = widthFitBoundary - containerDimensionSpecs.width
+            if (containerLayout.width < widthFitBoundary) {
+                let widthOversize = widthFitBoundary - containerLayout.width
                 const 
                     newLeft = Math.max(0,virtualWindowLayout.left - widthOversize),
                     leftShiftApplied = virtualWindowLayout.left - newLeft
@@ -615,8 +615,8 @@ const Workwindow = (props) => {
             }
 
             // adjust top and height
-            if (containerDimensionSpecs.height < heightFitBoundary) {
-                let heightOverize = heightFitBoundary - containerDimensionSpecs.height
+            if (containerLayout.height < heightFitBoundary) {
+                let heightOverize = heightFitBoundary - containerLayout.height
                 const 
                     newTop = Math.max(0,virtualWindowLayout.top - heightOverize),
                     topShiftApplied = virtualWindowLayout.top - newTop
@@ -645,13 +645,13 @@ const Workwindow = (props) => {
         }
 
         maxSizeConstraintsRef.current = [
-            containerDimensionSpecs.width - virtualWindowLayout.left, 
-            containerDimensionSpecs.height - virtualWindowLayout.top,
+            containerLayout.width - virtualWindowLayout.left, 
+            containerLayout.height - virtualWindowLayout.top,
         ]
 
         setWindowState('repositioned')
 
-    },[containerDimensionSpecs])
+    },[containerLayout])
 
     // -----------------------------[ resizeable and draggable callbacks ]-----------------------------
 
@@ -703,8 +703,8 @@ const Workwindow = (props) => {
         })
 
         maxSizeConstraintsRef.current = [
-            containerDimensionSpecs.width - data.x, 
-            containerDimensionSpecs.height - (data.y - data.deltaY),
+            containerLayout.width - data.x, 
+            containerLayout.height - (data.y - data.deltaY),
         ]
     }
 
@@ -712,8 +712,8 @@ const Workwindow = (props) => {
     // this makes no difference to the deltaY shift problem...
     const bounds = { // for Draggable
         top:0, 
-        right:containerDimensionSpecs.width - dynamicWindowLayout.width, 
-        bottom:containerDimensionSpecs.height - dynamicWindowLayout.height, 
+        right:containerLayout.width - dynamicWindowLayout.width, 
+        bottom:containerLayout.height - dynamicWindowLayout.height, 
         left:0,
     }
 
