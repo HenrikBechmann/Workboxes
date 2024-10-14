@@ -341,19 +341,22 @@ const AttachmentsController = (props) => {
                     : null
 
     return <>
-        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
-            {((mode === 'create') && attachments.list.length == 0) && 
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
-                </Box>
-            }
-            {((mode === 'add') && attachments.list.length == 0) && 
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
-                </Box>
-            }
-            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>}
-            {!emptyList && <AttachmentControllers mode = {mode} />}
+        {(mode !== 'view') && <>
+            <SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
+            {emptyList && <>
+                {(mode === 'create') && 
+                    <Box style = {actionIconStyles} data-type = 'actionbox'>
+                        <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
+                    </Box>
+                }
+                {(mode === 'add') && 
+                    <Box style = {actionIconStyles} data-type = 'actionbox'>
+                        <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
+                    </Box>
+                }
+                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>
+            </>}
+            {!emptyList && (mode == 'view') && <AttachmentControllers mode = {mode} />}
         </>}
     </>
 
@@ -393,20 +396,23 @@ const ExtensionsController = (props) => {
                     : null
 
     return <>
-        {(mode !== 'view') && <><SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
-            {((mode === 'create') && extensions.list.length == 0) && 
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an extension' caption = 'create'/>
-                </Box>
-            }
-            {((mode === 'add') && extensions.list.length == 0) && 
-                <Box style = {actionIconStyles} data-type = 'actionbox'>
-                    <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
-                </Box>
-            }
-            {emptyList && <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
-            {!emptyList && <ExtensionControllers mode = {mode} />}
+        {(mode !== 'view') && <>
+            <SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
+            {emptyList && <>
+                {(mode === 'create') && 
+                    <Box style = {actionIconStyles} data-type = 'actionbox'>
+                        <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an extension' caption = 'create'/>
+                    </Box>
+                }
+                {(mode === 'add') && 
+                    <Box style = {actionIconStyles} data-type = 'actionbox'>
+                        <SideIcon icon = {searchIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
+                    </Box>
+                }
+                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>}
+            </>}
         </>}
+        {!emptyList && (mode == 'view') && <ExtensionControllers mode = {mode} />}
     </>
 
 }
