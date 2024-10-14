@@ -7,8 +7,8 @@ import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
 import { useUserAuthData, useUserRecords, useAuth, useErrorControl } from '../../system/WorkboxesProvider'
 
-const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
-const ToolbarStandard = lazy(() => import('../toolbars/Toolbar_Standard'))
+const ToolbarFrame = lazy(() => import('../../components/toolbars/Toolbar_Frame'))
+const ToolbarStandard = lazy(() => import('../../components/toolbars/Toolbar_Standard'))
 
 const bodyStyle = {
     height: '100%', 
