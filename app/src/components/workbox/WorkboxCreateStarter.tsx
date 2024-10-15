@@ -54,7 +54,7 @@ const WorkboxCreateStarter = (props) => {
             const 
                 target = event.target as HTMLInputElement,
                 value = target.value
-
+            isInvalidTests.name(value)
             setEditData({name:value})
         },
     }
@@ -62,7 +62,7 @@ const WorkboxCreateStarter = (props) => {
         // TODO check for blank, string
         name:(value) => {
             let isInvalid = false
-            if (value.length > maxNameLength || value.length < minNameLength) {
+            if ((value.length > maxNameLength) || (value.length < minNameLength)) {
                 isInvalid = true
             }
             if (!isInvalid) {
@@ -84,7 +84,7 @@ const WorkboxCreateStarter = (props) => {
                 <Flex data-type = 'documenteditflex' align = 'center'>
                     <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
                     <Input 
-                        value = {editData.name || 'untitled'} 
+                        value = {editData.name} 
                         size = 'sm'
                         onChange = {onChangeFunctions.name}
                     >
