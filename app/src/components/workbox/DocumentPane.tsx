@@ -134,7 +134,7 @@ const DocumentHandle = (props) => {
 const DocumentFrame = forwardRef(function DocumentFrame(props:any, documentFrameElementRef:any) {
     const 
         // context
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         // triggers state change
         displayCode = workboxHandler.configuration.document.displaycode, // out, over, under
 

@@ -9,7 +9,7 @@ const DataNoteDisplay = lazy(()=> import('./Data_Note_Display'))
 
 const BaseDataDisplayController = () => {
     const
-        [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
+        [ workboxHandler ] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         workboxType = workboxRecord.profile.type.name
 

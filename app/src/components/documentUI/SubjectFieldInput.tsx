@@ -18,7 +18,7 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const SubjectFieldInput = (props) => {
     const 
         {editBaseRecord} = props,
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
         minNameLength = systemRecords.settings.constraints.input.nameLength_min,

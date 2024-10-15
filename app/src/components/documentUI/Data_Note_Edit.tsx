@@ -30,7 +30,7 @@ const DataNoteEdit = () => {
 
     const 
         storage = useStorage(),
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord?.document.base || 
             workboxHandler.workboxRecord.document.base,
         { editRecord } = workboxHandler,

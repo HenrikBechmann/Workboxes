@@ -29,7 +29,7 @@ const workboxContentStyles = {
 const WorkboxContent = (props) => { // no props; all in workboxHandler
 
     const 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
 
         // create delay to obtain forward references
         [contentState,setContentState] = useState( 'setup' ), // create cycle for forward reference updates

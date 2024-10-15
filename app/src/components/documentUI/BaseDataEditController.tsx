@@ -9,7 +9,7 @@ const DataNoteEdit = lazy(()=> import('./Data_Note_Edit'))
 
 const BaseDataEditController = () => {
     const
-        [ workboxHandler, dispatchWorkboxHandler ] = useWorkboxHandler(),
+        [ workboxHandler ] = useWorkboxHandler(),
         { editRecord } = workboxHandler,
         workboxType = editRecord?.profile.type.name || workboxHandler.workboxRecord.profile.type.name
 

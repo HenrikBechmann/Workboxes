@@ -434,7 +434,7 @@ const DocumentController = (props) => {
         baseFields = documentData.base,
         { name, description, image } = baseFields,
         storage = useStorage(),
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         {document: sessiondocument} = workboxHandler.session,
         blockIDMapRef = useRef(new Map([
             ['todo',sessionDocumentSectionID + '.base.todo'],

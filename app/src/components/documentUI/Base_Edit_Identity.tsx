@@ -46,7 +46,7 @@ const basicAlternateActionIconStyles = {
 const Base_Edit_Identity = (props) => {
 
     const 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         editBaseRecord = workboxHandler.editRecord?.document.base || 
             workboxHandler.workboxRecord.document.base,
         { controlPack } = props,

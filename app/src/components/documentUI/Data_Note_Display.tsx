@@ -15,7 +15,7 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 const DataNoteDisplay = () => {
 
     const 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
         { workboxRecord } = workboxHandler,
         documentData = workboxRecord.document.data,
         documentFiles = workboxRecord.document.files,

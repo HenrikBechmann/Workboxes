@@ -49,7 +49,7 @@ const DisplayPanes = (props) => {
 
         } = props,
 
-        [workboxHandler, dispatchWorkboxHandler] = useWorkboxHandler(),
+        [workboxHandler] = useWorkboxHandler(),
 
         // triggers state change...
         displayCode = workboxHandler.configuration.content.displaycode, // both, resources, document
