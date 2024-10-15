@@ -430,7 +430,7 @@ const ExtensionsController = (props) => {
 
     return <>
         {(mode !== 'view') && <>
-            <SectionDivider type = 'block' title = 'Extra document sections (shown only with full workbox display)'/>
+            <SectionDivider type = 'block' title = 'Extended document sections (shown only with full workbox display)'/>
             {emptyList && <>
                 {(mode === 'create') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
@@ -666,7 +666,7 @@ const DocumentController = (props) => {
         basecontent = [identityController, thumbnailController, dataController]
     }
 
-    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '28px'}>
+    return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '32px'}>
         
         {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content (shown in workbox lists)'/>}
         <Box data-type = 'documentcontrolframe'>

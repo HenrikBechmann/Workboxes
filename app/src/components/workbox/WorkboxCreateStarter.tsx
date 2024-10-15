@@ -74,30 +74,32 @@ const WorkboxCreateStarter = (props) => {
             return isInvalid
         },
     }
-    return <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+    return <>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
-        <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
-            isInvalid = {invalidFieldFlags.name}>
-            <Flex data-type = 'documenteditflex' align = 'center'>
-                <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
-                <Input 
-                    value = {editData.name || 'untitled'} 
-                    size = 'sm'
-                    onChange = {onChangeFunctions.name}
-                >
-                </Input>
-            </Flex>
-            <FormErrorMessage mt = '0'>
-                {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
-            </FormErrorMessage>
-            <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
-                {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
-            </FormHelperText>
-        </FormControl>
-        <Button onClick = {response} colorScheme = 'blue'>{prompt}</Button>
-    </Box>
+        <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+            <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
+                isInvalid = {invalidFieldFlags.name}>
+                <Flex data-type = 'documenteditflex' align = 'center'>
+                    <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'3px'}} fontSize = 'sm'>Subject:</FormLabel>
+                    <Input 
+                        value = {editData.name || 'untitled'} 
+                        size = 'sm'
+                        onChange = {onChangeFunctions.name}
+                    >
+                    </Input>
+                </Flex>
+                <FormErrorMessage mt = '0'>
+                    {errorMessages.name} Current length is {editData.name?.length || '0 (blank)'}.
+                </FormErrorMessage>
+                <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
+            <Button onClick = {response} colorScheme = 'blue'>{prompt}</Button>
+        </Box>
+    </>
 }
 
 export default WorkboxCreateStarter
