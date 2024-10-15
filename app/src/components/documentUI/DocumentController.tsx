@@ -31,6 +31,7 @@ const Base_Edit_Data = lazy(()=> import('./Base_Edit_Data'))
 const Base_EditMode_Identity = lazy(()=> import('./Base_EditMode_Identity'))
 const Base_EditMode_Thumbnail = lazy(()=> import('./Base_EditMode_Thumbnail'))
 const Base_EditMode_Data = lazy(()=> import('./Base_EditMode_Data'))
+const WorkboxCreateStarter = lazy(()=> import('../workbox/WorkboxCreateStarter'))
 
 import insertIcon from '../../../assets/add.png'
 import editIcon from '../../../assets/edit.png'
@@ -333,10 +334,11 @@ const AttachmentsController = (props) => {
     const 
         { controlPack } = props,
         { mode } = controlPack,
-        { onCreate } = controlPack.actionResponses,
-        { onAdd } = controlPack.actionResponses,
+        // { onCreate } = controlPack.actionResponses,
+        // { onAdd } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {attachments} = workboxHandler.workboxRecord.document.data,
+        [activeCreate, setActiveCreate] = useState(false),
         isDisabled = !!controlPack.currentEditBlockID,
         emptyList = attachments.list.length == 0,
         extraText = 
@@ -346,21 +348,38 @@ const AttachmentsController = (props) => {
                     ? ' - nothing to edit'
                     : null
 
+    const onAdd = () => {
+        controlPack.actionResponses.onAdd(controlPack.blockIDMap.get('attachments'))
+    }
+
+    const onCreate = () => {
+        controlPack.actionResponses.onCreate(controlPack.blockIDMap.get('attachments'))
+        setActiveCreate(true)
+    }
+
     return <>
         {(mode !== 'view') && <>
             <SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
             {emptyList && <>
                 {(mode === 'create') && 
-                    <Box style = {actionIconStyles} data-type = 'actionbox'>
-                        <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
-                    </Box>
+                    <>
+                        {(!activeCreate) && 
+                            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                                <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
+                            </Box>
+                        }
+                        {(activeCreate) && 
+                            <WorkboxCreateStarter prompt = 'create add-on'/>
+                        }
+                    </>
                 }
                 {(mode === 'add') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
                         <SideIcon icon = {noteAddIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an add-on' caption = 'add'/>
                     </Box>
                 }
-                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>
+                {!activeCreate && 
+                    <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current add-on sections {extraText})</Box>}
             </>}
             {!emptyList && (mode == 'view') && <AttachmentControllers mode = {mode} />}
         </>}
@@ -388,8 +407,8 @@ const ExtensionsController = (props) => {
     const 
         { controlPack } = props,
         { mode } = controlPack,
-        { onCreate } = controlPack.actionResponses,
-        { onAdd } = controlPack.actionResponses,
+        // { onCreate } = controlPack.actionResponses,
+        // { onAdd } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {extensions} = workboxHandler.workboxRecord.document,
         isDisabled = !!controlPack.currentEditBlockID,
@@ -400,6 +419,14 @@ const ExtensionsController = (props) => {
                 : mode == 'edit'
                     ? ' - nothing to edit'
                     : null
+
+    const onAdd = () => {
+
+    }
+
+    const onCreate = () => {
+
+    }
 
     return <>
         {(mode !== 'view') && <>
@@ -441,6 +468,8 @@ const DocumentController = (props) => {
             ['identity',sessionDocumentSectionID + '.base.identity'],
             ['thumbnail',sessionDocumentSectionID + '.base.thumbnail'],
             ['data',sessionDocumentSectionID + '.base.data'],
+            ['attachments',sessionDocumentSectionID + '.attachments'],
+            ['extensions',sessionDocumentSectionID + '.extensions'],
         ]))
 
     let actionIcon, response, tooltip, canceltip

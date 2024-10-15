@@ -1,7 +1,7 @@
 // WorkboxCreateStarter.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, lazy, CSSProperties} from 'react'
 
 import {
     Box,
@@ -11,7 +11,20 @@ import {
     Button
 } from '@chakra-ui/react'
 
+const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
+
 import { useSystemRecords } from '../../system/WorkboxesProvider'
+
+const actionIconStyles = {
+    height: '36px',
+    width: '24px',
+    marginLeft: '-28px',
+    float:'left',
+    position:'sticky',
+    top:0,
+} as CSSProperties
+
+import cancelEditIcon from '../../../assets/edit_off.png'
 
 const WorkboxCreateStarter = (props) => {
 
@@ -29,8 +42,12 @@ const WorkboxCreateStarter = (props) => {
         invalidFieldFlagsRef = useRef({
             name:false,
         }),
-        [editData, setEditData] = useState({name:'unitled'}),
+        [editData, setEditData] = useState({name:'untitled'}),
         invalidFieldFlags = invalidFieldFlagsRef.current
+
+    const onCancel = () => {
+
+    }
 
     const onChangeFunctions = {
         name:(event) => {
@@ -58,6 +75,9 @@ const WorkboxCreateStarter = (props) => {
         },
     }
     return <Box data-type = 'namefield' margin = '3px' padding = '3px'>
+        <Box style = {actionIconStyles} data-type = 'actionbox'>
+            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+        </Box>
         <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
             isInvalid = {invalidFieldFlags.name}>
             <Flex data-type = 'documenteditflex' align = 'center'>
