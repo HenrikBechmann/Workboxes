@@ -323,6 +323,11 @@ const versionData = {
         accepts: [],
         locked: false,
       },
+      standard_resources: {
+        types:null,
+        extras:null,
+        parents:null,
+      }
     }],
     domain: [
     {
@@ -408,6 +413,11 @@ const versionData = {
         accepts: [],
         locked: false,
       },
+      standard_resources: {
+        types:null,
+        extras:null,
+        parents:null,
+      }
     }],
     member: [
     {
@@ -501,6 +511,11 @@ const versionData = {
         accepts: [],
         locked: false,
       },
+      standard_resources: {
+        types:null,
+        extras:null,
+        parents:null,
+      }
     }],
   },
   accounts: {
