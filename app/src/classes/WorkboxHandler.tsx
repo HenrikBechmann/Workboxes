@@ -62,6 +62,7 @@ class WorkboxHandler {
     editRecord = null
     editoreditcontent = null
     resourcesRecords = []
+    version // primary, extra, listing
 
     // --------------------[ process control & tracking ]------------------------
     configuration

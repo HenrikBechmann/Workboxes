@@ -108,6 +108,7 @@ const Workbox = (props) => {
             workspaceHandler, onError, onFail, })
 
         workboxHandler.configuration = workboxSpecification.configuration
+        workboxHandler.version = version
         workboxHandler.internal.setWorkboxHandlerContext = setWorkboxHandlerContext
         workboxHandler.internal.onError = onError
         workboxHandler.internal.onFail = onFail
