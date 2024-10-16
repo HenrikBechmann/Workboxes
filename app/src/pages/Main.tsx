@@ -8,7 +8,7 @@
 
 */
 
-import React, { useState, useEffect, lazy } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
@@ -99,7 +99,7 @@ export const Main = (props) => {
     // },[workspaceHandler.workspaceSelection.id, mainState])
     },[workspaceHandler.workspaceSelection, mainState])
 
-    return ((mainState == 'ready') && <Workspace />)
+    return ((mainState == 'ready') && <Suspense><Workspace /></Suspense>)
 }
 
 export default Main

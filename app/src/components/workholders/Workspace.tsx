@@ -245,10 +245,10 @@ const Workspace = (props) => {
 
     // the scroller enables scrolling components throughout TODO s/b a provider
     return <Box ref = {workspaceFrameElementRef} data-type = 'workspace-container' position = 'absolute' inset = {0}>
-        <Scroller 
+        <Suspense><Scroller 
             layout = 'static' 
             staticComponent = {workspaceComponent} 
-            dndOptions = {scrollerAcceptsRef.current} />
+            dndOptions = {scrollerAcceptsRef.current} /></Suspense>
     </Box>
 } 
 
