@@ -23,7 +23,6 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
-const Loading = lazy(() => import('../../system/Loading'))
 const SectionDivider = lazy(()=> import('./SectionDivider'))
 const Base_Edit_Identity = lazy(()=> import('./Base_Edit_Identity'))
 const Base_Edit_Thumbnail = lazy(()=> import('./Base_Edit_Thumbnail'))
@@ -112,18 +111,14 @@ const animateModeChange = (element) => {
 
         element.style.transition = animateTransition
 
-        // setTimeout(()=>{
             requestAnimationFrame(()=> {
                 element.style.height = sectionHeight + 'px';
                 element.style.opacity = 1
-                // setTimeout(()=>{
-                    requestAnimationFrame(()=> {
-                        element.style.transition = ''
-                        element.style.height = 'auto'
-                    })
-                // },600)
+                requestAnimationFrame(()=> {
+                    element.style.transition = ''
+                    element.style.height = 'auto'
+                })
             })
-        // },25)           
 
     });
 
@@ -160,7 +155,7 @@ const Base_Display_Thumbnail = (props) => {
 const Base_Display_Data = (props) => {
 
     return <Box style = {{clear:'left'}} >
-        <BaseDataDisplayController />
+        <Suspense><BaseDataDisplayController /></Suspense>
     </Box>
 
 }
@@ -207,10 +202,10 @@ const IdentityController = (props) => {
     return <Box ref = {animationBoxRef}><Box>
         {(newMode !='edit') && <Base_Display_Identity name = {name} description = {description} />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Workbox identity information'/>
+            <Suspense><SectionDivider isDisabled = {isDisabled} title = 'Workbox identity information'/></Suspense>
             {isActiveEdit
-                ? <Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} />
-                : <Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} />
+                ? <Suspense><Base_Edit_Identity name = {name} description = {description} controlPack = {controlPack} /></Suspense>
+                : <Suspense><Base_EditMode_Identity name = {name} description = {description} controlPack = {controlPack} /></Suspense>
             }
         </>}
     </Box></Box>
@@ -256,10 +251,10 @@ const ThumbnailController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Thumbnail thumbnail = {thumbnail} />}
         {(newMode =='edit') && <> 
-            <SectionDivider isDisabled = {isDisabled} title = 'Iconic image (optional)'/>
+            <Suspense><SectionDivider isDisabled = {isDisabled} title = 'Iconic image (optional)'/></Suspense>
             {isActiveEdit
-                ? <Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
-                : <Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/>
+                ? <Suspense><Base_Edit_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/></Suspense>
+                : <Suspense><Base_EditMode_Thumbnail thumbnail = {thumbnail} controlPack = {controlPack}/></Suspense>
             }
         </>}
     </Box></Box>
@@ -305,10 +300,10 @@ const DataController = (props) => {
     return <Box ref = {animationBoxRef} ><Box>
         {(newMode !='edit') && <Base_Display_Data />}
         {(newMode == 'edit') && <>
-            <SectionDivider isDisabled = {isDisabled} title = 'Main document content'/>
+            <Suspense><SectionDivider isDisabled = {isDisabled} title = 'Main document content'/></Suspense>
             {isActiveEdit
-                ? <Base_Edit_Data controlPack = {controlPack} />
-                : <Base_EditMode_Data controlPack = {controlPack}/>
+                ? <Suspense><Base_Edit_Data controlPack = {controlPack} /></Suspense>
+                : <Suspense><Base_EditMode_Data controlPack = {controlPack}/></Suspense>
             }
         </>}
     </Box></Box>
@@ -359,7 +354,7 @@ const AttachmentsController = (props) => {
 
     return <>
         {(mode !== 'view') && <>
-            <SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/>
+            <Suspense><SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/></Suspense>
             {emptyList && <>
                 {(mode === 'create') && 
                     <>
@@ -369,7 +364,7 @@ const AttachmentsController = (props) => {
                             </Box>
                         }
                         {(activeCreate) && 
-                            <WorkboxCreateStarter context = 'attachment'/>
+                            <Suspense><WorkboxCreateStarter context = 'attachment'/></Suspense>
                         }
                     </>
                 }
@@ -430,7 +425,7 @@ const ExtensionsController = (props) => {
 
     return <>
         {(mode !== 'view') && <>
-            <SectionDivider type = 'block' title = 'Extended document sections (shown only with full workbox display)'/>
+            <Suspense><SectionDivider type = 'block' title = 'Extended document sections (shown only with full workbox display)'/></Suspense>
             {emptyList && <>
                 {(mode === 'create') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
@@ -668,7 +663,7 @@ const DocumentController = (props) => {
 
     return <Box data-type = 'documentbase' style = {baseStyles} marginLeft = {mode == 'view'?'0': '32px'}>
         
-        {(mode !== 'view') && <SectionDivider type = 'block' title = 'Base document content (shown in workbox lists)'/>}
+        {(mode !== 'view') && <Suspense><SectionDivider type = 'block' title = 'Base document content (shown in workbox lists)'/></Suspense>}
         <Box data-type = 'documentcontrolframe'>
         {basecontent}
         </Box>

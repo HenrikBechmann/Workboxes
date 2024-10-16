@@ -20,7 +20,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, Suspense, lazy } from 'react'
 
 import {
     Box,
@@ -144,9 +144,9 @@ const Workbox = (props) => {
     return <WorkboxHandlerContext.Provider value = {workboxHandlerContext} >
         {workboxHandlerContext.current && 
             <>
-                {(version == 'primary') && <WorkboxPrimary />}
-                {(version == 'extra') && <WorkboxExtra />}
-                {(version == 'listing') && <WorkboxListing />}
+                {(version == 'primary') && <Suspense><WorkboxPrimary /></Suspense>}
+                {(version == 'extra') && <Suspense><WorkboxExtra /></Suspense>}
+                {(version == 'listing') && <Suspense><WorkboxListing /></Suspense>}
             </>
         }
     </WorkboxHandlerContext.Provider>

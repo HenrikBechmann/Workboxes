@@ -16,6 +16,8 @@ import {
     Box
 } from '@chakra-ui/react'
 
+import Loading from '../../system/Loading'
+
 const DocumentController = lazy(()=>import('./DocumentController'))
 
 import { useWorkboxHandler } from '../workbox/Workbox'
@@ -63,8 +65,8 @@ const DocumentPane = (props) => {
     },[contentState])
 
     return <Box>
-        <Suspense>
-            {is_workboxRecordParameterRef.current && documentComponentRef.current}
+        <Suspense fallback = {<Loading />}>
+            {is_workboxRecordParameterRef.current && <Suspense>{documentComponentRef.current}</Suspense>}
         </Suspense>
     </Box>
 }

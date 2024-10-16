@@ -1,7 +1,7 @@
 // Data_Note_Edit.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, lazy} from 'react'
+import React, {useState, useRef, Suspense, lazy} from 'react'
 
 import {
     Box,
@@ -74,7 +74,7 @@ const DataNoteEdit = () => {
     }
 
     return <Box>
-        <SubjectFieldInput editBaseRecord = {editBaseRecord} />
+        <Suspense><SubjectFieldInput editBaseRecord = {editBaseRecord} /></Suspense>
         <BlockNoteView editor={editor} onChange= {changeData} />
     </Box>
 }

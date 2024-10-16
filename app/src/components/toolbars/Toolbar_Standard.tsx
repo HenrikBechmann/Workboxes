@@ -1,7 +1,7 @@
 // Toolbar_Standard.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect, lazy} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect, Suspense, lazy} from 'react'
 import { signOut } from "firebase/auth"
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -341,14 +341,14 @@ const StandardToolbar = (props) => {
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} 
             caption = 'hide' tooltip = 'hide toolbar'/></>}
         <span>&nbsp;&nbsp;</span>
-        {workspaceWriteDialogState.open && <WorkspaceWriteDialog 
-            workspaceWriteDialogState = {workspaceWriteDialogState} setWorkspaceWriteDialogState = {setWorkspaceWriteDialogState}/>}
-        {workspaceDeleteDialogState && <WorkspaceDeleteDialog 
-            setWorkspaceDeleteDialogState = {setWorkspaceDeleteDialogState} setWorkspaceResetDialogState = {setWorkspaceResetDialogState}/>}
-        {workspaceSaveAsDialogState && <WorkspaceSaveAsDialog setWorkspaceSaveAsDialogState = {setWorkspaceSaveAsDialogState} />}
-        {saveDialogState && <WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} />}
-        {workspaceResetDialogState && <WorkspaceResetDialog setWorkspaceResetDialogState = {setWorkspaceResetDialogState} />}
-        {workspaceSetDefaultDialogState && <WorkspaceSetDefaultDialog setWorkspaceSetDefaultDialogState = {setWorkspaceSetDefaultDialogState} />}
+        {workspaceWriteDialogState.open && <Suspense><WorkspaceWriteDialog 
+            workspaceWriteDialogState = {workspaceWriteDialogState} setWorkspaceWriteDialogState = {setWorkspaceWriteDialogState}/></Suspense>}
+        {workspaceDeleteDialogState && <Suspense><WorkspaceDeleteDialog 
+            setWorkspaceDeleteDialogState = {setWorkspaceDeleteDialogState} setWorkspaceResetDialogState = {setWorkspaceResetDialogState}/></Suspense>}
+        {workspaceSaveAsDialogState && <Suspense><WorkspaceSaveAsDialog setWorkspaceSaveAsDialogState = {setWorkspaceSaveAsDialogState} /></Suspense>}
+        {saveDialogState && <Suspense><WorkspaceSaveDialog setSaveDialogState = {setSaveDialogState} /></Suspense>}
+        {workspaceResetDialogState && <Suspense><WorkspaceResetDialog setWorkspaceResetDialogState = {setWorkspaceResetDialogState} /></Suspense>}
+        {workspaceSetDefaultDialogState && <Suspense><WorkspaceSetDefaultDialog setWorkspaceSetDefaultDialogState = {setWorkspaceSetDefaultDialogState} /></Suspense>}
     </Box>
 }
 

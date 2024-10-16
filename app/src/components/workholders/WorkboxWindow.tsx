@@ -16,7 +16,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, CSSProperties, lazy } from 'react'
+import React, { useState, useRef, useEffect, CSSProperties, Suspense, lazy } from 'react'
 
 import {
     Grid, GridItem,
@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 
 // both Draggable and Resizable apply their dynamics to the existing wrapped element
-const Draggable = lazy(() => import('react-draggable'))
+import Draggable from 'react-draggable'
 import { Resizable } from 'react-resizable'
 import "react-resizable/css/styles.css"
 
@@ -769,7 +769,13 @@ const WorkboxWindow = (props) => {
                     style = {windowGridStyles}
                 >
                     <GridItem data-type = 'window-header' style = {windowHeaderStyles}>
-                        <WindowTitle windowCallbacks = {windowCallbacks} windowSessionID = {windowSessionID} ref = {windowTitleElementRef} type = {typeAlias} title = {titleName}/>
+                        <Suspense><WindowTitle 
+                            windowCallbacks = {windowCallbacks} 
+                            windowSessionID = {windowSessionID} 
+                            ref = {windowTitleElementRef} 
+                            type = {typeAlias} 
+                            title = {titleName}/>
+                        </Suspense>
                     </GridItem>
                     <GridItem data-type = 'window-body' style = {windowBodyStyles}>
                         <Box 

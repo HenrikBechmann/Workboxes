@@ -1,7 +1,7 @@
 // PanelReorderDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, useMemo, useEffect, lazy} from 'react'
+import React, {useRef, useState, useMemo, useEffect, Suspense, lazy} from 'react'
 
 import {
     Button, Text, Box,
@@ -136,7 +136,7 @@ const PanelReorderDialog = (props) => {
 
                     <AlertDialogBody fontSize = 'sm' height = '100%'>
                         <Box position = 'relative' height = '100%' border = '1px solid silver'>
-                        <Scroller 
+                        <Suspense><Scroller 
                             callbacks = {{dragDropTransferCallback}}
                             dndOptions = {{accept:['panel']}}
                             profile = {{description:'re-order panels scroller'}}
@@ -147,7 +147,7 @@ const PanelReorderDialog = (props) => {
                             startingListRange = { [0,panelCount - 1] }
                             getItemPack = { getItemPack }
                             cache = 'preload'
-                        />
+                        /></Suspense>
                         </Box>
                     </AlertDialogBody>
                     <AlertDialogFooter>

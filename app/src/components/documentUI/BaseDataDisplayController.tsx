@@ -7,6 +7,8 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 const DataNoteDisplay = lazy(()=> import('./Data_Note_Display'))
 
+import Loading from '../../system/Loading'
+
 const BaseDataDisplayController = () => {
     const
         [ workboxHandler ] = useWorkboxHandler(),
@@ -19,7 +21,7 @@ const BaseDataDisplayController = () => {
         switch (workboxType) {
         case 'member':
         case 'domain': 
-            component = <Suspense><DataNoteDisplay /></Suspense>
+            component = <Suspense fallback = {<Loading />}><DataNoteDisplay /></Suspense>
         }
 
         return component

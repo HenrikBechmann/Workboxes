@@ -9,6 +9,7 @@ import React, {
     // useContext, 
     CSSProperties, 
     forwardRef,
+    Suspense,
     lazy,
 } from 'react'
 
@@ -121,9 +122,9 @@ const ResourcesPane = forwardRef(function FoldersPanel(props:any, resourcesFrame
                     style = {resourcesGridStyles}
                 >
                     <GridItem data-type = 'resources-header' style = {resourcesHeaderStyles}>
-                        <ToolbarFrame>
-                            <ResourcesToolbar resourcesConfig = {resourcesConfig} setResourcesState = {setResourcesState} />
-                        </ToolbarFrame>
+                        <Suspense><ToolbarFrame>
+                            <Suspense><ResourcesToolbar resourcesConfig = {resourcesConfig} setResourcesState = {setResourcesState} /></Suspense>
+                        </ToolbarFrame></Suspense>
                     </GridItem>
                     <GridItem data-type = 'resources-body' style = {resourcesBodyStyles}>
                         Workbox lists

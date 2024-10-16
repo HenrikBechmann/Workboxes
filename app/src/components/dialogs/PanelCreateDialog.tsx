@@ -1,7 +1,7 @@
 // PanelCreateDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect, lazy} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect, Suspense, lazy} from 'react'
 
 import {
     Button, Text, Input, Select, Checkbox,
@@ -140,10 +140,10 @@ const PanelCreateDialog = (props) => {
         toast({description:result.notice})
 
         panelComponentListRef.current.push(
-            <Workpanel 
+            <Suspense><Workpanel 
                 key = {payload.id} 
                 panelID = {payload.id}
-            />
+            /></Suspense>
         )
 
         if (checkboxRef.current.checked) {

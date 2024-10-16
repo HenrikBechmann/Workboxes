@@ -20,7 +20,7 @@ const root = createRoot(document.getElementById('root'))
 
 root.render(
     <ChakraProvider>
-        <Suspense><WorkboxesProvider>
+        <Suspense fallback = {<Loading />}><WorkboxesProvider>
             <RouterProvider router = {router} />
         </WorkboxesProvider></Suspense>
     </ChakraProvider>

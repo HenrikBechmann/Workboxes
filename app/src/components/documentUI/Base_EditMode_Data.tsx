@@ -7,7 +7,7 @@ import { Box } from '@chakra-ui/react'
 
 const BaseDataDisplayController = lazy(()=> import('./BaseDataDisplayController'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
-const Loading = lazy(() => import('../../system/Loading'))
+import Loading from '../../system/Loading'
 
 import editIcon from '../../../assets/edit.png'
 

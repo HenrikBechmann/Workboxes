@@ -65,7 +65,7 @@ class WorkboxHandler {
     version // primary, extra, listing
 
     // --------------------[ process control & tracking ]------------------------
-    configuration
+    configuration // inherited
 
     // for document and resources, transitory mode settings
     session = {
@@ -269,8 +269,6 @@ class WorkboxHandler {
 
     async subscribeToWorkboxRecord() {
 
-        // console.log('subscribing workboxRecord for workbox')
-
         const workboxSubscriptionControlData = {
             functions:{ // repository for direct calls
                 updateWorkboxData:this.updateWorkboxData
@@ -290,15 +288,11 @@ class WorkboxHandler {
 
     async unsubscribeFromWorkboxRecord() {
 
-        // console.log('WorkboxHandler unsubscribeFromWorkboxRecord',this.workboxSubscriptionControlData)
-
         await this.internal.workspaceHandler.unsubscribeFromWorkboxRecord(this.workboxSubscriptionControlData)
 
     }
 
     updateWorkboxData = (workboxRecord) => {
-
-        // console.log('updating workboxRecord for workbox', workboxRecord)
 
         this.workboxRecord = workboxRecord
         this.internal.setWorkboxHandlerContext({current:this})

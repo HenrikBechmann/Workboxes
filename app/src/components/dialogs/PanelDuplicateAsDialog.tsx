@@ -1,7 +1,7 @@
 // PanelDuplicateAsDialog.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, CSSProperties, useRef, useState, useEffect, lazy} from 'react'
+import React, {useMemo, CSSProperties, useRef, useState, useEffect, Suspense, lazy} from 'react'
 
 import {
     Button, Text, Input, Checkbox,
@@ -106,10 +106,10 @@ const PanelDuplicateAsDialog = (props) => {
         toast({description:result.notice})
 
             panelComponentListRef.current.push(
-                <Workpanel 
+                <Suspense><Workpanel 
                     key = {result.payload} 
                     panelID = {result.payload}
-                />
+                /></Suspense>
             )
 
         if (checkboxRef.current.checked) {

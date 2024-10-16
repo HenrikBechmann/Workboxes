@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 
 
-const Loading = lazy(() => import('../../system/Loading'))
+import Loading from '../../system/Loading'
 const IntakeCroppedImage = lazy(() => import('./IntakeCroppedImage'))
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 

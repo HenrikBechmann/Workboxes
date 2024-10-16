@@ -1,7 +1,7 @@
 // Toolbar_Worspace.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useMemo, useRef, useState, useEffect, CSSProperties, lazy} from 'react'
+import React, {useMemo, useRef, useState, useEffect, CSSProperties, Suspense, lazy} from 'react'
 
 import { useWorkspaceHandler, useUserRecords } from '../../system/WorkboxesProvider'
 
@@ -344,32 +344,32 @@ const WorkspaceToolbar = (props) => {
         {false && <><ToolbarVerticalDivider />
         <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/></>}
         &nbsp; &nbsp;
-        {panelCreateDialogState && <PanelCreateDialog 
+        {panelCreateDialogState && <Suspense><PanelCreateDialog 
             setPanelCreateDialogState = {setPanelCreateDialogState} 
             panelComponentListRef = {panelComponentListRef}
-        />}
-        {panelDuplicateAsDialogState && <PanelDuplicateAsDialog 
+        /></Suspense>}
+        {panelDuplicateAsDialogState && <Suspense><PanelDuplicateAsDialog 
             setPanelDuplicateAsDialogState = {setPanelDuplicateAsDialogState} 
             panelComponentListRef = {panelComponentListRef}
-        />}
-        {panelDeleteDialogState && <PanelDeleteDialog 
+        /></Suspense>}
+        {panelDeleteDialogState && <Suspense><PanelDeleteDialog 
             setPanelDeleteDialogState = {setPanelDeleteDialogState} 
             setPanelResetDialogState = {setPanelResetDialogState} 
             panelComponentListRef = {panelComponentListRef}
-        />}
-        {panelRenameDialogState && <PanelRenameDialog 
+        /></Suspense>}
+        {panelRenameDialogState && <Suspense><PanelRenameDialog 
             setPanelRenameDialogState = {setPanelRenameDialogState} 
-        />}
-        {panelResetDialogState && <PanelResetDialog 
+        /></Suspense>}
+        {panelResetDialogState && <Suspense><PanelResetDialog 
             setPanelResetDialogState = {setPanelResetDialogState} 
-        />}
+        /></Suspense>}
         {panelSetDefaultDialogState && <PanelSetDefaultDialog 
             setPanelSetDefaultDialogState = {setPanelSetDefaultDialogState} 
         />}
-        {panelReorderDialogState && <PanelReorderDialog 
+        {panelReorderDialogState && <Suspense><PanelReorderDialog 
             setPanelReorderDialogState = {setPanelReorderDialogState} 
             panelComponentListRef = {panelComponentListRef}
-        />}
+        /></Suspense>}
     </Box>
 }
 

@@ -26,7 +26,7 @@
 
 */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo, lazy} from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, Suspense, lazy} from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -180,10 +180,10 @@ const Workspace = (props) => {
                 defaultIndex = index
             }
             panelComponentListRef.current.push(
-                <Workpanel 
+                <Suspense key = {panelID} ><Workpanel 
                     key = {panelID} 
                     panelID = {panelID}
-                />
+                /></Suspense>
             )
 
         }
@@ -233,11 +233,11 @@ const Workspace = (props) => {
             </GridItem>
             <GridItem data-type = 'workspace-footer' area = 'footer' minWidth = '0'>
                 <Box borderTop = '1px solid lightgray' width = '100%' >
-                    <ToolbarFrame>
+                    <Suspense><ToolbarFrame>
                         {(workspaceState != 'setup') && 
-                            <WorkspaceToolbar panelComponentListRef = {panelComponentListRef} />
+                            <Suspense><WorkspaceToolbar panelComponentListRef = {panelComponentListRef} /></Suspense>
                         }
-                    </ToolbarFrame>
+                    </ToolbarFrame></Suspense>
                 </Box>
             </GridItem>
         </Grid>

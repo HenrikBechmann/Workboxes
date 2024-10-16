@@ -7,6 +7,8 @@ import { useWorkboxHandler } from '../workbox/Workbox'
 
 const DataNoteEdit = lazy(()=> import('./Data_Note_Edit'))
 
+import Loading from '../../system/Loading'
+
 const BaseDataEditController = () => {
     const
         [ workboxHandler ] = useWorkboxHandler(),
@@ -19,7 +21,7 @@ const BaseDataEditController = () => {
         switch (workboxType) {
         case 'member':
         case 'domain': 
-            component = <Suspense><DataNoteEdit /></Suspense>
+            component = <Suspense fallback = {<Loading />}><DataNoteEdit /></Suspense>
         }
 
         return component

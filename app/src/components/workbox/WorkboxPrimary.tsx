@@ -9,7 +9,7 @@
         - Resource Toolbar
 */
 
-import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, lazy } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, CSSProperties, useContext, Suspense, lazy } from 'react'
 
 import {
     Box,
@@ -31,7 +31,9 @@ import {
 
 const ToolbarFrame = lazy(() => import('../toolbars/Toolbar_Frame'))
 const WorkboxToolbar = lazy(() => import('../toolbars/Toolbar_Workbox'))
-const WorkboxContent = lazy(() => import('./WorkboxContent'))
+// avoid lazy load for WorkboxContent to avoid failure of initializing mode (document/view/both)
+// TODO trace reason for need to avoid lazy in this case
+import WorkboxContent from './WorkboxContent'
 import { useWorkboxHandler } from './Workbox'
 import {CONTENT_FRAME_PADDING_WIDTH} from './WorkboxContent'
 
@@ -79,7 +81,7 @@ const WorkboxPrimary = (props) => { // no props
     // TODO: use of imported CONTENT_FRAME_PADDING_WIDTH for intialization is a sequencing anomaly
     const resizeObserverCallback = useCallback(()=> {
 
-        workboxHandler.dimensions.primaryFrameWidth = workboxFrameElementRef.current.offsetWidth - 
+        workboxHandler.dimensions.primaryFrameWidth = workboxFrameElementRef.current?.offsetWidth - 
             (workboxHandler.dimensions.CONTENT_FRAME_PADDING_WIDTH || CONTENT_FRAME_PADDING_WIDTH)
         let UIDocumentWidthRatio = 
             workboxHandler.dimensions.UIDocumentWidth/workboxHandler.dimensions.primaryFrameWidth
@@ -296,9 +298,9 @@ const WorkboxPrimary = (props) => { // no props
         style = {workboxGridStyles}
     >
         <GridItem data-type = 'workbox-header' style = {workboxHeaderStyles}>
-            <ToolbarFrame scrollerStyles = {{margin:'auto'}}>
-                <WorkboxToolbar />
-            </ToolbarFrame>
+            <Suspense><ToolbarFrame scrollerStyles = {{margin:'auto'}}>
+                <Suspense><WorkboxToolbar /></Suspense>
+            </ToolbarFrame></Suspense>
         </GridItem>
         <GridItem data-type = 'workbox-body' style = {workboxBodyStyles}>
             <Box data-type = 'workbox-frame' ref = {workboxFrameElementRef} style = {workboxFrameStyles} >
