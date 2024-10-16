@@ -206,10 +206,12 @@ const DocumentToolbar = (props) => {
         // }),
         onChangeCreateType = (event) => {
             workboxHandler.session.document.createselection = event.target.value
+            dispatchWorkboxHandler()
         },
 
         onChangeAddType = (event) => {
             workboxHandler.session.document.addselection = event.target.value
+            dispatchWorkboxHandler()
         }
 
         // <MenuItem icon = {<img src = {settingsIcon} />}>Document settings</MenuItem>
@@ -281,7 +283,7 @@ const DocumentToolbar = (props) => {
             <Select ref = {createTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeCreateType}>
                 <option value="note">Note</option>
                 <option value="weblink">Weblink</option>
-                <option value="image">Media box</option>
+                <option value="media">Media box</option>
             </Select>
         </Box>
         { addToggle }

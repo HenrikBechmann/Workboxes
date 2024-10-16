@@ -369,7 +369,7 @@ const AttachmentsController = (props) => {
                             </Box>
                         }
                         {(activeCreate) && 
-                            <WorkboxCreateStarter prompt = 'create add-on'/>
+                            <WorkboxCreateStarter context = 'attachment'/>
                         }
                     </>
                 }

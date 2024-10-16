@@ -1,7 +1,7 @@
 // WorkboxCreateStarter.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useState, useRef, lazy, CSSProperties} from 'react'
+import React, {useState, useRef, useMemo, lazy, CSSProperties} from 'react'
 
 import {
     Box,
@@ -14,6 +14,7 @@ import {
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
+import { useWorkboxHandler } from './Workbox'
 
 const actionIconStyles = {
     height: '36px',
@@ -29,7 +30,9 @@ import cancelEditIcon from '../../../assets/edit_off.png'
 const WorkboxCreateStarter = (props) => {
 
     const 
-        { prompt, response } = props,
+        { response, context } = props,
+        [workboxHandler] = useWorkboxHandler(),
+        createType = workboxHandler.session.document.createselection,
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
@@ -48,6 +51,28 @@ const WorkboxCreateStarter = (props) => {
     const onCancel = () => {
 
     }
+
+    const prompt = useMemo(()=>{
+
+        const type = (context == 'attachment')
+            ? 'add-on'
+            : 'extension'
+
+        let prompt
+        switch (createType) {
+        case 'media':
+            prompt = `Create Media ${type}`
+            break
+        case 'note':
+            prompt = `Create Note ${type}`
+            break
+        case 'weblink':
+            prompt = `Create Weblink ${type}`
+        }
+
+        return prompt
+
+    },[context, createType])
 
     const onChangeFunctions = {
         name:(event) => {
