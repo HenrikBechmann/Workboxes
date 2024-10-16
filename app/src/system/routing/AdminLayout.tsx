@@ -1,6 +1,6 @@
 // SysadminLaout.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React, {lazy} from 'react'
+import React, {Suspense, lazy} from 'react'
 import { Outlet as RouterOutput } from 'react-router-dom'
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 
@@ -27,9 +27,9 @@ const SysadminLayout = (props) => {
                               "body"`}
     >
         <GridItem data-type = 'grid-header' gridArea = 'header'  width = '100vw'>
-            <ToolbarFrame>
-                <ToolbarStandard />
-            </ToolbarFrame>
+            <Suspense><ToolbarFrame>
+                <Suspense><ToolbarStandard /></Suspense>
+            </ToolbarFrame></Suspense>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>        
             <Box data-type = 'sysadmin-outlet' style = {bodyStyle}>

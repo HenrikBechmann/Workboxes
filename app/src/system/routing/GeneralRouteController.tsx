@@ -1,7 +1,7 @@
 // GeneralRouteController.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, {useRef, useState, lazy} from 'react'
+import React, {useRef, useState, Suspense, lazy} from 'react'
 import { Outlet as RouterOutput, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import { Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
 
@@ -68,14 +68,14 @@ const GeneralRouteController = (props) => {
                               "body"`}
     >
         <GridItem data-type = 'grid-header' gridArea = 'header' width = '100vw'>
-            <ToolbarFrame>
+            <Suspense><ToolbarFrame>
                 {!userAuthData && <Text ml = '6px'>Welcome to Workboxes! 
                     <NavLink to = '/signin' style={navlinkStyles} >
                         Sign in
                     </NavLink>
                 </Text>}
-                {userAuthData && <ToolbarStandard />}
-            </ToolbarFrame>
+                {userAuthData && <Suspense><ToolbarStandard /></Suspense>}
+            </ToolbarFrame></Suspense>
         </GridItem>
         <GridItem data-type = 'grid-body' gridArea = 'body' width = '100vw'>
             <Box data-type = 'general-outlet' style = {bodyStyle}>

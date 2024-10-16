@@ -227,7 +227,7 @@ const Workspace = (props) => {
                         data-type = 'panel-scroller' height = '100%' display = 'inline-flex' minWidth = {0}
                         transform = 'translate(var(--wb_panel_offset), 0px)' transition = 'transform 0.75s ease'
                     >
-                        {(workspaceState != 'setup') && panelComponentListRef.current}
+                        {(workspaceState != 'setup') && <Suspense><>{panelComponentListRef.current}</></Suspense>}
                     </Box>
                  </Box>
             </GridItem>
