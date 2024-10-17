@@ -25,7 +25,7 @@ const actionIconStyles = {
     top:0,
 } as CSSProperties
 
-import cancelEditIcon from '../../../assets/edit_off.png'
+import removeIcon from '../../../assets/close.png'
 
 const WorkboxCreateStarter = (props) => {
 
@@ -101,7 +101,7 @@ const WorkboxCreateStarter = (props) => {
     }
     return <>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
+            <SideIcon icon = {removeIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>
         </Box>
         <Box data-type = 'namefield' margin = '3px' padding = '3px'>
             <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}} 
