@@ -15,9 +15,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@blocknote/core": "^0.16.0",
-    "@blocknote/mantine": "^0.16.0",
-    "@blocknote/react": "^0.16.0",
+    "@blocknote/core": "^0.17.0",
+    "@blocknote/mantine": "^0.17.0",
+    "@blocknote/react": "^0.17.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -29,7 +29,7 @@
     "hast-util-from-parse5": "^8.0.1",
     "html2canvas": "^1.4.1",
     "import": "^0.0.6",
-    "is-mobile": "^4.0.0",
+    "is-mobile": "^5.0.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
