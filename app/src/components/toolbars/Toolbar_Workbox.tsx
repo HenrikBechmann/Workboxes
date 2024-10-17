@@ -86,7 +86,7 @@ const WorkboxToolbar = (props) => {
         itemIcon = workboxRecord?.document.base.image.source,
         itemTitle = workboxRecord?.profile.workbox.name,
         type = workboxRecord?.profile.type.name,
-        typeName = workboxRecord?systemRecords.workboxaliases.aliases[type]:null
+        typeName = workboxRecord?systemRecords.workboxaliases.aliases[type].name:null
 
     // console.log('domainIcon',domainIcon, workboxRecord)
 

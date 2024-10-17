@@ -164,7 +164,7 @@ const Workpanel = (props:any) => {
                 }
             }
 
-        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name]
+        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name].name
 
         addWindow(windowSpecification, workboxSpecification)
 
@@ -198,7 +198,7 @@ const Workpanel = (props:any) => {
                 }
             }
 
-        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name]
+        titleData.type.alias = systemRecords.workboxaliases.aliases[titleData.type.name].name
 
         addWindow(windowSpecification, workboxSpecification)
 
