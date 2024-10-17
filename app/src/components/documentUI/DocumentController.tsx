@@ -334,6 +334,7 @@ const AttachmentsController = (props) => {
         [workboxHandler] = useWorkboxHandler(),
         {attachments} = workboxHandler.workboxRecord.document.data,
         [activeCreate, setActiveCreate] = useState(false),
+        [activeAdd, setActiveAdd] = useState(false),
         isDisabled = !!controlPack.currentEditBlockID,
         emptyList = attachments.list.length == 0,
         extraText = 
@@ -343,20 +344,30 @@ const AttachmentsController = (props) => {
                     ? ' - nothing to edit'
                     : null
 
-    const onAdd = () => {
-        controlPack.actionResponses.onAdd(controlPack.blockIDMap.get('attachments'))
-    }
-
     const onCreate = () => {
         controlPack.actionResponses.onCreate(controlPack.blockIDMap.get('attachments'))
         setActiveCreate(true)
     }
 
     const doneCreate = () => {
-
+        setActiveCreate(false)
     }
 
     const cancelCreate = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('attachments'))
+        setActiveCreate(false)
+    }
+
+    const onAdd = () => {
+        controlPack.actionResponses.onAdd(controlPack.blockIDMap.get('attachments'))
+        setActiveAdd(true)
+    }
+
+    const doneAdd = () => {
+        setActiveCreate(false)
+    }
+
+    const cancelAdd = () => {
         controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('attachments'))
         setActiveCreate(false)
     }
@@ -419,6 +430,8 @@ const ExtensionsController = (props) => {
         // { onAdd } = controlPack.actionResponses,
         [workboxHandler] = useWorkboxHandler(),
         {extensions} = workboxHandler.workboxRecord.document,
+        [activeCreate, setActiveCreate] = useState(false),
+        [activeAdd, setActiveAdd] = useState(false),
         isDisabled = !!controlPack.currentEditBlockID,
         emptyList = extensions.list.length == 0,
         extraText = 
@@ -428,12 +441,32 @@ const ExtensionsController = (props) => {
                     ? ' - nothing to edit'
                     : null
 
-    const onAdd = () => {
-
+    const onCreate = () => {
+        controlPack.actionResponses.onCreate(controlPack.blockIDMap.get('extensions'))
+        setActiveCreate(true)
     }
 
-    const onCreate = () => {
+    const doneCreate = () => {
+        setActiveCreate(false)
+    }
 
+    const cancelCreate = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('extensions'))
+        setActiveCreate(false)
+    }
+
+    const onAdd = () => {
+        controlPack.actionResponses.onAdd(controlPack.blockIDMap.get('extensions'))
+        setActiveAdd(true)
+    }
+
+    const doneAdd = () => {
+        setActiveCreate(false)
+    }
+
+    const cancelAdd = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('extensions'))
+        setActiveCreate(false)
     }
 
     return <>
@@ -441,16 +474,28 @@ const ExtensionsController = (props) => {
             <Suspense><SectionDivider type = 'block' title = 'Extended document sections (shown only with full workbox display)'/></Suspense>
             {emptyList && <>
                 {(mode === 'create') && 
-                    <Box style = {actionIconStyles} data-type = 'actionbox'>
-                        <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an extension' caption = 'create'/>
-                    </Box>
+                    <>
+                        {(!activeCreate) && 
+                            <Box style = {actionIconStyles} data-type = 'actionbox'>
+                                <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an extension' caption = 'create'/>
+                            </Box>
+                        }
+                        {activeCreate && 
+                            <Suspense><WorkboxCreateStarter 
+                                context = 'extension' 
+                                doneCreate = {doneCreate} 
+                                cancelCreate = {cancelCreate}/>
+                            </Suspense>
+                        }
+                    </>
                 }
                 {(mode === 'add') && 
                     <Box style = {actionIconStyles} data-type = 'actionbox'>
                         <SideIcon icon = {noteAddIcon} isDisabled = {isDisabled} response = {onAdd} tooltip = 'add an extension' caption = 'add'/>
                     </Box>
                 }
-                <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extra sections {extraText})</Box>
+                {!activeCreate && 
+                    <Box fontStyle = 'italic' fontSize = 'sm' opacity = '0.5'>(no current extension sections {extraText})</Box>}
             </>}
         </>}
         {!emptyList && (mode == 'view') && <ExtensionControllers mode = {mode} />}
