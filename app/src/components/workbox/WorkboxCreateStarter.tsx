@@ -90,7 +90,6 @@ const WorkboxCreateStarter = (props) => {
         },
     }
     const isInvalidTests = {
-        // TODO check for blank, string
         name:(value) => {
             let isInvalid = false
             if ((value.length > maxNameLength) || (value.length < minNameLength)) {
