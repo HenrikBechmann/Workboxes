@@ -87,11 +87,13 @@ class WorkboxHandler {
         },
         document:{
             mode:'view',
+            // action functions set by edit component (eg. WorkboxPrimary)
             createblock: null,
             addblock: null,
             createselection: null,
             addselection: null,
             editblock: null,
+            // register id of block being changed, and error
             changesessionid: null,
             is_change_error:false,
             removeblock: null,

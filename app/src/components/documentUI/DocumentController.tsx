@@ -352,6 +352,15 @@ const AttachmentsController = (props) => {
         setActiveCreate(true)
     }
 
+    const doneCreate = () => {
+
+    }
+
+    const cancelCreate = () => {
+        controlPack.actionResponses.onCancel(controlPack.blockIDMap.get('attachments'))
+        setActiveCreate(false)
+    }
+
     return <>
         {(mode !== 'view') && <>
             <Suspense><SectionDivider type = 'block' title = 'Base document add-on sections (also shown in workbox lists)'/></Suspense>
@@ -363,8 +372,12 @@ const AttachmentsController = (props) => {
                                 <SideIcon icon = {insertIcon} isDisabled = {isDisabled} response = {onCreate} tooltip = 'create an add-on' caption = 'create'/>
                             </Box>
                         }
-                        {(activeCreate) && 
-                            <Suspense><WorkboxCreateStarter context = 'attachment'/></Suspense>
+                        {activeCreate && 
+                            <Suspense><WorkboxCreateStarter 
+                                context = 'attachment' 
+                                doneCreate = {doneCreate} 
+                                cancelCreate = {cancelCreate}/>
+                            </Suspense>
                         }
                     </>
                 }

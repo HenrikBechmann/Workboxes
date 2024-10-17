@@ -30,7 +30,7 @@ import removeIcon from '../../../assets/close.png'
 const WorkboxCreateStarter = (props) => {
 
     const 
-        { response, context } = props,
+        { doneCreate, cancelCreate, context } = props,
         [workboxHandler] = useWorkboxHandler(),
         createType = workboxHandler.session.document.createselection,
         systemRecords = useSystemRecords(),
@@ -49,7 +49,7 @@ const WorkboxCreateStarter = (props) => {
         invalidFieldFlags = invalidFieldFlagsRef.current
 
     const onCancel = () => {
-
+        cancelCreate()
     }
 
     const prompt = useMemo(()=>{
@@ -73,6 +73,12 @@ const WorkboxCreateStarter = (props) => {
         return prompt
 
     },[context, createType])
+
+    const doCreate = () => {
+        if (invalidFieldFlags.name) {
+            alert('Please fix error before proceeding')
+        }
+    }
 
     const onChangeFunctions = {
         name:(event) => {
@@ -122,7 +128,7 @@ const WorkboxCreateStarter = (props) => {
                     {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
                 </FormHelperText>
             </FormControl>
-            <Button onClick = {response} colorScheme = 'blue'>{prompt}</Button>
+            <Button onClick = {doCreate} colorScheme = 'blue'>{prompt}</Button>
         </Box>
     </>
 }
