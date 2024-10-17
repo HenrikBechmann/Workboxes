@@ -234,7 +234,46 @@ const versionTransforms = {
 }
 
 // collection:type. Always increment version to larger number
-const versionData = {
+export const versionData = {
+  connectors: {
+    standard: {
+      version: 2,
+      generation: 0,
+      data:null, // overflow
+      parent: {
+        id:null,
+        domain:null,
+        type:null,
+        template:null,
+        owner:null,
+      },
+      child: {
+        id:null,
+        domain:null,
+        type:null,
+        template:null,
+        owner:null,
+      },
+      profile:{
+        connector: {
+          id:null,
+        },
+        type:'standard',
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+      }
+    },
+  },
   workboxes: {
     collection: [
     {
