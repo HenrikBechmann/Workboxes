@@ -119,7 +119,7 @@ const WorkboxCreateStarter = (props) => {
 
         const databaseRecord = updateDocumentSchema('workboxes', createType ,{}, workboxRecord)
 
-        workboxHandler.saveNewWorkboxRecord(databaseRecord)
+        await workboxHandler.saveNewWorkboxRecord(databaseRecord)
 
     }
 
