@@ -1,6 +1,17 @@
 // WorkboxCreateStarter.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    create:
+    - workbox
+    - connectors
+        - extras
+        - types
+    - document list (attachment or extension)
+    - hydration
+
+*/
+
 import React, {useState, useRef, useMemo, lazy, CSSProperties} from 'react'
 
 import {
