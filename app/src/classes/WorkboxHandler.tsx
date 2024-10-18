@@ -210,10 +210,9 @@ class WorkboxHandler {
     //     },
     //     subscriptionindex: <prefix>.<entityid>
     // }
-
     workboxSubscriptionControlData
 
-    // -----------------------------[ operations ]--------------------------
+    // -----------------------------[ editor operations ]--------------------------
 
     // -- sync files - start
     getEditorFiles = (editorDocument) => {
@@ -267,7 +266,8 @@ class WorkboxHandler {
             }
         })
     }
-    // -- sync files - end
+    
+    //---[editor operations - end]---
 
     async subscribeToWorkboxRecord() {
 
@@ -327,7 +327,12 @@ class WorkboxHandler {
         workboxRecordClone.profile.commits.updated_timestamp = Timestamp.now()
         workboxRecordClone.profile.workbox.name = workboxRecordClone.document.base.name
 
+        if (!workboxRecordClone.profile.commits.created_by) {
+            workboxRecordClone.profile.commits.created_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
+            workboxRecordClone.profile.commits.created_timestamp = Timestamp.now()
+        }
 
+        // if type == member
         let memberSyncCollection, memberSyncDoc, memberSyncUpdate, domainSyncCollection, domainSyncDoc, domainSyncUpdate
         if (workboxRecordClone.profile.type.name == 'member') {
             // update member data
@@ -343,6 +348,8 @@ class WorkboxHandler {
                 'profile.workbox.name':workboxRecordClone.document.base.name
             }
             batch.update(memberSyncDoc,memberSyncUpdate)
+
+        // if type == domain
         } else if (workboxRecordClone.profile.type.name == 'domain') {
             // update domain data
             workboxRecordClone.profile.domain.name = workboxRecordClone.document.base.name
@@ -405,7 +412,7 @@ class WorkboxHandler {
 
             // batch.update(handleSyncDoc,handleSyncUpdate)
 
-        }
+        } // end of processing for member or domain types
 
         try {
 

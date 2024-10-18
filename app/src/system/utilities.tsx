@@ -88,6 +88,11 @@ const versionMaps = {
     },
   },
   workboxes: {
+    note: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
     collection: {
       latest_version:2,
       datamap: new Map(),
@@ -169,6 +174,9 @@ const versionMaps = {
 
 const versionTransforms = {
   connectors: {
+    standard: [],
+  },
+  note: {
     standard: [],
   },
   workboxes: {
@@ -285,6 +293,97 @@ export const versionData = {
     }],
   },
   workboxes: {
+    note: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        origin: {
+          id:null,
+        },
+        workbox: {
+          id:null,
+          name: null,
+          image: {
+            source: null,
+          },
+        },
+        roles: {
+          read: null,
+          write: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        controller: {
+          id: null,
+          name: null,
+        },
+        type: {
+          name: "collection",
+          alias: "Collection",
+          image: {
+            source: null,
+          },
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {
+            id: null, 
+            name: null
+          },
+          updated_timestamp: null,
+        },
+        counts: {
+          connectors: 0,
+          references: 0,
+        },
+      },
+      document: {
+        reconcilefileserror:false,
+        reconcilemonth:'0',
+        files:[],
+        data:{
+          content:null,
+          attachments:{
+            list:[],
+          },
+        },
+        base: {
+            name: null,
+            image: {
+              filename: null,
+              previous_filename: null,
+              caption: null,
+              source: null,
+            },
+            description: null,
+        },
+        extensions: {
+          list:[],
+        },
+        template: null,
+        locked: false,
+      },
+      resources: {
+        accepts: [],
+        locked: false,
+      },
+      standard_resources: {
+        types:null,
+        extras:null,
+        parents:null,
+      }
+    }],
     collection: [
     {
       version: 2,

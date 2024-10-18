@@ -22,6 +22,12 @@ import {
     Button
 } from '@chakra-ui/react'
 
+import { doc, collection } from 'firebase/firestore'
+
+import {useFirestore} from '../../system/WorkboxesProvider'
+
+import { updateDocumentSchema } from '../../system/utilities'
+
 const SideIcon = lazy(() => import('../toolbars/controls/SideIcon'))
 
 import { useSystemRecords } from '../../system/WorkboxesProvider'
@@ -41,6 +47,7 @@ import removeIcon from '../../../assets/close.png'
 const WorkboxCreateStarter = (props) => {
 
     const 
+        db = useFirestore(),
         { doneCreate, cancelCreate, context } = props,
         [workboxHandler] = useWorkboxHandler(),
         createType = workboxHandler.session.document.createselection,
@@ -89,6 +96,31 @@ const WorkboxCreateStarter = (props) => {
         if (invalidFieldFlags.name) {
             alert('Please fix error before proceeding')
         }
+        const newWorkboxRef = doc(collection(db,'workboxes'))
+        const parentRecord = workboxHandler.workboxRecord
+        const workboxRecord = {
+            document: {
+                base: {
+                    name: editData.name,
+                }
+            },
+            profile: {
+                type: {
+                    name: createType
+                },
+                domain: parentRecord.profile.domain,
+                owner: parentRecord.profile.owner,
+                roles: parentRecord.profile.roles,
+                workbox: {
+                    id:newWorkboxRef.id,
+                    name: editData.name,
+                }
+            }
+        }
+        const databaseRecord = updateDocumentSchema('workboxes', createType ,{}, workboxRecord)
+
+        console.log('createType, databaseRecord',createType, databaseRecord)
+
     }
 
     const onChangeFunctions = {
