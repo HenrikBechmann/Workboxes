@@ -80,6 +80,13 @@ export const updateDocumentSchema = (collection, type, document, initialvalues =
 
 // property names are collection names
 const versionMaps = {
+  connectors: {
+    standard: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
+  },
   workboxes: {
     collection: {
       latest_version:2,
@@ -161,6 +168,9 @@ const versionMaps = {
 }
 
 const versionTransforms = {
+  connectors: {
+    standard: [],
+  },
   workboxes: {
     collection: [],
   },
