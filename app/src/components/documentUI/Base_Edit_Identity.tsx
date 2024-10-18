@@ -166,7 +166,7 @@ const Base_Edit_Identity = (props) => {
     return <>
         <Box style = {actionBoxStyles} data-type = 'action box'> 
             <Box style = {basicActionIconStyles} data-type = 'actionbox'>
-                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+                <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'save'/>
             </Box>
             <Box style = {basicAlternateActionIconStyles} data-type = 'actionbox'>
                 <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>

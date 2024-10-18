@@ -65,7 +65,7 @@ const Base_Edit_Data = (props) => {
 
     return <Box data-type = 'active-edit-data' minHeight = '200px'>
         <Box style = {actionIconStyles} data-type = 'actionbox'>
-            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'edit'/>
+            <SideIcon icon = {saveIcon} response = {onSave} tooltip = 'save the changes' caption = 'save'/>
         </Box>
         <Box style = {alternateActionIconStyles} data-type = 'actionbox'>
             <SideIcon icon = {cancelEditIcon} response = {onCancel} tooltip = 'cancel the changes' caption = 'cancel'/>

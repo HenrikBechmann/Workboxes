@@ -92,11 +92,11 @@ const WorkboxCreateStarter = (props) => {
 
     },[context, createType])
 
-    const doCreate = () => {
+    async function doCreate() {
         if (invalidFieldFlags.name) {
             alert('Please fix error before proceeding')
         }
-        const newWorkboxRef = doc(collection(db,'workboxes'))
+        // const newWorkboxRef = doc(collection(db,'workboxes'))
         const parentRecord = workboxHandler.workboxRecord
         const workboxRecord = {
             document: {
@@ -112,14 +112,14 @@ const WorkboxCreateStarter = (props) => {
                 owner: parentRecord.profile.owner,
                 roles: parentRecord.profile.roles,
                 workbox: {
-                    id:newWorkboxRef.id,
                     name: editData.name,
                 }
             }
         }
+
         const databaseRecord = updateDocumentSchema('workboxes', createType ,{}, workboxRecord)
 
-        console.log('createType, databaseRecord',createType, databaseRecord)
+        workboxHandler.saveNewWorkboxRecord(databaseRecord)
 
     }
 

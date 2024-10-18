@@ -305,6 +305,21 @@ class WorkboxHandler {
 
 
     }
+    async saveNewWorkboxRecord(workboxRecord) {
+        const 
+            newWorkboxRef = doc(collection(this.internal.db,'workboxes')),
+            userRecord = this.userRecords.user
+
+        workboxRecord.profile.workbox.id = newWorkboxRef.id
+
+        workboxRecord.profile.commits.created_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
+        workboxRecord.profile.commits.created_timestamp = Timestamp.now()
+
+        console.log('newWorkboxRecord', workboxRecord)
+
+        await this.saveWorkboxRecord(workboxRecord)
+
+    }
 
     async saveWorkboxRecord(workboxRecord) {
 
@@ -326,11 +341,6 @@ class WorkboxHandler {
         workboxRecordClone.profile.commits.updated_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
         workboxRecordClone.profile.commits.updated_timestamp = Timestamp.now()
         workboxRecordClone.profile.workbox.name = workboxRecordClone.document.base.name
-
-        if (!workboxRecordClone.profile.commits.created_by) {
-            workboxRecordClone.profile.commits.created_by = {id:userRecord.profile.user.id, name:userRecord.profile.user.name}
-            workboxRecordClone.profile.commits.created_timestamp = Timestamp.now()
-        }
 
         // if type == member
         let memberSyncCollection, memberSyncDoc, memberSyncUpdate, domainSyncCollection, domainSyncDoc, domainSyncUpdate
@@ -416,7 +426,7 @@ class WorkboxHandler {
 
         try {
 
-            batch.set(doc(workboxCollection,this.workboxID),workboxRecordClone)
+            batch.set(doc(workboxCollection,workboxRecordClone.profile.workbox.id),workboxRecordClone)
             // await setDoc(doc(workboxCollection,this.workboxID),workboxRecordClone)
             await batch.commit()
             this.internal.usage.write(writecount)
