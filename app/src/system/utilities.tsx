@@ -246,7 +246,7 @@ const versionTransforms = {
 // collection:type. Always increment version to larger number
 export const versionData = {
   connectors: {
-    standard: {
+    standard: [{
       version: 2,
       generation: 0,
       data:null, // overflow
@@ -282,7 +282,7 @@ export const versionData = {
           updated_timestamp: null,
         },
       }
-    },
+    }],
   },
   workboxes: {
     collection: [
