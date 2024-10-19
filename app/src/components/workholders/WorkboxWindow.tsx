@@ -253,13 +253,14 @@ const WorkboxWindow = (props) => {
             subscriptionindex: 'workwindow.' + windowSessionID
         }
 
+        // console.log('workwindow subscribe to workbox data', workboxSubscriptionControlData)
         workboxSubscriptionControlDataRef.current = workboxSubscriptionControlData
         await workspaceHandler.subscribeToWorkboxRecord(workboxSubscriptionControlData)
     }
 
     async function unsubscribeFromWorkboxRecord() {
         const workboxSubscriptionControlData = workboxSubscriptionControlDataRef.current
-        await workspaceHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData)
+        await workspaceHandler.unsubscribeFromWorkboxRecord(workboxSubscriptionControlData, 'workwindow')
     }
 
     useEffect(()=>{
@@ -267,7 +268,7 @@ const WorkboxWindow = (props) => {
         subscribeToWorkboxRecord()
 
         return () => {
-            // console.log('Workwindow unmount unsubscribe',workboxSubscriptionControlData)
+            // console.log('Workwindow unmount unsubscribe',workboxSubscriptionControlDataRef.current)
             unsubscribeFromWorkboxRecord()
         }
 

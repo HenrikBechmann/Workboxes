@@ -35,7 +35,7 @@ class SubscriptionHandler {
     userID
 
     publishers = {
-        domainRecordPublishers:new Map(),
+        domainRecordPublishers: new Map(),
         workboxRecordPublishers: new Map(),
     }
 
@@ -54,49 +54,52 @@ class SubscriptionHandler {
     // }
 
 
-    async subscribeToDomainRecord(domainSubscriptionControlData) { // domain and member records
+    // only called from workspaceHandler
+    async subscribeToDomainRecord(domainSubscriptionControlData, source) { // domain and member records
         const 
             { domainRecordPublishers } = this.publishers,
             domainID = domainSubscriptionControlData.domain.id
 
         if (!domainRecordPublishers.has(domainID)) {
             const 
-                workspaceID = this.workspaceHandler.workspaceRecord.profile.workspace.id,
-                userID = this.userID,
                 domainRecordPublisher = 
                     new DomainRecordPublisher( domainID, this.workspaceHandler )
 
             domainRecordPublishers.set(domainID, domainRecordPublisher)
 
-            await domainRecordPublisher.openSnapshot()
         }
 
+        // console.log('subscribing to domain snapshot, source', source, domainSubscriptionControlData)
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
         domainRecordPublisher.subscribe(domainSubscriptionControlData)
         
     }
 
-    async unsubscribeFromDomainRecord(domainSubscriptionControlData) {
+    // only called from workspaceHandler
+    async unsubscribeFromDomainRecord(domainSubscriptionControlData, source = 'indeterminate') {
         
         const { domainRecordPublishers } = this.publishers
         const 
             domainID = domainSubscriptionControlData.domain.id
 
         if (!domainRecordPublishers.has(domainID)) {
+            console.log('domain not found for domain record publishers unsubscribe')
             return
         }
 
         const domainRecordPublisher = domainRecordPublishers.get(domainID)
+        // console.log('unsubscribing from domain snapshot, source', source, domainSubscriptionControlData)
         await domainRecordPublisher.unSubscribe(domainSubscriptionControlData)
 
         if (!domainRecordPublisher.subscriptions.size) {
-            await domainRecordPublisher.closeSnapshot()
             domainRecordPublishers.delete(domainID)
         }
 
     }
 
-    async clearSubscriptionsToDomainRecords() {
+    async clearSubscriptionsToDomainRecords(source) {
+
+        // console.log('clearing subscriptions to domain records', source)
         const { domainRecordPublishers } = this.publishers
 
         const domainList = Array.from(domainRecordPublishers,([index, value]) => index)
@@ -105,7 +108,7 @@ class SubscriptionHandler {
             const domainID = domainList[index]
             const domainRecordPublisher = domainRecordPublishers.get(domainID)
             await domainRecordPublisher.unSubscribeAll()
-            await domainRecordPublisher.closeSnapshot()
+            await domainRecordPublisher.closeDomainSnapshot()
         }
 
         domainRecordPublishers.clear()
@@ -127,15 +130,12 @@ class SubscriptionHandler {
 
     async subscribeToWorkboxRecord(workboxSubscriptionControlData) { // workbox record
 
-        // console.log('subscribeToWorkboxRecord', workboxSubscriptionControlData)
-
         const 
             { workboxRecordPublishers } = this.publishers,
             workboxID = workboxSubscriptionControlData.workbox.id
 
         if (!workboxRecordPublishers.has(workboxID)) {
 
-            // console.log('setting up WorkboxRecordPublisher')
             const 
                 userID = this.userID,
                 workboxRecordPublisher = 
@@ -143,18 +143,22 @@ class SubscriptionHandler {
 
             workboxRecordPublishers.set(workboxID, workboxRecordPublisher)
 
-            await workboxRecordPublisher.openSnapshot()
+            // console.log('opening workbox snapshot')
+            await workboxRecordPublisher.openWorkboxSnapshot()
         }
 
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
+        // console.log('subscribing to workbox snapshot')
         workboxRecordPublisher.subscribe(workboxSubscriptionControlData)
         
     }
 
-    async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData) {
+    async unsubscribeFromWorkboxRecord(workboxSubscriptionControlData, source) {
 
         // console.log('-------------------------------\n','SubscriptionHandler unsubscribeFromWorkboxRecord',
         //     workboxSubscriptionControlData)
+
+        // console.log('unsubscribeFronWorkboxRecord', source, workboxSubscriptionControlData)
 
         const { workboxRecordPublishers } = this.publishers
         const 
@@ -167,7 +171,7 @@ class SubscriptionHandler {
         }
 
         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
-        await workboxRecordPublisher.unSubscribe(workboxSubscriptionControlData)
+        await workboxRecordPublisher.unSubscribe(workboxSubscriptionControlData, source)
 
         // console.log('TWO workboxID, workboxRecordPublishers', 
         //     workboxID, workboxRecordPublishers)
@@ -178,28 +182,26 @@ class SubscriptionHandler {
             // console.log('closeSnapshot from SubscriptionHandler.unsubscribeFromWorkboxRecord', workboxID)
             // console.log('deleting workboxRecordPublishers workboxID')
             workboxRecordPublishers.delete(workboxID)
-            await workboxRecordPublisher.closeSnapshot()
+            // await workboxRecordPublisher.closeWorkboxSnapshot()
         }
-
-        // console.log('--------------------------\n')
 
     }
 
-    async clearSubscriptionsToWorkboxRecords() {
-        const { workboxRecordPublishers } = this.publishers
+    // async clearSubscriptionsToWorkboxRecords() {
+    //     const { workboxRecordPublishers } = this.publishers
 
-        const workboxList = Array.from(workboxRecordPublishers,([index, value]) => index)
+    //     const workboxList = Array.from(workboxRecordPublishers,([index, value]) => index)
 
-        for (let index = 0; index < workboxRecordPublishers.size; index++) {
-            const workboxID = workboxList[index]
-            const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
-            await workboxRecordPublisher.unSubscribeAll()
-            console.log('closeSnapshot from clearSubscriptionsToWorkboxRecords', workboxRecordPublishers)
-            await workboxRecordPublisher.closeSnapshot()
-        }
+    //     for (let index = 0; index < workboxRecordPublishers.size; index++) {
+    //         const workboxID = workboxList[index]
+    //         const workboxRecordPublisher = workboxRecordPublishers.get(workboxID)
+    //         await workboxRecordPublisher.unSubscribeAll()
+    //         // console.log('closeSnapshot from clearSubscriptionsToWorkboxRecords', workboxRecordPublishers)
+    //         await workboxRecordPublisher.closeSnapshot()
+    //     }
 
-        workboxRecordPublishers.clear()
-    }
+    //     workboxRecordPublishers.clear()
+    // }
 
 }
 

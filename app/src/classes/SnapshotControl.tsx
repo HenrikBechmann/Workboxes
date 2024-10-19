@@ -36,8 +36,6 @@ class SnapshotControl {
 
         this.snapshotData.delete(index)
 
-        // console.log('this.snapshotData.size',this.snapshotData.size)
-
     }
 
     wasSchemaChecked = (index) => {

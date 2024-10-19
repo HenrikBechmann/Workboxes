@@ -41,16 +41,20 @@ class DomainRecordPublisher {
     domainRecord = null
     memberRecord = null
 
-    async openSnapshot() {
+    private async openDomainSnapshot() {
 
         const {domainSnapshotIndex, memberSnapshotIndex} = 
-            await this.setDomainSnapshots(this.workspaceHandler, this.domainID, this.setDomainRecord, this.setMemberRecord)
+            await this.createDomainSnapshots(this.workspaceHandler, this.domainID)
+        // console.log('creating domain snapshot', domainSnapshotIndex)
+
         this.domainSnapshotIndex = domainSnapshotIndex
         this.memberSnapshotIndex = memberSnapshotIndex
 
     }
 
-    async closeSnapshot() {
+    private async closeDomainSnapshot() {
+
+        console.log('closing domain snapshot', this.domainSnapshotIndex)
 
         const { snapshotControl } = this.workspaceHandler
 
@@ -58,10 +62,14 @@ class DomainRecordPublisher {
         snapshotControl.has(this.domainSnapshotIndex) && snapshotControl.unsub(this.domainSnapshotIndex)
         snapshotControl.has(this.memberSnapshotIndex) && snapshotControl.unsub(this.memberSnapshotIndex)
 
+        this.domainSnapshotIndex = null
+        this.memberSnapshotIndex = null
+
     }
 
-    private setDomainRecord = (domainRecord) => {
+    private updateDomainSubscribers = (domainRecord) => {
 
+        // this.subscriptions.size && console.log('updating domain subscribers')
         this.domainRecord = domainRecord
         this.subscriptions.forEach((subscription) =>{
             subscription.functions.updateDomainData(domainRecord)
@@ -69,7 +77,7 @@ class DomainRecordPublisher {
 
     }
 
-    private setMemberRecord = (memberRecord) => {
+    private updateMemberSubscribers = (memberRecord) => {
 
         this.memberRecord = memberRecord
         this.subscriptions.forEach((subscription) =>{
@@ -78,18 +86,32 @@ class DomainRecordPublisher {
 
     }
 
+    // only called from subscriptionHandler
     async subscribe (domainSubscriptionControlData) {
 
+        const { snapshotControl } = this.workspaceHandler
+
+        // TODO try to remove race condition requiring check for subscription
+        if (!snapshotControl.has(this.domainSnapshotIndex)) {
+
+            await this.openDomainSnapshot()
+
+        }
+
         this.subscriptions.set(domainSubscriptionControlData.subscriptionindex, domainSubscriptionControlData)
-        domainSubscriptionControlData.functions.updateDomainData(this.domainRecord)
         domainSubscriptionControlData.functions.updateDomainData && 
             domainSubscriptionControlData.functions.updateDomainData(this.domainRecord)
 
     }
 
+    // only called from subscriptionHandler
     async unSubscribe(domainSubscriptionControlData) {
 
         this.subscriptions.delete(domainSubscriptionControlData.subscriptionindex)
+
+        if (!this.subscriptions.size) {
+            await this.closeDomainSnapshot()
+        }
 
     }
 
@@ -99,7 +121,7 @@ class DomainRecordPublisher {
 
     }
 
-    async setDomainSnapshots(workspaceHandler, domainID, setDomainRecord, setMemberRecord) {
+    private async createDomainSnapshots(workspaceHandler, domainID) {
 
         const 
             { snapshotControl } = workspaceHandler,
@@ -147,7 +169,7 @@ class DomainRecordPublisher {
                         }
 
                         // set new domain record
-                        setDomainRecord(domainRecord)
+                        this.updateDomainSubscribers(domainRecord)
 
                     }
 
@@ -211,7 +233,7 @@ class DomainRecordPublisher {
                         }
 
                         // set new membership record
-                        setMemberRecord(memberRecord)
+                        this.updateMemberSubscribers(memberRecord)
 
                     }
 

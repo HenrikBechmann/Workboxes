@@ -37,7 +37,7 @@ class WorkboxRecordPublisher {
 
     domainSubscriptionControlData
 
-    async openSnapshot() {
+    async openWorkboxSnapshot() {
 
         // console.log('openSnapshot')
 
@@ -48,11 +48,11 @@ class WorkboxRecordPublisher {
     }
 
     updateDomainData = (domainRecord) => {
+
+        // console.log('update domain data', domainRecord)
         this.domainRecord = domainRecord
 
-        // console.log('updateDomainData for workboxID, domainRecord, workboxRecord', this.workboxID, domainRecord, this.workboxRecord)
-
-        if (this.workboxRecord) {
+        if (this.workboxRecord && domainRecord) {
             if (this.workboxRecord.profile.domain.name !== domainRecord.profile.domain.name) {
                 this.workboxRecord.profile.domain.name = domainRecord.profile.domain.name
                 this.subscriptions.forEach((subscription) =>{
@@ -86,19 +86,19 @@ class WorkboxRecordPublisher {
         this.domainSubscriptionControlData = domainSubscriptionControlData
         
         // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
-        workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData)
+        workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData, 'workboxRecordPublisher')
 
     }
 
-    async unsubscribeFromDomainRecord() {
+    private async unsubscribeFromDomainRecord() {
 
         const {workspaceHandler} = this
 
-        await workspaceHandler.unsubscribeFromDomainRecord(this.domainSubscriptionControlData)
+        await workspaceHandler.unsubscribeFromDomainRecord(this.domainSubscriptionControlData, 'workbox record publisher')
 
     }
 
-    async closeSnapshot() {
+    async closeWorkboxSnapshot() {
 
         this.unsubscribeFromDomainRecord()
 
@@ -145,20 +145,18 @@ class WorkboxRecordPublisher {
 
         this.subscriptions.set(workboxSubscriptionControlData.subscriptionindex, workboxSubscriptionControlData)
 
-        // console.log('WorkboxRecordPublisher.subscribe: workboxSubscriptionControlData, this.subscriptions, this.workboxRecord', 
-        //     workboxSubscriptionControlData, this.subscriptions, this.workboxRecord)
-        // console.log('udpateWorkboxRecord')
-
         this.workboxRecord && workboxSubscriptionControlData.functions.updateWorkboxData(this.workboxRecord)
 
     }
 
-    async unSubscribe(workboxSubscriptionControlData) {
+    async unSubscribe(workboxSubscriptionControlData, source) {
 
-        // console.log('WorkboxPublisher.unsubscribe: workboxSubscriptionControlData, this.subscriptions', 
-        //     workboxSubscriptionControlData, this.subscriptions)
-
+        // console.log('unsubscribe from workbox data', source)
         this.subscriptions.delete(workboxSubscriptionControlData.subscriptionindex)
+
+        if (!this.subscriptions.size) {
+            await this.closeWorkboxSnapshot()
+        }
 
     }
 

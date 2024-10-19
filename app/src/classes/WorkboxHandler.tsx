@@ -290,7 +290,7 @@ class WorkboxHandler {
 
     async unsubscribeFromWorkboxRecord() {
 
-        await this.internal.workspaceHandler.unsubscribeFromWorkboxRecord(this.workboxSubscriptionControlData)
+        await this.internal.workspaceHandler.unsubscribeFromWorkboxRecord(this.workboxSubscriptionControlData, 'workbox handler')
 
     }
 

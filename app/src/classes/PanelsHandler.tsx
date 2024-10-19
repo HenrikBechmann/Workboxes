@@ -50,7 +50,7 @@ class PanelsHandler {
 
         const { panelRecords, panelControlMap} = this.workspaceHandler
         panelRecords.length = 0 // start over
-        await this.workspaceHandler.clearSubscriptionsToDomainRecords()
+        await this.workspaceHandler.clearSubscriptionsToDomainRecords('panel reset')
         panelControlMap.clear()
 
         const 
@@ -417,7 +417,7 @@ class PanelsHandler {
             { panelRecords, changedRecords, panelControlMap } = workspaceHandler
 
         panelRecords.splice(panelSelection.index, 1)
-        await this.workspaceHandler.unsubscribeFromDomainRecord(panelSelection)
+        await this.workspaceHandler.unsubscribeFromDomainRecord(panelSelection, 'panel')
         panelControlMap.delete(panelSelection.id)
 
         const deletedIndex = panelSelection.index

@@ -79,7 +79,7 @@ const WorkspaceToolbar = (props) => {
         [panelSetDefaultDialogState, setPanelSetDefaultDialogState] = useState(false),
         [panelReorderDialogState, setPanelReorderDialogState] = useState(false),
 
-        previousSubscriptionControlDataRef = useRef(null),
+        // previousSubscriptionControlDataRef = useRef(null),
 
         // navigation
         navigate = useNavigate(),
@@ -173,7 +173,7 @@ const WorkspaceToolbar = (props) => {
 
     }
 
-    const setPanelDomainContext = (panelSelection) => {
+    async function setPanelDomainContext (panelSelection) {
 
         const 
             panelDomainID = panelRecord.profile.domain.id,
@@ -184,16 +184,16 @@ const WorkspaceToolbar = (props) => {
                     updateMemberData,
                 },
                 subscriptionindex:'workspacemenu.' + panelSelection.id
-            },
-            previousSubscriptionControlData = previousSubscriptionControlDataRef.current
+            }
+            // previousSubscriptionControlData = previousSubscriptionControlDataRef.current
 
             // subscribe to new domainRecord to avoid closing domain snapshot by unsubscribing previous, in case the same
-            workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData)
+            await workspaceHandler.subscribeToDomainRecord(domainSubscriptionControlData, 'toolbar_workspace')
 
-            if (previousSubscriptionControlData) {
-                workspaceHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData)
-            }
-            previousSubscriptionControlDataRef.current = domainSubscriptionControlData
+            // if (previousSubscriptionControlData) {
+            //     await workspaceHandler.unsubscribeFromDomainRecord(previousSubscriptionControlData, 'workspace toolbar')
+            // }
+            // previousSubscriptionControlDataRef.current = domainSubscriptionControlData
 
     }
 
