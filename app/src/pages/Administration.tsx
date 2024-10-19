@@ -41,9 +41,11 @@ const contentBoxStyle = {
 
 const ContentBox = (props) => {
 
-    const {children} = props
+    const {children, style} = props
 
-    return <Box style = {contentBoxStyle}>
+    const renderStyle = {...contentBoxStyle, ...style}
+
+    return <Box style = {renderStyle}>
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
                 {children}
             </VStack>
@@ -247,12 +249,11 @@ const Administration = (props) => {
     return <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
             <ContentBox>
                 <Text>Select user account</Text>
-                <Button onClick = {createMemberRecords} colorScheme = 'blue'>Create</Button>
                 <Select>
                     <option value="__any__">All</option>
                 </Select>
             </ContentBox>
-            <ContentBox>
+            <ContentBox style = {{width:'400px',fontSize:'small'}}>
                 <Text>Assert presence of...</Text>
                 <UnorderedList>
                     <ListItem>user member record</ListItem>
@@ -261,7 +262,7 @@ const Administration = (props) => {
                     <ListItem>user/access/memberships record</ListItem>
                     <ListItem>user default workspace record, with default panel record</ListItem>
                 </UnorderedList>
-                <Button onClick = {createMemberRecords} colorScheme = 'blue'>Create</Button>
+                <Button onClick = {createMemberRecords} colorScheme = 'blue'>Assert</Button>
                 <Text>See console for results</Text>
             </ContentBox>
         </Box>

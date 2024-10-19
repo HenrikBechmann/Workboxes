@@ -45,25 +45,25 @@ const menuTileData = [
             buttonPrompt:'Administer',
             nav:'/sysadmin/administration',
         },
-        {
-            header:'Global settings',
-            body:`One document holds global settings for clients; 
-                another holds internal global settings.`,
-            buttonPrompt:'Administer',
-            nav:'/sysadmin/settings',
-        },
-        {
-            header:'Workbox metadata',
-            body:`Technical parameters for each data type, informing clients how to present fields.`,
-            buttonPrompt:'Administer',
-            nav:'/sysadmin/metadata',
-        },
-        {
-            header:'User controls',
-            body:`Invitations and suspensions, by email.`,
-            buttonPrompt:'Administer',
-            nav:'/sysadmin/usercontrols',
-        },
+        // {
+        //     header:'Global settings',
+        //     body:`One document holds global settings for clients; 
+        //         another holds internal global settings.`,
+        //     buttonPrompt:'Administer',
+        //     nav:'/sysadmin/settings',
+        // },
+        // {
+        //     header:'Workbox metadata',
+        //     body:`Technical parameters for each data type, informing clients how to present fields.`,
+        //     buttonPrompt:'Administer',
+        //     nav:'/sysadmin/metadata',
+        // },
+        // {
+        //     header:'User controls',
+        //     body:`Invitations and suspensions, by email.`,
+        //     buttonPrompt:'Administer',
+        //     nav:'/sysadmin/usercontrols',
+        // },
         {
             header:'Help panels',
             body:`Sets the text for each help icon. Help icons are found all over the place.`,
@@ -110,7 +110,7 @@ const Sysadmin = (props) => {
                     orientation = 'vertical'
                     padding = {[10,20]}
                     gap = {20}
-                    startingListRange = {[0,4]}
+                    startingListRange = {[0,1]}
                     getItemPack = {getMenuTile}
                     usePlaceholder = {false}
                 /></Suspense>
