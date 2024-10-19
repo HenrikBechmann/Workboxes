@@ -1,6 +1,6 @@
 // Sysadmin.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
-import React, {CSSProperties, lazy} from 'react'
+import React, {CSSProperties, Suspense, lazy} from 'react'
 
 import { Box } from '@chakra-ui/react'
 
@@ -40,6 +40,12 @@ const MenuTile = (props) => {
 
 const menuTileData = [
         {
+            header:'general admin',
+            body:`General admin procedures.`,
+            buttonPrompt:'Administer',
+            nav:'/sysadmin/administration',
+        },
+        {
             header:'Global settings',
             body:`One document holds global settings for clients; 
                 another holds internal global settings.`,
@@ -63,12 +69,6 @@ const menuTileData = [
             body:`Sets the text for each help icon. Help icons are found all over the place.`,
             buttonPrompt:'Administer',
             nav:'/sysadmin/helppanels',
-        },
-        {
-            header:'user admin',
-            body:`General user admin procedures.`,
-            buttonPrompt:'Administer',
-            nav:'/sysadmin/administration',
         },
     ]
 
@@ -104,7 +104,7 @@ const Sysadmin = (props) => {
         </GridItem>
         <GridItem data-type = 'sysadmin-body' area = 'body'>
             <Box data-type = 'tiles-body' style = {scrollerContainer}>
-                <Scroller 
+                <Suspense><Scroller 
                     cellWidth = {200} 
                     cellHeight = {220} 
                     orientation = 'vertical'
@@ -113,7 +113,7 @@ const Sysadmin = (props) => {
                     startingListRange = {[0,4]}
                     getItemPack = {getMenuTile}
                     usePlaceholder = {false}
-                />
+                /></Suspense>
             </Box>
         </GridItem>
     </Grid>

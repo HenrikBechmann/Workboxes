@@ -1,9 +1,17 @@
 // Administration.tsx
 // copyright (c) 2024-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
+/*
+    general admin functions
+    - specify user to address admin to
+
+
+
+*/
+
 import React from 'react'
 
-import { Box, VStack, Text, Button } from '@chakra-ui/react'
+import { Box, VStack, Text, Button, UnorderedList, ListItem, Select } from '@chakra-ui/react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -238,8 +246,23 @@ const Administration = (props) => {
 
     return <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
             <ContentBox>
-                <Text>Create current user Member Record and Member Workbox</Text>
+                <Text>Select user account</Text>
                 <Button onClick = {createMemberRecords} colorScheme = 'blue'>Create</Button>
+                <Select>
+                    <option value="__any__">All</option>
+                </Select>
+            </ContentBox>
+            <ContentBox>
+                <Text>Assert presence of...</Text>
+                <UnorderedList>
+                    <ListItem>user member record</ListItem>
+                    <ListItem>user base domain workbox and standard resources</ListItem>
+                    <ListItem>user base member workbox and standard resources</ListItem>
+                    <ListItem>user/access/memberships record</ListItem>
+                    <ListItem>user default workspace record, with default panel record</ListItem>
+                </UnorderedList>
+                <Button onClick = {createMemberRecords} colorScheme = 'blue'>Create</Button>
+                <Text>See console for results</Text>
             </ContentBox>
         </Box>
 

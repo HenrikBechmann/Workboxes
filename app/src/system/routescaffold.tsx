@@ -1,7 +1,7 @@
 // scaffold.tsx
 // copyright (c) 2023-present Henrik Bechmann, Toronto, Licence: GPL-3.0
 
-import React, { lazy } from 'react'
+import React, { Suspense, lazy } from 'react'
 
 // general support
 const Signin = lazy(()=> import('../pages/Signin'))
@@ -34,12 +34,12 @@ const Unauthorized = lazy(()=> import('../pages/Unauthorized'))
 const AdminRouteController = lazy(()=> import('./routing/AdminRouteController'))
 
 const AdminLayout = lazy(()=> import('./routing/AdminLayout'))
-const Sysadmin = lazy(()=> import('../pages/Sysadmin'))
+const Sysadmin  = lazy(()=> import('../pages/Sysadmin'))
 const SysSettings = lazy(()=> import('../pages/SysSettings'))
 const Metadata = lazy(()=> import('../pages/Metadata'))
 const UserControls = lazy(()=> import('../pages/UserControls'))
 const HelpPanels = lazy(()=> import('../pages/HelpPanels'))
-const Administration = lazy(()=> import('../pages/Administration'))
+const Administration = lazy(()=> import( '../pages/Administration'))
 
 const routes = [
     
@@ -110,14 +110,14 @@ const routes = [
     },
     {
         path: '/sysadmin',
-        element: <AdminRouteController />,
+        element: <Suspense><AdminRouteController /></Suspense>,
         children: [
             {
                 element: <AdminLayout />,
                 children:[
                     {
                         index:true,
-                        element:<Sysadmin />,
+                        element:<Suspense><Sysadmin /></Suspense>,
                     },
                     {
                         path:'settings',
@@ -129,15 +129,15 @@ const routes = [
                     },
                     {
                         path:'usercontrols',
-                        element:<UserControls />
+                        element:<div><Suspense><UserControls /></Suspense></div>
                     },
                     {
                         path:'helppanels',
-                        element:<HelpPanels />
+                        element:<div><Suspense><HelpPanels /></Suspense></div>
                     },
                     {
                         path:'administration',
-                        element:<Administration />
+                        element:<div><Suspense><Administration /></Suspense></div>
                     },
                 ]
             },
