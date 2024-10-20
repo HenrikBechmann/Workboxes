@@ -19,7 +19,8 @@ import {
     FormControl, FormLabel, FormHelperText, FormErrorMessage,
     Flex,
     Input,
-    Button
+    Button,
+    Select,
 } from '@chakra-ui/react'
 
 import { doc, collection } from 'firebase/firestore'
@@ -54,17 +55,21 @@ const WorkboxCreateStarter = (props) => {
         systemRecords = useSystemRecords(),
         maxNameLength = systemRecords.settings.constraints.input.nameLength_max,
         minNameLength = systemRecords.settings.constraints.input.nameLength_min,
+        createTypeAlias = systemRecords.workboxaliases.aliases[createType].name,
         errorMessages = {
             name:`The name can only be between ${minNameLength} and ${maxNameLength} characters, and cannot be blank.`,
         },
         helperText = {
             name:`Subject is required. Betweeen ${minNameLength} and ${maxNameLength} characters.`,
+            variant:'(optional) This will structure the new workbox resource lists.'
         },
         invalidFieldFlagsRef = useRef({
             name:false,
         }),
         [editData, setEditData] = useState({name:'untitled'}),
         invalidFieldFlags = invalidFieldFlagsRef.current
+
+    // console.log('system',systemRecords)
 
     const onCancel = () => {
         cancelCreate()
@@ -168,6 +173,17 @@ const WorkboxCreateStarter = (props) => {
                 </FormErrorMessage>
                 <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
                     {helperText.name} Current length is {editData.name?.length || '0 (blank)'}.
+                </FormHelperText>
+            </FormControl>
+            <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}}>
+                <Flex data-type = 'documenteditflex' align = 'center'>
+                    <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'6px'}} fontSize = 'sm'>{`[${createTypeAlias}] Template variant`}:</FormLabel>
+                    <Select width = '200px'>
+                        
+                    </Select>
+                </Flex>
+                <FormHelperText mt = '0' fontSize = 'xs' fontStyle = 'italic' borderBottom = '1px solid silver'>
+                    {helperText.variant}.
                 </FormHelperText>
             </FormControl>
             <Button onClick = {doCreate} colorScheme = 'blue'>{prompt}</Button>

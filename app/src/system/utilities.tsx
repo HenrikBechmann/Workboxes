@@ -330,6 +330,7 @@ export const versionData = {
           image: {
             source: null,
           },
+          variant:null,
         },
         commits: {
           created_by: {
@@ -421,6 +422,7 @@ export const versionData = {
           image: {
             source: null,
           },
+          variant:null,
         },
         commits: {
           created_by: {
@@ -512,6 +514,7 @@ export const versionData = {
           image: {
             source: null,
           },
+          variant:null,
         },
         commits: {
           created_by: {
@@ -608,6 +611,7 @@ export const versionData = {
           image: {
             source: null,
           },
+          variant:null,
         },
         commits: {
           created_by: {
