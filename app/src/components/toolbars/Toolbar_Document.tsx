@@ -283,7 +283,7 @@ const DocumentToolbar = (props) => {
             <Select ref = {createTypeRef} size = 'xs' marginLeft = '8px' width = '80px' onChange = {onChangeCreateType}>
                 <option value="note">Note</option>
                 <option value="weblink">Weblink</option>
-                <option value="media">Media box</option>
+                <option value="media">Media</option>
             </Select>
         </Box>
         { addToggle }

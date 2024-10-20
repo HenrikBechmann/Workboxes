@@ -348,8 +348,14 @@ export const versionData = {
           connectors: 0,
           references: 0,
         },
+        template: null,
+        flags:{
+          is_template:false,
+          locked:false,
+        }
       },
       document: {
+        locked: false,
         reconcilefileserror:false,
         reconcilemonth:'0',
         files:[],
@@ -372,8 +378,6 @@ export const versionData = {
         extensions: {
           list:[],
         },
-        template: null,
-        locked: false,
       },
       resources: {
         accepts: [],
@@ -440,8 +444,14 @@ export const versionData = {
           connectors: 0,
           references: 0,
         },
+        template: null,
+        flags:{
+          is_template:false,
+          locked:false,
+        }
       },
       document: {
+        locked: false,
         reconcilefileserror:false,
         reconcilemonth:'0',
         files:[],
@@ -464,8 +474,6 @@ export const versionData = {
         extensions: {
           list:[],
         },
-        template: null,
-        locked: false,
       },
       resources: {
         accepts: [],
@@ -529,8 +537,14 @@ export const versionData = {
           connectors: 0,
           references: 0,
         },
+        template: null,
+        flags:{
+          is_template:false,
+          locked:false,
+        }
       },
       document: {
+        locked:false,
         reconcilefileserror:false,
         reconcilemonth:'0',
         files:[],
@@ -553,8 +567,6 @@ export const versionData = {
         extensions: {
           list:[],
         },
-        template: null,
-        locked:false,
       },
       resources: {
         accepts: [],
@@ -626,8 +638,14 @@ export const versionData = {
           connectors: 0,
           references: 0,
         },
+        template: null,
+        flags:{
+          is_template:false,
+          locked:false,
+        }
       },
       document: {
+        locked: false,
         reconcilefileserror:false,
         reconcilemonth:'0',
         files:[],
@@ -650,8 +668,6 @@ export const versionData = {
         extensions: {
           list:[],
         },
-        template: null,
-        locked: false,
       },
       resources: {
         accepts: [],

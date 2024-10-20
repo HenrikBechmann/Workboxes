@@ -895,9 +895,6 @@ export const UserProvider = ({children}) => {
                 extensions: {
                   list:[],
                 },
-                messages: {
-                  list:[],
-                },
                 locked:false,
             },
         })

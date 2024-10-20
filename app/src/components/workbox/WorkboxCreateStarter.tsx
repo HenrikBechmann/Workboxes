@@ -61,7 +61,7 @@ const WorkboxCreateStarter = (props) => {
         },
         helperText = {
             name:`Subject is required. Betweeen ${minNameLength} and ${maxNameLength} characters.`,
-            variant:'(optional) This will structure the new workbox resource lists.'
+            variant:'(Recommended) The variant will structure the new workbox resource lists.'
         },
         invalidFieldFlagsRef = useRef({
             name:false,
