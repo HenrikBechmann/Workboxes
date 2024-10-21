@@ -9,7 +9,7 @@
 
 */
 
-import React from 'react'
+import React, {useEffect, useRef, useState, useMemo} from 'react'
 
 import { Box, VStack, Text, Button, UnorderedList, ListItem, Select } from '@chakra-ui/react'
 
@@ -58,15 +58,22 @@ const Administration = (props) => {
         // userRecords = useUserRecords(),
         // errorControl = useErrorControl(),
         // navigate = useNavigate(),
+        userOptions = useUserOptions(),
         createMemberRecords = useCreateMemberRecords
+
+    const selectComponent = useMemo(()=>{
+
+        return <Select>
+            {userOptions}
+        </Select>
+
+    },[userOptions])
 
     return (
     <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
-            <Text>Select user account</Text>
-            <Select>
-                <option value="__any__">All</option>
-            </Select>
+            <Text>Select user account for administration</Text>
+            {selectComponent}
         </ContentBox>
         <ContentBox style = {{width:'400px',fontSize:'small'}}>
             <Text>Assert presence of...</Text>
@@ -82,6 +89,37 @@ const Administration = (props) => {
         </ContentBox>
     </Box>)
 
+}
+
+const useUserOptions = () => {
+
+    const 
+        [userList, setUserList] = useState([]),
+        db = useFirestore()
+
+    async function setUserOptions () {
+        const 
+            q = query(collection(db, "users")),
+            userRecords = await getDocs(q),
+            list = []
+
+        userRecords.forEach((doc) => {
+            list.push(
+                <option key = {doc.id} value = {doc.id}>{doc.data().profile.user.name}</option>
+            )
+        })
+
+        setUserList(list)
+
+    }
+
+    useEffect(()=>{
+
+        setUserOptions()
+
+    },[])
+
+    return userList
 }
 
 async function useCreateMemberRecords() {
