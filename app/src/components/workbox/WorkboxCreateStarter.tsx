@@ -124,7 +124,7 @@ const WorkboxCreateStarter = (props) => {
 
         const databaseRecord = updateDocumentSchema('workboxes', createType ,{}, workboxRecord)
 
-        await workboxHandler.saveNewWorkboxRecord(databaseRecord)
+        // await workboxHandler.saveNewWorkboxRecord(databaseRecord)
 
     }
 
@@ -177,7 +177,7 @@ const WorkboxCreateStarter = (props) => {
             </FormControl>
             <FormControl style = {{minWidth:'300px', maxWidth:'500px', paddingBottom:'6px'}}>
                 <Flex data-type = 'documenteditflex' align = 'center'>
-                    <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'6px'}} fontSize = 'sm'>{`[${createTypeAlias}] Template variant`}:</FormLabel>
+                    <FormLabel data-type = 'subjectlabel' style = {{margin:0, marginRight:'6px'}} fontSize = 'sm'>{`Template variant [${createTypeAlias}]`}:</FormLabel>
                     <Select width = '200px'>
                         
                     </Select>

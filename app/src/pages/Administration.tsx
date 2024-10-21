@@ -55,19 +55,48 @@ const ContentBox = (props) => {
 const Administration = (props) => {
 
     const
+        // userRecords = useUserRecords(),
+        // errorControl = useErrorControl(),
+        // navigate = useNavigate(),
+        createMemberRecords = useCreateMemberRecords
+
+    return (
+    <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
+        <ContentBox>
+            <Text>Select user account</Text>
+            <Select>
+                <option value="__any__">All</option>
+            </Select>
+        </ContentBox>
+        <ContentBox style = {{width:'400px',fontSize:'small'}}>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user member record</ListItem>
+                <ListItem>user base domain workbox and standard resources</ListItem>
+                <ListItem>user base member workbox and standard resources</ListItem>
+                <ListItem>user/access/memberships record</ListItem>
+                <ListItem>user default workspace record, with default panel record</ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+    </Box>)
+
+}
+
+async function useCreateMemberRecords() {
+
+    const 
         db = useFirestore(),
-        userRecords = useUserRecords(),
         errorControl = useErrorControl(),
-        navigate = useNavigate()
+        navigate = useNavigate(),
+        userRecords = useUserRecords(),
+        userDomainID = userRecords.domain.profile.domain.id,
+        memberCollection = collection(db, 'domains', userDomainID, 'members'),
+        workboxCollection = collection(db, 'workboxes'),
+        membersQuery = query(memberCollection)
 
-    async function createMemberRecords() {
-
-        const 
-            userDomainID = userRecords.domain.profile.domain.id,
-            memberCollection = collection(db, 'domains', userDomainID, 'members'),
-            workboxCollection = collection(db, 'workboxes'),
-            membersQuery = query(memberCollection)
-
+    async function createMemberRecords () {
         let queryPayload
         // ------------------[ database interaction ]-----------------
         try {
@@ -245,28 +274,8 @@ const Administration = (props) => {
 
         alert('Done.')
     }
-
-    return <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
-            <ContentBox>
-                <Text>Select user account</Text>
-                <Select>
-                    <option value="__any__">All</option>
-                </Select>
-            </ContentBox>
-            <ContentBox style = {{width:'400px',fontSize:'small'}}>
-                <Text>Assert presence of...</Text>
-                <UnorderedList>
-                    <ListItem>user member record</ListItem>
-                    <ListItem>user base domain workbox and standard resources</ListItem>
-                    <ListItem>user base member workbox and standard resources</ListItem>
-                    <ListItem>user/access/memberships record</ListItem>
-                    <ListItem>user default workspace record, with default panel record</ListItem>
-                </UnorderedList>
-                <Button onClick = {createMemberRecords} colorScheme = 'blue'>Assert</Button>
-                <Text>See console for results</Text>
-            </ContentBox>
-        </Box>
-
+    return createMemberRecords
 }
+
 
 export default Administration
