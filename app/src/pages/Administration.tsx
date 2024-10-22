@@ -53,9 +53,9 @@ const ContentBox = (props) => {
 const Administration = (props) => {
 
     const
-        [userSelectionSpecs] = useUserOptions(),
+        [userSelectionSpecs] = useUserSelections(),
         [userID, setUserID] = useState(null),
-        assertMemberRecord = useAssertMemberRecord(userID)
+        assertMember = useAssertMember(userID)
 
     const selectComponent = useMemo(()=>{
 
@@ -75,6 +75,30 @@ const Administration = (props) => {
 
     },[userSelectionSpecs])
 
+    const assertUser = () => {
+
+    }
+    const assertAccount = () => {
+        
+    }
+    const assertDomain = () => {
+        
+    }
+    const assertDomainWorkbox = () => {
+        
+    }
+    // const assertMember = () => {
+        
+    // }
+    const assertMemberWorkbox = () => {
+        
+    }
+    const assertWorkspace = () => {
+        
+    }
+    const assertAccessMemberships = () => {
+        
+    }
     return (
     <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
@@ -101,7 +125,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>[1]<b>user</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertUser} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -109,7 +133,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>user [2]<b>account</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertAccount} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -117,7 +141,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>user [3]<b>domain</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertDomain} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -125,7 +149,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertDomainWorkbox} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -133,7 +157,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>user domain [5]<b>member</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertMember} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -141,7 +165,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>base [6]<b>domain member workbox</b> and <b>standard resources connectors</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertMemberWorkbox} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -149,7 +173,7 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertWorkspace} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
@@ -157,14 +181,14 @@ const Administration = (props) => {
             <UnorderedList>
                 <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
-            <Button colorScheme = 'blue'>Assert</Button>
+            <Button onClick = {assertAccessMemberships} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
     </Box>)
 
 }
 
-const useUserOptions = () => {
+const useUserSelections = () => {
 
     const 
         userListRef = useRef(null),
@@ -201,33 +225,41 @@ const useUserOptions = () => {
     return [userSelectionSpecs]
 }
 
-async function useAssertMemberRecord(userID) {
+function useAssertMember(userID) {
 
-    const assertMemberRecord = useMemo(()=>{
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
 
-        async function assertMemberRecord () {
-            const 
-                db = useFirestore(),
-                errorControl = useErrorControl(),
-                navigate = useNavigate(),
-                userCollection = collection(db,'users'),
-                userDoc = userID?await getDoc(doc(userCollection,userID)):null,
-                userRecord = userDoc?userDoc.data():null,
-                workboxCollection = collection(db, 'workboxes')
+    async function setData() {
+        const
+            userCollection = collection(db,'users'),
+            userDoc = userID?await getDoc(doc(userCollection,userID)):null,
+            userRecord = userDoc?userDoc.data():null,
+            workboxCollection = collection(db, 'workboxes'),
+            userDomainID = userRecord.profile.domain.id,
+            memberCollection = collection(db, 'domains', userDomainID, 'members'),
+            membersQuery = query(memberCollection,where('profile.user.id','==',userID)),
+            memberDocs = await getDocs(membersQuery),
+            userMemberRecord = memberDocs.docs[0].data()
 
-            if (!userRecord) {
-                alert('user not found')
-                return
-            }
+        if (!userRecord) {
+            alert('user not found')
+            return
+        }
 
-            const
-                userDomainID = userRecord.profile.domain.id,
-                memberCollection = collection(db, 'domains', userDomainID, 'members'),
-                membersQuery = query(memberCollection,where('profile.user.id','==',userID)),
-                memberDoc = await getDoc((doc(memberCollection))),
-                userMemberRecord = memberDoc.data()
+        console.log('userMemberRecord:userDomainID, useMemberRecord',userDomainID, userMemberRecord)
 
-            console.log('userMemberRecord',userMemberRecord)
+    }
+
+    return () => {
+
+        setData()
+
+    }
+
+}
 
         //     let queryPayload
         //     // ------------------[ database interaction ]-----------------
@@ -404,11 +436,6 @@ async function useAssertMemberRecord(userID) {
         //     // --------------------
 
         //     alert('Done.')
-        }
-    },[userID])
-
-    return assertMemberRecord
-}
 
 
 export default Administration
