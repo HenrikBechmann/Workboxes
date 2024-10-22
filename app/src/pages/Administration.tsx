@@ -55,7 +55,15 @@ const Administration = (props) => {
     const
         [userSelectionSpecs] = useUserSelections(),
         [userID, setUserID] = useState(null),
-        assertMember = useAssertMember(userID)
+
+        assertUser = useAssertUser(userID),
+        assertAccount = useAssertAccount(userID),
+        assertDomain = useAssertDomain(userID),
+        assertDomainWorkbox = useAssertDomainWorkbox(userID),
+        assertMember = useAssertMember(userID),
+        assertMemberWorkbox = useAssertMemberWorkbox(userID),
+        assertWorkspace = useAssertWorkspace(userID),
+        assertAccessMemberships = useAssertAccessMemberships(userID)
 
     const selectComponent = useMemo(()=>{
 
@@ -75,30 +83,6 @@ const Administration = (props) => {
 
     },[userSelectionSpecs])
 
-    const assertUser = () => {
-
-    }
-    const assertAccount = () => {
-        
-    }
-    const assertDomain = () => {
-        
-    }
-    const assertDomainWorkbox = () => {
-        
-    }
-    // const assertMember = () => {
-        
-    // }
-    const assertMemberWorkbox = () => {
-        
-    }
-    const assertWorkspace = () => {
-        
-    }
-    const assertAccessMemberships = () => {
-        
-    }
     return (
     <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
         <ContentBox>
@@ -225,6 +209,74 @@ const useUserSelections = () => {
     return [userSelectionSpecs]
 }
 
+function useAssertUser(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertAccount(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertDomain(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertDomainWorkbox(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
 function useAssertMember(userID) {
 
     const 
@@ -232,7 +284,7 @@ function useAssertMember(userID) {
         errorControl = useErrorControl(),
         navigate = useNavigate()
 
-    async function setData() {
+    async function assertData() {
         const
             userCollection = collection(db,'users'),
             userDoc = userID?await getDoc(doc(userCollection,userID)):null,
@@ -255,12 +307,65 @@ function useAssertMember(userID) {
 
     return () => {
 
-        setData()
+        assertData()
 
     }
 
 }
 
+function useAssertMemberWorkbox(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertWorkspace(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertAccessMemberships(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+// ===================================================
+        // for assertMember:
         //     let queryPayload
         //     // ------------------[ database interaction ]-----------------
         //     try {
