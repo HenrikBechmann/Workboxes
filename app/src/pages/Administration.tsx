@@ -3,9 +3,6 @@
 
 /*
     general admin functions
-    - specify user to address admin to
-
-
 
 */
 
@@ -33,17 +30,18 @@ const contentBoxStyle = {
     flexShrink: 0, 
     margin: '5px', 
     backgroundColor:'white', 
-    height:'300px', 
+    height:'200px', 
     width: '300px', 
     border: '5px outset silver',
     paddingTop: '6px',
+    overflow:'scroll',
 }
 
 const ContentBox = (props) => {
 
-    const {children, style} = props
+    const {children, styles} = props
 
-    const renderStyle = {...contentBoxStyle, ...style}
+    const renderStyle = {...contentBoxStyle, ...styles}
 
     return <Box style = {renderStyle}>
             <VStack data-type = 'vstack' padding = '3px' width = '100%'>
@@ -55,15 +53,15 @@ const ContentBox = (props) => {
 const Administration = (props) => {
 
     const
-        [userSpecs] = useUserOptions(),
+        [userSelectionSpecs] = useUserOptions(),
         [userID, setUserID] = useState(null),
         assertMemberRecord = useAssertMemberRecord(userID)
 
     const selectComponent = useMemo(()=>{
 
-        if (!userSpecs) return null
+        if (!userSelectionSpecs) return null
 
-        const {defaultUserID, userOptions} = userSpecs
+        const {defaultUserID, userOptions} = userSelectionSpecs
 
         setUserID(defaultUserID)
 
@@ -75,7 +73,7 @@ const Administration = (props) => {
 
         return component
 
-    },[userSpecs])
+    },[userSelectionSpecs])
 
     return (
     <Box data-type = 'page-content' width = '100%' display = 'flex' flexWrap = 'wrap'>
@@ -83,14 +81,81 @@ const Administration = (props) => {
             <Text>Select user account for administration</Text>
             {selectComponent}
         </ContentBox>
-        <ContentBox style = {{width:'400px',fontSize:'small'}}>
+        <ContentBox styles = {{fontSize:'x-small'}}>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>user member record</ListItem>
-                <ListItem>user base domain workbox and standard resources</ListItem>
-                <ListItem>user base member workbox and standard resources</ListItem>
-                <ListItem>user/access/memberships record</ListItem>
-                <ListItem>user default workspace record, with default panel record</ListItem>
+                <ListItem>[1]<b>user</b></ListItem>
+                <ListItem>user [2]<b>account</b></ListItem>
+                <ListItem>user [3]<b>domain</b></ListItem>
+                <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
+                <ListItem>user domain [5]<b>member</b></ListItem>
+                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resources connectors</b></ListItem>
+                <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
+                <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>[1]<b>user</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user [2]<b>account</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user [3]<b>domain</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user domain [5]<b>member</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resources connectors</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
+            </UnorderedList>
+            <Button colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
             <Button colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -105,7 +170,7 @@ const useUserOptions = () => {
         userListRef = useRef(null),
         defaultValueRef = useRef(null),
         db = useFirestore(),
-        [userSpecs, setUserSpecs] = useState(null)
+        [userSelectionSpecs, setUserSpecs] = useState(null)
 
     async function setUserOptions () { 
 
@@ -133,7 +198,7 @@ const useUserOptions = () => {
 
     },[])
 
-    return [userSpecs]
+    return [userSelectionSpecs]
 }
 
 async function useAssertMemberRecord(userID) {
