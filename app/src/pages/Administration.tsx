@@ -224,11 +224,19 @@ function useAssertUser(userID) {
         const docRef = doc(collectionRef, userID)
         const recordRef = await getDoc(docRef)
         if (recordRef.exists()) {
-            console.log(`user record for ${userID} retrieved`)
+            console.log(`user record for ${userID} retrieved`, )
         } else {
             console.log(`user record for ${userID} NOT retrieved`)
+            return
         }
-        const recordData = recordRef.data()
+
+        let recordData = recordRef.data()
+
+        console.log('retrieved version',recordData.version)
+
+        recordData = updateDocumentSchema('users','standard',recordData,{},true) // force update
+
+        console.log('asserted updated version')
 
         const { profile, workspace } = recordData
 

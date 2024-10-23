@@ -18,12 +18,17 @@ export const updateDocumentSchema = (collection, type, document, initialvalues =
 
         const 
           versionData = versionMaps[collection][type],
-          latestVersion = versionData.latest_version,
-          sourceVersion = document.version
+          latestVersion = versionData.latest_version
 
-        if (sourceVersion === latestVersion) {
+        let sourceVersion = document.version
+
+        if ((!force) && (sourceVersion === latestVersion)) {
 
           return document // nothing to do
+
+        } else {
+
+          sourceVersion = null
 
         }
 
@@ -49,6 +54,7 @@ export const updateDocumentSchema = (collection, type, document, initialvalues =
           transform && transform(transitionDocument)
 
           // merge new structure/additions
+
           const updateversiondata = versionData.datamap.get(targetVersionNumber)
 
           if (updateversiondata) {
