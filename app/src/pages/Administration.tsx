@@ -220,23 +220,30 @@ function useAssertUser(userID) {
 
     async function assertData() {
 
-        const collectionRef = collection(db,'users')
-        const docRef = doc(collectionRef, userID)
-        const recordRef = await getDoc(docRef)
+        const 
+            collectionRef = collection(db,'users'),
+            docRef = doc(collectionRef, userID),
+            recordRef = await getDoc(docRef)
+
         if (recordRef.exists()) {
             console.log(`user record for ${userID} retrieved`, )
         } else {
-            console.log(`user record for ${userID} NOT retrieved`)
+            console.log(`user record for ${userID} NOT retrieved, aborting`)
             return
         }
+
+        let update_count = 0
 
         let recordData = recordRef.data()
 
         console.log('retrieved version',recordData.version)
 
+        const opening_version = recordData.version
+
+        // todo run transformations
         recordData = updateDocumentSchema('users','standard',recordData,{},true) // force update
 
-        console.log('asserted updated version')
+        console.log('asserted most recent version')
 
         const { profile, workspace } = recordData
 
@@ -251,6 +258,11 @@ function useAssertUser(userID) {
 
         console.log('version, generation', recordData.version, recordData.generation)
 
+        if (recordData.version !== opening_version) {
+            console.log('version number was updated')
+            update_count++
+        }
+
         const 
             account = profile.account,
             domain = profile.domain,
@@ -260,6 +272,7 @@ function useAssertUser(userID) {
 
         console.log('handle, account, domain, workspace_desktop, workspace_mobile\n',
             handle, account, domain, workspace_desktop, workspace_mobile)
+
     }
 
     return () => {

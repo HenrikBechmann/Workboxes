@@ -8,6 +8,7 @@ export const copyVersionDataToFirestore = () => {
 }
 
 // TODO integrate force arg to allow for maintenance
+// TODO run transformation available for force
 export const updateDocumentSchema = (collection, type, document, initialvalues = {}, force = false) => {
 
     // console.log('updateDocumentSchema: collection, type, document, initialvalues', 
