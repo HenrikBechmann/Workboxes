@@ -97,7 +97,7 @@ const Administration = (props) => {
                 <ListItem>user [3]<b>domain</b></ListItem>
                 <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
                 <ListItem>user domain [5]<b>member</b></ListItem>
-                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resources connectors</b></ListItem>
+                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
                 <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
                 <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
@@ -147,7 +147,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resources connectors</b></ListItem>
+                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertMemberWorkbox} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>

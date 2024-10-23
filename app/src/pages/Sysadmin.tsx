@@ -45,13 +45,13 @@ const menuTileData = [
             buttonPrompt:'Administer',
             nav:'/sysadmin/administration',
         },
-        // {
-        //     header:'Global settings',
-        //     body:`One document holds global settings for clients; 
-        //         another holds internal global settings.`,
-        //     buttonPrompt:'Administer',
-        //     nav:'/sysadmin/settings',
-        // },
+        {
+            header:'Experimental settings',
+            body:`One document holds global settings for clients; 
+                another holds internal global settings.`,
+            buttonPrompt:'Administer',
+            nav:'/sysadmin/settings',
+        },
         // {
         //     header:'Workbox metadata',
         //     body:`Technical parameters for each data type, informing clients how to present fields.`,

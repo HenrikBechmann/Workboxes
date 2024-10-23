@@ -265,6 +265,7 @@ export const versionData = {
         template:null,
         owner:null,
         sortorder:null,
+        created_timestamp:null,
       },
       child: {
         id:null,
@@ -273,6 +274,7 @@ export const versionData = {
         template:null,
         owner:null,
         sortorder:null,
+        created_timestamp:null,
       },
       profile:{
         connector: {

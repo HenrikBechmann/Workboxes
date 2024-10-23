@@ -121,7 +121,7 @@ const routes = [
                     },
                     {
                         path:'settings',
-                        element:<SysSettings />
+                        element:<div><Suspense><SysSettings /></Suspense></div>
                     },
                     {
                         path:'metadata',
