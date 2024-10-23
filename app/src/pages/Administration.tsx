@@ -21,6 +21,8 @@ import {
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
+import { cloneDeep as _cloneDeep } from 'lodash'
+
 import { useFirestore, useUserRecords, useErrorControl } from '../system/WorkboxesProvider'
 
 import { updateDocumentSchema } from '../system/utilities'
@@ -217,6 +219,39 @@ function useAssertUser(userID) {
         navigate = useNavigate()
 
     async function assertData() {
+
+        const collectionRef = collection(db,'users')
+        const docRef = doc(collectionRef, userID)
+        const recordRef = await getDoc(docRef)
+        if (recordRef.exists()) {
+            console.log(`user record for ${userID} retrieved`)
+        } else {
+            console.log(`user record for ${userID} NOT retrieved`)
+        }
+        const recordData = recordRef.data()
+
+        const { profile, workspace } = recordData
+
+        const commits = _cloneDeep(profile.commits)
+
+        commits.created_timestamp = recordData.profile.commits.created_timestamp.toDate()
+        commits.updated_timestamp = recordData.profile.commits.updated_timestamp.toDate()
+
+        console.log('commits',commits)
+
+        console.log('flags', profile.flags)
+
+        console.log('version, generation', recordData.version, recordData.generation)
+
+        const 
+            account = profile.account,
+            domain = profile.domain,
+            handle = profile.handle.lower_case,
+            workspace_mobile = workspace.mobile,
+            workspace_desktop = workspace.mobile
+
+        console.log('handle, account, domain, workspace_desktop, workspace_mobile\n',
+            handle, account, domain, workspace_desktop, workspace_mobile)
     }
 
     return () => {

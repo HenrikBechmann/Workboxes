@@ -7,7 +7,8 @@ export const copyVersionDataToFirestore = () => {
 
 }
 
-export const updateDocumentSchema = (collection, type, document, initialvalues = {}) => {
+// TODO integrate force arg to allow for maintenance
+export const updateDocumentSchema = (collection, type, document, initialvalues = {}, force = false) => {
 
     // console.log('updateDocumentSchema: collection, type, document, initialvalues', 
     //   collection, type, {...document}, initialvalues)
@@ -263,6 +264,7 @@ export const versionData = {
         domain:null,
         type:null,
         template:null,
+        variant:null,
         owner:null,
         sortorder:null,
         created_timestamp:null,
@@ -273,6 +275,7 @@ export const versionData = {
         domain:null,
         type:null,
         template:null,
+        variant:null,
         owner:null,
         sortorder:null,
         created_timestamp:null,
