@@ -35,6 +35,7 @@ import hideIcon from '../../../assets/expand_less.png'
 import arrowbackIcon from '../../../assets/arrow_back.png'
 import arrowforwardIcon from '../../../assets/arrow_forward.png'
 import resetIcon from '../../../assets/restart.png'
+import refreshIcon from '../../../assets/refresh.png'
 import tilesIcon from '../../../assets/grid_view.png'
 import cardsIcon from '../../../assets/splitscreen.png'
 import settingsIcon from '../../../assets/settings.png'
@@ -256,7 +257,6 @@ const ResourcesToolbar = (props) => {
 
     const layoutIcon = listIcon
 
-        // <ToolbarVerticalDivider />
         // <StandardIcon icon = {arrowbackIcon} caption = 'back' tooltip = 'back to previous list'/>
         // <StandardIcon icon = {arrowforwardIcon} caption = 'forward' tooltip = 'forward to next list'/>
         // <StandardIcon icon = {resetIcon} caption = 'reset' tooltip = 'reset to main resources list'/>
@@ -280,6 +280,10 @@ const ResourcesToolbar = (props) => {
         { selectToggle }
         { dragToggle }
         { spreadToggle }
+        <ToolbarVerticalDivider />
+        <StandardIcon icon = {sortIcon} caption = 'sort' tooltip = 'sort list'/>
+        <StandardIcon icon = {filterIcon} caption = 'filter' tooltip = 'filter list'/>
+        <StandardIcon icon = {refreshIcon} caption = 'refresh' tooltip = 'refresh list'/>
         <ToolbarVerticalDivider />
         <LearnIcon tooltip = 'Explain this toolbar'/>
         {false && <StandardIcon icon = {hideIcon} iconStyles = {{transform:'rotate(0deg)'}} caption = 'hide' tooltip = 'hide toolbar'/>}
