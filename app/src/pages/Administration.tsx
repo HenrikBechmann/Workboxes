@@ -66,7 +66,8 @@ const Administration = (props) => {
         assertMember = useAssertMember(userID),
         assertMemberWorkbox = useAssertMemberWorkbox(userID),
         assertWorkspace = useAssertWorkspace(userID),
-        assertAccessMemberships = useAssertAccessMemberships(userID)
+        assertAccessMemberships = useAssertAccessMemberships(userID),
+        assertConnectors = useAssertAccessMemberships(userID)
 
     const selectComponent = useMemo(()=>{
 
@@ -93,7 +94,7 @@ const Administration = (props) => {
             {selectComponent}
         </ContentBox>
         <ContentBox styles = {{fontSize:'x-small'}}>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>[1]<b>user</b></ListItem>
                 <ListItem>[2]<b>user handle</b></ListItem>
@@ -104,12 +105,13 @@ const Administration = (props) => {
                 <ListItem>base [7]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
                 <ListItem>default [8]<b>workspace</b> and <b>panel</b></ListItem>
                 <ListItem>user/access/[9]<b>memberships</b>, subscriptions, forums documents</ListItem>
+                <ListItem>[10]<b>connectors</b></ListItem>
             </UnorderedList>
             <Button colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>[1]<b>user</b></ListItem>
             </UnorderedList>
@@ -117,7 +119,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>[2]<b>user handle</b></ListItem>
             </UnorderedList>
@@ -125,7 +127,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>user [3]<b>account</b></ListItem>
             </UnorderedList>
@@ -133,7 +135,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>user [4]<b>domain</b></ListItem>
             </UnorderedList>
@@ -141,7 +143,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>base [5]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
             </UnorderedList>
@@ -149,7 +151,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>user domain [6]<b>member</b></ListItem>
             </UnorderedList>
@@ -157,7 +159,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>base [7]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
             </UnorderedList>
@@ -165,7 +167,7 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>default [8]<b>workspace</b> and <b>panel</b></ListItem>
             </UnorderedList>
@@ -173,11 +175,19 @@ const Administration = (props) => {
             <Text>See console for results</Text>
         </ContentBox>
         <ContentBox>
-            <Text>Assert presence of...</Text>
+            <Text>Assert compliance of...</Text>
             <UnorderedList>
                 <ListItem>user/access/[9]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
             <Button onClick = {assertAccessMemberships} colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert compliance of...</Text>
+            <UnorderedList>
+                <ListItem>[10]<b>connectors</b>, subscriptions, forums documents</ListItem>
+            </UnorderedList>
+            <Button onClick = {assertConnectors} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
         </ContentBox>
     </Box>)
@@ -452,6 +462,23 @@ function useAssertWorkspace(userID) {
 }
 
 function useAssertAccessMemberships(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertConnectors(userID) {
 
     const 
         db = useFirestore(),
