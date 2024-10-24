@@ -319,9 +319,6 @@ export const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        origin: {
-          id:null,
-        },
         workbox: {
           id:null,
           name: null,
@@ -341,7 +338,7 @@ export const versionData = {
           id: null,
           name: null,
         },
-        controller: {
+        dependent: {
           id: null,
           name: null,
         },
@@ -415,9 +412,6 @@ export const versionData = {
       version: 2,
       generation: 0,
       profile: {
-        origin: {
-          id:null,
-        },
         workbox: {
           id:null,
           name: null,
@@ -437,7 +431,7 @@ export const versionData = {
           id: null,
           name: null,
         },
-        controller: {
+        dependent: {
           id: null,
           name: null,
         },
@@ -511,9 +505,6 @@ export const versionData = {
       version: 3,
       generation: 0,
       profile: {
-        origin: {
-          id:null,
-        },
         workbox: {
           id:null,
           name: null,
@@ -533,7 +524,7 @@ export const versionData = {
           id: null,
           name: null,
         },
-        controller: {
+        dependent: {
           id: null,
           name: null,
         },
@@ -604,9 +595,6 @@ export const versionData = {
       version: 0,
       generation: 0,
       profile: {
-        origin: {
-          id:null,
-        },
         workbox: {
           id:null,
           name: null,
@@ -626,7 +614,7 @@ export const versionData = {
           id: null,
           name: null,
         },
-        controller: {
+        dependent: {
           id: null,
           name: null,
         },
@@ -697,9 +685,6 @@ export const versionData = {
       version: 3,
       generation: 0,
       profile: {
-        origin: {
-          id:null,
-        },
         workbox: {
           id:null,
           name: null,
@@ -727,7 +712,7 @@ export const versionData = {
           id: null,
           name: null,
         },
-        controller: {
+        dependent: {
           id: null,
           name: null,
         },
