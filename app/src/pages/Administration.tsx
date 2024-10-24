@@ -21,7 +21,7 @@ import {
     runTransaction, writeBatch,
 } from 'firebase/firestore'
 
-import { cloneDeep as _cloneDeep } from 'lodash'
+import { cloneDeep as _cloneDeep, isEqual as _isEqual } from 'lodash'
 
 import { useFirestore, useUserRecords, useErrorControl } from '../system/WorkboxesProvider'
 
@@ -59,6 +59,7 @@ const Administration = (props) => {
         [userID, setUserID] = useState(null),
 
         assertUser = useAssertUser(userID),
+        assertUserHandle = useAssertUserHandle(userID),
         assertAccount = useAssertAccount(userID),
         assertDomain = useAssertDomain(userID),
         assertDomainWorkbox = useAssertDomainWorkbox(userID),
@@ -95,13 +96,14 @@ const Administration = (props) => {
             <Text>Assert presence of...</Text>
             <UnorderedList>
                 <ListItem>[1]<b>user</b></ListItem>
-                <ListItem>user [2]<b>account</b></ListItem>
-                <ListItem>user [3]<b>domain</b></ListItem>
-                <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
-                <ListItem>user domain [5]<b>member</b></ListItem>
-                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
-                <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
-                <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
+                <ListItem>[2]<b>user handle</b></ListItem>
+                <ListItem>user [3]<b>account</b></ListItem>
+                <ListItem>user [4]<b>domain</b></ListItem>
+                <ListItem>base [5]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
+                <ListItem>user domain [6]<b>member</b></ListItem>
+                <ListItem>base [7]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
+                <ListItem>default [8]<b>workspace</b> and <b>panel</b></ListItem>
+                <ListItem>user/access/[9]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
             <Button colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -117,7 +119,15 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>user [2]<b>account</b></ListItem>
+                <ListItem>[2]<b>user handle</b></ListItem>
+            </UnorderedList>
+            <Button onClick = {assertUserHandle} colorScheme = 'blue'>Assert</Button>
+            <Text>See console for results</Text>
+        </ContentBox>
+        <ContentBox>
+            <Text>Assert presence of...</Text>
+            <UnorderedList>
+                <ListItem>user [3]<b>account</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertAccount} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -125,7 +135,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>user [3]<b>domain</b></ListItem>
+                <ListItem>user [4]<b>domain</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertDomain} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -133,7 +143,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>base [4]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
+                <ListItem>base [5]<b>domain workbox</b> and standard <b>resource connectors</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertDomainWorkbox} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -141,7 +151,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>user domain [5]<b>member</b></ListItem>
+                <ListItem>user domain [6]<b>member</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertMember} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -149,7 +159,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>base [6]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
+                <ListItem>base [7]<b>domain member workbox</b> and <b>standard resource connectors</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertMemberWorkbox} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -157,7 +167,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>default [7]<b>workspace</b> and <b>panel</b></ListItem>
+                <ListItem>default [8]<b>workspace</b> and <b>panel</b></ListItem>
             </UnorderedList>
             <Button onClick = {assertWorkspace} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -165,7 +175,7 @@ const Administration = (props) => {
         <ContentBox>
             <Text>Assert presence of...</Text>
             <UnorderedList>
-                <ListItem>user/access/[8]<b>memberships</b>, subscriptions, forums documents</ListItem>
+                <ListItem>user/access/[9]<b>memberships</b>, subscriptions, forums documents</ListItem>
             </UnorderedList>
             <Button onClick = {assertAccessMemberships} colorScheme = 'blue'>Assert</Button>
             <Text>See console for results</Text>
@@ -221,11 +231,10 @@ function useAssertUser(userID) {
     async function assertData() {
 
         const 
-            collectionRef = collection(db,'users'),
-            docRef = doc(collectionRef, userID),
-            recordRef = await getDoc(docRef)
+            userDocRef = doc(collection(db,'users'), userID),
+            userRecord = await getDoc(userDocRef)
 
-        if (recordRef.exists()) {
+        if (userRecord.exists()) {
             console.log(`user record for ${userID} retrieved`, )
         } else {
             console.log(`user record for ${userID} NOT retrieved, aborting`)
@@ -234,31 +243,42 @@ function useAssertUser(userID) {
 
         let update_count = 0
 
-        let recordData = recordRef.data()
+        let userRecordData = userRecord.data()
 
-        console.log('retrieved version',recordData.version)
+        console.log('retrieved version',userRecordData.version)
 
-        const opening_version = recordData.version
+        const opening_version = userRecordData.version
+        const opening_record = _cloneDeep(userRecordData)
+
+        console.log('opening_record', opening_record)
 
         // todo run transformations
-        recordData = updateDocumentSchema('users','standard',recordData,{},true) // force update
+        userRecordData = updateDocumentSchema('users','standard',userRecordData,{},true) // force update
 
         console.log('asserted most recent version')
 
-        const { profile, workspace } = recordData
+        console.log('closing_record',userRecordData)
+
+        const isEqual = _isEqual(opening_record, userRecordData)
+
+        console.log('isEqual',isEqual)
+
+        if (!isEqual) update_count++
+
+        const { profile, workspace } = userRecordData
 
         const commits = _cloneDeep(profile.commits)
 
-        commits.created_timestamp = recordData.profile.commits.created_timestamp.toDate()
-        commits.updated_timestamp = recordData.profile.commits.updated_timestamp.toDate()
+        commits.created_timestamp = userRecordData.profile.commits.created_timestamp.toDate()
+        commits.updated_timestamp = userRecordData.profile.commits.updated_timestamp.toDate()
 
         console.log('commits',commits)
 
         console.log('flags', profile.flags)
 
-        console.log('version, generation', recordData.version, recordData.generation)
+        console.log('version, generation', userRecordData.version, userRecordData.generation)
 
-        if (recordData.version !== opening_version) {
+        if (userRecordData.version !== opening_version) {
             console.log('version number was updated')
             update_count++
         }
@@ -273,6 +293,34 @@ function useAssertUser(userID) {
         console.log('handle, account, domain, workspace_desktop, workspace_mobile\n',
             handle, account, domain, workspace_desktop, workspace_mobile)
 
+        if (update_count) {
+
+            await setDoc(userDocRef, userRecordData)
+
+            console.log('updated user record with update_count',update_count)
+
+        } else {
+
+            console.log('no changes required')
+        }
+
+    }
+
+    return () => {
+
+        assertData()
+
+    }
+}
+
+function useAssertUserHandle(userID) {
+
+    const 
+        db = useFirestore(),
+        errorControl = useErrorControl(),
+        navigate = useNavigate()
+
+    async function assertData() {
     }
 
     return () => {
