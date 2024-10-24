@@ -20,6 +20,7 @@ const BaseDataEditController = () => {
         let component
         switch (workboxType) {
         case 'member':
+        case 'groupdomain': 
         case 'domain': 
             component = <Suspense fallback = {<Loading />}><DataNoteEdit /></Suspense>
         }

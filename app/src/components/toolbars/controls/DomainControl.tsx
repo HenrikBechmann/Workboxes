@@ -23,7 +23,7 @@ const DomainControl = (props) => {
         opacity:0.7,
     }
 
-    const localCaption = caption || 'workbox domain'
+    const localCaption = caption || 'domain'
 
     return <Box 
         cursor = 'pointer' 

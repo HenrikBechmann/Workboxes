@@ -20,6 +20,7 @@ const BaseDataDisplayController = () => {
         let component
         switch (workboxType) {
         case 'member':
+        case 'groupdomain': 
         case 'domain': 
             component = <Suspense fallback = {<Loading />}><DataNoteDisplay /></Suspense>
         }

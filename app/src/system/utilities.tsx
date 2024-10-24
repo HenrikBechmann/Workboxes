@@ -111,6 +111,11 @@ const versionMaps = {
       datamap: new Map(),
       functionmap: new Map(),
     },
+    groupdomain: {
+      latest_version:0,
+      datamap: new Map(),
+      functionmap: new Map(),
+    },
     member: {
       latest_version:3,
       datamap: new Map(),
@@ -535,6 +540,99 @@ export const versionData = {
         type: {
           name: "domain",
           alias: "Domain",
+          image: {
+            source: null,
+          },
+          variant:null,
+        },
+        commits: {
+          created_by: {
+            id: null,
+            name: null,
+          },
+          created_timestamp: null,
+          updated_by: {id: null, name: null},
+          updated_timestamp: null,
+        },
+        counts: {
+          connectors: 0,
+          references: 0,
+        },
+        template: null,
+        flags:{
+          is_template:false,
+          locked:false,
+        }
+      },
+      document: {
+        locked:false,
+        reconcilefileserror:false,
+        reconcilemonth:'0',
+        files:[],
+        data:{
+          content:null,
+          attachments:{
+            list:[],
+          },
+        },
+        base: {
+            name: null,
+            image: {
+              filename: null,
+              previous_filename: null,
+              caption: null,
+              source: null,
+            },
+            description: null,
+        },
+        extensions: {
+          list:[],
+        },
+      },
+      resources: {
+        accepts: [],
+        locked: false,
+      },
+      standard_resources: {
+        types:null,
+        extras:null,
+        parents:null,
+      }
+    }],
+    groupdomain: [
+    {
+      version: 0,
+      generation: 0,
+      profile: {
+        origin: {
+          id:null,
+        },
+        workbox: {
+          id:null,
+          name: null,
+          image: {
+            source: null,
+          },
+        },
+        roles: {
+          read: null,
+          write: null,
+        },
+        owner: {
+          id: null,
+          name: null,
+        },
+        domain: {
+          id: null,
+          name: null,
+        },
+        controller: {
+          id: null,
+          name: null,
+        },
+        type: {
+          name: "groupdomain",
+          alias: "Group domain",
           image: {
             source: null,
           },
