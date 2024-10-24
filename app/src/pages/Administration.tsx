@@ -262,6 +262,11 @@ function useAssertUser(userID) {
 
         console.log('opening_record', opening_record)
 
+        if (!userRecordData.profile.commits.updated_timestamp) {
+            userRecordData.profile.commits.updated_timestamp = userRecordData.profile.commits.created_timestamp
+            console.warn('missing updated timestamp set to created timestamp')
+        }
+
         // todo run transformations
         userRecordData = updateDocumentSchema('users','standard',userRecordData,{},true) // force update
 
@@ -279,10 +284,10 @@ function useAssertUser(userID) {
 
         const commits = _cloneDeep(profile.commits)
 
+        console.log('commits',profile.commits)
+
         commits.created_timestamp = userRecordData.profile.commits.created_timestamp.toDate()
         commits.updated_timestamp = userRecordData.profile.commits.updated_timestamp.toDate()
-
-        console.log('commits',commits)
 
         console.log('flags', profile.flags)
 
@@ -298,10 +303,57 @@ function useAssertUser(userID) {
             domain = profile.domain,
             handle = profile.handle.lower_case,
             workspace_mobile = workspace.mobile,
-            workspace_desktop = workspace.mobile
+            workspace_desktop = workspace.desktop
 
         console.log('handle, account, domain, workspace_desktop, workspace_mobile\n',
             handle, account, domain, workspace_desktop, workspace_mobile)
+
+        const 
+            handleDocRef = doc(collection(db,'handles'),handle),
+            handleRecord = await getDoc(handleDocRef)
+            if (handleRecord.exists()) {
+                console.log('handle record confirmed')
+            } else {
+                console.warn('no handle record')
+            }
+
+
+        const 
+            accountDocQuery = query(collection(db,'accounts'),where('profile.account.id','==',account.id)),
+            accountRecords = await getDocs(accountDocQuery)
+
+            if (accountRecords.size === 1) {
+                console.log('account record confirmed')
+            } else {
+                console.warn('no account record')
+            }
+
+        const 
+            domainDocQuery = query(collection(db,'domains'),where('profile.domain.id','==',domain.id)),
+            domainRecords = await getDocs(domainDocQuery)
+            if (domainRecords.size === 1) {
+                console.log('domain record confirmed')
+            } else {
+                console.warn('no domain record')
+            }
+
+        const 
+            desktopWorkspaceDocQuery = query(collection(db,'users',userID,'workspaces'),where('profile.workspace.id','==',workspace_desktop.id)),
+            desktopWorkspaceRecords = await getDocs(desktopWorkspaceDocQuery)
+            if (desktopWorkspaceRecords.size === 1) {
+                console.log('desktop workspace record confirmed')
+            } else {
+                console.warn('no desktop workspace record')
+            }
+
+        const 
+            mobileWorkspaceDocQuery = query(collection(db,'users',userID,'workspaces'),where('profile.workspace.id','==',workspace_mobile.id)),
+            mobileWorkspaceRecords = await getDocs(mobileWorkspaceDocQuery)
+            if (mobileWorkspaceRecords.size === 1) {
+                console.log('mobile workspace record confirmed')
+            } else {
+                console.warn('no mobile workspace record')
+            }
 
         if (update_count) {
 
